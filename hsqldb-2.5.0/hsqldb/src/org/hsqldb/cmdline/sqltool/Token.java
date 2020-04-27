@@ -51,24 +51,28 @@ public class Token {
     public TokenList nestedBlock = null;
 
     public String[] typeString = {
-        "SQL", "SPECIAL", "PL", "EDIT", "RAW", "RAWEXEC", "SYNTAX",
-        "UNTERM", "BUFFER", "MACRO"
+            "SQL", "SPECIAL", "PL", "EDIT", "RAW", "RAWEXEC", "SYNTAX",
+            "UNTERM", "BUFFER", "MACRO"
     };
     public char[] typeChar = {
-        'S', '\\', '*', 'E', 'R', 'X', '!', '<', '>', '/'
+            'S', '\\', '*', 'E', 'R', 'X', '!', '<', '>', '/'
     };
 
     public String getTypeString() {
         return typeString[type];
     }
+
     public char getTypeChar() {
         return typeChar[type];
     }
 
     public String val;
     public int type;
+
     public Token(int inType, String inVal, int inLine) {
-        val = inVal; type = inType; line = inLine + 1;
+        val = inVal;
+        type = inType;
+        line = inLine + 1;
         switch (inType) {
             case SPECIAL_TYPE:
             case EDIT_TYPE:
@@ -100,8 +104,9 @@ public class Token {
                 // Will NOT be trimmed
                 break;
 
-            default: throw new IllegalArgumentException(
-                "Internal error.  Unexpected scanner token type: " + inType);
+            default:
+                throw new IllegalArgumentException(
+                        "Internal error.  Unexpected scanner token type: " + inType);
         }
     }
 
@@ -113,8 +118,9 @@ public class Token {
         this(inType, (String) null, inLine);
     }
 
-    public String toString() { return "@" + line
-            + " TYPE=" + getTypeString() + ", VALUE=(" + val + ')';
+    public String toString() {
+        return "@" + line
+                + " TYPE=" + getTypeString() + ", VALUE=(" + val + ')';
     }
 
     public int hashCode() {

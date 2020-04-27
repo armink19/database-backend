@@ -46,8 +46,22 @@ import java.sql.SQLWarning;
  *
  * @author fredt@usrs
  * @version 2.3.5
- * @since 1.9.0
  * @revised JDK 1.7, HSQLDB 2.0.1
+ * <p>
+ * JDBC specification.
+ * <p>
+ * Closing the Statement closes the ResultSet instance returned. But:
+ * <p>
+ * Statement can be executed multiple times and return several results. With
+ * normal Statement objects, each execution can be for a completely different
+ * query. PreparedStatement instances are specifically for multiple use over
+ * multiple transactions.
+ * <p>
+ * ResultSets may be held over commits and span several transactions.
+ * <p>
+ * There is no real relation between the current state fo an Statement instance
+ * and the various ResultSets that it may have returned for different queries.
+ * @since 1.9.0
  */
 
 /**
@@ -133,7 +147,8 @@ class JDBCStatementBase {
     /** Implementation in subclasses
      * @throws SQLException on access error
      */
-    void close() throws SQLException {}
+    void close() throws SQLException {
+    }
 
     /**
      * An internal check for closed statements.
@@ -204,8 +219,8 @@ class JDBCStatementBase {
         checkClosed();
 
         return (resultIn == null || resultIn.isData()) ? -1
-                                                       : resultIn
-                                                       .getUpdateCount();
+                : resultIn
+                .getUpdateCount();
     }
 
     ResultSet getResultSet() throws SQLException {
@@ -214,7 +229,7 @@ class JDBCStatementBase {
 
         ResultSet result = currentResultSet;
 
-        if(!connection.isCloseResultSet) {
+        if (!connection.isCloseResultSet) {
             currentResultSet = null;
         }
 
@@ -249,7 +264,7 @@ class JDBCStatementBase {
         resultIn = resultIn.getChainedResult();
 
         if (currentResultSet != null) {
-            if( current != KEEP_CURRENT_RESULT) {
+            if (current != KEEP_CURRENT_RESULT) {
                 currentResultSet.close();
             }
         }
@@ -258,7 +273,7 @@ class JDBCStatementBase {
 
         if (resultIn != null) {
             currentResultSet = new JDBCResultSet(connection, this, resultIn,
-                                                 resultIn.metaData);
+                    resultIn.metaData);
 
             return true;
         }
@@ -277,8 +292,8 @@ class JDBCStatementBase {
         }
 
         generatedResultSet = new JDBCResultSet(connection, null,
-                                               generatedResult,
-                                               generatedResult.metaData);
+                generatedResult,
+                generatedResult.metaData);
 
         return generatedResultSet;
     }
@@ -297,21 +312,21 @@ class JDBCStatementBase {
         }
 
         generatedResultSet = null;
-        generatedResult    = null;
-        resultIn           = null;
-        currentResultSet   = null;
+        generatedResult = null;
+        resultIn = null;
+        currentResultSet = null;
     }
 
     /**
      * JDBC 3 constants
      */
-    static final int CLOSE_CURRENT_RESULT  = 1;
-    static final int KEEP_CURRENT_RESULT   = 2;
-    static final int CLOSE_ALL_RESULTS     = 3;
-    static final int SUCCESS_NO_INFO       = -2;
-    static final int EXECUTE_FAILED        = -3;
+    static final int CLOSE_CURRENT_RESULT = 1;
+    static final int KEEP_CURRENT_RESULT = 2;
+    static final int CLOSE_ALL_RESULTS = 3;
+    static final int SUCCESS_NO_INFO = -2;
+    static final int EXECUTE_FAILED = -3;
     static final int RETURN_GENERATED_KEYS = 1;
-    static final int NO_GENERATED_KEYS     = 2;
+    static final int NO_GENERATED_KEYS = 2;
 
     //--------------------------JDBC 4.1 -----------------------------
 

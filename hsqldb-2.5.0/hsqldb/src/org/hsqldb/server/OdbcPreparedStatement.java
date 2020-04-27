@@ -43,14 +43,14 @@ import java.util.Map;
 
 class OdbcPreparedStatement {
 
-    public String  handle, query;
-    public Result  ackResult;
+    public String handle, query;
+    public Result ackResult;
     public Session session;
-    private Map    containingMap;
-    private List   portals = new ArrayList();
+    private Map containingMap;
+    private List portals = new ArrayList();
 
     protected OdbcPreparedStatement(OdbcPreparedStatement other) {
-        this.handle    = other.handle;
+        this.handle = other.handle;
         this.ackResult = other.ackResult;
     }
 
@@ -61,32 +61,32 @@ class OdbcPreparedStatement {
     public OdbcPreparedStatement(String handle, String query,
                                  Map containingMap,
                                  Session session)
-                                 throws RecoverableOdbcFailure {
+            throws RecoverableOdbcFailure {
 
-        this.handle        = handle;
-        this.query         = query;
+        this.handle = handle;
+        this.query = query;
         this.containingMap = containingMap;
-        this.session       = session;
+        this.session = session;
 
         Result psResult = Result.newPrepareStatementRequest();
 
         psResult.setPrepareOrExecuteProperties(
-            query, 0, 0, 0, 0,ResultProperties.defaultPropsValue,
-            Statement.NO_GENERATED_KEYS, null, null);
+                query, 0, 0, 0, 0, ResultProperties.defaultPropsValue,
+                Statement.NO_GENERATED_KEYS, null, null);
 
         ackResult = session.execute(psResult);
 
         switch (ackResult.getType()) {
 
-            case ResultConstants.PREPARE_ACK :
+            case ResultConstants.PREPARE_ACK:
                 break;
 
-            case ResultConstants.ERROR :
+            case ResultConstants.ERROR:
                 throw new RecoverableOdbcFailure(ackResult);
-            default :
+            default:
                 throw new RecoverableOdbcFailure(
-                    "Output Result from Statement prep is of "
-                    + "unexpected type: " + ackResult.getType());
+                        "Output Result from Statement prep is of "
+                                + "unexpected type: " + ackResult.getType());
         }
 
         containingMap.put(handle, this);

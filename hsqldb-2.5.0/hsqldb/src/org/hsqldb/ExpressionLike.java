@@ -49,7 +49,7 @@ import org.hsqldb.types.Types;
 public final class ExpressionLike extends ExpressionLogical {
 
     private static final int ESCAPE = 2;
-    private Like             likeObject;
+    private Like likeObject;
 
     /**
      * Creates a LIKE expression
@@ -59,11 +59,11 @@ public final class ExpressionLike extends ExpressionLogical {
 
         super(OpTypes.LIKE);
 
-        nodes               = new Expression[TERNARY];
-        nodes[LEFT]         = left;
-        nodes[RIGHT]        = right;
-        nodes[ESCAPE]       = escape;
-        likeObject          = new Like();
+        nodes = new Expression[TERNARY];
+        nodes[LEFT] = left;
+        nodes[RIGHT] = right;
+        nodes[ESCAPE] = escape;
+        likeObject = new Like();
         this.noOptimisation = noOptimisation;
     }
 
@@ -71,13 +71,13 @@ public final class ExpressionLike extends ExpressionLogical {
 
         super(OpTypes.LIKE);
 
-        this.nodes      = other.nodes;
+        this.nodes = other.nodes;
         this.likeObject = other.likeObject;
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
 
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i] != null) {
@@ -96,16 +96,16 @@ public final class ExpressionLike extends ExpressionLogical {
             return super.getValue(session);
         }
 
-        Object leftValue   = nodes[LEFT].getValue(session);
-        Object rightValue  = nodes[RIGHT].getValue(session);
+        Object leftValue = nodes[LEFT].getValue(session);
+        Object rightValue = nodes[RIGHT].getValue(session);
         Object escapeValue = nodes[ESCAPE] == null ? null
-                                                   : nodes[ESCAPE].getValue(
-                                                       session);
+                : nodes[ESCAPE].getValue(
+                session);
 
         if (likeObject.isVariable) {
             synchronized (likeObject) {
                 likeObject.setPattern(session, rightValue, escapeValue,
-                                      nodes[ESCAPE] != null);
+                        nodes[ESCAPE] != null);
 
                 return likeObject.compare(session, leftValue);
             }
@@ -137,12 +137,12 @@ public final class ExpressionLike extends ExpressionLogical {
 
         if (nodes[LEFT].isUnresolvedParam()) {
             nodes[LEFT].dataType = nodes[RIGHT].dataType.isBinaryType()
-                                   ? Type.SQL_VARBINARY_DEFAULT
-                                   : Type.SQL_VARCHAR_DEFAULT;
+                    ? Type.SQL_VARBINARY_DEFAULT
+                    : Type.SQL_VARCHAR_DEFAULT;
         } else if (nodes[RIGHT].isUnresolvedParam()) {
             nodes[RIGHT].dataType = nodes[LEFT].dataType.isBinaryType()
-                                    ? Type.SQL_VARBINARY_DEFAULT
-                                    : Type.SQL_VARCHAR_DEFAULT;
+                    ? Type.SQL_VARBINARY_DEFAULT
+                    : Type.SQL_VARCHAR_DEFAULT;
         }
 
         if (nodes[LEFT].dataType == null || nodes[RIGHT].dataType == null) {
@@ -176,8 +176,8 @@ public final class ExpressionLike extends ExpressionLogical {
 
         if (group == Types.SQL_VARCHAR) {
             boolean ignoreCase =
-                !nodes[LEFT].dataType.getCollation().isCaseSensitive()
-                || !nodes[RIGHT].dataType.getCollation().isCaseSensitive();
+                    !nodes[LEFT].dataType.getCollation().isCaseSensitive()
+                            || !nodes[RIGHT].dataType.getCollation().isCaseSensitive();
 
             likeObject.setIgnoreCase(ignoreCase);
         }
@@ -189,8 +189,8 @@ public final class ExpressionLike extends ExpressionLogical {
         if (nodes[ESCAPE] != null) {
             if (nodes[ESCAPE].isUnresolvedParam()) {
                 nodes[ESCAPE].dataType = likeObject.isBinary
-                                         ? Type.SQL_VARBINARY
-                                         : Type.SQL_VARCHAR;
+                        ? Type.SQL_VARBINARY
+                        : Type.SQL_VARCHAR;
             }
 
             if (nodes[ESCAPE].dataType.typeComparisonGroup != group) {
@@ -213,20 +213,20 @@ public final class ExpressionLike extends ExpressionLogical {
 
                     switch (nodes[ESCAPE].dataType.typeCode) {
 
-                        case Types.SQL_CHAR :
-                        case Types.SQL_VARCHAR :
+                        case Types.SQL_CHAR:
+                        case Types.SQL_VARCHAR:
                             length =
-                                ((String) nodes[ESCAPE].valueData).length();
+                                    ((String) nodes[ESCAPE].valueData).length();
                             break;
 
-                        case Types.SQL_BINARY :
-                        case Types.SQL_VARBINARY :
+                        case Types.SQL_BINARY:
+                        case Types.SQL_VARBINARY:
                             length =
-                                ((BinaryData) nodes[ESCAPE].valueData).length(
-                                    session);
+                                    ((BinaryData) nodes[ESCAPE].valueData).length(
+                                            session);
                             break;
 
-                        default :
+                        default:
                             throw Error.error(ErrorCode.X_42563);
                     }
 
@@ -253,12 +253,12 @@ public final class ExpressionLike extends ExpressionLogical {
 
         // always optimise with logical conditions
         Object pattern = isRightArgFixedConstant
-                         ? nodes[RIGHT].getValue(session)
-                         : null;
+                ? nodes[RIGHT].getValue(session)
+                : null;
         boolean constantEscape = isEscapeFixedConstant
-                                 && nodes[ESCAPE] != null;
+                && nodes[ESCAPE] != null;
         Object escape = constantEscape ? nodes[ESCAPE].getValue(session)
-                                       : null;
+                : null;
 
         likeObject.setPattern(session, pattern, escape, nodes[ESCAPE] != null);
 
@@ -277,7 +277,7 @@ public final class ExpressionLike extends ExpressionLogical {
         if (likeObject.isEquivalentToEqualsPredicate()) {
             opType = OpTypes.EQUAL;
             nodes[RIGHT] = new ExpressionValue(likeObject.getRangeLow(),
-                                               Type.SQL_VARCHAR);
+                    Type.SQL_VARCHAR);
             likeObject = null;
 
             setEqualityMode();
@@ -287,12 +287,12 @@ public final class ExpressionLike extends ExpressionLogical {
 
         if (likeObject.isEquivalentToNotNullPredicate()) {
             Expression notNull = new ExpressionLogical(OpTypes.IS_NULL,
-                nodes[LEFT]);
+                    nodes[LEFT]);
 
-            opType      = OpTypes.NOT;
-            nodes       = new Expression[UNARY];
+            opType = OpTypes.NOT;
+            nodes = new Expression[UNARY];
             nodes[LEFT] = notNull;
-            likeObject  = null;
+            likeObject = null;
 
             return;
         }
@@ -300,22 +300,22 @@ public final class ExpressionLike extends ExpressionLogical {
         if (nodes[LEFT].opType == OpTypes.COLUMN) {
             ExpressionLike newLike = new ExpressionLike(this);
             Expression prefix = new ExpressionOp(OpTypes.LIKE_ARG,
-                                                 nodes[RIGHT], nodes[ESCAPE]);
+                    nodes[RIGHT], nodes[ESCAPE]);
 
             prefix.resolveTypes(session, null);
 
             Expression cast = new ExpressionOp(OpTypes.PREFIX, nodes[LEFT],
-                                               prefix);
+                    prefix);
             Expression equ = new ExpressionLogical(OpTypes.EQUAL, cast,
-                                                   prefix);
+                    prefix);
 
             equ = new ExpressionLogical(OpTypes.GREATER_EQUAL_PRE,
-                                        nodes[LEFT], prefix, equ);
-            nodes        = new Expression[BINARY];
-            likeObject   = null;
-            nodes[LEFT]  = equ;
+                    nodes[LEFT], prefix, equ);
+            nodes = new Expression[BINARY];
+            likeObject = null;
+            nodes[LEFT] = equ;
             nodes[RIGHT] = newLike;
-            opType       = OpTypes.AND;
+            opType = OpTypes.AND;
         }
     }
 
@@ -325,9 +325,9 @@ public final class ExpressionLike extends ExpressionLogical {
             return super.getSQL();
         }
 
-        String        left  = getContextSQL(nodes[LEFT]);
-        String        right = getContextSQL(nodes[RIGHT]);
-        StringBuilder sb    = new StringBuilder();
+        String left = getContextSQL(nodes[LEFT]);
+        String right = getContextSQL(nodes[RIGHT]);
+        StringBuilder sb = new StringBuilder();
 
         sb.append(left).append(' ').append(Tokens.T_LIKE).append(' ');
         sb.append(right);

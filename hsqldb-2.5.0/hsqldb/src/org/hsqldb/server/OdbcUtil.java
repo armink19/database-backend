@@ -44,7 +44,7 @@ import java.util.Locale;
 public class OdbcUtil {
 
     static void validateInputPacketSize(OdbcPacketInputStream p)
-    throws RecoverableOdbcFailure {
+            throws RecoverableOdbcFailure {
         int remaining = -1;
         try {
             remaining = p.available();
@@ -57,10 +57,10 @@ public class OdbcUtil {
             return;
         }
         throw new RecoverableOdbcFailure(
-            "Client supplied bad length for " + p.packetType
-            + " packet.  " + remaining + " bytes available after processing",
-            "Bad length for " + p.packetType
-            + " packet.  " + remaining + " extra bytes", "08P01");
+                "Client supplied bad length for " + p.packetType
+                        + " packet.  " + remaining + " bytes available after processing",
+                "Bad length for " + p.packetType
+                        + " packet.  " + remaining + " extra bytes", "08P01");
         // Code here means Protocol Violation
     }
 
@@ -68,7 +68,7 @@ public class OdbcUtil {
         String uc = inCommand.trim().toUpperCase(Locale.ENGLISH);
         int firstWhiteSpace;
         for (firstWhiteSpace = 0; firstWhiteSpace < uc.length();
-            firstWhiteSpace++) {
+             firstWhiteSpace++) {
             if (Character.isWhitespace(uc.charAt(firstWhiteSpace))) {
                 break;
             }
@@ -83,14 +83,14 @@ public class OdbcUtil {
             // TODO: Add error-checking
             int wordStart;
             for (wordStart = firstWhiteSpace; wordStart < uc.length();
-                wordStart++) {
+                 wordStart++) {
                 if (!Character.isWhitespace(uc.charAt(wordStart))) {
                     break;
                 }
             }
             int wordEnd;
             for (wordEnd = wordStart; wordEnd < uc.length();
-                wordEnd++) {
+                 wordEnd++) {
                 if (!Character.isWhitespace(uc.charAt(wordEnd))) {
                     break;
                 }
@@ -109,9 +109,9 @@ public class OdbcUtil {
     }
 
     static void writeParam(
-    String key, String val, DataOutputStream hOutStream) throws IOException {
+            String key, String val, DataOutputStream hOutStream) throws IOException {
         OdbcPacketOutputStream alertPacket =
-            OdbcPacketOutputStream.newOdbcPacketOutputStream();
+                OdbcPacketOutputStream.newOdbcPacketOutputStream();
         alertPacket.write(key);
         alertPacket.write(val);
         alertPacket.xmit('S', hOutStream);
@@ -128,22 +128,22 @@ public class OdbcUtil {
     static final int ODBC_AUTH_REQ_OK = 0;
 
     static void alertClient(int severity, String message,
-    DataOutputStream hOutStream) throws IOException {
+                            DataOutputStream hOutStream) throws IOException {
         alertClient(severity, message, null, hOutStream);
     }
 
     static void alertClient(int severity, String message,
-    String sqlStateCode, DataOutputStream hOutStream) throws IOException {
+                            String sqlStateCode, DataOutputStream hOutStream) throws IOException {
         if (sqlStateCode == null) {
             sqlStateCode = "XX000";
             // This default code means INTERNAL ERROR
         }
         if (!odbcSeverityMap.containsKey(severity)) {
             throw new IllegalArgumentException(
-                "Unknown severity value (" + severity + ')');
+                    "Unknown severity value (" + severity + ')');
         }
         OdbcPacketOutputStream alertPacket =
-            OdbcPacketOutputStream.newOdbcPacketOutputStream();
+                OdbcPacketOutputStream.newOdbcPacketOutputStream();
         alertPacket.write("S" + odbcSeverityMap.get(severity));
         if (severity < ODBC_SEVERITY_NOTICE) {
             alertPacket.write("C" + sqlStateCode);
@@ -155,16 +155,16 @@ public class OdbcUtil {
         alertPacket.close();
     }
 
-    static String[][] hardcodedParams = new String[][] {
-        new String[] { "client_encoding", "SQL_ASCII" },
-        new String[] { "DateStyle", "ISO, MDY" },
-        new String[] { "integer_datetimes", "on" },
-        new String[] { "is_superuser", "on" },
-        new String[] { "server_encoding", "SQL_ASCII" },
-        new String[] { "server_version", "8.3.1" },
-        new String[] { "session_authorization", "blaine" },
-        new String[] { "standard_conforming_strings", "off" },
-        new String[] { "TimeZone", "US/Eastern" },
+    static String[][] hardcodedParams = new String[][]{
+            new String[]{"client_encoding", "SQL_ASCII"},
+            new String[]{"DateStyle", "ISO, MDY"},
+            new String[]{"integer_datetimes", "on"},
+            new String[]{"is_superuser", "on"},
+            new String[]{"server_encoding", "SQL_ASCII"},
+            new String[]{"server_version", "8.3.1"},
+            new String[]{"session_authorization", "blaine"},
+            new String[]{"standard_conforming_strings", "off"},
+            new String[]{"TimeZone", "US/Eastern"},
     };
 
     static final int ODBC_SIMPLE_MODE = 0;
@@ -181,7 +181,7 @@ public class OdbcUtil {
     static final int ODBC_SEVERITY_LOG = 8;
 
     static final org.hsqldb.lib.IntKeyHashMap odbcSeverityMap =
-        new org.hsqldb.lib.IntKeyHashMap();
+            new org.hsqldb.lib.IntKeyHashMap();
 
     static {
         odbcSeverityMap.put(ODBC_SEVERITY_FATAL, "FATAL");
@@ -210,7 +210,7 @@ public class OdbcUtil {
         }
         ColumnBase col = md.columns[colIndex];
         int hashCode = (col.getSchemaNameString() + '.'
-            + col.getTableNameString()).hashCode();
+                + col.getTableNameString()).hashCode();
         if (hashCode < 0) {
             hashCode *= -1;
         }
@@ -219,7 +219,7 @@ public class OdbcUtil {
 
     /**
      * Temporary hack.
-     *
+     * <p>
      * This ID should stick with the table
      * column.  Here, it will change based on user-specified column label.
      * The int has is also being truncated into a short.
@@ -229,7 +229,7 @@ public class OdbcUtil {
             return 0;
         }
         short hashCode =
-            (short) md.getGeneratedColumnNames()[colIndex].hashCode();
+                (short) md.getGeneratedColumnNames()[colIndex].hashCode();
         if (hashCode < 0) {
             hashCode *= -1;
         }
@@ -239,13 +239,13 @@ public class OdbcUtil {
 
     /**
      * @param hexChars A String containing an EVEN number of hex
-     *                      characters.
+     *                 characters.
      */
     public static String hexCharsToOctalOctets(String hexChars) {
         int chars = hexChars.length();
         if (chars != (chars / 2) * 2) {
             throw new IllegalArgumentException("Hex character lists contains "
-                + "an odd number of characters: " + chars);
+                    + "an odd number of characters: " + chars);
         }
         StringBuilder sb = new StringBuilder();
         char c;
@@ -261,7 +261,7 @@ public class OdbcUtil {
                 octet += c - '0';
             } else {
                 throw new IllegalArgumentException(
-                    "Non-hex character in input at offset " + i + ": " + c);
+                        "Non-hex character in input at offset " + i + ": " + c);
             }
             octet = octet << 4;
             c = hexChars.charAt(++i);
@@ -273,7 +273,7 @@ public class OdbcUtil {
                 octet += c - '0';
             } else {
                 throw new IllegalArgumentException(
-                    "Non-hex character in input at offset " + i + ": " + c);
+                        "Non-hex character in input at offset " + i + ": " + c);
             }
 
             sb.append('\\');

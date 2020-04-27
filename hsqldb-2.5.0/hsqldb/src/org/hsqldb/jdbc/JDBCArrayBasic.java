@@ -97,8 +97,8 @@ public class JDBCArrayBasic implements Array {
      * @return a <code>String</code> that is the database-specific
      * name for a built-in base type; or the fully-qualified SQL type
      * name for a base type that is a UDT
-     * @exception SQLException if an error occurs while attempting
-     * to access the type name
+     * @throws SQLException if an error occurs while attempting
+     *                      to access the type name
      * @since JDK 1.2
      */
     public String getBaseTypeName() throws SQLException {
@@ -115,8 +115,8 @@ public class JDBCArrayBasic implements Array {
      * @return a constant from the class {@link java.sql.Types} that is
      * the type code for the elements in the array designated by this
      * <code>Array</code> object
-     * @exception SQLException if an error occurs while attempting
-     * to access the base type
+     * @throws SQLException if an error occurs while attempting
+     *                      to access the base type
      * @since JDK 1.2
      */
     public int getBaseType() throws SQLException {
@@ -139,12 +139,12 @@ public class JDBCArrayBasic implements Array {
      * a base type that maps to a primitive data type, then it is
      * implementation-defined whether the array returned is an array of
      * that primitive data type or an array of <code>Object</code>.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB always returns an array of <code>Object</code>.
      *
      * </div>
@@ -175,12 +175,12 @@ public class JDBCArrayBasic implements Array {
      * a base type that maps to a primitive data type, then it is
      * implementation-defined whether the array returned is an array of
      * that primitive data type or an array of <code>Object</code>.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB always returns an array of <code>Object</code>.
      *
      * </div>
@@ -189,9 +189,9 @@ public class JDBCArrayBasic implements Array {
      * @param map a <code>java.util.Map</code> object that contains mappings
      *            of SQL type names to classes in the Java programming language
      * @return an array in the Java programming language that contains the ordered
-     *         elements of the SQL array designated by this object
-     * @exception SQLException if an error occurs while attempting to
-     *                         access the array
+     * elements of the SQL array designated by this object
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public Object getArray(java.util.Map<String,
@@ -211,12 +211,12 @@ public class JDBCArrayBasic implements Array {
      * a base type that maps to a primitive data type, then it is
      * implementation-defined whether the array returned is an array of
      * that primitive data type or an array of <code>Object</code>.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB always returns an array of <code>Object</code>.
      *
      * </div>
@@ -227,8 +227,8 @@ public class JDBCArrayBasic implements Array {
      * @param count the number of successive SQL array elements to retrieve
      * @return an array containing up to <code>count</code> consecutive elements
      * of the SQL array, beginning with element <code>index</code>
-     * @exception SQLException if an error occurs while attempting to
-     * access the array
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public Object getArray(long index, int count) throws SQLException {
@@ -252,7 +252,7 @@ public class JDBCArrayBasic implements Array {
      * designated by this <code>Array</code> object, beginning with the specified
      * <code>index</code> and containing up to <code>count</code>
      * successive elements of the SQL array.
-     * <P>
+     * <p>
      * This method uses
      * the specified <code>map</code> for type map customizations
      * unless the base type of the array does not match a user-defined
@@ -265,12 +265,12 @@ public class JDBCArrayBasic implements Array {
      * a base type that maps to a primitive data type, then it is
      * implementation-defined whether the array returned is an array of
      * that primitive data type or an array of <code>Object</code>.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB always returns an array of <code>Object</code>.
      *
      * </div>
@@ -279,21 +279,21 @@ public class JDBCArrayBasic implements Array {
      * @param index the array index of the first element to retrieve;
      *              the first element is at index 1
      * @param count the number of successive SQL array elements to
-     * retrieve
-     * @param map a <code>java.util.Map</code> object
-     * that contains SQL type names and the classes in
-     * the Java programming language to which they are mapped
+     *              retrieve
+     * @param map   a <code>java.util.Map</code> object
+     *              that contains SQL type names and the classes in
+     *              the Java programming language to which they are mapped
      * @return an array containing up to <code>count</code>
      * consecutive elements of the SQL <code>ARRAY</code> value designated by this
      * <code>Array</code> object, beginning with element
      * <code>index</code>
-     * @exception SQLException if an error occurs while attempting to
-     * access the array
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public Object getArray(long index, int count,
                            java.util.Map<String,
-                               Class<?>> map) throws SQLException {
+                                   Class<?>> map) throws SQLException {
         return getArray(index, count);
     }
 
@@ -314,8 +314,8 @@ public class JDBCArrayBasic implements Array {
      * @return a {@link ResultSet} object containing one row for each
      * of the elements in the array designated by this <code>Array</code>
      * object, with the rows in ascending order based on the indices.
-     * @exception SQLException if an error occurs while attempting to
-     * access the array
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public ResultSet getResultSet() throws SQLException {
@@ -346,12 +346,12 @@ public class JDBCArrayBasic implements Array {
      * the order of the indices.
      *
      * @param map contains the mapping of SQL user-defined types to
-     * classes in the Java programming language
+     *            classes in the Java programming language
      * @return a <code>ResultSet</code> object containing one row for each
      * of the elements in the array designated by this <code>Array</code>
      * object, with the rows in ascending order based on the indices.
-     * @exception SQLException if an error occurs while attempting to
-     * access the array
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public ResultSet getResultSet(java.util.Map<String,
@@ -366,7 +366,7 @@ public class JDBCArrayBasic implements Array {
      * the connection's type map to map the elements of the array if
      * the map contains an entry for the base type. Otherwise, the
      * standard mapping is used.
-     * <P>
+     * <p>
      * The result set has one row for each element of the SQL array
      * designated by this object, with the first row containing the
      * element at index <code>index</code>.  The result set has
@@ -382,8 +382,8 @@ public class JDBCArrayBasic implements Array {
      * <code>count</code> consecutive elements of the SQL array
      * designated by this <code>Array</code> object, starting at
      * index <code>index</code>.
-     * @exception SQLException if an error occurs while attempting to
-     * access the array
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public ResultSet getResultSet(long index, int count) throws SQLException {
@@ -406,7 +406,7 @@ public class JDBCArrayBasic implements Array {
      * uses the standard mapping. This version of the method
      * <code>getResultSet</code> uses either the given type map or the standard mapping;
      * it never uses the type map associated with the connection.
-     * <P>
+     * <p>
      * The result set has one row for each element of the SQL array
      * designated by this object, with the first row containing the
      * element at index <code>index</code>.  The result set has
@@ -418,19 +418,19 @@ public class JDBCArrayBasic implements Array {
      * @param index the array index of the first element to retrieve;
      *              the first element is at index 1
      * @param count the number of successive SQL array elements to retrieve
-     * @param map the <code>Map</code> object that contains the mapping
-     * of SQL type names to classes in the Java(tm) programming language
+     * @param map   the <code>Map</code> object that contains the mapping
+     *              of SQL type names to classes in the Java(tm) programming language
      * @return a <code>ResultSet</code> object containing up to
      * <code>count</code> consecutive elements of the SQL array
      * designated by this <code>Array</code> object, starting at
      * index <code>index</code>.
-     * @exception SQLException if an error occurs while attempting to
-     * access the array
+     * @throws SQLException if an error occurs while attempting to
+     *                      access the array
      * @since JDK 1.2
      */
     public ResultSet getResultSet(long index, int count,
                                   java.util.Map<String,
-                                      Class<?>> map) throws SQLException {
+                                          Class<?>> map) throws SQLException {
         return getResultSet(index, count);
     }
 
@@ -458,7 +458,7 @@ public class JDBCArrayBasic implements Array {
      * <p>
      *
      * @throws SQLException if an error occurs releasing
-     * the Array's resources
+     *                      the Array's resources
      * @since JDK 1.6
      */
     public void free() throws SQLException {
@@ -467,8 +467,8 @@ public class JDBCArrayBasic implements Array {
     }
 
     //-------------
-    Type     arrayType;
-    Type     elementType;
+    Type arrayType;
+    Type elementType;
     Object[] data;
 
     /**
@@ -479,7 +479,7 @@ public class JDBCArrayBasic implements Array {
      * @param type the HSQLDB org.hsqldb.types.Type object
      */
     public JDBCArrayBasic(Object[] data, Type type) {
-        this.data        = data;
+        this.data = data;
         this.elementType = type;
     }
 
@@ -501,13 +501,13 @@ public class JDBCArrayBasic implements Array {
 
         ResultMetaData meta = ResultMetaData.newSimpleResultMetaData(types);
 
-        meta.columnLabels = new String[] {
-            "C1", "C2"
+        meta.columnLabels = new String[]{
+                "C1", "C2"
         };
-        meta.colIndexes   = new int[] {
-            -1, -1
+        meta.colIndexes = new int[]{
+                -1, -1
         };
-        meta.columns      = new ColumnBase[2];
+        meta.columns = new ColumnBase[2];
 
         for (int i = 0; i < meta.columns.length; i++) {
             ColumnBase column = new ColumnBase("", "", "", "");

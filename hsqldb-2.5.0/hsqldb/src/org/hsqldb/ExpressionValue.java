@@ -52,27 +52,27 @@ public class ExpressionValue extends Expression {
 
         super(OpTypes.VALUE);
 
-        dataType  = datatype;
+        dataType = datatype;
         valueData = o;
     }
 
     public byte getNullability() {
         return valueData == null ? SchemaObject.Nullability.NULLABLE
-                                 : SchemaObject.Nullability.NO_NULLS;
+                : SchemaObject.Nullability.NO_NULLS;
     }
 
     public String getSQL() {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 if (valueData == null) {
                     return Tokens.T_NULL;
                 }
 
                 return dataType.convertToSQLString(valueData);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "ExpressionValue");
         }
     }
@@ -89,14 +89,14 @@ public class ExpressionValue extends Expression {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 sb.append("VALUE = ").append(
-                    dataType.convertToSQLString(valueData));
+                        dataType.convertToSQLString(valueData));
                 sb.append(", TYPE = ").append(dataType.getNameString());
 
                 return sb.toString();
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "ExpressionValue");
         }
     }

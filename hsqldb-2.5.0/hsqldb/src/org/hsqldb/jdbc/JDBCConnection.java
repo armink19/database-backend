@@ -89,7 +89,7 @@ import java.util.Properties;
  * <P>A connection (session) with a specific
  * database. SQL statements are executed and results are returned
  * within the context of a connection.
- * <P>
+ * <p>
  * A <code>Connection</code> object's database is able to provide information
  * describing its tables, its supported SQL grammar, its stored
  * procedures, the capabilities of this connection, and so on. This
@@ -97,15 +97,15 @@ import java.util.Properties;
  *
  * <P>(JDBC4 clarification:)
  * <P><B>Note:</B> When configuring a <code>Connection</code>, JDBC applications
- *  should use the appropriate <code>Connection</code> method such as
- *  <code>setAutoCommit</code> or <code>setTransactionIsolation</code>.
- *  Applications should not invoke SQL commands directly to change the connection's
- *   configuration when there is a JDBC method available.  By default a <code>Connection</code> object is in
+ * should use the appropriate <code>Connection</code> method such as
+ * <code>setAutoCommit</code> or <code>setTransactionIsolation</code>.
+ * Applications should not invoke SQL commands directly to change the connection's
+ * configuration when there is a JDBC method available.  By default a <code>Connection</code> object is in
  * auto-commit mode, which means that it automatically commits changes
  * after executing each statement. If auto-commit mode has been
  * disabled, the method <code>commit</code> must be called explicitly in
  * order to commit changes; otherwise, database changes will not be saved.
- * <P>
+ * <p>
  * A new <code>Connection</code> object created using the JDBC 2.1 core API
  * has an initially empty type map associated with it. A user may enter a
  * custom mapping for a UDT in this type map.
@@ -133,29 +133,29 @@ import java.util.Properties;
  *      map.put("mySchemaName.ATHLETES", Class.forName("Athletes"));
  *      con.setTypeMap(map);
  * </pre>
- *
+ * <p>
  * <!-- end generic documentation -->
- *
+ * <p>
  * <!-- start release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3> <p>
- *
+ * <p>
  * To get a <code>Connection</code> to an HSQLDB database, the
  * following code may be used (updated to reflect the most recent
  * recommendations):
  *
  * <hr>
- *
+ * <p>
  * When using HSQLDB, the database connection <b>&lt;url&gt;</b> must start with
  * <b>'jdbc:hsqldb:'</b><p>
- *
+ * <p>
  * Since 1.7.2, connection properties (&lt;key-value-pairs&gt;) may be appended
  * to the database connection <b>&lt;url&gt;</b>, using the form:
  *
  * <blockquote>
  *      <b>'&lt;url&gt;[;key=value]*'</b>
  * </blockquote> <p>
- *
+ * <p>
  * Also since 1.7.2, the allowable forms of the HSQLDB database connection
  * <b>&lt;url&gt;</b> have been extended.  However, all legacy forms continue
  * to work, with unchanged semantics.  The extensions are as described in the
@@ -164,7 +164,7 @@ import java.util.Properties;
  * <hr>
  *
  * <b>Network Server Database Connections:</b> <p>
- *
+ * <p>
  * The {@link org.hsqldb.server.Server Server} database connection <b>&lt;url&gt;</b>
  * takes one of the two following forms:
  *
@@ -176,7 +176,7 @@ import java.util.Properties;
  *         (with TLS).
  * </ol>
  * </div> <p>
- *
+ * <p>
  * The {@link org.hsqldb.server.WebServer WebServer} database connection <b>&lt;url&gt;</b>
  * takes one of two following forms:
  *
@@ -188,14 +188,14 @@ import java.util.Properties;
  *      (with TLS).
  * </ol>
  * </div><p>
- *
+ * <p>
  * In both network server database connection <b>&lt;url&gt;</b> forms, the
  * optional <b>&lt;alias&gt;</b> component is used to identify one of possibly
  * several database instances available at the indicated host and port.  If the
  * <b>&lt;alias&gt;</b> component is omitted, then a connection is made to the
  * network server's default database instance, if such an instance is
  * available. <p>
- *
+ * <p>
  * For more information on server configuration regarding mounting multiple
  * databases and assigning them <b>&lt;alias&gt;</b> values, please read the
  * Java API documentation for {@link org.hsqldb.server.Server Server} and related
@@ -205,7 +205,7 @@ import java.util.Properties;
  * <hr>
  *
  * <b>Transient, In-Process Database Connections:</b> <p>
- *
+ * <p>
  * The 100% in-memory (transient, in-process) database connection
  * <b>&lt;url&gt;</b> takes one of the two following forms:
  *
@@ -218,7 +218,7 @@ import java.util.Properties;
  *      (the new form)
  * </ol>
  * </div> <p>
- *
+ * <p>
  * The driver converts the supplied <b>&lt;alias&gt;</b> component to
  * Local.ENGLISH lower case and uses the resulting character sequence as the
  * key used to look up a <b>mem:</b> protocol database instance amongst the
@@ -226,7 +226,7 @@ import java.util.Properties;
  * class loading context in the current JVM. If no such instance exists, one
  * <em>may</em> be automatically created and mapped to the <b>&lt;alias&gt;</b>,
  * as governed by the <b>'ifexists=true|false'</b> connection property. <p>
- *
+ * <p>
  * The rationale for converting the supplied <b>&lt;alias&gt;</b> component to
  * lower case is to provide consistency with the behavior of <b>res:</b>
  * protocol database connection <b>&lt;url&gt;</b>s, explained further on in
@@ -235,7 +235,7 @@ import java.util.Properties;
  * <hr>
  *
  * <b>Persistent, In-Process Database Connections:</b> <p>
- *
+ * <p>
  * The standalone (persistent, in-process) database connection
  * <b>&lt;url&gt;</b> takes one of the three following forms:
  *
@@ -251,11 +251,11 @@ import java.util.Properties;
  *      (new form with 'files_in_jar' semantics)
  * </ol>
  * </div> <p>
- *
+ * <p>
  * For the persistent, in-process database connection <b>&lt;url&gt;</b>,
  * the <b>&lt;path&gt;</b> component is the path prefix common to all of
  * the files that compose the database. <p>
- *
+ * <p>
  * From 1.7.2, although other files may be involved (such as transient working
  * files and/or TEXT table CSV data source files), the essential set that may,
  * at any particular point in time, compose an HSQLDB database is:
@@ -270,13 +270,13 @@ import java.util.Properties;
  * <li>&lt;path&gt;.lck
  * </ul>
  * </div> <p>
- *
+ * <p>
  * For example: <b>'jdbc:hsqldb:file:test'</b> connects to a database
  * composed of some subset of the files listed above, where the expansion
  * of <b>&lt;path&gt;</b> is <b>'test'</b> prefixed with the canonical path of
  * the JVM's effective working directory at the time the designated database
  * is first opened in-process. <p>
- *
+ * <p>
  * Be careful to note that this canonical expansion of <b>&lt;path&gt;</b> is
  * cached by the driver until JVM exit. So, although legacy JVMs tend to fix
  * the reported effective working directory at the one noted upon JVM startup,
@@ -288,7 +288,7 @@ import java.util.Properties;
  * practice for clients to attempt to pre-canonicalize the <b>&lt;path&gt;</b>
  * component of <b>file:</b> protocol database connection* <b>&lt;url&gt;</b>s.
  * <p>
- *
+ * <p>
  * Under <em>Windows</em>,
  * <b>'jdbc:hsqldb:file:c:\databases\test'</b> connects to a database located
  * on drive <b>'C:'</b> in the directory <b>'databases'</b>, composed
@@ -304,7 +304,7 @@ import java.util.Properties;
  *    +--test.backup
  *    +--test.lck
  * </pre>
- *
+ * <p>
  * Under most variations of UNIX, <b>'jdbc:hsqldb:file:/databases/test'</b>
  * connects to a database located in the directory <b>'databases'</b> directly
  * under root, once again composed of some subset of the files:
@@ -350,19 +350,19 @@ import java.util.Properties;
  * <hr>
  *
  * <b>res: protocol Connections:</b><p>
- *
+ * <p>
  * The <b>'jdbc:hsqldb:res:&lt;path&gt;'</b> database connection
  * <b>&lt;url&gt;</b> has different semantics than the
  * <b>'jdbc:hsqldb:file:&lt;path&gt;'</b> form. The semantics are similar to
  * those of a <b>'files_readonly'</b> database, but with some additional
  * points to consider. <p>
- *
+ * <p>
  * Specifically, the <b>'&lt;path&gt;'</b> component of a <b>res:</b> protocol
  * database connection <b>&lt;url&gt;</b> is first converted to lower case
  * with <tt>Locale.ENGLISH</tt> and only then used to obtain resource URL
  * objects, which in turn are used to read the database files as resources on
  * the class path. <p>
- *
+ * <p>
  * Due to lower case conversion by the driver, <b>res:</b> <b>'&lt;path&gt;'</b>
  * components <em>never</em> find jar resources stored with
  * <tt>Locale.ENGLISH</tt> mixed case paths. The rationale for converting to
@@ -370,12 +370,12 @@ import java.util.Properties;
  * preserved when archiving resources, and conversion to lower case seems to
  * be the most common occurrence (although there is also no actual guarantee
  * that the conversion is <tt>Locale.ENGLISH</tt>).<p>
- *
+ * <p>
  * More importantly, <b>res:</b> <b>'&lt;path&gt;'</b> components <em>must</em>
  * point only to resources contained in one or more jars on the class
  * path. That is, only resources having the jar sub-protocol are considered
  * valid. <p>
- *
+ * <p>
  * This restriction is enforced to avoid the unfortunate situation in which,
  * because <b>res:</b> database instances do not create a <b>&lt;path&gt;</b>.lck
  * file (they are strictly files-read-only) and because the <b>&lt;path&gt;</b>
@@ -388,7 +388,7 @@ import java.util.Properties;
  * cooperation of a <b>res:</b> database instance open on the same files,
  * potentially resulting in unexpected database errors, inconsistent operation
  * and/or data corruption. <p>
- *
+ * <p>
  * In short, a <b>res:</b> type database connection <b>&lt;url&gt;</b> is
  * designed specifically to connect to a <b>'files_in_jar'</b> mode database
  * instance, which in turn is designed specifically to operate under
@@ -411,14 +411,14 @@ import java.util.Properties;
  * path of org.hsqldb.persist.Logger's ClassLoader is searched.
  *
  * <hr>
- *
+ * <p>
  * For more information about HSQLDB file structure, various database modes
  * and other attributes such as those controlled through the HSQLDB properties
  * files, please read the general documentation, especially the Advanced Users
  * Guide. <p>
  *
  * <b>JDBC 4.0 Notes:</b><p>
- *
+ * <p>
  * Starting with JDBC 4.0 (JDK 1.6), the <code>DriverManager</code> methods
  * <code>getConnection</code> and <code>getDrivers</code> have been
  * enhanced to support the Java Standard Edition Service Provider mechanism.
@@ -427,22 +427,22 @@ import java.util.Properties;
  * <code>META-INF/services/java.sql.Driver</code>. This file contains the fully
  * qualified class name ('org.hsqldb.jdbc.JDBCDriver') of the HSQLDB implementation
  * of <code>java.sql.Driver</code>. <p>
- *
+ * <p>
  * Hence, under JDBC 4.0 or greater, applications no longer need to explicitly
  * load the HSQLDB JDBC driver using <code>Class.forName()</code>. Of course,
  * existing programs which do load JDBC drivers using
  * <code>Class.forName()</code> will continue to work without modification.
  *
  * <hr>
- *
+ * <p>
  * (fredt@users)<br>
  * (campbell-burnet@users)<p>
  *
  * </div> <!-- end release-specific documentation -->
+ *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
- * @since HSQLDB 1.9.0
  * @see JDBCDriver
  * @see JDBCStatement
  * @see JDBCParameterMetaData
@@ -453,6 +453,7 @@ import java.util.Properties;
  * @see java.sql.Statement
  * @see java.sql.ResultSet
  * @see java.sql.DatabaseMetaData
+ * @since HSQLDB 1.9.0
  */
 public class JDBCConnection implements Connection {
 
@@ -460,30 +461,30 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>Statement</code> object for sending
      * SQL statements to the database.
      * SQL statements without parameters are normally
      * executed using <code>Statement</code> objects. If the same SQL statement
      * is executed many times, it may be more efficient to use a
      * <code>PreparedStatement</code> object.
-     * <P>
+     * <p>
      * Result sets created using the returned <code>Statement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code>
      * and have a concurrency level of <code>CONCUR_READ_ONLY</code>.
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 1.7.2, support for precompilation at the engine level
      * has been implemented, so it is now much more efficient and performant
      * to use a <code>PreparedStatement</code> object if the same short-running
      * SQL statement is to be executed many times. <p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code> and <code>CONCUR_READ_ONLY</code>
      * results. <p>
@@ -491,19 +492,19 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @return a new default <code>Statement</code> object
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 clarification:)
-     * or this method is called on a closed connection
-     * @see #createStatement(int,int)
-     * @see #createStatement(int,int,int)
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 clarification:)
+     *                      or this method is called on a closed connection
+     * @see #createStatement(int, int)
+     * @see #createStatement(int, int, int)
      */
     public synchronized Statement createStatement() throws SQLException {
 
         checkClosed();
 
         int props =
-            ResultProperties.getValueForJDBC(JDBCResultSet.TYPE_FORWARD_ONLY,
-                JDBCResultSet.CONCUR_READ_ONLY, rsHoldability);
+                ResultProperties.getValueForJDBC(JDBCResultSet.TYPE_FORWARD_ONLY,
+                        JDBCResultSet.CONCUR_READ_ONLY, rsHoldability);
         Statement stmt = new JDBCStatement(this, props);
 
         return stmt;
@@ -511,10 +512,10 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>PreparedStatement</code> object for sending
      * parameterized SQL statements to the database.
-     * <P>
+     * <p>
      * A SQL statement with or without IN parameters can be
      * pre-compiled and stored in a <code>PreparedStatement</code> object. This
      * object can then be used to efficiently execute this statement
@@ -529,23 +530,23 @@ public class JDBCConnection implements Connection {
      * not be sent to the database until the <code>PreparedStatement</code>
      * object is executed.  This has no direct effect on users; however, it does
      * affect which methods throw certain <code>SQLException</code> objects.
-     * <P>
+     * <p>
      * Result sets created using the returned <code>PreparedStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code>
      * and have a concurrency level of <code>CONCUR_READ_ONLY</code>.
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 1.7.2, support for precompilation at the engine level
      * has been implemented, so it is now much more efficient and performant
      * to use a <code>PreparedStatement</code> object if the same short-running
      * SQL statement is to be executed many times. <p>
-     *
+     * <p>
      * The support for and behaviour of PreparedStatement complies with SQL and
      * JDBC standards.  Please read the introductory section
      * of the documentation for ${link JDBCParameterMetaData}. <P>
@@ -553,13 +554,13 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param sql an SQL statement that may contain one or more '?' IN
-     * parameter placeholders
+     *            parameter placeholders
      * @return a new default <code>PreparedStatement</code> object containing the
      * pre-compiled SQL statement
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 clarification:)
-     * or this method is called on a closed connection
-     * @see #prepareStatement(String,int,int)
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 clarification:)
+     *                      or this method is called on a closed connection
+     * @see #prepareStatement(String, int, int)
      */
     public synchronized PreparedStatement prepareStatement(
             String sql) throws SQLException {
@@ -578,7 +579,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>CallableStatement</code> object for calling
      * database stored procedures.
      * The <code>CallableStatement</code> object provides
@@ -593,18 +594,18 @@ public class JDBCConnection implements Connection {
      * is executed. This has no
      * direct effect on users; however, it does affect which method
      * throws certain SQLExceptions.
-     * <P>
+     * <p>
      * Result sets created using the returned <code>CallableStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code>
      * and have a concurrency level of <code>CONCUR_READ_ONLY</code>.
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with 1.7.2, the support for and behaviour of
      * CallableStatement has changed.  Please read the introductory section
      * of the documentation for org.hsqldb.jdbc.JDBCCallableStatement.
@@ -612,14 +613,14 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param sql an SQL statement that may contain one or more '?'
-     * parameter placeholders. (JDBC4 clarification:) Typically this statement is specified using JDBC
-     * call escape syntax.
+     *            parameter placeholders. (JDBC4 clarification:) Typically this statement is specified using JDBC
+     *            call escape syntax.
      * @return a new default <code>CallableStatement</code> object containing the
      * pre-compiled SQL statement
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 clarification:)
-     * or this method is called on a closed connection
-     * @see #prepareCall(String,int,int)
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 clarification:)
+     *                      or this method is called on a closed connection
+     * @see #prepareCall(String, int, int)
      */
     public synchronized CallableStatement prepareCall(
             String sql) throws SQLException {
@@ -641,30 +642,30 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Converts the given SQL statement into the system's native SQL grammar.
      * A driver may convert the JDBC SQL grammar into its system's
      * native SQL grammar prior to sending it. This method returns the
      * native form of the statement that the driver would have sent.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB converts the JDBC SQL
      * grammar into the system's native SQL grammar prior to sending
      * it, if escape processing is set true; this method returns the
      * native form of the statement that the driver would send in place
      * of client-specified JDBC SQL grammar. <p>
-     *
+     * <p>
      * Before 1.7.2, escape processing was incomplete and
      * also broken in terms of support for nested escapes. <p>
-     *
+     * <p>
      * Starting with 1.7.2, escape processing is complete and handles nesting
      * to arbitrary depth, but enforces a very strict interpretation of the
      * syntax and does not detect or process SQL comments. <p>
-     *
+     * <p>
      * In essence, the HSQLDB engine directly handles the prescribed syntax
      * and date / time formats specified internal to the JDBC escapes.
      * It also directly offers the XOpen / ODBC extended scalar
@@ -672,12 +673,12 @@ public class JDBCConnection implements Connection {
      * As such, the driver simply removes the curly braces and JDBC escape
      * codes in the simplest and fastest fashion possible, by replacing them
      * with whitespace.
-     *
+     * <p>
      * But to avoid a great deal of complexity, certain forms of input
      * whitespace are currently not recognised.  For instance,
      * the driver handles "{?= call ...}" but not "{ ?= call ...} or
      * "{? = call ...}" <p>
-     *
+     * <p>
      * Also, comments embedded in SQL are currently not detected or
      * processed and thus may have unexpected effects on the output
      * of this method, for instance causing otherwise valid SQL to become
@@ -688,10 +689,10 @@ public class JDBCConnection implements Connection {
      * recommended to avoid submitting SQL having comments containing JDBC
      * escape sequence patterns and/or single or double quotation marks,
      * as this will avoid any potential problems.
-     *
+     * <p>
      * It is intended to implement a less strict handling of whitespace and
      * proper processing of SQL comments at some point in the near future.
-     *
+     * <p>
      * In any event, 1.7.2 now correctly processes the following JDBC escape
      * forms to arbitrary nesting depth, but only if the exact whitespace
      * layout described below is used:
@@ -709,11 +710,11 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param sql an SQL statement that may contain one or more '?'
-     * parameter placeholders
+     *            parameter placeholders
      * @return the native form of this statement
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 clarification:)
-     * or this method is called on a closed connection
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 clarification:)
+     *                      or this method is called on a closed connection
      */
     public synchronized String nativeSQL(
             final String sql) throws SQLException {
@@ -724,20 +725,20 @@ public class JDBCConnection implements Connection {
             return sql;
         }
 
-        boolean       changed = false;
-        int           state   = 0;
-        int           len     = sql.length();
-        int           nest    = 0;
-        StringBuilder sb      = null;
-        String        msg;
+        boolean changed = false;
+        int state = 0;
+        int len = sql.length();
+        int nest = 0;
+        StringBuilder sb = null;
+        String msg;
 
         //--
-        final int outside_all                         = 0;
+        final int outside_all = 0;
         final int outside_escape_inside_single_quotes = 1;
         final int outside_escape_inside_double_quotes = 2;
 
         //--
-        final int inside_escape                      = 3;
+        final int inside_escape = 3;
         final int inside_escape_inside_single_quotes = 4;
         final int inside_escape_inside_double_quotes = 5;
 
@@ -755,7 +756,7 @@ public class JDBCConnection implements Connection {
 
             switch (state) {
 
-                case outside_all :                            // Not inside an escape or quotes
+                case outside_all:                            // Not inside an escape or quotes
                     if (c == '\'') {
                         state = outside_escape_inside_single_quotes;
                     } else if (c == '"') {
@@ -766,8 +767,8 @@ public class JDBCConnection implements Connection {
                         }
                         sb.append(sql, tail, i);
 
-                        i       = onStartEscapeSequence(sql, sb, i);
-                        tail    = i;
+                        i = onStartEscapeSequence(sql, sb, i);
+                        tail = i;
                         changed = true;
 
                         nest++;
@@ -776,21 +777,21 @@ public class JDBCConnection implements Connection {
                     }
 
                     break;
-                case outside_escape_inside_single_quotes :    // inside ' ' only
-                case inside_escape_inside_single_quotes :     // inside { } and ' '
+                case outside_escape_inside_single_quotes:    // inside ' ' only
+                case inside_escape_inside_single_quotes:     // inside { } and ' '
                     if (c == '\'') {
                         state -= 1;
                     }
 
                     break;
-                case outside_escape_inside_double_quotes :    // inside " " only
-                case inside_escape_inside_double_quotes :     // inside { } and " "
+                case outside_escape_inside_double_quotes:    // inside " " only
+                case inside_escape_inside_double_quotes:     // inside { } and " "
                     if (c == '"') {
                         state -= 2;
                     }
 
                     break;
-                case inside_escape :                          // inside { }
+                case inside_escape:                          // inside { }
                     if (c == '\'') {
                         state = inside_escape_inside_single_quotes;
                     } else if (c == '"') {
@@ -801,7 +802,7 @@ public class JDBCConnection implements Connection {
 
                         i++;
 
-                        tail    = i;
+                        tail = i;
                         changed = true;
 
                         nest--;
@@ -811,8 +812,8 @@ public class JDBCConnection implements Connection {
                     } else if (c == '{') {
                         sb.append(sql, tail, i);
 
-                        i       = onStartEscapeSequence(sql, sb, i);
-                        tail    = i;
+                        i = onStartEscapeSequence(sql, sb, i);
+                        tail = i;
                         changed = true;
 
                         nest++;
@@ -838,7 +839,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Sets this connection's auto-commit mode to the given state.
      * If a connection is in auto-commit mode, then all its SQL
      * statements will be executed and committed as individual
@@ -847,7 +848,7 @@ public class JDBCConnection implements Connection {
      * the method <code>commit</code> or the method <code>rollback</code>.
      * By default, new connections are in auto-commit
      * mode.
-     * <P>
+     * <p>
      * The commit occurs when the statement completes. The time when the statement
      * completes depends on the type of SQL Statement:
      * <ul>
@@ -860,17 +861,17 @@ public class JDBCConnection implements Connection {
      * when all of the associated result sets have been closed, and all update
      * counts and output parameters have been retrieved.
      * </ul>
-     * <P>
+     * <p>
      * <B>NOTE:</B>  If this method is called during a transaction and the
      * auto-commit mode is changed, the transaction is committed.  If
      * <code>setAutoCommit</code> is called and the auto-commit mode is
      * not changed, the call is a no-op.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Up to and including HSQLDB 2.0,
      *
      * <ol>
@@ -880,20 +881,20 @@ public class JDBCConnection implements Connection {
      *   any XXXStatement.executeXXX method returns. </li>
      * </ol>
      * <p>
-     *
+     * <p>
      * Starting with 2.0, HSQLDB may not return a result set to the network
      * client as a whole; the generic documentation will apply. The fetch
      * size is taken into account
-     *
+     * <p>
      * (campbell-burnet@users) </div> <!-- end release-specific
      * documentation -->
      *
      * @param autoCommit <code>true</code> to enable auto-commit mode;
-     *         <code>false</code> to disable it
-     * @exception SQLException if a database access error occurs,
-     *  (JDBC4 Clarification:)
-     *  setAutoCommit(true) is called while participating in a distributed transaction,
-     * or this method is called on a closed connection
+     *                   <code>false</code> to disable it
+     * @throws SQLException if a database access error occurs,
+     *                      (JDBC4 Clarification:)
+     *                      setAutoCommit(true) is called while participating in a distributed transaction,
+     *                      or this method is called on a closed connection
      * @see #getAutoCommit
      */
     public synchronized void setAutoCommit(
@@ -913,10 +914,10 @@ public class JDBCConnection implements Connection {
      * object.
      *
      * @return the current state of this <code>Connection</code> object's
-     *         auto-commit mode
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
+     * auto-commit mode
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 Clarification:)
+     *                      or this method is called on a closed connection
      * @see #setAutoCommit
      */
     public synchronized boolean getAutoCommit() throws SQLException {
@@ -932,24 +933,24 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Makes all changes made since the previous
      * commit/rollback permanent and releases any database locks
      * currently held by this <code>Connection</code> object.
      * This method should be
      * used only when auto-commit mode has been disabled.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
      * </div><!-- end release-specific documentation -->
      *
-     * @exception SQLException if a database access error occurs,
-     * (JDBC4 Clarification:)
-     * this method is called while participating in a distributed transaction,
-     * if this method is called on a closed connection or this
-     *            <code>Connection</code> object is in auto-commit mode
+     * @throws SQLException if a database access error occurs,
+     *                      (JDBC4 Clarification:)
+     *                      this method is called while participating in a distributed transaction,
+     *                      if this method is called on a closed connection or this
+     *                      <code>Connection</code> object is in auto-commit mode
      * @see #setAutoCommit
      */
     public synchronized void commit() throws SQLException {
@@ -965,20 +966,20 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Undoes all changes made in the current transaction
      * and releases any database locks currently held
      * by this <code>Connection</code> object. This method should be
      * used only when auto-commit mode has been disabled.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 1.7.2, savepoints are fully supported both
      * in SQL and via the JDBC interface. <p>
-     *
+     * <p>
      * Using SQL, savepoints may be set, released and used in rollback
      * as follows:
      *
@@ -990,11 +991,11 @@ public class JDBCConnection implements Connection {
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @exception SQLException if a database access error occurs,
-     * (JDBC4 Clarification:)
-     * this method is called while participating in a distributed transaction,
-     * this method is called on a closed connection or this
-     *            <code>Connection</code> object is in auto-commit mode
+     * @throws SQLException if a database access error occurs,
+     *                      (JDBC4 Clarification:)
+     *                      this method is called while participating in a distributed transaction,
+     *                      this method is called on a closed connection or this
+     *                      <code>Connection</code> object is in auto-commit mode
      * @see #setAutoCommit
      */
     public synchronized void rollback() throws SQLException {
@@ -1010,29 +1011,29 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Releases this <code>Connection</code> object's database and JDBC resources
      * immediately instead of waiting for them to be automatically released.
-     * <P>
+     * <p>
      * Calling the method <code>close</code> on a <code>Connection</code>
      * object that is already closed is a no-op.
-     * <P>
+     * <p>
      * It is <b>strongly recommended</b> that an application explicitly
      * commits or rolls back an active transaction prior to calling the
      * <code>close</code> method.  If the <code>close</code> method is called
      * and there is an active transaction, the results are implementation-defined.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * From 1.7.2, HSQLDB <code>INTERNAL</code> <code>Connection</code>
      * objects are not closable from JDBC client code. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @exception SQLException SQLException if a database access error occurs
+     * @throws SQLException SQLException if a database access error occurs
      */
     public synchronized void close() throws SQLException {
 
@@ -1043,8 +1044,8 @@ public class JDBCConnection implements Connection {
         if (isInternal || isClosed) {
             return;
         }
-        isClosed       = true;
-        rootWarning    = null;
+        isClosed = true;
+        rootWarning = null;
         connProperties = null;
 
         if (isPooled) {
@@ -1067,15 +1068,15 @@ public class JDBCConnection implements Connection {
      * This method is guaranteed to return <code>true</code> only when
      * it is called after the method <code>Connection.close</code> has
      * been called.
-     * <P>
+     * <p>
      * This method generally cannot be called to determine whether a
      * connection to a database is valid or invalid.  A typical client
      * can determine that a connection is invalid by catching any
      * exceptions that might be thrown when an operation is attempted.
      *
      * @return <code>true</code> if this <code>Connection</code> object
-     *         is closed; <code>false</code> if it is still open
-     * @exception SQLException if a database access error occurs
+     * is closed; <code>false</code> if it is still open
+     * @throws SQLException if a database access error occurs
      */
     public synchronized boolean isClosed() throws SQLException {
         return isClosed;
@@ -1086,31 +1087,31 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Retrieves a <code>DatabaseMetaData</code> object that contains
      * metadata about the database to which this
      * <code>Connection</code> object represents a connection.
      * The metadata includes information about the database's
      * tables, its supported SQL grammar, its stored
      * procedures, the capabilities of this connection, and so on.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 essentially supports full database metadata. <p>
-     *
+     * <p>
      * For discussion in greater detail, please follow the link to the
      * overview for JDBCDatabaseMetaData, below.
      *
      * </div> <!-- end release-specific documentation -->
      *
      * @return a <code>DatabaseMetaData</code> object for this
-     *         <code>Connection</code> object
-     * @exception  SQLException if a database access error occurs
-     * (JDBC4 Clarification)
-     * or this method is called on a closed connection
+     * <code>Connection</code> object
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 Clarification)
+     *                      or this method is called on a closed connection
      * @see JDBCDatabaseMetaData
      */
     public synchronized DatabaseMetaData getMetaData() throws SQLException {
@@ -1122,20 +1123,20 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Puts this connection in read-only mode as a hint to the driver to enable
      * database optimizations.
      *
      * <P><B>Note:</B> This method cannot be called during a transaction.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 supports the SQL standard, which will not allow calls to
      * this method to succeed during a transaction.<p>
-     *
+     * <p>
      * Additionally, HSQLDB provides a way to put a whole database in
      * read-only mode. This is done by manually adding the line
      * 'readonly=true' to the database's .properties file while the
@@ -1145,7 +1146,7 @@ public class JDBCConnection implements Connection {
      * offline and remove the line 'readonly=true' from the
      * database's .properties file. Upon restart, the database will
      * be in regular (read-write) mode. <p>
-     *
+     * <p>
      * When a database is put in readonly mode, its files are opened
      * in readonly mode, making it possible to create CD-based
      * readonly databases. To create a CD-based readonly database
@@ -1155,7 +1156,7 @@ public class JDBCConnection implements Connection {
      * files to CD. This will reduce the space required and may
      * improve access times against the .data file which holds the
      * CACHED table data. <p>
-     *
+     * <p>
      * Starting with 1.7.2, an alternate approach to opimizing the
      * .data file before creating a CD-based readonly database is to issue
      * the CHECKPOINT DEFRAG command followed by SHUTDOWN to take the
@@ -1164,11 +1165,11 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param readOnly <code>true</code> enables read-only mode;
-     *        <code>false</code> disables it
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     *  method is called on a closed connection or this
-     *            method is called during a transaction
+     *                 <code>false</code> disables it
+     * @throws SQLException if a database access error occurs, this
+     *                      (JDBC4 Clarification:)
+     *                      method is called on a closed connection or this
+     *                      method is called during a transaction
      */
     public synchronized void setReadOnly(
             boolean readOnly) throws SQLException {
@@ -1187,10 +1188,10 @@ public class JDBCConnection implements Connection {
      * object is in read-only mode.
      *
      * @return <code>true</code> if this <code>Connection</code> object
-     *         is read-only; <code>false</code> otherwise
-     * @exception SQLException SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
+     * is read-only; <code>false</code> otherwise
+     * @throws SQLException SQLException if a database access error occurs
+     *                      (JDBC4 Clarification:)
+     *                      or this method is called on a closed connection
      */
     public synchronized boolean isReadOnly() throws SQLException {
 
@@ -1205,12 +1206,12 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Sets the given catalog name in order to select
      * a subspace of this <code>Connection</code> object's database
      * in which to work.
-     * <P>
-     *
+     * <p>
+     * <p>
      * (JDBC4 Clarification:)<p>
      * If the driver does not support catalogs, it will
      * silently ignore this request.
@@ -1221,22 +1222,22 @@ public class JDBCConnection implements Connection {
      * method {@code prepareStatement} or {@code prepareCall} is invoked.
      * For maximum portability, {@code setCatalog} should be called before a
      * {@code Statement} is created or prepared.]
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB supports a single catalog per database. If the given catalog name
      * is not the same as the database catalog name, this method throws an
      * error. <p>
      * </div> <!-- end release-specific documentation -->
      *
      * @param catalog the name of a catalog (subspace in this
-     *        <code>Connection</code> object's database) in which to work
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification)
-     * or this method is called on a closed connection
+     *                <code>Connection</code> object's database) in which to work
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 Clarification)
+     *                      or this method is called on a closed connection
      * @see #getCatalog
      */
     public synchronized void setCatalog(String catalog) throws SQLException {
@@ -1252,14 +1253,14 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Retrieves this <code>Connection</code> object's current catalog name.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB supports a single catalog per database. This method
      * returns the catalog name for the current database
      * error. <p>
@@ -1267,9 +1268,9 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @return the current catalog name or <code>null</code> if there is none
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 Clarification:)
+     *                      or this method is called on a closed connection
      * @see #setCatalog
      */
     public synchronized String getCatalog() throws SQLException {
@@ -1278,7 +1279,7 @@ public class JDBCConnection implements Connection {
 
         try {
             return (String) sessionProxy.getAttribute(
-                SessionInterface.INFO_CATALOG);
+                    SessionInterface.INFO_CATALOG);
         } catch (HsqlException e) {
             throw JDBCUtil.sqlException(e);
         }
@@ -1286,20 +1287,20 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
-     *  Attempts to change the transaction isolation level for this
+     * <p>
+     * Attempts to change the transaction isolation level for this
      * <code>Connection</code> object to the one given.
      * The constants defined in the interface <code>Connection</code>
      * are the possible transaction isolation levels.
-     * <P>
+     * <p>
      * <B>Note:</B> If this method is called during a transaction, the result
      * is implementation-defined.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 accepts all isolation levels. <code>Connection.TRANSACTION_READ_UNCOMMITED</code>
      * is promoted to <code>Connection.TRANSACTION_READ_COMMITED, but the transactions become read only</code>.
      * Calling this method during a transaction always succeeds and the selected
@@ -1308,18 +1309,18 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param level one of the following <code>Connection</code> constants:
-     *        <code>Connection.TRANSACTION_READ_UNCOMMITTED</code>,
-     *        <code>Connection.TRANSACTION_READ_COMMITTED</code>,
-     *        <code>Connection.TRANSACTION_REPEATABLE_READ</code>, or
-     *        <code>Connection.TRANSACTION_SERIALIZABLE</code>.
-     *        (Note that <code>Connection.TRANSACTION_NONE</code> cannot be used
-     *        because it specifies that transactions are not supported.)
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection
-     * (:JDBC4 End Clarification)
-     *            or the given parameter is not one of the <code>Connection</code>
-     *            constants
+     *              <code>Connection.TRANSACTION_READ_UNCOMMITTED</code>,
+     *              <code>Connection.TRANSACTION_READ_COMMITTED</code>,
+     *              <code>Connection.TRANSACTION_REPEATABLE_READ</code>, or
+     *              <code>Connection.TRANSACTION_SERIALIZABLE</code>.
+     *              (Note that <code>Connection.TRANSACTION_NONE</code> cannot be used
+     *              because it specifies that transactions are not supported.)
+     * @throws SQLException if a database access error occurs, this
+     *                      (JDBC4 Clarification:)
+     *                      method is called on a closed connection
+     *                      (:JDBC4 End Clarification)
+     *                      or the given parameter is not one of the <code>Connection</code>
+     *                      constants
      * @see JDBCDatabaseMetaData#supportsTransactionIsolationLevel
      * @see #getTransactionIsolation
      */
@@ -1330,12 +1331,12 @@ public class JDBCConnection implements Connection {
 
         switch (level) {
 
-            case TRANSACTION_READ_UNCOMMITTED :
-            case TRANSACTION_READ_COMMITTED :
-            case TRANSACTION_REPEATABLE_READ :
-            case TRANSACTION_SERIALIZABLE :
+            case TRANSACTION_READ_UNCOMMITTED:
+            case TRANSACTION_READ_COMMITTED:
+            case TRANSACTION_REPEATABLE_READ:
+            case TRANSACTION_SERIALIZABLE:
                 break;
-            default :
+            default:
                 throw JDBCUtil.invalidArgument();
         }
 
@@ -1348,30 +1349,30 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Retrieves this <code>Connection</code> object's current
      * transaction isolation level.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 supports all isolation levels. <code>Connection.TRANSACTION_READ_UNCOMMITED</code>
      * is promoted to <code>Connection.TRANSACTION_READ_COMMITED</code>.
      *
      * </div> <!-- end release-specific documentation -->
      *
      * @return the current transaction isolation level, which will be one
-     *         of the following constants:
-     *        <code>Connection.TRANSACTION_READ_UNCOMMITTED</code>,
-     *        <code>Connection.TRANSACTION_READ_COMMITTED</code>,
-     *        <code>Connection.TRANSACTION_REPEATABLE_READ</code>,
-     *        <code>Connection.TRANSACTION_SERIALIZABLE</code>, or
-     *        <code>Connection.TRANSACTION_NONE</code>.
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
+     * of the following constants:
+     * <code>Connection.TRANSACTION_READ_UNCOMMITTED</code>,
+     * <code>Connection.TRANSACTION_READ_COMMITTED</code>,
+     * <code>Connection.TRANSACTION_REPEATABLE_READ</code>,
+     * <code>Connection.TRANSACTION_SERIALIZABLE</code>, or
+     * <code>Connection.TRANSACTION_NONE</code>.
+     * @throws SQLException if a database access error occurs
+     *                      (JDBC4 Clarification:)
+     *                      or this method is called on a closed connection
      * @see JDBCDatabaseMetaData#supportsTransactionIsolationLevel
      * @see #setTransactionIsolation
      */
@@ -1388,42 +1389,43 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Retrieves the first warning reported by calls on this
      * <code>Connection</code> object.  If there is more than one
      * warning, subsequent warnings will be chained to the first one
      * and can be retrieved by calling the method
      * <code>SQLWarning.getNextWarning</code> on the warning
      * that was retrieved previously.
-     * <P>
+     * <p>
      * This method may not be
      * called on a closed connection; doing so will cause an
      * <code>SQLException</code> to be thrown.
      *
      * <P><B>Note:</B> Subsequent warnings will be chained to this
      * SQLWarning.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB produces warnings whenever a createStatement(),
      * prepareStatement() or prepareCall() invocation requests an unsupported
      * but defined combination of result set type, concurrency and holdability,
      * such that another set is substituted.<p>
      * Other warnings are typically raised during the execution of data change
      * and query statements.<p>
-     *
+     * <p>
      * Only the warnings caused by the last operation on this connection are
      * returned by this method. A single operation may return up to 10 chained
      * warnings.
      *
      * </div> <!-- end release-specific documentation -->
+     *
      * @return the first <code>SQLWarning</code> object or <code>null</code>
-     *         if there are none
-     * @exception SQLException if a database access error occurs or
-     *            this method is called on a closed connection
+     * if there are none
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed connection
      * @see java.sql.SQLWarning
      */
     public synchronized SQLWarning getWarnings() throws SQLException {
@@ -1435,24 +1437,24 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Clears all warnings reported for this <code>Connection</code> object.
      * After a call to this method, the method <code>getWarnings</code>
      * returns <code>null</code> until a new warning is
      * reported for this <code>Connection</code> object.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * The standard behaviour is implemented. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @exception SQLException SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
+     * @throws SQLException SQLException if a database access error occurs
+     *                      (JDBC4 Clarification:)
+     *                      or this method is called on a closed connection
      */
     public synchronized void clearWarnings() throws SQLException {
 
@@ -1465,7 +1467,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>Statement</code> object that will generate
      * <code>ResultSet</code> objects with the given type and concurrency.
      * This method is the same as the <code>createStatement</code> method
@@ -1473,62 +1475,62 @@ public class JDBCConnection implements Connection {
      * type and concurrency to be overridden.
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 adheres closely to SQL and JDBC standards. The
      * interpretation of of resultSetType and resultSetConcurrency has
      * changed in this version.<p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code>,
      * <code>CONCUR_READ_ONLY</code>,
      * <code>CONCUR_UPDATABLE</code>
      * results. <p>
-     *
+     * <p>
      * If an unsupported combination is requested, a SQLWarning is issued on
      * this Connection and the closest supported combination is used instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param resultSetType a result set type; one of
-     *        <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     *        <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     *        <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @param resultSetType        a result set type; one of
+     *                             <code>ResultSet.TYPE_FORWARD_ONLY</code>,
+     *                             <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
+     *                             <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @param resultSetConcurrency a concurrency type; one of
-     *        <code>ResultSet.CONCUR_READ_ONLY</code> or
-     *        <code>ResultSet.CONCUR_UPDATABLE</code>
+     *                             <code>ResultSet.CONCUR_READ_ONLY</code> or
+     *                             <code>ResultSet.CONCUR_UPDATABLE</code>
      * @return a new <code>Statement</code> object that will generate
-     *         <code>ResultSet</code> objects with the given type and
-     *         concurrency
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection
-     * (:JDBC4 Clarification)
-     *         or the given parameters are not <code>ResultSet</code>
-     *         constants indicating type and concurrency
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method or this method is not supported for the specified result
-     * set type and result set concurrency.
+     * <code>ResultSet</code> objects with the given type and
+     * concurrency
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameters are not <code>ResultSet</code>
+     *                                         constants indicating type and concurrency
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method or this method is not supported for the specified result
+     *                                         set type and result set concurrency.
      * @since JDK 1.2
      */
     public synchronized Statement createStatement(int resultSetType,
-            int resultSetConcurrency) throws SQLException {
+                                                  int resultSetConcurrency) throws SQLException {
 
         checkClosed();
 
         int props = ResultProperties.getValueForJDBC(resultSetType,
-            resultSetConcurrency, rsHoldability);
+                resultSetConcurrency, rsHoldability);
 
         return new JDBCStatement(this, props);
     }
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>PreparedStatement</code> object that will generate
      * <code>ResultSet</code> objects with the given type and concurrency.
      * This method is the same as the <code>prepareStatement</code> method
@@ -1537,53 +1539,53 @@ public class JDBCConnection implements Connection {
      * (JDBC4 Clarification:)
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 adheres closely to SQL and JDBC standards. The
      * interpretation of of resultSetType and resultSetConcurrency has
      * changed in this version.<p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code>,
      * <code>CONCUR_READ_ONLY</code>,
      * <code>CONCUR_UPDATABLE</code>
      * results. <p>
-     *
+     * <p>
      * If an unsupported combination is requested, a SQLWarning is issued on
      * this Connection and the closest supported combination is used instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql a <code>String</code> object that is the SQL statement to
-     *            be sent to the database; may contain one or more '?' IN
-     *            parameters
-     * @param resultSetType a result set type; one of
-     *         <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     *         <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @param sql                  a <code>String</code> object that is the SQL statement to
+     *                             be sent to the database; may contain one or more '?' IN
+     *                             parameters
+     * @param resultSetType        a result set type; one of
+     *                             <code>ResultSet.TYPE_FORWARD_ONLY</code>,
+     *                             <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
+     *                             <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @param resultSetConcurrency a concurrency type; one of
-     *         <code>ResultSet.CONCUR_READ_ONLY</code> or
-     *         <code>ResultSet.CONCUR_UPDATABLE</code>
+     *                             <code>ResultSet.CONCUR_READ_ONLY</code> or
+     *                             <code>ResultSet.CONCUR_UPDATABLE</code>
      * @return a new PreparedStatement object containing the
      * pre-compiled SQL statement that will produce <code>ResultSet</code>
      * objects with the given type and concurrency
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection
-     * (:JDBC4 Clarification)
-     *         or the given parameters are not <code>ResultSet</code>
-     *         constants indicating type and concurrency
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method or this method is not supported for the specified result
-     * set type and result set concurrency.
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameters are not <code>ResultSet</code>
+     *                                         constants indicating type and concurrency
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method or this method is not supported for the specified result
+     *                                         set type and result set concurrency.
      * @since JDK 1.2
      */
     public synchronized PreparedStatement prepareStatement(String sql,
-            int resultSetType, int resultSetConcurrency) throws SQLException {
+                                                           int resultSetType, int resultSetConcurrency) throws SQLException {
 
         checkClosed();
 
@@ -1598,7 +1600,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>CallableStatement</code> object that will generate
      * <code>ResultSet</code> objects with the given type and concurrency.
      * This method is the same as the <code>prepareCall</code> method
@@ -1607,52 +1609,52 @@ public class JDBCConnection implements Connection {
      * (JDBC4 Clarification:)
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 adheres closely to SQL and JDBC standards. The
      * interpretation of of resultSetType and resultSetConcurrency has
      * changed in this version.<p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code>,
      * <code>CONCUR_READ_ONLY</code>,
      * <code>CONCUR_UPDATABLE</code>
      * results. <p>
-     *
+     * <p>
      * If an unsupported combination is requested, a SQLWarning is issued on
      * this Connection and the closest supported combination is used instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql a <code>String</code> object that is the SQL statement to
-     *            be sent to the database; may contain on or more '?' parameters
-     * @param resultSetType a result set type; one of
-     *         <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     *         <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @param sql                  a <code>String</code> object that is the SQL statement to
+     *                             be sent to the database; may contain on or more '?' parameters
+     * @param resultSetType        a result set type; one of
+     *                             <code>ResultSet.TYPE_FORWARD_ONLY</code>,
+     *                             <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
+     *                             <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @param resultSetConcurrency a concurrency type; one of
-     *         <code>ResultSet.CONCUR_READ_ONLY</code> or
-     *         <code>ResultSet.CONCUR_UPDATABLE</code>
+     *                             <code>ResultSet.CONCUR_READ_ONLY</code> or
+     *                             <code>ResultSet.CONCUR_UPDATABLE</code>
      * @return a new <code>CallableStatement</code> object containing the
      * pre-compiled SQL statement that will produce <code>ResultSet</code>
      * objects with the given type and concurrency
-     * @exception SQLException if a database access error occurs, this method
-     * (JDBC4 Clarification:)
-     * is called on a closed connection
-     * (:JDBC4 Clarification)
-     *         or the given parameters are not <code>ResultSet</code>
-     *         constants indicating type and concurrency
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method or this method is not supported for the specified result
-     * set type and result set concurrency.
+     * @throws SQLException                    if a database access error occurs, this method
+     *                                         (JDBC4 Clarification:)
+     *                                         is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameters are not <code>ResultSet</code>
+     *                                         constants indicating type and concurrency
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method or this method is not supported for the specified result
+     *                                         set type and result set concurrency.
      * @since JDK 1.2
      */
     public synchronized CallableStatement prepareCall(String sql,
-            int resultSetType, int resultSetConcurrency) throws SQLException {
+                                                      int resultSetType, int resultSetConcurrency) throws SQLException {
 
         checkClosed();
 
@@ -1666,7 +1668,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Retrieves the <code>Map</code> object associated with this
      * <code>Connection</code> object.
      * Unless the application has added an entry, the type map returned
@@ -1674,7 +1676,7 @@ public class JDBCConnection implements Connection {
      * JDBC 4.1[<p>
      * You must invoke <code>setTypeMap</code> after making changes to the
      * <code>Map</code> object returned from
-     *  <code>getTypeMap</code> as a JDBC driver may create an internal
+     * <code>getTypeMap</code> as a JDBC driver may create an internal
      * copy of the <code>Map</code> object passed to <code>setTypeMap</code>:
      * <pre>
      *      Map&lt;String,Class&lt;?&gt;&gt; myMap = con.getTypeMap();
@@ -1685,24 +1687,24 @@ public class JDBCConnection implements Connection {
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * For compatibility, HSQLDB returns an empty map. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
      * @return the <code>java.util.Map</code> object associated
-     *         with this <code>Connection</code> object
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @since JDK 1.2
+     * with this <code>Connection</code> object
+     * @throws SQLException                    if a database access error occurs
+     *                                         (JDBC4 Clarification:)
+     *                                         or this method is called on a closed connection
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #setTypeMap
+     * @since JDK 1.2
      */
     public synchronized java.util
             .Map<java.lang.String,
-                 java.lang.Class<?>> getTypeMap() throws SQLException {
+            java.lang.Class<?>> getTypeMap() throws SQLException {
 
         checkClosed();
 
@@ -1711,7 +1713,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Installs the given <code>TypeMap</code> object as the type map for
      * this <code>Connection</code> object.  The type map will be used for the
      * custom mapping of SQL structured types and distinct types.
@@ -1729,7 +1731,7 @@ public class JDBCConnection implements Connection {
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB does not yet support this feature. Calling this
      * method always throws a <code>SQLException</code>, stating that
      * the function is not supported. <p>
@@ -1737,18 +1739,18 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param map the <code>java.util.Map</code> object to install
-     *        as the replacement for this <code>Connection</code>
-     *        object's default type map
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection or
-     * (:JDBC4 Clarification)
-     *        the given parameter is not a <code>java.util.Map</code>
-     *        object
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @since JDK 1.2
+     *            as the replacement for this <code>Connection</code>
+     *            object's default type map
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection or
+     *                                         (:JDBC4 Clarification)
+     *                                         the given parameter is not a <code>java.util.Map</code>
+     *                                         object
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #getTypeMap
+     * @since JDK 1.2
      */
     public synchronized void setTypeMap(Map<String,
             Class<?>> map) throws SQLException {
@@ -1762,31 +1764,31 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * (JDBC4 Clarification:)
      * Changes the default holdability of <code>ResultSet</code> objects
      * created using this <code>Connection</code> object to the given
      * holdability.  The default holdability of <code>ResultSet</code> objects
      * can be be determined by invoking
      * {@link DatabaseMetaData#getResultSetHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB supports this feature. <p>
      * </div> <!-- end release-specific documentation -->
      *
      * @param holdability a <code>ResultSet</code> holdability constant; one of
-     *        <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     *        <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
-     * @throws SQLException if a database access occurs, this method is called
-     * (JDBC4 Clarification:)
-     * on a closed connection, or the given parameter
-     * (JDBC4 Clarification:)
-     *         is not a <code>ResultSet</code> constant indicating holdability
-     * @exception SQLFeatureNotSupportedException if the given holdability is not supported
+     *                    <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
+     *                    <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     * @throws SQLException                    if a database access occurs, this method is called
+     *                                         (JDBC4 Clarification:)
+     *                                         on a closed connection, or the given parameter
+     *                                         (JDBC4 Clarification:)
+     *                                         is not a <code>ResultSet</code> constant indicating holdability
+     * @throws SQLFeatureNotSupportedException if the given holdability is not supported
      * @see #getHoldability
      * @see DatabaseMetaData#getResultSetHoldability
      * @see JDBCResultSet
@@ -1799,10 +1801,10 @@ public class JDBCConnection implements Connection {
 
         switch (holdability) {
 
-            case JDBCResultSet.HOLD_CURSORS_OVER_COMMIT :
-            case JDBCResultSet.CLOSE_CURSORS_AT_COMMIT :
+            case JDBCResultSet.HOLD_CURSORS_OVER_COMMIT:
+            case JDBCResultSet.CLOSE_CURSORS_AT_COMMIT:
                 break;
-            default :
+            default:
                 throw JDBCUtil.invalidArgument();
         }
         rsHoldability = holdability;
@@ -1810,27 +1812,27 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Retrieves the current holdability of <code>ResultSet</code> objects
      * created using this <code>Connection</code> object.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB returns the current holdability.<p>
-     *
+     * <p>
      * The default is HOLD_CURSORS_OVER_COMMIT. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
      * @return the holdability, one of
-     *        <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     *        <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     * <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
+     * <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
      * @throws SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
+     *                      (JDBC4 Clarification:)
+     *                      or this method is called on a closed connection
      * @see #setHoldability
      * @see DatabaseMetaData#getResultSetHoldability
      * @see JDBCResultSet
@@ -1845,34 +1847,34 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates an unnamed savepoint in the current transaction and
      * returns the new <code>Savepoint</code> object that represents it.
      *
      * <p> (JDBC4 clarification:) if setSavepoint is invoked outside of an active transaction, a transaction will be started at this newly created
      * savepoint.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * From 2.0, HSQLDB supports this feature. <p>
-     *
+     * <p>
      * Note: Unnamed savepoints are not part of the SQL:2003 standard.
      * Use setSavepoint(String name) instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
      * @return the new <code>Savepoint</code> object
-     * @exception SQLException if a database access error occurs,
-     * (JDBC4 Clarification:)
-     * this method is called while participating in a distributed transaction,
-     * this method is called on a closed connection
-     *            or this <code>Connection</code> object is currently in
-     *            auto-commit mode
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if a database access error occurs,
+     *                                         (JDBC4 Clarification:)
+     *                                         this method is called while participating in a distributed transaction,
+     *                                         this method is called on a closed connection
+     *                                         or this <code>Connection</code> object is currently in
+     *                                         auto-commit mode
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see JDBCSavepoint
      * @see java.sql.Savepoint
      * @since JDK 1.4, HSQLDB 1.7.2
@@ -1898,19 +1900,19 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a savepoint with the given name in the current transaction
      * and returns the new <code>Savepoint</code> object that represents it.
      *
      * <p> if setSavepoint is invoked outside of an active transaction, a transaction will be started at this newly created
      * savepoint.
-     *
+     * <p>
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Previous to JDBC 4, if the connection is autoCommit,
      * setting a savepoint has no effect, as it is cleared upon the execution
      * of the next transactional statement. When built for JDBC 4, this method
@@ -1920,14 +1922,14 @@ public class JDBCConnection implements Connection {
      *
      * @param name a <code>String</code> containing the name of the savepoint
      * @return the new <code>Savepoint</code> object
-     * @exception SQLException if a database access error occurs,
-     * (JDBC4 Clarification:)
-     *      this method is called while participating in a distributed transaction,
-     * this method is called on a closed connection
-     *            or this <code>Connection</code> object is currently in
-     *            auto-commit mode
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if a database access error occurs,
+     *                                         (JDBC4 Clarification:)
+     *                                         this method is called while participating in a distributed transaction,
+     *                                         this method is called on a closed connection
+     *                                         or this <code>Connection</code> object is currently in
+     *                                         auto-commit mode
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see JDBCSavepoint
      * @see java.sql.Savepoint
      * @since JDK 1.4, HSQLDB 1.7.2
@@ -1960,21 +1962,21 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Undoes all changes made after the given <code>Savepoint</code> object
      * was set.
-     * <P>
+     * <p>
      * This method should be used only when auto-commit has been disabled.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Previous to JDBC 4, <tt>JDBCSavepoint</tt> objects are valid for the life of
      * the originating <tt>Connection</tt> object and hence can be used
      * interchangeably, as long as they have equal savepoint names. <p>
-     *
+     * <p>
      * When built for JDBC 4, <tt>JDBCConnection</tt> objects invalidate
      * <tt>JDBCSavepoint</tt> objects when auto-commit mode is entered as well
      * as when they are used to successfully release or roll back to a named SQL
@@ -1985,14 +1987,14 @@ public class JDBCConnection implements Connection {
      * </div> <!-- end release-specific documentation -->
      *
      * @param savepoint the <code>Savepoint</code> object to roll back to
-     * @exception SQLException if a database access error occurs,
-     * this method is called while participating in a distributed transaction,
-     * this method is called on a closed connection,
-     *            the <code>Savepoint</code> object is no longer valid,
-     *            or this <code>Connection</code> object is currently in
-     *            auto-commit mode
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called while participating in a distributed transaction,
+     *                                         this method is called on a closed connection,
+     *                                         the <code>Savepoint</code> object is no longer valid,
+     *                                         or this <code>Connection</code> object is currently in
+     *                                         auto-commit mode
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see JDBCSavepoint
      * @see java.sql.Savepoint
      * @see #rollback
@@ -2023,7 +2025,7 @@ public class JDBCConnection implements Connection {
         }
 
         if (JDBCDatabaseMetaData.JDBC_MAJOR >= 4 && getAutoCommit()) {
-            sp.name       = null;
+            sp.name = null;
             sp.connection = null;
 
             throw JDBCUtil.sqlException(ErrorCode.X_3B001);
@@ -2034,7 +2036,7 @@ public class JDBCConnection implements Connection {
 
             if (JDBCDatabaseMetaData.JDBC_MAJOR >= 4) {
                 sp.connection = null;
-                sp.name       = null;
+                sp.name = null;
             }
         } catch (HsqlException e) {
             throw JDBCUtil.sqlException(e);
@@ -2043,20 +2045,20 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Removes the specified <code>Savepoint</code> (JDBC4 Clarification:) and subsequent <code>Savepoint</code> objects from the current
      * transaction. Any reference to the savepoint after it have been removed
      * will cause an <code>SQLException</code> to be thrown.
-     *
+     * <p>
      * <!-- end generic documentation -->
      *
      *
      * <b>HSLQDB Note:</b><p>
-     *
+     * <p>
      * Previous to JDBC 4, <tt>JDBCSavepoint</tt> objects are valid for the life of
      * the originating <tt>Connection</tt> object and hence can be used
      * interchangeably, as long as they have equal savepoint names. <p>
-     *
+     * <p>
      * When built for JDBC 4, <tt>JDBCConnection</tt> objects invalidate
      * <tt>JDBCSavepoint</tt> objects when auto-commit mode is entered as well
      * as when they are used to successfully release or roll back to a named SQL
@@ -2066,13 +2068,13 @@ public class JDBCConnection implements Connection {
      * <tt>JDBCSavepoint</tt> is specified. <p>
      *
      * @param savepoint the <code>Savepoint</code> object to be removed
-     * @exception SQLException if a database access error occurs, this
-     *  (JDBC4 Clarification:)
-     *  method is called on a closed connection or
-     *            the given <code>Savepoint</code> object is not a valid
-     *            savepoint in the current transaction
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection or
+     *                                         the given <code>Savepoint</code> object is not a valid
+     *                                         savepoint in the current transaction
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see JDBCSavepoint
      * @see java.sql.Savepoint
      * @since JDK 1.4, HSQLDB 1.7.2
@@ -2081,7 +2083,7 @@ public class JDBCConnection implements Connection {
             Savepoint savepoint) throws SQLException {
 
         JDBCSavepoint sp;
-        Result        req;
+        Result req;
 
         checkClosed();
 
@@ -2103,7 +2105,7 @@ public class JDBCConnection implements Connection {
         }
 
         if (JDBCDatabaseMetaData.JDBC_MAJOR >= 4 && getAutoCommit()) {
-            sp.name       = null;
+            sp.name = null;
             sp.connection = null;
 
             throw JDBCUtil.invalidArgument(ErrorCode.X_3B001);
@@ -2114,7 +2116,7 @@ public class JDBCConnection implements Connection {
 
             if (JDBCDatabaseMetaData.JDBC_MAJOR >= 4) {
                 sp.connection = null;
-                sp.name       = null;
+                sp.name = null;
             }
         } catch (HsqlException e) {
             throw JDBCUtil.sqlException(e);
@@ -2123,94 +2125,94 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>Statement</code> object that will generate
      * <code>ResultSet</code> objects with the given type, concurrency,
      * and holdability.
      * This method is the same as the <code>createStatement</code> method
      * above, but it allows the default result set
      * type, concurrency, and holdability to be overridden.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 adheres closely to SQL and JDBC standards. The
      * interpretation of of resultSetType and resultSetConcurrency has
      * changed in this version.<p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code>,
      * <code>CONCUR_READ_ONLY</code>,
      * <code>CONCUR_UPDATABLE</code>
      * results. <p>
-     *
+     * <p>
      * If an unsupported combination is requested, a SQLWarning is issued on
      * this Connection and the closest supported combination is used instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param resultSetType one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     *         <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @param resultSetType        one of the following <code>ResultSet</code>
+     *                             constants:
+     *                             <code>ResultSet.TYPE_FORWARD_ONLY</code>,
+     *                             <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
+     *                             <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @param resultSetConcurrency one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.CONCUR_READ_ONLY</code> or
-     *         <code>ResultSet.CONCUR_UPDATABLE</code>
+     *                             constants:
+     *                             <code>ResultSet.CONCUR_READ_ONLY</code> or
+     *                             <code>ResultSet.CONCUR_UPDATABLE</code>
      * @param resultSetHoldability one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     *         <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     *                             constants:
+     *                             <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
+     *                             <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
      * @return a new <code>Statement</code> object that will generate
-     *         <code>ResultSet</code> objects with the given type,
-     *         concurrency, and holdability
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection
-     * (:JDBC4 Clarification)
-     *            or the given parameters are not <code>ResultSet</code>
-     *            constants indicating type, concurrency, and holdability
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method or this method is not supported for the specified result
-     * set type, result set holdability and result set concurrency.
+     * <code>ResultSet</code> objects with the given type,
+     * concurrency, and holdability
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameters are not <code>ResultSet</code>
+     *                                         constants indicating type, concurrency, and holdability
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method or this method is not supported for the specified result
+     *                                         set type, result set holdability and result set concurrency.
      * @see JDBCResultSet
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public synchronized Statement createStatement(int resultSetType,
-            int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                                  int resultSetConcurrency,
+                                                  int resultSetHoldability) throws SQLException {
 
         checkClosed();
 
         int props = ResultProperties.getValueForJDBC(resultSetType,
-            resultSetConcurrency, resultSetHoldability);
+                resultSetConcurrency, resultSetHoldability);
 
         return new JDBCStatement(this, props);
     }
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>PreparedStatement</code> object that will generate
      * <code>ResultSet</code> objects with the given type, concurrency,
      * and holdability.
-     * <P>
+     * <p>
      * This method is the same as the <code>prepareStatement</code> method
      * above, but it allows the default result set
      * type, concurrency, and holdability to be overridden.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 adheres closely to SQL and JDBC standards. The
      * interpretation of of resultSetType and resultSetConcurrency has
      * changed in this version.<p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code>,
      * <code>CONCUR_READ_ONLY</code>,
@@ -2218,48 +2220,48 @@ public class JDBCConnection implements Connection {
      * results.<p>
      * <code>HOLD_CURSORS_OVER_COMMIT</code> is supported only when
      * <code>CONCUR_READ_ONLY</code> is requested.<p>
-     *
-     *
+     * <p>
+     * <p>
      * If an unsupported combination is requested, a SQLWarning is issued on
      * this Connection and the closest supported combination is used instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql a <code>String</code> object that is the SQL statement to
-     *            be sent to the database; may contain one or more '?' IN
-     *            parameters
-     * @param resultSetType one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     *         <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @param sql                  a <code>String</code> object that is the SQL statement to
+     *                             be sent to the database; may contain one or more '?' IN
+     *                             parameters
+     * @param resultSetType        one of the following <code>ResultSet</code>
+     *                             constants:
+     *                             <code>ResultSet.TYPE_FORWARD_ONLY</code>,
+     *                             <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
+     *                             <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @param resultSetConcurrency one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.CONCUR_READ_ONLY</code> or
-     *         <code>ResultSet.CONCUR_UPDATABLE</code>
+     *                             constants:
+     *                             <code>ResultSet.CONCUR_READ_ONLY</code> or
+     *                             <code>ResultSet.CONCUR_UPDATABLE</code>
      * @param resultSetHoldability one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     *         <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     *                             constants:
+     *                             <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
+     *                             <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
      * @return a new <code>PreparedStatement</code> object, containing the
-     *         pre-compiled SQL statement, that will generate
-     *         <code>ResultSet</code> objects with the given type,
-     *         concurrency, and holdability
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection
-     * (:JDBC4 Clarification)
-     *            or the given parameters are not <code>ResultSet</code>
-     *            constants indicating type, concurrency, and holdability
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method or this method is not supported for the specified result
-     * set type, result set holdability and result set concurrency.
+     * pre-compiled SQL statement, that will generate
+     * <code>ResultSet</code> objects with the given type,
+     * concurrency, and holdability
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameters are not <code>ResultSet</code>
+     *                                         constants indicating type, concurrency, and holdability
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method or this method is not supported for the specified result
+     *                                         set type, result set holdability and result set concurrency.
      * @see JDBCResultSet
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public synchronized PreparedStatement prepareStatement(String sql,
-            int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                                           int resultSetType, int resultSetConcurrency,
+                                                           int resultSetHoldability) throws SQLException {
 
         checkClosed();
 
@@ -2274,67 +2276,67 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a <code>CallableStatement</code> object that will generate
      * <code>ResultSet</code> objects with the given type and concurrency.
      * This method is the same as the <code>prepareCall</code> method
      * above, but it allows the default result set
      * type, result set concurrency type and holdability to be overridden.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0 adheres closely to SQL and JDBC standards. The
      * interpretation of of resultSetType and resultSetConcurrency has
      * changed in this version.<p>
-     *
+     * <p>
      * HSQLDB supports <code>TYPE_FORWARD_ONLY</code>,
      * <code>TYPE_SCROLL_INSENSITIVE</code>,
      * <code>CONCUR_READ_ONLY</code>,
      * <code>CONCUR_UPDATABLE</code>
      * results. <p>
-     *
+     * <p>
      * If an unsupported combination is requested, a SQLWarning is issued on
      * this Connection and the closest supported combination is used instead. <p>
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql a <code>String</code> object that is the SQL statement to
-     *            be sent to the database; may contain on or more '?' parameters
-     * @param resultSetType one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.TYPE_FORWARD_ONLY</code>,
-     *         <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
-     *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
+     * @param sql                  a <code>String</code> object that is the SQL statement to
+     *                             be sent to the database; may contain on or more '?' parameters
+     * @param resultSetType        one of the following <code>ResultSet</code>
+     *                             constants:
+     *                             <code>ResultSet.TYPE_FORWARD_ONLY</code>,
+     *                             <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
+     *                             <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @param resultSetConcurrency one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.CONCUR_READ_ONLY</code> or
-     *         <code>ResultSet.CONCUR_UPDATABLE</code>
+     *                             constants:
+     *                             <code>ResultSet.CONCUR_READ_ONLY</code> or
+     *                             <code>ResultSet.CONCUR_UPDATABLE</code>
      * @param resultSetHoldability one of the following <code>ResultSet</code>
-     *        constants:
-     *         <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     *         <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     *                             constants:
+     *                             <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
+     *                             <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
      * @return a new <code>CallableStatement</code> object, containing the
-     *         pre-compiled SQL statement, that will generate
-     *         <code>ResultSet</code> objects with the given type,
-     *         concurrency, and holdability
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     * method is called on a closed connection
-     * (:JDBC4 Clarification)
-     *            or the given parameters are not <code>ResultSet</code>
-     *            constants indicating type, concurrency, and holdability
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method or this method is not supported for the specified result
-     * set type, result set holdability and result set concurrency.
+     * pre-compiled SQL statement, that will generate
+     * <code>ResultSet</code> objects with the given type,
+     * concurrency, and holdability
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameters are not <code>ResultSet</code>
+     *                                         constants indicating type, concurrency, and holdability
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method or this method is not supported for the specified result
+     *                                         set type, result set holdability and result set concurrency.
      * @see JDBCResultSet
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public synchronized CallableStatement prepareCall(String sql,
-            int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                                      int resultSetType, int resultSetConcurrency,
+                                                      int resultSetHoldability) throws SQLException {
 
         checkClosed();
 
@@ -2348,14 +2350,14 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a default <code>PreparedStatement</code> object that has
      * the capability to retrieve auto-generated keys. The given constant
      * tells the driver whether it should make auto-generated keys
      * available for retrieval.  This parameter is ignored if the SQL statement
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * auto-generated keys (the list of such statements is vendor-specific).
-     * <P>
+     * <p>
      * <B>Note:</B> This method is optimized for handling
      * parametric SQL statements that benefit from pre-compilation. If
      * the driver supports pre-compilation,
@@ -2365,19 +2367,19 @@ public class JDBCConnection implements Connection {
      * not be sent to the database until the <code>PreparedStatement</code>
      * object is executed.  This has no direct effect on users; however, it does
      * affect which methods throw certain SQLExceptions.
-     * <P>
+     * <p>
      * Result sets created using the returned <code>PreparedStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code>
      * and have a concurrency level of <code>CONCUR_READ_ONLY</code>.
      * (JDBC4 Clarification:)
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports returning generated columns
      * with single-row and multi-row INSERT, UPDATE and MERGE statements. <p>
      * If the table has an IDENTITY or GENERATED column(s) the values for these
@@ -2386,35 +2388,35 @@ public class JDBCConnection implements Connection {
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql an SQL statement that may contain one or more '?' IN
-     *        parameter placeholders
+     * @param sql               an SQL statement that may contain one or more '?' IN
+     *                          parameter placeholders
      * @param autoGeneratedKeys a flag indicating whether auto-generated keys
-     *        should be returned; one of
-     *        <code>Statement.RETURN_GENERATED_KEYS</code> or
-     *        <code>Statement.NO_GENERATED_KEYS</code>
+     *                          should be returned; one of
+     *                          <code>Statement.RETURN_GENERATED_KEYS</code> or
+     *                          <code>Statement.NO_GENERATED_KEYS</code>
      * @return a new <code>PreparedStatement</code> object, containing the
-     *         pre-compiled SQL statement, that will have the capability of
-     *         returning auto-generated keys
-     * @exception SQLException if a database access error occurs, this
-     * (JDBC4 Clarification:)
-     *  method is called on a closed connection
-     * (:JDBC4 Clarification)
-     *         or the given parameter is not a <code>Statement</code>
-     *         constant indicating whether auto-generated keys should be
-     *         returned
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method with a constant of Statement.RETURN_GENERATED_KEYS
+     * pre-compiled SQL statement, that will have the capability of
+     * returning auto-generated keys
+     * @throws SQLException                    if a database access error occurs, this
+     *                                         (JDBC4 Clarification:)
+     *                                         method is called on a closed connection
+     *                                         (:JDBC4 Clarification)
+     *                                         or the given parameter is not a <code>Statement</code>
+     *                                         constant indicating whether auto-generated keys should be
+     *                                         returned
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method with a constant of Statement.RETURN_GENERATED_KEYS
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public synchronized PreparedStatement prepareStatement(String sql,
-            int autoGeneratedKeys) throws SQLException {
+                                                           int autoGeneratedKeys) throws SQLException {
 
         checkClosed();
 
         try {
             if (autoGeneratedKeys != ResultConstants.RETURN_GENERATED_KEYS
                     && autoGeneratedKeys
-                       != ResultConstants.RETURN_NO_GENERATED_KEYS) {
+                    != ResultConstants.RETURN_NO_GENERATED_KEYS) {
                 throw JDBCUtil.invalidArgument("autoGeneratedKeys");
             }
 
@@ -2441,7 +2443,7 @@ public class JDBCConnection implements Connection {
      * pre-compiled and stored in a <code>PreparedStatement</code> object. This
      * object can then be used to efficiently execute this statement
      * multiple times.
-     * <P>
+     * <p>
      * <B>Note:</B> This method is optimized for handling
      * parametric SQL statements that benefit from pre-compilation. If
      * the driver supports pre-compilation,
@@ -2451,42 +2453,42 @@ public class JDBCConnection implements Connection {
      * not be sent to the database until the <code>PreparedStatement</code>
      * object is executed.  This has no direct effect on users; however, it does
      * affect which methods throw certain SQLExceptions.
-     * <P>
+     * <p>
      * Result sets created using the returned <code>PreparedStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code>
      * and have a concurrency level of <code>CONCUR_READ_ONLY</code>.
      * (JDBC4 Clarification:)
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports returning generated columns
      * with single-row and multi-row INSERT, UPDATE and MERGE statements. <p>
      * The columnIndexes may specify any set of columns of the table.
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql an SQL statement that may contain one or more '?' IN
-     *        parameter placeholders
+     * @param sql           an SQL statement that may contain one or more '?' IN
+     *                      parameter placeholders
      * @param columnIndexes an array of column indexes indicating the columns
-     *        that should be returned from the inserted row or rows
+     *                      that should be returned from the inserted row or rows
      * @return a new <code>PreparedStatement</code> object, containing the
-     *         pre-compiled statement, that is capable of returning the
-     *         auto-generated keys designated by the given array of column
-     *         indexes
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * pre-compiled statement, that is capable of returning the
+     * auto-generated keys designated by the given array of column
+     * indexes
+     * @throws SQLException                    if a database access error occurs
+     *                                         (JDBC4 Clarification:)
+     *                                         or this method is called on a closed connection
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public synchronized PreparedStatement prepareStatement(String sql,
-            int[] columnIndexes) throws SQLException {
+                                                           int[] columnIndexes) throws SQLException {
 
         checkClosed();
 
@@ -2503,7 +2505,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Creates a default <code>PreparedStatement</code> object capable
      * of returning the auto-generated keys designated by the given array.
      * This array contains the names of the columns in the target
@@ -2511,12 +2513,12 @@ public class JDBCConnection implements Connection {
      * The driver will ignore the array if the SQL statement
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * auto-generated keys (the list of such statements is vendor-specific).
-     * <P>
+     * <p>
      * An SQL statement with or without IN parameters can be
      * pre-compiled and stored in a <code>PreparedStatement</code> object. This
      * object can then be used to efficiently execute this statement
      * multiple times.
-     * <P>
+     * <p>
      * <B>Note:</B> This method is optimized for handling
      * parametric SQL statements that benefit from pre-compilation. If
      * the driver supports pre-compilation,
@@ -2526,19 +2528,19 @@ public class JDBCConnection implements Connection {
      * not be sent to the database until the <code>PreparedStatement</code>
      * object is executed.  This has no direct effect on users; however, it does
      * affect which methods throw certain SQLExceptions.
-     * <P>
+     * <p>
      * Result sets created using the returned <code>PreparedStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code>
      * and have a concurrency level of <code>CONCUR_READ_ONLY</code>.
      * (JDBC4 Clarification:)
      * The holdability of the created result sets can be determined by
      * calling {@link #getHoldability}.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports returning generated columns
      * with single-row and multi-row INSERT, UPDATE and MERGE statements. <p>
      * The columnNames may specify any set of columns of the table. The names
@@ -2546,23 +2548,23 @@ public class JDBCConnection implements Connection {
      *
      * </div> <!-- end release-specific documentation -->
      *
-     * @param sql an SQL statement that may contain one or more '?' IN
-     *        parameter placeholders
+     * @param sql         an SQL statement that may contain one or more '?' IN
+     *                    parameter placeholders
      * @param columnNames an array of column names indicating the columns
-     *        that should be returned from the inserted row or rows
+     *                    that should be returned from the inserted row or rows
      * @return a new <code>PreparedStatement</code> object, containing the
-     *         pre-compiled statement, that is capable of returning the
-     *         auto-generated keys designated by the given array of column
-     *         names
-     * @exception SQLException if a database access error occurs
-     * (JDBC4 Clarification:)
-     * or this method is called on a closed connection
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * pre-compiled statement, that is capable of returning the
+     * auto-generated keys designated by the given array of column
+     * names
+     * @throws SQLException                    if a database access error occurs
+     *                                         (JDBC4 Clarification:)
+     *                                         or this method is called on a closed connection
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public synchronized PreparedStatement prepareStatement(String sql,
-            String[] columnNames) throws SQLException {
+                                                           String[] columnNames) throws SQLException {
 
         checkClosed();
 
@@ -2584,13 +2586,13 @@ public class JDBCConnection implements Connection {
      * returned initially contains no data.  The <code>setAsciiStream</code>,
      * <code>setCharacterStream</code> and <code>setString</code> methods of
      * the <code>Clob</code> interface may be used to add data to the <code>Clob</code>.
-     * @return An object that implements the <code>Clob</code> interface
-     * @throws SQLException if an object that implements the
-     * <code>Clob</code> interface can not be constructed, this method is
-     * called on a closed connection or a database access error occurs.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this data type
      *
+     * @return An object that implements the <code>Clob</code> interface
+     * @throws SQLException                    if an object that implements the
+     *                                         <code>Clob</code> interface can not be constructed, this method is
+     *                                         called on a closed connection or a database access error occurs.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this data type
      * @since JDK 1.6, HSQLDB 2.0
      */
     public Clob createClob() throws SQLException {
@@ -2605,13 +2607,13 @@ public class JDBCConnection implements Connection {
      * returned initially contains no data.  The <code>setBinaryStream</code> and
      * <code>setBytes</code> methods of the <code>Blob</code> interface may be used to add data to
      * the <code>Blob</code>.
-     * @return  An object that implements the <code>Blob</code> interface
-     * @throws SQLException if an object that implements the
-     * <code>Blob</code> interface can not be constructed, this method is
-     * called on a closed connection or a database access error occurs.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this data type
      *
+     * @return An object that implements the <code>Blob</code> interface
+     * @throws SQLException                    if an object that implements the
+     *                                         <code>Blob</code> interface can not be constructed, this method is
+     *                                         called on a closed connection or a database access error occurs.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this data type
      * @since JDK 1.6, HSQLDB 2.0
      */
     public Blob createBlob() throws SQLException {
@@ -2626,13 +2628,13 @@ public class JDBCConnection implements Connection {
      * returned initially contains no data.  The <code>setAsciiStream</code>,
      * <code>setCharacterStream</code> and <code>setString</code> methods of the <code>NClob</code> interface may
      * be used to add data to the <code>NClob</code>.
-     * @return An object that implements the <code>NClob</code> interface
-     * @throws SQLException if an object that implements the
-     * <code>NClob</code> interface can not be constructed, this method is
-     * called on a closed connection or a database access error occurs.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this data type
      *
+     * @return An object that implements the <code>NClob</code> interface
+     * @throws SQLException                    if an object that implements the
+     *                                         <code>NClob</code> interface can not be constructed, this method is
+     *                                         called on a closed connection or a database access error occurs.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this data type
      * @since JDK 1.6, HSQLDB 2.0
      */
 
@@ -2648,12 +2650,13 @@ public class JDBCConnection implements Connection {
      * returned initially contains no data. The <code>createXmlStreamWriter</code> object and
      * <code>setString</code> method of the <code>SQLXML</code> interface may be used to add data to the <code>SQLXML</code>
      * object.
+     *
      * @return An object that implements the <code>SQLXML</code> interface
-     * @throws SQLException if an object that implements the <code>SQLXML</code> interface can not
-     * be constructed, this method is
-     * called on a closed connection or a database access error occurs.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this data type
+     * @throws SQLException                    if an object that implements the <code>SQLXML</code> interface can not
+     *                                         be constructed, this method is
+     *                                         called on a closed connection or a database access error occurs.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this data type
      * @since JDK 1.6, HSQLDB 2.0
      */
     public SQLXML createSQLXML() throws SQLException {
@@ -2663,11 +2666,11 @@ public class JDBCConnection implements Connection {
         return new JDBCSQLXML();
     }
 
-    /** @todo:  ThreadPool? HsqlTimer with callback? */
+    /** @todo: ThreadPool? HsqlTimer with callback? */
 
     /**
      * <!-- start generic documentation -->
-     *
+     * <p>
      * Returns true if the connection has not been closed and is still valid.
      * The driver shall submit a query on the connection or use some other
      * mechanism that positively verifies the connection is still valid when
@@ -2675,30 +2678,28 @@ public class JDBCConnection implements Connection {
      * <p>
      * The query submitted by the driver to validate the connection shall be
      * executed in the context of the current transaction.
-     *
+     * <p>
      * <!-- end generic documentation -->
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB uses a maximum timeout of 60 seconds if timeout has be specified
      * as zero.
      *
      * </div> <!-- end release-specific documentation -->
      *
      * @param timeout -             The time in seconds to wait for the database operation
-     *                                              used to validate the connection to complete.  If
-     *                                              the timeout period expires before the operation
-     *                                              completes, this method returns false.  A value of
-     *                                              0 indicates a timeout is not applied to the
-     *                                              database operation.
-     *
+     *                used to validate the connection to complete.  If
+     *                the timeout period expires before the operation
+     *                completes, this method returns false.  A value of
+     *                0 indicates a timeout is not applied to the
+     *                database operation.
      * @return true if the connection is valid, false otherwise
-     * @exception SQLException if the value supplied for <code>timeout</code>
-     * is less then 0
-     * @since JDK 1.6, HSQLDB 2.0
-     *
+     * @throws SQLException if the value supplied for <code>timeout</code>
+     *                      is less then 0
      * @see JDBCDatabaseMetaData#getClientInfoProperties
+     * @since JDK 1.6, HSQLDB 2.0
      */
     public boolean isValid(int timeout) throws SQLException {
 
@@ -2714,8 +2715,8 @@ public class JDBCConnection implements Connection {
             return false;
         }
 
-        final boolean[] flag = new boolean[] { true };
-        Thread          t    = new Thread() {
+        final boolean[] flag = new boolean[]{true};
+        Thread t = new Thread() {
 
             public void run() {
 
@@ -2799,25 +2800,25 @@ public class JDBCConnection implements Connection {
      * <li>ClientHostname   -       The host name of the computer the application
      *                                                  using the connection is running on.</li>
      * </ul>
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 2.0, throws an SQLClientInfoException when this method is
      * called.
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param name          The name of the client info property to set
-     * @param value         The value to set the client info property to.  If the
-     *                                      value is null, the current value of the specified
-     *                                      property is cleared.
-     * <p>
-     * @throws      SQLClientInfoException if the database server returns an error while
-     *                      setting the client info value on the database server or this method
-     * is called on a closed connection
-     * <p>
+     * @param name  The name of the client info property to set
+     * @param value The value to set the client info property to.  If the
+     *              value is null, the current value of the specified
+     *              property is cleared.
+     *              <p>
+     * @throws SQLClientInfoException if the database server returns an error while
+     *                                setting the client info value on the database server or this method
+     *                                is called on a closed connection
+     *                                <p>
      * @since JDK 1.6, HSQLDB 2.0
      */
     public void setClientInfo(String name,
@@ -2852,15 +2853,14 @@ public class JDBCConnection implements Connection {
      * set before the error occurred.
      * <p>
      *
-     * @param properties                the list of client info properties to set
-     * <p>
+     * @param properties the list of client info properties to set
+     *                   <p>
+     * @throws SQLClientInfoException if the database server returns an error while
+     *                                setting the clientInfo values on the database server or this method
+     *                                is called on a closed connection
      * @see java.sql.Connection#setClientInfo(String, String) setClientInfo(String, String)
      * @since JDK 1.6, HSQLDB 2.0
      * <p>
-     * @throws SQLClientInfoException if the database server returns an error while
-     *                  setting the clientInfo values on the database server or this method
-     * is called on a closed connection
-     *
      */
     public void setClientInfo(
             Properties properties) throws SQLClientInfoException {
@@ -2892,17 +2892,17 @@ public class JDBCConnection implements Connection {
      * Applications may use the <code>DatabaseMetaData.getClientInfoProperties</code>
      * method to determine the client info properties supported by the driver.
      * <p>
-     * @param name              The name of the client info property to retrieve
-     * <p>
-     * @return                  The value of the client info property specified
-     * <p>
-     * @throws SQLException             if the database server returns an error when
-     *                                                  fetching the client info value from the database
-     * or this method is called on a closed connection
-     * <p>
-     * @since JDK 1.6, HSQLDB 2.0
      *
+     * @param name The name of the client info property to retrieve
+     *             <p>
+     * @return The value of the client info property specified
+     * <p>
+     * @throws SQLException if the database server returns an error when
+     *                      fetching the client info value from the database
+     *                      or this method is called on a closed connection
+     *                      <p>
      * @see java.sql.DatabaseMetaData#getClientInfoProperties
+     * @since JDK 1.6, HSQLDB 2.0
      */
     public String getClientInfo(String name) throws SQLException {
 
@@ -2919,13 +2919,14 @@ public class JDBCConnection implements Connection {
      * may be null if the property has not been set and does not have a
      * default value.
      * <p>
-     * @return  A <code>Properties</code> object that contains the name and current value of
-     *                  each of the client info properties supported by the driver.
+     *
+     * @return A <code>Properties</code> object that contains the name and current value of
+     * each of the client info properties supported by the driver.
      * <p>
-     * @throws  SQLException if the database server returns an error when
-     *                  fetching the client info values from the database
-     * or this method is called on a closed connection
-     * <p>
+     * @throws SQLException if the database server returns an error when
+     *                      fetching the client info values from the database
+     *                      or this method is called on a closed connection
+     *                      <p>
      * @since JDK 1.6, HSQLDB 2.0
      */
     public Properties getClientInfo() throws SQLException {
@@ -2938,30 +2939,30 @@ public class JDBCConnection implements Connection {
 // --------------------------- Added: Mustang Build 80 -------------------------
 
     /**
-     *  Factory method for creating Array objects.
+     * Factory method for creating Array objects.
      * <p>
-     *  <b>Note: </b>When <code>createArrayOf</code> is used to create an array object
-     *  that maps to a primitive data type, then it is implementation-defined
-     *  whether the <code>Array</code> object is an array of that primitive
-     *  data type or an array of <code>Object</code>.
-     *  <p>
-     *  <b>Note: </b>The JDBC driver is responsible for mapping the elements
-     *  <code>Object</code> array to the default JDBC SQL type defined in
-     *  java.sql.Types for the given class of <code>Object</code>. The default
-     *  mapping is specified in Appendix B of the JDBC specification.  If the
-     *  resulting JDBC type is not the appropriate type for the given typeName then
-     *  it is implementation defined whether an <code>SQLException</code> is
-     *  thrown or the driver supports the resulting conversion.
+     * <b>Note: </b>When <code>createArrayOf</code> is used to create an array object
+     * that maps to a primitive data type, then it is implementation-defined
+     * whether the <code>Array</code> object is an array of that primitive
+     * data type or an array of <code>Object</code>.
+     * <p>
+     * <b>Note: </b>The JDBC driver is responsible for mapping the elements
+     * <code>Object</code> array to the default JDBC SQL type defined in
+     * java.sql.Types for the given class of <code>Object</code>. The default
+     * mapping is specified in Appendix B of the JDBC specification.  If the
+     * resulting JDBC type is not the appropriate type for the given typeName then
+     * it is implementation defined whether an <code>SQLException</code> is
+     * thrown or the driver supports the resulting conversion.
      *
-     *  @param typeName the SQL name of the type the elements of the array map to. The typeName is a
-     *  database-specific name which may be the name of a built-in type, a user-defined type or a standard  SQL type supported by this database. This
-     *   is the value returned by <code>Array.getBaseTypeName</code>
-     *  @param elements the elements that populate the returned object
-     *  @return an Array object whose elements map to the specified SQL type
-     *  @throws SQLException if a database error occurs, the JDBC type is not
-     *   appropriate for the typeName and the conversion is not supported, the typeName is null or this method is called on a closed connection
-     *  @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this data type
-     *  @since 1.6
+     * @param typeName the SQL name of the type the elements of the array map to. The typeName is a
+     *                 database-specific name which may be the name of a built-in type, a user-defined type or a standard  SQL type supported by this database. This
+     *                 is the value returned by <code>Array.getBaseTypeName</code>
+     * @param elements the elements that populate the returned object
+     * @return an Array object whose elements map to the specified SQL type
+     * @throws SQLException                    if a database error occurs, the JDBC type is not
+     *                                         appropriate for the typeName and the conversion is not supported, the typeName is null or this method is called on a closed connection
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this data type
+     * @since 1.6
      */
     public Array createArrayOf(String typeName,
                                Object[] elements) throws SQLException {
@@ -3002,13 +3003,14 @@ public class JDBCConnection implements Connection {
 
     /**
      * Factory method for creating Struct objects.
-     * @param typeName the SQL type name of the SQL structured type that this <code>Struct</code>
-     * object maps to. The typeName is the name of  a user-defined type that
-     * has been defined for this database. It is the value returned by
-     * <code>Struct.getSQLTypeName</code>.
+     *
+     * @param typeName   the SQL type name of the SQL structured type that this <code>Struct</code>
+     *                   object maps to. The typeName is the name of  a user-defined type that
+     *                   has been defined for this database. It is the value returned by
+     *                   <code>Struct.getSQLTypeName</code>.
      * @param attributes the attributes that populate the returned object
      * @return a Struct object that maps to the given SQL type and is populated with the given attributes
-     * @throws SQLException if a database error occurs, the typeName is null or this method is called on a closed connection
+     * @throws SQLException                    if a database error occurs, the typeName is null or this method is called on a closed connection
      * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this data type
      * @since JDK 1.6_b80, HSQLDB 2.0
      */
@@ -3025,7 +3027,7 @@ public class JDBCConnection implements Connection {
     /**
      * Returns an object that implements the given interface to allow access to
      * non-standard methods, or standard methods not exposed by the proxy.
-     *
+     * <p>
      * If the receiver implements the interface then the result is the receiver
      * or a proxy for the receiver. If the receiver is a wrapper
      * and the wrapped object implements the interface then the result is the
@@ -3034,14 +3036,14 @@ public class JDBCConnection implements Connection {
      * or a proxy for that result. If the receiver is not a
      * wrapper and does not implement the interface, then an <code>SQLException</code> is thrown.
      *
-     * @param <T> by which the return type is inferred from input parameter.
+     * @param <T>   by which the return type is inferred from input parameter.
      * @param iface A Class defining an interface that the result must implement.
      * @return an object that implements the interface. May be a proxy for the actual implementing object.
      * @throws java.sql.SQLException If no object found that implements the interface
      * @since JDK 1.6, HSQLDB 2.0
      */
     @SuppressWarnings("unchecked")
-    public <T>T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
+    public <T> T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
 
         checkClosed();
 
@@ -3063,8 +3065,8 @@ public class JDBCConnection implements Connection {
      *
      * @param iface a Class defining an interface.
      * @return true if this implements the interface or directly or indirectly wraps an object that does.
-     * @throws java.sql.SQLException  if an error occurs while determining whether this is a wrapper
-     * for an object with the given interface.
+     * @throws java.sql.SQLException if an error occurs while determining whether this is a wrapper
+     *                               for an object with the given interface.
      * @since JDK 1.6, HSQLDB 2.0
      */
     public boolean isWrapperFor(
@@ -3079,7 +3081,7 @@ public class JDBCConnection implements Connection {
 
     /**
      * Sets the given schema name to access.
-     * <P>
+     * <p>
      * If the driver does not support schemas, it will
      * silently ignore this request.
      * <p>
@@ -3091,8 +3093,8 @@ public class JDBCConnection implements Connection {
      * {@code Statement} is created or prepared.
      *
      * @param schema the name of a schema  in which to work
-     * @exception SQLException if a database access error occurs
-     * or this method is called on a closed connection
+     * @throws SQLException if a database access error occurs
+     *                      or this method is called on a closed connection
      * @see #getSchema
      * @since JDK 1.7, HSQLDB 2.0.1
      */
@@ -3106,7 +3108,7 @@ public class JDBCConnection implements Connection {
             throw JDBCUtil.invalidArgument("Zero-length schema");
         } else {
             (new JDBCDatabaseMetaData(this)).setConnectionDefaultSchema(
-                schema);
+                    schema);
         }
     }
 
@@ -3114,8 +3116,8 @@ public class JDBCConnection implements Connection {
      * Retrieves this <code>Connection</code> object's current schema name.
      *
      * @return the current schema name or <code>null</code> if there is none
-     * @exception SQLException if a database access error occurs
-     * or this method is called on a closed connection
+     * @throws SQLException if a database access error occurs
+     *                      or this method is called on a closed connection
      * @see #setSchema
      * @since JDK 1.7 M11 2010/09/10 (b123), HSQLDB 2.0.1
      */
@@ -3152,12 +3154,13 @@ public class JDBCConnection implements Connection {
      * <code>checkPermission</code> method denies calling <code>abort</code>,
      * this method throws a
      * <code>java.lang.SecurityException</code>.
-     * @param executor  The <code>Executor</code>  implementation which will
-     * be used by <code>abort</code>.
-     * @throws java.sql.SQLException if a database access error occurs or
-     * the {@code executor} is {@code null},
+     *
+     * @param executor The <code>Executor</code>  implementation which will
+     *                 be used by <code>abort</code>.
+     * @throws java.sql.SQLException       if a database access error occurs or
+     *                                     the {@code executor} is {@code null},
      * @throws java.lang.SecurityException if a security manager exists and its
-     *    <code>checkPermission</code> method denies calling <code>abort</code>
+     *                                     <code>checkPermission</code> method denies calling <code>abort</code>
      * @see SecurityManager#checkPermission
      * @see java.util.concurrent.Executor
      * @since JDK 1.7, HSQLDB 2.0.1
@@ -3172,11 +3175,10 @@ public class JDBCConnection implements Connection {
     }
 
     /**
-     *
      * Sets the maximum period a <code>Connection</code> or
      * objects created from the <code>Connection</code>
      * will wait for the database to reply to any one request. If any
-     *  request remains unanswered, the waiting method will
+     * request remains unanswered, the waiting method will
      * return with a <code>SQLException</code>, and the <code>Connection</code>
      * or objects created from the <code>Connection</code>  will be marked as
      * closed. Any subsequent use of
@@ -3207,7 +3209,7 @@ public class JDBCConnection implements Connection {
      * applied always to the response to the API call, or to any
      * single  request made during the API call.
      * <p>
-     *
+     * <p>
      * This method can be invoked more than once, such as to set a limit for an
      * area of JDBC code, and to reset to the default on exit from this area.
      * Invocation of this method has no impact on already outstanding
@@ -3228,7 +3230,7 @@ public class JDBCConnection implements Connection {
      * value has expired, the JDBC driver marks the connection
      * closed and releases any resources held by the connection.
      * <p>
-     *
+     * <p>
      * This method checks to see that there is an <code>SQLPermission</code>
      * object before allowing the method to proceed.  If a
      * <code>SecurityManager</code> exists and its
@@ -3236,24 +3238,24 @@ public class JDBCConnection implements Connection {
      * <code>setNetworkTimeout</code>, this method throws a
      * <code>java.lang.SecurityException</code>.
      *
-     * @param executor  The <code>Executor</code>  implementation which will
-     * be used by <code>setNetworkTimeout</code>.
+     * @param executor     The <code>Executor</code>  implementation which will
+     *                     be used by <code>setNetworkTimeout</code>.
      * @param milliseconds The time in milliseconds to wait for the database
-     * operation
-     *  to complete.  If the JDBC driver does not support milliseconds, the
-     * JDBC driver will round the value up to the nearest second.  If the
-     * timeout period expires before the operation
-     * completes, a SQLException will be thrown.
-     * A value of 0 indicates that there is not timeout for database operations.
-     * @throws java.sql.SQLException if a database access error occurs, this
-     * method is called on a closed connection,
-     * the {@code executor} is {@code null},
-     * or the value specified for <code>seconds</code> is less than 0.
-     * @throws java.lang.SecurityException if a security manager exists and its
-     *    <code>checkPermission</code> method denies calling
-     * <code>setNetworkTimeout</code>.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     *                     operation
+     *                     to complete.  If the JDBC driver does not support milliseconds, the
+     *                     JDBC driver will round the value up to the nearest second.  If the
+     *                     timeout period expires before the operation
+     *                     completes, a SQLException will be thrown.
+     *                     A value of 0 indicates that there is not timeout for database operations.
+     * @throws java.sql.SQLException           if a database access error occurs, this
+     *                                         method is called on a closed connection,
+     *                                         the {@code executor} is {@code null},
+     *                                         or the value specified for <code>seconds</code> is less than 0.
+     * @throws java.lang.SecurityException     if a security manager exists and its
+     *                                         <code>checkPermission</code> method denies calling
+     *                                         <code>setNetworkTimeout</code>.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see SecurityManager#checkPermission
      * @see Statement#setQueryTimeout
      * @see #getNetworkTimeout
@@ -3276,11 +3278,11 @@ public class JDBCConnection implements Connection {
      * <code>SQLException</code> is thrown.
      *
      * @return the current timeout limit in milliseconds; zero means there is
-     *         no limit
-     * @throws SQLException if a database access error occurs or
-     * this method is called on a closed <code>Connection</code>
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * no limit
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>Connection</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #setNetworkTimeout
      * @since JDK 1.7 M11 2010/09/10 (b123), HSQLDB 2.0.1
      */
@@ -3291,13 +3293,19 @@ public class JDBCConnection implements Connection {
 //---------------------- internal implementation ---------------------------
 // -------------------------- Common Attributes ------------------------------
 
-    /** Initial holdability */
+    /**
+     * Initial holdability
+     */
     int rsHoldability = JDBCResultSet.HOLD_CURSORS_OVER_COMMIT;
 
-    /** Properties for the connection */
+    /**
+     * Properties for the connection
+     */
     HsqlProperties connProperties;
 
-    /** Properties for the session */
+    /**
+     * Properties for the session
+     */
     HsqlProperties clientProperties;
 
     /**
@@ -3311,7 +3319,9 @@ public class JDBCConnection implements Connection {
      */
     boolean isInternal;
 
-    /** Is this connection to a network server instance. */
+    /**
+     * Is this connection to a network server instance.
+     */
     protected boolean isNetConn;
 
     /**
@@ -3319,48 +3329,70 @@ public class JDBCConnection implements Connection {
      */
     boolean isClosed;
 
-    /** The first warning in the chain. Null if there are no warnings. */
+    /**
+     * The first warning in the chain. Null if there are no warnings.
+     */
     private SQLWarning rootWarning;
 
-    /** Synchronizes concurrent modification of the warning chain */
+    /**
+     * Synchronizes concurrent modification of the warning chain
+     */
     private final Object rootWarning_mutex = new Object();
 
-    /** ID sequence for unnamed savepoints */
+    /**
+     * ID sequence for unnamed savepoints
+     */
     private int savepointIDSequence;
 
-    /** reuse count in ConnectionPool */
-    int                         incarnation;
+    /**
+     * reuse count in ConnectionPool
+     */
+    int incarnation;
 
-    /** used by a JDBCPool or other custom ConnectionPool instance */
-    boolean                     isPooled;
+    /**
+     * used by a JDBCPool or other custom ConnectionPool instance
+     */
+    boolean isPooled;
 
-    /** used by a JDBCPool or other custom ConnectionPool instance */
+    /**
+     * used by a JDBCPool or other custom ConnectionPool instance
+     */
     JDBCConnectionEventListener poolEventListener;
 
-    /** connection URL property close_result indicates to close old result when Statement is reused */
+    /**
+     * connection URL property close_result indicates to close old result when Statement is reused
+     */
     boolean isCloseResultSet;
 
-    /** connection URL property use_column_name indicates to return column name in ResultMetadata */
+    /**
+     * connection URL property use_column_name indicates to return column name in ResultMetadata
+     */
     boolean isUseColumnName = true;
 
-    /** database property for translation of INTERVAL types to VARCHAR */
+    /**
+     * database property for translation of INTERVAL types to VARCHAR
+     */
     boolean isTranslateTTIType = true;
 
-    /** connection URL property allow_empty_batch indicates to accept executeBatch() when the batch is empty */
+    /**
+     * connection URL property allow_empty_batch indicates to accept executeBatch() when the batch is empty
+     */
     boolean isEmptyBatchAllowed = false;
 
-    /** database URL property hsqldb.live_object indicates to store non-serialized object in OTHER columns */
+    /**
+     * database URL property hsqldb.live_object indicates to store non-serialized object in OTHER columns
+     */
     boolean isStoreLiveObject = false;
 
     /**
      * Constructs a new external <code>Connection</code> to an HSQLDB
      * <code>Database</code>. <p>
-     *
+     * <p>
      * This constructor is called on behalf of the
      * <code>java.sql.DriverManager</code> when getting a
      * <code>Connection</code> for use in normal (external)
      * client code. <p>
-     *
+     * <p>
      * Internal client code, that being code located in HSQLDB SQL
      * functions and stored procedures, receives an INTERNAL
      * connection constructed by the {@link
@@ -3368,26 +3400,26 @@ public class JDBCConnection implements Connection {
      * JDBCConnection(SessionInterface)} constructor. <p>
      *
      * @param props A <code>Properties</code> object containing the connection
-     *      properties
-     * @exception SQLException when the user/password combination is
-     *     invalid, the connection url is invalid, or the
-     *     <code>Database</code> is unavailable. <p>
-     *
-     *     The <code>Database</code> may be unavailable for a number
-     *     of reasons, including network problems or the fact that it
-     *     may already be in use by another process.
+     *              properties
+     * @throws SQLException when the user/password combination is
+     *                      invalid, the connection url is invalid, or the
+     *                      <code>Database</code> is unavailable. <p>
+     *                      <p>
+     *                      The <code>Database</code> may be unavailable for a number
+     *                      of reasons, including network problems or the fact that it
+     *                      may already be in use by another process.
      */
     public JDBCConnection(HsqlProperties props) throws SQLException {
 
-        String user     = props.getProperty("user");
+        String user = props.getProperty("user");
         String password = props.getProperty("password");
         String connType = props.getProperty("connection_type");
-        String host     = props.getProperty("host");
-        int    port     = props.getIntegerProperty("port", 0);
-        String path     = props.getProperty("path");
+        String host = props.getProperty("host");
+        int port = props.getIntegerProperty("port", 0);
+        String path = props.getProperty("path");
         String database = props.getProperty("database");
         boolean isTLS = (DatabaseURL.S_HSQLS.equals(connType)
-                         || DatabaseURL.S_HTTPS.equals(connType));
+                || DatabaseURL.S_HTTPS.equals(connType));
         boolean isTLSWrapper = props.isPropertyTrue(HsqlDatabaseProperties.url_tls_wrapper, false);
 
         isTLSWrapper &= isTLS;
@@ -3400,8 +3432,8 @@ public class JDBCConnection implements Connection {
             password = "";
         }
 
-        Calendar cal         = Calendar.getInstance();
-        int      zoneSeconds = HsqlDateTime.getZoneSeconds(cal);
+        Calendar cal = Calendar.getInstance();
+        int zoneSeconds = HsqlDateTime.getZoneSeconds(cal);
 
         try {
             if (DatabaseURL.isInProcessDatabaseType(connType)) {
@@ -3414,12 +3446,12 @@ public class JDBCConnection implements Connection {
                 sessionProxy = DatabaseManager.newSession(connType, database,
                         user, password, props, null, zoneSeconds);
             } else if (DatabaseURL.S_HSQL.equals(connType)
-                       || DatabaseURL.S_HSQLS.equals(connType)) {
+                    || DatabaseURL.S_HSQLS.equals(connType)) {
                 sessionProxy = new ClientConnection(host, port, path,
                         database, isTLS, isTLSWrapper, user, password, zoneSeconds);
                 isNetConn = true;
             } else if (DatabaseURL.S_HTTP.equals(connType)
-                       || DatabaseURL.S_HTTPS.equals(connType)) {
+                    || DatabaseURL.S_HTTPS.equals(connType)) {
                 sessionProxy = new ClientConnectionHTTP(host, port, path,
                         database, isTLS, isTLSWrapper, user, password, zoneSeconds);
                 isNetConn = true;
@@ -3428,7 +3460,7 @@ public class JDBCConnection implements Connection {
             }
             sessionProxy.setJDBCConnection(this);
 
-            connProperties   = props;
+            connProperties = props;
             clientProperties = sessionProxy.getClientProperties();
 
             setLocalVariables();
@@ -3441,13 +3473,13 @@ public class JDBCConnection implements Connection {
      * Constructs an <code>INTERNAL</code> <code>Connection</code>,
      * using the specified {@link org.hsqldb.SessionInterface
      * SessionInterface}. <p>
-     *
+     * <p>
      * This constructor is called only on behalf of an existing
      * <code>Session</code> (the internal parallel of a
      * <code>Connection</code>), to be used as a parameter to a SQL
      * function or stored procedure that needs to execute in the context
      * of that <code>Session</code>. <p>
-     *
+     * <p>
      * When a Java SQL function or stored procedure is called and its
      * first parameter is of type <code>Connection</code>, HSQLDB
      * automatically notices this and constructs an <code>INTERNAL</code>
@@ -3456,15 +3488,15 @@ public class JDBCConnection implements Connection {
      * parameter position, moving any other parameter values
      * specified in the SQL statement to the right by one position.
      * <p>
-     *
+     * <p>
      * To read more about this, see
      * {@link org.hsqldb.Routine Routine}. <p>
      *
      * <B>Notes:</B> <p>
-     *
+     * <p>
      * Starting with HSQLDB 1.7.2, <code>INTERNAL</code> connections are not
      * closed by a call to close() or by a SQL DISCONNECT.
-     *
+     * <p>
      * For HSQLDB developers not involved with writing database
      * internals, this change only applies to connections obtained
      * automatically from the database as the first parameter to
@@ -3475,30 +3507,30 @@ public class JDBCConnection implements Connection {
      * DISCONNECT on a connection obtained in this manner. <p>
      *
      * @param c the Session requesting the construction of this
-     *     Connection
-     * @exception HsqlException never (reserved for future use);
+     *          Connection
+     * @throws HsqlException never (reserved for future use);
      * @see org.hsqldb.Routine
      */
     public JDBCConnection(SessionInterface c) {
 
         // PRE: SessionInterface is non-null
-        isInternal   = true;
+        isInternal = true;
         sessionProxy = c;
     }
 
     /**
      * Constructor for use with connection pooling and XA.
      *
-     * @param c the connection
+     * @param c             the connection
      * @param eventListener the listener
      */
     public JDBCConnection(JDBCConnection c,
                           JDBCConnectionEventListener eventListener) {
 
-        sessionProxy      = c.sessionProxy;
-        connProperties    = c.connProperties;
-        clientProperties  = c.clientProperties;
-        isPooled          = true;
+        sessionProxy = c.sessionProxy;
+        connProperties = c.connProperties;
+        clientProperties = c.clientProperties;
+        isPooled = true;
         poolEventListener = eventListener;
 
         setLocalVariables();
@@ -3510,20 +3542,20 @@ public class JDBCConnection implements Connection {
         }
 
         isCloseResultSet = connProperties.isPropertyTrue(
-            HsqlDatabaseProperties.url_close_result, false);
+                HsqlDatabaseProperties.url_close_result, false);
         isUseColumnName = connProperties.isPropertyTrue(
-            HsqlDatabaseProperties.url_get_column_name, true);
+                HsqlDatabaseProperties.url_get_column_name, true);
         isEmptyBatchAllowed = connProperties.isPropertyTrue(
-            HsqlDatabaseProperties.url_allow_empty_batch, false);
+                HsqlDatabaseProperties.url_allow_empty_batch, false);
         isTranslateTTIType = clientProperties.isPropertyTrue(
-            HsqlDatabaseProperties.jdbc_translate_tti_types, true);
+                HsqlDatabaseProperties.jdbc_translate_tti_types, true);
         isStoreLiveObject = clientProperties.isPropertyTrue(
-            HsqlDatabaseProperties.sql_live_object, false);
+                HsqlDatabaseProperties.sql_live_object, false);
 
-        if (isStoreLiveObject)  {
+        if (isStoreLiveObject) {
             String connType = connProperties.getProperty("connection_type");
-            if(!DatabaseURL.S_MEM.equals(connType))
-            isStoreLiveObject = false;
+            if (!DatabaseURL.S_MEM.equals(connType))
+                isStoreLiveObject = false;
         }
 
     }
@@ -3534,10 +3566,11 @@ public class JDBCConnection implements Connection {
 
     /**
      * Retrieves this connection's JDBC url.
-     *
+     * <p>
      * This method is in support of the JDBCDatabaseMetaData.getURL() method.
+     *
      * @return the database connection url with which this object was
-     *      constructed
+     * constructed
      * @throws SQLException if this connection is closed
      */
     synchronized String getURL() throws SQLException {
@@ -3545,7 +3578,7 @@ public class JDBCConnection implements Connection {
         checkClosed();
 
         return isInternal ? sessionProxy.getInternalConnectionURL()
-                          : connProperties.getProperty("url");
+                : connProperties.getProperty("url");
     }
 
     /**
@@ -3683,7 +3716,7 @@ public class JDBCConnection implements Connection {
             i--;
 
             throw JDBCUtil.sqlException(ErrorCode.JDBC_CONNECTION_NATIVE_SQL,
-                                        sql.substring(i));
+                    sql.substring(i));
         }
 
         return i;

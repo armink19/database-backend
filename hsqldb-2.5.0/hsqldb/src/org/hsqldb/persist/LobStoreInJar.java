@@ -47,10 +47,10 @@ import java.io.InputStream;
  */
 public class LobStoreInJar implements LobStore {
 
-    final int       lobBlockSize;
-    Database        database;
+    final int lobBlockSize;
+    Database database;
     DataInputStream dataInput;
-    final String    fileName;
+    final String fileName;
 
     //
     long realPosition;
@@ -58,7 +58,7 @@ public class LobStoreInJar implements LobStore {
     public LobStoreInJar(Database database, int lobBlockSize) {
 
         this.lobBlockSize = lobBlockSize;
-        this.database     = database;
+        this.database = database;
 
         try {
             fileName = database.getPath() + ".lobs";
@@ -70,8 +70,8 @@ public class LobStoreInJar implements LobStore {
     public byte[] getBlockBytes(int blockAddress, int blockCount) {
 
         try {
-            long   address   = (long) blockAddress * lobBlockSize;
-            int    count     = blockCount * lobBlockSize;
+            long address = (long) blockAddress * lobBlockSize;
+            int count = blockCount * lobBlockSize;
             byte[] dataBytes = new byte[count];
 
             fileSeek(address);
@@ -86,10 +86,12 @@ public class LobStoreInJar implements LobStore {
     }
 
     public void setBlockBytes(byte[] dataBytes, int blockAddress,
-                              int blockCount) {}
+                              int blockCount) {
+    }
 
     public void setBlockBytes(byte[] dataBytes, long position, int offset,
-                              int length) {}
+                              int length) {
+    }
 
     public int getBlockSize() {
         return lobBlockSize;
@@ -99,7 +101,8 @@ public class LobStoreInJar implements LobStore {
         return 0;
     }
 
-    public void setLength(long length) {}
+    public void setLength(long length) {
+    }
 
     public void close() {
 
@@ -112,7 +115,8 @@ public class LobStoreInJar implements LobStore {
         }
     }
 
-    public void synch() {}
+    public void synch() {
+    }
 
     private void resetStream() throws IOException {
 
@@ -127,7 +131,7 @@ public class LobStoreInJar implements LobStore {
 
             if (fis == null) {
                 ClassLoader cl =
-                    Thread.currentThread().getContextClassLoader();
+                        Thread.currentThread().getContextClassLoader();
 
                 if (cl != null) {
                     fis = cl.getResourceAsStream(fileName);
@@ -142,7 +146,7 @@ public class LobStoreInJar implements LobStore {
             }
         }
 
-        dataInput    = new DataInputStream(fis);
+        dataInput = new DataInputStream(fis);
         realPosition = 0;
     }
 

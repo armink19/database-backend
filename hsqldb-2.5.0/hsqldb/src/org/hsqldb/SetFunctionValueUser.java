@@ -33,18 +33,20 @@ package org.hsqldb;
 
 /**
  * Value for user-defined aggregate functions.
+ *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
  * @since 2.4.1
- *
  */
 public class SetFunctionValueUser implements SetFunction {
 
     Object[] list = new Object[3];
 
-    public void add(Object itemLeft, Object itemRight) {}
+    public void add(Object itemLeft, Object itemRight) {
+    }
 
-    public void add(Object item) {}
+    public void add(Object item) {
+    }
 
     public Object getValue() {
         return list;

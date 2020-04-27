@@ -45,24 +45,24 @@ import java.util.Enumeration;
 /**
  * A subclass HsqlProperties with functionality needed for the HSQLDB Server
  * implementations.<p>
- *
+ * <p>
  * A property object is checked once and all the errors are stored in
  * collections to be used
- *
+ * <p>
  * Meta records specify accepted keys and policies for the expected values.<p>
- *
+ * <p>
  * Policy for defaults: <ul>
- *  <li>If (non-null) default is specified for the Meta record, then
- *  behavior is obvious.
- *  <li>If pattern-type Meta record, then there is no default.
- *  A value is required for the property.
- *  <li>Otherwise null is specified for the Meta record and user must set
- *  a value.
+ * <li>If (non-null) default is specified for the Meta record, then
+ * behavior is obvious.
+ * <li>If pattern-type Meta record, then there is no default.
+ * A value is required for the property.
+ * <li>Otherwise null is specified for the Meta record and user must set
+ * a value.
  * </ul>
- *
+ * <p>
  * If a range is specified in the Meta record, then the value is checked
  * against the range.<p>
- *
+ * <p>
  * If a set of values specified in the Meta record, then the value is checked
  * against the set.<p>
  *
@@ -73,32 +73,32 @@ import java.util.Enumeration;
 public class ServerProperties extends HsqlProperties {
 
     // types of properties
-    static final int SERVER_PROPERTY       = 0;
+    static final int SERVER_PROPERTY = 0;
     static final int SERVER_MULTI_PROPERTY = 1;
-    static final int SYSTEM_PROPERTY       = 2;
+    static final int SYSTEM_PROPERTY = 2;
 
     // keys to properties
-    static final String sc_key_prefix  = "server";
+    static final String sc_key_prefix = "server";
     static final String sc_key_address = "server.address";
     static final String sc_key_autorestart_server =
-        "server.restart_on_shutdown";
-    static final String sc_key_database         = "server.database";
-    static final String sc_key_dbname           = "server.dbname";
-    static final String sc_key_no_system_exit   = "server.no_system_exit";
-    static final String sc_key_port             = "server.port";
-    static final String sc_key_http_port        = "server.port";
-    static final String sc_key_silent           = "server.silent";
-    static final String sc_key_tls              = "server.tls";
-    static final String sc_key_trace            = "server.trace";
+            "server.restart_on_shutdown";
+    static final String sc_key_database = "server.database";
+    static final String sc_key_dbname = "server.dbname";
+    static final String sc_key_no_system_exit = "server.no_system_exit";
+    static final String sc_key_port = "server.port";
+    static final String sc_key_http_port = "server.port";
+    static final String sc_key_silent = "server.silent";
+    static final String sc_key_tls = "server.tls";
+    static final String sc_key_trace = "server.trace";
     static final String sc_key_web_default_page = "server.default_page";
-    static final String sc_key_web_root         = "server.root";
-    static final String sc_key_max_connections  = "server.maxconnections";
-    static final String sc_key_remote_open_db   = "server.remote_open";
-    static final String sc_key_max_databases    = "server.maxdatabases";
-    static final String sc_key_acl              = "server.acl";
-    static final String sc_key_daemon           = "server.daemon";
-    static final String sc_key_props            = "server.props";
-    static final String sc_key_system           = "system";
+    static final String sc_key_web_root = "server.root";
+    static final String sc_key_max_connections = "server.maxconnections";
+    static final String sc_key_remote_open_db = "server.remote_open";
+    static final String sc_key_max_databases = "server.maxdatabases";
+    static final String sc_key_acl = "server.acl";
+    static final String sc_key_daemon = "server.daemon";
+    static final String sc_key_props = "server.props";
+    static final String sc_key_system = "system";
 
     // web server page defaults
     static final String sc_default_web_mime = "text/html";
@@ -106,16 +106,16 @@ public class ServerProperties extends HsqlProperties {
     static final String sc_default_web_root = ".";
 
     //
-    static final HashMap        meta     = new HashMap();
+    static final HashMap meta = new HashMap();
     static final OrderedHashSet prefixes = new OrderedHashSet();
 
     //
-    final int         protocol;
+    final int protocol;
     protected boolean initialised = false;
 
     //
     IntKeyHashMap idToAliasMap = new IntKeyHashMap();
-    IntKeyHashMap idToPathMap  = new IntKeyHashMap();
+    IntKeyHashMap idToPathMap = new IntKeyHashMap();
 
     public ServerProperties(int protocol, File file) throws IOException {
 
@@ -154,7 +154,7 @@ public class ServerProperties extends HsqlProperties {
         Enumeration en = stringProps.propertyNames();
 
         while (en.hasMoreElements()) {
-            String   key      = (String) en.nextElement();
+            String key = (String) en.nextElement();
             Object[] metadata = (Object[]) meta.get(key);
 
             if (metadata == null) {
@@ -175,7 +175,7 @@ public class ServerProperties extends HsqlProperties {
                     == SYSTEM_PROPERTY) {
                 error = validateSystemProperty(key, metadata);
             } else if (((Integer) metadata[indexType]).intValue()
-                       == SERVER_MULTI_PROPERTY) {
+                    == SERVER_MULTI_PROPERTY) {
                 error = validateMultiProperty(key, metadata);
             } else {
                 String value = getProperty(key);
@@ -185,7 +185,7 @@ public class ServerProperties extends HsqlProperties {
                         error = "missing value for property: " + key;
                     } else {
                         setProperty(key,
-                                    metadata[indexDefaultValue].toString());
+                                metadata[indexDefaultValue].toString());
                     }
                 } else {
                     error = HsqlProperties.validateProperty(key, value,
@@ -240,7 +240,7 @@ public class ServerProperties extends HsqlProperties {
      */
     String validateMultiProperty(String key, Object[] meta) {
 
-        int    dbNumber;
+        int dbNumber;
         String prefix = (String) meta[indexName];
 
         if (meta[indexName].equals(sc_key_database)) {
@@ -256,14 +256,14 @@ public class ServerProperties extends HsqlProperties {
         }
 
         if (meta[indexName].equals(sc_key_dbname)) {
-            String alias    = stringProps.getProperty(key).toLowerCase();
+            String alias = stringProps.getProperty(key).toLowerCase();
             Object existing = idToAliasMap.put(dbNumber, alias);
 
             if (existing != null) {
                 return "duplicate database enumerator: " + key;
             }
         } else if (meta[indexName].equals(sc_key_database)) {
-            String path     = stringProps.getProperty(key);
+            String path = stringProps.getProperty(key);
             Object existing = idToPathMap.put(dbNumber, path);
 
             if (existing != null) {
@@ -280,9 +280,9 @@ public class ServerProperties extends HsqlProperties {
      */
     String validateSystemProperty(String key, Object[] meta) {
 
-        String prefix      = (String) meta[indexName];
+        String prefix = (String) meta[indexName];
         String specificKey = key.substring(prefix.length() + 1);
-        String value       = stringProps.getProperty(key);
+        String value = stringProps.getProperty(key);
 
         if (value == null) {
             return "value required for property: " + key;
@@ -297,33 +297,33 @@ public class ServerProperties extends HsqlProperties {
 
         // properties with variable suffixes
         meta.put(sc_key_database,
-                 getMeta(sc_key_database, SERVER_MULTI_PROPERTY, null));
+                getMeta(sc_key_database, SERVER_MULTI_PROPERTY, null));
         meta.put(sc_key_dbname,
-                 getMeta(sc_key_dbname, SERVER_MULTI_PROPERTY, null));
+                getMeta(sc_key_dbname, SERVER_MULTI_PROPERTY, null));
         meta.put(sc_key_system, getMeta(sc_key_system, SYSTEM_PROPERTY, null));
 
         // properties with fixed names
         meta.put(sc_key_silent,
-                 getMeta(sc_key_silent, SERVER_PROPERTY, false));
+                getMeta(sc_key_silent, SERVER_PROPERTY, false));
         meta.put(sc_key_trace, getMeta(sc_key_trace, SERVER_PROPERTY, false));
         meta.put(sc_key_tls, getMeta(sc_key_tls, SERVER_PROPERTY, false));
         meta.put(sc_key_acl, getMeta(sc_key_acl, SERVER_PROPERTY, null));
         meta.put(sc_key_autorestart_server,
-                 getMeta(sc_key_autorestart_server, SERVER_PROPERTY, false));
+                getMeta(sc_key_autorestart_server, SERVER_PROPERTY, false));
         meta.put(sc_key_remote_open_db,
-                 getMeta(sc_key_remote_open_db, SERVER_PROPERTY, false));
+                getMeta(sc_key_remote_open_db, SERVER_PROPERTY, false));
         meta.put(sc_key_no_system_exit,
-                 getMeta(sc_key_no_system_exit, SERVER_PROPERTY, false));
+                getMeta(sc_key_no_system_exit, SERVER_PROPERTY, false));
         meta.put(sc_key_daemon,
-                 getMeta(sc_key_daemon, SERVER_PROPERTY, false));
+                getMeta(sc_key_daemon, SERVER_PROPERTY, false));
         meta.put(sc_key_address,
-                 getMeta(sc_key_address, SERVER_PROPERTY, null));
+                getMeta(sc_key_address, SERVER_PROPERTY, null));
         meta.put(sc_key_port, getMeta(sc_key_port, 0, 9001, 0, 65535));
         meta.put(sc_key_http_port, getMeta(sc_key_http_port, 0, 80, 0, 65535));
         meta.put(sc_key_max_connections,
-                 getMeta(sc_key_max_connections, 0, 100, 1, 10000));
+                getMeta(sc_key_max_connections, 0, 100, 1, 10000));
         meta.put(sc_key_max_databases,
-                 getMeta(sc_key_max_databases, 0, 10, 1, 1000));
+                getMeta(sc_key_max_databases, 0, 10, 1, 1000));
 
         //
         prefixes.add(sc_key_database);

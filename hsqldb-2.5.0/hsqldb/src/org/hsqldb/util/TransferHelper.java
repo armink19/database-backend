@@ -43,32 +43,32 @@ import java.util.Hashtable;
 class TransferHelper {
 
     protected TransferDb db;
-    protected Traceable  tracer;
-    protected String     sSchema;
-    protected JDBCTypes  JDBCT;
-    private String       quote;
+    protected Traceable tracer;
+    protected String sSchema;
+    protected JDBCTypes JDBCT;
+    private String quote;
 
     TransferHelper() {
 
-        db     = null;
+        db = null;
         tracer = null;
-        quote  = "\'";
-        JDBCT  = new JDBCTypes();
+        quote = "\'";
+        JDBCT = new JDBCTypes();
     }
 
     TransferHelper(TransferDb database, Traceable t, String q) {
 
-        db     = database;
+        db = database;
         tracer = t;
-        quote  = q;
-        JDBCT  = new JDBCTypes();
+        quote = q;
+        JDBCT = new JDBCTypes();
     }
 
     void set(TransferDb database, Traceable t, String q) {
 
-        db     = database;
+        db = database;
         tracer = t;
-        quote  = q;
+        quote = q;
     }
 
     String formatIdentifier(String id) {
@@ -133,12 +133,14 @@ class TransferHelper {
                             int typeNumber = result.getShort(2);
 
                             hTypes.put(intobj, JDBCT.toString(typeNumber));
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                     }
                 }
 
                 result.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         }
 
         if (hTypes.isEmpty()) {
@@ -173,10 +175,10 @@ class TransferHelper {
         try {
             if (value instanceof Clob) {
                 return ((Clob) value).getSubString(
-                    1, (int) ((Clob) value).length());
+                        1, (int) ((Clob) value).length());
             } else if (value instanceof Blob) {
                 return ((Blob) value).getBytes(
-                    1, (int) ((Blob) value).length());
+                        1, (int) ((Blob) value).length());
             }
         } catch (SQLException e) {
             return null;
@@ -185,9 +187,11 @@ class TransferHelper {
         return (value);
     }
 
-    void beginDataTransfer() {}
+    void beginDataTransfer() {
+    }
 
-    void endDataTransfer() {}
+    void endDataTransfer() {
+    }
 
     String fixupColumnDefRead(String aTableName, ResultSetMetaData meta,
                               String columnType, ResultSet columnDesc,

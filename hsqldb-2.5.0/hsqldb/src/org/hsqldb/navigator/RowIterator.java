@@ -34,7 +34,6 @@ package org.hsqldb.navigator;
 import org.hsqldb.Row;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.5
  * @since 1.7.2

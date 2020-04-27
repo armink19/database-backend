@@ -57,23 +57,23 @@ import java.io.OutputStream;
 /**
  * Handles all logging to file operations. A log consists of three kinds of
  * blocks:<p>
- *
+ * <p>
  * DDL BLOCK: definition of DB objects, users and rights at startup time<br>
  * DATA BLOCK: all data for MEMORY tables at startup time<br>
  * LOG BLOCK: SQL statements logged since startup or the last CHECKPOINT<br>
- *
+ * <p>
  * The implementation of this class and its subclasses support the formats
  * used for writing the data. Since 1.7.2 the data can also be
  * written as binary in order to speed up shutdown and startup.<p>
- *
+ * <p>
  * From 1.7.2, two separate files are used, one for the DDL + DATA BLOCK and
  * the other for the LOG BLOCK.<p>
- *
+ * <p>
  * A related use for this class is for saving a current snapshot of the
  * database data to a user-defined file. This happens in the SHUTDOWN COMPACT
  * process or done as a result of the SCRIPT command. In this case, the
  * DATA block contains the CACHED table data as well.<p>
- *
+ * <p>
  * DatabaseScriptReader and its subclasses read back the data at startup time.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
@@ -82,13 +82,13 @@ import java.io.OutputStream;
  */
 public abstract class ScriptWriterBase implements Runnable {
 
-    Database            database;
-    String              outFile;
-    OutputStream        fileStreamOut;
+    Database database;
+    String outFile;
+    OutputStream fileStreamOut;
     FileAccess.FileSync outDescriptor;
-    int                 tableRowCount;
-    HsqlName            schemaToLog;
-    boolean             isClosed;
+    int tableRowCount;
+    HsqlName schemaToLog;
+    boolean isClosed;
 
     //
     boolean isCompressed;
@@ -98,21 +98,23 @@ public abstract class ScriptWriterBase implements Runnable {
      * this determines if the script is the normal script (false) used
      * internally by the engine or a user-initiated snapshot of the DB (true)
      */
-    boolean          isUserScript;
-    boolean          includeCachedData;
-    boolean          includeIndexRoots;
-    boolean          includeTableInit;
-    long             byteCount;
-    long             lineCount;
+    boolean isUserScript;
+    boolean includeCachedData;
+    boolean includeIndexRoots;
+    boolean includeTableInit;
+    long byteCount;
+    long lineCount;
     volatile boolean needsSync;
-    private int      syncCount;
-    static final int INSERT             = 0;
+    private int syncCount;
+    static final int INSERT = 0;
     static final int INSERT_WITH_SCHEMA = 1;
 
-    /** the last schema for last sessionId */
-    Session                      currentSession;
-    public static final String[] LIST_SCRIPT_FORMATS = new String[] {
-        Tokens.T_TEXT, Tokens.T_BINARY, null, Tokens.T_COMPRESSED
+    /**
+     * the last schema for last sessionId
+     */
+    Session currentSession;
+    public static final String[] LIST_SCRIPT_FORMATS = new String[]{
+            Tokens.T_TEXT, Tokens.T_BINARY, null, Tokens.T_COMPRESSED
     };
 
     ScriptWriterBase(Database db, OutputStream outputStream,
@@ -121,14 +123,14 @@ public abstract class ScriptWriterBase implements Runnable {
 
         initBuffers();
 
-        this.database          = db;
+        this.database = db;
         this.includeCachedData = includeCachedData;
         this.includeIndexRoots = !includeCachedData;
-        currentSession         = database.sessionManager.getSysSession();
+        currentSession = database.sessionManager.getSysSession();
 
         // start with neutral schema - no SET SCHEMA to log
         schemaToLog = currentSession.loggedSchema =
-            currentSession.currentSchema;
+                currentSession.currentSchema;
         fileStreamOut = new BufferedOutputStream(outputStream, 1 << 14);
         outDescriptor = descriptor;
     }
@@ -148,19 +150,19 @@ public abstract class ScriptWriterBase implements Runnable {
 
         if (exists && isNewFile) {
             throw Error.error(ErrorCode.FILE_IO_ERROR,
-                              file + " already exists");
+                    file + " already exists");
         }
 
-        this.database          = db;
-        this.isUserScript      = isUserScript;
+        this.database = db;
+        this.isUserScript = isUserScript;
         this.includeCachedData = includeCachedData;
         this.includeIndexRoots = !includeCachedData;
-        outFile                = file;
-        currentSession         = database.sessionManager.getSysSession();
+        outFile = file;
+        currentSession = database.sessionManager.getSysSession();
 
         // start with neutral schema - no SET SCHEMA to log
         schemaToLog = currentSession.loggedSchema =
-            currentSession.currentSchema;
+                currentSession.currentSchema;
 
         openFile();
     }
@@ -180,7 +182,7 @@ public abstract class ScriptWriterBase implements Runnable {
     protected abstract void initBuffers();
 
     /**
-     *  Called internally or externally in write delay intervals.
+     * Called internally or externally in write delay intervals.
      */
     public void sync() {
 
@@ -214,7 +216,7 @@ public abstract class ScriptWriterBase implements Runnable {
 */
             } catch (IOException e) {
                 database.logger.logWarningEvent("ScriptWriter synch error: ",
-                                                e);
+                        e);
             }
         }
     }
@@ -234,7 +236,7 @@ public abstract class ScriptWriterBase implements Runnable {
                 fileStreamOut.close();
 
                 outDescriptor = null;
-                isClosed      = true;
+                isClosed = true;
             }
         } catch (IOException e) {
             throw Error.error(ErrorCode.FILE_IO_ERROR);
@@ -254,14 +256,14 @@ public abstract class ScriptWriterBase implements Runnable {
     }
 
     /**
-     *  File is opened in append mode although in current usage the file
-     *  never pre-exists
+     * File is opened in append mode although in current usage the file
+     * never pre-exists
      */
     protected void openFile() {
 
         try {
-            FileAccess   fa  = isUserScript ? FileUtil.getFileUtil()
-                                            : database.logger.getFileAccess();
+            FileAccess fa = isUserScript ? FileUtil.getFileUtil()
+                    : database.logger.getFileAccess();
             OutputStream fos = fa.openOutputStreamElement(outFile, true);
 
             outDescriptor = fa.getFileSync(fos);
@@ -269,13 +271,14 @@ public abstract class ScriptWriterBase implements Runnable {
             fileStreamOut = new BufferedOutputStream(fos, 1 << 14);
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_Message_Pair, new Object[] {
-                e.toString(), outFile
-            });
+                    ErrorCode.M_Message_Pair, new Object[]{
+                            e.toString(), outFile
+                    });
         }
     }
 
-    protected void finishStream() {}
+    protected void finishStream() {
+    }
 
     public void writeDDL() {
 
@@ -305,8 +308,8 @@ public abstract class ScriptWriterBase implements Runnable {
             }
 
             Iterator tables =
-                database.schemaManager.databaseObjectIterator(schema,
-                    SchemaObject.TABLE);
+                    database.schemaManager.databaseObjectIterator(schema,
+                            SchemaObject.TABLE);
 
             while (tables.hasNext()) {
                 Table t = (Table) tables.next();
@@ -319,15 +322,15 @@ public abstract class ScriptWriterBase implements Runnable {
 
                 switch (t.getTableType()) {
 
-                    case TableBase.MEMORY_TABLE :
+                    case TableBase.MEMORY_TABLE:
                         script = true;
                         break;
 
-                    case TableBase.CACHED_TABLE :
+                    case TableBase.CACHED_TABLE:
                         script = includeCachedData;
                         break;
 
-                    case TableBase.TEXT_TABLE :
+                    case TableBase.TEXT_TABLE:
                         script = includeCachedData && !t.isDataReadOnly();
                         break;
                 }
@@ -351,8 +354,8 @@ public abstract class ScriptWriterBase implements Runnable {
         for (int i = 0; i < schemas.length; i++) {
             String schema = schemas[i];
             Iterator tables =
-                database.schemaManager.databaseObjectIterator(schema,
-                    SchemaObject.TABLE);
+                    database.schemaManager.databaseObjectIterator(schema,
+                            SchemaObject.TABLE);
 
             while (tables.hasNext()) {
                 Table t = (Table) tables.next();
@@ -374,7 +377,7 @@ public abstract class ScriptWriterBase implements Runnable {
             writeTableInit(t);
 
             RowIterator it =
-                t.rowIteratorForScript(t.getRowStore(currentSession));
+                    t.rowIteratorForScript(t.getRowStore(currentSession));
 
             while (it.next()) {
                 Row row = it.getCurrentRow();
@@ -393,7 +396,7 @@ public abstract class ScriptWriterBase implements Runnable {
     public void writeTableVersionData(Table t, TimestampData from) {
 
         int startCol = t.getSystemPeriodStartIndex();
-        int endCol   = t.getSystemPeriodEndIndex();
+        int endCol = t.getSystemPeriodEndIndex();
 
         schemaToLog = t.getName().schema;
 
@@ -401,18 +404,18 @@ public abstract class ScriptWriterBase implements Runnable {
             writeTableInit(t);
 
             RowIterator it =
-                t.rowIteratorForScript(t.getRowStore(currentSession));
+                    t.rowIteratorForScript(t.getRowStore(currentSession));
 
             while (it.next()) {
-                Row           row   = it.getCurrentRow();
+                Row row = it.getCurrentRow();
                 TimestampData start = (TimestampData) row.getField(startCol);
-                TimestampData end   = (TimestampData) row.getField(endCol);
+                TimestampData end = (TimestampData) row.getField(endCol);
 
                 // period started or ended at or after point of time
                 if (start.getSeconds() >= from.getSeconds()
                         || (end.getSeconds() >= from.getSeconds()
-                            && end.getSeconds()
-                               < DateTimeType.epochLimitSeconds)) {
+                        && end.getSeconds()
+                        < DateTimeType.epochLimitSeconds)) {
                     writeRow(currentSession, row, t);
                 }
             }
@@ -425,9 +428,11 @@ public abstract class ScriptWriterBase implements Runnable {
         }
     }
 
-    public void writeTableInit(Table t) {}
+    public void writeTableInit(Table t) {
+    }
 
-    public void writeTableTerm(Table t) {}
+    public void writeTableTerm(Table t) {
+    }
 
     protected void writeSingleColumnResult(Result r) {
 
@@ -451,13 +456,13 @@ public abstract class ScriptWriterBase implements Runnable {
     public abstract void writeOtherStatement(Session session, String s);
 
     public abstract void writeInsertStatement(Session session, Row row,
-            Table table);
+                                              Table table);
 
     public abstract void writeDeleteStatement(Session session, Table table,
-            Object[] data);
+                                              Object[] data);
 
     public abstract void writeSequenceStatement(Session session,
-            NumberSequence seq);
+                                                NumberSequence seq);
 
     public abstract void writeCommitStatement(Session session);
 

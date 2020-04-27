@@ -47,19 +47,19 @@ import java.util.Locale;
 // patch 1.9.0 by Blaine Simpson - IPv6 support
 public class DatabaseURL {
 
-    public static final String S_DOT               = ".";
-    public static final String S_MEM               = "mem:";
-    public static final String S_FILE              = "file:";
-    public static final String S_RES               = "res:";
-    public static final String S_ALIAS             = "alias:";
-    public static final String S_HSQL              = "hsql://";
-    public static final String S_HSQLS             = "hsqls://";
-    public static final String S_HTTP              = "http://";
-    public static final String S_HTTPS             = "https://";
-    public static final String S_URL_PREFIX        = "jdbc:hsqldb:";
-    public static final String S_URL_INTERNAL      = "jdbc:default:connection";
+    public static final String S_DOT = ".";
+    public static final String S_MEM = "mem:";
+    public static final String S_FILE = "file:";
+    public static final String S_RES = "res:";
+    public static final String S_ALIAS = "alias:";
+    public static final String S_HSQL = "hsql://";
+    public static final String S_HSQLS = "hsqls://";
+    public static final String S_HTTP = "http://";
+    public static final String S_HTTPS = "https://";
+    public static final String S_URL_PREFIX = "jdbc:hsqldb:";
+    public static final String S_URL_INTERNAL = "jdbc:default:connection";
     public static final String url_connection_type = "connection_type";
-    public static final String url_database        = "database";
+    public static final String url_database = "database";
 
     /**
      * Returns true if type represents an in-process connection to database.
@@ -102,28 +102,28 @@ public class DatabaseURL {
      * <p> Additional connection properties specified as key/value pairs.
      * </ul>
      *
-     * @return null returned if the part that should represent the port is not
-     *   an integer or the part for database name is empty. Empty
-     *   HsqlProperties returned if if url does not begin with valid protocol
-     *   and could refer to another JDBC driver.
-     * @param url String
+     * @param url       String
      * @param hasPrefix indicates URL prefix is present
-     * @param noPath indicates empty path and verbatim use of path elements as
-     * database
+     * @param noPath    indicates empty path and verbatim use of path elements as
+     *                  database
+     * @return null returned if the part that should represent the port is not
+     * an integer or the part for database name is empty. Empty
+     * HsqlProperties returned if if url does not begin with valid protocol
+     * and could refer to another JDBC driver.
      */
     public static HsqlProperties parseURL(String url, boolean hasPrefix,
                                           boolean noPath) {
 
-        String         urlImage   = url.toLowerCase(Locale.ENGLISH);
-        HsqlProperties props      = new HsqlProperties();
+        String urlImage = url.toLowerCase(Locale.ENGLISH);
+        HsqlProperties props = new HsqlProperties();
         HsqlProperties extraProps = null;
-        String         arguments  = null;
-        int            pos        = 0;
-        String         type       = null;
-        int            port       = 0;
-        String         database;
-        String         path;
-        boolean        isNetwork = false;
+        String arguments = null;
+        int pos = 0;
+        String type = null;
+        int port = 0;
+        String database;
+        String path;
+        boolean isNetwork = false;
 
         if (hasPrefix) {
             if (urlImage.startsWith(S_URL_PREFIX)) {
@@ -146,19 +146,20 @@ public class DatabaseURL {
                 break;
             }
 
-            String varName  = url.substring(replacePos + 2, endPos);
+            String varName = url.substring(replacePos + 2, endPos);
             String varValue = null;
 
             try {
                 varValue = System.getProperty(varName);
-            } catch (SecurityException e) {}
+            } catch (SecurityException e) {
+            }
 
             if (varValue == null) {
                 break;
             }
 
             url = url.substring(0, replacePos) + varValue
-                  + url.substring(endPos + 1);
+                    + url.substring(endPos + 1);
             urlImage = url.toLowerCase(Locale.ENGLISH);
         }
 
@@ -173,7 +174,7 @@ public class DatabaseURL {
         int semiPos = url.indexOf(';', pos);
 
         if (semiPos > -1) {
-            arguments  = url.substring(semiPos + 1, urlImage.length());
+            arguments = url.substring(semiPos + 1, urlImage.length());
             postUrlPos = semiPos;
             extraProps = HsqlProperties.delimitedArgPairsToProps(arguments,
                     "=", ";", null);
@@ -193,20 +194,20 @@ public class DatabaseURL {
         } else if (urlImage.startsWith(S_ALIAS, pos)) {
             type = S_ALIAS;
         } else if (urlImage.startsWith(S_HSQL, pos)) {
-            type      = S_HSQL;
-            port      = ServerConstants.SC_DEFAULT_HSQL_SERVER_PORT;
+            type = S_HSQL;
+            port = ServerConstants.SC_DEFAULT_HSQL_SERVER_PORT;
             isNetwork = true;
         } else if (urlImage.startsWith(S_HSQLS, pos)) {
-            type      = S_HSQLS;
-            port      = ServerConstants.SC_DEFAULT_HSQLS_SERVER_PORT;
+            type = S_HSQLS;
+            port = ServerConstants.SC_DEFAULT_HSQLS_SERVER_PORT;
             isNetwork = true;
         } else if (urlImage.startsWith(S_HTTP, pos)) {
-            type      = S_HTTP;
-            port      = ServerConstants.SC_DEFAULT_HTTP_SERVER_PORT;
+            type = S_HTTP;
+            port = ServerConstants.SC_DEFAULT_HTTP_SERVER_PORT;
             isNetwork = true;
         } else if (urlImage.startsWith(S_HTTPS, pos)) {
-            type      = S_HTTPS;
-            port      = ServerConstants.SC_DEFAULT_HTTPS_SERVER_PORT;
+            type = S_HTTPS;
+            port = ServerConstants.SC_DEFAULT_HTTPS_SERVER_PORT;
             isNetwork = true;
         }
 
@@ -228,7 +229,7 @@ public class DatabaseURL {
             String pathSeg = null;
             String hostSeg = null;
             String portSeg = null;
-            int    endPos  = url.indexOf('/', pos);
+            int endPos = url.indexOf('/', pos);
 
             if (endPos > 0 && endPos < postUrlPos) {
                 pathSeg = url.substring(endPos, postUrlPos);
@@ -271,7 +272,7 @@ public class DatabaseURL {
                 }
 
                 hostSeg = urlImage.substring(pos, (colPos > 0) ? colPos
-                                                               : endPos);
+                        : endPos);
             }
 
             // At this point, the entire url has been parsed into
@@ -294,10 +295,10 @@ public class DatabaseURL {
             }
 
             if (noPath) {
-                path     = "";
+                path = "";
                 database = pathSeg;
             } else if (pathSeg == null) {
-                path     = "/";
+                path = "/";
                 database = "";
             } else {
                 int lastSlashPos = pathSeg.lastIndexOf('/');
@@ -305,9 +306,9 @@ public class DatabaseURL {
                 if (lastSlashPos < 1) {
                     path = "/";
                     database =
-                        pathSeg.substring(1).toLowerCase(Locale.ENGLISH);
+                            pathSeg.substring(1).toLowerCase(Locale.ENGLISH);
                 } else {
-                    path     = pathSeg.substring(0, lastSlashPos);
+                    path = pathSeg.substring(0, lastSlashPos);
                     database = pathSeg.substring(lastSlashPos + 1);
                 }
             }
@@ -350,7 +351,8 @@ public class DatabaseURL {
 
                     try {
                         userHome = System.getProperty("user.home");
-                    } catch (SecurityException e) {}
+                    } catch (SecurityException e) {
+                    }
 
                     database = userHome + database.substring(1);
                 }

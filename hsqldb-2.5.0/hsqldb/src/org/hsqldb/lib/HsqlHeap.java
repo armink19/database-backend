@@ -33,16 +33,16 @@ package org.hsqldb.lib;
 
 /**
  * Provides the base HSQLDB interface for Heap ADT implementations. <p>
- *
+ * <p>
  * In this context, a Heap is simply a collection-like ADT that allows addition
  * of elements and provides a way to remove the least element, given some
  * implementation-dependent strategy for imposing an order over its
  * elements. <p>
- *
+ * <p>
  * Typically, an HsqlHeap will be implemented as a tree-like structure that
  * recursively guarantees a <i>Heap Invariant</i>, such that all nodes below
  * the root are greater than the root, given some comparison strategy. <p>
-
+ * <p>
  * This in turn provides the basis for an efficient implementation of ADTs such
  * PriorityQueue, since Heap operations using the typical implementation are,
  * in theory, guaranteed to be O(log n).
@@ -73,10 +73,10 @@ public interface HsqlHeap {
      *
      * @param o The element to add
      * @throws IllegalArgumentException if the implementation does
-     *      not accept elements of the supplied type (optional)
-     * throws RuntimeException if the implementation
-     *      dictates that this Heap is not currently accepting additions
-     *      or that this Heap is currently full (optional)
+     *                                  not accept elements of the supplied type (optional)
+     *                                  throws RuntimeException if the implementation
+     *                                  dictates that this Heap is not currently accepting additions
+     *                                  or that this Heap is currently full (optional)
      */
     void add(Object o) throws IllegalArgumentException, RuntimeException;
 

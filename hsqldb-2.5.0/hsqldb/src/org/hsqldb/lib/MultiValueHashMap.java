@@ -43,19 +43,19 @@ import org.hsqldb.map.BaseHashMap;
  */
 public class MultiValueHashMap extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
-    Iterator   valueIterator;
+    Iterator valueIterator;
 
     public MultiValueHashMap() {
         this(8);
     }
 
     public MultiValueHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.objectKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
 
         super.multiValueTable = new boolean[super.objectValueTable.length];
     }

@@ -44,16 +44,19 @@ import java.util.Locale;
 
 /**
  * Test HSQLDBs collation capabilities
+ *
  * @author frank.schoenheit@sun.com
  */
 public class TestCollation extends TestBase {
 
-    Statement  statement;
+    Statement statement;
     Connection connection;
-    Iterator   collIterator;
-    Iterator   localeIterator;
+    Iterator collIterator;
+    Iterator localeIterator;
 
-    /** Creates a new instance of TestCollation */
+    /**
+     * Creates a new instance of TestCollation
+     */
     public TestCollation(String name) {
 
         super(name, "jdbc:hsqldb:file:test", false, false);
@@ -65,9 +68,9 @@ public class TestCollation extends TestBase {
 
         super.setUp();
 
-        connection     = super.newConnection();
-        statement      = connection.createStatement();
-        collIterator   = Collation.getCollationsIterator();
+        connection = super.newConnection();
+        statement = connection.createStatement();
+        collIterator = Collation.getCollationsIterator();
         localeIterator = Collation.getLocalesIterator();
     }
 
@@ -77,7 +80,8 @@ public class TestCollation extends TestBase {
             statement = connection.createStatement();
 
             statement.execute("SHUTDOWN");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         super.tearDown();
     }
@@ -90,10 +94,11 @@ public class TestCollation extends TestBase {
         // let's check whether unknown collation identifiers are rejected
         try {
             statement.execute(
-                getSetCollationStmt(
-                    "ThisIsDefinitlyNoValidCollationIdentifier"));
+                    getSetCollationStmt(
+                            "ThisIsDefinitlyNoValidCollationIdentifier"));
             fail("database did not reject invalid collation name");
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         // let's check whether the DB accepts all known collations
         int count = 0;
@@ -105,14 +110,14 @@ public class TestCollation extends TestBase {
                 statement.execute(getSetCollationStmt(collationName));
             } catch (SQLException e) {
                 fail("could not set collation '" + collationName
-                     + "'\n  exception message: " + e.getMessage());
+                        + "'\n  exception message: " + e.getMessage());
             }
 
             ++count;
         }
 
         System.out.println("checked " + count
-                           + " collations for availability.");
+                + " collations for availability.");
 
         // even if the above worked, we cannot be sure that all locales are really supported.
         // The fact that SET DATABASE COLLATION succeeeded only means that a Collator could
@@ -124,7 +129,7 @@ public class TestCollation extends TestBase {
         // The "installed" puzzles me - maybe this is really different per installation, and not only
         // per JDK version?
         Locale[] availableLocales = Locale.getAvailableLocales();
-        Set      existenceCheck   = new HashSet();
+        Set existenceCheck = new HashSet();
 
         for (int i = 0; i < availableLocales.length; ++i) {
             String availaleName = availableLocales[i].getLanguage();
@@ -137,8 +142,8 @@ public class TestCollation extends TestBase {
         }
 
         String notInstalled = "";
-        int    expected     = 0,
-               failed       = 0;
+        int expected = 0,
+                failed = 0;
 
         while (localeIterator.hasNext()) {
             String localeName = (String) localeIterator.next();
@@ -158,7 +163,7 @@ public class TestCollation extends TestBase {
 
         if (notInstalled.length() > 0) {
             fail("the following locales are not installed:\n  " + notInstalled
-                 + "\n  (" + failed + " out of " + expected + ")");
+                    + "\n  (" + failed + " out of " + expected + ")");
         }
     }
 
@@ -168,11 +173,11 @@ public class TestCollation extends TestBase {
     public void testVerifyCollation() {
 
         String failedCollations = "";
-        String failMessage      = "";
+        String failMessage = "";
 
         while (collIterator.hasNext()) {
             String collationName = (String) collIterator.next();
-            String message       = checkSorting(collationName);
+            String message = checkSorting(collationName);
 
             if (message.length() > 0) {
                 if (failedCollations.length() > 0) {
@@ -180,13 +185,13 @@ public class TestCollation extends TestBase {
                 }
 
                 failedCollations += collationName;
-                failMessage      += message;
+                failMessage += message;
             }
         }
 
         if (failedCollations.length() > 0) {
             fail("test failed for following collations:\n" + failedCollations
-                 + "\n" + failMessage);
+                    + "\n" + failMessage);
         }
     }
 
@@ -195,7 +200,7 @@ public class TestCollation extends TestBase {
      */
     protected final String getSetCollationStmt(String collationName) {
 
-        final String setCollationStmtPre  = "SET DATABASE COLLATION \"";
+        final String setCollationStmtPre = "SET DATABASE COLLATION \"";
         final String setCollationStmtPost = "\"";
 
         return setCollationStmtPre + collationName + setCollationStmtPost;
@@ -208,10 +213,10 @@ public class TestCollation extends TestBase {
 
         String stmt1 = "DROP TABLE WORDLIST IF EXISTS;";
         String stmt2 =
-            "CREATE TEXT TABLE WORDLIST ( ID INTEGER, WORD VARCHAR(50) );";
+                "CREATE TEXT TABLE WORDLIST ( ID INTEGER, WORD VARCHAR(50) );";
         String stmt3 = "SET TABLE WORDLIST SOURCE \"" + collationName
-                       + ".csv;encoding=UTF-8\"";
-        String selectStmt    = "SELECT ID, WORD FROM WORDLIST ORDER BY WORD";
+                + ".csv;encoding=UTF-8\"";
+        String selectStmt = "SELECT ID, WORD FROM WORDLIST ORDER BY WORD";
         String returnMessage = "";
 
         try {
@@ -226,21 +231,21 @@ public class TestCollation extends TestBase {
 
             while (results.next()) {
                 int expectedPosition = results.getInt(1);
-                int foundPosition    = results.getRow();
+                int foundPosition = results.getRow();
 
                 if (expectedPosition != foundPosition) {
                     String word = results.getString(2);
 
                     return "testing collation '" + collationName
-                           + "' failed\n" + "  word              : " + word
-                           + "\n" + "  expected position : "
-                           + expectedPosition + "\n"
-                           + "  found position    : " + foundPosition + "\n";
+                            + "' failed\n" + "  word              : " + word
+                            + "\n" + "  expected position : "
+                            + expectedPosition + "\n"
+                            + "  found position    : " + foundPosition + "\n";
                 }
             }
         } catch (SQLException e) {
             return "testing collation '" + collationName
-                   + "' failed\n  exception message: " + e.getMessage() + "\n";
+                    + "' failed\n  exception message: " + e.getMessage() + "\n";
         }
 
         return "";

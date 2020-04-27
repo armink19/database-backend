@@ -39,21 +39,21 @@ import java.io.Serializable;
 
 /**
  * Represents of an instance of an OTHER field value. <p>
- *
+ * <p>
  * Prior to 1.7.0 there were problems storing Objects of normal column types
  * in columns of the type OTHER. In 1.7.0 changes were made to allow this,
  * but as all the conversion took place inside the engine, it introduced a
  * requirement for all classes for objects stored in OTHER columns to be
  * available on the runtime class path of the engine. <p>
- *
+ * <p>
  * In 1.7.2, the introduction of real prepared statement support allows us
  * revert to the pre 1.7.0 behaviour without the artificial limitations. <p>
- *
+ * <p>
  * The classes for stored objects need not be available to open and operate
  * the database in general. The classes need to be available only if a
  * conversion from one of these objects to another type is performed inside
  * the engine while operating the database.
- *
+ * <p>
  * The current limitation is that in SQL statements, values of type String
  * (CHARACTER and related SQL types) cannot be stored in columns of type
  * OTHER. This limitation does not exist for String values assigned to
@@ -67,7 +67,8 @@ public class JavaObjectData {
 
     private byte[] data;
 
-    JavaObjectData() {}
+    JavaObjectData() {
+    }
 
     /**
      * Constructor used inside the engine when an already serialized

@@ -49,16 +49,15 @@ import org.hsqldb.result.Result;
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- *
  * @version 2.5.0
+ * @see User
  * @since 1.7.2
- * @see  User
  */
 public final class UserManager {
 
     /**
      * This object's set of User objects. <p>
-     *
+     * <p>
      * Note: The special _SYSTEM  role
      * is not included in this list but the special PUBLIC
      * User object is kept in the list because it's needed by MetaData
@@ -75,30 +74,30 @@ public final class UserManager {
 
     /**
      * Construction happens once for each Database instance.
-     *
+     * <p>
      * Creates special users PUBLIC_USER_NAME and SYSTEM_AUTHORIZATION_NAME.
      * Sets up association with the GranteeManager for this database.
      */
     public UserManager(Database database) {
         granteeManager = database.getGranteeManager();
-        userList       = new HashMappedList();
+        userList = new HashMappedList();
     }
 
     /**
      * Creates a new User object under management of this object. <p>
+     * <p>
+     * A set of constraints regarding user creation is imposed: <p>
      *
-     *  A set of constraints regarding user creation is imposed: <p>
+     * <OL>
+     * <LI>If the specified name is null, then an
+     * ASSERTION_FAILED exception is thrown stating that
+     * the name is null.
      *
-     *  <OL>
-     *    <LI>If the specified name is null, then an
-     *        ASSERTION_FAILED exception is thrown stating that
-     *        the name is null.
-     *
-     *    <LI>If this object's collection already contains an element whose
-     *        name attribute equals the name argument, then
-     *        a GRANTEE_ALREADY_EXISTS exception is thrown.
-     *        (This will catch attempts to create Reserved grantee names).
-     *  </OL>
+     * <LI>If this object's collection already contains an element whose
+     * name attribute equals the name argument, then
+     * a GRANTEE_ALREADY_EXISTS exception is thrown.
+     * (This will catch attempts to create Reserved grantee names).
+     * </OL>
      */
     public User createUser(Session session, HsqlName name, String password,
                            boolean isDigest) {
@@ -143,8 +142,8 @@ public final class UserManager {
         }
 
         Result result = pwCheckFunction.invoke(session,
-                                               new Object[]{ password }, null,
-                                               true);
+                new Object[]{password}, null,
+                true);
         Boolean check = (Boolean) result.getValueObject();
 
         if (check == null || !check.booleanValue()) {
@@ -156,22 +155,21 @@ public final class UserManager {
 
     /**
      * Attempts to drop a User object with the specified name
-     *  from this object's set. <p>
+     * from this object's set. <p>
+     * <p>
+     * A successful drop action consists of: <p>
      *
-     *  A successful drop action consists of: <p>
+     * <UL>
      *
-     *  <UL>
+     * <LI>removing the User object with the specified name
+     * from the set.
      *
-     *    <LI>removing the User object with the specified name
-     *        from the set.
+     * <LI>revoking all rights from the removed User<br>
+     * (this ensures that in case there are still references to the
+     * just dropped User object, those references
+     * cannot be used to erroneously access database objects).
      *
-     *    <LI>revoking all rights from the removed User<br>
-     *        (this ensures that in case there are still references to the
-     *        just dropped User object, those references
-     *        cannot be used to erroneously access database objects).
-     *
-     *  </UL> <p>
-     *
+     * </UL> <p>
      */
     public void dropUser(String name) {
 
@@ -204,14 +202,14 @@ public final class UserManager {
         }
 
         HsqlName name =
-            granteeManager.database.nameManager.newHsqlName(username,
-                isQuoted, SchemaObject.GRANTEE);
+                granteeManager.database.nameManager.newHsqlName(username,
+                        isQuoted, SchemaObject.GRANTEE);
         User user = createUser(null, name, password, false);
 
         user.isLocalOnly = true;
 
         granteeManager.grant(name.name, SqlInvariants.DBA_ADMIN_ROLE_NAME,
-                             granteeManager.getDBARole());
+                granteeManager.getDBARole());
     }
 
     /**
@@ -228,7 +226,7 @@ public final class UserManager {
             password = "";
         }
 
-        User    user    = (User) userList.get(name);
+        User user = (User) userList.get(name);
         boolean isLocal = user != null && user.isLocalOnly;
 
         if (extAuthenticationFunction == null || isLocal) {
@@ -246,9 +244,9 @@ public final class UserManager {
          * assign the list of roles to the user.
          */
         Result result =
-            extAuthenticationFunction.invokeJavaMethodDirect(new String[] {
-            granteeManager.database.getNameString(), name, password
-        });
+                extAuthenticationFunction.invokeJavaMethodDirect(new String[]{
+                        granteeManager.database.getNameString(), name, password
+                });
 
         if (result.isError()) {
             throw Error.error(ErrorCode.X_28501, result.getMainString());
@@ -258,10 +256,10 @@ public final class UserManager {
 
         if (user == null) {
             HsqlName hsqlName =
-                granteeManager.database.nameManager.newHsqlName(name, true,
-                    SchemaObject.GRANTEE);
+                    granteeManager.database.nameManager.newHsqlName(name, true,
+                            SchemaObject.GRANTEE);
 
-            user                = createUser(null, hsqlName, "", false);
+            user = createUser(null, hsqlName, "", false);
             user.isExternalOnly = true;
         }
 
@@ -280,14 +278,15 @@ public final class UserManager {
                 Grantee role = granteeManager.getRole((String) roles[i]);
 
                 user.grant(role);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
 
         user.updateAllRights();
 
         for (int i = 0; i < roles.length; i++) {
             Schema schema = granteeManager.database.schemaManager.findSchema(
-                (String) roles[i]);
+                    (String) roles[i]);
 
             if (schema != null) {
                 user.setInitialSchema(schema.getName());
@@ -301,7 +300,7 @@ public final class UserManager {
 
     /**
      * Retrieves this object's set of User objects as
-     *  an associative list.
+     * an associative list.
      */
     public HashMappedList getUsers() {
         return userList;
@@ -309,7 +308,7 @@ public final class UserManager {
 
     public boolean exists(String name) {
         return userList.get(name) == null ? false
-                                          : true;
+                : true;
     }
 
     /**
@@ -331,7 +330,7 @@ public final class UserManager {
      * Retrieves the <code>User</code> objects representing the database
      * users that are visible to the <code>User</code> object
      * represented by the <code>session</code> argument. <p>
-     *
+     * <p>
      * If the <code>session</code> argument's <code>User</code> object
      * attribute has isAdmin() true (directly or by virtue of a Role),
      * then all of the
@@ -341,22 +340,21 @@ public final class UserManager {
      * object, if it exists in this collection, are considered visible. <p>
      *
      * @param session The <code>Session</code> object used to determine
-     *          visibility
+     *                visibility
      * @return a list of <code>User</code> objects visible to
-     *          the <code>User</code> object contained by the
-     *         <code>session</code> argument.
-     *
+     * the <code>User</code> object contained by the
+     * <code>session</code> argument.
      */
     public HsqlArrayList listVisibleUsers(Session session) {
 
         HsqlArrayList list;
-        User          user;
-        boolean       isAdmin;
-        String        sessionName;
-        String        userName;
+        User user;
+        boolean isAdmin;
+        String sessionName;
+        String userName;
 
-        list        = new HsqlArrayList();
-        isAdmin     = session.isAdmin();
+        list = new HsqlArrayList();
+        isAdmin = session.isAdmin();
         sessionName = session.getUsername();
 
         if (userList == null || userList.size() == 0) {
@@ -388,8 +386,7 @@ public final class UserManager {
      * <code>User</code> object for the current <code>Database</code> object.
      *
      * @return the <code>SYS_AUTHORIZATION_NAME</code>
-     *          <code>User</code> object
-     *
+     * <code>User</code> object
      */
     public User getSysUser() {
         return GranteeManager.systemAuthorisation;
@@ -398,7 +395,7 @@ public final class UserManager {
     public synchronized void removeSchemaReference(HsqlName schemaName) {
 
         for (int i = 0; i < userList.size(); i++) {
-            User     user   = (User) userList.get(i);
+            User user = (User) userList.get(i);
             HsqlName schema = user.getInitialSchema();
 
             if (schema == null) {
@@ -449,7 +446,7 @@ public final class UserManager {
     public String[] getAuthenticationSQL() {
 
         HsqlArrayList list = new HsqlArrayList();
-        String[]      array;
+        String[] array;
 
         if (pwCheckFunction != null) {
             StringBuilder sb = new StringBuilder();

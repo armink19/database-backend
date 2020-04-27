@@ -65,7 +65,7 @@ import java.sql.*;
  * <!-- start generic documentation -->
  * <P>The object used for executing a static SQL statement
  * and returning the results it produces.
- * <P>
+ * <p>
  * By default, only one <code>ResultSet</code> object per <code>Statement</code>
  * object can be open at the same time. Therefore, if the reading of one
  * <code>ResultSet</code> object is interleaved
@@ -74,7 +74,7 @@ import java.sql.*;
  * <code>Statement</code> interface implicitly close a statement's current
  * <code>ResultSet</code> object if an open one exists.
  * <!-- end generic documentation-->
- *
+ * <p>
  * <!-- start release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3><p>
@@ -82,11 +82,11 @@ import java.sql.*;
  * requirement that any existing ResultSet is closed when execute() or
  * executeQuery() methods are called. The connection property close_result=true
  * is required for this behaviour.<p>
- *
+ * <p>
  * Methods added in JAVA 8 are generally supported when the HSQLDB jar is compiled
  * with JDK 8.
  * <p>
- *
+ * <p>
  * (fredt@users)<br>
  * (campbell-burnet@users)<p>
  *
@@ -96,9 +96,9 @@ import java.sql.*;
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.4.0
- * @since HSQLDB 1.9.0
  * @see JDBCConnection#createStatement
  * @see JDBCResultSet
+ * @since HSQLDB 1.9.0
  */
 public class JDBCStatement extends JDBCStatementBase implements Statement,
         java.sql.Wrapper {
@@ -108,32 +108,32 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Executes the given SQL statement, which returns a single
      * <code>ResultSet</code> object.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * This method should not be used for statements other than SELECT queries.<p>
-     *
+     * <p>
      * From 2.0, HSQLDB throws an exception when the statement
      * is a DDL statement or an UPDATE or DELETE statement.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @param sql an SQL statement to be sent to the database, typically a
-     *        static SQL <code>SELECT</code> statement
+     *            static SQL <code>SELECT</code> statement
      * @return a <code>ResultSet</code> object that contains the data produced
-     *         by the given query; never <code>null</code>
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the given
-     *            SQL statement produces anything other than a single
-     *            <code>ResultSet</code> object
+     * by the given query; never <code>null</code>
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the given
+     *                      SQL statement produces anything other than a single
+     *                      <code>ResultSet</code> object
      */
     public synchronized ResultSet executeQuery(
             String sql) throws SQLException {
 
         fetchResult(sql, StatementTypes.RETURN_RESULT,
-                    JDBCStatementBase.NO_GENERATED_KEYS, null, null);
+                JDBCStatementBase.NO_GENERATED_KEYS, null, null);
 
         return getResultSet();
     }
@@ -146,20 +146,18 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- end generic documentation -->
      *
      * @param sql (JDBC4 clarification:) an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     *
-     * @return (JDBC4 clarification:) either (1) the row count for SQL Data Manipulation Language (DML) statements
-     *         or (2) 0 for SQL statements that return nothing
-     *
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the given
-     *            SQL statement produces a <code>ResultSet</code> object
+     *            <code>DELETE</code>; or an SQL statement that returns nothing,
+     *            such as a DDL statement.
+     * @return (JDBC4 clarification :) either (1) the row count for SQL Data Manipulation Language (DML) statements
+     * or (2) 0 for SQL statements that return nothing
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the given
+     *                      SQL statement produces a <code>ResultSet</code> object
      */
     public synchronized int executeUpdate(String sql) throws SQLException {
 
         fetchResult(sql, StatementTypes.RETURN_COUNT,
-                    JDBCStatementBase.NO_GENERATED_KEYS, null, null);
+                JDBCStatementBase.NO_GENERATED_KEYS, null, null);
 
         return resultIn.getUpdateCount();
     }
@@ -172,10 +170,10 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * It is generally good practice to release resources as soon as
      * you are finished with them to avoid tying up database
      * resources.
-     * <P>
+     * <p>
      * Calling the method <code>close</code> on a <code>Statement</code>
      * object that is already closed has no effect.
-     * <P>
+     * <p>
      * <B>Note:</B>When a <code>Statement</code> object is
      * closed, its current <code>ResultSet</code> object, if one exists, is
      * also closed.
@@ -183,7 +181,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * automatically closed when it is garbage collected.]
      * <!-- end generic documentation -->
      *
-     * @exception SQLException if a database access error occurs
+     * @throws SQLException if a database access error occurs
      */
     public synchronized void close() throws SQLException {
 
@@ -193,10 +191,10 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
         closeResultData();
 
         batchResultOut = null;
-        connection     = null;
-        resultIn       = null;
-        resultOut      = null;
-        isClosed       = true;
+        connection = null;
+        resultIn = null;
+        resultOut = null;
+        isClosed = true;
     }
 
     //----------------------------------------------------------------------
@@ -212,20 +210,20 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * and <code>LONGVARCHAR</code> columns.  If the limit is exceeded, the
      * excess data is silently discarded.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Including 1.7.2, HSQLDB always returns zero, meaning there
      * is no limit.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @return the current column size limit for columns storing character and
-     *         binary values; zero means there is no limit
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * binary values; zero means there is no limit
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #setMaxFieldSize
      */
     public synchronized int getMaxFieldSize() throws SQLException {
@@ -241,7 +239,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Sets the limit for the maximum number of bytes that can be returned for
      * character and binary column values in a <code>ResultSet</code>
      * object produced by this <code>Statement</code> object.
-     *
+     * <p>
      * This limit applies
      * only to <code>BINARY</code>, <code>VARBINARY</code>,
      * <code>LONGVARBINARY</code>, <code>CHAR</code>, <code>VARCHAR</code>,
@@ -250,11 +248,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * is silently discarded. For maximum portability, use values
      * greater than 256.
      * <!-- emd generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * To present, calls to this method are simply ignored; HSQLDB always
      * stores the full number of bytes when dealing with any of the field types
      * mentioned above. These types all have an absolute maximum element upper
@@ -262,7 +260,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * java.lang.Integer.MAX_VALUE.  For XXXBINARY types, this translates to
      * Integer.MAX_VALUE bytes.  For XXXCHAR types, this translates to
      * 2 * Integer.MAX_VALUE bytes (2 bytes / character). <p>
-     *
+     * <p>
      * In practice, field sizes are limited to values much smaller than the
      * absolute maximum element upper bound, in particular due to limits imposed
      * on the maximum available Java heap memory.
@@ -270,9 +268,9 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- end release-specific documentation -->
      *
      * @param max the new column size limit in bytes; zero means there is no limit
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>
-     * or the condition {@code max >= 0} is not satisfied
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code>
+     *                      or the condition {@code max >= 0} is not satisfied
      * @see #getMaxFieldSize
      */
     public void setMaxFieldSize(int max) throws SQLException {
@@ -293,10 +291,10 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- start generic documentation -->
      *
      * @return the current maximum number of rows for a <code>ResultSet</code>
-     *         object produced by this <code>Statement</code> object;
-     *         zero means there is no limit
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * object produced by this <code>Statement</code> object;
+     * zero means there is no limit
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #setMaxRows
      */
     public synchronized int getMaxRows() throws SQLException {
@@ -317,9 +315,9 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- end generic documentation -->
      *
      * @param max the new max rows limit; zero means there is no limit
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>
-     * or the condition {@code max >= 0} is not satisfied
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code>
+     *                      or the condition {@code max >= 0} is not satisfied
      * @see #getMaxRows
      */
     public synchronized void setMaxRows(int max) throws SQLException {
@@ -337,16 +335,16 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Sets escape processing on or off.
      * If escape scanning is on (the default), the driver will do
      * escape substitution before sending the SQL statement to the database.
-     *
+     * <p>
      * Note: Since prepared statements have usually been parsed prior
      * to making this call, disabling escape processing for
      * <code>PreparedStatements</code> objects will have no effect.
      * <!-- end generic documentation -->
      *
      * @param enable <code>true</code> to enable escape processing;
-     *       <code>false</code> to disable it
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     *               <code>false</code> to disable it
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      */
     public void setEscapeProcessing(boolean enable) throws SQLException {
 
@@ -362,20 +360,20 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * If the limit is exceeded, a
      * <code>SQLException</code> is thrown.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * To present, HSQLDB always returns zero, meaning there
      * is no limit.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @return the current query timeout limit in seconds; zero means there is
-     *         no limit
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * no limit
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #setQueryTimeout
      */
     public synchronized int getQueryTimeout() throws SQLException {
@@ -396,20 +394,20 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * implementations may also apply this limit to <code>ResultSet</code> methods
      * (consult your driver vendor documentation for details).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * The maximum number of seconds to wait is 32767.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @param seconds the new query timeout limit in seconds; zero means
-     *        there is no limit
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>
-     * or the condition {@code seconds >= 0} is not satisfied
+     *                there is no limit
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code>
+     *                      or the condition {@code seconds >= 0} is not satisfied
      * @see #getQueryTimeout
      */
     public void setQueryTimeout(int seconds) throws SQLException {
@@ -433,20 +431,20 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * This method can be used by one thread to cancel a statement that
      * is being executed by another thread.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB version 2.3.4 and later supports aborting an SQL query
      * or data update statement.
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>Statement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      */
     public void cancel() throws SQLException {
         checkClosed();
@@ -477,20 +475,20 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * will be chained on it rather than on the <code>Statement</code>
      * object that produced it.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * In 2.0, HSQLDB may produces Statement warnings;
      * this method always returns null.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @return the first <code>SQLWarning</code> object or <code>null</code>
-     *         if there are no warnings
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * if there are no warnings
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      */
     public synchronized SQLWarning getWarnings() throws SQLException {
 
@@ -507,18 +505,18 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <code>null</code> until a new warning is reported for this
      * <code>Statement</code> object.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * In HSQLDB 2.0, <code>SQLWarning</code> objects may
      * be produced for Statement Objects; calls to this method clear the warnings.
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      */
     public synchronized void clearWarnings() throws SQLException {
 
@@ -547,11 +545,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * the one that generated the <code>ResultSet</code> object being used for
      * positioning. Also, cursor names must be unique within a connection.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Including 2.0, HSQLDB does not support named cursors;
      * calls to this method are ignored.
      * </div>
@@ -559,9 +557,9 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * @param name the new cursor name, which must be unique within
      *             a connection
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>Statement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      */
     public void setCursorName(String name) throws SQLException {
         checkClosed();
@@ -577,7 +575,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * this unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an
      * unknown SQL string.
-     * <P>
+     * <p>
      * The <code>execute</code> method executes an SQL statement and indicates the
      * form of the first result.  You must then use the methods
      * <code>getResultSet</code> or <code>getUpdateCount</code>
@@ -587,10 +585,10 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * @param sql any SQL statement
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
-     *         object; <code>false</code> if it is an update count or there are
-     *         no results
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * object; <code>false</code> if it is an update count or there are
+     * no results
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -598,17 +596,17 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
     public synchronized boolean execute(String sql) throws SQLException {
 
         fetchResult(sql, StatementTypes.RETURN_ANY,
-                    JDBCStatementBase.NO_GENERATED_KEYS, null, null);
+                JDBCStatementBase.NO_GENERATED_KEYS, null, null);
 
         return currentResultSet != null;
     }
 
     /**
      * <!-- start generic documentation -->
-     *  Retrieves the current result as a <code>ResultSet</code> object.
-     *  This method should be called only once per result.
+     * Retrieves the current result as a <code>ResultSet</code> object.
+     * This method should be called only once per result.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
@@ -618,8 +616,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * @return the current result as a <code>ResultSet</code> object or
      * <code>null</code> if the result is an update count or there are no more results
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #execute
      */
     public synchronized ResultSet getResultSet() throws SQLException {
@@ -628,15 +626,15 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
 
     /**
      * <!-- start generic documentation -->
-     *  Retrieves the current result as an update count;
-     *  if the result is a <code>ResultSet</code> object or there are no more results, -1
-     *  is returned. This method should be called only once per result.
+     * Retrieves the current result as an update count;
+     * if the result is a <code>ResultSet</code> object or there are no more results, -1
+     * is returned. This method should be called only once per result.
      * <!-- end generic documentation -->
      *
      * @return the current result as an update count; -1 if the current result is a
      * <code>ResultSet</code> object or there are no more results
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #execute
      */
     public synchronized int getUpdateCount() throws SQLException {
@@ -652,16 +650,16 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * <P>There are no more results when the following is true:
      * <PRE>
-     *     // stmt is a Statement object {@code
-     *     ((stmt.getMoreResults() == false) && (stmt.getUpdateCount() == -1))
+     * // stmt is a Statement object {@code
+     * ((stmt.getMoreResults() == false) && (stmt.getUpdateCount() == -1))
      * }</PRE>
      * <!-- end generic documentation -->
      *
      * @return <code>true</code> if the next result is a <code>ResultSet</code>
-     *         object; <code>false</code> if it is an update count or there are
-     *         no more results
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * object; <code>false</code> if it is an update count or there are
+     * no more results
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #execute
      */
     public synchronized boolean getMoreResults() throws SQLException {
@@ -676,29 +674,29 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * rows will be processed in <code>ResultSet</code>
      * objects created using this <code>Statement</code> object.  The
      * default value is <code>ResultSet.FETCH_FORWARD</code>.
-     * <P>
+     * <p>
      * Note that this method sets the default fetch direction for
      * result sets generated by this <code>Statement</code> object.
      * Each result set has its own methods for getting and setting
      * its own fetch direction.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB accepts all valid parameters. <p>
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @param direction the initial direction for processing rows
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>
-     * or the given direction
-     * is not one of <code>ResultSet.FETCH_FORWARD</code>,
-     * <code>ResultSet.FETCH_REVERSE</code>, or <code>ResultSet.FETCH_UNKNOWN</code>
-     * @since JDK 1.2
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code>
+     *                      or the given direction
+     *                      is not one of <code>ResultSet.FETCH_FORWARD</code>,
+     *                      <code>ResultSet.FETCH_REVERSE</code>, or <code>ResultSet.FETCH_UNKNOWN</code>
      * @see #getFetchDirection
+     * @since JDK 1.2
      */
     public synchronized void setFetchDirection(
             int direction) throws SQLException {
@@ -708,13 +706,13 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
 
         switch (direction) {
 
-            case ResultSet.FETCH_FORWARD :
-            case ResultSet.FETCH_REVERSE :
-            case ResultSet.FETCH_UNKNOWN :
+            case ResultSet.FETCH_FORWARD:
+            case ResultSet.FETCH_REVERSE:
+            case ResultSet.FETCH_UNKNOWN:
                 fetchDirection = direction;
 
                 break;
-            default :
+            default:
                 throw JDBCUtil.invalidArgument();
         }
     }
@@ -728,21 +726,21 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * a fetch direction by calling the method <code>setFetchDirection</code>,
      * the return value is implementation-specific.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB returns the fetch direction. <p>
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @return the default fetch direction for result sets generated
-     *          from this <code>Statement</code> object
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
-     * @since JDK 1.2
+     * from this <code>Statement</code> object
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #setFetchDirection
+     * @since JDK 1.2
      */
     public int getFetchDirection() throws SQLException {
 
@@ -760,23 +758,23 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * If the value specified is zero, then the hint is ignored.
      * The default value is zero.
      * <!-- start generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB uses the specified value as a hint, but may process more or fewer
      * rows than specified.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @param rows the number of rows to fetch
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the
-     *        (JDBC4 modified:)
-     *        condition  {@code rows >= 0} is not satisfied.
-     * @since JDK 1.2
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the
+     *                      (JDBC4 modified:)
+     *                      condition  {@code rows >= 0} is not satisfied.
      * @see #getFetchSize
+     * @since JDK 1.2
      */
     public synchronized void setFetchSize(int rows) throws SQLException {
 
@@ -797,21 +795,21 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * a fetch size by calling the method <code>setFetchSize</code>,
      * the return value is implementation-specific.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <b>HSQLDB-Specific Information</b> <p>
-     *
+     * <p>
      * HSQLDB returns 0 by default, or the fetch size specified by setFetchSize
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @return the default fetch size for result sets generated
-     *          from this <code>Statement</code> object
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
-     * @since JDK 1.2
+     * from this <code>Statement</code> object
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #setFetchSize
+     * @since JDK 1.2
      */
     public synchronized int getFetchSize() throws SQLException {
 
@@ -825,11 +823,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Retrieves the result set concurrency for <code>ResultSet</code> objects
      * generated by this <code>Statement</code> object.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB supports <code>CONCUR_READ_ONLY</code> and
      * <code>CONCUR_UPDATABLE</code> concurrency.
      * </div>
@@ -837,8 +835,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * @return either <code>ResultSet.CONCUR_READ_ONLY</code> or
      * <code>ResultSet.CONCUR_UPDATABLE</code>
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @since JDK 1.2
      */
     public synchronized int getResultSetConcurrency() throws SQLException {
@@ -853,11 +851,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Retrieves the result set type for <code>ResultSet</code> objects
      * generated by this <code>Statement</code> object.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB 1.7.0 and later versions support <code>TYPE_FORWARD_ONLY</code>
      * and <code>TYPE_SCROLL_INSENSITIVE</code>.
      * </div>
@@ -866,8 +864,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * @return one of <code>ResultSet.TYPE_FORWARD_ONLY</code>,
      * <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
      * <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @since JDK 1.2
      */
     public synchronized int getResultSetType() throws SQLException {
@@ -882,26 +880,26 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Adds the given SQL command to the current list of commands for this
      * <code>Statement</code> object. The commands in this list can be
      * executed as a batch by calling the method <code>executeBatch</code>.
-     * <P>
+     * <p>
      * (JDBC4 clarification:)<p>
      * <B>NOTE:</B>  Support of an ability to batch updates is optional.
-     *
+     * <p>
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with 1.7.2, this feature is supported.
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @param sql typically this is a SQL <code>INSERT</code> or
-     * <code>UPDATE</code> statement
-     * (:JDBC4 modified)
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the
-     * driver does not support batch updates
+     *            <code>UPDATE</code> statement
+     *            (:JDBC4 modified)
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the
+     *                      driver does not support batch updates
      * @see #executeBatch
      * @since JDK 1.2
      */
@@ -916,29 +914,29 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
         if (batchResultOut == null) {
             batchResultOut = Result.newBatchedExecuteRequest();
         }
-        batchResultOut.getNavigator().add(new Object[] { sql });
+        batchResultOut.getNavigator().add(new Object[]{sql});
     }
 
     /**
      * <!-- start generic documentation -->
      * Empties this <code>Statement</code> object's current list of
      * SQL commands.
-     * <P>
+     * <p>
      * (JDBC4 clarification:) <p>
      * <B>NOTE:</B>  Support of an ability to batch updates is optional.
      * <!-- start generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 1.7.2, this feature is supported.
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @exception SQLException if a database access error occurs,
-     *  this method is called on a closed <code>Statement</code> or the
-     * driver does not support batch updates
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the
+     *                      driver does not support batch updates
      * @see #addBatch
      * @since JDK 1.2
      */
@@ -968,7 +966,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <LI>A value of <code>SUCCESS_NO_INFO</code> -- indicates that the command was
      * processed successfully but that the number of rows affected is
      * unknown
-     * <P>
+     * <p>
      * If one of the commands in a batch update fails to execute properly,
      * this method throws a <code>BatchUpdateException</code>, and a JDBC
      * driver may or may not continue to process the remaining commands in
@@ -984,7 +982,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * to execute successfully and occurs only if a driver continues to
      * process commands after a command fails
      * </OL>
-     * <P>
+     * <p>
      * (JDBC4 clarification:) <p>
      * <B>NOTE:</B>  Support of an ability to batch updates is optional.
      * <p>
@@ -993,13 +991,13 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * accommodate the option of continuing to process commands in a batch
      * update after a <code>BatchUpdateException</code> object has been thrown.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 1.7.2, this feature is supported. <p>
-     *
+     * <p>
      * HSQLDB stops execution of commands in a batch when one of the commands
      * results in an exception. The size of the returned array equals the
      * number of commands that were executed successfully.<p>
@@ -1010,13 +1008,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * @return an array of update counts containing one element for each
      * command in the batch.  The elements of the array are ordered according
      * to the order in which commands were added to the batch.
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the
-     * driver does not support batch statements. Throws {@link BatchUpdateException}
-     * (a subclass of <code>SQLException</code>) if one of the commands sent to the
-     * database fails to execute properly or attempts to return a result set.
-     *
-     *
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the
+     *                      driver does not support batch statements. Throws {@link BatchUpdateException}
+     *                      (a subclass of <code>SQLException</code>) if one of the commands sent to the
+     *                      database fails to execute properly or attempts to return a result set.
      * @see #addBatch
      * @see java.sql.DatabaseMetaData#supportsBatchUpdates
      * @since JDK 1.3
@@ -1048,8 +1044,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
             throw JDBCUtil.sqlException(resultIn);
         }
 
-        RowSetNavigator navigator    = resultIn.getNavigator();
-        int[]           updateCounts = new int[navigator.getSize()];
+        RowSetNavigator navigator = resultIn.getNavigator();
+        int[] updateCounts = new int[navigator.getSize()];
 
         for (int i = 0; navigator.next(); i++) {
             Object[] data = navigator.getCurrent();
@@ -1077,8 +1073,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- end generic documentation -->
      *
      * @return the connection that produced this statement
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @since JDK 1.2
      */
     public synchronized Connection getConnection() throws SQLException {
@@ -1099,37 +1095,37 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * <P>There are no more results when the following is true:
      * <PRE>
-     *     // stmt is a Statement object{@code
-     *     ((stmt.getMoreResults(current) == false) && (stmt.getUpdateCount() == -1))
+     * // stmt is a Statement object{@code
+     * ((stmt.getMoreResults(current) == false) && (stmt.getUpdateCount() == -1))
      * }</PRE>
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * HSQLDB moves to the next ResultSet and returns the correct result. <p>
      * </div>
      * <!-- end release-specific documentation -->
      *
      * @param current one of the following <code>Statement</code>
-     *        constants indicating what should happen to current
-     *        <code>ResultSet</code> objects obtained using the method
-     *        <code>getResultSet</code>:
-     *        <code>Statement.CLOSE_CURRENT_RESULT</code>,
-     *        <code>Statement.KEEP_CURRENT_RESULT</code>, or
-     *        <code>Statement.CLOSE_ALL_RESULTS</code>
+     *                constants indicating what should happen to current
+     *                <code>ResultSet</code> objects obtained using the method
+     *                <code>getResultSet</code>:
+     *                <code>Statement.CLOSE_CURRENT_RESULT</code>,
+     *                <code>Statement.KEEP_CURRENT_RESULT</code>, or
+     *                <code>Statement.CLOSE_ALL_RESULTS</code>
      * @return <code>true</code> if the next result is a <code>ResultSet</code>
-     *         object; <code>false</code> if it is an update count or there are no
-     *         more results
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the argument
-     *             supplied is not one of the following:
-     *        <code>Statement.CLOSE_CURRENT_RESULT</code>,
-     *        <code>Statement.KEEP_CURRENT_RESULT</code>, or
-     *        <code>Statement.CLOSE_ALL_RESULTS</code>
-     * @since JDK 1.4, HSQLDB 1.7
+     * object; <code>false</code> if it is an update count or there are no
+     * more results
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code> or the argument
+     *                      supplied is not one of the following:
+     *                      <code>Statement.CLOSE_CURRENT_RESULT</code>,
+     *                      <code>Statement.KEEP_CURRENT_RESULT</code>, or
+     *                      <code>Statement.CLOSE_ALL_RESULTS</code>
      * @see #execute
+     * @since JDK 1.4, HSQLDB 1.7
      */
     public synchronized boolean getMoreResults(
             int current) throws SQLException {
@@ -1146,27 +1142,27 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p><B>Note:</B>If the columns which represent the auto-generated keys were not specified,
      * the JDBC driver implementation will determine the columns which best represent the auto-generated keys.
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports this feature with single-row
      * and multi-row insert, update and merge statements. <p>
-     *
+     * <p>
      * This method returns a result set only if
      * the executeUpdate methods that was used is one of the three methods that
      * have the extra parameter indicating return of generated keys<p>
-     *
+     * <p>
      * If the executeUdate method did not specify the columns which represent
      * the auto-generated keys the IDENTITY column or GENERATED column(s) of the
      * table are returned.<p>
-     *
+     * <p>
      * The executeUpdate methods with column indexes or column names return the
      * post-insert or post-update values of the specified columns, whether the
      * columns are generated or not. This allows values that have been modified
      * by execution of triggers to be returned.<p>
-     *
+     * <p>
      * If column names or indexes provided by the user in the executeUpdate()
      * method calls do not correspond to table columns (incorrect names or
      * indexes larger than the column count), an empty result is returned.
@@ -1175,10 +1171,10 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- end release-specific documentation -->
      *
      * @return a <code>ResultSet</code> object containing the auto-generated key(s)
-     *         generated by the execution of this <code>Statement</code> object
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
+     * generated by the execution of this <code>Statement</code> object
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>Statement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      * @since JDK 1.4, HSQLDB 1.7
      */
     public synchronized ResultSet getGeneratedKeys() throws SQLException {
@@ -1195,11 +1191,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * auto-generated keys (the list of such statements is vendor-specific).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports returning generated columns
      * with single-row and multi-row INSERT, UPDATE and MERGE statements. <p>
      * If the table has an IDENTITY or GENERATED column(s) the values for these
@@ -1207,37 +1203,36 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * </div>
      * <!-- end release-specific documentation -->
-     * @param sql an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     * (:JDBC4 clarification)
      *
+     * @param sql               an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
+     *                          <code>DELETE</code>; or an SQL statement that returns nothing,
+     *                          such as a DDL statement.
+     *                          (:JDBC4 clarification)
      * @param autoGeneratedKeys a flag indicating whether auto-generated keys
-     *        should be made available for retrieval;
-     *         one of the following constants:
-     *         <code>Statement.RETURN_GENERATED_KEYS</code>
-     *         <code>Statement.NO_GENERATED_KEYS</code>
+     *                          should be made available for retrieval;
+     *                          one of the following constants:
+     *                          <code>Statement.RETURN_GENERATED_KEYS</code>
+     *                          <code>Statement.NO_GENERATED_KEYS</code>
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
-     *         or (2) 0 for SQL statements that return nothing
-     *         (:JDBC4 clarification)
-     *
-     * @exception SQLException if a database access error occurs,
-     *  this method is called on a closed <code>Statement</code>, the given
-     *            SQL statement returns a <code>ResultSet</code> object, or
-     *            the given constant is not one of those allowed
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method with a constant of Statement.RETURN_GENERATED_KEYS
+     * or (2) 0 for SQL statements that return nothing
+     * (:JDBC4 clarification)
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code>, the given
+     *                                         SQL statement returns a <code>ResultSet</code> object, or
+     *                                         the given constant is not one of those allowed
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method with a constant of Statement.RETURN_GENERATED_KEYS
      * @since JDK 1.4, HSQLDB 1.7
      */
     public synchronized int executeUpdate(String sql,
-            int autoGeneratedKeys) throws SQLException {
+                                          int autoGeneratedKeys) throws SQLException {
 
         if (autoGeneratedKeys != Statement.RETURN_GENERATED_KEYS
                 && autoGeneratedKeys != Statement.NO_GENERATED_KEYS) {
             throw JDBCUtil.invalidArgument("autoGeneratedKeys");
         }
         fetchResult(sql, StatementTypes.RETURN_COUNT, autoGeneratedKeys, null,
-                    null);
+                null);
 
         if (resultIn.isError()) {
             throw JDBCUtil.sqlException(resultIn);
@@ -1255,11 +1250,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * (JDBC 4 clarification)
      * auto-generated keys (the list of such statements is vendor-specific).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports returning generated columns
      * with single-row and multi-row INSERT, UPDATE and MERGE statements. <p>
      * The columnIndexes may specify any set of columns of the table.
@@ -1267,34 +1262,32 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param sql an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     * (:JDBC4 clarification)
-     *
+     * @param sql           an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
+     *                      <code>DELETE</code>; or an SQL statement that returns nothing,
+     *                      such as a DDL statement.
+     *                      (:JDBC4 clarification)
      * @param columnIndexes an array of column indexes indicating the columns
-     *        that should be returned from the inserted row
+     *                      that should be returned from the inserted row
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
-     *         or (2) 0 for SQL statements that return nothing
-     *         (:JDBC 4 clarification)
-     *
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>, the SQL
-     *            statement returns a <code>ResultSet</code> object, or the
-     *            second argument supplied to this method is not an <code>int</code> array
-     *            whose elements are valid column indexes
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
+     * or (2) 0 for SQL statements that return nothing
+     * (:JDBC 4 clarification)
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code>, the SQL
+     *                                         statement returns a <code>ResultSet</code> object, or the
+     *                                         second argument supplied to this method is not an <code>int</code> array
+     *                                         whose elements are valid column indexes
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      * @since JDK 1.4, HSQLDB 1.7
      */
     public synchronized int executeUpdate(String sql,
-            int[] columnIndexes) throws SQLException {
+                                          int[] columnIndexes) throws SQLException {
 
         if (columnIndexes == null || columnIndexes.length == 0) {
             throw JDBCUtil.invalidArgument("columnIndexes");
         }
         fetchResult(sql, StatementTypes.RETURN_COUNT,
-                    ResultConstants.RETURN_GENERATED_KEYS_COL_INDEXES,
-                    columnIndexes, null);
+                ResultConstants.RETURN_GENERATED_KEYS_COL_INDEXES,
+                columnIndexes, null);
 
         return resultIn.getUpdateCount();
     }
@@ -1308,11 +1301,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * auto-generated keys (the list of such statements is vendor-specific).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with version 2.0, HSQLDB supports returning generated columns
      * with single-row and multi-row INSERT, UPDATE and MERGE statements. <p>
      * The columnNames may specify any set of columns of the table.
@@ -1320,33 +1313,32 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param sql an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     * (:JDBC4 clarification)
+     * @param sql         an SQL Data Manipulation Language (DML) statement, such as <code>INSERT</code>, <code>UPDATE</code> or
+     *                    <code>DELETE</code>; or an SQL statement that returns nothing,
+     *                    such as a DDL statement.
+     *                    (:JDBC4 clarification)
      * @param columnNames an array of the names of the columns that should be
-     *        returned from the inserted row
+     *                    returned from the inserted row
      * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>,
-     *         or <code>DELETE</code> statements, or 0 for SQL statements
-     *         that return nothing
-     * @exception SQLException if a database access error occurs,
-     *  this method is called on a closed <code>Statement</code>, the SQL
-     *            statement returns a <code>ResultSet</code> object, or the
-     *            second argument supplied to this method is not a <code>String</code> array
-     *            whose elements are valid column names
-     *
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
+     * or <code>DELETE</code> statements, or 0 for SQL statements
+     * that return nothing
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code>, the SQL
+     *                                         statement returns a <code>ResultSet</code> object, or the
+     *                                         second argument supplied to this method is not a <code>String</code> array
+     *                                         whose elements are valid column names
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      * @since JDK 1.4, HSQLDB 1.7
      */
     public synchronized int executeUpdate(String sql,
-            String[] columnNames) throws SQLException {
+                                          String[] columnNames) throws SQLException {
 
         if (columnNames == null || columnNames.length == 0) {
             throw JDBCUtil.invalidArgument("columnIndexes");
         }
         fetchResult(sql, StatementTypes.RETURN_COUNT,
-                    ResultConstants.RETURN_GENERATED_KEYS_COL_NAMES, null,
-                    columnNames);
+                ResultConstants.RETURN_GENERATED_KEYS_COL_NAMES, null,
+                columnNames);
 
         return resultIn.getUpdateCount();
     }
@@ -1360,45 +1352,45 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * (JDBC4 clarification)
      * auto-generated keys (the list of such statements is vendor-specific).
-     * <P>
+     * <p>
      * In some (uncommon) situations, a single SQL statement may return
      * multiple result sets and/or update counts.  Normally you can ignore
      * this unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an
      * unknown SQL string.
-     * <P>
+     * <p>
      * The <code>execute</code> method executes an SQL statement and indicates the
      * form of the first result.  You must then use the methods
      * <code>getResultSet</code> or <code>getUpdateCount</code>
      * to retrieve the result, and <code>getMoreResults</code> to
      * move to any subsequent result(s).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with 2.0, HSQLDB supports this feature.
      *
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param sql any SQL statement
+     * @param sql               any SQL statement
      * @param autoGeneratedKeys a constant indicating whether auto-generated
-     *        keys should be made available for retrieval using the method
-     *        <code>getGeneratedKeys</code>; one of the following constants:
-     *        <code>Statement.RETURN_GENERATED_KEYS</code> or
-     *        <code>Statement.NO_GENERATED_KEYS</code>
+     *                          keys should be made available for retrieval using the method
+     *                          <code>getGeneratedKeys</code>; one of the following constants:
+     *                          <code>Statement.RETURN_GENERATED_KEYS</code> or
+     *                          <code>Statement.NO_GENERATED_KEYS</code>
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
-     *         object; <code>false</code> if it is an update count or there are
-     *         no results
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the second
-     *         parameter supplied to this method is not
-     *         <code>Statement.RETURN_GENERATED_KEYS</code> or
-     *         <code>Statement.NO_GENERATED_KEYS</code>.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method with a constant of Statement.RETURN_GENERATED_KEYS
+     * object; <code>false</code> if it is an update count or there are
+     * no results
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code> or the second
+     *                                         parameter supplied to this method is not
+     *                                         <code>Statement.RETURN_GENERATED_KEYS</code> or
+     *                                         <code>Statement.NO_GENERATED_KEYS</code>.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method with a constant of Statement.RETURN_GENERATED_KEYS
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -1413,7 +1405,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
             throw JDBCUtil.invalidArgument("autoGeneratedKeys");
         }
         fetchResult(sql, StatementTypes.RETURN_ANY, autoGeneratedKeys, null,
-                    null);
+                null);
 
         return resultIn.isData();
     }
@@ -1429,41 +1421,41 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * (JDBC4 clarification)
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * auto-generated keys (the list of such statements is vendor-specific).
-     * <P>
+     * <p>
      * Under some (uncommon) situations, a single SQL statement may return
      * multiple result sets and/or update counts.  Normally you can ignore
      * this unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an
      * unknown SQL string.
-     * <P>
+     * <p>
      * The <code>execute</code> method executes an SQL statement and indicates the
      * form of the first result.  You must then use the methods
      * <code>getResultSet</code> or <code>getUpdateCount</code>
      * to retrieve the result, and <code>getMoreResults</code> to
      * move to any subsequent result(s).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with 2.0, HSQLDB supports this feature.
      *
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param sql any SQL statement
+     * @param sql           any SQL statement
      * @param columnIndexes an array of the indexes of the columns in the
-     *        inserted row that should be  made available for retrieval by a
-     *        call to the method <code>getGeneratedKeys</code>
+     *                      inserted row that should be  made available for retrieval by a
+     *                      call to the method <code>getGeneratedKeys</code>
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
-     *         object; <code>false</code> if it is an update count or there
-     *         are no results
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the
-     *            elements in the <code>int</code> array passed to this method
-     *            are not valid column indexes
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
+     * object; <code>false</code> if it is an update count or there
+     * are no results
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code> or the
+     *                                         elements in the <code>int</code> array passed to this method
+     *                                         are not valid column indexes
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -1476,8 +1468,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
             throw JDBCUtil.invalidArgument("columnIndexes");
         }
         fetchResult(sql, StatementTypes.RETURN_ANY,
-                    ResultConstants.RETURN_GENERATED_KEYS_COL_INDEXES,
-                    columnIndexes, null);
+                ResultConstants.RETURN_GENERATED_KEYS_COL_INDEXES,
+                columnIndexes, null);
 
         return resultIn.isData();
     }
@@ -1492,41 +1484,41 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * available.  The driver will ignore the array if the SQL statement
      * is not an <code>INSERT</code> statement, or an SQL statement able to return
      * auto-generated keys (the list of such statements is vendor-specific).
-     * <P>
+     * <p>
      * In some (uncommon) situations, a single SQL statement may return
      * multiple result sets and/or update counts.  Normally you can ignore
      * this unless you are (1) executing a stored procedure that you know may
      * return multiple results or (2) you are dynamically executing an
      * unknown SQL string.
-     * <P>
+     * <p>
      * The <code>execute</code> method executes an SQL statement and indicates the
      * form of the first result.  You must then use the methods
      * <code>getResultSet</code> or <code>getUpdateCount</code>
      * to retrieve the result, and <code>getMoreResults</code> to
      * move to any subsequent result(s).
      * <!-- end generic documentation -->
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with 2.0, HSQLDB supports this feature.
      *
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param sql any SQL statement
+     * @param sql         any SQL statement
      * @param columnNames an array of the names of the columns in the inserted
-     *        row that should be made available for retrieval by a call to the
-     *        method <code>getGeneratedKeys</code>
+     *                    row that should be made available for retrieval by a call to the
+     *                    method <code>getGeneratedKeys</code>
      * @return <code>true</code> if the next result is a <code>ResultSet</code>
-     *         object; <code>false</code> if it is an update count or there
-     *         are no more results
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the
-     *          elements of the <code>String</code> array passed to this
-     *          method are not valid column names
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
+     * object; <code>false</code> if it is an update count or there
+     * are no more results
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code> or the
+     *                                         elements of the <code>String</code> array passed to this
+     *                                         method are not valid column names
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -1540,8 +1532,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
             throw JDBCUtil.invalidArgument("columnIndexes");
         }
         fetchResult(sql, StatementTypes.RETURN_ANY,
-                    ResultConstants.RETURN_GENERATED_KEYS_COL_NAMES, null,
-                    columnNames);
+                ResultConstants.RETURN_GENERATED_KEYS_COL_NAMES, null,
+                columnNames);
 
         return resultIn.isData();
     }
@@ -1553,9 +1545,9 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <!-- end generic documentation -->
      *
      * @return either <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
-     *         <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @since JDK 1.4, HSQLDB 1.7
      */
     public synchronized int getResultSetHoldability() throws SQLException {
@@ -1567,6 +1559,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
     /**
      * Retrieves whether this <code>Statement</code> object has been closed. A <code>Statement</code> is closed if the
      * method close has been called on it, or if it is automatically closed.
+     *
      * @return true if this <code>Statement</code> object is closed; false if it is still open
      * @throws SQLException if a database access error occurs
      * @since JDK 1.6, HSQLDB 2.0
@@ -1575,7 +1568,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
         return isClosed;
     }
 
-// --------------------------- Added: Mustang Build 81 -------------------------
+    // --------------------------- Added: Mustang Build 81 -------------------------
     boolean poolable = false;
 
     /**
@@ -1592,12 +1585,13 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * a <code>PreparedStatement</code> and <code>CallableStatement</code>
      * are poolable when created.
      * <p>
-     * @param poolable          requests that the statement be pooled if true and
-     *                                          that the statement not be pooled if false
-     * <p>
+     *
+     * @param poolable requests that the statement be pooled if true and
+     *                 that the statement not be pooled if false
+     *                 <p>
      * @throws SQLException if this method is called on a closed
-     * <code>Statement</code>
-     * <p>
+     *                      <code>Statement</code>
+     *                      <p>
      * @since JDK 1.6 Build 81, HSQLDB 2.0
      */
 
@@ -1613,14 +1607,15 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * Returns a  value indicating whether the <code>Statement</code>
      * is poolable or not.
      * <p>
-     * @return          <code>true</code> if the <code>Statement</code>
+     *
+     * @return <code>true</code> if the <code>Statement</code>
      * is poolable; <code>false</code> otherwise
      * @throws SQLException if this method is called on a closed
-     * <code>Statement</code>
-     * <p>
+     *                      <code>Statement</code>
+     *                      <p>
+     * @see #setPoolable(boolean) setPoolable(boolean)
      * @since JDK 1.6 Build 81, HSQLDB 2.0
      * <p>
-     * @see #setPoolable(boolean) setPoolable(boolean)
      */
     public synchronized boolean isPoolable() throws SQLException {
 
@@ -1634,7 +1629,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
     /**
      * Returns an object that implements the given interface to allow access to
      * non-standard methods, or standard methods not exposed by the proxy.
-     *
+     * <p>
      * If the receiver implements the interface then the result is the receiver
      * or a proxy for the receiver. If the receiver is a wrapper
      * and the wrapped object implements the interface then the result is the
@@ -1649,7 +1644,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * @since JDK 1.6, HSQLDB 2.0
      */
     @SuppressWarnings("unchecked")
-    public <T>T unwrap(Class<T> iface) throws java.sql.SQLException {
+    public <T> T unwrap(Class<T> iface) throws java.sql.SQLException {
 
         if (isWrapperFor(iface)) {
             return (T) this;
@@ -1669,8 +1664,8 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * @param iface a Class defining an interface.
      * @return true if this implements the interface or directly or indirectly wraps an object that does.
-     * @throws java.sql.SQLException  if an error occurs while determining whether this is a wrapper
-     * for an object with the given interface.
+     * @throws java.sql.SQLException if an error occurs while determining whether this is a wrapper
+     *                               for an object with the given interface.
      * @since JDK 1.6, HSQLDB 2.0
      */
     public boolean isWrapperFor(
@@ -1681,19 +1676,19 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
     //--------------------------JDBC 4.2 -----------------------------
 
     /**
-     *  Retrieves the current result as an update count; if the result
+     * Retrieves the current result as an update count; if the result
      * is a <code>ResultSet</code> object or there are no more results, -1
-     *  is returned. This method should be called only once per result.
+     * is returned. This method should be called only once per result.
      * <p>
      * This method should be used when the returned row count may exceed
      * {@link Integer#MAX_VALUE}.
-     *<p>
+     * <p>
      * The public implementation will throw {@code UnsupportedOperationException}
      *
      * @return the current result as an update count; -1 if the current result
      * is a <code>ResultSet</code> object or there are no more results
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #execute
      * @since 1.8
      */
@@ -1703,6 +1698,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
     }
 
 //#endif JAVA8
+
     /**
      * Sets the limit for the maximum number of rows that any
      * <code>ResultSet</code> object  generated by this <code>Statement</code>
@@ -1712,13 +1708,13 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * This method should be used when the row limit may exceed
      * {@link Integer#MAX_VALUE}.
-     *<p>
+     * <p>
      * The default implementation will throw {@code UnsupportedOperationException}
      *
      * @param max the new max rows limit; zero means there is no limit
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>
-     *            or the condition {@code max >= 0} is not satisfied
+     * @throws SQLException if a database access error occurs,
+     *                      this method is called on a closed <code>Statement</code>
+     *                      or the condition {@code max >= 0} is not satisfied
      * @see #getMaxRows
      * @since 1.8
      */
@@ -1726,7 +1722,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
     public void setLargeMaxRows(long max) throws SQLException {
 
         int maxRows = max > Integer.MAX_VALUE ? Integer.MAX_VALUE :
-                                                (int) max;
+                (int) max;
         setMaxRows(maxRows);
     }
 //#endif JAVA8
@@ -1739,14 +1735,14 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * This method should be used when the returned row limit may exceed
      * {@link Integer#MAX_VALUE}.
-     *<p>
+     * <p>
      * The default implementation will return {@code 0}
      *
      * @return the current maximum number of rows for a <code>ResultSet</code>
-     *         object produced by this <code>Statement</code> object;
-     *         zero means there is no limit
-     * @exception SQLException if a database access error occurs or
-     * this method is called on a closed <code>Statement</code>
+     * object produced by this <code>Statement</code> object;
+     * zero means there is no limit
+     * @throws SQLException if a database access error occurs or
+     *                      this method is called on a closed <code>Statement</code>
      * @see #setMaxRows
      * @since 1.8
      */
@@ -1772,7 +1768,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <LI>A value of <code>SUCCESS_NO_INFO</code> -- indicates that the command was
      * processed successfully but that the number of rows affected is
      * unknown
-     * <P>
+     * <p>
      * If one of the commands in a batch update fails to execute properly,
      * this method throws a <code>BatchUpdateException</code>, and a JDBC
      * driver may or may not continue to process the remaining commands in
@@ -1791,22 +1787,21 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * This method should be used when the returned row count may exceed
      * {@link Integer#MAX_VALUE}.
-     *<p>
+     * <p>
      * The default implementation will throw {@code UnsupportedOperationException}
      *
      * @return an array of update counts containing one element for each
      * command in the batch.  The elements of the array are ordered according
      * to the order in which commands were added to the batch.
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code> or the
-     * driver does not support batch statements. Throws {@link BatchUpdateException}
-     * (a subclass of <code>SQLException</code>) if one of the commands sent to the
-     * database fails to execute properly or attempts to return a result set.
+     * @throws SQLException        if a database access error occurs,
+     *                             this method is called on a closed <code>Statement</code> or the
+     *                             driver does not support batch statements. Throws {@link BatchUpdateException}
+     *                             (a subclass of <code>SQLException</code>) if one of the commands sent to the
+     *                             database fails to execute properly or attempts to return a result set.
      * @throws SQLTimeoutException when the driver has determined that the
-     * timeout value that was specified by the {@code setQueryTimeout}
-     * method has been exceeded and has at least attempted to cancel
-     * the currently running {@code Statement}
-     *
+     *                             timeout value that was specified by the {@code setQueryTimeout}
+     *                             method has been exceeded and has at least attempted to cancel
+     *                             the currently running {@code Statement}
      * @see #addBatch
      * @see DatabaseMetaData#supportsBatchUpdates
      * @since 1.8
@@ -1817,7 +1812,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
 
         long[] longCounts = new long[updateCounts.length];
 
-        for(int i = 0; i < updateCounts.length; i++) {
+        for (int i = 0; i < updateCounts.length; i++) {
             longCounts[i] = updateCounts[i];
         }
 
@@ -1835,25 +1830,23 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * <strong>Note:</strong>This method cannot be called on a
      * <code>PreparedStatement</code> or <code>CallableStatement</code>.
-     *<p>
+     * <p>
      * The default implementation will throw {@code UnsupportedOperationException}
      *
      * @param sql an SQL Data Manipulation Language (DML) statement,
-     * such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     *
+     *            such as <code>INSERT</code>, <code>UPDATE</code> or
+     *            <code>DELETE</code>; or an SQL statement that returns nothing,
+     *            such as a DDL statement.
      * @return either (1) the row count for SQL Data Manipulation Language
      * (DML) statements or (2) 0 for SQL statements that return nothing
-     *
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>, the given
-     * SQL statement produces a <code>ResultSet</code> object, the method is called on a
-     * <code>PreparedStatement</code> or <code>CallableStatement</code>
+     * @throws SQLException        if a database access error occurs,
+     *                             this method is called on a closed <code>Statement</code>, the given
+     *                             SQL statement produces a <code>ResultSet</code> object, the method is called on a
+     *                             <code>PreparedStatement</code> or <code>CallableStatement</code>
      * @throws SQLTimeoutException when the driver has determined that the
-     * timeout value that was specified by the {@code setQueryTimeout}
-     * method has been exceeded and has at least attempted to cancel
-     * the currently running {@code Statement}
+     *                             timeout value that was specified by the {@code setQueryTimeout}
+     *                             method has been exceeded and has at least attempted to cancel
+     *                             the currently running {@code Statement}
      * @since 1.8
      */
 //#ifdef JAVA8
@@ -1876,33 +1869,31 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * <strong>Note:</strong>This method cannot be called on a
      * <code>PreparedStatement</code> or <code>CallableStatement</code>.
-     *<p>
+     * <p>
      * The default implementation will throw {@code SQLFeatureNotSupportedException}
      *
-     * @param sql an SQL Data Manipulation Language (DML) statement,
-     * such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     *
+     * @param sql               an SQL Data Manipulation Language (DML) statement,
+     *                          such as <code>INSERT</code>, <code>UPDATE</code> or
+     *                          <code>DELETE</code>; or an SQL statement that returns nothing,
+     *                          such as a DDL statement.
      * @param autoGeneratedKeys a flag indicating whether auto-generated keys
-     *        should be made available for retrieval;
-     *         one of the following constants:
-     *         <code>Statement.RETURN_GENERATED_KEYS</code>
-     *         <code>Statement.NO_GENERATED_KEYS</code>
+     *                          should be made available for retrieval;
+     *                          one of the following constants:
+     *                          <code>Statement.RETURN_GENERATED_KEYS</code>
+     *                          <code>Statement.NO_GENERATED_KEYS</code>
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
-     *         or (2) 0 for SQL statements that return nothing
-     *
-     * @exception SQLException if a database access error occurs,
-     *  this method is called on a closed <code>Statement</code>, the given
-     *            SQL statement returns a <code>ResultSet</code> object,
-     *            the given constant is not one of those allowed, the method is called on a
-     * <code>PreparedStatement</code> or <code>CallableStatement</code>
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method with a constant of Statement.RETURN_GENERATED_KEYS
-     * @throws SQLTimeoutException when the driver has determined that the
-     * timeout value that was specified by the {@code setQueryTimeout}
-     * method has been exceeded and has at least attempted to cancel
-     * the currently running {@code Statement}
+     * or (2) 0 for SQL statements that return nothing
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code>, the given
+     *                                         SQL statement returns a <code>ResultSet</code> object,
+     *                                         the given constant is not one of those allowed, the method is called on a
+     *                                         <code>PreparedStatement</code> or <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method with a constant of Statement.RETURN_GENERATED_KEYS
+     * @throws SQLTimeoutException             when the driver has determined that the
+     *                                         timeout value that was specified by the {@code setQueryTimeout}
+     *                                         method has been exceeded and has at least attempted to cancel
+     *                                         the currently running {@code Statement}
      * @since 1.8
      */
 //#ifdef JAVA8
@@ -1926,30 +1917,28 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * <strong>Note:</strong>This method cannot be called on a
      * <code>PreparedStatement</code> or <code>CallableStatement</code>.
-     *<p>
+     * <p>
      * The default implementation will throw {@code SQLFeatureNotSupportedException}
      *
-     * @param sql an SQL Data Manipulation Language (DML) statement,
-     * such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
-     *
+     * @param sql           an SQL Data Manipulation Language (DML) statement,
+     *                      such as <code>INSERT</code>, <code>UPDATE</code> or
+     *                      <code>DELETE</code>; or an SQL statement that returns nothing,
+     *                      such as a DDL statement.
      * @param columnIndexes an array of column indexes indicating the columns
-     *        that should be returned from the inserted row
+     *                      that should be returned from the inserted row
      * @return either (1) the row count for SQL Data Manipulation Language (DML) statements
-     *         or (2) 0 for SQL statements that return nothing
-     *
-     * @exception SQLException if a database access error occurs,
-     * this method is called on a closed <code>Statement</code>, the SQL
-     * statement returns a <code>ResultSet</code> object,the second argument
-     * supplied to this method is not an
-     * <code>int</code> array whose elements are valid column indexes, the method is called on a
-     * <code>PreparedStatement</code> or <code>CallableStatement</code>
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
-     * @throws SQLTimeoutException when the driver has determined that the
-     * timeout value that was specified by the {@code setQueryTimeout}
-     * method has been exceeded and has at least attempted to cancel
-     * the currently running {@code Statement}
+     * or (2) 0 for SQL statements that return nothing
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code>, the SQL
+     *                                         statement returns a <code>ResultSet</code> object,the second argument
+     *                                         supplied to this method is not an
+     *                                         <code>int</code> array whose elements are valid column indexes, the method is called on a
+     *                                         <code>PreparedStatement</code> or <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws SQLTimeoutException             when the driver has determined that the
+     *                                         timeout value that was specified by the {@code setQueryTimeout}
+     *                                         method has been exceeded and has at least attempted to cancel
+     *                                         the currently running {@code Statement}
      * @since 1.8
      */
 //#ifdef JAVA8
@@ -1972,29 +1961,29 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      * <p>
      * <strong>Note:</strong>This method cannot be called on a
      * <code>PreparedStatement</code> or <code>CallableStatement</code>.
-     *<p>
+     * <p>
      * The default implementation will throw {@code SQLFeatureNotSupportedException}
      *
-     * @param sql an SQL Data Manipulation Language (DML) statement,
-     * such as <code>INSERT</code>, <code>UPDATE</code> or
-     * <code>DELETE</code>; or an SQL statement that returns nothing,
-     * such as a DDL statement.
+     * @param sql         an SQL Data Manipulation Language (DML) statement,
+     *                    such as <code>INSERT</code>, <code>UPDATE</code> or
+     *                    <code>DELETE</code>; or an SQL statement that returns nothing,
+     *                    such as a DDL statement.
      * @param columnNames an array of the names of the columns that should be
-     *        returned from the inserted row
+     *                    returned from the inserted row
      * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>,
-     *         or <code>DELETE</code> statements, or 0 for SQL statements
-     *         that return nothing
-     * @exception SQLException if a database access error occurs,
-     *  this method is called on a closed <code>Statement</code>, the SQL
-     *            statement returns a <code>ResultSet</code> object, the
-     *            second argument supplied to this method is not a <code>String</code> array
-     *            whose elements are valid column names, the method is called on a
-     * <code>PreparedStatement</code> or <code>CallableStatement</code>
-     * @throws SQLFeatureNotSupportedException  if the JDBC driver does not support this method
-     * @throws SQLTimeoutException when the driver has determined that the
-     * timeout value that was specified by the {@code setQueryTimeout}
-     * method has been exceeded and has at least attempted to cancel
-     * the currently running {@code Statement}
+     * or <code>DELETE</code> statements, or 0 for SQL statements
+     * that return nothing
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>Statement</code>, the SQL
+     *                                         statement returns a <code>ResultSet</code> object, the
+     *                                         second argument supplied to this method is not a <code>String</code> array
+     *                                         whose elements are valid column names, the method is called on a
+     *                                         <code>PreparedStatement</code> or <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws SQLTimeoutException             when the driver has determined that the
+     *                                         timeout value that was specified by the {@code setQueryTimeout}
+     *                                         method has been exceeded and has at least attempted to cancel
+     *                                         the currently running {@code Statement}
      * @since 1.8
      */
 //#ifdef JAVA8
@@ -2013,10 +2002,10 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      */
     JDBCStatement(JDBCConnection c, int props) {
 
-        resultOut             = Result.newExecuteDirectRequest();
-        connection            = c;
+        resultOut = Result.newExecuteDirectRequest();
+        connection = c;
         connectionIncarnation = connection.incarnation;
-        rsProperties          = props;
+        rsProperties = props;
     }
 
     /**
@@ -2024,11 +2013,11 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
      *
      * <p>
      *
-     * @param sql a character sequence representing the SQL to be executed
+     * @param sql              a character sequence representing the SQL to be executed
      * @param statementRetType int
-     * @param generatedKeys int
+     * @param generatedKeys    int
      * @param generatedIndexes int[]
-     * @param generatedNames String[]
+     * @param generatedNames   String[]
      * @throws SQLException when a database access error occurs
      */
     private void fetchResult(String sql, int statementRetType,
@@ -2061,7 +2050,7 @@ public class JDBCStatement extends JDBCStatementBase implements Statement,
             currentResultSet = new JDBCResultSet(connection, this, resultIn,
                     resultIn.metaData);
         } else if (resultIn.getStatementType()
-                   == StatementTypes.RETURN_RESULT) {
+                == StatementTypes.RETURN_RESULT) {
             getMoreResults();
         }
     }

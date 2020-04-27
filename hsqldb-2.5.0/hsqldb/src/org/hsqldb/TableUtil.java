@@ -52,11 +52,11 @@ public class TableUtil {
         table = new TableDerived(database, tableName, tableType);
 
         ColumnSchema column = new ColumnSchema(colName, colType, false, true,
-                                               null);
+                null);
 
         table.addColumn(column);
-        table.createPrimaryKeyConstraint(table.getName(), new int[]{ 0 },
-                                         true);
+        table.createPrimaryKeyConstraint(table.getName(), new int[]{0},
+                true);
 
         return table;
     }
@@ -65,24 +65,24 @@ public class TableUtil {
 
         for (int i = 0; i < colTypes.length; i++) {
             ColumnSchema column =
-                new ColumnSchema(HsqlNameManager.getAutoColumnName(i),
-                                 colTypes[i], true, false, null);
+                    new ColumnSchema(HsqlNameManager.getAutoColumnName(i),
+                            colTypes[i], true, false, null);
 
             table.addColumnNoCheck(column);
         }
     }
 
     public static void setColumnsInSchemaTable(Table table,
-            HsqlName[] columnNames, Type[] columnTypes) {
+                                               HsqlName[] columnNames, Type[] columnTypes) {
 
         for (int i = 0; i < columnNames.length; i++) {
             HsqlName columnName = columnNames[i];
 
             columnName = table.database.nameManager.newColumnSchemaHsqlName(
-                table.getName(), columnName);
+                    table.getName(), columnName);
 
             ColumnSchema column = new ColumnSchema(columnName, columnTypes[i],
-                                                   true, false, null);
+                    true, false, null);
 
             table.addColumn(column);
         }

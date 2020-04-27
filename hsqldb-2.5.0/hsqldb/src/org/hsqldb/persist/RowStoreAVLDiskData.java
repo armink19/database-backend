@@ -51,18 +51,18 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class RowStoreAVLDiskData extends RowStoreAVL {
 
-    DataFileCache      cache;
+    DataFileCache cache;
     RowOutputInterface rowOut;
 
     public RowStoreAVLDiskData(Table table) {
 
-        this.database     = table.database;
-        this.table        = table;
-        this.indexList    = table.getIndexList();
+        this.database = table.database;
+        this.table = table;
+        this.indexList = table.getIndexList();
         this.accessorList = new CachedObject[indexList.length];
-        lock              = new ReentrantReadWriteLock();
-        readLock          = lock.readLock();
-        writeLock         = lock.writeLock();
+        lock = new ReentrantReadWriteLock();
+        readLock = lock.readLock();
+        writeLock = lock.writeLock();
     }
 
     public Object[] getData(RowAVLDiskData row) {
@@ -158,7 +158,8 @@ public class RowStoreAVLDiskData extends RowStoreAVL {
         return false;
     }
 
-    public void set(CachedObject object) {}
+    public void set(CachedObject object) {
+    }
 
     public CachedObject get(long key) {
 
@@ -193,7 +194,8 @@ public class RowStoreAVLDiskData extends RowStoreAVL {
 
         try {
             cache.saveRow(row);
-        } catch (HsqlException e1) {}
+        } catch (HsqlException e1) {
+        }
     }
 
     public void postCommitAction(Session session, RowAction action) {
@@ -218,15 +220,15 @@ public class RowStoreAVLDiskData extends RowStoreAVL {
 
         switch (changeAction) {
 
-            case RowAction.ACTION_DELETE :
+            case RowAction.ACTION_DELETE:
                 cache.removePersistence(row);
                 break;
 
-            case RowAction.ACTION_INSERT :
+            case RowAction.ACTION_INSERT:
                 commitPersistence(row);
                 break;
 
-            case RowAction.ACTION_INSERT_DELETE :
+            case RowAction.ACTION_INSERT_DELETE:
 
                 // INSERT + DELETE
                 if (txModel == TransactionManager.LOCKS) {
@@ -237,7 +239,7 @@ public class RowStoreAVLDiskData extends RowStoreAVL {
                 }
                 break;
 
-            case RowAction.ACTION_DELETE_FINAL :
+            case RowAction.ACTION_DELETE_FINAL:
                 throw Error.runtimeError(ErrorCode.U_S0500, "RowStore");
         }
     }
@@ -247,21 +249,21 @@ public class RowStoreAVLDiskData extends RowStoreAVL {
 
         switch (changeAction) {
 
-            case RowAction.ACTION_DELETE :
+            case RowAction.ACTION_DELETE:
                 if (txModel == TransactionManager.LOCKS) {
                     ((RowAVL) row).setNewNodes(this);
                     indexRow(session, row);
                 }
                 break;
 
-            case RowAction.ACTION_INSERT :
+            case RowAction.ACTION_INSERT:
                 if (txModel == TransactionManager.LOCKS) {
                     delete(session, row);
                     remove(row);
                 }
                 break;
 
-            case RowAction.ACTION_INSERT_DELETE :
+            case RowAction.ACTION_INSERT_DELETE:
 
                 // INSERT + DELETE
                 if (txModel == TransactionManager.LOCKS) {
@@ -282,7 +284,7 @@ public class RowStoreAVLDiskData extends RowStoreAVL {
 
         this.cache = cache;
         this.tableSpace =
-            cache.spaceManager.getTableSpace(DataSpaceManager.tableIdDefault);
+                cache.spaceManager.getTableSpace(DataSpaceManager.tableIdDefault);
     }
 
     /**

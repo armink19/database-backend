@@ -52,22 +52,22 @@ public abstract class Type implements SchemaObject, Cloneable {
     public static final Type[] emptyArray = new Type[]{};
 
     //
-    public final int        typeComparisonGroup;
-    public final int        typeDataGroup;
-    public final int        typeCode;
-    public final long       precision;
-    public final int        scale;
+    public final int typeComparisonGroup;
+    public final int typeDataGroup;
+    public final int typeCode;
+    public final long precision;
+    public final int scale;
     public UserTypeModifier userTypeModifier;
 
     //
     Type(int typeGroup, int type, long precision, int scale) {
 
         this.typeComparisonGroup = typeGroup;
-        this.typeCode            = type;
-        this.precision           = precision;
-        this.scale               = scale;
+        this.typeCode = type;
+        this.precision = precision;
+        this.scale = scale;
         this.typeDataGroup = typeCode == Types.SQL_CHAR ? Types.SQL_VARCHAR
-                                                        : typeCode;
+                : typeCode;
     }
 
     // interface specific methods
@@ -144,8 +144,8 @@ public abstract class Type implements SchemaObject, Cloneable {
     }
 
     /**
-     *  Retrieves the SQL character sequence required to (re)create the
-     *  type, as a String
+     * Retrieves the SQL character sequence required to (re)create the
+     * type, as a String
      *
      * @return the SQL character sequence required to (re)create the type
      */
@@ -193,7 +193,7 @@ public abstract class Type implements SchemaObject, Cloneable {
 
     public int getJDBCPrecision() {
         return precision > Integer.MAX_VALUE ? Integer.MAX_VALUE
-                                             : (int) precision;
+                : (int) precision;
     }
 
     /**
@@ -263,22 +263,22 @@ public abstract class Type implements SchemaObject, Cloneable {
 
         if (a == null) {
             return sort.sortNullsLast[0] ? 1
-                                         : -1;
+                    : -1;
         }
 
         if (b == null) {
             return sort.sortNullsLast[0] ? -1
-                                         : 1;
+                    : 1;
         }
 
         int result = compare(session, a, b);
 
         return sort.sortDescending[0] ? -result
-                                      : result;
+                : result;
     }
 
     public abstract Object convertToTypeLimits(SessionInterface session,
-            Object a);
+                                               Object a);
 
     /**
      * Explicit casts are handled by this method.
@@ -324,7 +324,7 @@ public abstract class Type implements SchemaObject, Cloneable {
      * Converts the object to the given type without limit checks. Used for JDBC writes.
      */
     public abstract Object convertToDefaultType(
-        SessionInterface sessionInterface, Object o);
+            SessionInterface sessionInterface, Object o);
 
     public abstract String convertToString(Object a);
 
@@ -334,6 +334,7 @@ public abstract class Type implements SchemaObject, Cloneable {
 
     /**
      * Can convert without changing the object
+     *
      * @return 0 always, 1 range check required, -1 never
      */
     public int canMoveFrom(Type otherType) {
@@ -352,7 +353,7 @@ public abstract class Type implements SchemaObject, Cloneable {
         }
 
         return otherType.typeCode == Types.SQL_ALL_TYPES
-               || typeComparisonGroup == otherType.typeComparisonGroup;
+                || typeComparisonGroup == otherType.typeComparisonGroup;
     }
 
     public boolean canCompareDirect(Type otherType) {
@@ -462,15 +463,15 @@ public abstract class Type implements SchemaObject, Cloneable {
     public boolean isDistinctType() {
 
         return userTypeModifier == null ? false
-                                        : userTypeModifier.schemaObjectType
-                                          == SchemaObject.TYPE;
+                : userTypeModifier.schemaObjectType
+                == SchemaObject.TYPE;
     }
 
     public boolean isDomainType() {
 
         return userTypeModifier == null ? false
-                                        : userTypeModifier.schemaObjectType
-                                          == SchemaObject.DOMAIN;
+                : userTypeModifier.schemaObjectType
+                == SchemaObject.DOMAIN;
     }
 
     public int getDegree() {
@@ -510,7 +511,7 @@ public abstract class Type implements SchemaObject, Cloneable {
         if (other.typeCode == typeCode) {
             if (typeCode == Types.SQL_ARRAY) {
                 return collectionBaseType().precedenceDegree(
-                    other.collectionBaseType());
+                        other.collectionBaseType());
             }
 
             return 0;
@@ -598,9 +599,9 @@ public abstract class Type implements SchemaObject, Cloneable {
             }
 
             return ((Type) other).typeCode == typeCode
-                   && ((Type) other).precision == precision
-                   && ((Type) other).scale == scale
-                   && ((Type) other).userTypeModifier == userTypeModifier;
+                    && ((Type) other).precision == precision
+                    && ((Type) other).scale == scale
+                    && ((Type) other).userTypeModifier == userTypeModifier;
         }
 
         return false;
@@ -610,46 +611,48 @@ public abstract class Type implements SchemaObject, Cloneable {
         return typeCode + ((int) precision << 8) + (scale << 16);
     }
 
-    /** @todo 1.9.0 - review all - need max implementation defined lengths, used for parameters */
+    /**
+     * @todo 1.9.0 - review all - need max implementation defined lengths, used for parameters
+     */
 
     // null type
     public static final Type SQL_ALL_TYPES = NullType.getNullType();
 
     // character types
     public static final CharacterType SQL_CHAR =
-        new CharacterType(Types.SQL_CHAR, 1);
+            new CharacterType(Types.SQL_CHAR, 1);
     public static final CharacterType SQL_CHAR_UUID =
-        new CharacterType(Types.SQL_CHAR, 36);
+            new CharacterType(Types.SQL_CHAR, 36);
     public static final CharacterType SQL_CHAR_DEFAULT =
-        new CharacterType(Types.SQL_CHAR, CharacterType.defaultCharPrecision);
+            new CharacterType(Types.SQL_CHAR, CharacterType.defaultCharPrecision);
     public static final CharacterType SQL_VARCHAR =
-        new CharacterType(Types.SQL_VARCHAR, 0);
+            new CharacterType(Types.SQL_VARCHAR, 0);
     public static final CharacterType SQL_VARCHAR_DEFAULT =
-        new CharacterType(Types.SQL_VARCHAR,
-                          CharacterType.defaultVarcharPrecision);
+            new CharacterType(Types.SQL_VARCHAR,
+                    CharacterType.defaultVarcharPrecision);
     public static final ClobType SQL_CLOB =
-        new ClobType(ClobType.defaultClobSize);
+            new ClobType(ClobType.defaultClobSize);
 
     // binary types
     public static final BitType SQL_BIT = new BitType(Types.SQL_BIT, 1);
     public static final BitType SQL_BIT_VARYING =
-        new BitType(Types.SQL_BIT_VARYING, 1);
+            new BitType(Types.SQL_BIT_VARYING, 1);
     public static final BitType SQL_BIT_VARYING_MAX_LENGTH =
-        new BitType(Types.SQL_BIT_VARYING, BitType.maxBitPrecision);
+            new BitType(Types.SQL_BIT_VARYING, BitType.maxBitPrecision);
 
     // binary types
     public static final BinaryType SQL_BINARY =
-        new BinaryType(Types.SQL_BINARY, 1);
+            new BinaryType(Types.SQL_BINARY, 1);
     public static final BinaryType SQL_BINARY_16 =
-        new BinaryType(Types.SQL_BINARY, 16);
+            new BinaryType(Types.SQL_BINARY, 16);
     public static final BinaryType SQL_BINARY_DEFAULT =
-        new BinaryType(Types.SQL_BINARY, 32 * 1024);
+            new BinaryType(Types.SQL_BINARY, 32 * 1024);
     public static final BinaryType SQL_VARBINARY =
-        new BinaryType(Types.SQL_VARBINARY, 0);
+            new BinaryType(Types.SQL_VARBINARY, 0);
     public static final BinaryType SQL_VARBINARY_DEFAULT =
-        new BinaryType(Types.SQL_VARBINARY, 32 * 1024);
+            new BinaryType(Types.SQL_VARBINARY, 32 * 1024);
     public static final BlobType SQL_BLOB =
-        new BlobType(BlobType.defaultBlobSize);
+            new BlobType(BlobType.defaultBlobSize);
     public static final BinaryUUIDType SQL_GUID = new BinaryUUIDType();
 
     // other type
@@ -660,153 +663,153 @@ public abstract class Type implements SchemaObject, Cloneable {
 
     // number types
     public static final NumberType SQL_NUMERIC =
-        new NumberType(Types.SQL_NUMERIC, NumberType.defaultNumericPrecision,
-                       0);
+            new NumberType(Types.SQL_NUMERIC, NumberType.defaultNumericPrecision,
+                    0);
     public static final NumberType SQL_DECIMAL =
-        new NumberType(Types.SQL_DECIMAL, NumberType.defaultNumericPrecision,
-                       0);
+            new NumberType(Types.SQL_DECIMAL, NumberType.defaultNumericPrecision,
+                    0);
     public static final NumberType SQL_DECIMAL_DEFAULT =
-        new NumberType(Types.SQL_DECIMAL, NumberType.defaultNumericPrecision,
-                       NumberType.defaultNumericScale);
+            new NumberType(Types.SQL_DECIMAL, NumberType.defaultNumericPrecision,
+                    NumberType.defaultNumericScale);
     public static final NumberType SQL_DECIMAL_BIGINT_SQR =
-        new NumberType(Types.SQL_DECIMAL,
-                       NumberType.bigintSquareNumericPrecision, 0);
+            new NumberType(Types.SQL_DECIMAL,
+                    NumberType.bigintSquareNumericPrecision, 0);
     public static final NumberType SQL_DOUBLE =
-        new NumberType(Types.SQL_DOUBLE, 0, 0);
+            new NumberType(Types.SQL_DOUBLE, 0, 0);
 
     //
     public static final NumberType TINYINT = new NumberType(Types.TINYINT,
-        NumberType.tinyintPrecision, 0);
+            NumberType.tinyintPrecision, 0);
     public static final NumberType SQL_SMALLINT =
-        new NumberType(Types.SQL_SMALLINT, NumberType.smallintPrecision, 0);
+            new NumberType(Types.SQL_SMALLINT, NumberType.smallintPrecision, 0);
     public static final NumberType SQL_INTEGER =
-        new NumberType(Types.SQL_INTEGER, NumberType.integerPrecision, 0);
+            new NumberType(Types.SQL_INTEGER, NumberType.integerPrecision, 0);
     public static final NumberType SQL_BIGINT =
-        new NumberType(Types.SQL_BIGINT, NumberType.bigintPrecision, 0);
+            new NumberType(Types.SQL_BIGINT, NumberType.bigintPrecision, 0);
 
     // date time
     public static final DateTimeType SQL_DATE =
-        new DateTimeType(Types.SQL_TIMESTAMP, Types.SQL_DATE, 0);
+            new DateTimeType(Types.SQL_TIMESTAMP, Types.SQL_DATE, 0);
     public static final DateTimeType SQL_TIME =
-        new DateTimeType(Types.SQL_TIME, Types.SQL_TIME,
-                         DTIType.defaultTimeFractionPrecision);
+            new DateTimeType(Types.SQL_TIME, Types.SQL_TIME,
+                    DTIType.defaultTimeFractionPrecision);
     public static final DateTimeType SQL_TIME_MAX =
-        new DateTimeType(Types.SQL_TIME, Types.SQL_TIME,
-                         DTIType.maxFractionPrecision);
+            new DateTimeType(Types.SQL_TIME, Types.SQL_TIME,
+                    DTIType.maxFractionPrecision);
     public static final DateTimeType SQL_TIME_WITH_TIME_ZONE =
-        new DateTimeType(Types.SQL_TIME, Types.SQL_TIME_WITH_TIME_ZONE,
-                         DTIType.defaultTimeFractionPrecision);
+            new DateTimeType(Types.SQL_TIME, Types.SQL_TIME_WITH_TIME_ZONE,
+                    DTIType.defaultTimeFractionPrecision);
     public static final DateTimeType SQL_TIMESTAMP =
-        new DateTimeType(Types.SQL_TIMESTAMP, Types.SQL_TIMESTAMP,
-                         DTIType.defaultTimestampFractionPrecision);
+            new DateTimeType(Types.SQL_TIMESTAMP, Types.SQL_TIMESTAMP,
+                    DTIType.defaultTimestampFractionPrecision);
     public static final DateTimeType SQL_TIMESTAMP_WITH_TIME_ZONE =
-        new DateTimeType(Types.SQL_TIMESTAMP,
-                         Types.SQL_TIMESTAMP_WITH_TIME_ZONE,
-                         DTIType.defaultTimestampFractionPrecision);
+            new DateTimeType(Types.SQL_TIMESTAMP,
+                    Types.SQL_TIMESTAMP_WITH_TIME_ZONE,
+                    DTIType.defaultTimestampFractionPrecision);
     public static final DateTimeType SQL_TIMESTAMP_NO_FRACTION =
-        new DateTimeType(Types.SQL_TIMESTAMP, Types.SQL_TIMESTAMP, 0);
+            new DateTimeType(Types.SQL_TIMESTAMP, Types.SQL_TIMESTAMP, 0);
     public static final DateTimeType SQL_TIMESTAMP_WITH_TIME_ZONE_MAX =
-        new DateTimeType(Types.SQL_TIMESTAMP,
-                         Types.SQL_TIMESTAMP_WITH_TIME_ZONE,
-                         DTIType.maxFractionPrecision);
+            new DateTimeType(Types.SQL_TIMESTAMP,
+                    Types.SQL_TIMESTAMP_WITH_TIME_ZONE,
+                    DTIType.maxFractionPrecision);
 
     // interval
     public static final IntervalType SQL_INTERVAL_YEAR =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_MONTH =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_MONTH,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_MONTH,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_DAY =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_HOUR =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_MINUTE =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_MINUTE,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_MINUTE,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_SECOND =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
-                                     DTIType.defaultIntervalPrecision,
-                                     DTIType.defaultIntervalFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
+                    DTIType.defaultIntervalPrecision,
+                    DTIType.defaultIntervalFractionPrecision);
     public static final IntervalType SQL_INTERVAL_SECOND_MAX_FRACTION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
-                                     DTIType.defaultIntervalPrecision,
-                                     DTIType.maxFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
+                    DTIType.defaultIntervalPrecision,
+                    DTIType.maxFractionPrecision);
     public static final IntervalType SQL_INTERVAL_YEAR_TO_MONTH =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR_TO_MONTH,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR_TO_MONTH,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_DAY_TO_HOUR =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_HOUR,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_HOUR,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_DAY_TO_MINUTE =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_MINUTE,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_MINUTE,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_DAY_TO_SECOND =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_SECOND,
-                                     DTIType.defaultIntervalPrecision,
-                                     DTIType.defaultIntervalFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_SECOND,
+                    DTIType.defaultIntervalPrecision,
+                    DTIType.defaultIntervalFractionPrecision);
     public static final IntervalType SQL_INTERVAL_HOUR_TO_MINUTE =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR_TO_MINUTE,
-                                     DTIType.defaultIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR_TO_MINUTE,
+                    DTIType.defaultIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_HOUR_TO_SECOND =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR_TO_SECOND,
-                                     DTIType.defaultIntervalPrecision,
-                                     DTIType.defaultIntervalFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR_TO_SECOND,
+                    DTIType.defaultIntervalPrecision,
+                    DTIType.defaultIntervalFractionPrecision);
     public static final IntervalType SQL_INTERVAL_MINUTE_TO_SECOND =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_MINUTE_TO_SECOND,
-                                     DTIType.defaultIntervalPrecision,
-                                     DTIType.defaultIntervalFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_MINUTE_TO_SECOND,
+                    DTIType.defaultIntervalPrecision,
+                    DTIType.defaultIntervalFractionPrecision);
 
     //
     public static final IntervalType SQL_INTERVAL_YEAR_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR,
-                                     DTIType.maxIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR,
+                    DTIType.maxIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_MONTH_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_MONTH,
-                                     DTIType.maxIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_MONTH,
+                    DTIType.maxIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_DAY_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY,
-                                     DTIType.maxIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY,
+                    DTIType.maxIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_HOUR_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR,
-                                     DTIType.maxIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_HOUR,
+                    DTIType.maxIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_MINUTE_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_MINUTE,
-                                     DTIType.maxIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_MINUTE,
+                    DTIType.maxIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_SECOND_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
-                                     DTIType.maxIntervalSecondPrecision,
-                                     DTIType.defaultIntervalFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
+                    DTIType.maxIntervalSecondPrecision,
+                    DTIType.defaultIntervalFractionPrecision);
     public static final IntervalType SQL_INTERVAL_SECOND_MAX_FRACTION_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
-                                     DTIType.maxIntervalSecondPrecision,
-                                     DTIType.maxFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_SECOND,
+                    DTIType.maxIntervalSecondPrecision,
+                    DTIType.maxFractionPrecision);
 
     //
     public static final IntervalType SQL_INTERVAL_YEAR_TO_MONTH_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR_TO_MONTH,
-                                     DTIType.maxIntervalPrecision, 0);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_YEAR_TO_MONTH,
+                    DTIType.maxIntervalPrecision, 0);
     public static final IntervalType SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION =
-        IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_SECOND,
-                                     DTIType.maxIntervalPrecision,
-                                     DTIType.maxFractionPrecision);
+            IntervalType.newIntervalType(Types.SQL_INTERVAL_DAY_TO_SECOND,
+                    DTIType.maxIntervalPrecision,
+                    DTIType.maxFractionPrecision);
 
     //
     public static final ArrayType SQL_ARRAY_ALL_TYPES =
-        new ArrayType(SQL_ALL_TYPES, 0);
+            new ArrayType(SQL_ALL_TYPES, 0);
 
     public static ArrayType getDefaultArrayType(int type) {
         return new ArrayType(getDefaultType(type),
-                             ArrayType.defaultArrayCardinality);
+                ArrayType.defaultArrayCardinality);
     }
 
     public static Type getDefaultType(int type) {
 
         try {
             return getType(type, Type.SQL_VARCHAR.getCharacterSet(),
-                           Type.SQL_VARCHAR.getCollation(), 0, 0);
+                    Type.SQL_VARCHAR.getCollation(), 0, 0);
         } catch (Exception e) {
             return null;
         }
@@ -816,123 +819,123 @@ public abstract class Type implements SchemaObject, Cloneable {
 
         switch (type) {
 
-            case Types.SQL_ALL_TYPES :
+            case Types.SQL_ALL_TYPES:
                 return SQL_ALL_TYPES;
 
-            case Types.SQL_ARRAY :
+            case Types.SQL_ARRAY:
                 return SQL_ARRAY_ALL_TYPES;
 
-            case Types.SQL_CHAR :
+            case Types.SQL_CHAR:
                 return SQL_CHAR_DEFAULT;
 
-            case Types.SQL_VARCHAR :
+            case Types.SQL_VARCHAR:
                 return SQL_VARCHAR_DEFAULT;
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 return SQL_CLOB;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 return SQL_INTEGER;
 
-            case Types.SQL_SMALLINT :
+            case Types.SQL_SMALLINT:
                 return SQL_SMALLINT;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 return SQL_BIGINT;
 
-            case Types.TINYINT :
+            case Types.TINYINT:
                 return TINYINT;
 
-            case Types.SQL_FLOAT :
-            case Types.SQL_REAL :
-            case Types.SQL_DOUBLE :
+            case Types.SQL_FLOAT:
+            case Types.SQL_REAL:
+            case Types.SQL_DOUBLE:
                 return SQL_DOUBLE;
 
-            case Types.SQL_NUMERIC :
+            case Types.SQL_NUMERIC:
                 return SQL_NUMERIC;
 
-            case Types.SQL_DECIMAL :
+            case Types.SQL_DECIMAL:
                 return SQL_DECIMAL;
 
-            case Types.SQL_BOOLEAN :
+            case Types.SQL_BOOLEAN:
                 return SQL_BOOLEAN;
 
-            case Types.SQL_BINARY :
+            case Types.SQL_BINARY:
                 return SQL_BINARY_DEFAULT;
 
-            case Types.SQL_VARBINARY :
+            case Types.SQL_VARBINARY:
                 return SQL_VARBINARY_DEFAULT;
 
-            case Types.SQL_GUID :
+            case Types.SQL_GUID:
                 return SQL_GUID;
 
-            case Types.SQL_BLOB :
+            case Types.SQL_BLOB:
                 return SQL_BLOB;
 
-            case Types.SQL_BIT :
+            case Types.SQL_BIT:
                 return SQL_BIT;
 
-            case Types.SQL_BIT_VARYING :
+            case Types.SQL_BIT_VARYING:
                 return SQL_BIT_VARYING;
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return SQL_DATE;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 return SQL_TIME;
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return SQL_TIME_WITH_TIME_ZONE;
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return SQL_TIMESTAMP;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return SQL_TIMESTAMP_WITH_TIME_ZONE;
 
-            case Types.SQL_INTERVAL_YEAR :
+            case Types.SQL_INTERVAL_YEAR:
                 return SQL_INTERVAL_YEAR;
 
-            case Types.SQL_INTERVAL_YEAR_TO_MONTH :
+            case Types.SQL_INTERVAL_YEAR_TO_MONTH:
                 return SQL_INTERVAL_YEAR_TO_MONTH;
 
-            case Types.SQL_INTERVAL_MONTH :
+            case Types.SQL_INTERVAL_MONTH:
                 return SQL_INTERVAL_MONTH;
 
-            case Types.SQL_INTERVAL_DAY :
+            case Types.SQL_INTERVAL_DAY:
                 return SQL_INTERVAL_DAY;
 
-            case Types.SQL_INTERVAL_DAY_TO_HOUR :
+            case Types.SQL_INTERVAL_DAY_TO_HOUR:
                 return SQL_INTERVAL_DAY_TO_HOUR;
 
-            case Types.SQL_INTERVAL_DAY_TO_MINUTE :
+            case Types.SQL_INTERVAL_DAY_TO_MINUTE:
                 return SQL_INTERVAL_DAY_TO_MINUTE;
 
-            case Types.SQL_INTERVAL_DAY_TO_SECOND :
+            case Types.SQL_INTERVAL_DAY_TO_SECOND:
                 return SQL_INTERVAL_DAY_TO_SECOND;
 
-            case Types.SQL_INTERVAL_HOUR :
+            case Types.SQL_INTERVAL_HOUR:
                 return SQL_INTERVAL_HOUR;
 
-            case Types.SQL_INTERVAL_HOUR_TO_MINUTE :
+            case Types.SQL_INTERVAL_HOUR_TO_MINUTE:
                 return SQL_INTERVAL_HOUR_TO_MINUTE;
 
-            case Types.SQL_INTERVAL_HOUR_TO_SECOND :
+            case Types.SQL_INTERVAL_HOUR_TO_SECOND:
                 return SQL_INTERVAL_HOUR_TO_SECOND;
 
-            case Types.SQL_INTERVAL_MINUTE :
+            case Types.SQL_INTERVAL_MINUTE:
                 return SQL_INTERVAL_MINUTE;
 
-            case Types.SQL_INTERVAL_MINUTE_TO_SECOND :
+            case Types.SQL_INTERVAL_MINUTE_TO_SECOND:
                 return SQL_INTERVAL_MINUTE_TO_SECOND;
 
-            case Types.SQL_INTERVAL_SECOND :
+            case Types.SQL_INTERVAL_SECOND:
                 return SQL_INTERVAL_SECOND;
 
-            case Types.OTHER :
+            case Types.OTHER:
                 return OTHER;
 
-            default :
+            default:
                 return null;
         }
     }
@@ -941,32 +944,32 @@ public abstract class Type implements SchemaObject, Cloneable {
 
         switch (jdbcTypeNumber) {
 
-            case Types.BIGINT :
+            case Types.BIGINT:
                 return Types.SQL_BIGINT;
 
-            case Types.LONGVARCHAR :
+            case Types.LONGVARCHAR:
                 return Types.SQL_VARCHAR;
 
-            case Types.CLOB :
+            case Types.CLOB:
                 return Types.SQL_CLOB;
 
-            case Types.BINARY :
+            case Types.BINARY:
                 return Types.SQL_BINARY;
 
-            case Types.BIT :
+            case Types.BIT:
                 return Types.SQL_BIT_VARYING;
 
-            case Types.VARBINARY :
-            case Types.LONGVARBINARY :
+            case Types.VARBINARY:
+            case Types.LONGVARBINARY:
                 return Types.SQL_VARBINARY;
 
-            case Types.BLOB :
+            case Types.BLOB:
                 return Types.SQL_BLOB;
 
-            case Types.ARRAY :
+            case Types.ARRAY:
                 return Types.SQL_ARRAY;
 
-            default :
+            default:
                 return jdbcTypeNumber;
         }
     }
@@ -982,29 +985,29 @@ public abstract class Type implements SchemaObject, Cloneable {
 
         switch (type) {
 
-            case Types.SQL_BLOB :
+            case Types.SQL_BLOB:
                 return Types.BLOB;
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 return Types.CLOB;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 return Types.BIGINT;
 
-            case Types.SQL_BINARY :
+            case Types.SQL_BINARY:
                 return Types.BINARY;
 
-            case Types.SQL_VARBINARY :
+            case Types.SQL_VARBINARY:
                 return Types.VARBINARY;
 
-            case Types.SQL_BIT :
-            case Types.SQL_BIT_VARYING :
+            case Types.SQL_BIT:
+            case Types.SQL_BIT_VARYING:
                 return Types.BIT;
 
-            case Types.SQL_ARRAY :
+            case Types.SQL_ARRAY:
                 return Types.ARRAY;
 
-            default :
+            default:
                 return type;
         }
     }
@@ -1030,86 +1033,86 @@ public abstract class Type implements SchemaObject, Cloneable {
 
         switch (type) {
 
-            case Types.SQL_ALL_TYPES :
+            case Types.SQL_ALL_TYPES:
                 return SQL_ALL_TYPES;
 
-            case Types.SQL_CHAR :
-            case Types.SQL_VARCHAR :
-            case Types.SQL_CLOB :
+            case Types.SQL_CHAR:
+            case Types.SQL_VARCHAR:
+            case Types.SQL_CLOB:
                 return CharacterType.getCharacterType(type, precision,
-                                                      collation);
+                        collation);
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 return SQL_INTEGER;
 
-            case Types.SQL_SMALLINT :
+            case Types.SQL_SMALLINT:
                 return SQL_SMALLINT;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 return SQL_BIGINT;
 
-            case Types.TINYINT :
+            case Types.TINYINT:
                 return TINYINT;
 
-            case Types.SQL_FLOAT :
+            case Types.SQL_FLOAT:
                 if (precision > 53) {
                     throw Error.error(ErrorCode.X_42592, "" + precision);
                 }
 
-            // fall through
-            case Types.SQL_REAL :
-            case Types.SQL_DOUBLE :
+                // fall through
+            case Types.SQL_REAL:
+            case Types.SQL_DOUBLE:
                 return SQL_DOUBLE;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 if (precision == 0) {
                     precision = NumberType.defaultNumericPrecision;
                 }
 
                 return NumberType.getNumberType(type, precision, scale);
 
-            case Types.SQL_BOOLEAN :
+            case Types.SQL_BOOLEAN:
                 return SQL_BOOLEAN;
 
-            case Types.SQL_BINARY :
-            case Types.SQL_VARBINARY :
-            case Types.SQL_BLOB :
+            case Types.SQL_BINARY:
+            case Types.SQL_VARBINARY:
+            case Types.SQL_BLOB:
                 return BinaryType.getBinaryType(type, precision);
 
-            case Types.SQL_GUID :
+            case Types.SQL_GUID:
                 return SQL_GUID;
 
-            case Types.SQL_BIT :
-            case Types.SQL_BIT_VARYING :
+            case Types.SQL_BIT:
+            case Types.SQL_BIT_VARYING:
                 return BitType.getBitType(type, precision);
 
-            case Types.SQL_DATE :
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_DATE:
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return DateTimeType.getDateTimeType(type, scale);
 
-            case Types.SQL_INTERVAL_YEAR :
-            case Types.SQL_INTERVAL_YEAR_TO_MONTH :
-            case Types.SQL_INTERVAL_MONTH :
-            case Types.SQL_INTERVAL_DAY :
-            case Types.SQL_INTERVAL_DAY_TO_HOUR :
-            case Types.SQL_INTERVAL_DAY_TO_MINUTE :
-            case Types.SQL_INTERVAL_DAY_TO_SECOND :
-            case Types.SQL_INTERVAL_HOUR :
-            case Types.SQL_INTERVAL_HOUR_TO_MINUTE :
-            case Types.SQL_INTERVAL_HOUR_TO_SECOND :
-            case Types.SQL_INTERVAL_MINUTE :
-            case Types.SQL_INTERVAL_MINUTE_TO_SECOND :
-            case Types.SQL_INTERVAL_SECOND :
+            case Types.SQL_INTERVAL_YEAR:
+            case Types.SQL_INTERVAL_YEAR_TO_MONTH:
+            case Types.SQL_INTERVAL_MONTH:
+            case Types.SQL_INTERVAL_DAY:
+            case Types.SQL_INTERVAL_DAY_TO_HOUR:
+            case Types.SQL_INTERVAL_DAY_TO_MINUTE:
+            case Types.SQL_INTERVAL_DAY_TO_SECOND:
+            case Types.SQL_INTERVAL_HOUR:
+            case Types.SQL_INTERVAL_HOUR_TO_MINUTE:
+            case Types.SQL_INTERVAL_HOUR_TO_SECOND:
+            case Types.SQL_INTERVAL_MINUTE:
+            case Types.SQL_INTERVAL_MINUTE_TO_SECOND:
+            case Types.SQL_INTERVAL_SECOND:
                 return IntervalType.getIntervalType(type, precision, scale);
 
-            case Types.OTHER :
+            case Types.OTHER:
                 return OTHER;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Type");
         }
     }
@@ -1129,7 +1132,7 @@ public abstract class Type implements SchemaObject, Cloneable {
 
     public static final IntValueHashMap typeAliases;
     public static final IntValueHashMap typeNames;
-    public static final IntKeyHashMap   jdbcConvertTypes;
+    public static final IntKeyHashMap jdbcConvertTypes;
 
     static {
         typeNames = new IntValueHashMap(37);
@@ -1194,7 +1197,7 @@ public abstract class Type implements SchemaObject, Cloneable {
         jdbcConvertTypes.put(Tokens.SQL_BINARY, Type.SQL_BINARY_DEFAULT);
         jdbcConvertTypes.put(Tokens.SQL_VARBINARY, Type.SQL_VARBINARY_DEFAULT);
         jdbcConvertTypes.put(Tokens.SQL_LONGVARBINARY,
-                             Type.SQL_VARBINARY_DEFAULT);
+                Type.SQL_VARBINARY_DEFAULT);
         jdbcConvertTypes.put(Tokens.SQL_CLOB, Type.SQL_CLOB);
         jdbcConvertTypes.put(Tokens.SQL_BLOB, Type.SQL_BLOB);
         jdbcConvertTypes.put(Tokens.SQL_BIT, Type.SQL_BIT);

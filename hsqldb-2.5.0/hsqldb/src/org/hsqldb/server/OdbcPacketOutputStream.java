@@ -37,16 +37,16 @@ import java.io.IOException;
 
 /**
  * Atomic transmission packet from HyperSQL server to ODBC client.
- *
+ * <p>
  * Sample usage
  * <CODE>
- *     outPacket = OdbcPacketOutputStream.newOdbcPacketOutputStream();
- *     ...
- *     // For each packet you need to transmit:
- *     outPacket.reset();
- *     outPacket.write(this);
- *     outPacket.write(that);
- *     outPacket.xmit('X', hsqlDataOutputStream);
+ * outPacket = OdbcPacketOutputStream.newOdbcPacketOutputStream();
+ * ...
+ * // For each packet you need to transmit:
+ * outPacket.reset();
+ * outPacket.write(this);
+ * outPacket.write(that);
+ * outPacket.xmit('X', hsqlDataOutputStream);
  * </CODE>
  */
 class OdbcPacketOutputStream extends DataOutputStream {
@@ -54,7 +54,7 @@ class OdbcPacketOutputStream extends DataOutputStream {
     private ByteArrayOutputStream byteArrayOutputStream;
     private ByteArrayOutputStream stringWriterOS = new ByteArrayOutputStream();
     private DataOutputStream stringWriterDos =
-        new DataOutputStream(stringWriterOS);
+            new DataOutputStream(stringWriterOS);
     private int packetStart = 0;    // Stream's "written" at start of packet.
 
     public int getSize() {
@@ -100,7 +100,7 @@ class OdbcPacketOutputStream extends DataOutputStream {
     }
 
     static OdbcPacketOutputStream newOdbcPacketOutputStream()
-    throws IOException {
+            throws IOException {
         return new OdbcPacketOutputStream(new ByteArrayOutputStream());
     }
 
@@ -119,7 +119,7 @@ class OdbcPacketOutputStream extends DataOutputStream {
      */
     synchronized int xmit(char packetType,
                           org.hsqldb.lib.DataOutputStream destinationStream)
-                          throws IOException {
+            throws IOException {
 
         byte[] ba = byteArrayOutputStream.toByteArray();
 
@@ -144,7 +144,7 @@ class OdbcPacketOutputStream extends DataOutputStream {
     /**
      * The behavior here is purposefully different from
      * java.io.DataOutputStream.writeChar(int), which writes 2 bytes.
-     *
+     * <p>
      * We are supporting only 1-byte characters, or don't care about the
      * high bits.
      */

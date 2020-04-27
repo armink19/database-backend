@@ -55,23 +55,23 @@ import java.util.Calendar;
  */
 public interface SessionInterface {
 
-    int INFO_ID      = 0;                // used
+    int INFO_ID = 0;                // used
     int INFO_INTEGER = 1;                // used
     int INFO_BOOLEAN = 2;                // used
     int INFO_VARCHAR = 3;                // used
-    int INFO_LIMIT   = 4;
+    int INFO_LIMIT = 4;
 
     //
-    int INFO_ISOLATION           = 0;    // used
-    int INFO_AUTOCOMMIT          = 1;    // used
+    int INFO_ISOLATION = 0;    // used
+    int INFO_AUTOCOMMIT = 1;    // used
     int INFO_CONNECTION_READONLY = 2;    // used
-    int INFO_CATALOG             = 3;    // used
+    int INFO_CATALOG = 3;    // used
 
     //
     int TX_READ_UNCOMMITTED = 1;
-    int TX_READ_COMMITTED   = 2;
-    int TX_REPEATABLE_READ  = 4;
-    int TX_SERIALIZABLE     = 8;
+    int TX_READ_COMMITTED = 2;
+    int TX_REPEATABLE_READ = 4;
+    int TX_SERIALIZABLE = 8;
 
     //
     int lobStreamBlockSize = 512 * 1024;

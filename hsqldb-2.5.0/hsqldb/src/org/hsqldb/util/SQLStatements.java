@@ -74,7 +74,7 @@ import java.io.Serializable;
 
 /**
  * container for set of SQL statements
- *
+ * <p>
  * New class based on Hypersonic SQL code.
  *
  * @version 1.7.1
@@ -82,19 +82,19 @@ import java.io.Serializable;
  */
 class SQLStatements implements Serializable {
 
-    String  sSchema, sType;
-    String  sDatabaseToConvert;
-    String  sSourceTable, sDestTable;
-    String  sDestDrop, sDestCreate, sDestInsert, sDestDelete;
-    String  sDestDropIndex, sDestCreateIndex, sDestAlter, sSourceSelect;
-    boolean bTransfer    = true;
-    boolean bCreate      = true;
-    boolean bDelete      = true;
-    boolean bDrop        = true;
+    String sSchema, sType;
+    String sDatabaseToConvert;
+    String sSourceTable, sDestTable;
+    String sDestDrop, sDestCreate, sDestInsert, sDestDelete;
+    String sDestDropIndex, sDestCreateIndex, sDestAlter, sSourceSelect;
+    boolean bTransfer = true;
+    boolean bCreate = true;
+    boolean bDelete = true;
+    boolean bDrop = true;
     boolean bCreateIndex = true;
-    boolean bDropIndex   = true;
-    boolean bInsert      = true;
-    boolean bAlter       = true;
-    boolean bFKForced    = false;
-    boolean bIdxForced   = false;
+    boolean bDropIndex = true;
+    boolean bInsert = true;
+    boolean bAlter = true;
+    boolean bFKForced = false;
+    boolean bIdxForced = false;
 }

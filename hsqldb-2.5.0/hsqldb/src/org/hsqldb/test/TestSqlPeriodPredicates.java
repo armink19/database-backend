@@ -47,7 +47,7 @@ public class TestSqlPeriodPredicates extends TestBase {
 
     public TestSqlPeriodPredicates(String name) throws Exception {
 
-        super(name,  "jdbc:hsqldb:mem:test", true, false);
+        super(name, "jdbc:hsqldb:mem:test", true, false);
     }
 
     public void setUp() throws Exception {
@@ -59,43 +59,43 @@ public class TestSqlPeriodPredicates extends TestBase {
         stmt.executeUpdate("CREATE TABLE PUBLIC.emp (emp_id INTEGER NOT NULL,name VARCHAR(30),salary DECIMAL(10,2),dept_id INTEGER,bus_start DATETIME NOT NULL,bus_end DATETIME NOT NULL);");
 
         stmt.executeUpdate(
-            "insert into PUBLIC.emp (emp_id, name, salary, dept_id, bus_start, bus_end)"
-            + "values"
-            + "(1, 'Tom', 300000.00, 1, TIMESTAMP '2000-01-01 01:02:03', TIMESTAMP '2000-02-01 01:02:03'),"
-            + "(2, 'Tom', 305000.00, 1, TIMESTAMP '2000-02-01 01:02:03', TIMESTAMP '2000-03-01 01:02:03'),"
-            + "(3, 'Tom', 310000.00, 1, TIMESTAMP '2000-03-01 01:02:03', TIMESTAMP '2000-04-01 01:02:03')"
-            + ";");
+                "insert into PUBLIC.emp (emp_id, name, salary, dept_id, bus_start, bus_end)"
+                        + "values"
+                        + "(1, 'Tom', 300000.00, 1, TIMESTAMP '2000-01-01 01:02:03', TIMESTAMP '2000-02-01 01:02:03'),"
+                        + "(2, 'Tom', 305000.00, 1, TIMESTAMP '2000-02-01 01:02:03', TIMESTAMP '2000-03-01 01:02:03'),"
+                        + "(3, 'Tom', 310000.00, 1, TIMESTAMP '2000-03-01 01:02:03', TIMESTAMP '2000-04-01 01:02:03')"
+                        + ";");
 
         stmt.close();
     }
 
     public void tearDown() {
-            super.tearDown();
+        super.tearDown();
     }
 
     /**
      * Set the two parameters of the prepared statement, execute the query and validate the returned result set.
      */
     private void executeAndTestQuery(PreparedStatement stmt, String periodStart, String periodEnd, int... expectedIds) throws SQLException {
-            stmt.setString(1, periodStart);
-            stmt.setString(2, periodEnd);
+        stmt.setString(1, periodStart);
+        stmt.setString(2, periodEnd);
 
-            ResultSet rs = stmt.executeQuery();
-            assertAllIdsPresent(rs, expectedIds);
-            rs.close();
+        ResultSet rs = stmt.executeQuery();
+        assertAllIdsPresent(rs, expectedIds);
+        rs.close();
     }
 
     /**
      * Validate that all the expected ids are contained within the result set.
      *
-     * @param rs result set containing the result of the query
+     * @param rs          result set containing the result of the query
      * @param expectedIds list if the expected ids. If null, expects an empty result set.
      * @throws SQLException
      */
-    private void assertAllIdsPresent(ResultSet rs, int ...expectedIds) throws
-        SQLException {
-        Set<Integer> expected = new TreeSet<Integer> ();
-        Set<Integer> found = new TreeSet<Integer> ();
+    private void assertAllIdsPresent(ResultSet rs, int... expectedIds) throws
+            SQLException {
+        Set<Integer> expected = new TreeSet<Integer>();
+        Set<Integer> found = new TreeSet<Integer>();
         if (expectedIds != null) {
             for (int id : expectedIds) {
                 expected.add(id);
@@ -114,37 +114,37 @@ public class TestSqlPeriodPredicates extends TestBase {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-01 01:02:03'");
+                "TIMESTAMP '2000-01-01 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-12 01:02:03'", 1);
+                "TIMESTAMP '2000-01-12 01:02:03'", 1);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-12-31 01:02:03'", 1, 2, 3);
+                "TIMESTAMP '2000-12-31 01:02:03'", 1, 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-04-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'");
+                "TIMESTAMP '2000-05-01 01:02:03'");
 
         stmt.close();
     }
 
     public void testFirstPeriodOverlapsSecondPeriodReversed() throws
-        SQLException {
+            SQLException {
 
         String query = "SELECT emp_id FROM PUBLIC.EMP WHERE PERIOD (?, ?) OVERLAPS PERIOD (BUS_START, BUS_END);";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-12 01:02:03'", 1);
+                "TIMESTAMP '2000-01-12 01:02:03'", 1);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-01 01:02:03'");
+                "TIMESTAMP '2000-01-01 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-12-31 01:02:03'", 1, 2, 3);
+                "TIMESTAMP '2000-12-31 01:02:03'", 1, 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-04-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'");
+                "TIMESTAMP '2000-05-01 01:02:03'");
 
         stmt.close();
     }
@@ -155,14 +155,14 @@ public class TestSqlPeriodPredicates extends TestBase {
         ResultSet rs;
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-03-01 01:02:03'", 2);
+                "TIMESTAMP '2000-03-01 01:02:03'", 2);
         stmt.close();
 
         query = "SELECT emp_id FROM PUBLIC.EMP WHERE PERIOD (?, ?) EQUALS PERIOD (BUS_START, BUS_END);";
         stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-03-01 01:02:03'", 2);
+                "TIMESTAMP '2000-03-01 01:02:03'", 2);
         stmt.close();
 
         query = "SELECT emp_id FROM PUBLIC.EMP WHERE PERIOD (BUS_START, BUS_END) EQUALS PERIOD (TIMESTAMP '2000-03-01 01:02:03', TIMESTAMP '2000-04-01 01:02:03');";
@@ -179,13 +179,13 @@ public class TestSqlPeriodPredicates extends TestBase {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-02-01 01:02:04'", 2);
+                "TIMESTAMP '2000-02-01 01:02:04'", 2);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-03-01 01:02:03'",
-                            "TIMESTAMP '1999-04-01 01:02:03'");
+                "TIMESTAMP '1999-04-01 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-03-01 01:02:03'",
-                            "TIMESTAMP '2000-03-30 01:02:03'", 3);
+                "TIMESTAMP '2000-03-30 01:02:03'", 3);
 
         stmt.close();
 
@@ -193,13 +193,13 @@ public class TestSqlPeriodPredicates extends TestBase {
         stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-03-01 01:02:03'",
-                            "TIMESTAMP '2001-03-01 01:02:03'", 1, 2, 3);
+                "TIMESTAMP '2001-03-01 01:02:03'", 1, 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-01-01 01:02:03'",
-                            "TIMESTAMP '2001-04-01 01:02:03'", 1, 2, 3);
+                "TIMESTAMP '2001-04-01 01:02:03'", 1, 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-01-31 01:02:03'",
-                            "TIMESTAMP '2000-03-01 01:02:03'", 2);
+                "TIMESTAMP '2000-03-01 01:02:03'", 2);
 
         stmt.close();
     }
@@ -228,19 +228,19 @@ public class TestSqlPeriodPredicates extends TestBase {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-04-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'", 1, 2, 3);
+                "TIMESTAMP '2000-05-01 01:02:03'", 1, 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-03-31 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'", 1, 2);
+                "TIMESTAMP '2000-05-01 01:02:03'", 1, 2);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-03-01 01:02:03'",
-                            "TIMESTAMP '1999-03-30 01:02:03'");
+                "TIMESTAMP '1999-03-30 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-12 01:02:03'");
+                "TIMESTAMP '2000-01-12 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'", 1);
+                "TIMESTAMP '2000-05-01 01:02:03'", 1);
 
         stmt.close();
     }
@@ -250,59 +250,59 @@ public class TestSqlPeriodPredicates extends TestBase {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-04-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'");
+                "TIMESTAMP '2000-05-01 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-03-01 01:02:03'",
-                            "TIMESTAMP '1999-03-30 01:02:03'", 1, 2, 3);
+                "TIMESTAMP '1999-03-30 01:02:03'", 1, 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-12 01:02:03'", 2, 3);
+                "TIMESTAMP '2000-01-12 01:02:03'", 2, 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-01-01 01:02:03'",
-                            "TIMESTAMP '2000-03-01 01:02:03'", 3);
+                "TIMESTAMP '2000-03-01 01:02:03'", 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-03-01 01:02:03'", 3);
+                "TIMESTAMP '2000-03-01 01:02:03'", 3);
 
         stmt.close();
     }
 
     public void testFirstPeriodImmediatelyPrecedesSecondPeriod() throws
-        SQLException {
+            SQLException {
         String query = "SELECT emp_id FROM PUBLIC.EMP WHERE PERIOD (BUS_START, BUS_END) IMMEDIATELY PRECEDES PERIOD (?, ?);";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-04-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'", 3);
+                "TIMESTAMP '2000-05-01 01:02:03'", 3);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-03-31 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'");
+                "TIMESTAMP '2000-05-01 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-03-01 01:02:03'",
-                            "TIMESTAMP '1999-03-30 01:02:03'");
+                "TIMESTAMP '1999-03-30 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'", 1);
+                "TIMESTAMP '2000-05-01 01:02:03'", 1);
 
         stmt.close();
     }
 
     public void testFirstPeriodImmediatelySuccedesSecondPeriod() throws
-        SQLException {
+            SQLException {
         String query = "SELECT emp_id FROM PUBLIC.EMP WHERE PERIOD (BUS_START, BUS_END) IMMEDIATELY SUCCEEDS PERIOD (?, ?);";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-04-01 01:02:03'",
-                            "TIMESTAMP '2000-05-01 01:02:03'");
+                "TIMESTAMP '2000-05-01 01:02:03'");
 
         executeAndTestQuery(stmt, "TIMESTAMP '1999-12-01 01:02:03'",
-                            "TIMESTAMP '2000-01-01 01:02:03'", 1);
+                "TIMESTAMP '2000-01-01 01:02:03'", 1);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-01-01 01:02:03'",
-                            "TIMESTAMP '2000-02-01 01:02:03'", 2);
+                "TIMESTAMP '2000-02-01 01:02:03'", 2);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-02-01 01:02:03'",
-                            "TIMESTAMP '2000-03-01 01:02:03'", 3);
+                "TIMESTAMP '2000-03-01 01:02:03'", 3);
 
         stmt.close();
     }
@@ -314,19 +314,19 @@ public class TestSqlPeriodPredicates extends TestBase {
     public void testPeriodOverlapsSinglePointInTime() throws SQLException {
 
         String query =
-            "SELECT emp_id FROM PUBLIC.EMP WHERE (BUS_START, BUS_END) OVERLAPS (?, ?);";
+                "SELECT emp_id FROM PUBLIC.EMP WHERE (BUS_START, BUS_END) OVERLAPS (?, ?);";
         PreparedStatement stmt = conn.prepareStatement(query);
 
         executeAndTestQuery(stmt, "TIMESTAMP '2000-01-11 01:02:03'",
-                            "TIMESTAMP '2000-01-11 01:02:03'", 1);
+                "TIMESTAMP '2000-01-11 01:02:03'", 1);
 
         stmt.close();
 
         query =
-            "SELECT emp_id FROM PUBLIC.EMP WHERE (?, ?) OVERLAPS (BUS_START, BUS_END);";
+                "SELECT emp_id FROM PUBLIC.EMP WHERE (?, ?) OVERLAPS (BUS_START, BUS_END);";
         stmt = conn.prepareStatement(query);
         executeAndTestQuery(stmt, "TIMESTAMP '2000-01-11 01:02:03'",
-                            "TIMESTAMP '2000-01-11 01:02:03'", 1);
+                "TIMESTAMP '2000-01-11 01:02:03'", 1);
 
         stmt.close();
     }
@@ -336,25 +336,25 @@ public class TestSqlPeriodPredicates extends TestBase {
      */
     public void testInvalidPeriodDateSpecification() {
         PreparedStatement stmt = null;
-        List<String> predicates = new LinkedList<String> ();
+        List<String> predicates = new LinkedList<String>();
         Collections.addAll(predicates, "OVERLAPS", "EQUALS", "CONTAINS",
-                           "PRECEDES", "SUCCEEDS", "IMMEDIATELY PRECEDES",
-                           "IMMEDIATELY SUCCEEDS");
+                "PRECEDES", "SUCCEEDS", "IMMEDIATELY PRECEDES",
+                "IMMEDIATELY SUCCEEDS");
         for (String predicate : predicates) {
             String query = String.format("SELECT emp_id FROM PUBLIC.EMP WHERE PERIOD (BUS_START, BUS_END) %s PERIOD (?, ?);",
-                                         predicate);
+                    predicate);
             try {
                 stmt = conn.prepareStatement(query);
                 // testing with start after end
                 executeAndTestQuery(stmt, "TIMESTAMP '2000-01-11 01:02:03'",
-                                    "TIMESTAMP '2000-01-10 01:02:03'");
+                        "TIMESTAMP '2000-01-10 01:02:03'");
                 fail(String.format(
-                    "An exception should have been raised for predicate %s when start is after end!",
-                    predicate));
+                        "An exception should have been raised for predicate %s when start is after end!",
+                        predicate));
             } catch (SQLDataException e) {
                 // This is Ok. The test pass.
                 assertEquals("data exception: invalid period value",
-                             e.getMessage());
+                        e.getMessage());
             } catch (SQLException e) {
                 e.printStackTrace();
                 fail(e.getMessage());
@@ -363,14 +363,14 @@ public class TestSqlPeriodPredicates extends TestBase {
             try {
                 // testing with start equals end
                 executeAndTestQuery(stmt, "TIMESTAMP '2000-01-11 01:02:03'",
-                                    "TIMESTAMP '2000-01-11 01:02:03'");
+                        "TIMESTAMP '2000-01-11 01:02:03'");
                 fail(String.format(
-                    "An exception should have been raised for predicate %s when start equals end!",
-                    predicate));
+                        "An exception should have been raised for predicate %s when start equals end!",
+                        predicate));
             } catch (SQLDataException e) {
                 // This is Ok. The test pass.
                 assertEquals("data exception: invalid period value",
-                             e.getMessage());
+                        e.getMessage());
             } catch (SQLException e) {
                 e.printStackTrace();
                 fail(e.getMessage());

@@ -46,10 +46,10 @@ import org.hsqldb.rights.User;
  */
 public class SessionManager {
 
-    long                   sessionIdCount = 0;
-    private LongKeyHashMap sessionMap     = new LongKeyHashMap();
-    private Session        sysSession;
-    private Session        sysLobSession;
+    long sessionIdCount = 0;
+    private LongKeyHashMap sessionMap = new LongKeyHashMap();
+    private Session sysSession;
+    private Session sysLobSession;
 
     /**
      * @todo:
@@ -67,9 +67,9 @@ public class SessionManager {
         User sysUser = db.getUserManager().getSysUser();
 
         sysSession = new Session(db, sysUser, false, false, sessionIdCount++,
-                                 null, 0);
+                null, 0);
         sysLobSession = new Session(db, sysUser, true, false,
-                                    sessionIdCount++, null, 0);
+                sessionIdCount++, null, 0);
     }
 
     /**
@@ -91,9 +91,9 @@ public class SessionManager {
      * Session registry. This method is typically called internally as
      * the final step, when a successful connection has been made.
      *
-     * @param db the database to which the new Session is initially connected
-     * @param user the Session User
-     * @param readonly the ReadOnly attribute for the new Session
+     * @param db              the database to which the new Session is initially connected
+     * @param user            the Session User
+     * @param readonly        the ReadOnly attribute for the new Session
      * @param timeZoneSeconds the session time zone second interval
      * @return Session
      */
@@ -104,7 +104,7 @@ public class SessionManager {
                                            int timeZoneSeconds) {
 
         Session s = new Session(db, user, autoCommit, readonly,
-                                sessionIdCount, zoneString, timeZoneSeconds);
+                sessionIdCount, zoneString, timeZoneSeconds);
 
         sessionMap.put(sessionIdCount, s);
 
@@ -117,7 +117,7 @@ public class SessionManager {
 
         boolean autoCommit = db.databaseProperties.isVersion18();
         Session s = new Session(db, db.getUserManager().getSysUser(),
-                                autoCommit, false, sessionIdCount, null, 0);
+                autoCommit, false, sessionIdCount, null, 0);
 
         s.isProcessingLog = true;
 
@@ -134,11 +134,11 @@ public class SessionManager {
     public Session getSysSessionForScript(Database db) {
 
         Session session = new Session(db, db.getUserManager().getSysUser(),
-                                      false, false, 0, null, 0);
+                false, false, 0, null, 0);
 
         // some old 1.8.0 do not have SET SCHEMA PUBLIC
         session.setCurrentSchemaHsqlName(
-            db.schemaManager.defaultSchemaHsqlName);
+                db.schemaManager.defaultSchemaHsqlName);
 
         session.isProcessingScript = true;
 
@@ -155,9 +155,9 @@ public class SessionManager {
     public Session getSysSession() {
 
         sysSession.currentSchema =
-            sysSession.database.schemaManager.getDefaultSchemaHsqlName();
+                sysSession.database.schemaManager.getDefaultSchemaHsqlName();
         sysSession.isProcessingScript = false;
-        sysSession.isProcessingLog    = false;
+        sysSession.isProcessingLog = false;
 
         sysSession.setUser(sysSession.database.getUserManager().getSysUser());
 
@@ -170,11 +170,11 @@ public class SessionManager {
     synchronized public Session newSysSession() {
 
         Session session = new Session(sysSession.database,
-                                      sysSession.getUser(), false, false,
-                                      sessionIdCount, null, 0);
+                sysSession.getUser(), false, false,
+                sessionIdCount, null, 0);
 
         session.currentSchema =
-            sysSession.database.schemaManager.getDefaultSchemaHsqlName();
+                sysSession.database.schemaManager.getDefaultSchemaHsqlName();
 
         sessionMap.put(sessionIdCount, session);
 
@@ -186,7 +186,7 @@ public class SessionManager {
     synchronized public Session newSysSession(HsqlName schema, User user) {
 
         Session session = new Session(sysSession.database, user, false, false,
-                                      0, null, 0);
+                0, null, 0);
 
         session.currentSchema = schema;
 
@@ -211,7 +211,7 @@ public class SessionManager {
     }
 
     /**
-     *  Removes the session from management and disconnects.
+     * Removes the session from management and disconnects.
      */
     synchronized void removeSession(Session session) {
         sessionMap.remove(session.getId());
@@ -241,7 +241,7 @@ public class SessionManager {
      */
     public synchronized Session[] getVisibleSessions(Session session) {
         return session.isAdmin() ? getAllSessions()
-                                 : new Session[]{ session };
+                : new Session[]{session};
     }
 
     /**
@@ -255,7 +255,7 @@ public class SessionManager {
     public synchronized Session[] getAllSessions() {
 
         Session[] sessions = new Session[sessionMap.size()];
-        Iterator  it       = sessionMap.values().iterator();
+        Iterator it = sessionMap.values().iterator();
 
         for (int i = 0; it.hasNext(); i++) {
             sessions[i] = (Session) it.next();
@@ -273,7 +273,7 @@ public class SessionManager {
 
             if (!session.isClosed()
                     && userName.equals(
-                        session.getUser().getName().getNameString())) {
+                    session.getUser().getName().getNameString())) {
                 return true;
             }
         }

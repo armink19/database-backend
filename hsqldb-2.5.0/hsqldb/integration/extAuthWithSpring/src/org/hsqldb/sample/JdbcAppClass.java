@@ -41,7 +41,7 @@ import java.sql.SQLException;
 
 /**
  * An application class that performs some simple JDBC work.
- *
+ * <p>
  * This class is purposefully not Spring-aware.
  */
 public class JdbcAppClass {
@@ -74,7 +74,7 @@ public class JdbcAppClass {
                 return;
             }
             if (rs.getInt(1) != 456) {
-                log.error("App class retrieved wrong value: "  + rs.getInt(1));
+                log.error("App class retrieved wrong value: " + rs.getInt(1));
                 return;
             }
             if (rs.next()) {

@@ -38,17 +38,17 @@ import java.io.OutputStream;
 /**
  * Interface for abstraction of file access.
  *
- * @author  Ocke Janssen oj@openoffice.org
+ * @author Ocke Janssen oj@openoffice.org
  * @version 2.4.1
  * @since 1.8.0
  */
 public interface FileAccess {
 
-    int ELEMENT_READ         = 1;
+    int ELEMENT_READ = 1;
     int ELEMENT_SEEKABLEREAD = 3;
-    int ELEMENT_WRITE        = 4;
-    int ELEMENT_READWRITE    = 7;
-    int ELEMENT_TRUNCATE     = 8;
+    int ELEMENT_WRITE = 4;
+    int ELEMENT_READWRITE = 7;
+    int ELEMENT_TRUNCATE = 8;
 
     InputStream openInputStreamElement(String streamName) throws IOException;
 

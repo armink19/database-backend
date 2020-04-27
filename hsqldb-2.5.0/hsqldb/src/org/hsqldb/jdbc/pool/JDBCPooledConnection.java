@@ -49,10 +49,10 @@ import java.sql.SQLException;
  * getConnection() method establishes a lease on the lifetime connection
  * and returns a special JDBCConnection (userConnection) that is
  * valid until it is closed.<p>
- *
+ * <p>
  * This class uses a dedicated HyperSQL method to guarantee each lease on the
  * connection starts with the original state of the connection.<p>
- *
+ * <p>
  * The ConnectionEventLister objects that have been registered with this
  * PooledConnection are notified when each lease expires, or an unrecoverable
  * error occurs on the connection to the database.<p>
@@ -62,7 +62,7 @@ import java.sql.SQLException;
  * @since JDK 1.2, HSQLDB 2.0
  */
 public class JDBCPooledConnection
-implements PooledConnection, JDBCConnectionEventListener {
+        implements PooledConnection, JDBCConnectionEventListener {
 
     synchronized public Connection getConnection() throws SQLException {
 
@@ -70,7 +70,7 @@ implements PooledConnection, JDBCConnectionEventListener {
             throw new SQLException("Connection in use");
         }
 
-        isInUse        = true;
+        isInUse = true;
         userConnection = new JDBCConnection(connection, this);
 
         return userConnection;
@@ -94,10 +94,12 @@ implements PooledConnection, JDBCConnectionEventListener {
         listeners.remove(listener);
     }
 
-    public void addStatementEventListener(StatementEventListener listener) {}
+    public void addStatementEventListener(StatementEventListener listener) {
+    }
 
     public void removeStatementEventListener(
-            StatementEventListener listener) {}
+            StatementEventListener listener) {
+    }
 
     // ------------------------ internal implementation ------------------------
     synchronized public void connectionClosed() {
@@ -110,7 +112,7 @@ implements PooledConnection, JDBCConnectionEventListener {
 
         for (int i = 0; i < listeners.size(); i++) {
             ConnectionEventListener connectionEventListener =
-                (ConnectionEventListener) listeners.get(i);
+                    (ConnectionEventListener) listeners.get(i);
 
             connectionEventListener.connectionClosed(event);
         }
@@ -124,7 +126,7 @@ implements PooledConnection, JDBCConnectionEventListener {
 
         for (int i = 0; i < listeners.size(); i++) {
             ConnectionEventListener connectionEventListener =
-                (ConnectionEventListener) listeners.get(i);
+                    (ConnectionEventListener) listeners.get(i);
 
             connectionEventListener.connectionErrorOccurred(event);
         }
@@ -195,7 +197,7 @@ implements PooledConnection, JDBCConnectionEventListener {
     protected OrderedHashSet listeners = new OrderedHashSet();
     protected JDBCConnection connection;
     protected JDBCConnection userConnection;
-    protected boolean        isInUse;
+    protected boolean isInUse;
 
     public JDBCPooledConnection(JDBCConnection connection) {
         this.connection = connection;

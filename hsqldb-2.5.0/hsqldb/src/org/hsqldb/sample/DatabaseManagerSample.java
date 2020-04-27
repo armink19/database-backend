@@ -46,7 +46,7 @@ public class DatabaseManagerSample extends DatabaseManager {
         Properties p = new Properties();
 
         p.put("org.hsqldb.util.ConnectionTypeClass",
-              "org.hsqldb.sample.ConnectionTypesSample");
+                "org.hsqldb.sample.ConnectionTypesSample");
         System.setProperties(p);
     }
 }

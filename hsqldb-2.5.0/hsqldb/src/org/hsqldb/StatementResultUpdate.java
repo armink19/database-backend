@@ -51,7 +51,7 @@ import org.hsqldb.types.Type;
  */
 public class StatementResultUpdate extends StatementDML {
 
-    int    actionType;
+    int actionType;
     Type[] types;
     Result result;
 
@@ -89,13 +89,13 @@ public class StatementResultUpdate extends StatementDML {
 
         checkAccessRights(session);
 
-        Object[]        args = session.sessionContext.dynamicArguments;
-        Row             row;
+        Object[] args = session.sessionContext.dynamicArguments;
+        Row row;
         PersistentStore store = baseTable.getRowStore(session);
 
         switch (actionType) {
 
-            case ResultConstants.UPDATE_CURSOR : {
+            case ResultConstants.UPDATE_CURSOR: {
                 row = getRow(session, args);
 
                 /**
@@ -108,9 +108,9 @@ public class StatementResultUpdate extends StatementDML {
                 }
 
                 RowSetNavigatorDataChange list =
-                    session.sessionContext.getRowSetDataChange();
+                        session.sessionContext.getRowSetDataChange();
                 Object[] data =
-                    (Object[]) ArrayUtil.duplicateArray(row.getData());
+                        (Object[]) ArrayUtil.duplicateArray(row.getData());
                 boolean[] columnCheck = baseTable.getNewColumnCheckList();
 
                 for (int i = 0; i < baseColumnMap.length; i++) {
@@ -118,20 +118,20 @@ public class StatementResultUpdate extends StatementDML {
                         continue;
                     }
 
-                    data[baseColumnMap[i]]        = args[i];
+                    data[baseColumnMap[i]] = args[i];
                     columnCheck[baseColumnMap[i]] = true;
                 }
 
                 int[] colMap = ArrayUtil.booleanArrayToIntIndexes(columnCheck);
 
                 list.addRow(session, row, data, baseTable.getColumnTypes(),
-                            colMap);
+                        colMap);
                 list.endMainDataSet();
                 update(session, baseTable, list, null);
 
                 break;
             }
-            case ResultConstants.DELETE_CURSOR : {
+            case ResultConstants.DELETE_CURSOR: {
                 row = getRow(session, args);
 
                 if (row == null || row.isDeleted(session, store)) {
@@ -139,7 +139,7 @@ public class StatementResultUpdate extends StatementDML {
                 }
 
                 RowSetNavigatorDataChange list =
-                    session.sessionContext.getRowSetDataChange();
+                        session.sessionContext.getRowSetDataChange();
 
                 list.addRow(row);
                 list.endMainDataSet();
@@ -147,7 +147,7 @@ public class StatementResultUpdate extends StatementDML {
 
                 break;
             }
-            case ResultConstants.INSERT_CURSOR : {
+            case ResultConstants.INSERT_CURSOR: {
                 Object[] data = baseTable.getNewRowData(session);
 
                 for (int i = 0; i < baseColumnMap.length; i++) {
@@ -163,15 +163,15 @@ public class StatementResultUpdate extends StatementDML {
 
     Row getRow(Session session, Object[] args) {
 
-        int             rowIdIndex = result.metaData.getColumnCount();
-        Long            rowId      = (Long) args[rowIdIndex];
-        PersistentStore store      = baseTable.getRowStore(session);
-        Row             row        = null;
+        int rowIdIndex = result.metaData.getColumnCount();
+        Long rowId = (Long) args[rowIdIndex];
+        PersistentStore store = baseTable.getRowStore(session);
+        Row row = null;
 
         if (rowIdIndex + 2 == result.metaData.getExtendedColumnCount()) {
             Object[] data =
-                ((RowSetNavigatorData) result.getNavigator()).getData(
-                    rowId.longValue());
+                    ((RowSetNavigatorData) result.getNavigator()).getData(
+                            rowId.longValue());
 
             if (data != null) {
                 row = (Row) data[rowIdIndex + 1];
@@ -192,50 +192,50 @@ public class StatementResultUpdate extends StatementDML {
 
         QueryExpression qe = statement.queryExpression;
 
-        this.result             = result;
-        this.actionType         = action;
-        this.baseTable          = qe.getBaseTable();
-        this.types              = types;
-        this.baseColumnMap      = qe.getBaseTableColumnMap();
+        this.result = result;
+        this.actionType = action;
+        this.baseTable = qe.getBaseTable();
+        this.types = types;
+        this.baseColumnMap = qe.getBaseTableColumnMap();
         this.writeTableNames[0] = baseTable.getName();
 
         // used for statement logging - needs improvements to list only the updated values
-        this.sql                = statement.getSQL();
-        this.parameterMetaData  = qe.getMetaData();
+        this.sql = statement.getSQL();
+        this.parameterMetaData = qe.getMetaData();
     }
 
     void checkAccessRights(Session session) {
 
         switch (type) {
 
-            case StatementTypes.CALL : {
+            case StatementTypes.CALL: {
                 break;
             }
-            case StatementTypes.INSERT : {
+            case StatementTypes.INSERT: {
                 session.getGrantee().checkInsert(targetTable,
-                                                 insertCheckColumns);
+                        insertCheckColumns);
 
                 break;
             }
-            case StatementTypes.SELECT_CURSOR :
+            case StatementTypes.SELECT_CURSOR:
                 break;
 
-            case StatementTypes.DELETE_WHERE : {
+            case StatementTypes.DELETE_WHERE: {
                 session.getGrantee().checkDelete(targetTable);
 
                 break;
             }
-            case StatementTypes.UPDATE_WHERE : {
+            case StatementTypes.UPDATE_WHERE: {
                 session.getGrantee().checkUpdate(targetTable,
-                                                 updateCheckColumns);
+                        updateCheckColumns);
 
                 break;
             }
-            case StatementTypes.MERGE : {
+            case StatementTypes.MERGE: {
                 session.getGrantee().checkInsert(targetTable,
-                                                 insertCheckColumns);
+                        insertCheckColumns);
                 session.getGrantee().checkUpdate(targetTable,
-                                                 updateCheckColumns);
+                        updateCheckColumns);
 
                 break;
             }

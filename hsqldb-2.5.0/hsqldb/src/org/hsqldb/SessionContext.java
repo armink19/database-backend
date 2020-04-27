@@ -54,30 +54,30 @@ public class SessionContext {
 
     //
     public Boolean isAutoCommit;
-    Boolean        isReadOnly;
-    Boolean        noSQL;
-    int            currentMaxRows;
+    Boolean isReadOnly;
+    Boolean noSQL;
+    int currentMaxRows;
 
     //
-    HashMappedList  sessionVariables;
+    HashMappedList sessionVariables;
     RangeVariable[] sessionVariablesRange;
-    RangeGroup[]    sessionVariableRangeGroups;
+    RangeGroup[] sessionVariableRangeGroups;
 
     //
     private HsqlArrayList stack;
-    Object[]              diagnosticsVariables = ValuePool.emptyObjectArray;
-    Object[]              routineArguments     = ValuePool.emptyObjectArray;
-    Object[]              routineVariables     = ValuePool.emptyObjectArray;
-    Result[]              routineCursors       = Result.emptyArray;
-    Object[]              dynamicArguments     = ValuePool.emptyObjectArray;
-    Object[][]            triggerArguments     = null;
-    public int            depth;
-    Boolean               isInRoutine;
+    Object[] diagnosticsVariables = ValuePool.emptyObjectArray;
+    Object[] routineArguments = ValuePool.emptyObjectArray;
+    Object[] routineVariables = ValuePool.emptyObjectArray;
+    Result[] routineCursors = Result.emptyArray;
+    Object[] dynamicArguments = ValuePool.emptyObjectArray;
+    Object[][] triggerArguments = null;
+    public int depth;
+    Boolean isInRoutine;
 
     //
-    Number         lastIdentity = ValuePool.INTEGER_0;
+    Number lastIdentity = ValuePool.INTEGER_0;
     HashMappedList savepoints;
-    LongDeque      savepointTimestamps;
+    LongDeque savepointTimestamps;
 
     // range variable data
     RangeIterator[] rangeIterators;
@@ -96,7 +96,7 @@ public class SessionContext {
      * Reusable set of all FK constraints that have so far been enforced while
      * a cascading insert or delete is in progress.
      */
-    HashSet               constraintPath;
+    HashSet constraintPath;
     StatementResultUpdate rowUpdateStatement = new StatementResultUpdate();
 
     //
@@ -110,20 +110,20 @@ public class SessionContext {
 
         this.session = session;
         diagnosticsVariables =
-            new Object[ExpressionColumn.diagnosticsVariableTokens.length];
-        rangeIterators        = new RangeIterator[8];
-        savepoints            = new HashMappedList(4);
-        savepointTimestamps   = new LongDeque();
-        sessionVariables      = new HashMappedList();
+                new Object[ExpressionColumn.diagnosticsVariableTokens.length];
+        rangeIterators = new RangeIterator[8];
+        savepoints = new HashMappedList(4);
+        savepointTimestamps = new LongDeque();
+        sessionVariables = new HashMappedList();
         sessionVariablesRange = new RangeVariable[1];
         sessionVariablesRange[0] = new RangeVariable(sessionVariables, null,
                 true, RangeVariable.VARIALBE_RANGE);
         sessionVariableRangeGroups = new RangeGroup[]{
-            new RangeGroupSimple(sessionVariablesRange, true) };
+                new RangeGroupSimple(sessionVariablesRange, true)};
         isAutoCommit = Boolean.FALSE;
-        isReadOnly   = Boolean.FALSE;
-        noSQL        = Boolean.FALSE;
-        isInRoutine  = Boolean.FALSE;
+        isReadOnly = Boolean.FALSE;
+        noSQL = Boolean.FALSE;
+        isInRoutine = Boolean.FALSE;
     }
 
     void resetStack() {
@@ -167,13 +167,13 @@ public class SessionContext {
         stack.add(ValuePool.getInt(rownum));
 
         diagnosticsVariables =
-            new Object[ExpressionColumn.diagnosticsVariableTokens.length];
-        rangeIterators      = new RangeIterator[8];
-        savepoints          = new HashMappedList(4);
+                new Object[ExpressionColumn.diagnosticsVariableTokens.length];
+        rangeIterators = new RangeIterator[8];
+        savepoints = new HashMappedList(4);
         savepointTimestamps = new LongDeque();
-        isAutoCommit        = Boolean.FALSE;
-        currentMaxRows      = 0;
-        isInRoutine         = Boolean.valueOf(isRoutine);
+        isAutoCommit = Boolean.FALSE;
+        currentMaxRows = 0;
+        isInRoutine = Boolean.valueOf(isRoutine);
 
         depth++;
     }
@@ -188,19 +188,19 @@ public class SessionContext {
 
         rownum = ((Integer) stack.remove(stack.size() - 1)).intValue();
         currentMaxRows = ((Integer) stack.remove(stack.size() - 1)).intValue();
-        isInRoutine          = (Boolean) stack.remove(stack.size() - 1);
-        noSQL                = (Boolean) stack.remove(stack.size() - 1);
-        isReadOnly           = (Boolean) stack.remove(stack.size() - 1);
-        isAutoCommit         = (Boolean) stack.remove(stack.size() - 1);
-        lastIdentity         = (Number) stack.remove(stack.size() - 1);
-        savepointTimestamps  = (LongDeque) stack.remove(stack.size() - 1);
-        savepoints           = (HashMappedList) stack.remove(stack.size() - 1);
+        isInRoutine = (Boolean) stack.remove(stack.size() - 1);
+        noSQL = (Boolean) stack.remove(stack.size() - 1);
+        isReadOnly = (Boolean) stack.remove(stack.size() - 1);
+        isAutoCommit = (Boolean) stack.remove(stack.size() - 1);
+        lastIdentity = (Number) stack.remove(stack.size() - 1);
+        savepointTimestamps = (LongDeque) stack.remove(stack.size() - 1);
+        savepoints = (HashMappedList) stack.remove(stack.size() - 1);
         rangeIterators = (RangeIterator[]) stack.remove(stack.size() - 1);
-        routineCursors       = (Result[]) stack.remove(stack.size() - 1);
-        routineVariables     = (Object[]) stack.remove(stack.size() - 1);
-        triggerArguments     = ((Object[][]) stack.remove(stack.size() - 1));
-        routineArguments     = (Object[]) stack.remove(stack.size() - 1);
-        dynamicArguments     = (Object[]) stack.remove(stack.size() - 1);
+        routineCursors = (Result[]) stack.remove(stack.size() - 1);
+        routineVariables = (Object[]) stack.remove(stack.size() - 1);
+        triggerArguments = ((Object[][]) stack.remove(stack.size() - 1));
+        routineArguments = (Object[]) stack.remove(stack.size() - 1);
+        dynamicArguments = (Object[]) stack.remove(stack.size() - 1);
         diagnosticsVariables = (Object[]) stack.remove(stack.size() - 1);
 
         depth--;
@@ -267,10 +267,10 @@ public class SessionContext {
 
         if (position >= rangeIterators.length) {
             int size = (int) ArrayUtil.getBinaryNormalisedCeiling(position
-                + 1);
+                    + 1);
 
             rangeIterators =
-                (RangeIterator[]) ArrayUtil.resizeArray(rangeIterators, size);
+                    (RangeIterator[]) ArrayUtil.resizeArray(rangeIterators, size);
         }
 
         rangeIterators[position] = checkIterator;
@@ -284,10 +284,10 @@ public class SessionContext {
 
         if (position >= rangeIterators.length) {
             int size = (int) ArrayUtil.getBinaryNormalisedCeiling(position
-                + 1);
+                    + 1);
 
             rangeIterators =
-                (RangeIterator[]) ArrayUtil.resizeArray(rangeIterators, size);
+                    (RangeIterator[]) ArrayUtil.resizeArray(rangeIterators, size);
         }
 
         rangeIterators[position] = iterator;
@@ -345,13 +345,13 @@ public class SessionContext {
 
         ArrayUtil.copyArray(routineVariables, vars, routineVariables.length);
 
-        routineVariables        = vars;
+        routineVariables = vars;
         routineVariables[index] = variable.getDefaultValue(session);
     }
 
     public void pushRoutineTables() {
         popSessionTables = sessionTables;
-        sessionTables    = new HashMappedList();
+        sessionTables = new HashMappedList();
     }
 
     public void popRoutineTables() {
@@ -374,7 +374,8 @@ public class SessionContext {
         sessionTables.add(table.getName().name, table);
     }
 
-    public void setSessionTables(Table[] tables) {}
+    public void setSessionTables(Table[] tables) {
+    }
 
     public Table findSessionTable(String name) {
 

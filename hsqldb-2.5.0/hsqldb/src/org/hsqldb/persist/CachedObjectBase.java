@@ -43,12 +43,12 @@ import org.hsqldb.error.ErrorCode;
 public abstract class CachedObjectBase implements CachedObject {
 
     boolean isMemory;
-    long    position;
-    int     storageSize;
+    long position;
+    int storageSize;
     boolean isInMemory;
     boolean hasChanged;
-    int     keepCount;
-    int     accessCount;
+    int keepCount;
+    int accessCount;
 
     public boolean isMemory() {
         return isMemory;
@@ -113,7 +113,7 @@ public abstract class CachedObjectBase implements CachedObject {
         } else {
             if (keepCount == 0) {
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "CachedObjectBase - keep count");
+                        "CachedObjectBase - keep count");
             }
 
             keepCount--;
@@ -132,14 +132,16 @@ public abstract class CachedObjectBase implements CachedObject {
 
     public boolean equals(Object other) {
         return other instanceof CachedObjectBase
-               && ((CachedObjectBase) other).position == this.position;
+                && ((CachedObjectBase) other).position == this.position;
     }
 
     public int hashCode() {
         return (int) position;
     }
 
-    public void restore() {}
+    public void restore() {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 }

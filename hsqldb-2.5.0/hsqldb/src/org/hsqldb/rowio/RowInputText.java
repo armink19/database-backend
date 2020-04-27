@@ -51,21 +51,21 @@ public class RowInputText extends RowInputBase implements RowInputInterface {
 
     // text table specific
     protected TextFileSettings textFileSettings;
-    private String             fieldSep;
-    private String             varSep;
-    private String             longvarSep;
-    private int                fieldSepLen;
-    private int                varSepLen;
-    private int                longvarSepLen;
-    private boolean            fieldSepEnd;
-    private boolean            varSepEnd;
-    private boolean            longvarSepEnd;
-    private int                textLen;
-    protected String           text;
-    protected long             line;
-    protected int              field;
-    protected int              next = 0;
-    protected Scanner          scanner;
+    private String fieldSep;
+    private String varSep;
+    private String longvarSep;
+    private int fieldSepLen;
+    private int varSepLen;
+    private int longvarSepLen;
+    private boolean fieldSepEnd;
+    private boolean varSepEnd;
+    private boolean longvarSepEnd;
+    private int textLen;
+    protected String text;
+    protected long line;
+    protected int field;
+    protected int next = 0;
+    protected Scanner scanner;
 
     //
     private int maxPooledStringLength = ValuePool.getMaxStringLength();
@@ -78,40 +78,40 @@ public class RowInputText extends RowInputBase implements RowInputInterface {
 
         super(new byte[0]);
 
-        scanner               = new Scanner();
+        scanner = new Scanner();
         this.textFileSettings = textFileSettings;
-        this.fieldSep         = textFileSettings.fs;
-        this.varSep           = textFileSettings.vs;
-        this.longvarSep       = textFileSettings.lvs;
+        this.fieldSep = textFileSettings.fs;
+        this.varSep = textFileSettings.vs;
+        this.longvarSep = textFileSettings.lvs;
 
         //-- Newline indicates that field should match to end of line.
         if (fieldSep.endsWith("\n")) {
             fieldSepEnd = true;
-            fieldSep    = fieldSep.substring(0, fieldSep.length() - 1);
+            fieldSep = fieldSep.substring(0, fieldSep.length() - 1);
         }
 
         if (varSep.endsWith("\n")) {
             varSepEnd = true;
-            varSep    = varSep.substring(0, varSep.length() - 1);
+            varSep = varSep.substring(0, varSep.length() - 1);
         }
 
         if (longvarSep.endsWith("\n")) {
             longvarSepEnd = true;
-            longvarSep    = longvarSep.substring(0, longvarSep.length() - 1);
+            longvarSep = longvarSep.substring(0, longvarSep.length() - 1);
         }
 
-        fieldSepLen   = fieldSep.length();
-        varSepLen     = varSep.length();
+        fieldSepLen = fieldSep.length();
+        varSepLen = varSep.length();
         longvarSepLen = longvarSep.length();
     }
 
     public void setSource(String text, long pos, int byteSize) {
 
-        size      = byteSize;
+        size = byteSize;
         this.text = text;
-        textLen   = text.length();
-        filePos   = pos;
-        next      = 0;
+        textLen = text.length();
+        filePos = pos;
+        next = 0;
 
         line++;
 
@@ -147,7 +147,7 @@ public class RowInputText extends RowInputBase implements RowInputInterface {
                 start = next;
             }
 
-            s    = text.substring(start, next);
+            s = text.substring(start, next);
             next += sepLen;
 
             int trimLength = s.trim().length();
@@ -228,15 +228,15 @@ public class RowInputText extends RowInputBase implements RowInputInterface {
 
         switch (type.typeCode) {
 
-            case Types.SQL_CHAR :
+            case Types.SQL_CHAR:
                 s = readString();
                 break;
 
-            case Types.SQL_VARCHAR :
+            case Types.SQL_VARCHAR:
                 s = readVarString();
                 break;
 
-            default :
+            default:
                 s = readLongVarString();
                 break;
         }
@@ -464,7 +464,7 @@ public class RowInputText extends RowInputBase implements RowInputInterface {
         }
 
         return s.equalsIgnoreCase("TRUE") ? Boolean.TRUE
-                                          : Boolean.FALSE;
+                : Boolean.FALSE;
     }
 
     protected Object readOther() {
@@ -575,11 +575,11 @@ public class RowInputText extends RowInputBase implements RowInputInterface {
 
     public void reset() {
 
-        text    = "";
+        text = "";
         textLen = 0;
         filePos = 0;
-        next    = 0;
-        field   = 0;
-        line    = 0;
+        next = 0;
+        field = 0;
+        line = 0;
     }
 }

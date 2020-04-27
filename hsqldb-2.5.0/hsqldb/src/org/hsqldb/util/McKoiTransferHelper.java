@@ -72,7 +72,7 @@ class McKoiTransferHelper extends TransferHelper {
 
         if (columnType.equals("SERIAL")) {
             columnType = "INTEGER DEFAULT UNIQUEKEY (\'"
-                         + t.Stmts.sSourceTable + "\')";
+                    + t.Stmts.sSourceTable + "\')";
         }
 
         return (columnType);

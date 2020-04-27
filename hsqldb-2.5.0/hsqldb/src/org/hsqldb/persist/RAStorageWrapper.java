@@ -40,15 +40,15 @@ import java.io.IOException;
  * OpenOffice.org.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version  2.3.0
- * @since  2.2.9
+ * @version 2.3.0
+ * @since 2.2.9
  */
 final class RAStorageWrapper implements RandomAccessInterface {
 
     final Storage file;
 
     RAStorageWrapper(Storage virtualFile)
-                           throws IOException {
+            throws IOException {
         this.file = virtualFile;
     }
 

@@ -42,7 +42,7 @@ import java.text.SimpleDateFormat;
  * scripts to the database, comparing the results returned with
  * the expected results. The test script format is compatible with existing
  * scripts.
- *
+ * <p>
  * Script writers be aware that you can't use stderr to distinguish error
  * messages.  This class writes error messages to stdout.
  *
@@ -56,11 +56,11 @@ public class TestUtil {
      * redesigned with OOD.
      */
     static private final SimpleDateFormat sdfYMDHMS =
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    static private boolean      abortOnErr        = false;
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    static private boolean abortOnErr = false;
     static final private String TIMESTAMP_VAR_STR = "${timestamp}";
     static final String LS = System.getProperty("line.separator", "\n");
-    static final boolean        oneSessionOnly    = false;
+    static final boolean oneSessionOnly = false;
 
     public static void main(String[] argv) {
 
@@ -118,17 +118,17 @@ public class TestUtil {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
-            String     url = "jdbc:hsqldb:test1;sql.enforce_strict_size=true";
-            String     user        = "sa";
-            String     password    = "";
+            String url = "jdbc:hsqldb:test1;sql.enforce_strict_size=true";
+            String user = "sa";
+            String password = "";
             Connection cConnection = null;
-            String[]   filelist;
-            String     absolute = new File(directory).getAbsolutePath();
+            String[] filelist;
+            String absolute = new File(directory).getAbsolutePath();
 
             filelist = new File(absolute).list();
 
             ArraySort.sort((Object[]) filelist, filelist.length,
-                           new StringComparator());
+                    new StringComparator());
 
             for (int i = 0; i < filelist.length; i++) {
                 String fname = filelist[i];
@@ -142,8 +142,8 @@ public class TestUtil {
                     }
 
                     print("Opened DB in "
-                          + (double) (sw.elapsedTime() - elapsed) / 1000
-                          + " s");
+                            + (double) (sw.elapsedTime() - elapsed) / 1000
+                            + " s");
                     testScript(cConnection, absolute + File.separator + fname);
 
                     if (!oneSessionOnly) {
@@ -168,7 +168,7 @@ public class TestUtil {
 
         try {
             TestUtil.testScript(aConnection, file.getAbsolutePath(),
-                                new FileReader(file));
+                    new FileReader(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("test script file error: " + e.toString());
@@ -177,24 +177,25 @@ public class TestUtil {
 
     /**
      * Runs a preformatted script.<p>
-     *
+     * <p>
      * Where a result set is required, each line in the script will
      * be interpreted as a seperate expected row in the ResultSet
      * returned by the query.  Within each row, fields should be delimited
      * using either comma (the default), or a user defined delimiter
      * which should be specified in the System property TestUtilFieldDelimiter
+     *
      * @param aConnection Connection object for the database
-     * @param sourceName Identifies the script which failed
-     * @param inReader Source of commands to be tested
+     * @param sourceName  Identifies the script which failed
+     * @param inReader    Source of commands to be tested
      */
     public static void testScript(Connection aConnection, String sourceName,
                                   Reader inReader)
-                                  throws SQLException, IOException {
+            throws SQLException, IOException {
 
-        Statement        statement = aConnection.createStatement();
-        LineNumberReader reader    = new LineNumberReader(inReader);
-        LineGroupReader  sqlReader = new LineGroupReader(reader);
-        int              startLine = 0;
+        Statement statement = aConnection.createStatement();
+        LineNumberReader reader = new LineNumberReader(inReader);
+        LineGroupReader sqlReader = new LineGroupReader(reader);
+        int startLine = 0;
 
         System.out.println("Opened test script file: " + sourceName);
 
@@ -224,32 +225,35 @@ public class TestUtil {
             // of the failure.
         } catch (SQLException se) {
             System.out.println("Error encountered at command beginning at "
-                               + sourceName + ':' + startLine);
+                    + sourceName + ':' + startLine);
 
             throw se;
         } catch (RuntimeException re) {
             System.out.println("Error encountered at command beginning at "
-                               + sourceName + ':' + startLine);
+                    + sourceName + ':' + startLine);
 
             throw re;
         }
 
         System.out.println("Processed " + reader.getLineNumber()
-                           + " lines from " + sourceName);
+                + " lines from " + sourceName);
     }
 
-    /** Legacy wrapper */
+    /**
+     * Legacy wrapper
+     */
     static void test(Statement stat, String s, int line) {
         TestUtil.test(stat, s, null, line);
     }
 
     /**
      * Performs a preformatted statement or group of statements and throws
-     *  if the result does not match the expected one.
-     * @param line start line in the script file for this test
-     * @param stat Statement object used to access the database
+     * if the result does not match the expected one.
+     *
+     * @param line       start line in the script file for this test
+     * @param stat       Statement object used to access the database
      * @param sourceName Identifies the script which failed
-     * @param s Contains the type, expected result and SQL for the test
+     * @param s          Contains the type, expected result and SQL for the test
      */
     static void test(Statement stat, String s, String sourceName, int line) {
 
@@ -277,11 +281,12 @@ public class TestUtil {
      * returned with the expected results.
      * If the actual result differs from that expected, or an
      * exception is thrown, then the appropriate message is printed.
-     * @param stat Statement object used to access the database
+     *
+     * @param stat    Statement object used to access the database
      * @param section Vector of script lines containing a discrete
-     * section of script (i.e. test type, expected results,
-     * SQL for the statement).
-     * @param line line of the script file where this section started
+     *                section of script (i.e. test type, expected results,
+     *                SQL for the statement).
+     * @param line    line of the script file where this section started
      */
     private static void testSection(Statement stat, HsqlArrayList section,
                                     String scriptName, int line) {
@@ -291,15 +296,15 @@ public class TestUtil {
 
         if (pSection == null) {    //it was not possible to sucessfully parse the section
             System.out.println(
-                "The section starting at " + scriptName + ':' + line
-                + " could not be parsed, and so was not processed." + LS);
+                    "The section starting at " + scriptName + ':' + line
+                            + " could not be parsed, and so was not processed." + LS);
 
             return;
         }
 
         if (pSection instanceof IgnoreParsedSection) {
             System.out.println("At " + scriptName + ':' + line + ": "
-                               + pSection.getResultString());
+                    + pSection.getResultString());
 
             return;
         }
@@ -322,18 +327,19 @@ public class TestUtil {
 
         if (!pSection.test(stat)) {
             System.out.println("Section starting at " + scriptName + ':'
-                               + line + " returned an unexpected result: "
-                               + pSection.getTestResultString());
+                    + line + " returned an unexpected result: "
+                    + pSection.getTestResultString());
 
             if (TestUtil.abortOnErr) {
                 throw new TestRuntimeException(scriptName + ": " + line
-                                               + "pSection");
+                        + "pSection");
             }
         }
     }
 
     /**
      * Factory method to create appropriate parsed section class for the section
+     *
      * @param sectionLines Vector containing the section of script
      * @return a ParesedSection object
      */
@@ -367,7 +373,7 @@ public class TestUtil {
         //corresponds to the value of type
         switch (type) {
 
-            case 'u' : {
+            case 'u': {
                 ParsedSection section = new UpdateParsedSection(sectionLines);
 
                 if (TestUtil.oneSessionOnly) {
@@ -378,31 +384,31 @@ public class TestUtil {
 
                 return section;
             }
-            case 's' :
+            case 's':
                 return new SilentParsedSection(sectionLines);
 
-            case 'w' :
+            case 'w':
                 return new WaitSection(sectionLines);
 
-            case 'p' :
+            case 'p':
                 return new ProceedSection(sectionLines);
 
-            case 'r' :
+            case 'r':
                 return new ResultSetParsedSection(sectionLines);
 
-            case 'o' :
+            case 'o':
                 return new ResultSetOutputParsedSection(sectionLines);
 
-            case 'c' :
+            case 'c':
                 return new CountParsedSection(sectionLines);
 
-            case 'd' :
+            case 'd':
                 return new DisplaySection(sectionLines);
 
-            case 'e' :
+            case 'e':
                 return new ExceptionParsedSection(sectionLines);
 
-            case ' ' : {
+            case ' ': {
                 ParsedSection section = new BlankParsedSection(sectionLines);
 
                 if (TestUtil.oneSessionOnly) {
@@ -413,7 +419,7 @@ public class TestUtil {
 
                 return section;
             }
-            default :
+            default:
 
                 //if we arrive here, then we should have a valid code,
                 //since we validated it earlier, so return an
@@ -424,7 +430,7 @@ public class TestUtil {
 
     /**
      * This method should certainly be an instance method.
-     *
+     * <p>
      * Can't do that until make this entire class OO.
      */
     public static void setAbortOnErr(boolean aoe) {
@@ -457,41 +463,52 @@ abstract class ParsedSection {
 
     /**
      * Type of this test.
+     *
      * @see #isValidCode(char) for allowed values
      */
     protected char type = ' ';
 
-    /** error message for this section */
+    /**
+     * error message for this section
+     */
     String message = null;
 
-    /** contents of the section as an array of Strings, one for each line in the section. */
+    /**
+     * contents of the section as an array of Strings, one for each line in the section.
+     */
     protected String[] lines = null;
 
-    /** number of the last row containing results in sectionLines */
+    /**
+     * number of the last row containing results in sectionLines
+     */
     protected int resEndRow = 0;
 
-    /** SQL query to be submitted to the database. */
+    /**
+     * SQL query to be submitted to the database.
+     */
     protected String sqlString = null;
 
     /**
      * Constructor when the section's input lines do not need to be parsed
      * into SQL.
      */
-    protected ParsedSection() {}
+    protected ParsedSection() {
+    }
 
     /**
      * Common constructor functions for this family.
+     *
      * @param linesArray Array of the script lines containing the section of script.
-     * database
+     *                   database
      */
     protected ParsedSection(HsqlArrayList linesArray) {
 
         //read the lines array backwards to get out the SQL String
         //using a StringBuilder for efficency until we've got the whole String
-        StringBuilder sqlBuff  = new StringBuilder();
-        int           endIndex = 0;
-        int           k;
-        String        s = (String) linesArray.get(0);
+        StringBuilder sqlBuff = new StringBuilder();
+        int endIndex = 0;
+        int k;
+        String s = (String) linesArray.get(0);
 
         if (s.startsWith("/*")) {
 
@@ -502,7 +519,7 @@ abstract class ParsedSection {
             if (s.length() == 3) {
                 lines = (String[]) linesArray.toArray(1, linesArray.size());
             } else {
-                lines    = (String[]) linesArray.toArray();
+                lines = (String[]) linesArray.toArray();
                 lines[0] = lines[0].substring(3);
             }
 
@@ -546,6 +563,7 @@ abstract class ParsedSection {
 
     /**
      * String representation of this ParsedSection
+     *
      * @return String representation of this ParsedSection
      */
     protected String getTestResultString() {
@@ -574,12 +592,14 @@ abstract class ParsedSection {
 
     /**
      * returns a String representation of the expected result for the test
+     *
      * @return The expected result(s) for the test
      */
     protected abstract String getResultString();
 
     /**
      * returns a String representation of the actual result for the test
+     *
      * @return The expected result(s) for the test
      */
     protected String getActualResultString() {
@@ -587,7 +607,7 @@ abstract class ParsedSection {
     }
 
     /**
-     *  returns the error message for the section
+     * returns the error message for the section
      *
      * @return message
      */
@@ -597,6 +617,7 @@ abstract class ParsedSection {
 
     /**
      * returns the type of this section
+     *
      * @return type of this section
      */
     protected char getType() {
@@ -605,6 +626,7 @@ abstract class ParsedSection {
 
     /**
      * returns the SQL statement for this section
+     *
      * @return SQL statement for this section
      */
     protected String getSql() {
@@ -613,6 +635,7 @@ abstract class ParsedSection {
 
     /**
      * performs the test contained in the section against the database.
+     *
      * @param aStatement Statement object
      * @return true if the result(s) are as expected, otherwise false
      */
@@ -633,6 +656,7 @@ abstract class ParsedSection {
 
     /**
      * Checks that the type code letter is valid
+     *
      * @param aCode Lower-cased type code to validate.
      * @return true if the type code is valid, otherwise false.
      */
@@ -654,16 +678,16 @@ abstract class ParsedSection {
          */
         switch (aCode) {
 
-            case ' ' :
-            case 'r' :
-            case 'o' :
-            case 'e' :
-            case 'c' :
-            case 'u' :
-            case 's' :
-            case 'd' :
-            case 'w' :
-            case 'p' :
+            case ' ':
+            case 'r':
+            case 'o':
+            case 'e':
+            case 'c':
+            case 'u':
+            case 's':
+            case 'd':
+            case 'w':
+            case 'p':
                 return true;
         }
 
@@ -671,12 +695,14 @@ abstract class ParsedSection {
     }
 }
 
-/** Represents a ParsedSection for a ResultSet test */
+/**
+ * Represents a ParsedSection for a ResultSet test
+ */
 class ResultSetParsedSection extends ParsedSection {
 
-    private String   delim = System.getProperty("TestUtilFieldDelimiter", ",");
+    private String delim = System.getProperty("TestUtilFieldDelimiter", ",");
     private String[] expectedRows = null;
-    private String[] actualRows   = null;
+    private String[] actualRows = null;
 
     /**
      * constructs a new instance of ResultSetParsedSection, interpreting
@@ -700,8 +726,8 @@ class ResultSetParsedSection extends ParsedSection {
 
     protected String getResultString() {
 
-        StringBuilder printVal     = new StringBuilder();
-        String[]      expectedRows = getExpectedRows();
+        StringBuilder printVal = new StringBuilder();
+        String[] expectedRows = getExpectedRows();
 
         for (int i = 0; i < expectedRows.length; i++) {
             printVal.append(expectedRows[i]).append(LS);
@@ -712,8 +738,8 @@ class ResultSetParsedSection extends ParsedSection {
 
     protected String getActualResultString() {
 
-        StringBuilder printVal   = new StringBuilder();
-        String[]      actualRows = getActualRows();
+        StringBuilder printVal = new StringBuilder();
+        String[] actualRows = getActualRows();
 
         if (actualRows == null) {
             return "no result";
@@ -735,20 +761,20 @@ class ResultSetParsedSection extends ParsedSection {
                 aStatement.execute(getSql());
             } catch (SQLException s) {
                 throw new Exception("Expected a ResultSet, but got the error: "
-                                    + s.getMessage());
+                        + s.getMessage());
             }
 
             //check that update count != -1
             if (aStatement.getUpdateCount() != -1) {
                 throw new Exception(
-                    "Expected a ResultSet, but got an update count of "
-                    + aStatement.getUpdateCount());
+                        "Expected a ResultSet, but got an update count of "
+                                + aStatement.getUpdateCount());
             }
 
             //iterate over the ResultSet
-            HsqlArrayList list     = new HsqlArrayList(new String[1][], 0);
-            ResultSet     results  = aStatement.getResultSet();
-            int           colCount = results.getMetaData().getColumnCount();
+            HsqlArrayList list = new HsqlArrayList(new String[1][], 0);
+            ResultSet results = aStatement.getResultSet();
+            int colCount = results.getMetaData().getColumnCount();
 
             while (results.next()) {
                 String[] row = new String[colCount];
@@ -765,8 +791,8 @@ class ResultSetParsedSection extends ParsedSection {
             actualRows = new String[list.size()];
 
             for (int i = 0; i < list.size(); i++) {
-                String[]      row = (String[]) list.get(i);
-                StringBuilder sb  = new StringBuilder();
+                String[] row = (String[]) list.get(i);
+                StringBuilder sb = new StringBuilder();
 
                 for (int j = 0; j < row.length; j++) {
                     if (j > 0) {
@@ -780,18 +806,18 @@ class ResultSetParsedSection extends ParsedSection {
             }
 
             String[] expectedRows = getExpectedRows();
-            int      count        = 0;
+            int count = 0;
 
             for (; count < list.size(); count++) {
                 if (count < expectedRows.length) {
                     String[] expectedFields =
-                        StringUtil.split(expectedRows[count], delim);
+                            StringUtil.split(expectedRows[count], delim);
 
                     // handle ARRAY[val,val, val] commas
                     for (int i = 0; i < expectedFields.length; i++) {
                         if (expectedFields[i] == null) {
                             expectedFields = (String[]) ArrayUtil.resizeArray(
-                                expectedFields, i);
+                                    expectedFields, i);
 
                             break;
                         }
@@ -802,16 +828,16 @@ class ResultSetParsedSection extends ParsedSection {
                             }
 
                             for (int j = i + 1; j < expectedFields.length;
-                                    j++) {
+                                 j++) {
                                 String part = expectedFields[j];
 
                                 expectedFields[i] += delim + part;
 
                                 if (part.endsWith("]")) {
                                     ArrayUtil.adjustArray(
-                                        ArrayUtil.CLASS_CODE_OBJECT,
-                                        expectedFields, expectedFields.length,
-                                        i + 1, i - j);
+                                            ArrayUtil.CLASS_CODE_OBJECT,
+                                            expectedFields, expectedFields.length,
+                                            i + 1, i - j);
 
                                     break;
                                 }
@@ -837,10 +863,10 @@ class ResultSetParsedSection extends ParsedSection {
                                 if (!expectedFields[i].equalsIgnoreCase(
                                         "NULL")) {
                                     message = "Expected row " + (count + 1)
-                                              + " of the ResultSet to contain:"
-                                              + LS + expectedRows[count] + LS
-                                              + "but field " + j
-                                              + " contained NULL";
+                                            + " of the ResultSet to contain:"
+                                            + LS + expectedRows[count] + LS
+                                            + "but field " + j
+                                            + " contained NULL";
 
                                     break;
                                 }
@@ -848,10 +874,10 @@ class ResultSetParsedSection extends ParsedSection {
 
                                 //then the results are different
                                 message = "Expected row " + (count + 1)
-                                          + " of the ResultSet to contain:"
-                                          + LS + expectedRows[count] + LS
-                                          + "but field " + j + " contained "
-                                          + actual;
+                                        + " of the ResultSet to contain:"
+                                        + LS + expectedRows[count] + LS
+                                        + "but field " + j + " contained "
+                                        + actual;
 
                                 break;
                             }
@@ -860,9 +886,9 @@ class ResultSetParsedSection extends ParsedSection {
 
                         //we have the wrong number of columns
                         message = "Expected the ResultSet to contain "
-                                  + expectedFields.length
-                                  + " fields, but it contained " + colCount
-                                  + " fields.";
+                                + expectedFields.length
+                                + " fields, but it contained " + colCount
+                                + " fields.";
                     }
                 }
 
@@ -877,8 +903,8 @@ class ResultSetParsedSection extends ParsedSection {
 
                     //we don't have the expected number of rows
                     message = "Expected the ResultSet to contain "
-                              + expectedRows.length
-                              + " rows, but it contained " + count + " rows.";
+                            + expectedRows.length
+                            + " rows, but it contained " + count + " rows.";
                 }
             }
         } catch (Exception x) {
@@ -899,10 +925,12 @@ class ResultSetParsedSection extends ParsedSection {
     }
 }
 
-/** Represents a ParsedSection for a ResultSet dump */
+/**
+ * Represents a ParsedSection for a ResultSet dump
+ */
 class ResultSetOutputParsedSection extends ParsedSection {
 
-    private String   delim = System.getProperty("TestUtilFieldDelimiter", ",");
+    private String delim = System.getProperty("TestUtilFieldDelimiter", ",");
     private String[] expectedRows = null;
 
     /**
@@ -929,23 +957,23 @@ class ResultSetOutputParsedSection extends ParsedSection {
                 aStatement.execute(getSql());
             } catch (SQLException s) {
                 throw new Exception("Expected a ResultSet, but got the error: "
-                                    + s.getMessage());
+                        + s.getMessage());
             }
 
             //check that update count != -1
             if (aStatement.getUpdateCount() != -1) {
                 throw new Exception(
-                    "Expected a ResultSet, but got an update count of "
-                    + aStatement.getUpdateCount());
+                        "Expected a ResultSet, but got an update count of "
+                                + aStatement.getUpdateCount());
             }
 
             //iterate over the ResultSet
-            ResultSet     results  = aStatement.getResultSet();
+            ResultSet results = aStatement.getResultSet();
             StringBuilder printVal = new StringBuilder();
 
             while (results.next()) {
                 for (int j = 0; j < results.getMetaData().getColumnCount();
-                        j++) {
+                     j++) {
                     if (j != 0) {
                         printVal.append(',');
                     }
@@ -969,7 +997,9 @@ class ResultSetOutputParsedSection extends ParsedSection {
     }
 }
 
-/** Represents a ParsedSection for an update test */
+/**
+ * Represents a ParsedSection for an update test
+ */
 class UpdateParsedSection extends ParsedSection {
 
     //expected update count
@@ -979,7 +1009,7 @@ class UpdateParsedSection extends ParsedSection {
 
         super(linesArray);
 
-        type        = 'u';
+        type = 'u';
         countWeWant = Integer.parseInt(lines[0]);
     }
 
@@ -1000,16 +1030,16 @@ class UpdateParsedSection extends ParsedSection {
                 aStatement.execute(getSql());
             } catch (SQLException s) {
                 throw new Exception("Expected an update count of "
-                                    + getCountWeWant()
-                                    + ", but got the error: "
-                                    + s.getMessage());
+                        + getCountWeWant()
+                        + ", but got the error: "
+                        + s.getMessage());
             }
 
             if (aStatement.getUpdateCount() != getCountWeWant()) {
                 throw new Exception("Expected an update count of "
-                                    + getCountWeWant()
-                                    + ", but got an update count of "
-                                    + aStatement.getUpdateCount() + ".");
+                        + getCountWeWant()
+                        + ", but got an update count of "
+                        + aStatement.getUpdateCount() + ".");
             }
         } catch (Exception x) {
             message = x.toString();
@@ -1028,15 +1058,17 @@ class WaitSection extends ParsedSection {
      * a W command will cause a non-threaded execution to wait forever.
      */
     static private String W_SYNTAX_MSG =
-        "Syntax of Wait commands:" + LS
-        + "    /*w 123*/     To Wait 123 milliseconds" + LS
-        + "    /*w false x*/ Wait until /*p*/ command in another script has executed"
-        + LS
-        + "    /*w true x*/  Same, but the /*p*/ must not have executed yet";
+            "Syntax of Wait commands:" + LS
+                    + "    /*w 123*/     To Wait 123 milliseconds" + LS
+                    + "    /*w false x*/ Wait until /*p*/ command in another script has executed"
+                    + LS
+                    + "    /*w true x*/  Same, but the /*p*/ must not have executed yet";
 
-/** Represents a ParsedSection for wait execution */
-    long    sleepTime       = -1;
-    Waiter  waiter          = null;
+    /**
+     * Represents a ParsedSection for wait execution
+     */
+    long sleepTime = -1;
+    Waiter waiter = null;
     boolean enforceSequence = false;
 
     protected WaitSection(HsqlArrayList linesArray) {
@@ -1045,8 +1077,8 @@ class WaitSection extends ParsedSection {
          * constructing the SQL Buffer, which we don't need. */
         lines = (String[]) linesArray.toArray();
 
-        int    closeCmd = lines[0].indexOf("*/");
-        String cmd      = lines[0].substring(0, closeCmd);
+        int closeCmd = lines[0].indexOf("*/");
+        String cmd = lines[0].substring(0, closeCmd);
 
         lines[0] = lines[0].substring(closeCmd + 2).trim();
 
@@ -1122,13 +1154,14 @@ class ProceedSection extends ParsedSection {
 
     /* See comment above for WaitSection */
     static private String P_SYNTAX_MSG =
-        "Syntax of Proceed commands:" + LS
-        + "    /*p false x*/ /*p*/ command in another script may Proceed" + LS
-        + "    /*p true x*/  Same, but the /*w*/ must be waiting when we execute /*p*/"
-    ;
+            "Syntax of Proceed commands:" + LS
+                    + "    /*p false x*/ /*p*/ command in another script may Proceed" + LS
+                    + "    /*p true x*/  Same, but the /*w*/ must be waiting when we execute /*p*/";
 
-/** Represents a ParsedSection for wait execution */
-    Waiter  waiter          = null;
+    /**
+     * Represents a ParsedSection for wait execution
+     */
+    Waiter waiter = null;
     boolean enforceSequence = false;
 
     protected ProceedSection(HsqlArrayList linesArray) {
@@ -1137,8 +1170,8 @@ class ProceedSection extends ParsedSection {
          * constructing the SQL Buffer, which we don't need. */
         lines = (String[]) linesArray.toArray();
 
-        int    closeCmd = lines[0].indexOf("*/");
-        String cmd      = lines[0].substring(0, closeCmd);
+        int closeCmd = lines[0].indexOf("*/");
+        String cmd = lines[0].substring(0, closeCmd);
 
         lines[0] = lines[0].substring(closeCmd + 2).trim();
 
@@ -1194,7 +1227,9 @@ class ProceedSection extends ParsedSection {
     }
 }
 
-/** Represents a ParsedSection for silent execution */
+/**
+ * Represents a ParsedSection for silent execution
+ */
 class SilentParsedSection extends ParsedSection {
 
     protected SilentParsedSection(HsqlArrayList linesArray) {
@@ -1212,13 +1247,16 @@ class SilentParsedSection extends ParsedSection {
 
         try {
             aStatement.execute(getSql());
-        } catch (Exception x) {}
+        } catch (Exception x) {
+        }
 
         return true;
     }
 }
 
-/** Represents a ParsedSection for a count test */
+/**
+ * Represents a ParsedSection for a count test
+ */
 class CountParsedSection extends ParsedSection {
 
     //expected row count
@@ -1228,7 +1266,7 @@ class CountParsedSection extends ParsedSection {
 
         super(linesArray);
 
-        type        = 'c';
+        type = 'c';
         countWeWant = Integer.parseInt(lines[0]);
     }
 
@@ -1249,21 +1287,21 @@ class CountParsedSection extends ParsedSection {
                 aStatement.execute(getSql());
             } catch (SQLException s) {
                 throw new Exception("Expected a ResultSet containing "
-                                    + getCountWeWant()
-                                    + " rows, but got the error: "
-                                    + s.getMessage());
+                        + getCountWeWant()
+                        + " rows, but got the error: "
+                        + s.getMessage());
             }
 
             //check that update count != -1
             if (aStatement.getUpdateCount() != -1) {
                 throw new Exception(
-                    "Expected a ResultSet, but got an update count of "
-                    + aStatement.getUpdateCount());
+                        "Expected a ResultSet, but got an update count of "
+                                + aStatement.getUpdateCount());
             }
 
             //iterate over the ResultSet
             ResultSet results = aStatement.getResultSet();
-            int       count   = 0;
+            int count = 0;
 
             while (results.next()) {
                 count++;
@@ -1274,9 +1312,9 @@ class CountParsedSection extends ParsedSection {
 
                 //we don't have the expected number of rows
                 throw new Exception("Expected the ResultSet to contain "
-                                    + getCountWeWant()
-                                    + " rows, but it contained " + count
-                                    + " rows.");
+                        + getCountWeWant()
+                        + " rows, but it contained " + count
+                        + " rows.");
             }
         } catch (Exception x) {
             message = x.toString();
@@ -1288,11 +1326,13 @@ class CountParsedSection extends ParsedSection {
     }
 }
 
-/** Represents a ParsedSection for an Exception test */
+/**
+ * Represents a ParsedSection for an Exception test
+ */
 class ExceptionParsedSection extends ParsedSection {
 
-    private String    expectedState = null;
-    private Throwable caught        = null;
+    private String expectedState = null;
+    private Throwable caught = null;
 
     protected ExceptionParsedSection(HsqlArrayList linesArray) {
 
@@ -1309,7 +1349,7 @@ class ExceptionParsedSection extends ParsedSection {
 
     protected String getResultString() {
         return (caught == null) ? "Nothing thrown"
-                                : caught.toString();
+                : caught.toString();
     }
 
     protected boolean test(Statement aStatement) {
@@ -1325,10 +1365,10 @@ class ExceptionParsedSection extends ParsedSection {
             }
 
             message = "SQLState '" + sqlX.getSQLState() + "' : "
-                      + sqlX.toString() + " instead of '" + expectedState
-                      + "'";
+                    + sqlX.toString() + " instead of '" + expectedState
+                    + "'";
         } catch (Exception x) {
-            caught  = x;
+            caught = x;
             message = x.toString();
         }
 
@@ -1336,7 +1376,9 @@ class ExceptionParsedSection extends ParsedSection {
     }
 }
 
-/** Represents a ParsedSection for a section with blank type */
+/**
+ * Represents a ParsedSection for a section with blank type
+ */
 class BlankParsedSection extends ParsedSection {
 
     protected BlankParsedSection(HsqlArrayList linesArray) {
@@ -1351,7 +1393,9 @@ class BlankParsedSection extends ParsedSection {
     }
 }
 
-/** Represents a ParsedSection that is to be ignored */
+/**
+ * Represents a ParsedSection that is to be ignored
+ */
 class IgnoreParsedSection extends ParsedSection {
 
     protected IgnoreParsedSection(HsqlArrayList sectionLines, char aType) {
@@ -1373,7 +1417,9 @@ class IgnoreParsedSection extends ParsedSection {
     }
 }
 
-/** Represents a Section to be Displayed, not executed */
+/**
+ * Represents a Section to be Displayed, not executed
+ */
 class DisplaySection extends ParsedSection {
 
     protected DisplaySection(HsqlArrayList sectionLines) {

@@ -50,27 +50,28 @@ import java.io.UnsupportedEncodingException;
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.4.1
  * @since 2.2.7
-*/
+ */
 public class TextFileReader8 implements TextFileReader {
 
     RandomAccessInterface dataFile;
-    RowInputInterface     rowIn;
-    TextFileSettings      textFileSettings;
-    String                header;
-    boolean               isReadOnly;
-    StringCreator         buffer;
-    long                  position = 0;
+    RowInputInterface rowIn;
+    TextFileSettings textFileSettings;
+    String header;
+    boolean isReadOnly;
+    StringCreator buffer;
+    long position = 0;
 
-    TextFileReader8() {}
+    TextFileReader8() {
+    }
 
     TextFileReader8(RandomAccessInterface dataFile,
                     TextFileSettings textFileSettings,
                     RowInputInterface rowIn, boolean isReadOnly) {
 
-        this.dataFile         = dataFile;
+        this.dataFile = dataFile;
         this.textFileSettings = textFileSettings;
-        this.rowIn            = rowIn;
-        this.isReadOnly       = isReadOnly;
+        this.rowIn = rowIn;
+        this.isReadOnly = isReadOnly;
         this.buffer = StringCreator.getStringCreator(byte.class,
                 textFileSettings.charEncoding);
 
@@ -78,15 +79,15 @@ public class TextFileReader8 implements TextFileReader {
     }
 
     static TextFileReader newTextFileReader(RandomAccessInterface dataFile,
-            TextFileSettings textFileSettings, RowInputInterface rowIn,
-            boolean isReadOnly) {
+                                            TextFileSettings textFileSettings, RowInputInterface rowIn,
+                                            boolean isReadOnly) {
 
         if (textFileSettings.isUTF16) {
             return new TextFileReader16(dataFile, textFileSettings, rowIn,
-                                        isReadOnly);
+                    isReadOnly);
         } else {
             return new TextFileReader8(dataFile, textFileSettings, rowIn,
-                                       isReadOnly);
+                    isReadOnly);
         }
     }
 
@@ -108,12 +109,12 @@ public class TextFileReader8 implements TextFileReader {
 
     public RowInputInterface readObject() {
 
-        boolean hasQuote  = false;
-        boolean complete  = false;
-        boolean wasCR     = false;
+        boolean hasQuote = false;
+        boolean complete = false;
+        boolean wasCR = false;
         boolean wasNormal = false;
-        long    currentPos;
-        long    fieldPos;
+        long currentPos;
+        long fieldPos;
         boolean quotedField = false;
 
         buffer.reset();
@@ -128,7 +129,7 @@ public class TextFileReader8 implements TextFileReader {
             dataFile.seek(position);
 
             currentPos = 0;
-            fieldPos   = -1;
+            fieldPos = -1;
 
             while (!complete) {
                 int c = readChar();
@@ -148,12 +149,12 @@ public class TextFileReader8 implements TextFileReader {
 
                     if (!isReadOnly) {
                         dataFile.write(
-                            textFileSettings.bytesForLineEnd, 0,
-                            textFileSettings.bytesForLineEnd.length);
+                                textFileSettings.bytesForLineEnd, 0,
+                                textFileSettings.bytesForLineEnd.length);
 
                         for (int i = 0;
-                                i < textFileSettings.bytesForLineEnd.length;
-                                i++) {
+                             i < textFileSettings.bytesForLineEnd.length;
+                             i++) {
                             buffer.write(textFileSettings.bytesForLineEnd[i]);
                         }
                     }
@@ -165,14 +166,14 @@ public class TextFileReader8 implements TextFileReader {
 
                     // quoted field reset
                     if (!hasQuote) {
-                        fieldPos    = currentPos;
+                        fieldPos = currentPos;
                         quotedField = false;
-                        hasQuote    = false;
+                        hasQuote = false;
                     }
                 } else if (c == textFileSettings.quoteChar) {
                     wasNormal = true;
-                    complete  = wasCR;
-                    wasCR     = false;
+                    complete = wasCR;
+                    wasCR = false;
 
                     // quoted field can begin only after separator
                     // or anywhere when separator is multibyte
@@ -189,18 +190,18 @@ public class TextFileReader8 implements TextFileReader {
                 } else {
                     switch (c) {
 
-                        case TextFileSettings.CR_CHAR :
+                        case TextFileSettings.CR_CHAR:
                             wasCR = !hasQuote;
                             break;
 
-                        case TextFileSettings.LF_CHAR :
+                        case TextFileSettings.LF_CHAR:
                             complete = !hasQuote;
                             break;
 
-                        default :
+                        default:
                             wasNormal = true;
-                            complete  = wasCR;
-                            wasCR     = false;
+                            complete = wasCR;
+                            wasCR = false;
                     }
                 }
 
@@ -223,7 +224,7 @@ public class TextFileReader8 implements TextFileReader {
                 }
 
                 ((RowInputText) rowIn).setSource(rowString, position,
-                                                 buffer.getByteSize());
+                        buffer.getByteSize());
 
                 position += rowIn.getSize();
 
@@ -238,8 +239,8 @@ public class TextFileReader8 implements TextFileReader {
 
     public void readHeaderLine() {
 
-        boolean complete  = false;
-        boolean wasCR     = false;
+        boolean complete = false;
+        boolean wasCR = false;
         boolean wasNormal = false;
 
         buffer.reset();
@@ -267,12 +268,12 @@ public class TextFileReader8 implements TextFileReader {
 
                     if (!isReadOnly) {
                         dataFile.write(
-                            textFileSettings.bytesForLineEnd, 0,
-                            textFileSettings.bytesForLineEnd.length);
+                                textFileSettings.bytesForLineEnd, 0,
+                                textFileSettings.bytesForLineEnd.length);
 
                         for (int i = 0;
-                                i < textFileSettings.bytesForLineEnd.length;
-                                i++) {
+                             i < textFileSettings.bytesForLineEnd.length;
+                             i++) {
                             buffer.write(textFileSettings.bytesForLineEnd[i]);
                         }
                     }
@@ -285,18 +286,18 @@ public class TextFileReader8 implements TextFileReader {
 
             switch (c) {
 
-                case TextFileSettings.CR_CHAR :
+                case TextFileSettings.CR_CHAR:
                     wasCR = true;
                     break;
 
-                case TextFileSettings.LF_CHAR :
+                case TextFileSettings.LF_CHAR:
                     complete = true;
                     break;
 
-                default :
+                default:
                     wasNormal = true;
-                    complete  = wasCR;
-                    wasCR     = false;
+                    complete = wasCR;
+                    wasCR = false;
             }
 
             if (wasCR || complete) {
@@ -323,15 +324,15 @@ public class TextFileReader8 implements TextFileReader {
      * Searches from file pointer, pos, and finds the beginning of the first
      * line that contains any non-space character. Increments the row counter
      * when a blank line is skipped.
-     *
+     * <p>
      * If none found return -1
      */
     private long findNextUsedLinePos() {
 
         try {
-            long    firstPos   = position;
-            long    currentPos = position;
-            boolean wasCR      = false;
+            long firstPos = position;
+            long currentPos = position;
+            boolean wasCR = false;
 
             dataFile.seek(position);
 
@@ -342,11 +343,11 @@ public class TextFileReader8 implements TextFileReader {
 
                 switch (c) {
 
-                    case TextFileSettings.CR_CHAR :
+                    case TextFileSettings.CR_CHAR:
                         wasCR = true;
                         break;
 
-                    case TextFileSettings.LF_CHAR :
+                    case TextFileSettings.LF_CHAR:
                         wasCR = false;
 
                         ((RowInputText) rowIn).skippedLine();
@@ -354,7 +355,7 @@ public class TextFileReader8 implements TextFileReader {
                         firstPos = currentPos;
                         break;
 
-                    case ' ' :
+                    case ' ':
                         if (wasCR) {
                             wasCR = false;
 
@@ -362,10 +363,10 @@ public class TextFileReader8 implements TextFileReader {
                         }
                         break;
 
-                    case -1 :
+                    case -1:
                         return -1;
 
-                    default :
+                    default:
                         if (wasCR) {
                             wasCR = false;
 
@@ -432,10 +433,10 @@ public class TextFileReader8 implements TextFileReader {
     static class StringCreatorBytes extends StringCreator {
 
         private HsqlByteArrayOutputStream buffer;
-        private String                    encoding;
+        private String encoding;
 
         StringCreatorBytes(String encoding) {
-            this.buffer   = new HsqlByteArrayOutputStream(128);
+            this.buffer = new HsqlByteArrayOutputStream(128);
             this.encoding = encoding;
         }
 

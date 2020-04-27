@@ -71,10 +71,10 @@ public class RowSetNavigatorClient extends RowSetNavigator {
     public RowSetNavigatorClient(RowSetNavigator source, int offset,
                                  int blockSize) {
 
-        this.size          = source.size;
+        this.size = source.size;
         this.baseBlockSize = blockSize;
         this.currentOffset = offset;
-        table              = new Object[blockSize][];
+        table = new Object[blockSize][];
 
         source.absolute(offset);
 
@@ -92,7 +92,7 @@ public class RowSetNavigatorClient extends RowSetNavigator {
      */
     public void setData(Object[][] table) {
         this.table = table;
-        this.size  = table.length;
+        this.size = table.length;
     }
 
     public void setData(int index, Object[] data) {
@@ -129,7 +129,7 @@ public class RowSetNavigatorClient extends RowSetNavigator {
     public void removeCurrent() {
 
         System.arraycopy(table, currentPos + 1, table, currentPos,
-                         size - currentPos - 1);
+                size - currentPos - 1);
 
         table[size - 1] = null;
 
@@ -215,14 +215,14 @@ public class RowSetNavigatorClient extends RowSetNavigator {
             Object[] data = table[i];
 
             out.writeData(meta.getColumnCount(), meta.columnTypes, data, null,
-                          null);
+                    null);
         }
     }
 
     public void read(RowInputInterface in, ResultMetaData meta) {
 
-        id            = in.readLong();
-        size          = in.readInt();
+        id = in.readLong();
+        size = in.readInt();
         currentOffset = in.readInt();
         baseBlockSize = in.readInt();
 
@@ -252,7 +252,7 @@ public class RowSetNavigatorClient extends RowSetNavigator {
             Object[] data = table[i];
 
             out.writeData(meta.getColumnCount(), meta.columnTypes, data, null,
-                          null);
+                    null);
         }
     }
 
@@ -263,18 +263,19 @@ public class RowSetNavigatorClient extends RowSetNavigator {
 
         try {
             RowSetNavigatorClient source = session.getRows(id, offset,
-                baseBlockSize);
+                    baseBlockSize);
 
-            table         = source.table;
+            table = source.table;
             currentOffset = source.currentOffset;
-        } catch (HsqlException e) {}
+        } catch (HsqlException e) {
+        }
     }
 
     private void ensureCapacity() {
 
         if (size == table.length) {
-            int        newSize  = size == 0 ? 4
-                                            : size * 2;
+            int newSize = size == 0 ? 4
+                    : size * 2;
             Object[][] newTable = new Object[newSize][];
 
             System.arraycopy(table, 0, newTable, 0, size);

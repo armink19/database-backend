@@ -44,17 +44,17 @@ import java.util.Map;
 
 /**
  * Sample class which executes SQL files, by embedding SqlFile.
- * <P>
+ * <p>
  * Suitable for using as a template.
- * <P>
+ * <p>
  * This class also serves as an example of using RCData to allow your
  * application users to store JDBC access information in a convenient
  * text file.
  *
+ * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @see #main(String[])
  * @see SqlFile
  * @see RCData
- * @author Blaine Simpson (blaine dot simpson at admc dot com)
  */
 public class SqlFileEmbedder {
     private Connection conn;
@@ -103,14 +103,14 @@ public class SqlFileEmbedder {
 
     /**
      * Instantiates SqlFileEmbedder object and connects to specified database.
-     * <P>
+     * <p>
      * N.b., you do not need to use RCData to use SqlFile. All SqlFile
      * needs is a live Connection. I'm using RCData because it is a convenient
      * way for a non-contained app (i.e. one that doesn't run in a 3rd party
      * container) to get a Connection.
      *
      * @param rcFile File
-     * @param urlid String
+     * @param urlid  String
      * @throws Exception on any problem
      */
     public SqlFileEmbedder(File rcFile, String urlid) throws Exception {
@@ -123,11 +123,11 @@ public class SqlFileEmbedder {
      * See source code for the main(String[]) method for an example of calling
      * this method.
      *
-     * @see #main(String[])
      * @param fileStrings String[]
-     * @throws IOException on io problems
+     * @throws IOException  on io problems
      * @throws SqlToolError on SQL Tool problems
      * @throws SQLException on SQL problems
+     * @see #main(String[])
      */
     public void executeFiles(String[] fileStrings)
             throws IOException, SqlToolError, SQLException {

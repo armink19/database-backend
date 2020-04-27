@@ -83,7 +83,7 @@ public class RowInputBinary180 extends RowInputBinary {
 
         if (type.typeCode == Types.SQL_TIMESTAMP) {
             long millis = readLong();
-            int  nanos  = readInt();
+            int nanos = readInt();
 
             millis = HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
                     millis);

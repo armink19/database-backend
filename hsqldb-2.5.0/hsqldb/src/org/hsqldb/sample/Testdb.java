@@ -36,11 +36,11 @@ import java.sql.*;
 /**
  * Title:        Testdb
  * Description:  simple hello world db example of a
- *               standalone persistent db application
- *
- *               every time it runs it adds four more rows to sample_table
- *               it does a query and prints the results to standard out
- *
+ * standalone persistent db application
+ * <p>
+ * every time it runs it adds four more rows to sample_table
+ * it does a query and prints the results to standard out
+ * <p>
  * Author: Karl Meissner karl@meissnersd.com
  */
 public class Testdb {
@@ -61,9 +61,9 @@ public class Testdb {
         // It can contain directory names relative to the
         // current working directory
         conn = DriverManager.getConnection("jdbc:hsqldb:"
-                                           + db_file_name_prefix,    // filenames
-                                           "SA",                     // username
-                                           "");                      // password
+                        + db_file_name_prefix,    // filenames
+                "SA",                     // username
+                "");                      // password
     }
 
     public void shutdown() throws SQLException {
@@ -77,7 +77,7 @@ public class Testdb {
         conn.close();    // if there are no other open connection
     }
 
-//use for SQL command SELECT
+    //use for SQL command SELECT
     public synchronized void query(String expression) throws SQLException {
 
         Statement st = null;
@@ -100,7 +100,7 @@ public class Testdb {
         // completely examined.
     }
 
-//use for SQL commands CREATE, DROP, INSERT and UPDATE
+    //use for SQL commands CREATE, DROP, INSERT and UPDATE
     public synchronized void update(String expression) throws SQLException {
 
         Statement st = null;
@@ -120,10 +120,10 @@ public class Testdb {
 
         // the order of the rows in a cursor
         // are implementation dependent unless you use the SQL ORDER statement
-        ResultSetMetaData meta   = rs.getMetaData();
-        int               colmax = meta.getColumnCount();
-        int               i;
-        Object            o = null;
+        ResultSetMetaData meta = rs.getMetaData();
+        int colmax = meta.getColumnCount();
+        int i;
+        Object o = null;
 
         // the result set is a cursor into the data.  You can only
         // point to one row at a time
@@ -161,7 +161,7 @@ public class Testdb {
             // by declaring the id column IDENTITY, the db will automatically
             // generate unique values for new rows- useful for row keys
             db.update(
-                "CREATE TABLE sample_table ( id INTEGER IDENTITY, str_col VARCHAR(256), num_col INTEGER)");
+                    "CREATE TABLE sample_table ( id INTEGER IDENTITY, str_col VARCHAR(256), num_col INTEGER)");
         } catch (SQLException ex2) {
 
             //ignore
@@ -177,13 +177,13 @@ public class Testdb {
             // add some rows - will create duplicates if run more then once
             // the id column is automatically generated
             db.update(
-                "INSERT INTO sample_table(str_col,num_col) VALUES('Ford', 100)");
+                    "INSERT INTO sample_table(str_col,num_col) VALUES('Ford', 100)");
             db.update(
-                "INSERT INTO sample_table(str_col,num_col) VALUES('Toyota', 200)");
+                    "INSERT INTO sample_table(str_col,num_col) VALUES('Toyota', 200)");
             db.update(
-                "INSERT INTO sample_table(str_col,num_col) VALUES('Honda', 300)");
+                    "INSERT INTO sample_table(str_col,num_col) VALUES('Honda', 300)");
             db.update(
-                "INSERT INTO sample_table(str_col,num_col) VALUES('GM', 400)");
+                    "INSERT INTO sample_table(str_col,num_col) VALUES('GM', 400)");
 
             // do a query
             db.query("SELECT * FROM sample_table WHERE num_col < 250");

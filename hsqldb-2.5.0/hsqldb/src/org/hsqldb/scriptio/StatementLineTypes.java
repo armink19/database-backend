@@ -40,11 +40,11 @@ package org.hsqldb.scriptio;
  */
 public interface StatementLineTypes {
 
-    int ANY_STATEMENT             = 1;
-    int DELETE_STATEMENT          = 2;
-    int INSERT_STATEMENT          = 3;
-    int COMMIT_STATEMENT          = 4;
-    int SESSION_ID                = 5;
-    int SET_SCHEMA_STATEMENT      = 6;
+    int ANY_STATEMENT = 1;
+    int DELETE_STATEMENT = 2;
+    int INSERT_STATEMENT = 3;
+    int COMMIT_STATEMENT = 4;
+    int SESSION_ID = 5;
+    int SET_SCHEMA_STATEMENT = 6;
     int SET_FILES_CHECK_STATEMENT = 7;
 }

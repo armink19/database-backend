@@ -46,48 +46,47 @@ import org.hsqldb.lib.OrderedHashSet;
  * Represents the set of rights on a database object
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- *
  * @version 2.5.0
  * @since 1.9.0
  */
 public final class Right {
 
-    boolean           isFull;
-    boolean           isFullSelect;
-    boolean           isFullInsert;
-    boolean           isFullUpdate;
-    boolean           isFullReferences;
-    boolean           isFullTrigger;
-    boolean           isFullDelete;
-    OrderedHashSet    selectColumnSet;
-    OrderedHashSet    insertColumnSet;
-    OrderedHashSet    updateColumnSet;
-    OrderedHashSet    referencesColumnSet;
-    OrderedHashSet    triggerColumnSet;
+    boolean isFull;
+    boolean isFullSelect;
+    boolean isFullInsert;
+    boolean isFullUpdate;
+    boolean isFullReferences;
+    boolean isFullTrigger;
+    boolean isFullDelete;
+    OrderedHashSet selectColumnSet;
+    OrderedHashSet insertColumnSet;
+    OrderedHashSet updateColumnSet;
+    OrderedHashSet referencesColumnSet;
+    OrderedHashSet triggerColumnSet;
     ExpressionLogical filterExpression;
 
     //
-    Right   grantableRights;
+    Right grantableRights;
     Grantee grantor;
     Grantee grantee;
 
     //
-    public static final OrderedHashSet emptySet   = new OrderedHashSet();
-    public static final Right          fullRights = new Right(true);
-    public static final Right          noRights   = new Right();
+    public static final OrderedHashSet emptySet = new OrderedHashSet();
+    public static final Right fullRights = new Right(true);
+    public static final Right noRights = new Right();
 
     static {
         fullRights.grantor = GranteeManager.systemAuthorisation;
     }
 
     public static final String[] privilegeNames = {
-        Tokens.T_SELECT, Tokens.T_INSERT, Tokens.T_UPDATE, Tokens.T_DELETE,
-        Tokens.T_REFERENCES, Tokens.T_TRIGGER
+            Tokens.T_SELECT, Tokens.T_INSERT, Tokens.T_UPDATE, Tokens.T_DELETE,
+            Tokens.T_REFERENCES, Tokens.T_TRIGGER
     };
     public static final int[] privilegeTypes = {
-        GrantConstants.SELECT, GrantConstants.INSERT, GrantConstants.UPDATE,
-        GrantConstants.DELETE, GrantConstants.REFERENCES,
-        GrantConstants.TRIGGER
+            GrantConstants.SELECT, GrantConstants.INSERT, GrantConstants.UPDATE,
+            GrantConstants.DELETE, GrantConstants.REFERENCES,
+            GrantConstants.TRIGGER
     };
 
     public Right() {
@@ -112,7 +111,7 @@ public final class Right {
 
     public Right getGrantableRights() {
         return grantableRights == null ? noRights
-                                       : grantableRights;
+                : grantableRights;
     }
 
     public Right duplicate() {
@@ -152,11 +151,11 @@ public final class Right {
             return;
         }
 
-        isFullSelect     |= right.isFullSelect;
-        isFullInsert     |= right.isFullInsert;
-        isFullUpdate     |= right.isFullUpdate;
+        isFullSelect |= right.isFullSelect;
+        isFullInsert |= right.isFullInsert;
+        isFullUpdate |= right.isFullUpdate;
         isFullReferences |= right.isFullReferences;
-        isFullDelete     |= right.isFullDelete;
+        isFullDelete |= right.isFullDelete;
 
         if (isFullSelect) {
             selectColumnSet = null;
@@ -223,7 +222,7 @@ public final class Right {
         if (isFull) {
             isFull = false;
             isFullSelect = isFullInsert = isFullUpdate = isFullReferences =
-                isFullDelete = true;
+                    isFullDelete = true;
         }
 
         if (right.isFullDelete) {
@@ -234,11 +233,11 @@ public final class Right {
 
             //
         } else if (right.isFullSelect) {
-            isFullSelect    = false;
+            isFullSelect = false;
             selectColumnSet = null;
         } else if (right.selectColumnSet != null) {
             if (isFullSelect) {
-                isFullSelect    = false;
+                isFullSelect = false;
                 selectColumnSet = ((Table) object).getColumnNameSet();
             }
 
@@ -253,11 +252,11 @@ public final class Right {
 
             //
         } else if (right.isFullInsert) {
-            isFullInsert    = false;
+            isFullInsert = false;
             insertColumnSet = null;
         } else if (right.insertColumnSet != null) {
             if (isFullInsert) {
-                isFullInsert    = false;
+                isFullInsert = false;
                 insertColumnSet = ((Table) object).getColumnNameSet();
             }
 
@@ -272,11 +271,11 @@ public final class Right {
 
             //
         } else if (right.isFullUpdate) {
-            isFullUpdate    = false;
+            isFullUpdate = false;
             updateColumnSet = null;
         } else if (right.updateColumnSet != null) {
             if (isFullUpdate) {
-                isFullUpdate    = false;
+                isFullUpdate = false;
                 updateColumnSet = ((Table) object).getColumnNameSet();
             }
 
@@ -291,11 +290,11 @@ public final class Right {
 
             //
         } else if (right.isFullReferences) {
-            isFullReferences    = false;
+            isFullReferences = false;
             referencesColumnSet = null;
         } else if (right.referencesColumnSet != null) {
             if (isFullReferences) {
-                isFullReferences    = false;
+                isFullReferences = false;
                 referencesColumnSet = ((Table) object).getColumnNameSet();
             }
 
@@ -310,11 +309,11 @@ public final class Right {
 
             //
         } else if (right.isFullTrigger) {
-            isFullTrigger    = false;
+            isFullTrigger = false;
             triggerColumnSet = null;
         } else if (right.triggerColumnSet != null) {
             if (isFullTrigger) {
-                isFullTrigger    = false;
+                isFullTrigger = false;
                 triggerColumnSet = ((Table) object).getColumnNameSet();
             }
 
@@ -329,9 +328,9 @@ public final class Right {
     void clear() {
 
         isFull = isFullSelect = isFullInsert = isFullUpdate =
-            isFullReferences = isFullDelete = false;
+                isFullReferences = isFullDelete = false;
         selectColumnSet = insertColumnSet = updateColumnSet =
-            referencesColumnSet = triggerColumnSet = null;
+                referencesColumnSet = triggerColumnSet = null;
     }
 
     /**
@@ -410,28 +409,28 @@ public final class Right {
         }
 
         if (!containsRights(isFullSelect, selectColumnSet,
-                            right.selectColumnSet, right.isFullSelect)) {
+                right.selectColumnSet, right.isFullSelect)) {
             return false;
         }
 
         if (!containsRights(isFullInsert, insertColumnSet,
-                            right.insertColumnSet, right.isFullInsert)) {
+                right.insertColumnSet, right.isFullInsert)) {
             return false;
         }
 
         if (!containsRights(isFullUpdate, updateColumnSet,
-                            right.updateColumnSet, right.isFullUpdate)) {
+                right.updateColumnSet, right.isFullUpdate)) {
             return false;
         }
 
         if (!containsRights(isFullReferences, referencesColumnSet,
-                            right.referencesColumnSet,
-                            right.isFullReferences)) {
+                right.referencesColumnSet,
+                right.isFullReferences)) {
             return false;
         }
 
         if (!containsRights(isFullTrigger, triggerColumnSet,
-                            right.triggerColumnSet, right.isFullTrigger)) {
+                right.triggerColumnSet, right.isFullTrigger)) {
             return false;
         }
 
@@ -463,31 +462,31 @@ public final class Right {
 
         switch (type) {
 
-            case GrantConstants.SELECT :
+            case GrantConstants.SELECT:
                 return isFullSelect ? table.getColumnNameSet()
-                                    : selectColumnSet == null ? emptySet
-                                                              : selectColumnSet;
+                        : selectColumnSet == null ? emptySet
+                        : selectColumnSet;
 
-            case GrantConstants.INSERT :
+            case GrantConstants.INSERT:
                 return isFullInsert ? table.getColumnNameSet()
-                                    : insertColumnSet == null ? emptySet
-                                                              : insertColumnSet;
+                        : insertColumnSet == null ? emptySet
+                        : insertColumnSet;
 
-            case GrantConstants.UPDATE :
+            case GrantConstants.UPDATE:
                 return isFullUpdate ? table.getColumnNameSet()
-                                    : updateColumnSet == null ? emptySet
-                                                              : updateColumnSet;
+                        : updateColumnSet == null ? emptySet
+                        : updateColumnSet;
 
-            case GrantConstants.REFERENCES :
+            case GrantConstants.REFERENCES:
                 return isFullReferences ? table.getColumnNameSet()
-                                        : referencesColumnSet == null
-                                          ? emptySet
-                                          : referencesColumnSet;
+                        : referencesColumnSet == null
+                        ? emptySet
+                        : referencesColumnSet;
 
-            case GrantConstants.TRIGGER :
+            case GrantConstants.TRIGGER:
                 return isFullTrigger ? table.getColumnNameSet()
-                                     : triggerColumnSet == null ? emptySet
-                                                                : triggerColumnSet;
+                        : triggerColumnSet == null ? emptySet
+                        : triggerColumnSet;
         }
 
         return emptySet;
@@ -530,7 +529,7 @@ public final class Right {
 
         if (otherColumnSet != null
                 && (columnSet == null
-                    || !columnSet.containsAll(otherColumnSet))) {
+                || !columnSet.containsAll(otherColumnSet))) {
             return false;
         }
 
@@ -609,28 +608,28 @@ public final class Right {
 
         switch (privilegeType) {
 
-            case GrantConstants.DELETE :
+            case GrantConstants.DELETE:
                 return isFullDelete;
 
-            case GrantConstants.SELECT :
+            case GrantConstants.SELECT:
                 return isFullSelect;
 
-            case GrantConstants.INSERT :
+            case GrantConstants.INSERT:
                 return isFullInsert;
 
-            case GrantConstants.UPDATE :
+            case GrantConstants.UPDATE:
                 return isFullUpdate;
 
-            case GrantConstants.REFERENCES :
+            case GrantConstants.REFERENCES:
                 return isFullReferences;
 
-            case GrantConstants.TRIGGER :
+            case GrantConstants.TRIGGER:
                 return isFullTrigger;
 
-            case GrantConstants.EXECUTE :
+            case GrantConstants.EXECUTE:
                 return isFull;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Right");
         }
     }
@@ -651,7 +650,7 @@ public final class Right {
         result |= (insertColumnSet != null && !insertColumnSet.isEmpty());
         result |= (updateColumnSet != null && !updateColumnSet.isEmpty());
         result |= referencesColumnSet != null
-                  && !referencesColumnSet.isEmpty();
+                && !referencesColumnSet.isEmpty();
         result |= triggerColumnSet != null && !triggerColumnSet.isEmpty();
 
         return result;
@@ -668,49 +667,49 @@ public final class Right {
 
         switch (privilegeType) {
 
-            case GrantConstants.DELETE :
+            case GrantConstants.DELETE:
                 return isFullDelete;
 
-            case GrantConstants.SELECT :
+            case GrantConstants.SELECT:
                 if (isFullSelect) {
                     return true;
                 }
 
                 return selectColumnSet != null && !selectColumnSet.isEmpty();
 
-            case GrantConstants.INSERT :
+            case GrantConstants.INSERT:
                 if (isFullInsert) {
                     return true;
                 }
 
                 return insertColumnSet != null && !insertColumnSet.isEmpty();
 
-            case GrantConstants.UPDATE :
+            case GrantConstants.UPDATE:
                 if (isFullUpdate) {
                     return true;
                 }
 
                 return updateColumnSet != null && !updateColumnSet.isEmpty();
 
-            case GrantConstants.REFERENCES :
+            case GrantConstants.REFERENCES:
                 if (isFullReferences) {
                     return true;
                 }
 
                 return referencesColumnSet != null
-                       && !referencesColumnSet.isEmpty();
+                        && !referencesColumnSet.isEmpty();
 
-            case GrantConstants.TRIGGER :
+            case GrantConstants.TRIGGER:
                 if (isFullTrigger) {
                     return true;
                 }
 
                 return triggerColumnSet != null && !triggerColumnSet.isEmpty();
 
-            case GrantConstants.EXECUTE :
+            case GrantConstants.EXECUTE:
                 return isFull;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Right");
         }
     }
@@ -732,7 +731,7 @@ public final class Right {
         result |= (insertColumnSet != null && insertColumnSet.isEmpty());
         result |= (updateColumnSet != null && !updateColumnSet.isEmpty());
         result |= referencesColumnSet != null
-                  && !referencesColumnSet.isEmpty();
+                && !referencesColumnSet.isEmpty();
         result |= triggerColumnSet != null && !triggerColumnSet.isEmpty();
 
         if (!result) {
@@ -825,12 +824,12 @@ public final class Right {
     private static void getColumnList(Table t, OrderedHashSet set,
                                       StringBuilder buf) {
 
-        int       count        = 0;
+        int count = 0;
         boolean[] colCheckList = t.getNewColumnCheckList();
 
         for (int i = 0; i < set.size(); i++) {
-            HsqlName name     = (HsqlName) set.get(i);
-            int      colIndex = t.findColumn(name.name);
+            HsqlName name = (HsqlName) set.get(i);
+            int colIndex = t.findColumn(name.name);
 
             if (colIndex == -1) {
                 continue;
@@ -910,12 +909,12 @@ public final class Right {
 
     private static void setColumns(Table t, OrderedHashSet set) {
 
-        int       count        = 0;
+        int count = 0;
         boolean[] colCheckList = t.getNewColumnCheckList();
 
         for (int i = 0; i < set.size(); i++) {
-            String name     = (String) set.get(i);
-            int    colIndex = t.findColumn(name);
+            String name = (String) set.get(i);
+            int colIndex = t.findColumn(name);
 
             if (colIndex == -1) {
                 throw Error.error(ErrorCode.X_42501, name);
@@ -943,7 +942,7 @@ public final class Right {
 
         switch (type) {
 
-            case GrantConstants.SELECT :
+            case GrantConstants.SELECT:
                 if (set == null) {
                     isFullSelect = true;
                 }
@@ -951,13 +950,13 @@ public final class Right {
                 selectColumnSet = set;
                 break;
 
-            case GrantConstants.DELETE :
+            case GrantConstants.DELETE:
                 if (set == null) {
                     isFullDelete = true;
                 }
                 break;
 
-            case GrantConstants.INSERT :
+            case GrantConstants.INSERT:
                 if (set == null) {
                     isFullInsert = true;
                 }
@@ -965,7 +964,7 @@ public final class Right {
                 insertColumnSet = set;
                 break;
 
-            case GrantConstants.UPDATE :
+            case GrantConstants.UPDATE:
                 if (set == null) {
                     isFullUpdate = true;
                 }
@@ -973,7 +972,7 @@ public final class Right {
                 updateColumnSet = set;
                 break;
 
-            case GrantConstants.REFERENCES :
+            case GrantConstants.REFERENCES:
                 if (set == null) {
                     isFullReferences = true;
                 }
@@ -981,7 +980,7 @@ public final class Right {
                 referencesColumnSet = set;
                 break;
 
-            case GrantConstants.TRIGGER :
+            case GrantConstants.TRIGGER:
                 if (set == null) {
                     isFullTrigger = true;
                 }
@@ -989,27 +988,27 @@ public final class Right {
                 triggerColumnSet = set;
                 break;
 
-            default :
+            default:
         }
     }
 
     /**
      * Used solely by org.hsqldb.dbinfo in existing system tables lacking column
      * level reporting.<p>
-     *
+     * <p>
      * Returns names of individual rights instead of ALL
      */
     String[] getTableRightsArray() {
 
         if (isFull) {
-            return new String[] {
-                Tokens.T_SELECT, Tokens.T_INSERT, Tokens.T_UPDATE,
-                Tokens.T_DELETE, Tokens.T_REFERENCES
+            return new String[]{
+                    Tokens.T_SELECT, Tokens.T_INSERT, Tokens.T_UPDATE,
+                    Tokens.T_DELETE, Tokens.T_REFERENCES
             };
         }
 
-        HsqlArrayList list  = new HsqlArrayList();
-        String[]      array = new String[list.size()];
+        HsqlArrayList list = new HsqlArrayList();
+        String[] array = new String[list.size()];
 
         if (isFullSelect) {
             list.add(Tokens.T_SELECT);

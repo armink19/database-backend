@@ -51,14 +51,20 @@ import java.sql.Connection;
  */
 public class StatementProcedure extends StatementDMQL {
 
-    /** Expression to evaluate */
+    /**
+     * Expression to evaluate
+     */
     Expression expression;
 
-    /** Routine to execute */
+    /**
+     * Routine to execute
+     */
     Routine procedure;
 
-    /** arguments to Routine */
-    Expression[]   arguments = Expression.emptyArray;
+    /**
+     * arguments to Routine
+     */
+    Expression[] arguments = Expression.emptyArray;
     ResultMetaData resultMetaData;
 
     /**
@@ -68,7 +74,7 @@ public class StatementProcedure extends StatementDMQL {
                        CompileContext compileContext) {
 
         super(StatementTypes.CALL, StatementTypes.X_SQL_DATA,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
         statementReturnType = StatementTypes.RETURN_RESULT;
 
@@ -93,7 +99,7 @@ public class StatementProcedure extends StatementDMQL {
         }
 
         isTransactionStatement = readTableNames.length > 0
-                                 || writeTableNames.length > 0;
+                || writeTableNames.length > 0;
     }
 
     /**
@@ -103,7 +109,7 @@ public class StatementProcedure extends StatementDMQL {
                        Expression[] arguments, CompileContext compileContext) {
 
         super(StatementTypes.CALL, StatementTypes.X_SQL_DATA,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
         if (procedure.maxDynamicResults > 0) {
             statementReturnType = StatementTypes.RETURN_ANY;
@@ -118,14 +124,14 @@ public class StatementProcedure extends StatementDMQL {
 
         if (procedure.isPSM()) {
             isTransactionStatement = readTableNames.length > 0
-                                     || writeTableNames.length > 0;
+                    || writeTableNames.length > 0;
         }
     }
 
     Result getResult(Session session) {
 
         Result result = expression == null ? getProcedureResult(session)
-                                           : getExpressionResult(session);
+                : getExpressionResult(session);
 
         result.setStatementType(statementReturnType);
 
@@ -135,7 +141,7 @@ public class StatementProcedure extends StatementDMQL {
     Result getProcedureResult(Session session) {
 
         Object[] data = ValuePool.emptyObjectArray;
-        int      argLength;
+        int argLength;
 
         if (procedure.isPSM()) {
             argLength = arguments.length;
@@ -159,23 +165,23 @@ public class StatementProcedure extends StatementDMQL {
             Expression e = arguments[i];
 
             if (e != null) {
-                Type   targetType = procedure.getParameter(i).getDataType();
-                Object value      = e.getValue(session);
+                Type targetType = procedure.getParameter(i).getDataType();
+                Object value = e.getValue(session);
 
                 data[i] = targetType.convertToType(session, value,
-                                                   e.getDataType());
+                        e.getDataType());
             }
         }
 
         session.sessionContext.pushRoutineInvocation();
 
-        Result   result = Result.updateZeroResult;
+        Result result = Result.updateZeroResult;
         Object[] callArguments;
 
         try {
             session.sessionContext.routineArguments = data;
             session.sessionContext.routineVariables =
-                ValuePool.emptyObjectArray;
+                    ValuePool.emptyObjectArray;
 
             if (procedure.isPSM()) {
                 result = executePSMProcedure(session);
@@ -200,19 +206,19 @@ public class StatementProcedure extends StatementDMQL {
 
         for (int i = 0; i < procedure.getParameterCount(); i++) {
             ColumnSchema param = procedure.getParameter(i);
-            int          mode  = param.getParameterMode();
+            int mode = param.getParameterMode();
 
             if (mode != SchemaObject.ParameterModes.PARAM_IN) {
                 if (arguments[i].isDynamicParam()) {
                     int paramIndex = arguments[i].parameterIndex;
 
                     session.sessionContext.dynamicArguments[paramIndex] =
-                        callArguments[i];
+                            callArguments[i];
                 } else {
                     int varIndex = arguments[i].getColumnIndex();
 
                     session.sessionContext.routineVariables[varIndex] =
-                        callArguments[i];
+                            callArguments[i];
                 }
             }
         }
@@ -220,9 +226,9 @@ public class StatementProcedure extends StatementDMQL {
         Result r = result;
 
         result =
-            Result.newCallResponse(getParametersMetaData().getParameterTypes(),
-                                   id,
-                                   session.sessionContext.dynamicArguments);
+                Result.newCallResponse(getParametersMetaData().getParameterTypes(),
+                        id,
+                        session.sessionContext.dynamicArguments);
 
         if (procedure.returnsTable()) {
             result.addChainedResult(r);
@@ -238,10 +244,10 @@ public class StatementProcedure extends StatementDMQL {
     Result executePSMProcedure(Session session) {
 
         int variableCount = procedure.getVariableCount();
-        int cursorCount   = procedure.getCursorCount();
+        int cursorCount = procedure.getCursorCount();
 
         session.sessionContext.routineVariables = new Object[variableCount];
-        session.sessionContext.routineCursors   = new Result[cursorCount];
+        session.sessionContext.routineCursors = new Result[cursorCount];
 
         Result result = procedure.statement.execute(session);
 
@@ -254,7 +260,7 @@ public class StatementProcedure extends StatementDMQL {
 
     Result executeJavaProcedure(Session session, Connection connection) {
 
-        Result   result        = Result.updateZeroResult;
+        Result result = Result.updateZeroResult;
         Object[] callArguments = session.sessionContext.routineArguments;
         Object[] data = procedure.convertArgsToJava(session, callArguments);
 
@@ -287,12 +293,12 @@ public class StatementProcedure extends StatementDMQL {
         Object[] row;
 
         if (expression.getDataType().isArrayType()) {
-            row    = new Object[1];
+            row = new Object[1];
             row[0] = o;
         } else if (o instanceof Object[]) {
             row = (Object[]) o;
         } else {
-            row    = new Object[1];
+            row = new Object[1];
             row[0] = o;
         }
 
@@ -336,7 +342,7 @@ public class StatementProcedure extends StatementDMQL {
 
         switch (type) {
 
-            case StatementTypes.CALL : {
+            case StatementTypes.CALL: {
                 if (expression == null) {
                     return ResultMetaData.emptyResultMetaData;
                 }
@@ -357,8 +363,8 @@ public class StatementProcedure extends StatementDMQL {
                 // is described whose single column is of type NULL
                 ResultMetaData md = ResultMetaData.newResultMetaData(1);
                 ColumnBase column =
-                    new ColumnBase(null, null, null,
-                                   StatementDMQL.RETURN_COLUMN_NAME);
+                        new ColumnBase(null, null, null,
+                                StatementDMQL.RETURN_COLUMN_NAME);
 
                 column.setType(expression.getDataType());
 
@@ -370,9 +376,9 @@ public class StatementProcedure extends StatementDMQL {
 
                 return md;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "StatementProcedure");
+                        "StatementProcedure");
         }
     }
 

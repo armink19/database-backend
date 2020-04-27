@@ -39,13 +39,14 @@ import java.util.Enumeration;
 
 /**
  * Test multiple row insert statements via jdbc against in-memory database
+ *
  * @author Justin Spadea
  */
 public class TestMultiInsert extends TestBase {
 
-    Statement         stmnt;
+    Statement stmnt;
     PreparedStatement pstmnt;
-    Connection        connection;
+    Connection connection;
 
     public TestMultiInsert(String name) {
         super(name);
@@ -57,8 +58,9 @@ public class TestMultiInsert extends TestBase {
 
         try {
             connection = super.newConnection();
-            stmnt      = connection.createStatement();
-        } catch (Exception e) {}
+            stmnt = connection.createStatement();
+        } catch (Exception e) {
+        }
     }
 
     private void printTable(String table, String cols, int expected) throws SQLException {
@@ -67,12 +69,12 @@ public class TestMultiInsert extends TestBase {
 
         ResultSetMetaData rsmd = rs.getMetaData();
         String result = "Table " + table + ", expecting "
-            + expected + " rows total:\n";
+                + expected + " rows total:\n";
 
         while (rs.next()) {
             for (int i = 0; i < rsmd.getColumnCount(); i++) {
                 result += rsmd.getColumnLabel(i + 1) + ":"
-                           + rs.getString(i + 1) + ":";
+                        + rs.getString(i + 1) + ":";
             }
             result += "\n";
             rows++;
@@ -89,9 +91,9 @@ public class TestMultiInsert extends TestBase {
             // create table T and insert two rows simultaneously
             stmnt.execute("DROP TABLE T IF EXISTS;");
             stmnt.execute(
-                "CREATE TABLE T (I IDENTITY, A CHAR(10), B CHAR(10));");
+                    "CREATE TABLE T (I IDENTITY, A CHAR(10), B CHAR(10));");
             stmnt.execute(
-                "INSERT INTO T VALUES (NULL, 'A', 'a'),(NULL, 'B', 'b');");
+                    "INSERT INTO T VALUES (NULL, 'A', 'a'),(NULL, 'B', 'b');");
 
             // print table out - should have two rows
             printTable("T", "*", 2);
@@ -101,7 +103,7 @@ public class TestMultiInsert extends TestBase {
             stmnt.execute("INSERT INTO T VALUES(NULL,'single1','s1');");
             stmnt.execute("INSERT INTO T VALUES((NULL,'single2','s2'));");
             stmnt.execute(
-                "INSERT INTO T VALUES((NULL,'double1','d1'),(NULL,'double2','d2'));");
+                    "INSERT INTO T VALUES((NULL,'double1','d1'),(NULL,'double2','d2'));");
 
             // print table out - should have 6 rows
             printTable("T", "*", 6);
@@ -145,11 +147,11 @@ public class TestMultiInsert extends TestBase {
     public static void main(String[] argv) {
 
         TestResult result = new TestResult();
-        TestCase   testA  = new TestMultiInsert("testMultiInsert");
+        TestCase testA = new TestMultiInsert("testMultiInsert");
 
         testA.run(result);
         System.out.println("TestMultiInsert error count: " + result.failureCount());
         Enumeration e = result.failures();
-        while(e.hasMoreElements()) System.out.println(e.nextElement());
+        while (e.hasMoreElements()) System.out.println(e.nextElement());
     }
 }

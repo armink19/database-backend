@@ -46,17 +46,17 @@ import java.io.LineNumberReader;
  */
 public class LineGroupReader {
 
-    private static final String[] defaultContinuations = new String[] {
-        " ", "*"
+    private static final String[] defaultContinuations = new String[]{
+            " ", "*"
     };
-    private static final String[] defaultIgnoredStarts = new String[]{ "--" };
+    private static final String[] defaultIgnoredStarts = new String[]{"--"};
     static final String LS = System.getProperty("line.separator", "\n");
 
     //
     LineNumberReader reader;
-    String           nextStartLine       = null;
-    int              startLineNumber     = 0;
-    int              nextStartLineNumber = 0;
+    String nextStartLine = null;
+    int startLineNumber = 0;
+    int nextStartLineNumber = 0;
 
     //
     final String[] sectionContinuations;
@@ -71,13 +71,14 @@ public class LineGroupReader {
     public LineGroupReader(LineNumberReader reader) {
 
         this.sectionContinuations = defaultContinuations;
-        this.sectionStarts        = ValuePool.emptyStringArray;
-        this.ignoredStarts        = defaultIgnoredStarts;
-        this.reader               = reader;
+        this.sectionStarts = ValuePool.emptyStringArray;
+        this.ignoredStarts = defaultIgnoredStarts;
+        this.reader = reader;
 
         try {
             getSection();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -85,19 +86,20 @@ public class LineGroupReader {
      */
     public LineGroupReader(LineNumberReader reader, String[] sectionStarts) {
 
-        this.sectionStarts        = sectionStarts;
+        this.sectionStarts = sectionStarts;
         this.sectionContinuations = ValuePool.emptyStringArray;
-        this.ignoredStarts        = ValuePool.emptyStringArray;
-        this.reader               = reader;
+        this.ignoredStarts = ValuePool.emptyStringArray;
+        this.reader = reader;
 
         try {
             getSection();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public HsqlArrayList getSection() {
 
-        String        line;
+        String line;
         HsqlArrayList list = new HsqlArrayList(new String[8], 0);
 
         if (nextStartLine != null) {
@@ -113,7 +115,8 @@ public class LineGroupReader {
 
             try {
                 line = reader.readLine();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
             if (line == null) {
                 nextStartLine = null;
@@ -133,7 +136,7 @@ public class LineGroupReader {
             }
 
             if (newSection) {
-                nextStartLine       = line;
+                nextStartLine = line;
                 nextStartLineNumber = reader.getLineNumber();
 
                 return list;
@@ -158,7 +161,7 @@ public class LineGroupReader {
                 break;
             }
 
-            String key   = (String) list.get(0);
+            String key = (String) list.get(0);
             String value = LineGroupReader.convertToString(list, 1);
 
             map.put(key, value);
@@ -207,7 +210,8 @@ public class LineGroupReader {
 
         try {
             reader.close();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public static String convertToString(HsqlArrayList list, int offset) {

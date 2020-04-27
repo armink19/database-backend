@@ -59,16 +59,16 @@ public class StatementExpression extends StatementDMQL {
 
         switch (type) {
 
-            case StatementTypes.RETURN :
-            case StatementTypes.CONDITION :
+            case StatementTypes.RETURN:
+            case StatementTypes.CONDITION:
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "");
         }
 
         isTransactionStatement = false;
-        this.expression        = expression;
+        this.expression = expression;
 
         setDatabaseObjects(session, compileContext);
         checkAccessRights(session);
@@ -80,10 +80,10 @@ public class StatementExpression extends StatementDMQL {
 
         switch (type) {
 
-            case StatementTypes.RETURN :
+            case StatementTypes.RETURN:
                 return sql;
 
-            case StatementTypes.CONDITION :
+            case StatementTypes.CONDITION:
                 sb.append(expression.getSQL());
                 break;
         }
@@ -154,27 +154,28 @@ public class StatementExpression extends StatementDMQL {
 
         switch (type) {
 
-            case StatementTypes.RETURN :
-            case StatementTypes.CONDITION :
+            case StatementTypes.RETURN:
+            case StatementTypes.CONDITION:
                 Result result = expression.getResult(session);
 
                 // data navigator has statement scope and will be cleared at the end of statement
                 if (result.isData()) {
                     RowSetNavigatorData navigator =
-                        new RowSetNavigatorData(session,
-                                                result.getNavigator());
+                            new RowSetNavigatorData(session,
+                                    result.getNavigator());
 
                     result.setNavigator(navigator);
                 }
 
                 return result;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "");
         }
     }
 
-    public void resolve(Session session) {}
+    public void resolve(Session session) {
+    }
 
     String describeImpl(Session session) throws Exception {
         return getSQL();
@@ -193,5 +194,6 @@ public class StatementExpression extends StatementDMQL {
         }
     }
 
-    void collectTableNamesForWrite(OrderedHashSet set) {}
+    void collectTableNamesForWrite(OrderedHashSet set) {
+    }
 }

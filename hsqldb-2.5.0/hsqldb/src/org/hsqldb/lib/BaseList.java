@@ -54,7 +54,7 @@ abstract class BaseList {
 
     public boolean contains(Object o) {
         return indexOf(o) == -1 ? false
-                                : true;
+                : true;
     }
 
     public boolean remove(Object o) {
@@ -89,8 +89,8 @@ abstract class BaseList {
 
     public boolean addAll(Collection other) {
 
-        boolean  result = false;
-        Iterator it     = other.iterator();
+        boolean result = false;
+        Iterator it = other.iterator();
 
         while (it.hasNext()) {
             result = true;
@@ -118,7 +118,9 @@ abstract class BaseList {
         return elementCount == 0;
     }
 
-    /** Returns a string representation */
+    /**
+     * Returns a string representation
+     */
     public String toString() {
 
         StringBuilder sb = new StringBuilder(32 + elementCount * 3);
@@ -150,7 +152,7 @@ abstract class BaseList {
 
     private class BaseListIterator implements Iterator {
 
-        int     counter = 0;
+        int counter = 0;
         boolean removed;
 
         public boolean hasNext() {

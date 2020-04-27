@@ -53,18 +53,18 @@ import java.io.IOException;
  */
 public class RowStoreAVLHybrid extends RowStoreAVL {
 
-    DataFileCache     cache;
+    DataFileCache cache;
     private final int maxMemoryRowCount;
-    private boolean   useDisk;
-    boolean           isCached;
-    long              rowIdSequence = 0;
+    private boolean useDisk;
+    boolean isCached;
+    long rowIdSequence = 0;
 
     public RowStoreAVLHybrid(Session session, TableBase table,
                              boolean diskBased) {
 
-        this.table             = table;
+        this.table = table;
         this.maxMemoryRowCount = session.getResultMemoryRowCount();
-        this.useDisk           = diskBased;
+        this.useDisk = diskBased;
 
         if (maxMemoryRowCount == 0) {
             this.useDisk = false;
@@ -96,7 +96,8 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
         useDisk = !mode;
     }
 
-    public void set(CachedObject object) {}
+    public void set(CachedObject object) {
+    }
 
     public CachedObject get(long i) {
 
@@ -105,7 +106,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
                 return cache.get(i, this, false);
             } else {
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "RowStoreAVLHybrid");
+                        "RowStoreAVLHybrid");
             }
         } catch (HsqlException e) {
             return null;
@@ -119,7 +120,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
                 return cache.get(i, this, keep);
             } else {
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "RowStoreAVLHybrid");
+                        "RowStoreAVLHybrid");
             }
         } catch (HsqlException e) {
             return null;
@@ -243,29 +244,31 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
         }
     }
 
-    public void commitPersistence(CachedObject row) {}
+    public void commitPersistence(CachedObject row) {
+    }
 
-    public void postCommitAction(Session session, RowAction rowAction) {}
+    public void postCommitAction(Session session, RowAction rowAction) {
+    }
 
     public void commitRow(Session session, Row row, int changeAction,
                           int txModel) {
 
         switch (changeAction) {
 
-            case RowAction.ACTION_DELETE :
+            case RowAction.ACTION_DELETE:
                 remove(row);
                 break;
 
-            case RowAction.ACTION_INSERT :
+            case RowAction.ACTION_INSERT:
                 break;
 
-            case RowAction.ACTION_INSERT_DELETE :
+            case RowAction.ACTION_INSERT_DELETE:
 
                 // INSERT + DELEETE
                 remove(row);
                 break;
 
-            case RowAction.ACTION_DELETE_FINAL :
+            case RowAction.ACTION_DELETE_FINAL:
                 throw Error.runtimeError(ErrorCode.U_S0500, "RowStore");
         }
     }
@@ -275,7 +278,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
 
         switch (changeAction) {
 
-            case RowAction.ACTION_DELETE :
+            case RowAction.ACTION_DELETE:
                 row = (Row) get(row, true);
 
                 ((RowAVL) row).setNewNodes(this);
@@ -283,12 +286,12 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
                 indexRow(session, row);
                 break;
 
-            case RowAction.ACTION_INSERT :
+            case RowAction.ACTION_INSERT:
                 delete(session, row);
                 remove(row);
                 break;
 
-            case RowAction.ACTION_INSERT_DELETE :
+            case RowAction.ACTION_INSERT_DELETE:
 
                 // INSERT + DELEETE
                 remove(row);
@@ -310,7 +313,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
         if (isCached) {
             cache.adjustStoreCount(-1);
 
-            cache    = null;
+            cache = null;
             isCached = false;
         } else {
             destroy();
@@ -322,17 +325,17 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
 
     public CachedObject getAccessor(Index key) {
 
-        int     position = key.getPosition();
-        NodeAVL node     = (NodeAVL) accessorList[position];
+        int position = key.getPosition();
+        NodeAVL node = (NodeAVL) accessorList[position];
 
         if (node == null) {
             return null;
         }
 
         RowAVL oldRow = node.getRow(this);
-        RowAVL row    = (RowAVL) get(oldRow, false);
+        RowAVL row = (RowAVL) get(oldRow, false);
 
-        node                            = row.getNode(key.getPosition());
+        node = row.getNode(key.getPosition());
         accessorList[key.getPosition()] = node;
 
         return node;
@@ -341,7 +344,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
     public synchronized void resetAccessorKeys(Session session, Index[] keys) {
 
         if (indexList.length == 0 || accessorList[0] == null) {
-            indexList    = keys;
+            indexList = keys;
             accessorList = new CachedObject[indexList.length];
 
             return;
@@ -361,8 +364,8 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
     public final void changeToDiskTable(Session session) {
 
         cache =
-            session.sessionData.persistentStoreCollection
-                .getSessionDataCache();
+                session.sessionData.persistentStoreCollection
+                        .getSessionDataCache();
 
         if (cache == null) {
             useDisk = false;
@@ -371,7 +374,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
         }
 
         tableSpace =
-            cache.spaceManager.getTableSpace(DataSpaceManager.tableIdDefault);
+                cache.spaceManager.getTableSpace(DataSpaceManager.tableIdDefault);
         isCached = true;
 
         cache.adjustStoreCount(1);
@@ -380,8 +383,8 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
             return;
         }
 
-        IndexAVL    idx      = (IndexAVL) indexList[0];
-        NodeAVL     root     = (NodeAVL) accessorList[0];
+        IndexAVL idx = (IndexAVL) indexList[0];
+        NodeAVL root = (NodeAVL) accessorList[0];
         RowIterator iterator = table.rowIterator(this);
 
         ArrayUtil.fillArray(accessorList, null);
@@ -391,7 +394,7 @@ public class RowStoreAVLHybrid extends RowStoreAVL {
         while (iterator.next()) {
             Row row = iterator.getCurrentRow();
             Row newRow = (Row) getNewCachedObject(session, row.getData(),
-                                                  false);
+                    false);
 
             indexRow(session, newRow);
         }

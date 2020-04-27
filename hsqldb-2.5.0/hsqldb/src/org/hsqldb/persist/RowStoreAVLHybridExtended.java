@@ -77,8 +77,8 @@ public class RowStoreAVLHybridExtended extends RowStoreAVLHybrid {
 
     public void indexRow(Session session, Row row) {
 
-        NodeAVL node  = ((RowAVL) row).getNode(0);
-        int     count = 0;
+        NodeAVL node = ((RowAVL) row).getNode(0);
+        int count = 0;
 
         while (node != null) {
             count++;
@@ -98,8 +98,8 @@ public class RowStoreAVLHybridExtended extends RowStoreAVLHybrid {
      */
     public void delete(Session session, Row row) {
 
-        NodeAVL node  = ((RowAVL) row).getNode(0);
-        int     count = 0;
+        NodeAVL node = ((RowAVL) row).getNode(0);
+        int count = 0;
 
         while (node != null) {
             count++;
@@ -144,7 +144,7 @@ public class RowStoreAVLHybridExtended extends RowStoreAVLHybrid {
 
         try {
             if (indexList.length == 0 || accessorList[0] == null) {
-                indexList    = keys;
+                indexList = keys;
                 accessorList = new CachedObject[indexList.length];
 
                 return;
@@ -165,17 +165,17 @@ public class RowStoreAVLHybridExtended extends RowStoreAVLHybrid {
     private void resetAccessorKeysCached(Index[] keys) {
 
         RowStoreAVLHybrid tempStore = new RowStoreAVLHybridExtended(session,
-            table, true);
+                table, true);
 
         tempStore.changeToDiskTable(session);
 
-        tempStore.indexList    = indexList;
+        tempStore.indexList = indexList;
         tempStore.accessorList = accessorList;
 
         tempStore.elementCount.set(elementCount.get());
 
         //
-        indexList    = keys;
+        indexList = keys;
         accessorList = new CachedObject[indexList.length];
 
         elementCount.set(0);
@@ -185,7 +185,7 @@ public class RowStoreAVLHybridExtended extends RowStoreAVLHybrid {
         while (iterator.next()) {
             Row row = iterator.getCurrentRow();
             Row newRow = (Row) getNewCachedObject(session, row.getData(),
-                                                  false);
+                    false);
 
             indexRow(session, newRow);
         }

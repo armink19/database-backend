@@ -89,56 +89,55 @@ import java.util.Vector;
 // fredt@users 20040508 - patch 1.7.2 - bug fixes
 
 /**
- *  Utility program (or applet) for transferring tables between different
- *  databases via JDBC. Understands HSQLDB database particularly well.
+ * Utility program (or applet) for transferring tables between different
+ * databases via JDBC. Understands HSQLDB database particularly well.
  *
  * @author Thomas Mueller (Hypersonic SQL Group)
-  * @version 2.5.0
-  * @since Hypersonic SQL
+ * @version 2.5.0
+ * @since Hypersonic SQL
  */
 public class Transfer extends Applet
-implements WindowListener, ActionListener, ItemListener, Traceable {
+        implements WindowListener, ActionListener, ItemListener, Traceable {
 
-    Frame            fMain;
-    Image            imgEmpty;
-    DataAccessPoint  sourceDb;
-    DataAccessPoint  targetDb;
-    TransferTable    tCurrent;
-    int              iMaxRows;
-    int              iSelectionStep;
-    Vector           tTable;
-    java.awt.List    lTable;
-    String[]         sSourceSchemas;
-    String           sSourceCatalog, sDestSchema, sDestCatalog;
+    Frame fMain;
+    Image imgEmpty;
+    DataAccessPoint sourceDb;
+    DataAccessPoint targetDb;
+    TransferTable tCurrent;
+    int iMaxRows;
+    int iSelectionStep;
+    Vector tTable;
+    java.awt.List lTable;
+    String[] sSourceSchemas;
+    String sSourceCatalog, sDestSchema, sDestCatalog;
     TextField tSourceTable, tDestTable, tDestDropIndex, tDestCreateIndex;
-    TextField        tDestDrop, tDestCreate, tDestDelete, tDestAlter;
-    TextField        tSourceSelect, tDestInsert;
-    Checkbox         cTransfer, cDrop, cCreate, cDelete, cInsert, cAlter;
-    Checkbox         cCreateIndex, cDropIndex;
-    Checkbox         cFKForced, cIdxForced;
-    Button           bStart, bContinue;
-    TextField        tMessage;
-    int              iTransferMode;
-    static boolean   bMustExit;
-    int              CurrentTransfer, CurrentAlter;
+    TextField tDestDrop, tDestCreate, tDestDelete, tDestAlter;
+    TextField tSourceSelect, tDestInsert;
+    Checkbox cTransfer, cDrop, cCreate, cDelete, cInsert, cAlter;
+    Checkbox cCreateIndex, cDropIndex;
+    Checkbox cFKForced, cIdxForced;
+    Button bStart, bContinue;
+    TextField tMessage;
+    int iTransferMode;
+    static boolean bMustExit;
+    int CurrentTransfer, CurrentAlter;
     static final int SELECT_SOURCE_CATALOG = 1;
-    static final int SELECT_SOURCE_SCHEMA  = 2;
-    static final int SELECT_DEST_CATALOG   = 3;
-    static final int SELECT_DEST_SCHEMA    = 4;
-    static final int SELECT_SOURCE_TABLES  = 5;
-    static final int TRFM_TRANSFER         = 1;
-    static final int TRFM_DUMP             = 2;
-    static final int TRFM_RESTORE          = 3;
+    static final int SELECT_SOURCE_SCHEMA = 2;
+    static final int SELECT_DEST_CATALOG = 3;
+    static final int SELECT_DEST_SCHEMA = 4;
+    static final int SELECT_SOURCE_TABLES = 5;
+    static final int TRFM_TRANSFER = 1;
+    static final int TRFM_DUMP = 2;
+    static final int TRFM_RESTORE = 3;
 
     /**
      * Method declaration
-     *
      *
      * @param s
      */
     public void trace(String s) {
 
-        if ((s != null) &&!s.equals("")) {
+        if ((s != null) && !s.equals("")) {
             tMessage.setText(s);
 
             if (TRACE) {
@@ -179,7 +178,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             work(arg);
         } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException(
-                    "Try:  java "+ Transfer.class.getName() + " --help");
+                    "Try:  java " + Transfer.class.getName() + " --help");
         }
     }
 
@@ -211,7 +210,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 bStart.setEnabled(true);
 
                 for (Enumeration e =
-                        result.elements(); e.hasMoreElements(); ) {
+                     result.elements(); e.hasMoreElements(); ) {
                     lTable.add(e.nextElement().toString());
                 }
 
@@ -224,7 +223,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                         sSourceSchemas = null;
                     } else {
                         sDestCatalog = (String) result.firstElement();
-                        sDestSchema  = null;
+                        sDestSchema = null;
                     }
                 } else {
                     if (iSelectionStep == Transfer.SELECT_SOURCE_CATALOG) {
@@ -232,7 +231,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                         sSourceSchemas = null;
                     } else {
                         sDestCatalog = null;
-                        sDestSchema  = null;
+                        sDestSchema = null;
                     }
                 }
 
@@ -242,7 +241,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                         targetDb.setCatalog(sDestCatalog);
                     } catch (Exception ex) {
                         trace("Catalog " + sSourceCatalog
-                              + " could not be selected in the target database");
+                                + " could not be selected in the target database");
 
                         sSourceCatalog = null;
                     }
@@ -291,7 +290,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 bStart.setEnabled(true);
 
                 for (Enumeration e =
-                        result.elements(); e.hasMoreElements(); ) {
+                     result.elements(); e.hasMoreElements(); ) {
                     lTable.add(e.nextElement().toString());
                 }
 
@@ -300,7 +299,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             } else {
                 if (result.size() == 1) {
                     if (iSelectionStep == Transfer.SELECT_SOURCE_SCHEMA) {
-                        sSourceSchemas    = new String[1];
+                        sSourceSchemas = new String[1];
                         sSourceSchemas[0] = (String) result.firstElement();
                     } else {
                         sDestSchema = (String) result.firstElement();
@@ -333,7 +332,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
     }
 
     static private final String SYNTAX_MSG =
-        "java " + Transfer.class.getName() + " [--help|--dump|--restore]";
+            "java " + Transfer.class.getName() + " [--help|--dump|--restore]";
 
     /**
      * @throws IllegalArgumentException for the obvious reason
@@ -351,11 +350,12 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             }
             if ((arg[0].toLowerCase().equals("-r"))
                     || (arg[0].toLowerCase().equals("--restore"))) {
-                iTransferMode = TRFM_RESTORE; } else if ((arg[0].toLowerCase().equals("-d"))
-                       || (arg[0].toLowerCase().equals("--dump"))) {
+                iTransferMode = TRFM_RESTORE;
+            } else if ((arg[0].toLowerCase().equals("-d"))
+                    || (arg[0].toLowerCase().equals("--dump"))) {
                 iTransferMode = TRFM_DUMP;
             } else if ((arg[0].toLowerCase().equals("-h"))
-                       || (arg[0].toLowerCase().equals("--help"))) {
+                    || (arg[0].toLowerCase().equals("--help"))) {
                 System.out.println(Transfer.SYNTAX_MSG);
                 return;
             } else {
@@ -372,10 +372,10 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         fMain.setSize(640, 480);
         fMain.add("Center", this);
 
-        MenuBar  bar    = new MenuBar();
+        MenuBar bar = new MenuBar();
         String[] extras = {
-            "Insert 10 rows only", "Insert 1000 rows only", "Insert all rows",
-            "-", "Load Settings...", "Save Settings...", "-", "Exit"
+                "Insert 10 rows only", "Insert 1000 rows only", "Insert all rows",
+                "-", "Load Settings...", "Save Settings...", "-", "Exit"
         };
         Menu menu = new Menu("Options");
 
@@ -384,13 +384,13 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         fMain.setMenuBar(bar);
         initGUI();
 
-        Dimension d    = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension size = fMain.getSize();
 
         // (ulrivo): full size on screen with less than 640 width
         if (d.width >= 640) {
             fMain.setLocation((d.width - size.width) / 2,
-                              (d.height - size.height) / 2);
+                    (d.height - size.height) / 2);
         } else {
             fMain.setLocation(0, 0);
             fMain.setSize(d);
@@ -404,8 +404,8 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             if ((iTransferMode == TRFM_DUMP)
                     || (iTransferMode == TRFM_TRANSFER)) {
                 sourceDb = new TransferDb(
-                    ConnectionDialog.createConnection(
-                        fMain, "Source Database"), this);
+                        ConnectionDialog.createConnection(
+                                fMain, "Source Database"), this);
 
                 if (!sourceDb.isConnected()) {
                     exit();
@@ -414,12 +414,12 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 }
             } else {
                 FileDialog f = new FileDialog(fMain, "Restore FileName",
-                                              FileDialog.LOAD);
+                        FileDialog.LOAD);
 
                 f.setVisible(true);
 
                 String sFileName = f.getFile();
-                String Path      = f.getDirectory();
+                String Path = f.getDirectory();
 
                 if ((sFileName == null) || (sFileName.equals(""))) {
                     exit();
@@ -433,8 +433,8 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             if ((iTransferMode == TRFM_RESTORE)
                     || (iTransferMode == TRFM_TRANSFER)) {
                 targetDb = new TransferDb(
-                    ConnectionDialog.createConnection(
-                        fMain, "Target Database"), this);
+                        ConnectionDialog.createConnection(
+                                fMain, "Target Database"), this);
 
                 if (!targetDb.isConnected()) {
                     exit();
@@ -443,12 +443,12 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 }
             } else {
                 FileDialog f = new FileDialog(fMain, "Dump FileName",
-                                              FileDialog.SAVE);
+                        FileDialog.SAVE);
 
                 f.setVisible(true);
 
                 String sFileName = f.getFile();
-                String Path      = f.getDirectory();
+                String Path = f.getDirectory();
 
                 if ((sFileName == null) || (sFileName.equals(""))) {
                     exit();
@@ -471,7 +471,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             sSourceCatalog = null;
         } else {
             iSelectionStep = SELECT_DEST_CATALOG;
-            sDestCatalog   = null;
+            sDestCatalog = null;
         }
 
         ProcessNextStep();
@@ -516,7 +516,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
     /**
      * Method declaration
      *
-     *
      * @param f
      * @param m
      */
@@ -537,7 +536,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
     /**
      * Method declaration
      *
-     *
      * @param e
      */
     public void itemStateChanged(ItemEvent e) {
@@ -546,8 +544,8 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
         if (item == lTable) {
             if (iSelectionStep == SELECT_SOURCE_TABLES) {
-                String table    = lTable.getSelectedItem();
-                int    selected = ((Integer) e.getItem()).intValue();
+                String table = lTable.getSelectedItem();
+                int selected = ((Integer) e.getItem()).intValue();
 
                 for (int i = 0; i < tTable.size(); i++) {
                     TransferTable t = (TransferTable) tTable.elementAt(i);
@@ -573,7 +571,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
     /**
      * Method declaration
-     *
      */
     private void saveTable() {
 
@@ -583,26 +580,26 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
         TransferTable t = tCurrent;
 
-        t.Stmts.sSourceTable     = tSourceTable.getText();
-        t.Stmts.sDestTable       = tDestTable.getText();
-        t.Stmts.sDestDrop        = tDestDrop.getText();
+        t.Stmts.sSourceTable = tSourceTable.getText();
+        t.Stmts.sDestTable = tDestTable.getText();
+        t.Stmts.sDestDrop = tDestDrop.getText();
         t.Stmts.sDestCreateIndex = tDestCreateIndex.getText();
-        t.Stmts.sDestDropIndex   = tDestDropIndex.getText();
-        t.Stmts.sDestCreate      = tDestCreate.getText();
-        t.Stmts.sDestDelete      = tDestDelete.getText();
-        t.Stmts.sSourceSelect    = tSourceSelect.getText();
-        t.Stmts.sDestInsert      = tDestInsert.getText();
-        t.Stmts.sDestAlter       = tDestAlter.getText();
+        t.Stmts.sDestDropIndex = tDestDropIndex.getText();
+        t.Stmts.sDestCreate = tDestCreate.getText();
+        t.Stmts.sDestDelete = tDestDelete.getText();
+        t.Stmts.sSourceSelect = tSourceSelect.getText();
+        t.Stmts.sDestInsert = tDestInsert.getText();
+        t.Stmts.sDestAlter = tDestAlter.getText();
 
         //
-        t.Stmts.bTransfer    = cTransfer.getState();
-        t.Stmts.bDrop        = cDrop.getState();
-        t.Stmts.bCreate      = cCreate.getState();
-        t.Stmts.bDelete      = cDelete.getState();
-        t.Stmts.bInsert      = cInsert.getState();
-        t.Stmts.bAlter       = cAlter.getState();
+        t.Stmts.bTransfer = cTransfer.getState();
+        t.Stmts.bDrop = cDrop.getState();
+        t.Stmts.bCreate = cCreate.getState();
+        t.Stmts.bDelete = cDelete.getState();
+        t.Stmts.bInsert = cInsert.getState();
+        t.Stmts.bAlter = cAlter.getState();
         t.Stmts.bCreateIndex = cCreateIndex.getState();
-        t.Stmts.bDropIndex   = cDropIndex.getState();
+        t.Stmts.bDropIndex = cDropIndex.getState();
 
         if (!t.Stmts.bTransfer) {
             t.Stmts.bInsert = false;
@@ -611,10 +608,10 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         }
 
         boolean reparsetable = ((t.Stmts.bFKForced != cFKForced.getState())
-                                || (t.Stmts.bIdxForced
-                                    != cIdxForced.getState()));
+                || (t.Stmts.bIdxForced
+                != cIdxForced.getState()));
 
-        t.Stmts.bFKForced  = cFKForced.getState();
+        t.Stmts.bFKForced = cFKForced.getState();
         t.Stmts.bIdxForced = cIdxForced.getState();
 
         if (reparsetable) {
@@ -629,7 +626,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
     /**
      * Method declaration
-     *
      *
      * @param t
      */
@@ -665,7 +661,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
     /**
      * Method declaration
-     *
      *
      * @param and
      */
@@ -705,8 +700,8 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
         switch (iSelectionStep) {
 
-            case SELECT_SOURCE_CATALOG :
-            case SELECT_DEST_CATALOG :
+            case SELECT_SOURCE_CATALOG:
+            case SELECT_DEST_CATALOG:
                 if (CatalogToSelect()) {
                     fMain.setVisible(true);
 
@@ -714,8 +709,8 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 }
                 break;
 
-            case SELECT_DEST_SCHEMA :
-            case SELECT_SOURCE_SCHEMA :
+            case SELECT_DEST_SCHEMA:
+            case SELECT_SOURCE_SCHEMA:
                 if (SchemaToSelect()) {
                     fMain.setVisible(true);
 
@@ -723,7 +718,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 }
                 break;
 
-            case SELECT_SOURCE_TABLES :
+            case SELECT_SOURCE_TABLES:
                 if (iTransferMode == TRFM_TRANSFER) {
                     bStart.setLabel("Start Transfer");
                 } else if (iTransferMode == TRFM_DUMP) {
@@ -738,14 +733,13 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 RefreshMainDisplay();
                 break;
 
-            default :
+            default:
                 break;
         }
     }
 
     /**
      * Method declaration
-     *
      *
      * @param ev
      */
@@ -757,7 +751,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             return;
         }
 
-        String   s = ev.getActionCommand();
+        String s = ev.getActionCommand();
         MenuItem i = new MenuItem();
 
         if (s == null) {
@@ -772,14 +766,14 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             bStart.invalidate();
 
             CurrentTransfer = 0;
-            CurrentAlter    = 0;
+            CurrentAlter = 0;
 
             transfer();
         } else if (s.equals("Continue Transfer")) {
             transfer();
         } else if (s.equals("Start Dump") || s.equals("Start Restore")) {
             CurrentTransfer = 0;
-            CurrentAlter    = 0;
+            CurrentAlter = 0;
 
             transfer();
         } else if (s.equals("Quit")) {
@@ -816,13 +810,13 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
                 sSourceSchemas = null;
             } else {
                 sDestCatalog = selection;
-                sDestSchema  = null;
+                sDestSchema = null;
 
                 try {
                     targetDb.setCatalog(sDestCatalog);
                 } catch (Exception ex) {
                     trace("Catalog " + sDestCatalog
-                          + " could not be selected in the target database");
+                            + " could not be selected in the target database");
 
                     sDestCatalog = null;
                 }
@@ -839,7 +833,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             iMaxRows = 0;
         } else if (s.equals("Load Settings...")) {
             FileDialog f = new FileDialog(fMain, "Load Settings",
-                                          FileDialog.LOAD);
+                    FileDialog.LOAD);
 
             f.setVisible(true);
 
@@ -851,7 +845,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             }
         } else if (s.equals("Save Settings...")) {
             FileDialog f = new FileDialog(fMain, "Save Settings",
-                                          FileDialog.SAVE);
+                    FileDialog.SAVE);
 
             f.setVisible(true);
 
@@ -868,26 +862,26 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
     /**
      * Method declaration
      *
-     *
      * @param e
      */
-    public void windowActivated(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {
+    }
 
     /**
      * Method declaration
      *
-     *
      * @param e
      */
-    public void windowDeactivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {
+    }
 
     /**
      * Method declaration
      *
-     *
      * @param e
      */
-    public void windowClosed(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {
+    }
 
     private void cleanup() {
 
@@ -899,12 +893,12 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             if (targetDb != null) {
                 targetDb.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     /**
      * Method declaration
-     *
      *
      * @param ev
      */
@@ -920,30 +914,29 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
     /**
      * Method declaration
      *
-     *
      * @param e
      */
-    public void windowDeiconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {
+    }
 
     /**
      * Method declaration
      *
-     *
      * @param e
      */
-    public void windowIconified(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {
+    }
 
     /**
      * Method declaration
      *
-     *
      * @param e
      */
-    public void windowOpened(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {
+    }
 
     /**
      * Method declaration
-     *
      */
     private void initGUI() {
 
@@ -1009,12 +1002,12 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         cCreate.addItemListener(this);
 
         cDropIndex = new Checkbox("Drop destination index (ignore error)",
-                                  true);
+                true);
 
         cDropIndex.addItemListener(this);
 
         cIdxForced = new Checkbox("force Idx_ prefix for indexes names",
-                                  false);
+                false);
 
         cIdxForced.addItemListener(this);
 
@@ -1031,7 +1024,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         cInsert.addItemListener(this);
 
         cFKForced = new Checkbox("force FK_ prefix for foreign key names",
-                                 false);
+                false);
 
         cFKForced.addItemListener(this);
 
@@ -1066,7 +1059,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         p.add(createLabel(""));
 
         if (iTransferMode == TRFM_TRANSFER) {
-            bStart    = new Button("Start Transfer");
+            bStart = new Button("Start Transfer");
             bContinue = new Button("Continue Transfer");
 
             bContinue.setEnabled(false);
@@ -1102,7 +1095,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
     /**
      * Method declaration
      *
-     *
      * @param center
      */
     private Panel createBorderPanel(Component center) {
@@ -1122,7 +1114,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
     /**
      * Method declaration
-     *
      *
      * @param s
      */
@@ -1189,7 +1180,6 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
     /**
      * Method declaration
-     *
      */
     private void transfer() {
 
@@ -1197,17 +1187,17 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
         updateEnabled(false);
         trace("Start Transfer");
 
-        int           TransferIndex = CurrentTransfer;
-        int           AlterIndex    = CurrentAlter;
-        TransferTable t             = null;
-        long          startTime, stopTime;
+        int TransferIndex = CurrentTransfer;
+        int AlterIndex = CurrentAlter;
+        TransferTable t = null;
+        long startTime, stopTime;
 
         startTime = System.currentTimeMillis();
 
         try {
             for (int i = TransferIndex; i < tTable.size(); i++) {
                 CurrentTransfer = i;
-                t               = (TransferTable) tTable.elementAt(i);
+                t = (TransferTable) tTable.elementAt(i);
 
                 lTable.select(i);
                 displayTable(t);
@@ -1217,7 +1207,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
 
             for (int i = AlterIndex; i < tTable.size(); i++) {
                 CurrentAlter = i;
-                t            = (TransferTable) tTable.elementAt(i);
+                t = (TransferTable) tTable.elementAt(i);
 
                 lTable.select(i);
                 displayTable(t);
@@ -1227,7 +1217,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             stopTime = System.currentTimeMillis();
 
             trace("Transfer finished successfully in: "
-                  + (stopTime - startTime) / 1000.00 + " sec");
+                    + (stopTime - startTime) / 1000.00 + " sec");
 
             if (iTransferMode == TRFM_TRANSFER) {
                 bContinue.setLabel("Quit");
@@ -1242,7 +1232,7 @@ implements WindowListener, ActionListener, ItemListener, Traceable {
             String last = tMessage.getText();
 
             trace("Transfer stopped - " + last + " /  / Error: "
-                  + e.toString());
+                    + e.toString());
             e.printStackTrace();
         }
 

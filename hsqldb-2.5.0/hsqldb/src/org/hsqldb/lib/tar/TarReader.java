@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  * N.b. this is not a <I>Reader</I> in the <CODE>java.io.Reader</CODE> sense,
  * but in the sense of differentiating <CODE>tar x</CODE> and
  * <CODE>tar t</CODE> from <CODE>tar c</CODE>.
- * <P>
+ * <p>
  * <B>SECURITY NOTE</B>
  * Due to pitiful lack of support for file security in Java before version 1.6,
  * this class will only explicitly set permissions if it is compiled for Java
@@ -69,9 +69,9 @@ public class TarReader {
     public static final int OVERWRITE_MODE = 2;
 
     protected TarFileInputStream archive;
-    protected Pattern[]          patterns = null;
-    protected int                mode;
-    protected File               extractBaseDir;    // null means current directory
+    protected Pattern[] patterns = null;
+    protected int mode;
+    protected File extractBaseDir;    // null means current directory
 
     // Not used for Absolute path entries
     // This path is always absolutized
@@ -80,23 +80,22 @@ public class TarReader {
      * Compression is determined directly by the suffix of the file name in
      * the specified path.
      *
-     * @param inFile  Absolute or relative (from user.dir) path to
-     *                tar file to be read.  Suffix may indicate
-     *                a compression method.
-     * @param mode    Whether to list, extract-without-overwrite, or
-     *                extract-with-overwrite.
-     * @param patternStrings
-     *                  List of regular expressions to match against tar entry
-     *                  names.  If null, all entries will be listed or
-     *                  extracted.  If non-null, then only entries with names
-     *                  which match will be extracted or listed.
-     * @param readBufferBlocks  Null will use default tar value.
-     * @param inDir   Directory that RELATIVE entries will be extracted
-     *                relative to.  Defaults to current directory (user.dir).
-     *                Only used for extract modes and relative file entries.
+     * @param inFile           Absolute or relative (from user.dir) path to
+     *                         tar file to be read.  Suffix may indicate
+     *                         a compression method.
+     * @param mode             Whether to list, extract-without-overwrite, or
+     *                         extract-with-overwrite.
+     * @param patternStrings   List of regular expressions to match against tar entry
+     *                         names.  If null, all entries will be listed or
+     *                         extracted.  If non-null, then only entries with names
+     *                         which match will be extracted or listed.
+     * @param readBufferBlocks Null will use default tar value.
+     * @param inDir            Directory that RELATIVE entries will be extracted
+     *                         relative to.  Defaults to current directory (user.dir).
+     *                         Only used for extract modes and relative file entries.
      * @throws IllegalArgumentException if any given pattern is an invalid
-     *                  regular expression.  Don't have to worry about this if
-     *                  you call with null 'patterns' param.
+     *                                  regular expression.  Don't have to worry about this if
+     *                                  you call with null 'patterns' param.
      * @see Pattern
      */
     public TarReader(File inFile, int mode, String[] patternStrings,
@@ -107,10 +106,10 @@ public class TarReader {
         File archiveFile = inFile.getAbsoluteFile();
 
         extractBaseDir = (inDir == null) ? null
-                                         : inDir.getAbsoluteFile();
+                : inDir.getAbsoluteFile();
 
         int compression =
-            TarFileOutputStream.Compression.NO_COMPRESSION;
+                TarFileOutputStream.Compression.NO_COMPRESSION;
 
         if (archiveFile.getName().endsWith(".tgz")
                 || archiveFile.getName().endsWith(".gz")) {
@@ -128,18 +127,18 @@ public class TarReader {
         // Don't check for archive file existence here.  We can depend upon the
         // TarFileInputStream to check that.
         archive = (readBufferBlocks == null)
-                  ? new TarFileInputStream(archiveFile, compression)
-                  : new TarFileInputStream(archiveFile, compression,
-                                           readBufferBlocks.intValue());
+                ? new TarFileInputStream(archiveFile, compression)
+                : new TarFileInputStream(archiveFile, compression,
+                readBufferBlocks.intValue());
     }
 
     public void read() throws IOException, TarMalformatException {
 
         TarEntryHeader header;
-        boolean        anyUnsupporteds = false;
-        boolean        matched;
-        Long           paxSize   = null;
-        String         paxString = null;
+        boolean anyUnsupporteds = false;
+        boolean matched;
+        Long paxSize = null;
+        String paxString = null;
 
         try {
             EACH_HEADER:
@@ -155,7 +154,7 @@ public class TarReader {
                      * patterns, we will need this size for the listing or to
                      * extract the data.
                      */
-                    paxSize   = getPifData(header).getSize();
+                    paxSize = getPifData(header).getSize();
                     paxString = header.toString();
 
                     continue;
@@ -197,7 +196,7 @@ public class TarReader {
 
                 switch (mode) {
 
-                    case LIST_MODE :
+                    case LIST_MODE:
                         if (paxString != null) {
                             System.out.println(paxString);
                         }
@@ -206,8 +205,8 @@ public class TarReader {
                         skipFileData(header);
                         break;
 
-                    case EXTRACT_MODE :
-                    case OVERWRITE_MODE :
+                    case EXTRACT_MODE:
+                    case OVERWRITE_MODE:
                         if (paxString != null) {
                             System.out.println(paxString);
                         }
@@ -230,7 +229,7 @@ public class TarReader {
                         }
                         break;
 
-                    default :
+                    default:
                         throw new IllegalArgumentException(
                                 RB.unsupported_mode.getString(mode));
                 }
@@ -249,7 +248,7 @@ public class TarReader {
     }
 
     protected PIFData getPifData(TarEntryHeader header)
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         /*
          * If you modify this, make sure to not intermix reading/writing of
@@ -271,10 +270,10 @@ public class TarReader {
 
         int readNow;
         int readBlocks = (int) (dataSize / 512L);
-        int modulus    = (int) (dataSize % 512L);
+        int modulus = (int) (dataSize % 512L);
 
         // Couldn't care less about the entry "name" field.
-        PipedInputStream  inPipe  = null;
+        PipedInputStream inPipe = null;
         PipedOutputStream outPipe = new PipedOutputStream();
 
         /* This constructor not available until Java 1.6:
@@ -284,8 +283,8 @@ public class TarReader {
             inPipe = new PipedInputStream(outPipe);
             while (readBlocks > 0) {
                 readNow = (readBlocks > archive.getReadBufferBlocks())
-                          ? archive.getReadBufferBlocks()
-                          : readBlocks;
+                        ? archive.getReadBufferBlocks()
+                        : readBlocks;
 
                 archive.readBlocks(readNow);
 
@@ -294,7 +293,8 @@ public class TarReader {
                 outPipe.write(archive.readBuffer, 0, readNow * 512);
             }
 
-            if (modulus != 0) { archive.readBlock();
+            if (modulus != 0) {
+                archive.readBlock();
                 outPipe.write(archive.readBuffer, 0, modulus);
             }
 
@@ -317,21 +317,21 @@ public class TarReader {
     }
 
     protected void extractFile(TarEntryHeader header)
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         if (header.getDataSize() < 1) {
             throw new TarMalformatException(RB.data_size_unknown.getString());
         }
 
-        int  readNow;
-        int  readBlocks = (int) (header.getDataSize() / 512L);
-        int  modulus    = (int) (header.getDataSize() % 512L);
-        File newFile    = header.generateFile();
+        int readNow;
+        int readBlocks = (int) (header.getDataSize() / 512L);
+        int modulus = (int) (header.getDataSize() % 512L);
+        File newFile = header.generateFile();
 
         if (!newFile.isAbsolute()) {
             newFile = (extractBaseDir == null) ? newFile.getAbsoluteFile()
-                                               : new File(extractBaseDir,
-                                               newFile.getPath());
+                    : new File(extractBaseDir,
+                    newFile.getPath());
         }
 
         // newFile is definitively Absolutized at this point
@@ -340,13 +340,13 @@ public class TarReader {
         if (newFile.exists()) {
             if (mode != TarReader.OVERWRITE_MODE) {
                 throw new IOException(
-                    RB.extraction_exists.getString(newFile.getAbsolutePath()));
+                        RB.extraction_exists.getString(newFile.getAbsolutePath()));
             }
 
             if (!newFile.isFile()) {
                 throw new IOException(
                         RB.extraction_exists_notfile.getString(
-                        newFile.getAbsolutePath()));
+                                newFile.getAbsolutePath()));
             }
 
             // Better to let FileOutputStream creation zero it than to
@@ -357,23 +357,23 @@ public class TarReader {
             if (!parentDir.isDirectory()) {
                 throw new IOException(
                         RB.extraction_parent_not_dir.getString(
-                        parentDir.getAbsolutePath()));
+                                parentDir.getAbsolutePath()));
             }
 
             if (!parentDir.canWrite()) {
                 throw new IOException(
                         RB.extraction_parent_not_writable.getString(
-                        parentDir.getAbsolutePath()));
+                                parentDir.getAbsolutePath()));
             }
         } else {
             if (!parentDir.mkdirs()) {
                 throw new IOException(
                         RB.extraction_parent_mkfail.getString(
-                        parentDir.getAbsolutePath()));
+                                parentDir.getAbsolutePath()));
             }
         }
 
-        int              fileMode  = header.getFileMode();
+        int fileMode = header.getFileMode();
         FileOutputStream outStream = new FileOutputStream(newFile);
 
         try {
@@ -390,8 +390,8 @@ public class TarReader {
 
             while (readBlocks > 0) {
                 readNow = (readBlocks > archive.getReadBufferBlocks())
-                          ? archive.getReadBufferBlocks()
-                          : readBlocks;
+                        ? archive.getReadBufferBlocks()
+                        : readBlocks;
 
                 archive.readBlocks(readNow);
 
@@ -425,12 +425,12 @@ public class TarReader {
     }
 
     protected void skipFileData(TarEntryHeader header)
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         /*
          * Some entry types which we don't support have 0 data size.
          * If we just return here, the entry will just be skipped./
-        */
+         */
         if (header.getDataSize() == 0) {
             return;
         }
@@ -440,14 +440,14 @@ public class TarReader {
         }
 
         int skipNow;
-        int oddBlocks  = (header.getDataSize() % 512L == 0L) ? 0
-                                                             : 1;
+        int oddBlocks = (header.getDataSize() % 512L == 0L) ? 0
+                : 1;
         int skipBlocks = (int) (header.getDataSize() / 512L) + oddBlocks;
 
         while (skipBlocks > 0) {
             skipNow = (skipBlocks > archive.getReadBufferBlocks())
-                      ? archive.getReadBufferBlocks()
-                      : skipBlocks;
+                    ? archive.getReadBufferBlocks()
+                    : skipBlocks;
 
             archive.readBlocks(skipNow);
 
@@ -477,11 +477,11 @@ public class TarReader {
         }
 
         protected SimpleDateFormat sdf =
-            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
         /**
-         * @param rawHeader  May be longer than 512 bytes, but the first 512
-         *                   bytes MUST COMPRISE a raw tar entry header.
+         * @param rawHeader May be longer than 512 bytes, but the first 512
+         *                  bytes MUST COMPRISE a raw tar entry header.
          */
         public TarEntryHeader(byte[] rawHeader) throws TarMalformatException {
 
@@ -499,8 +499,8 @@ public class TarReader {
                 if (expectedCheckSum.longValue() != calculatedCheckSum) {
                     throw new TarMalformatException(
                             RB.checksum_mismatch.getString(
-                            expectedCheckSum.toString(),
-                            Long.toString(calculatedCheckSum)));
+                                    expectedCheckSum.toString(),
+                                    Long.toString(calculatedCheckSum)));
                 }
 
                 path = readString(TarHeaderField.name);
@@ -515,7 +515,7 @@ public class TarReader {
                     throw new MissingField(TarHeaderField.mode);
                 }
 
-                fileMode   = (int) longObject.longValue();
+                fileMode = (int) longObject.longValue();
                 longObject = readInteger(TarHeaderField.size);
 
                 if (longObject != null) {
@@ -551,12 +551,12 @@ public class TarReader {
         /* CRITICALLY IMPORTANT:  TO NOT USE rawHeader.length OR DEPEND ON
          * THE LENGTH OF the rawHeader ARRAY!  Use only the first 512 bytes!
          */
-        protected String  path;
-        protected int     fileMode;
-        protected long    dataSize = -1;    // In bytes
-        protected long    modTime;
-        protected char    entryType;
-        protected String  ownerName;
+        protected String path;
+        protected int fileMode;
+        protected long dataSize = -1;    // In bytes
+        protected long modTime;
+        protected char entryType;
+        protected String ownerName;
         protected boolean ustar;
 
         /**
@@ -613,22 +613,22 @@ public class TarReader {
         public String toString() {
 
             StringBuilder sb = new StringBuilder(
-                sdf.format(Long.valueOf(modTime * 1000L)) + ' ');
+                    sdf.format(Long.valueOf(modTime * 1000L)) + ' ');
 
             sb.append((entryType == '\0') ? ' '
-                                          : entryType);
+                    : entryType);
             sb.append(ustar ? '*'
-                            : ' ');
+                    : ' ');
             sb.append(
-                " "
-                + StringUtil.toPaddedString(
-                    Integer.toOctalString(fileMode), 4, ' ', false) + ' '
-                        + StringUtil.toPaddedString(
+                    " "
+                            + StringUtil.toPaddedString(
+                            Integer.toOctalString(fileMode), 4, ' ', false) + ' '
+                            + StringUtil.toPaddedString(
                             Long.toString(dataSize), 11, ' ', false) + "  ");
             sb.append(StringUtil.toPaddedString(((ownerName == null) ? "-"
-                                                                     : ownerName), 8,
-                                                                     ' ',
-                                                                     true));
+                            : ownerName), 8,
+                    ' ',
+                    true));
             sb.append("  " + path);
 
             return sb.toString();
@@ -665,7 +665,7 @@ public class TarReader {
             String s = readString(field);
 
             return (s == null) ? '\0'
-                               : s.charAt(0);
+                    : s.charAt(0);
         }
 
         /**
@@ -674,16 +674,16 @@ public class TarReader {
         protected String readString(TarHeaderField field) throws TarMalformatException {
 
             int start = field.getStart();
-            int stop  = field.getStop();
+            int stop = field.getStop();
             int termIndex = TarEntryHeader.indexOf(rawHeader, (byte) 0, start,
-                                                   stop);
+                    stop);
 
             switch (termIndex) {
 
-                case 0 :
+                case 0:
                     return null;
 
-                case -1 :
+                case -1:
                     termIndex = stop - start;
                     break;
 
@@ -719,7 +719,7 @@ public class TarReader {
             } catch (NumberFormatException nfe) {
                 throw new TarMalformatException(
                         RB.bad_numeric_header_value.getString(
-                        field.toString(), nfe.toString()));
+                                field.toString(), nfe.toString()));
             }
         }
 
@@ -729,14 +729,14 @@ public class TarReader {
 
             for (int i = 0; i < 512; i++) {
                 boolean isInRange =
-                    (i >= TarHeaderField.checksum.getStart()
-                     && i < TarHeaderField.checksum.getStop());
+                        (i >= TarHeaderField.checksum.getStart()
+                                && i < TarHeaderField.checksum.getStop());
 
                 // We ignore current contents of the checksum field so that
                 // this method will continue to work right, even if we later
                 // recycle the header or RE-calculate a header.
                 sum += isInRange ? 32
-                                 : (255 & rawHeader[i]);
+                        : (255 & rawHeader[i]);
             }
 
             return sum;

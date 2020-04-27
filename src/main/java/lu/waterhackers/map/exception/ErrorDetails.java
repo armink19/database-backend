@@ -1,4 +1,4 @@
-package com.database.demo.exception;
+package lu.waterhackers.map.exception;
 
 import java.util.Date;
 

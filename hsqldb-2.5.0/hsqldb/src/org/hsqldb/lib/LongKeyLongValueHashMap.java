@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  */
 public class LongKeyLongValueHashMap extends BaseHashMap {
 
-    private Set        keySet;
+    private Set keySet;
     private Collection values;
 
     public LongKeyLongValueHashMap() {
@@ -57,9 +57,9 @@ public class LongKeyLongValueHashMap extends BaseHashMap {
     }
 
     public LongKeyLongValueHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.longKeyOrValue,
-              BaseHashMap.longKeyOrValue, false);
+                BaseHashMap.longKeyOrValue, false);
     }
 
     public long get(long key) throws NoSuchElementException {

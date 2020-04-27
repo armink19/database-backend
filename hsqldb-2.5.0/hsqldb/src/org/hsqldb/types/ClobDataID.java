@@ -59,7 +59,7 @@ public class ClobDataID implements ClobData {
                            int length) {
 
         ResultLob resultOut = ResultLob.newLobGetCharsRequest(id, position,
-            length);
+                length);
         Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
@@ -76,7 +76,7 @@ public class ClobDataID implements ClobData {
         }
 
         ResultLob resultOut = ResultLob.newLobGetLengthRequest(id);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -109,7 +109,7 @@ public class ClobDataID implements ClobData {
     public ClobData duplicate(SessionInterface session) {
 
         ResultLob resultOut = ResultLob.newLobDuplicateRequest(id);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -124,7 +124,7 @@ public class ClobDataID implements ClobData {
                             long length) {
 
         ResultLob resultOut = ResultLob.newLobGetRequest(id, position, length);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -142,7 +142,7 @@ public class ClobDataID implements ClobData {
         }
 
         ResultLob resultOut = ResultLob.newLobTruncateRequest(id, len);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -159,12 +159,13 @@ public class ClobDataID implements ClobData {
     }
 
     public void setCharacterStream(SessionInterface session, long pos,
-                                   Reader in) {}
+                                   Reader in) {
+    }
 
     public void setString(SessionInterface session, long pos, String str) {
 
         ResultLob resultOut = ResultLob.newLobSetCharsRequest(id, pos,
-            str.toCharArray());
+                str.toCharArray());
         Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
@@ -175,7 +176,8 @@ public class ClobDataID implements ClobData {
     }
 
     public void setClob(SessionInterface session, long pos, ClobData clob,
-                        long offset, long len) {}
+                        long offset, long len) {
+    }
 
     public void setChars(SessionInterface session, long pos, char[] chars,
                          int offset, int len) {
@@ -195,7 +197,7 @@ public class ClobDataID implements ClobData {
         }
 
         ResultLob resultOut = ResultLob.newLobSetCharsRequest(id, pos, chars);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -208,7 +210,7 @@ public class ClobDataID implements ClobData {
                          long start) {
 
         ResultLob resultOut = ResultLob.newLobGetCharPatternPositionRequest(id,
-            searchstr.toCharArray(), start);
+                searchstr.toCharArray(), start);
         Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
@@ -222,7 +224,7 @@ public class ClobDataID implements ClobData {
                          long start) {
 
         ResultLob resultOut = ResultLob.newLobGetCharPatternPositionRequest(id,
-            searchstr.getId(), start);
+                searchstr.getId(), start);
         Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
@@ -232,11 +234,13 @@ public class ClobDataID implements ClobData {
         return ((ResultLob) resultIn).getOffset();
     }
 
-    /** @todo - implement the next method call in Session */
+    /**
+     * @todo - implement the next method call in Session
+     */
     public long nonSpaceLength(SessionInterface session) {
 
         ResultLob resultOut = ResultLob.newLobGetTruncateLength(id);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -262,7 +266,8 @@ public class ClobDataID implements ClobData {
         return pos >= 0 && len >= 0 && pos + len <= fullLength;
     }
 
-    public void setSession(SessionInterface session) {}
+    public void setSession(SessionInterface session) {
+    }
 
     public boolean isBinary() {
         return false;

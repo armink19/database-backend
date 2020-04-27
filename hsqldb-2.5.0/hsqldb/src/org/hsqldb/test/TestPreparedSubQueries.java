@@ -47,40 +47,41 @@ public class TestPreparedSubQueries extends TestCase {
 
         boolean prepare;
         boolean update;
-        String  command;
+        String command;
 
         sqlStmt(String c, boolean p, boolean u) {
 
             prepare = p;
             command = c;
-            update  = u;
+            update = u;
         }
     }
+
     ;
 
     private sqlStmt[] stmtArray = {
-        new sqlStmt("drop table a if exists cascade", false, false),
-        new sqlStmt("create cached table a (a int identity,b int)", false,
+            new sqlStmt("drop table a if exists cascade", false, false),
+            new sqlStmt("create cached table a (a int identity,b int)", false,
                     false),
-        new sqlStmt("create index bIdx on a(b)", false, false),
-        new sqlStmt("insert into a(b) values(1)", true, true),
-        new sqlStmt("insert into a(b) values(2)", true, true),
-        new sqlStmt("insert into a(b) values(3)", true, true),
-        new sqlStmt("insert into a(b) values(4)", true, true),
-        new sqlStmt("insert into a(b) values(5)", true, true),
-        new sqlStmt("insert into a(b) values(6)", true, true),
-        new sqlStmt(
-            "update a set b=100 where b>(select b from a X where X.a=2)",
-            true, true),
-        new sqlStmt("update a set b=200 where b>(select b from a where a=?)",
+            new sqlStmt("create index bIdx on a(b)", false, false),
+            new sqlStmt("insert into a(b) values(1)", true, true),
+            new sqlStmt("insert into a(b) values(2)", true, true),
+            new sqlStmt("insert into a(b) values(3)", true, true),
+            new sqlStmt("insert into a(b) values(4)", true, true),
+            new sqlStmt("insert into a(b) values(5)", true, true),
+            new sqlStmt("insert into a(b) values(6)", true, true),
+            new sqlStmt(
+                    "update a set b=100 where b>(select b from a X where X.a=2)",
                     true, true),
-        new sqlStmt(
-            "update a set b=300 where b>(select b from a X where X.a=?)",
-            true, true)
+            new sqlStmt("update a set b=200 where b>(select b from a where a=?)",
+                    true, true),
+            new sqlStmt(
+                    "update a set b=300 where b>(select b from a X where X.a=?)",
+                    true, true)
     };
     private Object[][] stmtArgs = {
-        {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, { Integer.valueOf(2) },
-        { Integer.valueOf(2) }
+            {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {Integer.valueOf(2)},
+            {Integer.valueOf(2)}
     };
 
     public TestPreparedSubQueries(String name) {
@@ -114,16 +115,16 @@ public class TestPreparedSubQueries extends TestCase {
                     PreparedStatement ps = null;
 
                     System.out.println(" -- preparing\n<<<\n"
-                                       + stmtArray[i].command + "\n>>>\n");
+                            + stmtArray[i].command + "\n>>>\n");
 
                     ps = con.prepareStatement(stmtArray[i].command);
 
                     System.out.print(" -- setting " + stmtArgs[i].length
-                                     + " Args [");
+                            + " Args [");
 
                     for (j = 0; j < stmtArgs[i].length; j++) {
                         System.out.print((j > 0 ? "; "
-                                                : "") + stmtArgs[i][j]);
+                                : "") + stmtArgs[i][j]);
                         ps.setObject(j + 1, stmtArgs[i][j]);
                     }
 
@@ -134,7 +135,7 @@ public class TestPreparedSubQueries extends TestCase {
                         int r = ps.executeUpdate();
 
                         System.out.println(" ***** ps.executeUpdate gave me "
-                                           + r);
+                                + r);
                     } else {
                         boolean b = ps.execute();
 
@@ -142,10 +143,10 @@ public class TestPreparedSubQueries extends TestCase {
                     }
                 } else {
                     System.out.println(" -- executing directly\n<<<\n"
-                                       + stmtArray[i].command + "\n>>>\n");
+                            + stmtArray[i].command + "\n>>>\n");
 
                     Statement s = con.createStatement();
-                    boolean   b = s.execute(stmtArray[i].command);
+                    boolean b = s.execute(stmtArray[i].command);
 
                     System.out.println(" ***** st.execute gave me " + b);
                 }
@@ -168,7 +169,7 @@ public class TestPreparedSubQueries extends TestCase {
             s.execute("drop table a if exists");
             s.execute("create cached table a (a int identity,b int)");
             s.execute("insert into a(b) values(1)",
-                      Statement.RETURN_GENERATED_KEYS);
+                    Statement.RETURN_GENERATED_KEYS);
 
             ResultSet r = s.getGeneratedKeys();
 
@@ -180,7 +181,7 @@ public class TestPreparedSubQueries extends TestCase {
 
             r.close();
             assertTrue(valid);
-            s.execute("insert into a(b) values(2)", new int[]{ 1 });
+            s.execute("insert into a(b) values(2)", new int[]{1});
 
             r = s.getGeneratedKeys();
 
@@ -192,7 +193,7 @@ public class TestPreparedSubQueries extends TestCase {
 
             assertTrue(valid);
 
-            s.execute("insert into a(b) values(2)", new String[]{ "A" });
+            s.execute("insert into a(b) values(2)", new String[]{"A"});
 
             r = s.getGeneratedKeys();
 
@@ -207,7 +208,7 @@ public class TestPreparedSubQueries extends TestCase {
             s.execute("drop table a if exists");
             s.execute("create cached table a (g int generated always as (a + b), a int generated always as identity (start with 5), b int, c timestamp default current_timestamp)");
             s.execute("insert into a(b) values(1)",
-                      Statement.RETURN_GENERATED_KEYS);
+                    Statement.RETURN_GENERATED_KEYS);
 
             r = s.getGeneratedKeys();
 
@@ -222,7 +223,7 @@ public class TestPreparedSubQueries extends TestCase {
 
             r.close();
             assertTrue(valid);
-            s.execute("insert into a(b) values(2)", new int[]{ 1 });
+            s.execute("insert into a(b) values(2)", new int[]{1});
 
             r = s.getGeneratedKeys();
 
@@ -236,7 +237,7 @@ public class TestPreparedSubQueries extends TestCase {
 
             assertTrue(valid);
 
-            s.execute("insert into a(b) values(2)", new String[]{ "A", "G", "C" });
+            s.execute("insert into a(b) values(2)", new String[]{"A", "G", "C"});
 
             r = s.getGeneratedKeys();
 
@@ -249,9 +250,9 @@ public class TestPreparedSubQueries extends TestCase {
 
                 assertEquals(iv, 7);
 
-                long diff = System.currentTimeMillis() -  tv.getTime();
+                long diff = System.currentTimeMillis() - tv.getTime();
 
-                if (diff > 100 || diff <0) {
+                if (diff > 100 || diff < 0) {
                     fail("timestamp not correct");
                 }
 
@@ -275,13 +276,13 @@ public class TestPreparedSubQueries extends TestCase {
             s.execute("create cached table a (a int identity, b int)");
 
             PreparedStatement p1 =
-                con.prepareStatement("insert into a(b) values ?");
+                    con.prepareStatement("insert into a(b) values ?");
 
             p1.setInt(1, 10);
             p1.executeUpdate();
 
             PreparedStatement p2 = con.prepareStatement("call identity()");
-            ResultSet         r  = p2.executeQuery();
+            ResultSet r = p2.executeQuery();
 
             while (r.next()) {
                 r.getInt(1);
@@ -293,7 +294,7 @@ public class TestPreparedSubQueries extends TestCase {
             p1.executeUpdate();
 
             PreparedStatement ps3 = con.prepareStatement(
-                "select count(*) from a where a in ((select a from a where b = ?) union (select ? from a))");
+                    "select count(*) from a where a in ((select a from a where b = ?) union (select ? from a))");
 
             ps3.setInt(1, 10);
             ps3.setInt(2, 1);

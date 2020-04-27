@@ -85,15 +85,15 @@ import org.hsqldb.rowio.RowOutputInterface;
 // fredt@users 20021215 - doc 1.7.2 - javadoc comments
 
 /**
- *  The parent for all AVL node implementations. Subclasses of Node vary
- *  in the way they hold
- *  references to other Nodes in the AVL tree, or to their Row data.<br>
- *
- *  nNext links the Node objects belonging to different indexes for each
- *  table row. It is used solely by Row to locate the node belonging to a
- *  particular index.<br>
- *
- *  New class derived from Hypersonic SQL code and enhanced in HSQLDB. <p>
+ * The parent for all AVL node implementations. Subclasses of Node vary
+ * in the way they hold
+ * references to other Nodes in the AVL tree, or to their Row data.<br>
+ * <p>
+ * nNext links the Node objects belonging to different indexes for each
+ * table row. It is used solely by Row to locate the node belonging to a
+ * particular index.<br>
+ * <p>
+ * New class derived from Hypersonic SQL code and enhanced in HSQLDB. <p>
  *
  * @author Fred Toussi (fredt@users dot sourceforge dot net)
  * @author Thomas Mueller (Hypersonic SQL Group)
@@ -103,13 +103,13 @@ import org.hsqldb.rowio.RowOutputInterface;
 public class NodeAVL implements CachedObject {
 
     static final int NO_POS = RowAVLDisk.NO_POS;
-    public int       iBalance;
-    public NodeAVL   nNext;    // node of next index (nNext==null || nNext.iId=iId+1)
+    public int iBalance;
+    public NodeAVL nNext;    // node of next index (nNext==null || nNext.iId=iId+1)
 
     //
-    protected NodeAVL   nLeft;
-    protected NodeAVL   nRight;
-    protected NodeAVL   nParent;
+    protected NodeAVL nLeft;
+    protected NodeAVL nRight;
+    protected NodeAVL nParent;
     protected final Row row;
 
     NodeAVL() {
@@ -122,7 +122,7 @@ public class NodeAVL implements CachedObject {
 
     public void delete() {
         iBalance = 0;
-        nLeft    = nRight = nParent = null;
+        nLeft = nRight = nParent = null;
     }
 
     NodeAVL getLeft(PersistentStore store) {
@@ -192,7 +192,7 @@ public class NodeAVL implements CachedObject {
 
     public NodeAVL child(PersistentStore store, boolean isleft) {
         return isleft ? getLeft(store)
-                      : getRight(store);
+                : getRight(store);
     }
 
     public NodeAVL set(PersistentStore store, boolean isLeft, NodeAVL n) {
@@ -227,17 +227,21 @@ public class NodeAVL implements CachedObject {
         return n == this;
     }
 
-    public void setInMemory(boolean in) {}
+    public void setInMemory(boolean in) {
+    }
 
     public int getDefaultCapacity() {
         return 0;
     }
 
-    public void read(RowInputInterface in) {}
+    public void read(RowInputInterface in) {
+    }
 
-    public void write(RowOutputInterface out) {}
+    public void write(RowOutputInterface out) {
+    }
 
-    public void write(RowOutputInterface out, LongLookup lookup) {}
+    public void write(RowOutputInterface out, LongLookup lookup) {
+    }
 
     public long getPos() {
         return 0;
@@ -251,13 +255,15 @@ public class NodeAVL implements CachedObject {
         return row.getData();
     }
 
-    public void updateAccessCount(int count) {}
+    public void updateAccessCount(int count) {
+    }
 
     public int getAccessCount() {
         return 0;
     }
 
-    public void setStorageSize(int size) {}
+    public void setStorageSize(int size) {
+    }
 
     public int getStorageSize() {
         return 0;
@@ -271,7 +277,8 @@ public class NodeAVL implements CachedObject {
         return false;
     }
 
-    public void setPos(long pos) {}
+    public void setPos(long pos) {
+    }
 
     public boolean isNew() {
         return false;
@@ -281,7 +288,8 @@ public class NodeAVL implements CachedObject {
         return false;
     }
 
-    public void setChanged(boolean flag) {}
+    public void setChanged(boolean flag) {
+    }
 
     public boolean isKeepInMemory() {
         return false;
@@ -295,9 +303,11 @@ public class NodeAVL implements CachedObject {
         return false;
     }
 
-    public void restore() {}
+    public void restore() {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public int getRealSize(RowOutputInterface out) {
         return 0;

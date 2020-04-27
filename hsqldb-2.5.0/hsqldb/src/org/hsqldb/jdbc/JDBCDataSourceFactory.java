@@ -42,19 +42,18 @@ import java.util.Properties;
 
 /**
  * A JNDI ObjectFactory for creating data sources supported by HyperSQL
- *  {@link org.hsqldb.jdbc.JDBCDataSource JDBCDataSource} for plain
- *  connections for the end user.
- *  {@link org.hsqldb.jdbc.JDBCPool JDBCPool} for pooled plain
- *   connections for the end user.
- *  {@link org.hsqldb.jdbc.pool.JDBCPooledDataSource JDBCPooledDataSource} for
- *  PooleConnection objects used
- *  by external connection pooling software.
- *  {@link org.hsqldb.jdbc.pool.JDBCXADataSource JDBCXADataSource} for
- *  XAConnection objects used by external connection pooling software.
+ * {@link org.hsqldb.jdbc.JDBCDataSource JDBCDataSource} for plain
+ * connections for the end user.
+ * {@link org.hsqldb.jdbc.JDBCPool JDBCPool} for pooled plain
+ * connections for the end user.
+ * {@link org.hsqldb.jdbc.pool.JDBCPooledDataSource JDBCPooledDataSource} for
+ * PooleConnection objects used
+ * by external connection pooling software.
+ * {@link org.hsqldb.jdbc.pool.JDBCXADataSource JDBCXADataSource} for
+ * XAConnection objects used by external connection pooling software.
  *
  * @author Darin DeForest (deforest@users dot sourceforge.net) original version
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version 2.5.0
  * @version 2.0.0
  */
 public class JDBCDataSourceFactory implements ObjectFactory {
@@ -68,11 +67,11 @@ public class JDBCDataSourceFactory implements ObjectFactory {
      * @throws Exception on any error
      */
     public static DataSource createDataSource(Properties props)
-    throws Exception {
+            throws Exception {
 
         Class cl = Class.forName(bdsClassName);
         JDBCDataSource ds =
-            (JDBCDataSource) cl.getDeclaredConstructor().newInstance();
+                (JDBCDataSource) cl.getDeclaredConstructor().newInstance();
         String value = props.getProperty(databaseName);
 
         if (value == null) {
@@ -101,7 +100,8 @@ public class JDBCDataSourceFactory implements ObjectFactory {
             if (value.length() > 0) {
                 try {
                     ds.setLoginTimeout(Integer.parseInt(value));
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) {
+                }
             }
         }
 
@@ -111,25 +111,25 @@ public class JDBCDataSourceFactory implements ObjectFactory {
     /**
      * Creates a DataSource object using the javax.naming.Reference object
      * specified.<p>
-     *
+     * <p>
      * The Reference object's class name should be one of the four supported
      * data source class names and it must support the properties, database,
      * user and password. It may optionally support the loginTimeout property.
-     *
+     * <p>
      * HyperSQL's JDBCPooledDataSource and JDBCXADataSource object are intended
      * as factories used by a connection pooling DataSource.<p>
      * JDBCDataSource is a factory for normal connections and can be accessed
      * directly by user applications.<p>
      * JDBCPool is a connection pool accessed directly by user applications.<p>
      *
-     * @param obj The reference information used in creating a
-     *      Datasource object.
-     * @param name ignored
-     * @param nameCtx ignored
+     * @param obj         The reference information used in creating a
+     *                    Datasource object.
+     * @param name        ignored
+     * @param nameCtx     ignored
      * @param environment ignored
      * @return A newly created JDBCDataSource object; null if an object
-     *      cannot be created.
-     * @exception Exception is thrown if database or user is null or invalid
+     * cannot be created.
+     * @throws Exception is thrown if database or user is null or invalid
      */
     public Object getObjectInstance(Object obj, Name name, Context nameCtx,
                                     Hashtable environment) throws Exception {
@@ -138,17 +138,17 @@ public class JDBCDataSourceFactory implements ObjectFactory {
             return null;
         }
 
-        Reference ref       = (Reference) obj;
-        String    className = ref.getClassName();
+        Reference ref = (Reference) obj;
+        String className = ref.getClassName();
 
         if (bdsClassName.equals(className) || poolClassName.equals(className)
                 || pdsClassName.equals(className)
                 || xdsClassName.equals(className)) {
             RefAddr refAddr;
-            Object  value;
-            Class   cl = Class.forName(bdsClassName);
+            Object value;
+            Class cl = Class.forName(bdsClassName);
             JDBCCommonDataSource ds =
-                (JDBCDataSource) cl.getDeclaredConstructor().newInstance();
+                    (JDBCDataSource) cl.getDeclaredConstructor().newInstance();
 
             refAddr = ref.get("database");
 
@@ -187,7 +187,7 @@ public class JDBCDataSourceFactory implements ObjectFactory {
 
                 if (!(value instanceof String)) {
                     throw new Exception(className
-                                        + ": invalid RefAddr: password");
+                            + ": invalid RefAddr: password");
                 }
             }
 
@@ -204,8 +204,9 @@ public class JDBCDataSourceFactory implements ObjectFactory {
                     if (loginTimeoutContent.length() > 0) {
                         try {
                             ds.setLoginTimeout(
-                                Integer.parseInt(loginTimeoutContent));
-                        } catch (NumberFormatException nfe) {}
+                                    Integer.parseInt(loginTimeoutContent));
+                        } catch (NumberFormatException nfe) {
+                        }
                     }
                 }
             }
@@ -219,20 +220,21 @@ public class JDBCDataSourceFactory implements ObjectFactory {
     /**
      * supported properties
      */
-    private static final String urlName          = "url";
-    private static final String databaseName     = "database";
-    private static final String userName         = "user";
-    private static final String userNameName     = "username";
-    private static final String passwordName     = "password";
+    private static final String urlName = "url";
+    private static final String databaseName = "database";
+    private static final String userName = "user";
+    private static final String userNameName = "username";
+    private static final String passwordName = "password";
     private static final String loginTimeoutName = "loginTimeout";
 
     /**
      * class names
      */
-    private static final String bdsClassName  = "org.hsqldb.jdbc.JDBCDataSource";
+    private static final String bdsClassName = "org.hsqldb.jdbc.JDBCDataSource";
     private static final String poolClassName = "org.hsqldb.jdbc.JDBCPool";
-    private static final String pdsClassName  = "org.hsqldb.jdbc.pool.JDBCPooledDataSource";
-    private static final String xdsClassName  = "org.hsqldb.jdbc.pool.JDBCXADataSource";
+    private static final String pdsClassName = "org.hsqldb.jdbc.pool.JDBCPooledDataSource";
+    private static final String xdsClassName = "org.hsqldb.jdbc.pool.JDBCXADataSource";
 
-    public JDBCDataSourceFactory() {}
+    public JDBCDataSourceFactory() {
+    }
 }

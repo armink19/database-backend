@@ -49,13 +49,13 @@ import java.io.Reader;
  */
 public final class ClobInputStream extends Reader {
 
-    final ClobData                clob;
-    final long                    availableLength;
-    long                          bufferOffset;
-    long                          currentPosition;
-    char[]                        buffer;
-    boolean                       isClosed;
-    int                           streamBlockSize;
+    final ClobData clob;
+    final long availableLength;
+    long bufferOffset;
+    long currentPosition;
+    char[] buffer;
+    boolean isClosed;
+    int streamBlockSize;
     public final SessionInterface session;
 
     public ClobInputStream(SessionInterface session, ClobData clob,
@@ -63,8 +63,8 @@ public final class ClobInputStream extends Reader {
 
         final long clobLength = clob.length(session);
 
-        this.session         = session;
-        this.clob            = clob;
+        this.session = session;
+        this.clob = clob;
         this.availableLength = offset + Math.min(length, clobLength - offset);
         this.currentPosition = offset;
         this.streamBlockSize = session.getStreamBlockSize();

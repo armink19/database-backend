@@ -40,12 +40,12 @@ import org.hsqldb.lib.DoubleIntIndex;
  */
 public interface DataSpaceManager {
 
-    int tableIdEmpty     = 0;
+    int tableIdEmpty = 0;
     int tableIdDirectory = 1;
-    int tableIdLookup    = 5;
-    int tableIdSetAside  = 6;
-    int tableIdDefault   = 7;
-    int tableIdFirst     = 8;
+    int tableIdLookup = 5;
+    int tableIdSetAside = 6;
+    int tableIdDefault = 7;
+    int tableIdFirst = 8;
 
     //
     int fixedBlockSizeUnit = 4096;

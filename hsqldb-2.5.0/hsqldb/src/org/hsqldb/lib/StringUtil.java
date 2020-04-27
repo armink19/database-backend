@@ -33,7 +33,8 @@ package org.hsqldb.lib;
 
 import java.lang.reflect.Array;
 
-/** Provides a collection of convenience methods for processing and
+/**
+ * Provides a collection of convenience methods for processing and
  * creating objects with <code>String</code> value components.
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
@@ -50,7 +51,7 @@ public class StringUtil {
      * maxSize. Negative values are treated as positive
      */
     public static String toZeroPaddedString(long value, int precision,
-            int maxSize) {
+                                            int maxSize) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -120,9 +121,9 @@ public class StringUtil {
             }
         }
 
-        StringBuilder sb         = new StringBuilder(length);
-        int           padLength  = source.length();
-        int           partLength = (length - padLength) % pad.length();
+        StringBuilder sb = new StringBuilder(length);
+        int padLength = source.length();
+        int partLength = (length - padLength) % pad.length();
 
         if (trailing) {
             sb.append(source);
@@ -145,15 +146,16 @@ public class StringUtil {
      * Returns a string with non alphanumeric chars converted to the
      * substitute character. A digit first character is also converted.
      * By sqlbob@users
-     * @param source string to convert
+     *
+     * @param source     string to convert
      * @param substitute character to use
      * @return converted string
      */
     public static String toLowerSubset(String source, char substitute) {
 
-        int           len = source.length();
-        StringBuilder sb  = new StringBuilder(len);
-        char          ch;
+        int len = source.length();
+        StringBuilder sb = new StringBuilder(len);
+        char ch;
 
         for (int i = 0; i < len; i++) {
             ch = source.charAt(i);
@@ -172,14 +174,15 @@ public class StringUtil {
 
     /**
      * Builds a bracketed CSV list from the array
+     *
      * @param array an array of Objects
      * @return string
      */
     public static String arrayToString(Object array) {
 
-        int           len  = Array.getLength(array);
-        int           last = len - 1;
-        StringBuilder sb   = new StringBuilder(2 * (len + 1));
+        int len = Array.getLength(array);
+        int last = len - 1;
+        StringBuilder sb = new StringBuilder(2 * (len + 1));
 
         sb.append('{');
 
@@ -209,15 +212,16 @@ public class StringUtil {
      * <li> No attempt is made to escape the quote character sequence if it is
      *      found internal to a list element.
      * <ul>
-     * @return a CSV list
+     *
      * @param separator the <code>String</code> to use as the list element separator
-     * @param quote the <code>String</code> with which to quote the list elements
-     * @param s array of <code>String</code> objects
+     * @param quote     the <code>String</code> with which to quote the list elements
+     * @param s         array of <code>String</code> objects
+     * @return a CSV list
      */
     public static String getList(String[] s, String separator, String quote) {
 
-        int           len = s.length;
-        StringBuilder sb  = new StringBuilder(len * 16);
+        int len = s.length;
+        StringBuilder sb = new StringBuilder(len * 16);
 
         for (int i = 0; i < len; i++) {
             sb.append(quote);
@@ -243,15 +247,16 @@ public class StringUtil {
      * <li>Prepends and appends each element with the value of the
      *     <code>quote</code> argument.
      * <ul>
-     * @return a CSV list
-     * @param s the array of int values
+     *
+     * @param s         the array of int values
      * @param separator the <code>String</code> to use as the separator
-     * @param quote the <code>String</code> with which to quote the list elements
+     * @param quote     the <code>String</code> with which to quote the list elements
+     * @return a CSV list
      */
     public static String getList(int[] s, String separator, String quote) {
 
-        int           len = s.length;
-        StringBuilder sb  = new StringBuilder(len * 8);
+        int len = s.length;
+        StringBuilder sb = new StringBuilder(len * 8);
 
         for (int i = 0; i < len; i++) {
             sb.append(quote);
@@ -268,8 +273,8 @@ public class StringUtil {
 
     public static String getList(long[] s, String separator, String quote) {
 
-        int           len = s.length;
-        StringBuilder sb  = new StringBuilder(len * 8);
+        int len = s.length;
+        StringBuilder sb = new StringBuilder(len * 8);
 
         for (int i = 0; i < len; i++) {
             sb.append(quote);
@@ -298,16 +303,17 @@ public class StringUtil {
      * <li> No attempt is made to escape the quote character sequence if it is
      *      found internal to a list element.
      * <ul>
-     * @return a CSV list
+     *
      * @param separator the <code>String</code> to use as the list element separator
-     * @param quote the <code>String</code> with which to quote the list elements
-     * @param s the array of <code>String</code> array objects
+     * @param quote     the <code>String</code> with which to quote the list elements
+     * @param s         the array of <code>String</code> array objects
+     * @return a CSV list
      */
     public static String getList(String[][] s, String separator,
                                  String quote) {
 
-        int           len = s.length;
-        StringBuilder sb  = new StringBuilder(len * 16);
+        int len = s.length;
+        StringBuilder sb = new StringBuilder(len * 16);
 
         for (int i = 0; i < len; i++) {
             sb.append(quote);
@@ -324,13 +330,14 @@ public class StringUtil {
 
     /**
      * Checks if text is empty (characters <= space)
-     * @return boolean true if text is null or empty, false otherwise
+     *
      * @param s java.lang.String
+     * @return boolean true if text is null or empty, false otherwise
      */
     public static boolean isEmpty(String s) {
 
         int i = s == null ? 0
-                          : s.length();
+                : s.length();
 
         while (i > 0) {
             if (s.charAt(--i) > ' ') {
@@ -343,6 +350,7 @@ public class StringUtil {
 
     /**
      * Returns the size of substring that does not contain any trailing spaces
+     *
      * @param s the string
      * @return trimmed size
      */
@@ -364,14 +372,15 @@ public class StringUtil {
     /**
      * Skips any spaces at or after start and returns the index of first
      * non-space character;
-     * @param s the string
+     *
+     * @param s     the string
      * @param start index to start
      * @return index of first non-space
      */
     public static int skipSpaces(String s, int start) {
 
         int limit = s.length();
-        int i     = start;
+        int i = start;
 
         for (; i < limit; i++) {
             if (s.charAt(i) != ' ') {
@@ -386,21 +395,21 @@ public class StringUtil {
      * Splits the string into an array, using the separator. If separator is
      * not found in the string, the whole string is returned in the array.
      *
-     * @param s the string
+     * @param s         the string
      * @param separator the separator
      * @return array of strings
      */
     public static String[] split(String s, String separator) {
 
-        HsqlArrayList list      = new HsqlArrayList();
-        int           currindex = 0;
+        HsqlArrayList list = new HsqlArrayList();
+        int currindex = 0;
 
         for (boolean more = true; more; ) {
             int nextindex = s.indexOf(separator, currindex);
 
             if (nextindex == -1) {
                 nextindex = s.length();
-                more      = false;
+                more = false;
             }
 
             list.add(s.substring(currindex, nextindex));

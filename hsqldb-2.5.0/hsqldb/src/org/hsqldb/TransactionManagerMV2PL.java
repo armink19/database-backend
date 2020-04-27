@@ -45,10 +45,10 @@ import org.hsqldb.persist.PersistentStore;
  * @since 2.0.0
  */
 public class TransactionManagerMV2PL extends TransactionManagerCommon
-implements TransactionManager {
+        implements TransactionManager {
 
     // functional unit - merged committed transactions
-    HsqlDeque committedTransactions          = new HsqlDeque();
+    HsqlDeque committedTransactions = new HsqlDeque();
     LongDeque committedTransactionTimestamps = new LongDeque();
 
     public TransactionManagerMV2PL(Database db) {
@@ -56,7 +56,7 @@ implements TransactionManager {
         super(db);
 
         lobSession = database.sessionManager.getSysLobSession();
-        txModel    = MVLOCKS;
+        txModel = MVLOCKS;
     }
 
     public long getGlobalChangeTimestamp() {
@@ -124,7 +124,7 @@ implements TransactionManager {
             int limit = session.rowActionList.size();
 
             // new actionTimestamp used for commitTimestamp
-            session.actionTimestamp         = getNextGlobalChangeTimestamp();
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.transactionEndTimestamp = session.actionTimestamp;
 
             endTransaction(session);
@@ -144,7 +144,7 @@ implements TransactionManager {
                 Object[] list = session.rowActionList.getArray();
 
                 mergeTransaction(list, limit, newLimit,
-                                 session.actionTimestamp);
+                        session.actionTimestamp);
                 finaliseRows(session, list, limit, newLimit);
                 session.rowActionList.setSize(limit);
             }
@@ -152,7 +152,7 @@ implements TransactionManager {
             // session.actionTimestamp is the committed tx timestamp
             if (session == lobSession
                     || getFirstLiveTransactionTimestamp()
-                       > session.actionTimestamp) {
+                    > session.actionTimestamp) {
                 Object[] list = session.rowActionList.getArray();
 
                 mergeTransaction(list, 0, limit, session.actionTimestamp);
@@ -179,8 +179,8 @@ implements TransactionManager {
         writeLock.lock();
 
         try {
-            session.abortTransaction        = false;
-            session.actionTimestamp         = getNextGlobalChangeTimestamp();
+            session.abortTransaction = false;
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.transactionEndTimestamp = session.actionTimestamp;
 
             rollbackPartial(session, 0, session.transactionTimestamp);
@@ -199,11 +199,11 @@ implements TransactionManager {
 
         long timestamp = session.sessionContext.savepointTimestamps.get(index);
         Integer oi = (Integer) session.sessionContext.savepoints.get(index);
-        int     start  = oi.intValue();
+        int start = oi.intValue();
 
         while (session.sessionContext.savepoints.size() > index + 1) {
             session.sessionContext.savepoints.remove(
-                session.sessionContext.savepoints.size() - 1);
+                    session.sessionContext.savepoints.size() - 1);
             session.sessionContext.savepointTimestamps.removeLast();
         }
 
@@ -213,7 +213,7 @@ implements TransactionManager {
     public void rollbackAction(Session session) {
 
         rollbackPartial(session, session.actionIndex,
-                        session.actionStartTimestamp);
+                session.actionStartTimestamp);
         endActionTPL(session);
     }
 
@@ -276,7 +276,7 @@ implements TransactionManager {
                                      int[] colMap) {
 
         RowAction action = store.addDeleteActionToRow(session, row, colMap,
-            true);
+                true);
 
         if (table.tableType == TableBase.TEMP_TABLE) {
             store.delete(session, row);
@@ -301,7 +301,7 @@ implements TransactionManager {
                                + session.actionTimestamp);
 */
             throw Error.runtimeError(ErrorCode.GENERAL_ERROR,
-                                     "null insert action ");
+                    "null insert action ");
         }
 
         store.indexRow(session, row);
@@ -322,7 +322,7 @@ implements TransactionManager {
 
         if (action == null) {
             throw Error.runtimeError(ErrorCode.GENERAL_ERROR,
-                                     "null insert action ");
+                    "null insert action ");
         }
 
         store.indexRow(session, row);
@@ -331,7 +331,7 @@ implements TransactionManager {
         row.rowAction = null;
     }
 
-// functional unit - accessibility of rows
+    // functional unit - accessibility of rows
     public boolean canRead(Session session, PersistentStore store, Row row,
                            int mode, int[] colMap) {
 
@@ -376,8 +376,8 @@ implements TransactionManager {
         long timestamp = getFirstLiveTransactionTimestamp();
 
         while (true) {
-            long     commitTimestamp = 0;
-            Object[] actions         = null;
+            long commitTimestamp = 0;
+            Object[] actions = null;
 
             synchronized (committedTransactionTimestamps) {
                 if (committedTransactionTimestamps.isEmpty()) {
@@ -408,7 +408,7 @@ implements TransactionManager {
             if (!session.isTransaction) {
                 beginTransactionCommon(session);
                 liveTransactionTimestamps.addLast(
-                    session.transactionTimestamp);
+                        session.transactionTimestamp);
             }
         } finally {
             writeLock.unlock();
@@ -466,12 +466,12 @@ implements TransactionManager {
 
         try {
             if (session.isTransaction) {
-                session.actionTimestamp      = getNextGlobalChangeTimestamp();
+                session.actionTimestamp = getNextGlobalChangeTimestamp();
                 session.actionStartTimestamp = session.actionTimestamp;
             } else {
                 beginTransactionCommon(session);
                 liveTransactionTimestamps.addLast(
-                    session.transactionTimestamp);
+                        session.transactionTimestamp);
             }
         } finally {
             writeLock.unlock();
@@ -492,7 +492,7 @@ implements TransactionManager {
     private void endTransaction(Session session) {
 
         long timestamp = session.transactionTimestamp;
-        int  index     = liveTransactionTimestamps.indexOf(timestamp);
+        int index = liveTransactionTimestamps.indexOf(timestamp);
 
         if (index >= 0) {
             transactionCount.decrementAndGet();

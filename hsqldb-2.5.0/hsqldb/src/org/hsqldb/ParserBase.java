@@ -50,22 +50,22 @@ import java.math.BigDecimal;
 public class ParserBase {
 
     protected Scanner scanner;
-    protected Token   token;
+    protected Token token;
 
     //
     private final Token dummyToken = new Token();
 
     //
-    protected int           partPosition;
+    protected int partPosition;
     protected HsqlException lastError;
-    protected HsqlName      lastSynonym;
-    protected boolean       isCheckOrTriggerCondition;
-    protected boolean       isSchemaDefinition;
-    protected boolean       isViewDefinition;
-    protected boolean       isRecording;
+    protected HsqlName lastSynonym;
+    protected boolean isCheckOrTriggerCondition;
+    protected boolean isSchemaDefinition;
+    protected boolean isViewDefinition;
+    protected boolean isRecording;
     protected HsqlArrayList recordedStatement;
     static final BigDecimal LONG_MAX_VALUE_INCREMENT =
-        BigDecimal.valueOf(Long.MAX_VALUE).add(BigDecimal.valueOf(1));
+            BigDecimal.valueOf(Long.MAX_VALUE).add(BigDecimal.valueOf(1));
 
     /**
      * Constructs a new BaseParser object with the given context.
@@ -74,7 +74,7 @@ public class ParserBase {
      */
     ParserBase(Scanner scanner) {
         this.scanner = scanner;
-        this.token   = scanner.token;
+        this.token = scanner.token;
     }
 
     public Scanner getScanner() {
@@ -90,8 +90,8 @@ public class ParserBase {
     }
 
     /**
-     *  Resets this parse context with the given SQL character sequence.
-     *
+     * Resets this parse context with the given SQL character sequence.
+     * <p>
      * Internal structures are reset as though a new parser were created
      * with the given sql and the originally specified database and session
      *
@@ -102,14 +102,14 @@ public class ParserBase {
         scanner.reset(session, sql);
 
         //
-        partPosition              = 0;
-        lastError                 = null;
-        lastSynonym               = null;
+        partPosition = 0;
+        lastError = null;
+        lastSynonym = null;
         isCheckOrTriggerCondition = false;
-        isSchemaDefinition        = false;
-        isViewDefinition          = false;
-        isRecording               = false;
-        recordedStatement         = null;
+        isSchemaDefinition = false;
+        isViewDefinition = false;
+        isRecording = false;
+        recordedStatement = null;
     }
 
     int getPosition() {
@@ -170,21 +170,21 @@ public class ParserBase {
         }
 
         String sql = scanner.getPart(startPosition,
-                                     scanner.getTokenPosition());
+                scanner.getTokenPosition());
 
         return sql;
     }
 
     String getStatementForRoutine(int startPosition, short[] startTokens) {
 
-        int tokenIndex   = 0;
-        int semiIndex    = -1;
+        int tokenIndex = 0;
+        int semiIndex = -1;
         int semiPosition = -1;
 
         while (true) {
             if (token.tokenType == Tokens.SEMICOLON) {
                 semiPosition = scanner.getTokenPosition();
-                semiIndex    = tokenIndex;
+                semiIndex = tokenIndex;
             } else if (token.tokenType == Tokens.X_ENDPARSE) {
                 if (semiIndex > 0 && semiIndex == tokenIndex - 1) {
                     rewind(semiPosition);
@@ -203,7 +203,7 @@ public class ParserBase {
         }
 
         String sql = scanner.getPart(startPosition,
-                                     scanner.getTokenPosition());
+                scanner.getTokenPosition());
 
         return sql;
     }
@@ -251,39 +251,39 @@ public class ParserBase {
 
             switch (token.tokenType) {
 
-                case Tokens.X_MALFORMED_BINARY_STRING :
+                case Tokens.X_MALFORMED_BINARY_STRING:
                     errorCode = ErrorCode.X_42587;
                     break;
 
-                case Tokens.X_MALFORMED_BIT_STRING :
+                case Tokens.X_MALFORMED_BIT_STRING:
                     errorCode = ErrorCode.X_42588;
                     break;
 
-                case Tokens.X_MALFORMED_UNICODE_STRING :
+                case Tokens.X_MALFORMED_UNICODE_STRING:
                     errorCode = ErrorCode.X_42586;
                     break;
 
-                case Tokens.X_MALFORMED_STRING :
+                case Tokens.X_MALFORMED_STRING:
                     errorCode = ErrorCode.X_42584;
                     break;
 
-                case Tokens.X_UNKNOWN_TOKEN :
+                case Tokens.X_UNKNOWN_TOKEN:
                     errorCode = ErrorCode.X_42582;
                     break;
 
-                case Tokens.X_MALFORMED_NUMERIC :
+                case Tokens.X_MALFORMED_NUMERIC:
                     errorCode = ErrorCode.X_42585;
                     break;
 
-                case Tokens.X_MALFORMED_COMMENT :
+                case Tokens.X_MALFORMED_COMMENT:
                     errorCode = ErrorCode.X_42589;
                     break;
 
-                case Tokens.X_MALFORMED_IDENTIFIER :
+                case Tokens.X_MALFORMED_IDENTIFIER:
                     errorCode = ErrorCode.X_42583;
                     break;
 
-                default :
+                default:
             }
 
             throw Error.error(errorCode, token.getFullString());
@@ -309,8 +309,8 @@ public class ParserBase {
     boolean isNonReservedIdentifier() {
 
         return !token.isReservedIdentifier
-               && (token.isUndelimitedIdentifier
-                   || token.isDelimitedIdentifier);
+                && (token.isUndelimitedIdentifier
+                || token.isDelimitedIdentifier);
     }
 
     void checkIsNonReservedIdentifier() {
@@ -323,8 +323,8 @@ public class ParserBase {
     boolean isNonCoreReservedIdentifier() {
 
         return !token.isCoreReservedIdentifier
-               && (token.isUndelimitedIdentifier
-                   || token.isDelimitedIdentifier);
+                && (token.isUndelimitedIdentifier
+                || token.isDelimitedIdentifier);
     }
 
     void checkIsNonCoreReservedIdentifier() {
@@ -504,7 +504,7 @@ public class ParserBase {
 
         if (minus && token.dataType.typeCode == Types.SQL_BIGINT
                 && ((Number) token.tokenValue).longValue()
-                   == -(long) Integer.MIN_VALUE) {
+                == -(long) Integer.MIN_VALUE) {
             read();
 
             return Integer.MIN_VALUE;
@@ -566,7 +566,7 @@ public class ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.DATE : {
+            case Tokens.DATE: {
                 read();
 
                 if (token.tokenType != Tokens.X_VALUE
@@ -582,7 +582,7 @@ public class ParserBase {
 
                 return new ExpressionValue(date, Type.SQL_DATE);
             }
-            case Tokens.TIME : {
+            case Tokens.TIME: {
                 read();
 
                 if (token.tokenType != Tokens.X_VALUE
@@ -594,12 +594,12 @@ public class ParserBase {
 
                 read();
 
-                TimeData value    = scanner.newTime(s);
-                Type     dataType = scanner.dateTimeType;
+                TimeData value = scanner.newTime(s);
+                Type dataType = scanner.dateTimeType;
 
                 return new ExpressionValue(value, dataType);
             }
-            case Tokens.TIMESTAMP : {
+            case Tokens.TIMESTAMP: {
                 read();
 
                 if (token.tokenType != Tokens.X_VALUE
@@ -611,12 +611,12 @@ public class ParserBase {
 
                 read();
 
-                Object date     = scanner.newTimestamp(s);
-                Type   dataType = scanner.dateTimeType;
+                Object date = scanner.newTimestamp(s);
+                Type dataType = scanner.dateTimeType;
 
                 return new ExpressionValue(date, dataType);
             }
-            case Tokens.INTERVAL : {
+            case Tokens.INTERVAL: {
                 boolean minus = false;
 
                 read();
@@ -644,7 +644,7 @@ public class ParserBase {
                 read();
 
                 IntervalType dataType = readIntervalType(session, false);
-                Object       interval = scanner.newInterval(s, dataType);
+                Object interval = scanner.newInterval(s, dataType);
 
                 dataType = (IntervalType) scanner.dateTimeType;
 
@@ -654,7 +654,7 @@ public class ParserBase {
 
                 return new ExpressionValue(interval, dataType);
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "ParserBase");
         }
 
@@ -666,19 +666,19 @@ public class ParserBase {
     IntervalType readIntervalType(Session session,
                                   boolean maxPrecisionDefault) {
 
-        int    precision = -1;
-        int    scale     = -1;
-        int    startToken;
-        int    endToken;
+        int precision = -1;
+        int scale = -1;
+        int startToken;
+        int endToken;
         String startTokenString;
-        int    startIndex = -1;
-        int    endIndex   = -1;
+        int startIndex = -1;
+        int endIndex = -1;
 
-        startToken       = endToken = token.tokenType;
+        startToken = endToken = token.tokenType;
         startTokenString = token.tokenString;
 
         startIndex = ArrayUtil.find(Tokens.SQL_INTERVAL_FIELD_CODES,
-                                    startToken);
+                startToken);
 
         read();
 
@@ -714,7 +714,7 @@ public class ParserBase {
             read();
 
             int end = ArrayUtil.find(Tokens.SQL_INTERVAL_FIELD_CODES,
-                                     token.tokenType);
+                    token.tokenType);
 
             if (end > startIndex) {
                 endToken = token.tokenType;
@@ -754,15 +754,15 @@ public class ParserBase {
         if (startIndex == -1 && session.database.sqlSyntaxMys) {
             int type = FunctionCustom.getSQLTypeForToken(startTokenString);
             int startType = IntervalType.getStartIntervalType(type);
-            int endType   = IntervalType.getEndIntervalType(type);
+            int endType = IntervalType.getEndIntervalType(type);
 
             return IntervalType.getIntervalType(
-                type, startType, endType, IntervalType.maxIntervalPrecision,
-                IntervalType.maxFractionPrecision, true);
+                    type, startType, endType, IntervalType.maxIntervalPrecision,
+                    IntervalType.maxFractionPrecision, true);
         }
 
         return IntervalType.getIntervalType(startIndex, endIndex, precision,
-                                            scale);
+                scale);
     }
 
     static int getExpressionType(int tokenT) {
@@ -777,7 +777,7 @@ public class ParserBase {
     }
 
     private static final IntKeyIntValueHashMap expressionTypeMap =
-        new IntKeyIntValueHashMap(37);
+            new IntKeyIntValueHashMap(37);
 
     static {
 
@@ -809,7 +809,7 @@ public class ParserBase {
 
     HsqlException unexpectedToken(String tokenS) {
         return Error.parseError(ErrorCode.X_42581, tokenS,
-                                scanner.getLineNumber());
+                scanner.getLineNumber());
     }
 
     HsqlException unexpectedToken(int token) {
@@ -817,17 +817,17 @@ public class ParserBase {
         String tokenS = Tokens.getKeyword(token);
 
         return Error.parseError(ErrorCode.X_42581, tokenS,
-                                scanner.getLineNumber());
+                scanner.getLineNumber());
     }
 
     HsqlException unexpectedTokenRequire(String required) {
 
         if (token.tokenType == Tokens.X_ENDPARSE) {
             return Error.parseError(ErrorCode.X_42590,
-                                    ErrorCode.TOKEN_REQUIRED,
-                                    scanner.getLineNumber(), new Object[] {
-                "", required
-            });
+                    ErrorCode.TOKEN_REQUIRED,
+                    scanner.getLineNumber(), new Object[]{
+                            "", required
+                    });
         }
 
         String tokenS;
@@ -845,16 +845,16 @@ public class ParserBase {
         }
 
         return Error.parseError(ErrorCode.X_42581, ErrorCode.TOKEN_REQUIRED,
-                                scanner.getLineNumber(), new Object[] {
-            tokenS, required
-        });
+                scanner.getLineNumber(), new Object[]{
+                        tokenS, required
+                });
     }
 
     HsqlException unexpectedToken() {
 
         if (token.tokenType == Tokens.X_ENDPARSE) {
             return Error.parseError(ErrorCode.X_42590, null,
-                                    scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         String tokenS;
@@ -872,7 +872,7 @@ public class ParserBase {
         }
 
         return Error.parseError(ErrorCode.X_42581, tokenS,
-                                scanner.getLineNumber());
+                scanner.getLineNumber());
     }
 
     HsqlException tooManyIdentifiers() {
@@ -890,7 +890,7 @@ public class ParserBase {
         }
 
         return Error.parseError(ErrorCode.X_42551, tokenS,
-                                scanner.getLineNumber());
+                scanner.getLineNumber());
     }
 
     HsqlException unsupportedFeature() {

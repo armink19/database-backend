@@ -48,9 +48,9 @@ import org.hsqldb.jdbc.JDBCClobClient;
  */
 public final class ClobType extends CharacterType {
 
-    public static final long maxClobPrecision     = 1024L * 1024 * 1024 * 1024;
-    public static final int  defaultClobSize      = 1024 * 1024 * 1024;
-    public static final int  defaultShortClobSize = 16 * 1024 * 1024;
+    public static final long maxClobPrecision = 1024L * 1024 * 1024 * 1024;
+    public static final int defaultClobSize = 1024 * 1024 * 1024;
+    public static final int defaultShortClobSize = 16 * 1024 * 1024;
 
     public ClobType(long precision) {
         super(Types.SQL_CLOB, precision);
@@ -62,7 +62,7 @@ public final class ClobType extends CharacterType {
 
     public int displaySize() {
         return precision > Integer.MAX_VALUE ? Integer.MAX_VALUE
-                                             : (int) precision;
+                : (int) precision;
     }
 
     public int getJDBCTypeCode() {
@@ -83,18 +83,18 @@ public final class ClobType extends CharacterType {
 
     public String getDefinition() {
 
-        long   factor     = precision;
+        long factor = precision;
         String multiplier = null;
 
         if (precision % (1024) == 0) {
             if (precision % (1024 * 1024 * 1024) == 0) {
-                factor     = precision / (1024 * 1024 * 1024);
+                factor = precision / (1024 * 1024 * 1024);
                 multiplier = Tokens.T_G_FACTOR;
             } else if (precision % (1024 * 1024) == 0) {
-                factor     = precision / (1024 * 1024);
+                factor = precision / (1024 * 1024);
                 multiplier = Tokens.T_M_FACTOR;
             } else {
-                factor     = precision / (1024);
+                factor = precision / (1024);
                 multiplier = Tokens.T_K_FACTOR;
             }
         }
@@ -122,7 +122,9 @@ public final class ClobType extends CharacterType {
         return true;
     }
 
-    /** @todo - collation comparison */
+    /**
+     * @todo - collation comparison
+     */
     public int compare(Session session, Object a, Object b) {
         return compare(session, a, b, OpTypes.EQUAL);
     }
@@ -224,10 +226,10 @@ public final class ClobType extends CharacterType {
 
         if (otherType.typeCode == Types.SQL_CLOB) {
             return ((ClobData) data).position(session, (ClobData) otherData,
-                                              start);
+                    start);
         } else if (otherType.isCharacterType()) {
             return ((ClobData) data).position(session, (String) otherData,
-                                              start);
+                    start);
         } else {
             throw Error.runtimeError(ErrorCode.U_S0500, "ClobType");
         }

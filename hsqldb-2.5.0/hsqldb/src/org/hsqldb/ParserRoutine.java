@@ -70,14 +70,14 @@ public class ParserRoutine extends ParserTable {
         }
 
         throw Error.parseError(ErrorCode.X_34000, null,
-                               scanner.getLineNumber());
+                scanner.getLineNumber());
     }
 
     Statement compileSelectSingleRowStatement(RangeGroup[] rangeGroups) {
 
-        OrderedHashSet     variableNames = new OrderedHashSet();
-        Type[]             targetTypes;
-        LongDeque          colIndexList = new LongDeque();
+        OrderedHashSet variableNames = new OrderedHashSet();
+        Type[] targetTypes;
+        LongDeque colIndexList = new LongDeque();
         QuerySpecification select;
 
         compileContext.setOuterRanges(rangeGroups);
@@ -108,7 +108,7 @@ public class ParserRoutine extends ParserTable {
 
                 // todo - use more specific error message
                 throw Error.parseError(ErrorCode.X_0U000, null,
-                                       scanner.getLineNumber());
+                        scanner.getLineNumber());
             }
 
             targetTypes[i] = variables[i].getDataType();
@@ -122,7 +122,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         Statement statement = new StatementSet(session, variables, select,
-                                               columnMap, compileContext);
+                columnMap, compileContext);
 
         return statement;
     }
@@ -135,16 +135,16 @@ public class ParserRoutine extends ParserTable {
         read();
         readThis(Tokens.DIAGNOSTICS);
 
-        OrderedHashSet  targetSet    = new OrderedHashSet();
-        HsqlArrayList   exprList     = new HsqlArrayList();
-        LongDeque       colIndexList = new LongDeque();
-        RangeVariable[] rangeVars    = rangeGroups[0].getRangeVariables();
+        OrderedHashSet targetSet = new OrderedHashSet();
+        HsqlArrayList exprList = new HsqlArrayList();
+        LongDeque colIndexList = new LongDeque();
+        RangeVariable[] rangeVars = rangeGroups[0].getRangeVariables();
 
         readGetClauseList(rangeVars, targetSet, colIndexList, exprList);
 
         if (exprList.size() > 1) {
             throw Error.parseError(ErrorCode.X_42602, null,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         Expression expression = (Expression) exprList.get(0);
@@ -173,18 +173,18 @@ public class ParserRoutine extends ParserTable {
 
                 // todo - use more specific error message
                 throw Error.parseError(ErrorCode.X_0U000, null,
-                                       scanner.getLineNumber());
+                        scanner.getLineNumber());
             }
 
             if (!targets[i].getDataType().canBeAssignedFrom(
                     expression.getNodeDataType(i))) {
                 throw Error.parseError(ErrorCode.X_42561, null,
-                                       scanner.getLineNumber());
+                        scanner.getLineNumber());
             }
         }
 
         StatementSet cs = new StatementSet(session, targets, expression,
-                                           columnMap, compileContext);
+                columnMap, compileContext);
 
         return cs;
     }
@@ -195,15 +195,15 @@ public class ParserRoutine extends ParserTable {
     StatementSet compileSetStatement(RangeGroup[] rangeGroups,
                                      RangeVariable[] rangeVars) {
 
-        OrderedHashSet targetSet    = new OrderedHashSet();
-        HsqlArrayList  exprList     = new HsqlArrayList();
-        LongDeque      colIndexList = new LongDeque();
+        OrderedHashSet targetSet = new OrderedHashSet();
+        HsqlArrayList exprList = new HsqlArrayList();
+        LongDeque colIndexList = new LongDeque();
 
         readSetClauseList(rangeVars, targetSet, colIndexList, exprList);
 
         if (exprList.size() > 1) {
             throw Error.parseError(ErrorCode.X_42602, null,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         Expression expression = (Expression) exprList.get(0);
@@ -234,18 +234,18 @@ public class ParserRoutine extends ParserTable {
 
                 // todo - use more specific error message
                 throw Error.error(ErrorCode.X_0U000,
-                                  col.getName().statementName);
+                        col.getName().statementName);
             }
 
             if (!targets[i].getDataType().canBeAssignedFrom(
                     expression.getNodeDataType(i))) {
                 throw Error.parseError(ErrorCode.X_42561, null,
-                                       scanner.getLineNumber());
+                        scanner.getLineNumber());
             }
         }
 
         StatementSet cs = new StatementSet(session, targets, expression,
-                                           columnMap, compileContext);
+                columnMap, compileContext);
 
         return cs;
     }
@@ -254,14 +254,14 @@ public class ParserRoutine extends ParserTable {
      * Creates SET Statement for a trigger row from this parse context.
      */
     StatementDMQL compileTriggerSetStatement(Table table,
-            RangeGroup[] rangeGroups) {
+                                             RangeGroup[] rangeGroups) {
 
-        Expression[]   updateExpressions;
-        int[]          columnMap;
+        Expression[] updateExpressions;
+        int[] columnMap;
         OrderedHashSet targetSet = new OrderedHashSet();
-        HsqlArrayList  exprList  = new HsqlArrayList();
+        HsqlArrayList exprList = new HsqlArrayList();
         RangeVariable[] targetRangeVars = new RangeVariable[]{
-            rangeGroups[0].getRangeVariables()[TriggerDef.NEW_ROW] };
+                rangeGroups[0].getRangeVariables()[TriggerDef.NEW_ROW]};
         LongDeque colIndexList = new LongDeque();
 
         readSetClauseList(targetRangeVars, targetSet, colIndexList, exprList);
@@ -282,12 +282,12 @@ public class ParserRoutine extends ParserTable {
 
         exprList.toArray(updateExpressions);
         resolveUpdateExpressions(table, RangeGroup.emptyGroup, columnMap,
-                                 updateExpressions, rangeGroups);
+                updateExpressions, rangeGroups);
 
         StatementDMQL cs = new StatementSet(session, targets, table,
-                                            rangeGroups[0].getRangeVariables(),
-                                            columnMap, updateExpressions,
-                                            compileContext);
+                rangeGroups[0].getRangeVariables(),
+                columnMap, updateExpressions,
+                compileContext);
 
         return cs;
     }
@@ -304,11 +304,11 @@ public class ParserRoutine extends ParserTable {
 
         if (restrict) {
             OrderedHashSet set = database.schemaManager.getReferencesTo(
-                routine.getSpecificName());
+                    routine.getSpecificName());
 
             if (!set.isEmpty()) {
                 throw Error.parseError(ErrorCode.X_42502, null,
-                                       scanner.getLineNumber());
+                        scanner.getLineNumber());
             }
         }
 
@@ -322,11 +322,11 @@ public class ParserRoutine extends ParserTable {
         routine.resetAlteredRoutineSettings();
         routine.resolve(session);
 
-        Object[] args = new Object[]{ routine };
-        String   sql  = getLastPart();
+        Object[] args = new Object[]{routine};
+        String sql = getLastPart();
         StatementSchema cs = new StatementSchema(sql,
-            StatementTypes.ALTER_ROUTINE, args, null,
-            database.schemaManager.getCatalogNameArray());
+                StatementTypes.ALTER_ROUTINE, args, null,
+                database.schemaManager.getCatalogNameArray());
 
         return cs;
     }
@@ -334,12 +334,12 @@ public class ParserRoutine extends ParserTable {
     // SQL-invoked routine
     StatementSchema compileCreateProcedureOrFunction(boolean orReplace) {
 
-        Routine  routine = readCreateProcedureOrFunction();
-        Object[] args    = new Object[]{ routine };
-        String   sql     = getLastPart();
+        Routine routine = readCreateProcedureOrFunction();
+        Object[] args = new Object[]{routine};
+        String sql = getLastPart();
         StatementSchema cs = new StatementSchema(sql,
-            StatementTypes.CREATE_ROUTINE, args, null,
-            database.schemaManager.getCatalogNameArray());
+                StatementTypes.CREATE_ROUTINE, args, null,
+                database.schemaManager.getCatalogNameArray());
 
         return cs;
     }
@@ -356,7 +356,7 @@ public class ParserRoutine extends ParserTable {
 
     Routine readProcedureOrFunctionDeclaration() {
 
-        int     routineType;
+        int routineType;
         boolean isAggregate = false;
 
         if (token.tokenType == Tokens.AGGREGATE) {
@@ -370,8 +370,8 @@ public class ParserRoutine extends ParserTable {
         }
 
         routineType = token.tokenType == Tokens.PROCEDURE
-                      ? SchemaObject.PROCEDURE
-                      : SchemaObject.FUNCTION;
+                ? SchemaObject.PROCEDURE
+                : SchemaObject.FUNCTION;
 
         HsqlName name;
 
@@ -394,8 +394,8 @@ public class ParserRoutine extends ParserTable {
                 read();
 
                 TableDerived table =
-                    new TableDerived(database, SqlInvariants.MODULE_HSQLNAME,
-                                     TableBase.FUNCTION_TABLE);
+                        new TableDerived(database, SqlInvariants.MODULE_HSQLNAME,
+                                TableBase.FUNCTION_TABLE);
 
                 readTableDefinition(routine, table);
                 routine.setReturnTable(table);
@@ -451,7 +451,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         HsqlName hsqlName = database.nameManager.newHsqlName(Tokens.T_PASSWORD,
-            false, SchemaObject.FUNCTION);
+                false, SchemaObject.FUNCTION);
 
         hsqlName.setSchemaIfNull(SqlInvariants.SYSTEM_SCHEMA_HSQLNAME);
         routine.setName(hsqlName);
@@ -460,7 +460,7 @@ public class ParserRoutine extends ParserTable {
                 SchemaObject.PARAMETER);
 
         ColumnSchema column = new ColumnSchema(hsqlName, Type.SQL_VARCHAR,
-                                               false, false, null);
+                false, false, null);
 
         routine.addParameter(column);
         routine.setReturnType(Type.SQL_BOOLEAN);
@@ -484,19 +484,19 @@ public class ParserRoutine extends ParserTable {
         routine.setLanguage(Routine.LANGUAGE_JAVA);
         routine.setDataImpact(Routine.NO_SQL);
         routine.setName(
-            database.nameManager.newHsqlName(
-                Tokens.T_AUTHENTICATION, false, SchemaObject.FUNCTION));
+                database.nameManager.newHsqlName(
+                        Tokens.T_AUTHENTICATION, false, SchemaObject.FUNCTION));
 
         for (int i = 0; i < 3; i++) {
             ColumnSchema column = new ColumnSchema(null, Type.SQL_VARCHAR,
-                                                   false, false, null);
+                    false, false, null);
 
             routine.addParameter(column);
         }
 
         routine.setReturnType(
-            new ArrayType(
-                Type.SQL_VARCHAR_DEFAULT, ArrayType.defaultArrayCardinality));
+                new ArrayType(
+                        Type.SQL_VARCHAR_DEFAULT, ArrayType.defaultArrayCardinality));
         readRoutineBody(routine);
         routine.resolve(session);
 
@@ -531,12 +531,12 @@ public class ParserRoutine extends ParserTable {
     private void readRoutineCharacteristics(Routine routine) {
 
         OrderedIntHashSet set = new OrderedIntHashSet();
-        boolean           end = false;
+        boolean end = false;
 
         while (!end) {
             switch (token.tokenType) {
 
-                case Tokens.LANGUAGE : {
+                case Tokens.LANGUAGE: {
                     if (!set.add(Tokens.LANGUAGE)) {
                         throw unexpectedToken();
                     }
@@ -555,7 +555,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.PARAMETER : {
+                case Tokens.PARAMETER: {
                     if (!set.add(Tokens.PARAMETER)) {
                         throw unexpectedToken();
                     }
@@ -573,7 +573,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.SPECIFIC : {
+                case Tokens.SPECIFIC: {
                     if (!set.add(Tokens.SPECIFIC)) {
                         throw unexpectedToken();
                     }
@@ -581,14 +581,14 @@ public class ParserRoutine extends ParserTable {
                     read();
 
                     HsqlName name =
-                        readNewSchemaObjectName(SchemaObject.SPECIFIC_ROUTINE,
-                                                false);
+                            readNewSchemaObjectName(SchemaObject.SPECIFIC_ROUTINE,
+                                    false);
 
                     routine.setSpecificName(name);
 
                     break;
                 }
-                case Tokens.DETERMINISTIC : {
+                case Tokens.DETERMINISTIC: {
                     if (!set.add(Tokens.DETERMINISTIC)) {
                         throw unexpectedToken();
                     }
@@ -598,7 +598,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.NOT : {
+                case Tokens.NOT: {
                     if (!set.add(Tokens.DETERMINISTIC)) {
                         throw unexpectedToken();
                     }
@@ -609,7 +609,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.MODIFIES : {
+                case Tokens.MODIFIES: {
                     if (!set.add(Tokens.SQL)) {
                         throw unexpectedToken();
                     }
@@ -625,7 +625,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.NO : {
+                case Tokens.NO: {
                     if (!set.add(Tokens.SQL)) {
                         throw unexpectedToken();
                     }
@@ -636,7 +636,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.READS : {
+                case Tokens.READS: {
                     if (!set.add(Tokens.SQL)) {
                         throw unexpectedToken();
                     }
@@ -648,7 +648,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.CONTAINS : {
+                case Tokens.CONTAINS: {
                     if (!set.add(Tokens.SQL)) {
                         throw unexpectedToken();
                     }
@@ -659,14 +659,14 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.RETURNS : {
+                case Tokens.RETURNS: {
                     if (!set.add(Tokens.NULL) || routine.isProcedure()) {
                         throw unexpectedToken();
                     }
 
                     if (routine.isAggregate()) {
                         throw Error.error(ErrorCode.X_42604,
-                                          token.tokenString);
+                                token.tokenString);
                     }
 
                     read();
@@ -678,7 +678,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.CALLED : {
+                case Tokens.CALLED: {
                     if (!set.add(Tokens.NULL) || routine.isProcedure()) {
                         throw unexpectedToken();
                     }
@@ -691,7 +691,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.DYNAMIC : {
+                case Tokens.DYNAMIC: {
                     if (!set.add(Tokens.RESULT) || routine.isFunction()) {
                         throw unexpectedToken();
                     }
@@ -704,14 +704,14 @@ public class ParserRoutine extends ParserTable {
 
                     if (results < 0 || results > 16) {
                         throw Error.error(ErrorCode.X_42604,
-                                          String.valueOf(results));
+                                String.valueOf(results));
                     }
 
                     routine.setMaxDynamicResults(results);
 
                     break;
                 }
-                case Tokens.NEW : {
+                case Tokens.NEW: {
                     if (routine.getType() == SchemaObject.FUNCTION
                             || !set.add(Tokens.SAVEPOINT)) {
                         throw unexpectedToken();
@@ -724,7 +724,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.OLD : {
+                case Tokens.OLD: {
                     if (routine.getType() == SchemaObject.FUNCTION
                             || !set.add(Tokens.SAVEPOINT)) {
                         throw unexpectedToken();
@@ -739,7 +739,7 @@ public class ParserRoutine extends ParserTable {
 
                     // break;
                 }
-                default :
+                default:
                     end = true;
                     break;
             }
@@ -762,14 +762,14 @@ public class ParserRoutine extends ParserTable {
 
         try {
             Statement statement = compileSQLProcedureStatementOrNull(routine,
-                null);
+                    null);
 
             if (statement == null) {
                 throw unexpectedToken();
             }
 
             Token[] tokenisedStatement = getRecordedStatement();
-            String  sql                = Token.getSQL(tokenisedStatement);
+            String sql = Token.getSQL(tokenisedStatement);
 
             statement.setSQL(sql);
             routine.setProcedure(statement);
@@ -818,16 +818,16 @@ public class ParserRoutine extends ParserTable {
     Object[] readLocalDeclarationList(Routine routine,
                                       StatementCompound context) {
 
-        HsqlArrayList list                = new HsqlArrayList();
-        final int     table               = 0;
-        final int     variableOrCondition = 1;
-        final int     cursor              = 2;
-        final int     handler             = 3;
-        int           objectType          = table;
-        RangeGroup[]  rangeGroups         = new RangeGroup[1];
+        HsqlArrayList list = new HsqlArrayList();
+        final int table = 0;
+        final int variableOrCondition = 1;
+        final int cursor = 2;
+        final int handler = 3;
+        int objectType = table;
+        RangeGroup[] rangeGroups = new RangeGroup[1];
 
         rangeGroups[0] = context == null ? routine
-                                         : context;
+                : context;
 
         compileContext.setOuterRanges(rangeGroups);
 
@@ -904,8 +904,8 @@ public class ParserRoutine extends ParserTable {
 
     ColumnSchema[] readLocalVariableDeclarationOrNull() {
 
-        int           position = getPosition();
-        Type          type;
+        int position = getPosition();
+        Type type;
         HsqlArrayList names = new HsqlArrayList();
 
         try {
@@ -919,7 +919,7 @@ public class ParserRoutine extends ParserTable {
 
             while (true) {
                 HsqlName name = readNewSchemaObjectName(SchemaObject.VARIABLE,
-                    false);
+                        false);
 
                 if (token.tokenType == Tokens.CONDITION) {
                     rewind(position);
@@ -957,10 +957,10 @@ public class ParserRoutine extends ParserTable {
 
         for (int i = 0; i < names.size(); i++) {
             variable[i] = new ColumnSchema((HsqlName) names.get(i), type,
-                                           true, false, def);
+                    true, false, def);
 
             variable[i].setParameterMode(
-                SchemaObject.ParameterModes.PARAM_INOUT);
+                    SchemaObject.ParameterModes.PARAM_INOUT);
         }
 
         readThis(Tokens.SEMICOLON);
@@ -969,7 +969,7 @@ public class ParserRoutine extends ParserTable {
     }
 
     private StatementHandler compileLocalHandlerDeclaration(Routine routine,
-            StatementCompound context) {
+                                                            StatementCompound context) {
 
         int handlerType;
 
@@ -977,25 +977,25 @@ public class ParserRoutine extends ParserTable {
 
         switch (token.tokenType) {
 
-            case Tokens.CONTINUE :
+            case Tokens.CONTINUE:
                 read();
 
                 handlerType = StatementHandler.CONTINUE;
                 break;
 
-            case Tokens.EXIT :
+            case Tokens.EXIT:
                 read();
 
                 handlerType = StatementHandler.EXIT;
                 break;
 
-            case Tokens.UNDO :
+            case Tokens.UNDO:
                 read();
 
                 handlerType = StatementHandler.UNDO;
                 break;
 
-            default :
+            default:
                 throw unexpectedToken();
         }
 
@@ -1003,15 +1003,15 @@ public class ParserRoutine extends ParserTable {
         readThis(Tokens.FOR);
 
         StatementHandler handler = new StatementHandler(handlerType);
-        boolean          end     = false;
-        boolean          start   = true;
+        boolean end = false;
+        boolean start = true;
 
         while (!end) {
             int conditionType = StatementHandler.NONE;
 
             switch (token.tokenType) {
 
-                case Tokens.COMMA :
+                case Tokens.COMMA:
                     if (start) {
                         throw unexpectedToken();
                     }
@@ -1021,23 +1021,23 @@ public class ParserRoutine extends ParserTable {
                     start = true;
                     break;
 
-                case Tokens.SQLSTATE :
+                case Tokens.SQLSTATE:
                     conditionType = StatementHandler.SQL_STATE;
 
-                // fall through
-                case Tokens.SQLEXCEPTION :
+                    // fall through
+                case Tokens.SQLEXCEPTION:
                     if (conditionType == StatementHandler.NONE) {
                         conditionType = StatementHandler.SQL_EXCEPTION;
                     }
 
-                // fall through
-                case Tokens.SQLWARNING :
+                    // fall through
+                case Tokens.SQLWARNING:
                     if (conditionType == StatementHandler.NONE) {
                         conditionType = StatementHandler.SQL_WARNING;
                     }
 
-                // fall through
-                case Tokens.NOT :
+                    // fall through
+                case Tokens.NOT:
                     if (conditionType == StatementHandler.NONE) {
                         conditionType = StatementHandler.SQL_NOT_FOUND;
                     }
@@ -1063,7 +1063,7 @@ public class ParserRoutine extends ParserTable {
                     handler.addConditionType(conditionType);
                     break;
 
-                default :
+                default:
                     if (start) {
                         throw unexpectedToken();
                     }
@@ -1098,7 +1098,7 @@ public class ParserRoutine extends ParserTable {
 
         if (sqlState.length() != 5) {
             throw Error.parseError(ErrorCode.X_42607, null,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         read();
@@ -1106,21 +1106,21 @@ public class ParserRoutine extends ParserTable {
         return sqlState;
     }
 
-    static String[] featureStrings = new String[]{ "H901_03" };
+    static String[] featureStrings = new String[]{"H901_03"};
 
     String parseSQLFeatureValue() {
 
         if (!isUndelimitedSimpleName()) {
             throw Error.parseError(ErrorCode.X_42555, token.tokenString,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         String sqlFeature = token.tokenString;
-        int    index      = ArrayUtil.find(featureStrings, sqlFeature);
+        int index = ArrayUtil.find(featureStrings, sqlFeature);
 
         if (index < 0) {
             throw Error.parseError(ErrorCode.X_42555, token.tokenString,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         read();
@@ -1140,7 +1140,7 @@ public class ParserRoutine extends ParserTable {
         label = createLabelIfNull(context, label);
 
         StatementCompound statement =
-            new StatementCompound(StatementTypes.BEGIN_END, label, context);
+                new StatementCompound(StatementTypes.BEGIN_END, label, context);
 
         statement.setAtomic(atomic);
         statement.setRoot(routine);
@@ -1150,7 +1150,7 @@ public class ParserRoutine extends ParserTable {
         statement.setLocalDeclarations(declarations);
 
         Statement[] statements = compileSQLProcedureStatementList(routine,
-            statement);
+                statement);
 
         statement.setStatements(statements);
         readThis(Tokens.END);
@@ -1176,9 +1176,9 @@ public class ParserRoutine extends ParserTable {
             return label;
         }
 
-        String            labelString;
+        String labelString;
         StatementCompound parent = context;
-        int               level  = 0;
+        int level = 0;
 
         while (parent != null) {
             level++;
@@ -1194,9 +1194,9 @@ public class ParserRoutine extends ParserTable {
     }
 
     Statement[] compileSQLProcedureStatementList(Routine routine,
-            StatementCompound context) {
+                                                 StatementCompound context) {
 
-        Statement     e;
+        Statement e;
         HsqlArrayList list = new HsqlArrayList();
 
         while (true) {
@@ -1222,13 +1222,13 @@ public class ParserRoutine extends ParserTable {
     }
 
     Statement compileSQLProcedureStatementOrNull(Routine routine,
-            StatementCompound context) {
+                                                 StatementCompound context) {
 
-        Statement    cs          = null;
-        HsqlName     label       = null;
-        RangeGroup   rangeGroup  = context == null ? routine
-                                                   : context;
-        RangeGroup[] rangeGroups = new RangeGroup[]{ rangeGroup };
+        Statement cs = null;
+        HsqlName label = null;
+        RangeGroup rangeGroup = context == null ? routine
+                : context;
+        RangeGroup[] rangeGroups = new RangeGroup[]{rangeGroup};
 
         if (!routine.isTrigger() && isSimpleName() && !isReservedKey()) {
             label = readLabel();
@@ -1244,10 +1244,10 @@ public class ParserRoutine extends ParserTable {
             switch (token.tokenType) {
 
                 // data
-                case Tokens.OPEN : {
+                case Tokens.OPEN: {
                     if (routine.dataImpact == Routine.CONTAINS_SQL) {
                         throw Error.error(ErrorCode.X_42602,
-                                          routine.getDataImpactString());
+                                routine.getDataImpactString());
                     }
 
                     if (label != null) {
@@ -1258,7 +1258,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.SELECT : {
+                case Tokens.SELECT: {
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1269,7 +1269,7 @@ public class ParserRoutine extends ParserTable {
                 }
 
                 // data change
-                case Tokens.INSERT :
+                case Tokens.INSERT:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1277,7 +1277,7 @@ public class ParserRoutine extends ParserTable {
                     cs = compileInsertStatement(rangeGroups);
                     break;
 
-                case Tokens.UPDATE :
+                case Tokens.UPDATE:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1285,7 +1285,7 @@ public class ParserRoutine extends ParserTable {
                     cs = compileUpdateStatement(rangeGroups);
                     break;
 
-                case Tokens.DELETE :
+                case Tokens.DELETE:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1293,7 +1293,7 @@ public class ParserRoutine extends ParserTable {
                     cs = compileDeleteStatement(rangeGroups);
                     break;
 
-                case Tokens.TRUNCATE :
+                case Tokens.TRUNCATE:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1301,7 +1301,7 @@ public class ParserRoutine extends ParserTable {
                     cs = compileTruncateStatement();
                     break;
 
-                case Tokens.MERGE :
+                case Tokens.MERGE:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1309,7 +1309,7 @@ public class ParserRoutine extends ParserTable {
                     cs = compileMergeStatement(rangeGroups);
                     break;
 
-                case Tokens.SET :
+                case Tokens.SET:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1319,34 +1319,34 @@ public class ParserRoutine extends ParserTable {
                     if (routine.isTrigger()) {
                         if (routine.triggerType == TriggerDef.BEFORE
                                 && routine.triggerOperation
-                                   != StatementTypes.DELETE_WHERE) {
+                                != StatementTypes.DELETE_WHERE) {
                             int position = getPosition();
 
                             try {
                                 cs = compileTriggerSetStatement(
-                                    routine.triggerTable, rangeGroups);
+                                        routine.triggerTable, rangeGroups);
 
                                 break;
                             } catch (HsqlException e) {
                                 rewind(position);
 
                                 cs = compileSetStatement(
-                                    rangeGroups,
-                                    rangeGroup.getRangeVariables());
+                                        rangeGroups,
+                                        rangeGroup.getRangeVariables());
                             }
                         } else {
                             cs = compileSetStatement(
-                                rangeGroups, rangeGroup.getRangeVariables());
+                                    rangeGroups, rangeGroup.getRangeVariables());
                         }
 
                         ((StatementSet) cs).checkIsNotColumnTarget();
                     } else {
                         cs = compileSetStatement(
-                            rangeGroups, rangeGroup.getRangeVariables());
+                                rangeGroups, rangeGroup.getRangeVariables());
                     }
                     break;
 
-                case Tokens.GET :
+                case Tokens.GET:
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1355,7 +1355,7 @@ public class ParserRoutine extends ParserTable {
                     break;
 
                 // control
-                case Tokens.CALL : {
+                case Tokens.CALL: {
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1367,22 +1367,22 @@ public class ParserRoutine extends ParserTable {
                     if (proc != null) {
                         switch (routine.dataImpact) {
 
-                            case Routine.CONTAINS_SQL : {
+                            case Routine.CONTAINS_SQL: {
                                 if (proc.dataImpact == Routine.READS_SQL
                                         || proc.dataImpact
-                                           == Routine.MODIFIES_SQL) {
+                                        == Routine.MODIFIES_SQL) {
                                     throw Error.error(
-                                        ErrorCode.X_42602,
-                                        routine.getDataImpactString());
+                                            ErrorCode.X_42602,
+                                            routine.getDataImpactString());
                                 }
 
                                 break;
                             }
-                            case Routine.READS_SQL : {
+                            case Routine.READS_SQL: {
                                 if (proc.dataImpact == Routine.MODIFIES_SQL) {
                                     throw Error.error(
-                                        ErrorCode.X_42602,
-                                        routine.getDataImpactString());
+                                            ErrorCode.X_42602,
+                                            routine.getDataImpactString());
                                 }
 
                                 break;
@@ -1392,7 +1392,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.RETURN : {
+                case Tokens.RETURN: {
                     if (routine.isTrigger() || label != null) {
                         throw unexpectedToken();
                     }
@@ -1403,12 +1403,12 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.BEGIN : {
+                case Tokens.BEGIN: {
                     cs = compileCompoundStatement(routine, context, label);
 
                     break;
                 }
-                case Tokens.WHILE : {
+                case Tokens.WHILE: {
                     if (routine.isTrigger()) {
                         throw unexpectedToken();
                     }
@@ -1417,22 +1417,22 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.REPEAT : {
+                case Tokens.REPEAT: {
                     cs = compileRepeat(routine, context, label);
 
                     break;
                 }
-                case Tokens.LOOP : {
+                case Tokens.LOOP: {
                     cs = compileLoop(routine, context, label);
 
                     break;
                 }
-                case Tokens.FOR : {
+                case Tokens.FOR: {
                     cs = compileFor(routine, context, label);
 
                     break;
                 }
-                case Tokens.ITERATE : {
+                case Tokens.ITERATE: {
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1441,7 +1441,7 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.LEAVE : {
+                case Tokens.LEAVE: {
                     if (label != null) {
                         throw unexpectedToken();
                     }
@@ -1450,27 +1450,27 @@ public class ParserRoutine extends ParserTable {
 
                     break;
                 }
-                case Tokens.IF : {
+                case Tokens.IF: {
                     cs = compileIf(routine, context);
 
                     break;
                 }
-                case Tokens.CASE : {
+                case Tokens.CASE: {
                     cs = compileCase(routine, context);
 
                     break;
                 }
-                case Tokens.SIGNAL : {
+                case Tokens.SIGNAL: {
                     cs = compileSignal(routine, context, label);
 
                     break;
                 }
-                case Tokens.RESIGNAL : {
+                case Tokens.RESIGNAL: {
                     cs = compileResignal(routine, context, label);
 
                     break;
                 }
-                default :
+                default:
                     return null;
             }
 
@@ -1501,7 +1501,7 @@ public class ParserRoutine extends ParserTable {
         RangeGroup[] rangeGroups = new RangeGroup[1];
 
         rangeGroups[0] = context == null ? routine
-                                         : context;
+                : context;
 
         compileContext.setOuterRanges(rangeGroups);
 
@@ -1515,35 +1515,35 @@ public class ParserRoutine extends ParserTable {
 
         if (routine.isProcedure()) {
             throw Error.parseError(ErrorCode.X_42602, null,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         if (routine.returnsTable()) {
             if (e.getType() != OpTypes.TABLE_SUBQUERY) {
                 throw Error.parseError(ErrorCode.X_42611, null,
-                                       scanner.getLineNumber());
+                        scanner.getLineNumber());
             }
         }
 
-        Type returnType   = new RowType(e.getNodeDataTypes());
+        Type returnType = new RowType(e.getNodeDataTypes());
         Type declaredType = routine.getReturnType();
 
         if (!declaredType.isRowType()) {
-            declaredType = new RowType(new Type[]{ routine.getReturnType() });
+            declaredType = new RowType(new Type[]{routine.getReturnType()});
         }
 
         if (declaredType.getDegree() != returnType.getDegree()) {
             throw Error.parseError(ErrorCode.X_42564, null,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         if (!declaredType.canBeAssignedFrom(returnType)) {
             throw Error.parseError(ErrorCode.X_42611, null,
-                                   scanner.getLineNumber());
+                    scanner.getLineNumber());
         }
 
         return new StatementExpression(session, compileContext,
-                                       StatementTypes.RETURN, e);
+                StatementTypes.RETURN, e);
     }
 
     Statement compileIterate() {
@@ -1574,12 +1574,12 @@ public class ParserRoutine extends ParserTable {
         resolveOuterReferencesAndTypes(routine, context, e);
 
         StatementExpression condition = new StatementExpression(session,
-            compileContext, StatementTypes.CONDITION, e);
+                compileContext, StatementTypes.CONDITION, e);
 
         readThis(Tokens.DO);
 
         Statement[] statements = compileSQLProcedureStatementList(routine,
-            context);
+                context);
 
         readThis(Tokens.END);
         readThis(Tokens.WHILE);
@@ -1597,7 +1597,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         StatementCompound statement =
-            new StatementCompound(StatementTypes.WHILE, label, context);
+                new StatementCompound(StatementTypes.WHILE, label, context);
 
         statement.setStatements(statements);
         statement.setCondition(condition);
@@ -1611,7 +1611,7 @@ public class ParserRoutine extends ParserTable {
         readThis(Tokens.REPEAT);
 
         Statement[] statements = compileSQLProcedureStatementList(routine,
-            context);
+                context);
 
         readThis(Tokens.UNTIL);
 
@@ -1620,7 +1620,7 @@ public class ParserRoutine extends ParserTable {
         resolveOuterReferencesAndTypes(routine, context, e);
 
         StatementExpression condition = new StatementExpression(session,
-            compileContext, StatementTypes.CONDITION, e);
+                compileContext, StatementTypes.CONDITION, e);
 
         readThis(Tokens.END);
         readThis(Tokens.REPEAT);
@@ -1638,7 +1638,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         StatementCompound statement =
-            new StatementCompound(StatementTypes.REPEAT, label, context);
+                new StatementCompound(StatementTypes.REPEAT, label, context);
 
         statement.setStatements(statements);
         statement.setCondition(condition);
@@ -1652,7 +1652,7 @@ public class ParserRoutine extends ParserTable {
         readThis(Tokens.LOOP);
 
         Statement[] statements = compileSQLProcedureStatementList(routine,
-            context);
+                context);
 
         readThis(Tokens.END);
         readThis(Tokens.LOOP);
@@ -1670,7 +1670,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         StatementCompound result = new StatementCompound(StatementTypes.LOOP,
-            label, context);
+                label, context);
 
         result.setStatements(statements);
 
@@ -1683,27 +1683,27 @@ public class ParserRoutine extends ParserTable {
         RangeGroup[] rangeGroups = new RangeGroup[1];
 
         rangeGroups[0] = context == null ? routine
-                                         : context;
+                : context;
 
         compileContext.setOuterRanges(rangeGroups);
         readThis(Tokens.FOR);
 
         StatementQuery cursorStatement =
-            compileCursorSpecification(rangeGroups,
-                                       ResultProperties.defaultPropsValue,
-                                       false);
+                compileCursorSpecification(rangeGroups,
+                        ResultProperties.defaultPropsValue,
+                        false);
 
         readThis(Tokens.DO);
 
         StatementCompound forStatement =
-            new StatementCompound(StatementTypes.FOR, label, context);
+                new StatementCompound(StatementTypes.FOR, label, context);
 
         forStatement.setAtomic(true);
         forStatement.setRoot(routine);
         forStatement.setLoopStatement(null, cursorStatement);
 
         Statement[] statements = compileSQLProcedureStatementList(routine,
-            forStatement);
+                forStatement);
 
         readThis(Tokens.END);
         readThis(Tokens.FOR);
@@ -1736,13 +1736,13 @@ public class ParserRoutine extends ParserTable {
         resolveOuterReferencesAndTypes(routine, context, e);
 
         Statement statement = new StatementExpression(session, compileContext,
-            StatementTypes.CONDITION, e);
+                StatementTypes.CONDITION, e);
 
         list.add(statement);
         readThis(Tokens.THEN);
 
         Statement[] statements = compileSQLProcedureStatementList(routine,
-            context);
+                context);
 
         for (int i = 0; i < statements.length; i++) {
             list.add(statements[i]);
@@ -1756,7 +1756,7 @@ public class ParserRoutine extends ParserTable {
             resolveOuterReferencesAndTypes(routine, context, e);
 
             statement = new StatementExpression(session, compileContext,
-                                                StatementTypes.CONDITION, e);
+                    StatementTypes.CONDITION, e);
 
             list.add(statement);
             readThis(Tokens.THEN);
@@ -1773,7 +1773,7 @@ public class ParserRoutine extends ParserTable {
 
             e = Expression.EXPR_TRUE;
             statement = new StatementExpression(session, compileContext,
-                                                StatementTypes.CONDITION, e);
+                    StatementTypes.CONDITION, e);
 
             list.add(statement);
 
@@ -1792,7 +1792,7 @@ public class ParserRoutine extends ParserTable {
         list.toArray(statements);
 
         StatementCompound result = new StatementCompound(StatementTypes.IF,
-            null, context);
+                null, context);
 
         result.setStatements(statements);
 
@@ -1802,9 +1802,9 @@ public class ParserRoutine extends ParserTable {
     Statement compileCase(Routine routine, StatementCompound context) {
 
         HsqlArrayList list;
-        Expression    condition = null;
-        Statement     statement;
-        Statement[]   statements;
+        Expression condition = null;
+        Statement statement;
+        Statement[] statements;
 
         readThis(Tokens.CASE);
 
@@ -1819,8 +1819,8 @@ public class ParserRoutine extends ParserTable {
 
             condition = Expression.EXPR_TRUE;
             statement = new StatementExpression(session, compileContext,
-                                                StatementTypes.CONDITION,
-                                                condition);
+                    StatementTypes.CONDITION,
+                    condition);
 
             list.add(statement);
 
@@ -1839,7 +1839,7 @@ public class ParserRoutine extends ParserTable {
         list.toArray(statements);
 
         StatementCompound result = new StatementCompound(StatementTypes.IF,
-            null, context);
+                null, context);
 
         result.setStatements(statements);
 
@@ -1849,11 +1849,11 @@ public class ParserRoutine extends ParserTable {
     HsqlArrayList readSimpleCaseWhen(Routine routine,
                                      StatementCompound context) {
 
-        HsqlArrayList list      = new HsqlArrayList();
-        Expression    condition = null;
-        Statement     statement;
-        Statement[]   statements;
-        Expression    predicand = XreadRowValuePredicand();
+        HsqlArrayList list = new HsqlArrayList();
+        Expression condition = null;
+        Statement statement;
+        Statement[] statements;
+        Expression predicand = XreadRowValuePredicand();
 
         do {
             readThis(Tokens.WHEN);
@@ -1863,8 +1863,8 @@ public class ParserRoutine extends ParserTable {
 
                 if (predicand == newCondition) {
                     newCondition =
-                        new ExpressionLogical(predicand,
-                                              XreadRowValuePredicand());
+                            new ExpressionLogical(predicand,
+                                    XreadRowValuePredicand());
                 }
 
                 resolveOuterReferencesAndTypes(routine, context, newCondition);
@@ -1873,7 +1873,7 @@ public class ParserRoutine extends ParserTable {
                     condition = newCondition;
                 } else {
                     condition = new ExpressionLogical(OpTypes.OR, condition,
-                                                      newCondition);
+                            newCondition);
                 }
 
                 if (token.tokenType == Tokens.COMMA) {
@@ -1884,8 +1884,8 @@ public class ParserRoutine extends ParserTable {
             } while (true);
 
             statement = new StatementExpression(session, compileContext,
-                                                StatementTypes.CONDITION,
-                                                condition);
+                    StatementTypes.CONDITION,
+                    condition);
 
             list.add(statement);
             readThis(Tokens.THEN);
@@ -1906,10 +1906,10 @@ public class ParserRoutine extends ParserTable {
 
     HsqlArrayList readCaseWhen(Routine routine, StatementCompound context) {
 
-        HsqlArrayList list      = new HsqlArrayList();
-        Expression    condition = null;
-        Statement     statement;
-        Statement[]   statements;
+        HsqlArrayList list = new HsqlArrayList();
+        Expression condition = null;
+        Statement statement;
+        Statement[] statements;
 
         do {
             readThis(Tokens.WHEN);
@@ -1919,8 +1919,8 @@ public class ParserRoutine extends ParserTable {
             resolveOuterReferencesAndTypes(routine, context, condition);
 
             statement = new StatementExpression(session, compileContext,
-                                                StatementTypes.CONDITION,
-                                                condition);
+                    StatementTypes.CONDITION,
+                    condition);
 
             list.add(statement);
             readThis(Tokens.THEN);
@@ -1942,7 +1942,7 @@ public class ParserRoutine extends ParserTable {
     Statement compileSignal(Routine routine, StatementCompound context,
                             HsqlName label) {
 
-        String     sqlState;
+        String sqlState;
         Expression message = null;
 
         readThis(Tokens.SIGNAL);
@@ -1964,7 +1964,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         StatementSignal cs = new StatementSignal(StatementTypes.SIGNAL,
-            sqlState, message);
+                sqlState, message);
 
         return cs;
     }
@@ -1973,8 +1973,8 @@ public class ParserRoutine extends ParserTable {
                                       StatementCompound context,
                                       HsqlName label) {
 
-        String     sqlState = null;
-        Expression message  = null;
+        String sqlState = null;
+        Expression message = null;
 
         readThis(Tokens.RESIGNAL);
 
@@ -1996,7 +1996,7 @@ public class ParserRoutine extends ParserTable {
         }
 
         StatementSignal cs = new StatementSignal(StatementTypes.RESIGNAL,
-            sqlState, message);
+                sqlState, message);
 
         return cs;
     }
@@ -2005,7 +2005,7 @@ public class ParserRoutine extends ParserTable {
 
         HsqlName hsqlName = null;
         int parameterMode = readRoutineParameterMode(routine.routineType,
-            routine.isAggregate);
+                routine.isAggregate);
 
         if (!isReservedKey()) {
             hsqlName = readNewDependentSchemaObjectName(routine.getName(),
@@ -2014,7 +2014,7 @@ public class ParserRoutine extends ParserTable {
 
         Type typeObject = readTypeDefinition(false, true);
         ColumnSchema column = new ColumnSchema(hsqlName, typeObject, true,
-                                               false, null);
+                false, null);
 
         if (isParam) {
             column.setParameterMode((byte) parameterMode);
@@ -2029,11 +2029,11 @@ public class ParserRoutine extends ParserTable {
 
         switch (token.tokenType) {
 
-            case Tokens.IN :
+            case Tokens.IN:
                 read();
                 break;
 
-            case Tokens.OUT :
+            case Tokens.OUT:
                 if (routineType != SchemaObject.PROCEDURE) {
                     throw unexpectedToken();
                 }
@@ -2043,7 +2043,7 @@ public class ParserRoutine extends ParserTable {
                 parameterMode = SchemaObject.ParameterModes.PARAM_OUT;
                 break;
 
-            case Tokens.INOUT :
+            case Tokens.INOUT:
                 if (routineType != SchemaObject.PROCEDURE) {
                     if (!isAggregate) {
                         throw unexpectedToken();
@@ -2055,7 +2055,7 @@ public class ParserRoutine extends ParserTable {
                 parameterMode = SchemaObject.ParameterModes.PARAM_INOUT;
                 break;
 
-            default :
+            default:
         }
 
         return parameterMode;
@@ -2066,26 +2066,26 @@ public class ParserRoutine extends ParserTable {
                                         Expression e) {
 
         RangeGroup rangeGroup = context == null ? routine
-                                                : context;
+                : context;
 
-        resolveOuterReferencesAndTypes(new RangeGroup[]{ rangeGroup }, e);
+        resolveOuterReferencesAndTypes(new RangeGroup[]{rangeGroup}, e);
     }
 
     StatementSchema compileCreateTrigger(boolean orReplace) {
 
-        Table          table;
-        Boolean        isForEachRow = null;
-        boolean        isNowait     = false;
-        boolean        hasQueueSize = false;
-        int            queueSize    = 0;
-        int            beforeOrAfterType;
-        int            operationType;
-        String         className;
-        TriggerDef     td;
-        HsqlName       name;
-        HsqlName       otherName           = null;
-        OrderedHashSet columns             = null;
-        int[]          updateColumnIndexes = null;
+        Table table;
+        Boolean isForEachRow = null;
+        boolean isNowait = false;
+        boolean hasQueueSize = false;
+        int queueSize = 0;
+        int beforeOrAfterType;
+        int operationType;
+        String className;
+        TriggerDef td;
+        HsqlName name;
+        HsqlName otherName = null;
+        OrderedHashSet columns = null;
+        int[] updateColumnIndexes = null;
 
         read();
 
@@ -2095,34 +2095,34 @@ public class ParserRoutine extends ParserTable {
 
         switch (token.tokenType) {
 
-            case Tokens.INSTEAD :
+            case Tokens.INSTEAD:
                 beforeOrAfterType = TriggerDef.getTiming(Tokens.INSTEAD);
 
                 read();
                 readThis(Tokens.OF);
                 break;
 
-            case Tokens.BEFORE :
-            case Tokens.AFTER :
+            case Tokens.BEFORE:
+            case Tokens.AFTER:
                 beforeOrAfterType = TriggerDef.getTiming(token.tokenType);
 
                 read();
                 break;
 
-            default :
+            default:
                 throw unexpectedToken();
         }
 
         switch (token.tokenType) {
 
-            case Tokens.INSERT :
-            case Tokens.DELETE :
+            case Tokens.INSERT:
+            case Tokens.DELETE:
                 operationType = TriggerDef.getOperationType(token.tokenType);
 
                 read();
                 break;
 
-            case Tokens.UPDATE :
+            case Tokens.UPDATE:
                 operationType = TriggerDef.getOperationType(token.tokenType);
 
                 read();
@@ -2137,7 +2137,7 @@ public class ParserRoutine extends ParserTable {
                 }
                 break;
 
-            default :
+            default:
                 throw unexpectedToken();
         }
 
@@ -2158,7 +2158,7 @@ public class ParserRoutine extends ParserTable {
         if (beforeOrAfterType == TriggerDef.INSTEAD) {
             if (!table.isView()
                     || ((View) table).getCheckOption()
-                       == SchemaObject.ViewCheckModes.CHECK_CASCADE) {
+                    == SchemaObject.ViewCheckModes.CHECK_CASCADE) {
                 throw Error.error(ErrorCode.X_42538, name.schema.name);
             }
         } else {
@@ -2181,21 +2181,21 @@ public class ParserRoutine extends ParserTable {
             for (int i = 0; i < updateColumnIndexes.length; i++) {
                 if (updateColumnIndexes[i] == -1) {
                     throw Error.error(ErrorCode.X_42544,
-                                      (String) columns.get(i));
+                            (String) columns.get(i));
                 }
             }
         }
 
-        Expression      condition    = null;
-        SimpleName      oldTableName = null;
-        SimpleName      newTableName = null;
-        SimpleName      oldRowName   = null;
-        SimpleName      newRowName   = null;
-        Table[]         transitions  = new Table[4];
-        RangeVariable[] rangeVars    = new RangeVariable[4];
-        String          conditionSQL = null;
+        Expression condition = null;
+        SimpleName oldTableName = null;
+        SimpleName newTableName = null;
+        SimpleName oldRowName = null;
+        SimpleName newRowName = null;
+        Table[] transitions = new Table[4];
+        RangeVariable[] rangeVars = new RangeVariable[4];
+        String conditionSQL = null;
         RangeGroup[] rangeGroups = new RangeGroup[]{
-            new RangeGroup.RangeGroupSimple(rangeVars, false) };
+                new RangeGroup.RangeGroupSimple(rangeVars, false)};
 
         if (token.tokenType == Tokens.REFERENCING) {
             read();
@@ -2226,7 +2226,7 @@ public class ParserRoutine extends ParserTable {
                         read();
 
                         oldTableName = HsqlNameManager.getSimpleName(
-                            token.tokenString, token.isDelimitedIdentifier);
+                                token.tokenString, token.isDelimitedIdentifier);
 
                         SimpleName n = oldTableName;
 
@@ -2238,14 +2238,14 @@ public class ParserRoutine extends ParserTable {
                         isForEachRow = Boolean.FALSE;
 
                         HsqlName hsqlName = database.nameManager.newHsqlName(
-                            table.getSchemaName(), n.name,
-                            isDelimitedIdentifier(), SchemaObject.TRANSITION);
+                                table.getSchemaName(), n.name,
+                                isDelimitedIdentifier(), SchemaObject.TRANSITION);
                         Table transition = new Table(table, hsqlName);
                         RangeVariable range = new RangeVariable(transition,
-                            null, null, null, compileContext);
+                                null, null, null, compileContext);
 
                         transitions[TriggerDef.OLD_TABLE] = transition;
-                        rangeVars[TriggerDef.OLD_TABLE]   = range;
+                        rangeVars[TriggerDef.OLD_TABLE] = range;
                     } else {
                         if (Boolean.FALSE.equals(isForEachRow)
                                 || oldRowName != null) {
@@ -2257,7 +2257,7 @@ public class ParserRoutine extends ParserTable {
                         checkIsSimpleName();
 
                         oldRowName = HsqlNameManager.getSimpleName(
-                            token.tokenString, token.isDelimitedIdentifier);
+                                token.tokenString, token.isDelimitedIdentifier);
 
                         read();
 
@@ -2271,13 +2271,13 @@ public class ParserRoutine extends ParserTable {
                         isForEachRow = Boolean.TRUE;
 
                         RangeVariable range =
-                            new RangeVariable(table.columnList, oldRowName,
-                                              false,
-                                              RangeVariable.TRANSITION_RANGE);
+                                new RangeVariable(table.columnList, oldRowName,
+                                        false,
+                                        RangeVariable.TRANSITION_RANGE);
 
-                        range.rangePosition             = TriggerDef.OLD_ROW;
+                        range.rangePosition = TriggerDef.OLD_ROW;
                         transitions[TriggerDef.OLD_ROW] = null;
-                        rangeVars[TriggerDef.OLD_ROW]   = range;
+                        rangeVars[TriggerDef.OLD_ROW] = range;
                     }
                 } else if (token.tokenType == Tokens.NEW) {
                     if (operationType == StatementTypes.DELETE_WHERE) {
@@ -2298,7 +2298,7 @@ public class ParserRoutine extends ParserTable {
                         checkIsSimpleName();
 
                         newTableName = HsqlNameManager.getSimpleName(
-                            token.tokenString, token.isDelimitedIdentifier);
+                                token.tokenString, token.isDelimitedIdentifier);
 
                         read();
 
@@ -2312,14 +2312,14 @@ public class ParserRoutine extends ParserTable {
                         }
 
                         HsqlName hsqlName = database.nameManager.newHsqlName(
-                            table.getSchemaName(), n.name,
-                            isDelimitedIdentifier(), SchemaObject.TRANSITION);
+                                table.getSchemaName(), n.name,
+                                isDelimitedIdentifier(), SchemaObject.TRANSITION);
                         Table transition = new Table(table, hsqlName);
                         RangeVariable range = new RangeVariable(transition,
-                            null, null, null, compileContext);
+                                null, null, null, compileContext);
 
                         transitions[TriggerDef.NEW_TABLE] = transition;
-                        rangeVars[TriggerDef.NEW_TABLE]   = range;
+                        rangeVars[TriggerDef.NEW_TABLE] = range;
                     } else {
                         if (Boolean.FALSE.equals(isForEachRow)
                                 || newRowName != null) {
@@ -2331,7 +2331,7 @@ public class ParserRoutine extends ParserTable {
                         checkIsSimpleName();
 
                         newRowName = HsqlNameManager.getSimpleName(
-                            token.tokenString, token.isDelimitedIdentifier);
+                                token.tokenString, token.isDelimitedIdentifier);
 
                         read();
 
@@ -2345,13 +2345,13 @@ public class ParserRoutine extends ParserTable {
                         isForEachRow = Boolean.TRUE;
 
                         RangeVariable range =
-                            new RangeVariable(table.columnList, newRowName,
-                                              false,
-                                              RangeVariable.TRANSITION_RANGE);
+                                new RangeVariable(table.columnList, newRowName,
+                                        false,
+                                        RangeVariable.TRANSITION_RANGE);
 
-                        range.rangePosition             = TriggerDef.NEW_ROW;
+                        range.rangePosition = TriggerDef.NEW_ROW;
                         transitions[TriggerDef.NEW_ROW] = null;
-                        rangeVars[TriggerDef.NEW_ROW]   = range;
+                        rangeVars[TriggerDef.NEW_ROW] = range;
                     }
                 } else {
                     break;
@@ -2389,15 +2389,17 @@ public class ParserRoutine extends ParserTable {
         }
 
         //
-        if (rangeVars[TriggerDef.OLD_TABLE] != null) {}
+        if (rangeVars[TriggerDef.OLD_TABLE] != null) {
+        }
 
-        if (rangeVars[TriggerDef.NEW_TABLE] != null) {}
+        if (rangeVars[TriggerDef.NEW_TABLE] != null) {
+        }
 
         //
         if (Tokens.T_QUEUE.equals(token.tokenString)) {
             read();
 
-            queueSize    = readInteger();
+            queueSize = readInteger();
             hasQueueSize = true;
         }
 
@@ -2415,14 +2417,14 @@ public class ParserRoutine extends ParserTable {
             int position = getPosition();
 
             isCheckOrTriggerCondition = true;
-            condition                 = XreadBooleanValueExpression();
-            conditionSQL              = getLastPart(position);
+            condition = XreadBooleanValueExpression();
+            conditionSQL = getLastPart(position);
             isCheckOrTriggerCondition = false;
 
             readThis(Tokens.CLOSEBRACKET);
 
             HsqlList unresolved = condition.resolveColumnReferences(session,
-                rangeGroups[0], rangeGroups, null);
+                    rangeGroups[0], rangeGroups, null);
 
             ExpressionColumn.checkColumnsResolved(unresolved);
             condition.resolveTypes(session, null);
@@ -2453,21 +2455,21 @@ public class ParserRoutine extends ParserTable {
                 }
 
                 td = new TriggerDef(name, beforeOrAfterType, operationType,
-                                    isForEachRow.booleanValue(), table,
-                                    transitions, rangeVars, condition,
-                                    conditionSQL, updateColumnIndexes,
-                                    className, isNowait, queueSize);
+                        isForEachRow.booleanValue(), table,
+                        transitions, rangeVars, condition,
+                        conditionSQL, updateColumnIndexes,
+                        className, isNowait, queueSize);
 
-                String     sql            = getLastPart();
-                Object[]   args           = new Object[] {
-                    td, otherName, ifNotExists
+                String sql = getLastPart();
+                Object[] args = new Object[]{
+                        td, otherName, ifNotExists
                 };
-                HsqlName[] writeLockNames = new HsqlName[] {
-                    database.getCatalogName(), table.getName()
+                HsqlName[] writeLockNames = new HsqlName[]{
+                        database.getCatalogName(), table.getName()
                 };
 
                 return new StatementSchema(sql, StatementTypes.CREATE_TRIGGER,
-                                           args, null, writeLockNames);
+                        args, null, writeLockNames);
             } catch (HsqlException e) {
                 rewind(position);
             }
@@ -2483,21 +2485,21 @@ public class ParserRoutine extends ParserTable {
         }
 
         Routine routine = compileTriggerRoutine(table, rangeVars,
-            beforeOrAfterType, operationType);
+                beforeOrAfterType, operationType);
 
         td = new TriggerDefSQL(name, beforeOrAfterType, operationType,
-                               isForEachRow.booleanValue(), table,
-                               transitions, rangeVars, condition,
-                               conditionSQL, updateColumnIndexes, routine);
+                isForEachRow.booleanValue(), table,
+                transitions, rangeVars, condition,
+                conditionSQL, updateColumnIndexes, routine);
 
-        String   sql  = getLastPart();
-        Object[] args = new Object[] {
-            td, otherName, ifNotExists
+        String sql = getLastPart();
+        Object[] args = new Object[]{
+                td, otherName, ifNotExists
         };
 
         return new StatementSchema(sql, StatementTypes.CREATE_TRIGGER, args,
-                                   null, new HsqlName[] {
-            database.getCatalogName(), table.getName()
+                null, new HsqlName[]{
+                database.getCatalogName(), table.getName()
         });
     }
 
@@ -2505,10 +2507,10 @@ public class ParserRoutine extends ParserTable {
                                   int beforeOrAfter, int operation) {
 
         int impact = (beforeOrAfter == TriggerDef.BEFORE) ? Routine.READS_SQL
-                                                          : Routine
-                                                              .MODIFIES_SQL;
+                : Routine
+                .MODIFIES_SQL;
         Routine routine = new Routine(table, ranges, impact, beforeOrAfter,
-                                      operation);
+                operation);
 
         session.sessionContext.pushRoutineTables();
 
@@ -2516,19 +2518,19 @@ public class ParserRoutine extends ParserTable {
             startRecording();
 
             StatementCompound parent =
-                new StatementCompound(StatementTypes.BEGIN_END, null, null);
+                    new StatementCompound(StatementTypes.BEGIN_END, null, null);
 
             parent.rangeVariables = ranges;
 
             Statement statement = compileSQLProcedureStatementOrNull(routine,
-                null);
+                    null);
 
             if (statement == null) {
                 throw unexpectedToken();
             }
 
             Token[] tokenisedStatement = getRecordedStatement();
-            String  sql                = Token.getSQL(tokenisedStatement);
+            String sql = Token.getSQL(tokenisedStatement);
 
             statement.setSQL(sql);
             routine.setProcedure(statement);

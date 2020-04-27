@@ -41,7 +41,7 @@ import java.io.*;
  * @since 1.9.0
  */
 public class DataOutputStream extends java.io.BufferedOutputStream
-implements DataOutput {
+        implements DataOutput {
 
     byte[] tempBuffer = new byte[8];
 
@@ -85,7 +85,7 @@ implements DataOutput {
         int len = s.length();
 
         for (int i = 0; i < len; i++) {
-            int v     = s.charAt(i);
+            int v = s.charAt(i);
             int count = 0;
 
             tempBuffer[count++] = (byte) (v >>> 8);
@@ -102,7 +102,7 @@ implements DataOutput {
     public void writeChars(char[] c, int length) throws IOException {
 
         for (int i = 0; i < length; i++) {
-            int v     = c[i];
+            int v = c[i];
             int count = 0;
 
             tempBuffer[count++] = (byte) (v >>> 8);
@@ -122,8 +122,8 @@ implements DataOutput {
     public long write(InputStream inputStream,
                       long length) throws IOException {
 
-        byte[] data       = new byte[1024];
-        long   totalCount = 0;
+        byte[] data = new byte[1024];
+        long totalCount = 0;
 
         while (true) {
             long count = length - totalCount;
@@ -149,7 +149,7 @@ implements DataOutput {
     public void writeBoolean(boolean v) throws IOException {
 
         int val = v ? 1
-                    : 0;
+                : 0;
 
         write(val);
     }
@@ -199,7 +199,7 @@ implements DataOutput {
         writeChar(bytecount);
 
         HsqlByteArrayOutputStream bao =
-            new HsqlByteArrayOutputStream(bytecount);
+                new HsqlByteArrayOutputStream(bytecount);
 
         StringConverter.stringToUTFBytes(str, bao);
         this.write(bao.getBuffer(), 0, bao.size());

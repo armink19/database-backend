@@ -59,14 +59,14 @@ public class DataFileCacheSession extends DataFileCache {
                               boolean defrag) {
 
         this.dataFileName = baseFileName + ".data.tmp";
-        this.database     = database;
-        fa                = FileUtil.getFileUtil();
-        dataFileScale     = 64;
-        cachedRowPadding  = dataFileScale;
-        initialFreePos    = dataFileScale;
-        maxCacheRows      = 2048;
-        maxCacheBytes     = maxCacheRows * 1024L;
-        maxDataFileSize   = (long) Integer.MAX_VALUE * dataFileScale;
+        this.database = database;
+        fa = FileUtil.getFileUtil();
+        dataFileScale = 64;
+        cachedRowPadding = dataFileScale;
+        initialFreePos = dataFileScale;
+        maxCacheRows = 2048;
+        maxCacheBytes = maxCacheRows * 1024L;
+        maxDataFileSize = (long) Integer.MAX_VALUE * dataFileScale;
     }
 
     /**
@@ -76,7 +76,7 @@ public class DataFileCacheSession extends DataFileCache {
 
         try {
             dataFile = new RAFile(database.logger, dataFileName, false, false,
-                                  false);
+                    false);
             fileFreePosition = initialFreePos;
 
             initBuffers();
@@ -84,21 +84,22 @@ public class DataFileCacheSession extends DataFileCache {
             spaceManager = new DataSpaceManagerSimple(this, false);
         } catch (Throwable t) {
             database.logger.logWarningEvent("Failed to open Session RA file",
-                                            t);
+                    t);
             release();
 
             throw Error.error(t, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_DataFileCache_open, new Object[] {
-                t.toString(), dataFileName
-            });
+                    ErrorCode.M_DataFileCache_open, new Object[]{
+                            t.toString(), dataFileName
+                    });
         }
     }
 
-    protected void setFileModified() {}
+    protected void setFileModified() {
+    }
 
     /**
-     *  Parameter write is always false. The backing file is simply closed and
-     *  deleted.
+     * Parameter write is always false. The backing file is simply closed and
+     * deleted.
      */
     public void close() {
 
@@ -116,12 +117,12 @@ public class DataFileCacheSession extends DataFileCache {
             }
         } catch (Throwable t) {
             database.logger.logWarningEvent("Failed to close Session RA file",
-                                            t);
+                    t);
 
             throw Error.error(t, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_DataFileCache_close, new Object[] {
-                t.toString(), dataFileName
-            });
+                    ErrorCode.M_DataFileCache_close, new Object[]{
+                            t.toString(), dataFileName
+                    });
         } finally {
             writeLock.unlock();
         }

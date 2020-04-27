@@ -57,7 +57,7 @@ public class BlobDataID implements BlobData {
     public BlobData duplicate(SessionInterface session) {
 
         ResultLob resultOut = ResultLob.newLobDuplicateRequest(id);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -68,7 +68,8 @@ public class BlobDataID implements BlobData {
         return new BlobDataID(lobID);
     }
 
-    public void free() {}
+    public void free() {
+    }
 
     public InputStream getBinaryStream(SessionInterface session) {
 
@@ -99,7 +100,7 @@ public class BlobDataID implements BlobData {
         }
 
         ResultLob resultOut = ResultLob.newLobGetBytesRequest(id, pos, length);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw Error.error(resultIn);
@@ -111,7 +112,7 @@ public class BlobDataID implements BlobData {
     public BlobData getBlob(SessionInterface session, long pos, long length) {
 
         ResultLob resultOut = ResultLob.newLobGetRequest(id, pos, length);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw Error.error(resultIn);
@@ -145,7 +146,7 @@ public class BlobDataID implements BlobData {
         }
 
         ResultLob resultOut = ResultLob.newLobGetLengthRequest(id);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -168,7 +169,7 @@ public class BlobDataID implements BlobData {
                          long start) {
 
         ResultLob resultOut = ResultLob.newLobGetCharPatternPositionRequest(id,
-            pattern.getId(), start);
+                pattern.getId(), start);
         Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
@@ -182,7 +183,7 @@ public class BlobDataID implements BlobData {
                          long start) {
 
         ResultLob resultOut = ResultLob.newLobGetBytePatternPositionRequest(id,
-            pattern, start);
+                pattern, start);
         Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
@@ -192,11 +193,13 @@ public class BlobDataID implements BlobData {
         return ((ResultLob) resultIn).getOffset();
     }
 
-    /** @todo - implement the next method call in Session */
+    /**
+     * @todo - implement the next method call in Session
+     */
     public long nonZeroLength(SessionInterface session) {
 
         ResultLob resultOut = ResultLob.newLobGetTruncateLength(id);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -221,7 +224,7 @@ public class BlobDataID implements BlobData {
         }
 
         ResultLob resultOut = ResultLob.newLobSetBytesRequest(id, pos, bytes);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();
@@ -252,7 +255,8 @@ public class BlobDataID implements BlobData {
         //
     }
 
-    public void setSession(SessionInterface session) {}
+    public void setSession(SessionInterface session) {
+    }
 
     public void truncate(SessionInterface session, long len) {
 
@@ -261,7 +265,7 @@ public class BlobDataID implements BlobData {
         }
 
         ResultLob resultOut = ResultLob.newLobTruncateRequest(id, len);
-        Result    resultIn  = session.execute(resultOut);
+        Result resultIn = session.execute(resultOut);
 
         if (resultIn.isError()) {
             throw resultIn.getException();

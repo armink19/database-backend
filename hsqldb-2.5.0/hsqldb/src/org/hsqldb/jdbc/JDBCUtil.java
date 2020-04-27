@@ -57,12 +57,12 @@ public final class JDBCUtil {
 
     public static SQLException sqlException(HsqlException e) {
         return sqlException(e.getMessage(), e.getSQLState(), e.getErrorCode(),
-                            e);
+                e);
     }
 
     public static SQLException sqlException(HsqlException e, Throwable cause) {
         return sqlException(e.getMessage(), e.getSQLState(), e.getErrorCode(),
-                            cause);
+                cause);
     }
 
     public static SQLException sqlException(int id) {
@@ -78,7 +78,7 @@ public final class JDBCUtil {
     }
 
     public static SQLException sqlException(int id, String message,
-            Throwable cause) {
+                                            Throwable cause) {
         return sqlException(Error.error(id, message), cause);
     }
 
@@ -137,7 +137,7 @@ public final class JDBCUtil {
 
     public static SQLWarning sqlWarning(Result r) {
         return new SQLWarning(r.getMainString(), r.getSubString(),
-                              r.getErrorCode());
+                r.getErrorCode());
     }
 
     public static SQLException sqlException(Throwable t) {
@@ -146,10 +146,10 @@ public final class JDBCUtil {
 
     public static SQLException sqlException(Result r) {
         return sqlException(r.getMainString(), r.getSubString(),
-                            r.getErrorCode(), r.getException());
+                r.getErrorCode(), r.getException());
     }
 
-// TODO: Needs review.
+    // TODO: Needs review.
 //
 //  Connection exception subclass may be an insufficient discriminator
 //  regarding the choice of throwing transient or non-transient
@@ -185,7 +185,7 @@ public final class JDBCUtil {
 // 094=08003 Database does not exists                          - better 08001 ?
 //
     public static SQLException sqlException(String msg, String sqlstate,
-            int code, Throwable cause) {
+                                            int code, Throwable cause) {
 
         if (sqlstate.startsWith("08")) {
             if (!sqlstate.endsWith("3")) {
@@ -213,7 +213,7 @@ public final class JDBCUtil {
             return new SQLInvalidAuthorizationSpecException(msg, sqlstate,
                     code, cause);
         } else if (sqlstate.startsWith("42") || sqlstate.startsWith("37")
-                   || sqlstate.startsWith("2A")) {
+                || sqlstate.startsWith("2A")) {
 
             // TODO:
             //

@@ -35,16 +35,17 @@ import org.hsqldb.lib.HsqlArrayList;
 
 /**
  * Value for array aggregate functions.
+ *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
  * @since 2.4.1
- *
  */
 public class SetFunctionValueArray implements SetFunction {
 
     private final HsqlArrayList list = new HsqlArrayList();
 
-    public void add(Object itemLeft, Object itemRight) {}
+    public void add(Object itemLeft, Object itemRight) {
+    }
 
     public void add(Object item) {
         list.add(item);

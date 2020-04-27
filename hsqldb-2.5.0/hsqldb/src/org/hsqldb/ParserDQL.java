@@ -51,27 +51,27 @@ import org.hsqldb.types.*;
  */
 public class ParserDQL extends ParserBase {
 
-    protected Database             database;
-    protected Session              session;
+    protected Database database;
+    protected Session session;
     protected final CompileContext compileContext;
 
     /**
-     *  Constructs a new Parser object with the given context.
+     * Constructs a new Parser object with the given context.
      *
-     * @param  session the connected context
-     * @param  scanner the token source from which to parse commands
+     * @param session the connected context
+     * @param scanner the token source from which to parse commands
      */
     ParserDQL(Session session, Scanner scanner, CompileContext baseContext) {
 
         super(scanner);
 
-        this.session        = session;
-        this.database       = session.getDatabase();
+        this.session = session;
+        this.database = session.getDatabase();
         this.compileContext = new CompileContext(session, this, baseContext);
     }
 
     /**
-     *  Resets this parse context with the given SQL character sequence.
+     * Resets this parse context with the given SQL character sequence.
      *
      * @param sql a new SQL character sequence to replace the current one
      */
@@ -98,13 +98,13 @@ public class ParserDQL extends ParserBase {
 
     Type readTypeDefinition(boolean allowCollation, boolean includeUserTypes) {
 
-        int     typeNumber     = Integer.MIN_VALUE;
-        boolean hasLength      = false;
-        boolean hasScale       = false;
-        boolean isCharacter    = false;
-        boolean isIgnoreCase   = false;
+        int typeNumber = Integer.MIN_VALUE;
+        boolean hasLength = false;
+        boolean hasScale = false;
+        boolean isCharacter = false;
+        boolean isIgnoreCase = false;
         boolean readByteOrChar = false;
-        boolean enforceSize    = database.sqlEnforceSize;
+        boolean enforceSize = database.sqlEnforceSize;
 
         checkIsIdentifier();
 
@@ -125,8 +125,8 @@ public class ParserDQL extends ParserBase {
                 checkIsSchemaObjectName();
 
                 Type type = database.schemaManager.findDomainOrUDT(session,
-                    token.tokenString, token.namePrefix, token.namePrePrefix,
-                    token.namePrePrePrefix);
+                        token.tokenString, token.namePrefix, token.namePrePrefix,
+                        token.namePrePrePrefix);
 
                 if (type != null) {
                     getRecordedToken().setExpression(type);
@@ -144,36 +144,36 @@ public class ParserDQL extends ParserBase {
             if (database.sqlSyntaxOra) {
                 switch (token.tokenType) {
 
-                    case Tokens.BINARY_DOUBLE :
-                    case Tokens.BINARY_FLOAT :
+                    case Tokens.BINARY_DOUBLE:
+                    case Tokens.BINARY_FLOAT:
                         read();
 
                         return Type.SQL_DOUBLE;
 
-                    case Tokens.LONG :
+                    case Tokens.LONG:
                         read();
 
                         if (token.tokenType == Tokens.RAW) {
                             read();
 
                             return Type.getType(Types.SQL_VARBINARY, null,
-                                                null,
-                                                BlobType.defaultBlobSize, 0);
+                                    null,
+                                    BlobType.defaultBlobSize, 0);
                         } else {
                             readIfThis(Tokens.VARCHAR);
 
                             return Type.getType(Types.SQL_VARCHAR, null,
-                                                database.collation,
-                                                ClobType.defaultClobSize, 0);
+                                    database.collation,
+                                    ClobType.defaultClobSize, 0);
                         }
-                    case Tokens.NUMBER :
+                    case Tokens.NUMBER:
                         read();
 
                         if (token.tokenType == Tokens.OPENBRACKET) {
                             read();
 
                             int precision = readInteger();
-                            int scale     = 0;
+                            int scale = 0;
 
                             if (token.tokenType == Tokens.COMMA) {
                                 read();
@@ -184,29 +184,29 @@ public class ParserDQL extends ParserBase {
                             readThis(Tokens.CLOSEBRACKET);
 
                             return Type.getType(Types.SQL_DECIMAL, null, null,
-                                                precision, scale);
+                                    precision, scale);
                         } else {
                             return Type.SQL_DECIMAL_DEFAULT;
                         }
-                    case Tokens.RAW :
+                    case Tokens.RAW:
                         typeNumber = Types.SQL_VARBINARY;
                         break;
 
-                    case Tokens.VARCHAR2 :
+                    case Tokens.VARCHAR2:
                         readByteOrChar = true;
-                        enforceSize    = false;
-                        typeNumber     = Types.SQL_VARCHAR;
-                        break;
-
-                    case Tokens.NVARCHAR2 :
+                        enforceSize = false;
                         typeNumber = Types.SQL_VARCHAR;
                         break;
 
-                    case Tokens.NCHAR :
+                    case Tokens.NVARCHAR2:
+                        typeNumber = Types.SQL_VARCHAR;
+                        break;
+
+                    case Tokens.NCHAR:
                         typeNumber = Types.SQL_CHAR;
                         break;
 
-                    default :
+                    default:
                 }
             }
 
@@ -226,11 +226,11 @@ public class ParserDQL extends ParserBase {
 
                 switch (token.tokenType) {
 
-                    case Tokens.DATETIMEOFFSET :
+                    case Tokens.DATETIMEOFFSET:
                         typeNumber = Types.SQL_TIMESTAMP_WITH_TIME_ZONE;
                         break;
 
-                    case Tokens.TEXT :
+                    case Tokens.TEXT:
                         typeNumber = Types.LONGVARCHAR;
                         break;
                 }
@@ -239,12 +239,12 @@ public class ParserDQL extends ParserBase {
             if (database.sqlSyntaxPgs) {
                 switch (token.tokenType) {
 
-                    case Tokens.TEXT :
-                        typeNumber     = Types.LONGVARCHAR;
+                    case Tokens.TEXT:
+                        typeNumber = Types.LONGVARCHAR;
                         readByteOrChar = true;
                         break;
 
-                    case Tokens.CITEXT :
+                    case Tokens.CITEXT:
                         typeNumber = Types.VARCHAR_IGNORECASE;
                         break;
                 }
@@ -253,31 +253,31 @@ public class ParserDQL extends ParserBase {
             if (database.sqlSyntaxMys) {
                 switch (token.tokenType) {
 
-                    case Tokens.ENUM :
+                    case Tokens.ENUM:
                         return readMysEnum();
 
-                    case Tokens.TINYTEXT :
-                        typeNumber     = Types.VARCHAR;
+                    case Tokens.TINYTEXT:
+                        typeNumber = Types.VARCHAR;
                         readByteOrChar = true;
                         break;
 
-                    case Tokens.TEXT :
-                        typeNumber     = Types.LONGVARCHAR;
+                    case Tokens.TEXT:
+                        typeNumber = Types.LONGVARCHAR;
                         readByteOrChar = true;
                         break;
 
-                    case Tokens.MEDIUMTEXT :
-                    case Tokens.LONGTEXT :
-                        typeNumber     = Types.LONGVARCHAR;
+                    case Tokens.MEDIUMTEXT:
+                    case Tokens.LONGTEXT:
+                        typeNumber = Types.LONGVARCHAR;
                         readByteOrChar = true;
                         break;
 
-                    case Tokens.TINYBLOB :
+                    case Tokens.TINYBLOB:
                         typeNumber = Types.VARBINARY;
                         break;
 
-                    case Tokens.MEDIUMBLOB :
-                    case Tokens.LONGBLOB :
+                    case Tokens.MEDIUMBLOB:
+                    case Tokens.LONGBLOB:
                         typeNumber = Types.LONGVARBINARY;
                         break;
                 }
@@ -292,7 +292,7 @@ public class ParserDQL extends ParserBase {
 
         switch (typeNumber) {
 
-            case Types.SQL_CHAR :
+            case Types.SQL_CHAR:
                 if (token.tokenType == Tokens.VARYING) {
                     read();
 
@@ -309,13 +309,13 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Types.SQL_DOUBLE :
+            case Types.SQL_DOUBLE:
                 if (token.tokenType == Tokens.PRECISION) {
                     read();
                 }
                 break;
 
-            case Types.SQL_BINARY :
+            case Types.SQL_BINARY:
                 if (token.tokenType == Tokens.VARYING) {
                     read();
 
@@ -328,7 +328,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Types.SQL_BIT :
+            case Types.SQL_BIT:
                 if (token.tokenType == Tokens.VARYING) {
                     read();
 
@@ -336,22 +336,22 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Types.SQL_INTERVAL :
+            case Types.SQL_INTERVAL:
                 return readIntervalType(session, false);
 
-            default :
+            default:
         }
 
         long length = typeNumber == Types.SQL_TIMESTAMP
-                      ? DTIType.defaultTimestampFractionPrecision
-                      : 0;
+                ? DTIType.defaultTimestampFractionPrecision
+                : 0;
         int scale = 0;
 
         if (Types.requiresPrecision(typeNumber)
                 && token.tokenType != Tokens.OPENBRACKET && enforceSize
                 && !session.isProcessingScript()) {
             throw Error.error(ErrorCode.X_42599,
-                              Type.getDefaultType(typeNumber).getNameString());
+                    Type.getDefaultType(typeNumber).getNameString());
         }
 
         boolean acceptsPrecision = Types.acceptsPrecision(typeNumber);
@@ -359,10 +359,10 @@ public class ParserDQL extends ParserBase {
         if (database.sqlSyntaxMys) {
             switch (typeNumber) {
 
-                case Types.TINYINT :
-                case Types.SQL_INTEGER :
-                case Types.SQL_SMALLINT :
-                case Types.SQL_BIGINT :
+                case Types.TINYINT:
+                case Types.SQL_INTEGER:
+                case Types.SQL_SMALLINT:
+                case Types.SQL_BIGINT:
                     acceptsPrecision = true;
                     break;
             }
@@ -371,7 +371,7 @@ public class ParserDQL extends ParserBase {
         if (database.sqlSyntaxMss) {
             switch (typeNumber) {
 
-                case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+                case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                     acceptsPrecision = true;
                     break;
             }
@@ -385,36 +385,36 @@ public class ParserDQL extends ParserBase {
 
                 switch (token.tokenType) {
 
-                    case Tokens.X_VALUE :
+                    case Tokens.X_VALUE:
                         if (token.dataType.typeCode != Types.SQL_INTEGER
                                 && token.dataType.typeCode
-                                   != Types.SQL_BIGINT) {
+                                != Types.SQL_BIGINT) {
                             throw unexpectedToken();
                         }
                         break;
 
-                    case Tokens.X_LOB_SIZE :
+                    case Tokens.X_LOB_SIZE:
                         if (typeNumber == Types.SQL_BLOB
                                 || typeNumber == Types.SQL_CLOB
                                 || typeNumber == Types.SQL_VARBINARY
                                 || typeNumber == Types.SQL_VARCHAR) {
                             switch (token.lobMultiplierType) {
 
-                                case Tokens.K :
+                                case Tokens.K:
                                     multiplier = 1024;
                                     break;
 
-                                case Tokens.M :
+                                case Tokens.M:
                                     multiplier = 1024 * 1024;
                                     break;
 
-                                case Tokens.G :
+                                case Tokens.G:
                                     multiplier = 1024 * 1024 * 1024;
                                     break;
 
-                                case Tokens.P :
-                                case Tokens.T :
-                                default :
+                                case Tokens.P:
+                                case Tokens.T:
+                                default:
                                     throw unexpectedToken();
                             }
 
@@ -422,7 +422,7 @@ public class ParserDQL extends ParserBase {
                         } else {
                             throw unexpectedToken(token.getFullString());
                         }
-                    case Tokens.MAX :
+                    case Tokens.MAX:
                         if (database.sqlSyntaxMss) {
                             token.tokenValue = Long.valueOf(Integer.MAX_VALUE);
 
@@ -430,16 +430,16 @@ public class ParserDQL extends ParserBase {
                         }
 
                         throw unexpectedToken();
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
                 hasLength = true;
-                length    = ((Number) token.tokenValue).longValue();
+                length = ((Number) token.tokenValue).longValue();
 
                 if (length < 0
                         || (length == 0
-                            && !Types.acceptsZeroPrecision(typeNumber))) {
+                        && !Types.acceptsZeroPrecision(typeNumber))) {
                     throw Error.error(ErrorCode.X_42592);
                 }
 
@@ -490,7 +490,7 @@ public class ParserDQL extends ParserBase {
             } else if (typeNumber == Types.SQL_BIT) {
                 length = 1;
             } else if (typeNumber == Types.SQL_BLOB
-                       || typeNumber == Types.SQL_CLOB) {
+                    || typeNumber == Types.SQL_CLOB) {
                 length = BlobType.defaultBlobSize;
             } else if (enforceSize) {
 
@@ -503,14 +503,14 @@ public class ParserDQL extends ParserBase {
 
             switch (typeNumber) {
 
-                case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-                case Types.SQL_TIMESTAMP :
-                case Types.SQL_TIME :
+                case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+                case Types.SQL_TIMESTAMP:
+                case Types.SQL_TIME:
                     if (length > DTIType.maxFractionPrecision) {
                         throw Error.error(ErrorCode.X_42592);
                     }
 
-                    scale  = (int) length;
+                    scale = (int) length;
                     length = 0;
 
                     if (typeNumber == Types.SQL_TIMESTAMP_WITH_TIME_ZONE) {
@@ -537,10 +537,10 @@ public class ParserDQL extends ParserBase {
 
         switch (typeNumber) {
 
-            case Types.LONGVARCHAR : {
+            case Types.LONGVARCHAR: {
                 if (database.sqlLongvarIsLob) {
                     typeNumber = Types.SQL_CLOB;
-                    length     = ClobType.defaultClobSize;
+                    length = ClobType.defaultClobSize;
                 } else {
                     typeNumber = Types.SQL_VARCHAR;
 
@@ -551,10 +551,10 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Types.LONGVARBINARY : {
+            case Types.LONGVARBINARY: {
                 if (database.sqlLongvarIsLob) {
                     typeNumber = Types.SQL_BLOB;
-                    length     = BlobType.defaultBlobSize;
+                    length = BlobType.defaultBlobSize;
                 } else {
                     typeNumber = Types.SQL_VARBINARY;
 
@@ -565,7 +565,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Types.SQL_CHAR :
+            case Types.SQL_CHAR:
                 if (database.sqlSyntaxDb2) {
                     if (readIfThis(Tokens.FOR)) {
                         readThis(Tokens.BIT);
@@ -580,16 +580,16 @@ public class ParserDQL extends ParserBase {
                 isCharacter = true;
                 break;
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 isCharacter = true;
                 break;
 
-            case Types.VARCHAR_IGNORECASE :
-                typeNumber   = Types.SQL_VARCHAR;
+            case Types.VARCHAR_IGNORECASE:
+                typeNumber = Types.SQL_VARCHAR;
                 isIgnoreCase = true;
 
-            // fall through
-            case Types.SQL_VARCHAR :
+                // fall through
+            case Types.SQL_VARCHAR:
                 if (database.sqlSyntaxDb2) {
                     if (readIfThis(Tokens.FOR)) {
                         readThis(Tokens.BIT);
@@ -622,10 +622,10 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Types.SQL_BINARY :
+            case Types.SQL_BINARY:
                 break;
 
-            case Types.SQL_VARBINARY :
+            case Types.SQL_VARBINARY:
                 if (!hasLength) {
                     length = 32 * 1024;
                 }
@@ -635,17 +635,17 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Types.SQL_DECIMAL :
-            case Types.SQL_NUMERIC :
+            case Types.SQL_DECIMAL:
+            case Types.SQL_NUMERIC:
                 if (!hasLength && !hasScale && !enforceSize) {
                     length = NumberType.defaultNumericPrecision;
-                    scale  = NumberType.defaultNumericScale;
+                    scale = NumberType.defaultNumericScale;
                 }
                 break;
         }
 
         Collation collation = database.collation;
-        Charset   charset   = null;
+        Charset charset = null;
 
         if (isCharacter && allowCollation) {
             if (token.tokenType == Tokens.CHARACTER) {
@@ -654,8 +654,8 @@ public class ParserDQL extends ParserBase {
                 checkIsSchemaObjectName();
 
                 charset =
-                    (Charset) database.schemaManager.getCharacterSet(session,
-                        token.tokenString, token.namePrefix);
+                        (Charset) database.schemaManager.getCharacterSet(session,
+                                token.tokenString, token.namePrefix);
 
                 read();
             }
@@ -674,7 +674,7 @@ public class ParserDQL extends ParserBase {
         }
 
         Type typeObject = Type.getType(typeNumber, charset, collation, length,
-                                       scale);
+                scale);
 
         if (token.tokenType == Tokens.ARRAY) {
             if (typeObject.isLobType()) {
@@ -709,10 +709,10 @@ public class ParserDQL extends ParserBase {
         checkIsThis(Tokens.OPENBRACKET);
 
         HsqlName name = database.nameManager.newHsqlName("ENUM", false,
-            SchemaObject.DOMAIN);
+                SchemaObject.DOMAIN);
         Type t = Type.getType(Types.SQL_VARCHAR, null, null, 32, 0);
         UserTypeModifier m = new UserTypeModifier(name, SchemaObject.DOMAIN,
-            t);
+                t);
 
         t.userTypeModifier = m;
 
@@ -747,7 +747,7 @@ public class ParserDQL extends ParserBase {
 
         while (true) {
             Expression target = XreadTargetSpecification(rangeVars,
-                colIndexList);
+                    colIndexList);
 
             if (!targets.add(target)) {
                 ColumnSchema col = target.getColumn();
@@ -776,7 +776,7 @@ public class ParserDQL extends ParserBase {
      * CONSTRAINTS and return an array containing the indexes of the columns
      * within the table.
      *
-     * @param table table that contains the columns
+     * @param table     table that contains the columns
      * @param ascOrDesc boolean
      * @return array of column indexes
      */
@@ -811,12 +811,12 @@ public class ParserDQL extends ParserBase {
 
     HsqlName[] readColumnNames(HsqlName tableName) {
 
-        BitMap         quotedFlags = new BitMap(0, true);
-        OrderedHashSet set         = readColumnNames(quotedFlags, false);
-        HsqlName[]     colList     = new HsqlName[set.size()];
+        BitMap quotedFlags = new BitMap(0, true);
+        OrderedHashSet set = readColumnNames(quotedFlags, false);
+        HsqlName[] colList = new HsqlName[set.size()];
 
         for (int i = 0; i < colList.length; i++) {
-            String  name   = (String) set.get(i);
+            String name = (String) set.get(i);
             boolean quoted = quotedFlags.isSet(i);
 
             colList[i] = database.nameManager.newHsqlName(tableName.schema,
@@ -897,8 +897,8 @@ public class ParserDQL extends ParserBase {
 
         for (int i = 0; i < set.size(); i++) {
             SimpleName name =
-                HsqlNameManager.getSimpleName((String) set.get(i),
-                                              columnNameQuoted.isSet(i));
+                    HsqlNameManager.getSimpleName((String) set.get(i),
+                            columnNameQuoted.isSet(i));
 
             columnNameList[i] = name;
         }
@@ -912,7 +912,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.UNION :
+            case Tokens.UNION:
                 read();
 
                 unionType = QueryExpression.UNION;
@@ -926,7 +926,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.INTERSECT :
+            case Tokens.INTERSECT:
                 read();
 
                 unionType = QueryExpression.INTERSECT;
@@ -940,8 +940,8 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.EXCEPT :
-            case Tokens.MINUS_EXCEPT :
+            case Tokens.EXCEPT:
+            case Tokens.MINUS_EXCEPT:
                 read();
 
                 unionType = QueryExpression.EXCEPT;
@@ -955,7 +955,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            default :
+            default:
                 break;
         }
 
@@ -992,9 +992,9 @@ public class ParserDQL extends ParserBase {
 
                 HsqlName[] nameList = null;
                 HsqlName queryName =
-                    database.nameManager.newHsqlName(token.tokenString,
-                                                     isDelimitedIdentifier(),
-                                                     SchemaObject.SUBQUERY);
+                        database.nameManager.newHsqlName(token.tokenString,
+                                isDelimitedIdentifier(),
+                                SchemaObject.SUBQUERY);
 
                 queryName.schema = SqlInvariants.SYSTEM_SCHEMA_HSQLNAME;
 
@@ -1013,9 +1013,9 @@ public class ParserDQL extends ParserBase {
                 TableDerived td;
 
                 td = XreadTableNamedSubqueryBody(queryName, nameList,
-                                                 recursive
-                                                 ? OpTypes.RECURSIVE_SUBQUERY
-                                                 : OpTypes.TABLE_SUBQUERY);
+                        recursive
+                                ? OpTypes.RECURSIVE_SUBQUERY
+                                : OpTypes.TABLE_SUBQUERY);
 
                 readThis(Tokens.CLOSEBRACKET);
 
@@ -1024,23 +1024,23 @@ public class ParserDQL extends ParserBase {
                 }
 
                 if (recursive && token.tokenType == Tokens.CYCLE) {
-                    Table    table           = td;
-                    int[]    cycleColumnList = readColumnList(table, false);
+                    Table table = td;
+                    int[] cycleColumnList = readColumnList(table, false);
                     HsqlName name;
 
                     readThis(Tokens.SET);
                     checkIsSimpleName();
 
                     name = database.nameManager.newColumnHsqlName(
-                        table.getName(), token.tokenString,
-                        token.isDelimitedIdentifier);
+                            table.getName(), token.tokenString,
+                            token.isDelimitedIdentifier);
 
                     ColumnSchema cycleMarkColumn = new ColumnSchema(name,
-                        null, true, false, null);
+                            null, true, false, null);
 
                     if (table.getColumnIndex(name.name) != -1) {
                         throw Error.error(ErrorCode.X_42578,
-                                          token.tokenString);
+                                token.tokenString);
                     }
 
                     read();
@@ -1069,18 +1069,18 @@ public class ParserDQL extends ParserBase {
                     checkIsSimpleName();
 
                     name = database.nameManager.newColumnHsqlName(
-                        table.getName(), token.tokenString,
-                        token.isDelimitedIdentifier);
+                            table.getName(), token.tokenString,
+                            token.isDelimitedIdentifier);
 
                     if (table.getColumnIndex(name.name) != -1) {
                         throw Error.error(ErrorCode.X_42578,
-                                          token.tokenString);
+                                token.tokenString);
                     }
 
                     read();
 
                     ColumnSchema pathColumn = new ColumnSchema(name, null,
-                        true, false, null);
+                            true, false, null);
                 }
 
                 compileContext.registerSubquery(queryName.name, td);
@@ -1096,7 +1096,7 @@ public class ParserDQL extends ParserBase {
         }
 
         QueryExpression queryExpression = XreadQueryExpressionBody();
-        SortAndSlice    sortAndSlice    = XreadOrderByExpression();
+        SortAndSlice sortAndSlice = XreadOrderByExpression();
 
         if (queryExpression.sortAndSlice == SortAndSlice.noSort) {
             queryExpression.addSortAndSlice(sortAndSlice);
@@ -1130,14 +1130,14 @@ public class ParserDQL extends ParserBase {
         while (true) {
             switch (token.tokenType) {
 
-                case Tokens.UNION :
-                case Tokens.EXCEPT :
-                case Tokens.MINUS_EXCEPT : {
+                case Tokens.UNION:
+                case Tokens.EXCEPT:
+                case Tokens.MINUS_EXCEPT: {
                     queryExpression = XreadSetOperation(queryExpression);
 
                     break;
                 }
-                default : {
+                default: {
                     return queryExpression;
                 }
             }
@@ -1177,18 +1177,18 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.TABLE :
-            case Tokens.VALUES :
-            case Tokens.SELECT : {
+            case Tokens.TABLE:
+            case Tokens.VALUES:
+            case Tokens.SELECT: {
                 QuerySpecification select = XreadSimpleTable();
 
                 return select;
             }
-            case Tokens.OPENBRACKET : {
+            case Tokens.OPENBRACKET: {
                 read();
 
                 QueryExpression queryExpression = XreadQueryExpressionBody();
-                SortAndSlice    sortAndSlice    = XreadOrderByExpression();
+                SortAndSlice sortAndSlice = XreadOrderByExpression();
 
                 readThis(Tokens.CLOSEBRACKET);
 
@@ -1201,9 +1201,9 @@ public class ParserDQL extends ParserBase {
                         }
 
                         for (int i = 0; i < sortAndSlice.exprList.size();
-                                i++) {
+                             i++) {
                             Expression e =
-                                (Expression) sortAndSlice.exprList.get(i);
+                                    (Expression) sortAndSlice.exprList.get(i);
 
                             queryExpression.sortAndSlice.addOrderExpression(e);
                         }
@@ -1216,7 +1216,7 @@ public class ParserDQL extends ParserBase {
 
                 return queryExpression;
             }
-            default : {
+            default: {
                 throw unexpectedToken();
             }
         }
@@ -1228,7 +1228,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.TABLE : {
+            case Tokens.TABLE: {
                 read();
 
                 Table table = readNamedSubqueryOrNull();
@@ -1239,30 +1239,30 @@ public class ParserDQL extends ParserBase {
 
                 if (table.isView()) {
                     table = ((View) table).newDerivedTable(session,
-                                                           compileContext);
+                            compileContext);
                 }
 
                 select = new QuerySpecification(session, table,
-                                                compileContext, false);
+                        compileContext, false);
 
                 break;
             }
-            case Tokens.VALUES : {
+            case Tokens.VALUES: {
                 read();
 
                 TableDerived td = XreadRowValueExpressionList();
 
                 select = new QuerySpecification(session, td, compileContext,
-                                                true);
+                        true);
 
                 break;
             }
-            case Tokens.SELECT : {
+            case Tokens.SELECT: {
                 select = XreadQuerySpecification();
 
                 break;
             }
-            default : {
+            default: {
                 throw unexpectedToken();
             }
         }
@@ -1350,8 +1350,8 @@ public class ParserDQL extends ParserBase {
                 if (database.sqlSyntaxMss || database.sqlSyntaxMys
                         || database.sqlSyntaxPgs) {
                     RangeVariable range =
-                        new RangeVariable(database.schemaManager.dualTable,
-                                          null, null, null, compileContext);
+                            new RangeVariable(database.schemaManager.dualTable,
+                                    null, null, null, compileContext);
 
                     select.addRangeVariable(session, range);
 
@@ -1384,22 +1384,22 @@ public class ParserDQL extends ParserBase {
 
     void XreadTableReference(QuerySpecification select) {
 
-        boolean       natural   = false;
+        boolean natural = false;
         RangeVariable leftRange = readTableOrSubquery();
 
         select.addRangeVariable(session, leftRange);
 
         while (true) {
-            int     type;
-            boolean left  = false;
+            int type;
+            boolean left = false;
             boolean right = false;
-            boolean end   = false;
+            boolean end = false;
 
             type = token.tokenType;
 
             switch (token.tokenType) {
 
-                case Tokens.NATURAL :
+                case Tokens.NATURAL:
                     if (natural) {
                         throw unexpectedToken();
                     }
@@ -1409,12 +1409,12 @@ public class ParserDQL extends ParserBase {
                     natural = true;
 
                     continue;
-                case Tokens.INNER :
+                case Tokens.INNER:
                     read();
                     readThis(Tokens.JOIN);
                     break;
 
-                case Tokens.CROSS :
+                case Tokens.CROSS:
                     if (natural) {
                         throw unexpectedToken();
                     }
@@ -1423,7 +1423,7 @@ public class ParserDQL extends ParserBase {
                     readThis(Tokens.JOIN);
                     break;
 
-                case Tokens.UNION :
+                case Tokens.UNION:
                     if (natural) {
                         throw unexpectedToken();
                     }
@@ -1435,7 +1435,7 @@ public class ParserDQL extends ParserBase {
                     if (token.tokenType == Tokens.JOIN) {
                         read();
 
-                        left  = true;
+                        left = true;
                         right = true;
 
                         break;
@@ -1446,7 +1446,7 @@ public class ParserDQL extends ParserBase {
 
                         break;
                     }
-                case Tokens.LEFT :
+                case Tokens.LEFT:
                     read();
                     readIfThis(Tokens.OUTER);
                     readThis(Tokens.JOIN);
@@ -1454,7 +1454,7 @@ public class ParserDQL extends ParserBase {
                     left = true;
                     break;
 
-                case Tokens.RIGHT :
+                case Tokens.RIGHT:
                     read();
                     readIfThis(Tokens.OUTER);
                     readThis(Tokens.JOIN);
@@ -1462,23 +1462,23 @@ public class ParserDQL extends ParserBase {
                     right = true;
                     break;
 
-                case Tokens.FULL :
+                case Tokens.FULL:
                     read();
                     readIfThis(Tokens.OUTER);
                     readThis(Tokens.JOIN);
 
-                    left  = true;
+                    left = true;
                     right = true;
                     break;
 
-                case Tokens.JOIN :
+                case Tokens.JOIN:
                     read();
 
                     type = Tokens.INNER;
                     break;
 
-                case Tokens.COMMA :
-                default :
+                case Tokens.COMMA:
+                default:
                     if (natural) {
                         throw unexpectedToken();
                     }
@@ -1492,41 +1492,41 @@ public class ParserDQL extends ParserBase {
             }
 
             RangeVariable rightRange = readTableOrSubquery();
-            Expression    condition  = null;
+            Expression condition = null;
 
             rightRange.setJoinType(left, right);
 
             switch (type) {
 
-                case Tokens.CROSS :
+                case Tokens.CROSS:
                     select.addRangeVariable(session, rightRange);
                     break;
 
-                case Tokens.UNION :
+                case Tokens.UNION:
                     condition = Expression.EXPR_FALSE;
 
                     rightRange.addJoinCondition(condition);
                     select.addRangeVariable(session, rightRange);
                     break;
 
-                case Tokens.LEFT :
-                case Tokens.RIGHT :
-                case Tokens.INNER :
-                case Tokens.FULL : {
+                case Tokens.LEFT:
+                case Tokens.RIGHT:
+                case Tokens.INNER:
+                case Tokens.FULL: {
                     boolean using = token.tokenType == Tokens.USING;
 
                     if (natural || using) {
                         leftRange.resolveRangeTable(
-                            session, RangeGroup.emptyGroup,
-                            compileContext.getOuterRanges());
+                                session, RangeGroup.emptyGroup,
+                                compileContext.getOuterRanges());
                         rightRange.resolveRangeTable(
-                            session, RangeGroup.emptyGroup,
-                            compileContext.getOuterRanges());
+                                session, RangeGroup.emptyGroup,
+                                compileContext.getOuterRanges());
                     }
 
                     if (natural) {
                         OrderedHashSet columns =
-                            rightRange.getUniqueColumnNameSet();
+                                rightRange.getUniqueColumnNameSet();
 
                         condition = select.getEquiJoinExpressions(columns,
                                 rightRange, false);
@@ -1641,7 +1641,7 @@ public class ParserDQL extends ParserBase {
         }
 
         return sortAndSlice == null ? SortAndSlice.noSort
-                                    : sortAndSlice;
+                : sortAndSlice;
     }
 
     private SortAndSlice XreadTopOrLimit() {
@@ -1669,7 +1669,7 @@ public class ParserDQL extends ParserBase {
 
             if (e2 == null) {
                 throw Error.error(ErrorCode.X_42563,
-                                  ErrorCode.M_INVALID_LIMIT);
+                        ErrorCode.M_INVALID_LIMIT);
             }
         } else if (token.tokenType == Tokens.TOP) {
             int position = getPosition();
@@ -1695,7 +1695,7 @@ public class ParserDQL extends ParserBase {
             e1.setDataType(session, Type.SQL_INTEGER);
         } else if (e1.opType == OpTypes.VALUE) {
             valid = (e1.getDataType().typeCode == Types.SQL_INTEGER
-                     && ((Integer) e1.getValue(null)).intValue() >= 0);
+                    && ((Integer) e1.getValue(null)).intValue() >= 0);
         } else {
             throw Error.error(ErrorCode.X_42563, ErrorCode.M_INVALID_LIMIT);
         }
@@ -1704,7 +1704,7 @@ public class ParserDQL extends ParserBase {
             e2.setDataType(session, Type.SQL_INTEGER);
         } else if (e2.opType == OpTypes.VALUE) {
             valid &= (e2.getDataType().typeCode == Types.SQL_INTEGER
-                      && ((Integer) e2.getValue(null)).intValue() >= 0);
+                    && ((Integer) e2.getValue(null)).intValue() >= 0);
         } else {
             throw Error.error(ErrorCode.X_42563, ErrorCode.M_INVALID_LIMIT);
         }
@@ -1733,7 +1733,7 @@ public class ParserDQL extends ParserBase {
 
             if (e1 == null) {
                 throw Error.error(ErrorCode.X_42563,
-                                  ErrorCode.M_INVALID_LIMIT);
+                        ErrorCode.M_INVALID_LIMIT);
             }
 
             if (token.tokenType == Tokens.ROW
@@ -1749,7 +1749,7 @@ public class ParserDQL extends ParserBase {
 
             if (e2 == null) {
                 throw Error.error(ErrorCode.X_42563,
-                                  ErrorCode.M_INVALID_LIMIT);
+                        ErrorCode.M_INVALID_LIMIT);
             }
 
             if (e1 == null) {
@@ -1780,7 +1780,7 @@ public class ParserDQL extends ParserBase {
 
             if (e2 == null) {
                 e2 = new ExpressionValue(ValuePool.INTEGER_1,
-                                         Type.SQL_INTEGER);
+                        Type.SQL_INTEGER);
             }
 
             if (token.tokenType == Tokens.ROW
@@ -1829,10 +1829,10 @@ public class ParserDQL extends ParserBase {
         SortAndSlice sortAndSlice = new SortAndSlice();
 
         while (true) {
-            Expression        e;
+            Expression e;
             ExpressionOrderBy o;
-            boolean           isDesc    = false;
-            boolean           nullsLast = false;
+            boolean isDesc = false;
+            boolean nullsLast = false;
 
             e = XreadValueExpression();
             o = new ExpressionOrderBy(e);
@@ -1887,7 +1887,7 @@ public class ParserDQL extends ParserBase {
 
         Table table = readTableName(true);
         ExpressionPeriodOp appPeriodSpec =
-            XreadQueryApplicationPeriodSpecOrNull(table);
+                XreadQueryApplicationPeriodSpecOrNull(table);
         SimpleName alias = null;
 
         if (appPeriodSpec != null) {
@@ -1897,20 +1897,20 @@ public class ParserDQL extends ParserBase {
         if (operation != StatementTypes.TRUNCATE) {
             switch (token.tokenType) {
 
-                case Tokens.OVERRIDING :
+                case Tokens.OVERRIDING:
                     break;
 
-                case Tokens.AS :
+                case Tokens.AS:
                     read();
                     checkIsNonCoreReservedIdentifier();
 
-                // fall through
-                default :
+                    // fall through
+                default:
                     if (isNonCoreReservedIdentifier()) {
                         if (!database.sqlSyntaxMys
                                 || operation != StatementTypes.INSERT) {
                             alias = HsqlNameManager.getSimpleName(
-                                token.tokenString, isDelimitedIdentifier());
+                                    token.tokenString, isDelimitedIdentifier());
 
                             read();
                         }
@@ -1919,15 +1919,15 @@ public class ParserDQL extends ParserBase {
 
             if (alias == null && lastSynonym != null) {
                 alias =
-                    HsqlNameManager.getSimpleName(lastSynonym.name,
-                                                  lastSynonym.isNameQuoted);
+                        HsqlNameManager.getSimpleName(lastSynonym.name,
+                                lastSynonym.isNameQuoted);
             }
         }
 
         if (table.isView) {
             switch (operation) {
 
-                case StatementTypes.MERGE :
+                case StatementTypes.MERGE:
                     if (table.isTriggerUpdatable()
                             && table.isTriggerInsertable()) {
                         break;
@@ -1942,7 +1942,7 @@ public class ParserDQL extends ParserBase {
                     }
 
                     throw Error.error(ErrorCode.X_42545);
-                case StatementTypes.UPDATE_WHERE :
+                case StatementTypes.UPDATE_WHERE:
                     if (table.isTriggerUpdatable()) {
                         break;
                     }
@@ -1952,7 +1952,7 @@ public class ParserDQL extends ParserBase {
                     }
 
                     throw Error.error(ErrorCode.X_42545);
-                case StatementTypes.DELETE_WHERE :
+                case StatementTypes.DELETE_WHERE:
                     if (table.isTriggerDeletable()) {
                         break;
                     }
@@ -1962,7 +1962,7 @@ public class ParserDQL extends ParserBase {
                     }
 
                     throw Error.error(ErrorCode.X_42545);
-                case StatementTypes.INSERT :
+                case StatementTypes.INSERT:
                     if (table.isTriggerInsertable()) {
                         break;
                     }
@@ -1976,7 +1976,7 @@ public class ParserDQL extends ParserBase {
                     }
 
                     throw Error.error(ErrorCode.X_42545);
-                case StatementTypes.TRUNCATE :
+                case StatementTypes.TRUNCATE:
                     throw Error.error(ErrorCode.X_42545);
             }
 
@@ -1984,7 +1984,7 @@ public class ParserDQL extends ParserBase {
         }
 
         RangeVariable range = new RangeVariable(table, alias, null, null,
-            compileContext);
+                compileContext);
 
         if (table.isSystemVersioned()) {
             ExpressionPeriodOp sysPeriodSpec = new ExpressionPeriodOp();
@@ -2022,18 +2022,18 @@ public class ParserDQL extends ParserBase {
      */
     protected RangeVariable readTableOrSubquery() {
 
-        Table              table          = null;
-        SimpleName         alias          = null;
-        SimpleName[]       columnNameList = null;
-        OrderedHashSet     columnList     = null;
-        ExpressionPeriodOp sysPeriodSpec  = null;
-        boolean            joinedTable    = false;
-        boolean            isLateral      = false;
-        boolean            isTableName    = false;
+        Table table = null;
+        SimpleName alias = null;
+        SimpleName[] columnNameList = null;
+        OrderedHashSet columnList = null;
+        ExpressionPeriodOp sysPeriodSpec = null;
+        boolean joinedTable = false;
+        boolean isLateral = false;
+        boolean isTableName = false;
 
         switch (token.tokenType) {
 
-            case Tokens.OPENBRACKET : {
+            case Tokens.OPENBRACKET: {
                 table = XreadTableSubqueryOrNull(false);
 
                 if (table == null) {
@@ -2054,36 +2054,36 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.UNNEST : {
+            case Tokens.UNNEST: {
                 Expression e =
-                    XreadCollectionDerivedTable(OpTypes.TABLE_SUBQUERY);
+                        XreadCollectionDerivedTable(OpTypes.TABLE_SUBQUERY);
 
-                table     = e.getTable();
+                table = e.getTable();
                 isLateral = true;
 
                 break;
             }
-            case Tokens.LATERAL : {
+            case Tokens.LATERAL: {
                 Expression e = XreadLateralDerivedTable();
 
-                table     = e.getTable();
+                table = e.getTable();
                 isLateral = true;
 
                 break;
             }
-            case Tokens.TABLE : {
+            case Tokens.TABLE: {
                 Expression e = XreadTableFunctionDerivedTable();
 
-                table     = e.getTable();
+                table = e.getTable();
                 isLateral = true;
 
                 break;
             }
-            default : {
+            default: {
                 table = readNamedSubqueryOrNull();
 
                 if (table == null) {
-                    table       = readTableName(true);
+                    table = readTableName(true);
                     isTableName = true;
 
                     // attach to range variable below
@@ -2092,7 +2092,7 @@ public class ParserDQL extends ParserBase {
 
                 if (table.isView()) {
                     table = ((View) table).newDerivedTable(session,
-                                                           compileContext);
+                            compileContext);
                 }
             }
         }
@@ -2108,18 +2108,18 @@ public class ParserDQL extends ParserBase {
 
         if (isNonCoreReservedIdentifier()) {
             boolean limit = token.tokenType == Tokens.LIMIT
-                            || token.tokenType == Tokens.OFFSET
-                            || token.tokenType == Tokens.FETCH;
-            boolean minus    = token.tokenType == Tokens.MINUS_EXCEPT;
-            int     position = getPosition();
+                    || token.tokenType == Tokens.OFFSET
+                    || token.tokenType == Tokens.FETCH;
+            boolean minus = token.tokenType == Tokens.MINUS_EXCEPT;
+            int position = getPosition();
 
             alias = HsqlNameManager.getSimpleName(token.tokenString,
-                                                  isDelimitedIdentifier());
+                    isDelimitedIdentifier());
 
             read();
 
             if (token.tokenType == Tokens.OPENBRACKET) {
-                columnList     = new OrderedHashSet();
+                columnList = new OrderedHashSet();
                 columnNameList = readColumnNameList(columnList);
             } else if (!hasAs && limit) {
                 if (token.tokenType == Tokens.COLON
@@ -2136,7 +2136,7 @@ public class ParserDQL extends ParserBase {
 
         if (isTableName && alias == null && lastSynonym != null) {
             alias = HsqlNameManager.getSimpleName(lastSynonym.name,
-                                                  lastSynonym.isNameQuoted);
+                    lastSynonym.isNameQuoted);
         }
 
         if (database.sqlSyntaxMss) {
@@ -2149,10 +2149,10 @@ public class ParserDQL extends ParserBase {
 
         if (joinedTable) {
             range = new RangeVariableJoined(table, alias, columnList,
-                                            columnNameList, compileContext);
+                    columnNameList, compileContext);
         } else {
             range = new RangeVariable(table, alias, columnList,
-                                      columnNameList, compileContext);
+                    columnNameList, compileContext);
 
             if (sysPeriodSpec != null) {
                 sysPeriodSpec.setSystemRangeVariable(session, range);
@@ -2169,8 +2169,8 @@ public class ParserDQL extends ParserBase {
 
     private Expression readAggregateFunctionOrNull() {
 
-        int        position = getPosition();
-        int        tokenT   = token.tokenType;
+        int position = getPosition();
+        int tokenT = token.tokenType;
         Expression expr;
 
         read();
@@ -2202,7 +2202,7 @@ public class ParserDQL extends ParserBase {
 
     ExpressionLogical XreadFilterExpressionOrNull() {
 
-        int               position  = getPosition();
+        int position = getPosition();
         ExpressionLogical condition = null;
 
         if (token.tokenType == Tokens.FILTER) {
@@ -2227,11 +2227,11 @@ public class ParserDQL extends ParserBase {
 
     private Expression readAggregateExpression(int tokenT) {
 
-        int          type      = ParserDQL.getExpressionType(tokenT);
-        boolean      distinct  = false;
-        boolean      all       = false;
-        SortAndSlice sort      = null;
-        String       separator = null;
+        int type = ParserDQL.getExpressionType(tokenT);
+        boolean distinct = false;
+        boolean all = false;
+        SortAndSlice sort = null;
+        String separator = null;
 
         if (token.tokenType == Tokens.DISTINCT) {
             distinct = true;
@@ -2243,12 +2243,12 @@ public class ParserDQL extends ParserBase {
             read();
         }
 
-        int        position = getPosition();
-        Expression e        = XreadValueExpression();
+        int position = getPosition();
+        Expression e = XreadValueExpression();
 
         switch (type) {
 
-            case OpTypes.COUNT :
+            case OpTypes.COUNT:
                 if (e.getType() == OpTypes.MULTICOLUMN) {
                     if (((ExpressionColumn) e).tableName != null) {
                         throw unexpectedToken();
@@ -2268,18 +2268,18 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case OpTypes.STDDEV_POP :
-            case OpTypes.STDDEV_SAMP :
-            case OpTypes.VAR_POP :
-            case OpTypes.VAR_SAMP :
+            case OpTypes.STDDEV_POP:
+            case OpTypes.STDDEV_SAMP:
+            case OpTypes.VAR_POP:
+            case OpTypes.VAR_SAMP:
                 if (all || distinct) {
                     throw unexpectedToken(all ? Tokens.T_ALL
-                                              : Tokens.T_DISTINCT);
+                            : Tokens.T_DISTINCT);
                 }
                 break;
 
-            case OpTypes.ARRAY_AGG :
-            case OpTypes.GROUP_CONCAT : {
+            case OpTypes.ARRAY_AGG:
+            case OpTypes.GROUP_CONCAT: {
                 if (token.tokenType == Tokens.ORDER) {
                     read();
                     readThis(Tokens.BY);
@@ -2299,13 +2299,13 @@ public class ParserDQL extends ParserBase {
                 }
 
                 return new ExpressionArrayAggregate(type, distinct, e, sort,
-                                                    separator);
+                        separator);
             }
-            case OpTypes.MEDIAN : {
+            case OpTypes.MEDIAN: {
                 return new ExpressionArrayAggregate(type, distinct, e, sort,
-                                                    separator);
+                        separator);
             }
-            default :
+            default:
                 if (e.getType() == OpTypes.MULTICOLUMN
                         || e.getType() == OpTypes.ASTERISK) {
                     throw unexpectedToken(Tokens.T_ASTERISK);
@@ -2317,27 +2317,27 @@ public class ParserDQL extends ParserBase {
         return aggregateExp;
     }
 
-//--------------------------------------
+    //--------------------------------------
     // returns null
     // := <unsigned literal> | <general value specification>
     Expression XreadValueSpecificationOrNull() {
 
-        Expression e     = null;
-        boolean    minus = false;
+        Expression e = null;
+        boolean minus = false;
 
         switch (token.tokenType) {
 
-            case Tokens.PLUS_OP :
+            case Tokens.PLUS_OP:
                 read();
                 break;
 
-            case Tokens.MINUS_OP :
+            case Tokens.MINUS_OP:
                 read();
 
                 minus = true;
                 break;
 
-            default :
+            default:
         }
 
         e = XreadUnsignedValueSpecificationOrNull();
@@ -2361,17 +2361,17 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.TRUE :
+            case Tokens.TRUE:
                 read();
 
                 return Expression.EXPR_TRUE;
 
-            case Tokens.FALSE :
+            case Tokens.FALSE:
                 read();
 
                 return Expression.EXPR_FALSE;
 
-            case Tokens.DEFAULT :
+            case Tokens.DEFAULT:
                 if (compileContext.contextuallyTypedExpression) {
                     read();
 
@@ -2381,64 +2381,64 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.NULL :
+            case Tokens.NULL:
                 e = new ExpressionValue(null, null);
 
                 read();
 
                 return e;
 
-            case Tokens.X_VALUE :
+            case Tokens.X_VALUE:
                 e = new ExpressionValue(token.tokenValue, token.dataType);
 
                 read();
 
                 return e;
 
-            case Tokens.X_DELIMITED_IDENTIFIER :
-            case Tokens.X_IDENTIFIER :
+            case Tokens.X_DELIMITED_IDENTIFIER:
+            case Tokens.X_IDENTIFIER:
                 if (!token.isHostParameter) {
                     return null;
                 }
 
                 return null;
 
-            case Tokens.COLON :
+            case Tokens.COLON:
                 read();
 
                 if (token.tokenType == Tokens.X_DELIMITED_IDENTIFIER
-                        || token.tokenType == Tokens.X_IDENTIFIER) {}
-                else {
+                        || token.tokenType == Tokens.X_IDENTIFIER) {
+                } else {
                     throw unexpectedToken(Tokens.T_COLON);
                 }
 
-            // fall through
-            case Tokens.QUESTION :
+                // fall through
+            case Tokens.QUESTION:
                 ExpressionColumn p =
-                    new ExpressionColumn(OpTypes.DYNAMIC_PARAM);
+                        new ExpressionColumn(OpTypes.DYNAMIC_PARAM);
 
                 compileContext.addParameter(p, getPosition());
                 read();
 
                 return p;
 
-            case Tokens.COLLATION :
+            case Tokens.COLLATION:
                 return XreadCurrentCollationSpec();
 
-            case Tokens.VALUE :
-            case Tokens.CURRENT_CATALOG :
-            case Tokens.CURRENT_DEFAULT_TRANSFORM_GROUP :
-            case Tokens.CURRENT_PATH :
-            case Tokens.CURRENT_ROLE :
-            case Tokens.CURRENT_SCHEMA :
-            case Tokens.CURRENT_TRANSFORM_GROUP_FOR_TYPE :
-            case Tokens.CURRENT_USER :
-            case Tokens.SESSION_USER :
-            case Tokens.SYSTEM_USER :
-            case Tokens.USER :
+            case Tokens.VALUE:
+            case Tokens.CURRENT_CATALOG:
+            case Tokens.CURRENT_DEFAULT_TRANSFORM_GROUP:
+            case Tokens.CURRENT_PATH:
+            case Tokens.CURRENT_ROLE:
+            case Tokens.CURRENT_SCHEMA:
+            case Tokens.CURRENT_TRANSFORM_GROUP_FOR_TYPE:
+            case Tokens.CURRENT_USER:
+            case Tokens.SESSION_USER:
+            case Tokens.SYSTEM_USER:
+            case Tokens.USER:
                 FunctionSQL function =
-                    FunctionSQL.newSQLFunction(token.tokenString,
-                                               compileContext);
+                        FunctionSQL.newSQLFunction(token.tokenString,
+                                compileContext);
 
                 if (function == null) {
                     return null;
@@ -2459,44 +2459,44 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.X_VALUE :
+            case Tokens.X_VALUE:
                 e = new ExpressionValue(token.tokenValue, token.dataType);
 
                 read();
 
                 return e;
 
-            case Tokens.COLON :
+            case Tokens.COLON:
                 read();
 
                 if (token.tokenType == Tokens.X_DELIMITED_IDENTIFIER
-                        || token.tokenType == Tokens.X_IDENTIFIER) {}
-                else {
+                        || token.tokenType == Tokens.X_IDENTIFIER) {
+                } else {
                     throw unexpectedToken(Tokens.T_COLON);
                 }
 
-            // fall through
-            case Tokens.QUESTION :
+                // fall through
+            case Tokens.QUESTION:
                 ExpressionColumn p =
-                    new ExpressionColumn(OpTypes.DYNAMIC_PARAM);
+                        new ExpressionColumn(OpTypes.DYNAMIC_PARAM);
 
                 compileContext.addParameter(p, getPosition());
                 read();
 
                 return p;
 
-            case Tokens.X_IDENTIFIER :
-            case Tokens.X_DELIMITED_IDENTIFIER :
+            case Tokens.X_IDENTIFIER:
+            case Tokens.X_DELIMITED_IDENTIFIER:
                 checkValidCatalogName(token.namePrePrePrefix);
 
                 e = new ExpressionColumn(token.namePrePrefix,
-                                         token.namePrefix, token.tokenString);
+                        token.namePrefix, token.tokenString);
 
                 read();
 
                 return e;
 
-            default :
+            default:
                 return null;
         }
     }
@@ -2506,19 +2506,19 @@ public class ParserDQL extends ParserBase {
     // <explicit row value constructor> needed for predicate
     Expression XreadAllTypesValueExpressionPrimary(boolean isBoolean) {
 
-        Expression e        = null;
-        int        position = getPosition();
+        Expression e = null;
+        int position = getPosition();
 
         switch (token.tokenType) {
 
-            case Tokens.EXISTS :
-            case Tokens.UNIQUE :
+            case Tokens.EXISTS:
+            case Tokens.UNIQUE:
                 if (isBoolean) {
                     return XreadPredicate();
                 }
                 break;
 
-            case Tokens.PERIOD :
+            case Tokens.PERIOD:
                 if (isBoolean) {
                     break;
                 }
@@ -2546,7 +2546,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.ROW :
+            case Tokens.ROW:
                 if (isBoolean) {
                     break;
                 }
@@ -2559,7 +2559,7 @@ public class ParserDQL extends ParserBase {
                 readThis(Tokens.CLOSEBRACKET);
                 break;
 
-            default :
+            default:
                 e = XreadSimpleValueExpressionPrimary();
 
                 if (e != null) {
@@ -2647,7 +2647,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.OPENBRACKET :
+            case Tokens.OPENBRACKET:
                 read();
 
                 int subqueryPosition = getPosition();
@@ -2656,16 +2656,16 @@ public class ParserDQL extends ParserBase {
 
                 switch (token.tokenType) {
 
-                    case Tokens.TABLE :
-                    case Tokens.VALUES :
-                    case Tokens.SELECT :
+                    case Tokens.TABLE:
+                    case Tokens.VALUES:
+                    case Tokens.SELECT:
                         TableDerived td = null;
 
                         rewind(subqueryPosition);
 
                         try {
                             td = XreadSubqueryTableBody(
-                                OpTypes.SCALAR_SUBQUERY);
+                                    OpTypes.SCALAR_SUBQUERY);
 
                             readThis(Tokens.CLOSEBRACKET);
                         } catch (HsqlException ex) {
@@ -2684,7 +2684,7 @@ public class ParserDQL extends ParserBase {
                         if (td.queryExpression != null) {
                             if (td.queryExpression.isSingleColumn()) {
                                 e = new Expression(OpTypes.SCALAR_SUBQUERY,
-                                                   td);
+                                        td);
                             } else {
                                 e = new Expression(OpTypes.ROW_SUBQUERY, td);
                             }
@@ -2694,22 +2694,22 @@ public class ParserDQL extends ParserBase {
                             return e;
                         }
 
-                    // fall through
-                    default :
+                        // fall through
+                    default:
                         rewind(position);
 
                         return null;
                 }
-            case Tokens.ASTERISK :
+            case Tokens.ASTERISK:
                 e = new ExpressionColumn(token.namePrePrefix,
-                                         token.namePrefix);
+                        token.namePrefix);
 
                 getRecordedToken().setExpression(e);
                 read();
 
                 return e;
 
-            case Tokens.LEAST : {
+            case Tokens.LEAST: {
                 e = readLeastExpressionOrNull();
 
                 if (e != null) {
@@ -2718,7 +2718,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.GREATEST : {
+            case Tokens.GREATEST: {
                 e = readGreatestExpressionOrNull();
 
                 if (e != null) {
@@ -2727,7 +2727,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.DECODE : {
+            case Tokens.DECODE: {
                 e = readDecodeExpressionOrNull();
 
                 if (e != null) {
@@ -2736,7 +2736,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.CONCAT_WORD : {
+            case Tokens.CONCAT_WORD: {
                 e = readConcatExpressionOrNull();
 
                 if (e != null) {
@@ -2745,7 +2745,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.CONCAT_WS : {
+            case Tokens.CONCAT_WS: {
                 e = readConcatSeparatorExpressionOrNull();
 
                 if (e != null) {
@@ -2754,8 +2754,8 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.IF :
-            case Tokens.CASEWHEN : {
+            case Tokens.IF:
+            case Tokens.CASEWHEN: {
                 e = readCaseWhenExpressionOrNull();
 
                 if (e != null) {
@@ -2764,17 +2764,17 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.CASE :
+            case Tokens.CASE:
                 return readCaseExpression();
 
-            case Tokens.NULLIF :
+            case Tokens.NULLIF:
                 return readNullIfExpression();
 
-            case Tokens.COALESCE :
+            case Tokens.COALESCE:
                 return readCoalesceExpression();
 
-            case Tokens.IFNULL :
-            case Tokens.ISNULL : {
+            case Tokens.IFNULL:
+            case Tokens.ISNULL: {
                 e = readIfNullExpressionOrNull();
 
                 if (e != null) {
@@ -2783,7 +2783,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.NVL2 : {
+            case Tokens.NVL2: {
                 e = readIfNull2ExpressionOrNull();
 
                 if (e != null) {
@@ -2792,7 +2792,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.CAST :
+            case Tokens.CAST:
                 e = readCastExpression();
 
                 if (e != null) {
@@ -2800,7 +2800,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.CONVERT : {
+            case Tokens.CONVERT: {
                 e = readConvertExpressionOrNull();
 
                 if (e != null) {
@@ -2809,10 +2809,10 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.DATE :
-            case Tokens.TIME :
-            case Tokens.TIMESTAMP :
-            case Tokens.INTERVAL :
+            case Tokens.DATE:
+            case Tokens.TIME:
+            case Tokens.TIMESTAMP:
+            case Tokens.INTERVAL:
                 e = readDateTimeIntervalLiteral(session);
 
                 if (e != null) {
@@ -2820,24 +2820,24 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.ARRAY :
+            case Tokens.ARRAY:
                 return readCollection(OpTypes.ARRAY);
 
-            case Tokens.COUNT :
-            case Tokens.AVG :
-            case Tokens.MAX :
-            case Tokens.MIN :
-            case Tokens.SUM :
-            case Tokens.ANY :
-            case Tokens.SOME :
-            case Tokens.EVERY :
-            case Tokens.STDDEV_POP :
-            case Tokens.STDDEV_SAMP :
-            case Tokens.VAR_POP :
-            case Tokens.VAR_SAMP :
-            case Tokens.GROUP_CONCAT :
-            case Tokens.ARRAY_AGG :
-            case Tokens.MEDIAN :
+            case Tokens.COUNT:
+            case Tokens.AVG:
+            case Tokens.MAX:
+            case Tokens.MIN:
+            case Tokens.SUM:
+            case Tokens.ANY:
+            case Tokens.SOME:
+            case Tokens.EVERY:
+            case Tokens.STDDEV_POP:
+            case Tokens.STDDEV_SAMP:
+            case Tokens.VAR_POP:
+            case Tokens.VAR_SAMP:
+            case Tokens.GROUP_CONCAT:
+            case Tokens.ARRAY_AGG:
+            case Tokens.MEDIAN:
                 e = readAggregateFunctionOrNull();    // general set function
 
                 if (e != null) {
@@ -2845,7 +2845,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case Tokens.NEXT : {
+            case Tokens.NEXT: {
                 e = readSequenceExpressionOrNull(OpTypes.SEQUENCE);
 
                 if (e != null) {
@@ -2854,8 +2854,8 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.PREVVAL :
-            case Tokens.CURRENT : {
+            case Tokens.PREVVAL:
+            case Tokens.CURRENT: {
                 e = readSequenceExpressionOrNull(OpTypes.SEQUENCE_CURRENT);
 
                 if (e != null) {
@@ -2864,25 +2864,25 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.CURRVAL : {
+            case Tokens.CURRVAL: {
                 if (database.sqlSyntaxPgs) {
                     read();
                     readThis(Tokens.OPENBRACKET);
 
-                    String  spec    = readQuotedString();
+                    String spec = readQuotedString();
                     Scanner scanner = session.getScanner();
 
                     scanner.reset(session, spec);
                     scanner.scanNext();
 
                     String schemaName =
-                        session.getSchemaName(scanner.token.namePrefix);
+                            session.getSchemaName(scanner.token.namePrefix);
                     NumberSequence sequence =
-                        database.schemaManager.getSequence(
-                            scanner.token.tokenString, schemaName, true);
+                            database.schemaManager.getSequence(
+                                    scanner.token.tokenString, schemaName, true);
 
                     e = new ExpressionColumn(sequence,
-                                             OpTypes.SEQUENCE_CURRENT);
+                            OpTypes.SEQUENCE_CURRENT);
 
                     readThis(Tokens.CLOSEBRACKET);
 
@@ -2891,7 +2891,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.LASTVAL : {
+            case Tokens.LASTVAL: {
                 if (database.sqlSyntaxPgs) {
                     read();
                     readThis(Tokens.OPENBRACKET);
@@ -2903,7 +2903,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.NEXTVAL : {
+            case Tokens.NEXTVAL: {
                 if (database.sqlSyntaxPgs) {
                     return readNextvalFunction();
                 } else if (database.sqlSyntaxDb2) {
@@ -2916,7 +2916,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.ROW_NUMBER : {
+            case Tokens.ROW_NUMBER: {
                 read();
 
                 if (token.tokenType == Tokens.OPENBRACKET) {
@@ -2933,7 +2933,7 @@ public class ParserDQL extends ParserBase {
 
                 return new ExpressionColumn(OpTypes.ROWNUM);
             }
-            case Tokens.ROWNUM : {
+            case Tokens.ROWNUM: {
                 read();
 
                 if (token.tokenType == Tokens.OPENBRACKET) {
@@ -2954,24 +2954,24 @@ public class ParserDQL extends ParserBase {
 
                 return new ExpressionColumn(OpTypes.ROWNUM);
             }
-            case Tokens.LEFT :
-            case Tokens.RIGHT :
+            case Tokens.LEFT:
+            case Tokens.RIGHT:
 
                 // CLI function names
                 break;
 
-            case Tokens.TABLE : {
+            case Tokens.TABLE: {
                 read();
                 readThis(Tokens.OPENBRACKET);
 
                 TableDerived td =
-                    XreadSubqueryTableBody(OpTypes.TABLE_SUBQUERY);
+                        XreadSubqueryTableBody(OpTypes.TABLE_SUBQUERY);
 
                 readThis(Tokens.CLOSEBRACKET);
 
                 return new Expression(OpTypes.TABLE_SUBQUERY, td);
             }
-            default :
+            default:
                 if (isCoreReservedKey()) {
                     throw unexpectedToken();
                 }
@@ -2991,7 +2991,7 @@ public class ParserDQL extends ParserBase {
         read();
         readThis(Tokens.OPENBRACKET);
 
-        String  spec    = readQuotedString();
+        String spec = readQuotedString();
         Scanner scanner = session.getScanner();
 
         scanner.reset(session, spec);
@@ -2999,8 +2999,8 @@ public class ParserDQL extends ParserBase {
 
         String schemaName = session.getSchemaName(scanner.token.namePrefix);
         NumberSequence sequence =
-            database.schemaManager.getSequence(scanner.token.tokenString,
-                                               schemaName, true);
+                database.schemaManager.getSequence(scanner.token.tokenString,
+                        schemaName, true);
         Expression e = new ExpressionColumn(sequence, OpTypes.SEQUENCE);
 
         readThis(Tokens.CLOSEBRACKET);
@@ -3016,39 +3016,39 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.SUBSTRING :
-            case Tokens.SUBSTRING_REGEX :
-            case Tokens.LOWER :
-            case Tokens.UPPER :
-            case Tokens.TRANSLATE_REGEX :
-            case Tokens.TRIM :
-            case Tokens.OVERLAY :
-            case Tokens.NORMALIZE :
+            case Tokens.SUBSTRING:
+            case Tokens.SUBSTRING_REGEX:
+            case Tokens.LOWER:
+            case Tokens.UPPER:
+            case Tokens.TRANSLATE_REGEX:
+            case Tokens.TRIM:
+            case Tokens.OVERLAY:
+            case Tokens.NORMALIZE:
 
-            //
-            case Tokens.POSITION :
-            case Tokens.OCCURRENCES_REGEX :
-            case Tokens.POSITION_REGEX :
-            case Tokens.EXTRACT :
-            case Tokens.CHAR_LENGTH :
-            case Tokens.CHARACTER_LENGTH :
-            case Tokens.OCTET_LENGTH :
-            case Tokens.CARDINALITY :
-            case Tokens.ARRAY_MAX_CARDINALITY :
-            case Tokens.MAX_CARDINALITY :
-            case Tokens.ABS :
-            case Tokens.MOD :
-            case Tokens.LN :
-            case Tokens.EXP :
-            case Tokens.POWER :
-            case Tokens.SQRT :
-            case Tokens.FLOOR :
-            case Tokens.CEILING :
-            case Tokens.CEIL :
-            case Tokens.WIDTH_BUCKET :
+                //
+            case Tokens.POSITION:
+            case Tokens.OCCURRENCES_REGEX:
+            case Tokens.POSITION_REGEX:
+            case Tokens.EXTRACT:
+            case Tokens.CHAR_LENGTH:
+            case Tokens.CHARACTER_LENGTH:
+            case Tokens.OCTET_LENGTH:
+            case Tokens.CARDINALITY:
+            case Tokens.ARRAY_MAX_CARDINALITY:
+            case Tokens.MAX_CARDINALITY:
+            case Tokens.ABS:
+            case Tokens.MOD:
+            case Tokens.LN:
+            case Tokens.EXP:
+            case Tokens.POWER:
+            case Tokens.SQRT:
+            case Tokens.FLOOR:
+            case Tokens.CEILING:
+            case Tokens.CEIL:
+            case Tokens.WIDTH_BUCKET:
                 FunctionSQL function =
-                    FunctionSQL.newSQLFunction(token.tokenString,
-                                               compileContext);
+                        FunctionSQL.newSQLFunction(token.tokenString,
+                                compileContext);
 
                 if (function == null) {
                     throw unsupportedFeature();
@@ -3060,8 +3060,8 @@ public class ParserDQL extends ParserBase {
                     break;
                 }
 
-            // fall through
-            default :
+                // fall through
+            default:
                 e = XreadAllTypesValueExpressionPrimary(boole);
         }
 
@@ -3076,7 +3076,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.AT : {
+            case Tokens.AT: {
                 read();
 
                 Expression e1 = null;
@@ -3091,14 +3091,14 @@ public class ParserDQL extends ParserBase {
 
                     switch (token.tokenType) {
 
-                        case Tokens.YEAR :
-                        case Tokens.MONTH :
-                        case Tokens.DAY :
-                        case Tokens.HOUR :
-                        case Tokens.MINUTE :
-                        case Tokens.SECOND : {
+                        case Tokens.YEAR:
+                        case Tokens.MONTH:
+                        case Tokens.DAY:
+                        case Tokens.HOUR:
+                        case Tokens.MINUTE:
+                        case Tokens.SECOND: {
                             IntervalType type = readIntervalType(session,
-                                                                 false);
+                                    false);
 
                             if (e1.getType() == OpTypes.SUBTRACT) {
                                 e1.dataType = type;
@@ -3108,7 +3108,7 @@ public class ParserDQL extends ParserBase {
 
                             break;
                         }
-                        default :
+                        default:
                     }
                 } else {
                     rewind(position);
@@ -3120,12 +3120,12 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.YEAR :
-            case Tokens.MONTH :
-            case Tokens.DAY :
-            case Tokens.HOUR :
-            case Tokens.MINUTE :
-            case Tokens.SECOND : {
+            case Tokens.YEAR:
+            case Tokens.MONTH:
+            case Tokens.DAY:
+            case Tokens.HOUR:
+            case Tokens.MINUTE:
+            case Tokens.SECOND: {
                 IntervalType type = readIntervalType(session, true);
 
                 if (e.getType() == OpTypes.SUBTRACT) {
@@ -3136,12 +3136,12 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.COLLATE : {
+            case Tokens.COLLATE: {
                 read();
 
                 Collation collation =
-                    database.schemaManager.getCollation(session,
-                        token.tokenString, token.namePrefix);
+                        database.schemaManager.getCollation(session,
+                                token.tokenString, token.namePrefix);
 
                 e.setCollation(collation);
                 read();
@@ -3156,18 +3156,17 @@ public class ParserDQL extends ParserBase {
         Expression e;
 
         compileContext.contextuallyTypedExpression = true;
-        e                                          = XreadValueExpression();
+        e = XreadValueExpression();
         compileContext.contextuallyTypedExpression = false;
 
         return e;
     }
 
     /**
-     *     <value expression> ::=
-     *   <common value expression>
-     *   | <boolean value expression>
-     *   | <row value expression>
-     *
+     * <value expression> ::=
+     * <common value expression>
+     * | <boolean value expression>
+     * | <row value expression>
      */
     Expression XreadValueExpression() {
 
@@ -3195,37 +3194,37 @@ public class ParserDQL extends ParserBase {
     // no <row value expression> and no <predicate>
     Expression XreadAllTypesCommonValueExpression(boolean boole) {
 
-        Expression e    = XreadAllTypesTerm(boole);
-        int        type = 0;
-        boolean    end  = false;
+        Expression e = XreadAllTypesTerm(boole);
+        int type = 0;
+        boolean end = false;
 
         while (true) {
             switch (token.tokenType) {
 
-                case Tokens.PLUS_OP :
-                    type  = OpTypes.ADD;
+                case Tokens.PLUS_OP:
+                    type = OpTypes.ADD;
                     boole = false;
                     break;
 
-                case Tokens.MINUS_OP :
-                    type  = OpTypes.SUBTRACT;
+                case Tokens.MINUS_OP:
+                    type = OpTypes.SUBTRACT;
                     boole = false;
                     break;
 
-                case Tokens.CONCAT_OP :
-                    type  = OpTypes.CONCAT;
+                case Tokens.CONCAT_OP:
+                    type = OpTypes.CONCAT;
                     boole = false;
                     break;
 
-                case Tokens.OR :
+                case Tokens.OR:
                     if (boole) {
                         type = OpTypes.OR;
 
                         break;
                     }
 
-                // fall through
-                default :
+                    // fall through
+                default:
                     end = true;
                     break;
             }
@@ -3240,7 +3239,7 @@ public class ParserDQL extends ParserBase {
 
             e = XreadAllTypesTerm(boole);
             e = boole ? new ExpressionLogical(type, a, e)
-                      : new ExpressionArithmetic(type, a, e);
+                    : new ExpressionArithmetic(type, a, e);
         }
 
         return e;
@@ -3248,32 +3247,32 @@ public class ParserDQL extends ParserBase {
 
     Expression XreadAllTypesTerm(boolean boole) {
 
-        Expression e    = XreadAllTypesFactor(boole);
-        int        type = 0;
-        boolean    end  = false;
+        Expression e = XreadAllTypesFactor(boole);
+        int type = 0;
+        boolean end = false;
 
         while (true) {
             switch (token.tokenType) {
 
-                case Tokens.ASTERISK :
-                    type  = OpTypes.MULTIPLY;
+                case Tokens.ASTERISK:
+                    type = OpTypes.MULTIPLY;
                     boole = false;
                     break;
 
-                case Tokens.DIVIDE_OP :
-                    type  = OpTypes.DIVIDE;
+                case Tokens.DIVIDE_OP:
+                    type = OpTypes.DIVIDE;
                     boole = false;
                     break;
 
-                case Tokens.AND :
+                case Tokens.AND:
                     if (boole) {
                         type = OpTypes.AND;
 
                         break;
                     }
 
-                // fall through
-                default :
+                    // fall through
+                default:
                     end = true;
                     break;
             }
@@ -3293,7 +3292,7 @@ public class ParserDQL extends ParserBase {
             }
 
             e = boole ? new ExpressionLogical(type, a, e)
-                      : new ExpressionArithmetic(type, a, e);
+                    : new ExpressionArithmetic(type, a, e);
         }
 
         return e;
@@ -3302,26 +3301,26 @@ public class ParserDQL extends ParserBase {
     Expression XreadAllTypesFactor(boolean boole) {
 
         Expression e;
-        boolean    minus   = false;
-        boolean    not     = false;
-        boolean    unknown = false;
+        boolean minus = false;
+        boolean not = false;
+        boolean unknown = false;
 
         switch (token.tokenType) {
 
-            case Tokens.PLUS_OP :
+            case Tokens.PLUS_OP:
                 read();
 
                 boole = false;
                 break;
 
-            case Tokens.MINUS_OP :
+            case Tokens.MINUS_OP:
                 read();
 
                 boole = false;
                 minus = true;
                 break;
 
-            case Tokens.NOT :
+            case Tokens.NOT:
                 if (boole) {
                     read();
 
@@ -3329,7 +3328,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            default :
+            default:
         }
 
         e = XreadAllTypesPrimary(boole);
@@ -3378,17 +3377,17 @@ public class ParserDQL extends ParserBase {
 
     Expression XreadCharacterValueExpression() {
 
-        Expression e         = XreadCharacterPrimary();
-        Collation  collation = readCollateClauseOrNull();
+        Expression e = XreadCharacterPrimary();
+        Collation collation = readCollateClauseOrNull();
 
         while (token.tokenType == Tokens.CONCAT_OP) {
             read();
 
             Expression a = e;
 
-            e         = XreadCharacterPrimary();
+            e = XreadCharacterPrimary();
             collation = readCollateClauseOrNull();
-            e         = new ExpressionArithmetic(OpTypes.CONCAT, a, e);
+            e = new ExpressionArithmetic(OpTypes.CONCAT, a, e);
         }
 
         return e;
@@ -3398,20 +3397,20 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.SUBSTRING :
+            case Tokens.SUBSTRING:
 
 //            case Token.SUBSTRING_REGEX :
-            case Tokens.LOWER :
-            case Tokens.UPPER :
+            case Tokens.LOWER:
+            case Tokens.UPPER:
 
 //            case Token.TRANSLATE_REGEX :
-            case Tokens.TRIM :
-            case Tokens.OVERLAY :
+            case Tokens.TRIM:
+            case Tokens.OVERLAY:
 
 //            case Token.NORMALIZE :
                 FunctionSQL function =
-                    FunctionSQL.newSQLFunction(token.tokenString,
-                                               compileContext);
+                        FunctionSQL.newSQLFunction(token.tokenString,
+                                compileContext);
                 Expression e = readSQLFunction(function);
 
                 if (e != null) {
@@ -3426,28 +3425,28 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.POSITION :
+            case Tokens.POSITION:
 
 //            case Token.OCCURRENCES_REGEX :
 //            case Token.POSITION_REGEX :
-            case Tokens.EXTRACT :
-            case Tokens.CHAR_LENGTH :
-            case Tokens.CHARACTER_LENGTH :
-            case Tokens.OCTET_LENGTH :
-            case Tokens.CARDINALITY :
-            case Tokens.ABS :
-            case Tokens.MOD :
-            case Tokens.LN :
-            case Tokens.EXP :
-            case Tokens.POWER :
-            case Tokens.SQRT :
-            case Tokens.FLOOR :
-            case Tokens.CEILING :
-            case Tokens.CEIL :
-            case Tokens.WIDTH_BUCKET :
+            case Tokens.EXTRACT:
+            case Tokens.CHAR_LENGTH:
+            case Tokens.CHARACTER_LENGTH:
+            case Tokens.OCTET_LENGTH:
+            case Tokens.CARDINALITY:
+            case Tokens.ABS:
+            case Tokens.MOD:
+            case Tokens.LN:
+            case Tokens.EXP:
+            case Tokens.POWER:
+            case Tokens.SQRT:
+            case Tokens.FLOOR:
+            case Tokens.CEILING:
+            case Tokens.CEIL:
+            case Tokens.WIDTH_BUCKET:
                 FunctionSQL function =
-                    FunctionSQL.newSQLFunction(token.tokenString,
-                                               compileContext);
+                        FunctionSQL.newSQLFunction(token.tokenString,
+                                compileContext);
 
                 if (function == null) {
                     throw unexpectedToken();
@@ -3492,7 +3491,7 @@ public class ParserDQL extends ParserBase {
     Expression XreadTerm() {
 
         Expression e = XreadFactor();
-        int        type;
+        int type;
 
         while (true) {
             if (token.tokenType == Tokens.ASTERISK) {
@@ -3522,7 +3521,7 @@ public class ParserDQL extends ParserBase {
     Expression XreadFactor() {
 
         Expression e;
-        boolean    minus = false;
+        boolean minus = false;
 
         if (token.tokenType == Tokens.PLUS_OP) {
             read();
@@ -3601,17 +3600,17 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.CURRENT_DATE :
-            case Tokens.CURRENT_TIME :
-            case Tokens.CURRENT_TIMESTAMP :
-            case Tokens.LOCALTIME :
-            case Tokens.LOCALTIMESTAMP :
+            case Tokens.CURRENT_DATE:
+            case Tokens.CURRENT_TIME:
+            case Tokens.CURRENT_TIMESTAMP:
+            case Tokens.LOCALTIME:
+            case Tokens.LOCALTIMESTAMP:
 
-            //
-            case Tokens.ABS :
+                //
+            case Tokens.ABS:
                 FunctionSQL function =
-                    FunctionSQL.newSQLFunction(token.tokenString,
-                                               compileContext);
+                        FunctionSQL.newSQLFunction(token.tokenString,
+                                compileContext);
 
                 if (function == null) {
                     throw unexpectedToken();
@@ -3619,7 +3618,7 @@ public class ParserDQL extends ParserBase {
 
                 return readSQLFunction(function);
 
-            default :
+            default:
         }
 
         return XreadValueExpressionPrimary();
@@ -3632,19 +3631,19 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.CURRENT_DATE :
-            case Tokens.CURRENT_TIME :
-            case Tokens.CURRENT_TIMESTAMP :
-            case Tokens.LOCALTIME :
-            case Tokens.LOCALTIMESTAMP :
+            case Tokens.CURRENT_DATE:
+            case Tokens.CURRENT_TIME:
+            case Tokens.CURRENT_TIMESTAMP:
+            case Tokens.LOCALTIME:
+            case Tokens.LOCALTIMESTAMP:
                 function = FunctionSQL.newSQLFunction(token.tokenString,
-                                                      compileContext);
+                        compileContext);
                 break;
 
-            case Tokens.SYSTIMESTAMP :
-            case Tokens.NOW :
-            case Tokens.TODAY :
-            case Tokens.SYSDATE :
+            case Tokens.SYSTIMESTAMP:
+            case Tokens.NOW:
+            case Tokens.TODAY:
+            case Tokens.SYSDATE:
                 function = FunctionCustom.newCustomFunction(session,
                         token.tokenString, token.tokenType);
 
@@ -3653,7 +3652,7 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            default :
+            default:
                 return null;
         }
 
@@ -3704,7 +3703,7 @@ public class ParserDQL extends ParserBase {
             ex.setLevel(compileContext.subqueryDepth);
 
             if (lastError != null && lastError.getLevel() >= ex.getLevel()) {
-                ex        = lastError;
+                ex = lastError;
                 lastError = null;
             }
 
@@ -3748,7 +3747,7 @@ public class ParserDQL extends ParserBase {
     Expression XreadBooleanFactorOrNull() {
 
         Expression e;
-        boolean    not = false;
+        boolean not = false;
 
         if (token.tokenType == Tokens.NOT) {
             read();
@@ -3771,9 +3770,9 @@ public class ParserDQL extends ParserBase {
 
     Expression XreadBooleanTestOrNull() {
 
-        boolean    unknown = false;
-        boolean    isNot   = false;
-        Expression e       = XreadBooleanPrimaryOrNull();
+        boolean unknown = false;
+        boolean isNot = false;
+        Expression e = XreadBooleanPrimaryOrNull();
 
         if (e == null) {
             return e;
@@ -3818,15 +3817,15 @@ public class ParserDQL extends ParserBase {
     Expression XreadBooleanPrimaryOrNull() {
 
         Expression e = null;
-        int        position;
+        int position;
 
         switch (token.tokenType) {
 
-            case Tokens.EXISTS :
-            case Tokens.UNIQUE :
+            case Tokens.EXISTS:
+            case Tokens.UNIQUE:
                 return XreadPredicate();
 
-            case Tokens.ROW :
+            case Tokens.ROW:
                 read();
                 readThis(Tokens.OPENBRACKET);
 
@@ -3835,7 +3834,7 @@ public class ParserDQL extends ParserBase {
                 readThis(Tokens.CLOSEBRACKET);
                 break;
 
-            default :
+            default:
                 position = getPosition();
 
                 try {
@@ -3912,21 +3911,21 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.EXISTS : {
+            case Tokens.EXISTS: {
                 read();
 
                 Expression s = XreadTableSubquery(OpTypes.EXISTS);
 
                 return new ExpressionLogical(OpTypes.EXISTS, s);
             }
-            case Tokens.UNIQUE : {
+            case Tokens.UNIQUE: {
                 read();
 
                 Expression s = XreadTableSubquery(OpTypes.UNIQUE);
 
                 return new ExpressionLogical(OpTypes.UNIQUE, s);
             }
-            default : {
+            default: {
                 Expression a = XreadRowValuePredicand();
 
                 return XreadPredicateRightPart(a);
@@ -3936,11 +3935,11 @@ public class ParserDQL extends ParserBase {
 
     Expression XreadPredicateRightPart(final Expression l) {
 
-        boolean           hasNot      = false;
-        boolean           immediately = false;
-        ExpressionLogical e           = null;
-        Expression        r;
-        int               position = getPosition();
+        boolean hasNot = false;
+        boolean immediately = false;
+        ExpressionLogical e = null;
+        Expression r;
+        int position = getPosition();
 
         if (token.tokenType == Tokens.NOT) {
             read();
@@ -3962,7 +3961,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.IS : {
+            case Tokens.IS: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
@@ -3979,7 +3978,7 @@ public class ParserDQL extends ParserBase {
                     read();
 
                     if (hasNot) {
-                        e      = new ExpressionLogical(OpTypes.IS_NOT_NULL, l);
+                        e = new ExpressionLogical(OpTypes.IS_NOT_NULL, l);
                         hasNot = false;
                     } else {
                         e = new ExpressionLogical(OpTypes.IS_NULL, l);
@@ -3992,8 +3991,8 @@ public class ParserDQL extends ParserBase {
                     read();
                     readThis(Tokens.FROM);
 
-                    r      = XreadRowValuePredicand();
-                    e      = new ExpressionLogical(OpTypes.NOT_DISTINCT, l, r);
+                    r = XreadRowValuePredicand();
+                    e = new ExpressionLogical(OpTypes.NOT_DISTINCT, l, r);
                     hasNot = !hasNot;
 
                     break;
@@ -4003,24 +4002,24 @@ public class ParserDQL extends ParserBase {
 
                 return l;
             }
-            case Tokens.LIKE : {
-                e                = XreadLikePredicateRightPart(l);
+            case Tokens.LIKE: {
+                e = XreadLikePredicateRightPart(l);
                 e.noOptimisation = isCheckOrTriggerCondition;
 
                 break;
             }
-            case Tokens.BETWEEN : {
+            case Tokens.BETWEEN: {
                 e = XreadBetweenPredicateRightPart(l);
 
                 break;
             }
-            case Tokens.IN : {
-                e                = XreadInPredicateRightPart(l);
+            case Tokens.IN: {
+                e = XreadInPredicateRightPart(l);
                 e.noOptimisation = isCheckOrTriggerCondition;
 
                 break;
             }
-            case Tokens.CONTAINS : {
+            case Tokens.CONTAINS: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
@@ -4029,7 +4028,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.EQUALS : {
+            case Tokens.EQUALS: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
@@ -4038,7 +4037,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.OVERLAPS : {
+            case Tokens.OVERLAPS: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
@@ -4047,42 +4046,42 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.PRECEDES : {
+            case Tokens.PRECEDES: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
 
                 if (immediately) {
                     e = XreadPeriodPredicateRightPart(
-                        OpTypes.RANGE_IMMEDIATELY_PRECEDES, l);
+                            OpTypes.RANGE_IMMEDIATELY_PRECEDES, l);
                 } else {
                     e = XreadPeriodPredicateRightPart(OpTypes.RANGE_PRECEDES,
-                                                      l);
+                            l);
                 }
 
                 break;
             }
-            case Tokens.SUCCEEDS : {
+            case Tokens.SUCCEEDS: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
 
                 if (immediately) {
                     e = XreadPeriodPredicateRightPart(
-                        OpTypes.RANGE_IMMEDIATELY_SUCCEEDS, l);
+                            OpTypes.RANGE_IMMEDIATELY_SUCCEEDS, l);
                 } else {
                     e = XreadPeriodPredicateRightPart(OpTypes.RANGE_SUCCEEDS,
-                                                      l);
+                            l);
                 }
 
                 break;
             }
-            case Tokens.EQUALS_OP :
-            case Tokens.GREATER_EQUALS :
-            case Tokens.GREATER_OP :
-            case Tokens.LESS_OP :
-            case Tokens.LESS_EQUALS :
-            case Tokens.NOT_EQUALS : {
+            case Tokens.EQUALS_OP:
+            case Tokens.GREATER_EQUALS:
+            case Tokens.GREATER_OP:
+            case Tokens.LESS_OP:
+            case Tokens.LESS_EQUALS:
+            case Tokens.NOT_EQUALS: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
@@ -4093,13 +4092,13 @@ public class ParserDQL extends ParserBase {
 
                 switch (token.tokenType) {
 
-                    case Tokens.ANY :
-                    case Tokens.SOME :
-                    case Tokens.ALL :
+                    case Tokens.ANY:
+                    case Tokens.SOME:
+                    case Tokens.ALL:
                         e = XreadQuantifiedComparisonRightPart(type, l);
                         break;
 
-                    default : {
+                    default: {
                         Expression row = XreadRowValuePredicand();
 
                         e = new ExpressionLogical(type, l, row);
@@ -4110,12 +4109,12 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            case Tokens.MATCH : {
+            case Tokens.MATCH: {
                 e = XreadMatchPredicateRightPart(l);
 
                 break;
             }
-            default : {
+            default: {
                 if (hasNot) {
                     throw unexpectedToken();
                 }
@@ -4154,7 +4153,7 @@ public class ParserDQL extends ParserBase {
         Expression l = new ExpressionLogical(OpTypes.GREATER_EQUAL, a, left);
         Expression r = new ExpressionLogical(OpTypes.SMALLER_EQUAL, a, right);
         ExpressionLogical leftToRight = new ExpressionLogical(OpTypes.AND, l,
-            r);
+                r);
 
         if (symmetric) {
             l = new ExpressionLogical(OpTypes.SMALLER_EQUAL, a, left);
@@ -4169,24 +4168,24 @@ public class ParserDQL extends ParserBase {
     }
 
     private ExpressionLogical XreadQuantifiedComparisonRightPart(int exprType,
-            Expression l) {
+                                                                 Expression l) {
 
-        int        tokenT      = token.tokenType;
-        int        exprSubType = 0;
+        int tokenT = token.tokenType;
+        int exprSubType = 0;
         Expression e;
 
         switch (token.tokenType) {
 
-            case Tokens.ANY :
-            case Tokens.SOME :
+            case Tokens.ANY:
+            case Tokens.SOME:
                 exprSubType = OpTypes.ANY_QUANTIFIED;
                 break;
 
-            case Tokens.ALL :
+            case Tokens.ALL:
                 exprSubType = OpTypes.ALL_QUANTIFIED;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "ParserDQL");
         }
 
@@ -4199,10 +4198,10 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.WITH :
-            case Tokens.TABLE :
-            case Tokens.VALUES :
-            case Tokens.SELECT :
+            case Tokens.WITH:
+            case Tokens.TABLE:
+            case Tokens.VALUES:
+            case Tokens.SELECT:
                 rewind(position);
 
                 TableDerived td = XreadSubqueryTableBody(OpTypes.IN);
@@ -4212,7 +4211,7 @@ public class ParserDQL extends ParserBase {
                 readThis(Tokens.CLOSEBRACKET);
                 break;
 
-            default :
+            default:
                 rewind(position);
 
                 e = readAggregateExpression(tokenT);
@@ -4230,8 +4229,8 @@ public class ParserDQL extends ParserBase {
 
     private ExpressionLogical XreadInPredicateRightPart(Expression l) {
 
-        int        degree = l.getDegree();
-        Expression e      = null;
+        int degree = l.getDegree();
+        Expression e = null;
 
         read();
         readThis(Tokens.OPENBRACKET);
@@ -4241,17 +4240,17 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.UNNEST :
+            case Tokens.UNNEST:
                 e = XreadCollectionDerivedTable(OpTypes.IN);
 
                 readThis(Tokens.CLOSEBRACKET);
                 readCloseBrackets(brackets);
                 break;
 
-            case Tokens.WITH :
-            case Tokens.TABLE :
-            case Tokens.VALUES :
-            case Tokens.SELECT : {
+            case Tokens.WITH:
+            case Tokens.TABLE:
+            case Tokens.VALUES:
+            case Tokens.SELECT: {
                 rewind(position);
 
                 TableDerived td = XreadSubqueryTableBody(OpTypes.IN);
@@ -4262,7 +4261,7 @@ public class ParserDQL extends ParserBase {
 
                 break;
             }
-            default : {
+            default: {
                 rewind(position);
 
                 e = XreadInValueListConstructor(degree);
@@ -4294,7 +4293,7 @@ public class ParserDQL extends ParserBase {
             Expression e = XreadValueExpression();
 
             if (e.getType() != OpTypes.ROW) {
-                e = new Expression(OpTypes.ROW, new Expression[]{ e });
+                e = new Expression(OpTypes.ROW, new Expression[]{e});
             }
 
             list.add(e);
@@ -4317,7 +4316,7 @@ public class ParserDQL extends ParserBase {
         for (int i = 0; i < array.length; i++) {
             if (array[i].getType() != OpTypes.ROW) {
                 array[i] = new Expression(OpTypes.ROW,
-                                          new Expression[]{ array[i] });
+                        new Expression[]{array[i]});
             }
 
             Expression[] args = array[i].nodes;
@@ -4344,7 +4343,7 @@ public class ParserDQL extends ParserBase {
 
         read();
 
-        Expression b      = XreadStringValueExpression();
+        Expression b = XreadStringValueExpression();
         Expression escape = null;
 
         if (token.tokenString.equals(Tokens.T_ESCAPE)) {
@@ -4358,8 +4357,8 @@ public class ParserDQL extends ParserBase {
 
     private ExpressionLogical XreadMatchPredicateRightPart(Expression a) {
 
-        boolean isUnique  = false;
-        int     matchType = OpTypes.MATCH_SIMPLE;
+        boolean isUnique = false;
+        int matchType = OpTypes.MATCH_SIMPLE;
 
         read();
 
@@ -4371,36 +4370,36 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            default :
+            default:
                 matchType = isUnique ? OpTypes.MATCH_UNIQUE_SIMPLE
-                                     : OpTypes.MATCH_SIMPLE;
+                        : OpTypes.MATCH_SIMPLE;
                 break;
 
-            case Tokens.SIMPLE :
+            case Tokens.SIMPLE:
                 read();
 
                 matchType = isUnique ? OpTypes.MATCH_UNIQUE_SIMPLE
-                                     : OpTypes.MATCH_SIMPLE;
+                        : OpTypes.MATCH_SIMPLE;
                 break;
 
-            case Tokens.PARTIAL :
+            case Tokens.PARTIAL:
                 read();
 
                 matchType = isUnique ? OpTypes.MATCH_UNIQUE_PARTIAL
-                                     : OpTypes.MATCH_PARTIAL;
+                        : OpTypes.MATCH_PARTIAL;
                 break;
 
-            case Tokens.FULL :
+            case Tokens.FULL:
                 read();
 
                 matchType = isUnique ? OpTypes.MATCH_UNIQUE_FULL
-                                     : OpTypes.MATCH_FULL;
+                        : OpTypes.MATCH_FULL;
                 break;
         }
 
-        int        mode = isUnique ? OpTypes.MATCH_SIMPLE
-                                   : OpTypes.IN;
-        Expression s    = XreadTableSubquery(mode);
+        int mode = isUnique ? OpTypes.MATCH_SIMPLE
+                : OpTypes.IN;
+        Expression s = XreadTableSubquery(mode);
 
         return new ExpressionLogical(matchType, a, s);
     }
@@ -4410,20 +4409,20 @@ public class ParserDQL extends ParserBase {
      * CONTAINS can have single value right side
      */
     private ExpressionLogical XreadPeriodPredicateRightPart(int opType,
-            Expression left) {
+                                                            Expression left) {
 
         boolean isLeftRow = false;
 
         switch (left.getType()) {
 
-            case OpTypes.COLUMN :
+            case OpTypes.COLUMN:
                 left = new ExpressionPeriod((ExpressionColumn) left);
                 break;
 
-            case OpTypes.PERIOD :
+            case OpTypes.PERIOD:
                 break;
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
                 if (left.nodes.length != 2) {
                     throw Error.error(ErrorCode.X_42564);
                 }
@@ -4431,7 +4430,7 @@ public class ParserDQL extends ParserBase {
                 isLeftRow = true;
                 break;
 
-            default :
+            default:
                 throw Error.error(ErrorCode.X_42564);
         }
 
@@ -4457,7 +4456,7 @@ public class ParserDQL extends ParserBase {
 
         switch (right.getType()) {
 
-            case OpTypes.COLUMN :
+            case OpTypes.COLUMN:
                 if (period) {
                     throw Error.error(ErrorCode.X_42564);
                 }
@@ -4465,7 +4464,7 @@ public class ParserDQL extends ParserBase {
                 right = new ExpressionPeriod((ExpressionColumn) right);
                 break;
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
                 if (right.nodes.length == 2) {
                     if (period) {
                         right = new ExpressionPeriod(right);
@@ -4475,14 +4474,14 @@ public class ParserDQL extends ParserBase {
                         }
 
                         return new ExpressionLogical(OpTypes.OVERLAPS, left,
-                                                     right);
+                                right);
                     }
 
                     break;
                 }
 
                 throw Error.error(ErrorCode.X_42564);
-            default :
+            default:
                 if (opType != OpTypes.RANGE_CONTAINS) {
                     throw Error.error(ErrorCode.X_42564);
                 }
@@ -4566,7 +4565,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.OPENBRACKET : {
+            case Tokens.OPENBRACKET: {
                 read();
 
                 int position = getPosition();
@@ -4575,19 +4574,19 @@ public class ParserDQL extends ParserBase {
 
                 switch (token.tokenType) {
 
-                    case Tokens.TABLE :
-                    case Tokens.VALUES :
-                    case Tokens.SELECT :
+                    case Tokens.TABLE:
+                    case Tokens.VALUES:
+                    case Tokens.SELECT:
                         rewind(position);
 
                         TableDerived td =
-                            XreadSubqueryTableBody(OpTypes.ROW_SUBQUERY);
+                                XreadSubqueryTableBody(OpTypes.ROW_SUBQUERY);
 
                         readThis(Tokens.CLOSEBRACKET);
 
                         return new Expression(OpTypes.ROW_SUBQUERY, td);
 
-                    default :
+                    default:
                         rewind(position);
 
                         e = XreadRowElementList(true);
@@ -4597,7 +4596,7 @@ public class ParserDQL extends ParserBase {
                         return e;
                 }
             }
-            case Tokens.ROW : {
+            case Tokens.ROW: {
                 read();
                 readThis(Tokens.OPENBRACKET);
 
@@ -4614,7 +4613,7 @@ public class ParserDQL extends ParserBase {
 
     Expression XreadRowElementList(boolean multiple) {
 
-        Expression    e;
+        Expression e;
         HsqlArrayList list = new HsqlArrayList();
 
         while (true) {
@@ -4660,7 +4659,7 @@ public class ParserDQL extends ParserBase {
     Table XreadTableSubqueryOrNull(boolean parens) {
 
         boolean joinedTable = false;
-        int     position;
+        int position;
 
         position = getPosition();
 
@@ -4668,19 +4667,19 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.TABLE :
-            case Tokens.VALUES :
-            case Tokens.SELECT :
-            case Tokens.WITH :
+            case Tokens.TABLE:
+            case Tokens.VALUES:
+            case Tokens.SELECT:
+            case Tokens.WITH:
                 break;
 
-            case Tokens.OPENBRACKET :
+            case Tokens.OPENBRACKET:
                 if (parens) {
                     break;
                 }
 
-            // fall through
-            default :
+                // fall through
+            default:
                 joinedTable = true;
         }
 
@@ -4731,7 +4730,7 @@ public class ParserDQL extends ParserBase {
     QuerySpecification XreadJoinedTableAsView() {
 
         QuerySpecification select = new QuerySpecification(compileContext);
-        Expression         e      = new ExpressionColumn(OpTypes.MULTICOLUMN);
+        Expression e = new ExpressionColumn(OpTypes.MULTICOLUMN);
 
         select.addSelectColumnExpression(e);
         XreadTableReference(select);
@@ -4740,15 +4739,15 @@ public class ParserDQL extends ParserBase {
     }
 
     TableDerived XreadTableNamedSubqueryBody(HsqlName name,
-            HsqlName[] columnNames, int type) {
+                                             HsqlName[] columnNames, int type) {
 
         TableDerived td;
-        int          position = getPosition();
-        int          depth    = compileContext.getDepth();
+        int position = getPosition();
+        int depth = compileContext.getDepth();
 
         switch (type) {
 
-            case OpTypes.RECURSIVE_SUBQUERY : {
+            case OpTypes.RECURSIVE_SUBQUERY: {
                 try {
                     td = XreadRecursiveSubqueryBody(name, columnNames);
 
@@ -4760,7 +4759,7 @@ public class ParserDQL extends ParserBase {
             }
 
             // fall through
-            case OpTypes.TABLE_SUBQUERY : {
+            case OpTypes.TABLE_SUBQUERY: {
                 try {
                     td = XreadSubqueryTableBody(name, type);
 
@@ -4768,7 +4767,7 @@ public class ParserDQL extends ParserBase {
                         td.canRecompile = true;
 
                         td.queryExpression.resolve(
-                            session, compileContext.getOuterRanges(), null);
+                                session, compileContext.getOuterRanges(), null);
                     }
 
                     td.prepareTable(session, columnNames);
@@ -4787,7 +4786,7 @@ public class ParserDQL extends ParserBase {
                     throw e;
                 }
             }
-            default :
+            default:
                 throw unexpectedToken();
         }
 
@@ -4795,7 +4794,7 @@ public class ParserDQL extends ParserBase {
     }
 
     TableDerived XreadRecursiveSubqueryBody(HsqlName name,
-            HsqlName[] columnNames) {
+                                            HsqlName[] columnNames) {
 
         int position = getPosition();
 
@@ -4809,7 +4808,7 @@ public class ParserDQL extends ParserBase {
         leftQuerySpecification.resolve(session);
 
         TableDerived td = newSubQueryTable(name, leftQuerySpecification,
-                                           OpTypes.TABLE_SUBQUERY);
+                OpTypes.TABLE_SUBQUERY);
 
         compileContext.decrementDepth();
         td.prepareTable(session, columnNames);
@@ -4828,7 +4827,7 @@ public class ParserDQL extends ParserBase {
 
         QuerySpecification rightQuerySpecification = XreadSimpleTable();
         QueryExpression queryExpression = new QueryExpression(compileContext,
-            leftQuerySpecification);
+                leftQuerySpecification);
 
         rightQuerySpecification.isBaseMergeable = false;
 
@@ -4836,13 +4835,13 @@ public class ParserDQL extends ParserBase {
                 compileContext.getOuterRanges());
         queryExpression.addUnion(rightQuerySpecification, unionType);
 
-        queryExpression.isRecursive    = true;
+        queryExpression.isRecursive = true;
         queryExpression.recursiveTable = td;
 
         queryExpression.resolve(session);
 
         TableDerived maintd = newSubQueryTable(name, queryExpression,
-                                               OpTypes.TABLE_SUBQUERY);
+                OpTypes.TABLE_SUBQUERY);
 
         maintd.prepareTable(session, columnNames);
         maintd.setSQL(getLastPart(position));
@@ -4855,8 +4854,8 @@ public class ParserDQL extends ParserBase {
 
         HsqlName name = database.nameManager.getSubqueryTableName();
         TableDerived td = new TableDerived(database, name,
-                                           TableBase.SYSTEM_SUBQUERY, null, e,
-                                           opType, compileContext.getDepth());
+                TableBase.SYSTEM_SUBQUERY, null, e,
+                opType, compileContext.getDepth());
 
         return td;
     }
@@ -4873,9 +4872,9 @@ public class ParserDQL extends ParserBase {
         }
 
         TableDerived td = new TableDerived(database, name,
-                                           TableBase.SYSTEM_SUBQUERY, qe,
-                                           null, opType,
-                                           compileContext.getDepth());
+                TableBase.SYSTEM_SUBQUERY, qe,
+                null, opType,
+                compileContext.getDepth());
 
         return td;
     }
@@ -4891,7 +4890,7 @@ public class ParserDQL extends ParserBase {
         compileContext.incrementDepth();
 
         QueryExpression queryExpression = XreadQueryExpression();
-        TableDerived    td              = null;
+        TableDerived td = null;
 
         if (type == OpTypes.EXISTS) {
             queryExpression.setAsExists();
@@ -4933,18 +4932,18 @@ public class ParserDQL extends ParserBase {
         }
 
         TableDerived td = new TableDerived(database, view.getName(),
-                                           TableBase.VIEW_TABLE,
-                                           queryExpression, null,
-                                           OpTypes.NONE,
-                                           compileContext.getDepth());
+                TableBase.VIEW_TABLE,
+                queryExpression, null,
+                OpTypes.NONE,
+                compileContext.getDepth());
 
-        td.view        = view;
-        td.columnList  = view.columnList;
+        td.view = view;
+        td.columnList = view.columnList;
         td.columnCount = view.columnList.size();
 
         td.createPrimaryKey();
 
-        td.triggerList  = view.triggerList;
+        td.triggerList = view.triggerList;
         td.triggerLists = view.triggerLists;
 
         compileContext.decrementDepth();
@@ -4954,9 +4953,9 @@ public class ParserDQL extends ParserBase {
 
     Expression XreadContextuallyTypedTable(int degree) {
 
-        Expression   e       = readRow();
-        Expression[] list    = e.nodes;
-        boolean      isTable = false;
+        Expression e = readRow();
+        Expression[] list = e.nodes;
+        boolean isTable = false;
 
         if (degree == 1) {
             if (e.getType() == OpTypes.ROW) {
@@ -4965,7 +4964,7 @@ public class ParserDQL extends ParserBase {
                 for (int i = 0; i < list.length; i++) {
                     if (list[i].getType() != OpTypes.ROW) {
                         list[i] = new Expression(OpTypes.ROW,
-                                                 new Expression[]{ list[i] });
+                                new Expression[]{list[i]});
                     } else if (list[i].nodes.length != degree) {
                         throw Error.error(ErrorCode.X_42564);
                     }
@@ -4973,8 +4972,8 @@ public class ParserDQL extends ParserBase {
 
                 return e;
             } else {
-                e = new Expression(OpTypes.ROW, new Expression[]{ e });
-                e = new Expression(OpTypes.VALUELIST, new Expression[]{ e });
+                e = new Expression(OpTypes.ROW, new Expression[]{e});
+                e = new Expression(OpTypes.VALUELIST, new Expression[]{e});
 
                 return e;
             }
@@ -5017,7 +5016,7 @@ public class ParserDQL extends ParserBase {
                 throw Error.error(ErrorCode.X_42564);
             }
 
-            e = new Expression(OpTypes.VALUELIST, new Expression[]{ e });
+            e = new Expression(OpTypes.VALUELIST, new Expression[]{e});
         }
 
         return e;
@@ -5029,7 +5028,7 @@ public class ParserDQL extends ParserBase {
 
         compileContext.incrementDepth();
 
-        Expression   e  = XreadInValueList(degree);
+        Expression e = XreadInValueList(degree);
         TableDerived td = newSubQueryTable(e, OpTypes.IN);
 
         td.setSQL(getLastPart(position));
@@ -5045,7 +5044,7 @@ public class ParserDQL extends ParserBase {
 
         compileContext.incrementDepth();
 
-        Expression   e  = XreadRowValueExpressionListBody();
+        Expression e = XreadRowValueExpressionListBody();
         TableDerived td = prepareSubqueryTable(e, null);
 
         compileContext.decrementDepth();
@@ -5054,10 +5053,10 @@ public class ParserDQL extends ParserBase {
     }
 
     private TableDerived prepareSubqueryTable(Expression e,
-            HsqlName[] colNames) {
+                                              HsqlName[] colNames) {
 
         HsqlList unresolved = e.resolveColumnReferences(session,
-            RangeGroup.emptyGroup, compileContext.getOuterRanges(), null);
+                RangeGroup.emptyGroup, compileContext.getOuterRanges(), null);
 
         ExpressionColumn.checkColumnsResolved(unresolved);
         e.resolveTypes(session, null);
@@ -5075,13 +5074,13 @@ public class ParserDQL extends ParserBase {
         Expression r = null;
 
         while (true) {
-            int        brackets = readOpenBrackets();
-            Expression e        = readRow();
+            int brackets = readOpenBrackets();
+            Expression e = readRow();
 
             readCloseBrackets(brackets);
 
             if (r == null) {
-                r = new Expression(OpTypes.ROW, new Expression[]{ e });
+                r = new Expression(OpTypes.ROW, new Expression[]{e});
             } else {
                 r.nodes = (Expression[]) ArrayUtil.resizeArray(r.nodes,
                         r.nodes.length + 1);
@@ -5095,8 +5094,8 @@ public class ParserDQL extends ParserBase {
             read();
         }
 
-        Expression[] list   = r.nodes;
-        int          degree = 1;
+        Expression[] list = r.nodes;
+        int degree = 1;
 
         if (list[0].getType() == OpTypes.ROW) {
             degree = list[0].nodes.length;
@@ -5115,7 +5114,7 @@ public class ParserDQL extends ParserBase {
                 }
 
                 list[i] = new Expression(OpTypes.ROW,
-                                         new Expression[]{ list[i] });
+                        new Expression[]{list[i]});
             }
         }
 
@@ -5126,7 +5125,7 @@ public class ParserDQL extends ParserBase {
                                         LongDeque colIndexList) {
 
         ColumnSchema column = null;
-        int          index  = -1;
+        int index = -1;
 
         checkIsIdentifier();
 
@@ -5140,8 +5139,8 @@ public class ParserDQL extends ParserBase {
             }
 
             index = rangeVars[i].findColumn(token.namePrePrefix,
-                                            token.namePrefix,
-                                            token.tokenString);
+                    token.namePrefix,
+                    token.tokenString);
 
             if (index > -1) {
                 column = rangeVars[i].getColumn(index);
@@ -5184,7 +5183,7 @@ public class ParserDQL extends ParserBase {
     Expression XreadCollectionDerivedTable(int type) {
 
         boolean ordinality = false;
-        int     position   = getPosition();
+        int position = getPosition();
 
         readThis(Tokens.UNNEST);
         readThis(Tokens.OPENBRACKET);
@@ -5216,7 +5215,7 @@ public class ParserDQL extends ParserBase {
             ordinality = true;
         }
 
-        Expression   e  = new ExpressionTable(array, ordinality);
+        Expression e = new ExpressionTable(array, ordinality);
         TableDerived td = newSubQueryTable(e, type);
 
         td.setSQL(getLastPart(position));
@@ -5244,7 +5243,7 @@ public class ParserDQL extends ParserBase {
 
         readThis(Tokens.CLOSEBRACKET);
 
-        e = new ExpressionTable(new Expression[]{ e }, false);
+        e = new ExpressionTable(new Expression[]{e}, false);
 
         TableDerived td = newSubQueryTable(e, OpTypes.TABLE_SUBQUERY);
 
@@ -5284,7 +5283,7 @@ public class ParserDQL extends ParserBase {
             read();
 
             Collation collation = database.schemaManager.getCollation(session,
-                token.tokenString, token.namePrefix);
+                    token.tokenString, token.namePrefix);
 
             return collation;
         }
@@ -5319,8 +5318,8 @@ public class ParserDQL extends ParserBase {
             } else if (r.getType() == OpTypes.ROW) {
                 if (e.getType() == OpTypes.ROW
                         && r.nodes[0].getType() != OpTypes.ROW) {
-                    r = new Expression(OpTypes.ROW, new Expression[] {
-                        r, e
+                    r = new Expression(OpTypes.ROW, new Expression[]{
+                            r, e
                     });
                 } else {
                     r.nodes = (Expression[]) ArrayUtil.resizeArray(r.nodes,
@@ -5328,8 +5327,8 @@ public class ParserDQL extends ParserBase {
                     r.nodes[r.nodes.length - 1] = e;
                 }
             } else {
-                r = new Expression(OpTypes.ROW, new Expression[] {
-                    r, e
+                r = new Expression(OpTypes.ROW, new Expression[]{
+                        r, e
                 });
             }
 
@@ -5373,14 +5372,14 @@ public class ParserDQL extends ParserBase {
 
                 if (l == newCondition) {
                     newCondition =
-                        new ExpressionLogical(l, XreadRowValuePredicand());
+                            new ExpressionLogical(l, XreadRowValuePredicand());
                 }
 
                 if (condition == null) {
                     condition = newCondition;
                 } else {
                     condition = new ExpressionLogical(OpTypes.OR, condition,
-                                                      newCondition);
+                            newCondition);
                 }
 
                 if (token.tokenType == Tokens.COMMA) {
@@ -5393,7 +5392,7 @@ public class ParserDQL extends ParserBase {
 
         readThis(Tokens.THEN);
 
-        Expression current  = XreadValueExpression();
+        Expression current = XreadValueExpression();
         Expression elseExpr = null;
 
         if (token.tokenType == Tokens.WHEN) {
@@ -5413,9 +5412,9 @@ public class ParserDQL extends ParserBase {
         }
 
         Expression alt = new ExpressionOp(OpTypes.ALTERNATIVE, current,
-                                          elseExpr);
+                elseExpr);
         Expression casewhen = new ExpressionOp(OpTypes.CASEWHEN, condition,
-                                               alt);
+                alt);
 
         return casewhen;
     }
@@ -5425,12 +5424,12 @@ public class ParserDQL extends ParserBase {
      */
     private Expression readCaseWhenExpressionOrNull() {
 
-        Expression l        = null;
-        int        position = getPosition();
+        Expression l = null;
+        int position = getPosition();
 
         if (token.tokenType == Tokens.IF) {
-            if (database.sqlSyntaxMys || database.sqlSyntaxMss) {}
-            else {
+            if (database.sqlSyntaxMys || database.sqlSyntaxMss) {
+            } else {
                 return null;
             }
         }
@@ -5452,7 +5451,7 @@ public class ParserDQL extends ParserBase {
         readThis(Tokens.COMMA);
 
         Expression thenelse = new ExpressionOp(OpTypes.ALTERNATIVE, then,
-                                               XreadValueExpression());
+                XreadValueExpression());
 
         l = new ExpressionOp(OpTypes.CASEWHEN, l, thenelse);
 
@@ -5467,7 +5466,7 @@ public class ParserDQL extends ParserBase {
     private Expression readCastExpression() {
 
         Expression e;
-        Type       typeObject;
+        Type typeObject;
 
         read();
         readThis(Tokens.OPENBRACKET);
@@ -5493,8 +5492,8 @@ public class ParserDQL extends ParserBase {
 
         Expression e;
         Expression mode = null;
-        Type       typeObject;
-        int        position = getPosition();
+        Type typeObject;
+        int position = getPosition();
 
         read();
 
@@ -5544,9 +5543,9 @@ public class ParserDQL extends ParserBase {
      */
     private Expression readColumnOrFunctionExpression() {
 
-        String  name           = token.tokenString;
+        String name = token.tokenString;
         boolean isSimpleQuoted = isDelimitedSimpleName();
-        Token   recordedToken  = getRecordedToken();
+        Token recordedToken = getRecordedToken();
 
         checkIsIdentifier();
 
@@ -5564,49 +5563,49 @@ public class ParserDQL extends ParserBase {
             checkValidCatalogName(recordedToken.namePrePrePrefix);
 
             Expression column =
-                new ExpressionColumn(recordedToken.namePrePrefix,
-                                     recordedToken.namePrefix, name);
+                    new ExpressionColumn(recordedToken.namePrePrefix,
+                            recordedToken.namePrefix, name);
 
             return column;
         }
 
         RoutineSchema routineSchema =
-            (RoutineSchema) database.schemaManager.findSchemaObject(session,
-                name, recordedToken.namePrefix, recordedToken.namePrePrefix,
-                SchemaObject.FUNCTION);
+                (RoutineSchema) database.schemaManager.findSchemaObject(session,
+                        name, recordedToken.namePrefix, recordedToken.namePrePrefix,
+                        SchemaObject.FUNCTION);
 
         if (routineSchema == null && recordedToken.namePrefix == null
                 && !isViewDefinition) {
             String schema = session.getSchemaName(null);
             ReferenceObject synonym =
-                database.schemaManager.findSynonym(recordedToken.tokenString,
-                                                   schema,
-                                                   SchemaObject.ROUTINE);
+                    database.schemaManager.findSynonym(recordedToken.tokenString,
+                            schema,
+                            SchemaObject.ROUTINE);
 
             if (synonym != null) {
                 HsqlName synonymName = synonym.getTarget();
 
                 routineSchema =
-                    (RoutineSchema) database.schemaManager.findSchemaObject(
-                        synonymName.name, synonymName.schema.name,
-                        SchemaObject.ROUTINE);
+                        (RoutineSchema) database.schemaManager.findSchemaObject(
+                                synonymName.name, synonymName.schema.name,
+                                SchemaObject.ROUTINE);
             }
         }
 
         if (routineSchema == null && isSimpleQuoted) {
             HsqlName schema =
-                database.schemaManager.getDefaultSchemaHsqlName();
+                    database.schemaManager.getDefaultSchemaHsqlName();
 
             routineSchema =
-                (RoutineSchema) database.schemaManager.findSchemaObject(name,
-                    schema.name, SchemaObject.FUNCTION);
+                    (RoutineSchema) database.schemaManager.findSchemaObject(name,
+                            schema.name, SchemaObject.FUNCTION);
 
             if (routineSchema == null) {
                 Routine.createRoutines(session, schema, name);
 
                 routineSchema =
-                    (RoutineSchema) database.schemaManager.findSchemaObject(
-                        name, schema.name, SchemaObject.FUNCTION);
+                        (RoutineSchema) database.schemaManager.findSchemaObject(
+                                name, schema.name, SchemaObject.FUNCTION);
             }
         }
 
@@ -5640,8 +5639,8 @@ public class ParserDQL extends ParserBase {
             }
         }
 
-        FunctionSQLInvoked function  = new FunctionSQLInvoked(routineSchema);
-        Expression[]       arguments = new Expression[list.size()];
+        FunctionSQLInvoked function = new FunctionSQLInvoked(routineSchema);
+        Expression[] arguments = new Expression[list.size()];
 
         list.toArray(arguments);
         function.setArguments(arguments);
@@ -5654,7 +5653,7 @@ public class ParserDQL extends ParserBase {
     Expression readFunction() {
 
         FunctionSQL function = FunctionCustom.newCustomFunction(session,
-            token.tokenString, token.tokenType);
+                token.tokenString, token.tokenType);
 
         if (function != null) {
             int pos = getPosition();
@@ -5677,7 +5676,7 @@ public class ParserDQL extends ParserBase {
             }
         } else if (isReservedKey()) {
             function = FunctionSQL.newSQLFunction(token.tokenString,
-                                                  compileContext);
+                    compileContext);
 
             if (function != null) {
                 Expression e = readSQLFunction(function);
@@ -5738,9 +5737,9 @@ public class ParserDQL extends ParserBase {
             return null;
         }
 
-        Expression casewhen    = null;
+        Expression casewhen = null;
         Expression alternative = null;
-        Expression main        = XreadValueExpression();
+        Expression main = XreadValueExpression();
 
         readThis(Tokens.COMMA);
 
@@ -5760,7 +5759,7 @@ public class ParserDQL extends ParserBase {
             }
 
             Expression l = new ExpressionLogical(OpTypes.NOT_DISTINCT, main,
-                                                 v);
+                    v);
             Expression r = XreadValueExpression();
             Expression a = new ExpressionOp(OpTypes.ALTERNATIVE, r, null);
             Expression c = new ExpressionOp(OpTypes.CASEWHEN, l, a);
@@ -5808,7 +5807,7 @@ public class ParserDQL extends ParserBase {
         readThis(Tokens.COMMA);
 
         do {
-            r    = XreadValueExpression();
+            r = XreadValueExpression();
             root = new ExpressionArithmetic(OpTypes.CONCAT, root, r);
 
             if (token.tokenType == Tokens.COMMA) {
@@ -5825,8 +5824,8 @@ public class ParserDQL extends ParserBase {
 
     private Expression readConcatSeparatorExpressionOrNull() {
 
-        HsqlArrayList array    = new HsqlArrayList();
-        int           position = getPosition();
+        HsqlArrayList array = new HsqlArrayList();
+        int position = getPosition();
 
         read();
 
@@ -5952,7 +5951,7 @@ public class ParserDQL extends ParserBase {
         readThis(Tokens.COMMA);
 
         Expression alternative = new ExpressionOp(OpTypes.ALTERNATIVE,
-            new ExpressionValue((Object) null, (Type) null), c);
+                new ExpressionValue((Object) null, (Type) null), c);
 
         c = new ExpressionLogical(c, XreadValueExpression());
         c = new ExpressionOp(OpTypes.CASEWHEN, c, alternative);
@@ -5981,9 +5980,9 @@ public class ParserDQL extends ParserBase {
 
         readThis(Tokens.COMMA);
 
-        Expression e         = XreadValueExpression();
+        Expression e = XreadValueExpression();
         Expression condition = new ExpressionLogical(OpTypes.IS_NULL, c);
-        Expression alt       = new ExpressionOp(OpTypes.ALTERNATIVE, e, c);
+        Expression alt = new ExpressionOp(OpTypes.ALTERNATIVE, e, c);
 
         c = new ExpressionOp(OpTypes.CASEWHEN, condition, alt);
 
@@ -6017,9 +6016,9 @@ public class ParserDQL extends ParserBase {
 
         readThis(Tokens.COMMA);
 
-        Expression e2        = XreadValueExpression();
+        Expression e2 = XreadValueExpression();
         Expression condition = new ExpressionLogical(OpTypes.IS_NULL, c);
-        Expression alt       = new ExpressionOp(OpTypes.ALTERNATIVE, e2, e1);
+        Expression alt = new ExpressionOp(OpTypes.ALTERNATIVE, e2, e1);
 
         c = new ExpressionOp(OpTypes.CASEWHEN, condition, alt);
 
@@ -6053,13 +6052,13 @@ public class ParserDQL extends ParserBase {
             }
 
             Expression expressionNull = new ExpressionValue((Object) null,
-                (Type) null);
+                    (Type) null);
             Expression condition = new ExpressionLogical(OpTypes.IS_NULL,
-                current);
+                    current);
             Expression alt = new ExpressionOp(OpTypes.ALTERNATIVE,
-                                              expressionNull, current);
+                    expressionNull, current);
             Expression casewhen = new ExpressionOp(OpTypes.CASEWHEN,
-                                                   condition, alt);
+                    condition, alt);
 
             if (session.database.sqlSyntaxMys) {
                 alt.setSubType(OpTypes.CAST);
@@ -6092,8 +6091,8 @@ public class ParserDQL extends ParserBase {
             return function;
         }
 
-        HsqlArrayList exprList      = new HsqlArrayList();
-        boolean       isOpenBracket = token.tokenType == Tokens.OPENBRACKET;
+        HsqlArrayList exprList = new HsqlArrayList();
+        boolean isOpenBracket = token.tokenType == Tokens.OPENBRACKET;
 
         if (!isOpenBracket) {
             if (parseList[0] == Tokens.X_OPTION) {
@@ -6118,7 +6117,7 @@ public class ParserDQL extends ParserBase {
             read();
 
             parseList = function.parseListAlt;
-            exprList  = new HsqlArrayList();
+            exprList = new HsqlArrayList();
 
             readExpression(exprList, parseList, 0, parseList.length, false);
 
@@ -6141,7 +6140,7 @@ public class ParserDQL extends ParserBase {
 
             switch (exprType) {
 
-                case Tokens.QUESTION : {
+                case Tokens.QUESTION: {
                     Expression e = null;
 
                     e = XreadAllTypesCommonValueExpression(false);
@@ -6150,10 +6149,10 @@ public class ParserDQL extends ParserBase {
 
                     continue;
                 }
-                case Tokens.X_TOKEN : {
+                case Tokens.X_TOKEN: {
                     if (super.isUndelimitedSimpleName()) {
                         Expression e = new ExpressionValue(token.tokenString,
-                                                           Type.SQL_VARCHAR);
+                                Type.SQL_VARCHAR);
 
                         read();
                         exprList.add(e);
@@ -6163,9 +6162,9 @@ public class ParserDQL extends ParserBase {
 
                     throw unexpectedToken();
                 }
-                case Tokens.X_POS_INTEGER : {
-                    Expression e     = null;
-                    Integer    value = readIntegerObject();
+                case Tokens.X_POS_INTEGER: {
+                    Expression e = null;
+                    Integer value = readIntegerObject();
 
                     if (value.intValue() < 0) {
                         throw Error.error(ErrorCode.X_42592);
@@ -6177,17 +6176,17 @@ public class ParserDQL extends ParserBase {
 
                     continue;
                 }
-                case Tokens.X_OPTION : {
+                case Tokens.X_OPTION: {
                     i++;
 
-                    int expressionCount  = exprList.size();
-                    int position         = getPosition();
-                    int elementCount     = parseList[i++];
+                    int expressionCount = exprList.size();
+                    int position = getPosition();
+                    int elementCount = parseList[i++];
                     int initialExprIndex = exprList.size();
 
                     try {
                         readExpression(exprList, parseList, i, elementCount,
-                                       true);
+                                true);
                     } catch (HsqlException ex) {
                         ex.setLevel(compileContext.subqueryDepth);
 
@@ -6222,17 +6221,17 @@ public class ParserDQL extends ParserBase {
 
                     continue;
                 }
-                case Tokens.X_REPEAT : {
+                case Tokens.X_REPEAT: {
                     i++;
 
                     int elementCount = parseList[i++];
-                    int parseIndex   = i;
+                    int parseIndex = i;
 
                     while (true) {
                         int initialExprIndex = exprList.size();
 
                         readExpression(exprList, parseList, parseIndex,
-                                       elementCount, true);
+                                elementCount, true);
 
                         if (exprList.size() == initialExprIndex) {
                             break;
@@ -6243,19 +6242,19 @@ public class ParserDQL extends ParserBase {
 
                     continue;
                 }
-                case Tokens.X_KEYSET : {
-                    int        elementCount = parseList[++i];
-                    Expression e            = null;
+                case Tokens.X_KEYSET: {
+                    int elementCount = parseList[++i];
+                    Expression e = null;
 
                     if (ArrayUtil.find(parseList, token.tokenType, i
-                                       + 1, elementCount) == -1) {
+                            + 1, elementCount) == -1) {
                         if (!isOption) {
                             throw unexpectedToken();
                         }
                     } else {
                         e = new ExpressionValue(
-                            ValuePool.getInt(token.tokenType),
-                            Type.SQL_INTEGER);
+                                ValuePool.getInt(token.tokenType),
+                                Type.SQL_INTEGER);
 
                         read();
                     }
@@ -6266,10 +6265,10 @@ public class ParserDQL extends ParserBase {
 
                     continue;
                 }
-                case Tokens.OPENBRACKET :
-                case Tokens.CLOSEBRACKET :
-                case Tokens.COMMA :
-                default :
+                case Tokens.OPENBRACKET:
+                case Tokens.CLOSEBRACKET:
+                case Tokens.COMMA:
+                default:
                     if (token.tokenType != exprType) {
                         throw unexpectedToken();
                     }
@@ -6285,7 +6284,7 @@ public class ParserDQL extends ParserBase {
 
         switch (opType) {
 
-            case OpTypes.SEQUENCE :
+            case OpTypes.SEQUENCE:
                 if (token.tokenType == Tokens.NEXT) {
                     read();
 
@@ -6297,10 +6296,10 @@ public class ParserDQL extends ParserBase {
 
                     readThis(Tokens.VALUE);
                 } else if (database.sqlSyntaxDb2
-                           && token.tokenType == Tokens.NEXTVAL) {
+                        && token.tokenType == Tokens.NEXTVAL) {
                     read();
                 } else if (database.sqlSyntaxDb2
-                           && token.tokenType == Tokens.PREVVAL) {
+                        && token.tokenType == Tokens.PREVVAL) {
                     read();
                 } else {
                     rewind(position);
@@ -6309,19 +6308,19 @@ public class ParserDQL extends ParserBase {
                 }
                 break;
 
-            case OpTypes.SEQUENCE_CURRENT :
+            case OpTypes.SEQUENCE_CURRENT:
                 read();
                 readThis(Tokens.VALUE);
                 break;
 
-            default :
+            default:
         }
 
         readThis(Tokens.FOR);
         checkIsSchemaObjectName();
 
         NumberSequence sequence = database.schemaManager.findSequence(session,
-            token.tokenString, token.namePrefix);
+                token.tokenString, token.namePrefix);
 
         if (sequence == null) {
             throw Error.error(ErrorCode.X_42501, token.tokenString);
@@ -6344,7 +6343,7 @@ public class ParserDQL extends ParserBase {
         checkIsSimpleName();
 
         SimpleName name = HsqlNameManager.getSimpleName(token.tokenString,
-            isDelimitedIdentifier());
+                isDelimitedIdentifier());
 
         read();
 
@@ -6365,17 +6364,17 @@ public class ParserDQL extends ParserBase {
         checkIsSchemaObjectName();
 
         HsqlName hsqlName = database.nameManager.newHsqlName(token.tokenString,
-            isDelimitedIdentifier(), type);
+                isDelimitedIdentifier(), type);
 
         if (token.namePrefix != null) {
             switch (type) {
 
-                case SchemaObject.LABEL :
-                case SchemaObject.VARIABLE :
-                case SchemaObject.GRANTEE :
-                case SchemaObject.CATALOG :
+                case SchemaObject.LABEL:
+                case SchemaObject.VARIABLE:
+                case SchemaObject.GRANTEE:
+                case SchemaObject.CATALOG:
                     throw unexpectedToken();
-                case SchemaObject.CURSOR : {
+                case SchemaObject.CURSOR: {
                     if (token.namePrePrefix == null
                             && !token.isDelimitedPrefix
                             && (Tokens.T_MODULE.equals(token.namePrefix))) {
@@ -6387,7 +6386,7 @@ public class ParserDQL extends ParserBase {
 
                     break;
                 }
-                case SchemaObject.SCHEMA : {
+                case SchemaObject.SCHEMA: {
                     checkValidCatalogName(token.namePrefix);
 
                     if (token.namePrePrefix != null) {
@@ -6396,8 +6395,8 @@ public class ParserDQL extends ParserBase {
 
                     break;
                 }
-                case SchemaObject.SERVER :
-                case SchemaObject.WRAPPER : {
+                case SchemaObject.SERVER:
+                case SchemaObject.WRAPPER: {
                     checkValidCatalogName(token.namePrefix);
 
                     if (token.namePrePrefix != null) {
@@ -6406,26 +6405,26 @@ public class ParserDQL extends ParserBase {
 
                     break;
                 }
-                case SchemaObject.COLUMN : {
+                case SchemaObject.COLUMN: {
                     throw tooManyIdentifiers();
                 }
-                default : {
+                default: {
                     checkValidCatalogName(token.namePrePrefix);
 
                     HsqlName schemaName;
 
                     if (checkSchema) {
                         schemaName =
-                            session.getSchemaHsqlName(token.namePrefix);
+                                session.getSchemaHsqlName(token.namePrefix);
                     } else {
                         schemaName =
-                            session.database.schemaManager.findSchemaHsqlName(
-                                token.namePrefix);
+                                session.database.schemaManager.findSchemaHsqlName(
+                                        token.namePrefix);
 
                         if (schemaName == null) {
                             schemaName = database.nameManager.newHsqlName(
-                                token.namePrefix, isDelimitedIdentifier(),
-                                SchemaObject.SCHEMA);
+                                    token.namePrefix, isDelimitedIdentifier(),
+                                    SchemaObject.SCHEMA);
                         }
                     }
 
@@ -6476,8 +6475,8 @@ public class ParserDQL extends ParserBase {
 
         String schema = session.getSchemaName(token.namePrefix);
         SchemaObject object =
-            database.schemaManager.getSchemaObject(token.tokenString, schema,
-                type);
+                database.schemaManager.getSchemaObject(token.tokenString, schema,
+                        type);
 
         read();
 
@@ -6489,8 +6488,8 @@ public class ParserDQL extends ParserBase {
         checkIsSchemaObjectName();
 
         SchemaObject object =
-            database.schemaManager.getSchemaObject(token.tokenString,
-                schemaName.name, type);
+                database.schemaManager.getSchemaObject(token.tokenString,
+                        schemaName.name, type);
 
         if (token.namePrefix != null) {
             if (!token.namePrefix.equals(schemaName.name)) {
@@ -6525,21 +6524,21 @@ public class ParserDQL extends ParserBase {
         lastSynonym = null;
 
         Table table = database.schemaManager.findTable(session,
-            token.tokenString, token.namePrefix, token.namePrePrefix);
+                token.tokenString, token.namePrefix, token.namePrePrefix);
 
         if (table == null) {
             boolean trySynonym = orSynonym && token.namePrefix == null
-                                 && !isViewDefinition;
+                    && !isViewDefinition;
 
             if (trySynonym) {
                 ReferenceObject reference = database.schemaManager.findSynonym(
-                    token.tokenString,
-                    session.getCurrentSchemaHsqlName().name,
-                    SchemaObject.TABLE);
+                        token.tokenString,
+                        session.getCurrentSchemaHsqlName().name,
+                        SchemaObject.TABLE);
 
                 if (reference != null) {
                     table = (Table) database.schemaManager.getSchemaObject(
-                        reference.getTarget());
+                            reference.getTarget());
                     lastSynonym = reference.getName();
                 }
             }
@@ -6585,7 +6584,7 @@ public class ParserDQL extends ParserBase {
 
         switch (token.tokenType) {
 
-            case Tokens.AS : {
+            case Tokens.AS: {
                 read();
                 readThis(Tokens.OF);
 
@@ -6593,7 +6592,7 @@ public class ParserDQL extends ParserBase {
 
                 return new ExpressionPeriodOp(point);
             }
-            case Tokens.BETWEEN : {
+            case Tokens.BETWEEN: {
                 read();
                 readIfThis(Tokens.ASYMMETRIC);
 
@@ -6605,7 +6604,7 @@ public class ParserDQL extends ParserBase {
 
                 return new ExpressionPeriodOp(pointStart, pointEnd);
             }
-            case Tokens.FROM : {
+            case Tokens.FROM: {
                 read();
 
                 Expression pointStart = XreadValueExpression();
@@ -6616,7 +6615,7 @@ public class ParserDQL extends ParserBase {
 
                 return new ExpressionPeriodOp(pointStart, pointEnd);
             }
-            default :
+            default:
                 throw unexpectedToken();
         }
     }
@@ -6650,9 +6649,9 @@ public class ParserDQL extends ParserBase {
 
         readThis(Tokens.TO);
 
-        Expression       pointEnd = XreadValueExpression();
-        ExpressionPeriod left     = new ExpressionPeriod(period);
-        ExpressionPeriod right    = new ExpressionPeriod(pointStart, pointEnd);
+        Expression pointEnd = XreadValueExpression();
+        ExpressionPeriod left = new ExpressionPeriod(period);
+        ExpressionPeriod right = new ExpressionPeriod(pointStart, pointEnd);
 
         return new ExpressionPeriodOp(OpTypes.RANGE_OVERLAPS, left, right);
     }
@@ -6669,7 +6668,7 @@ public class ParserDQL extends ParserBase {
         }
 
         int index = rangeVar.findColumn(token.namePrePrefix, token.namePrefix,
-                                        token.tokenString);
+                token.tokenString);
 
         if (index == -1) {
             throw Error.error(ErrorCode.X_42501, token.tokenString);
@@ -6709,38 +6708,38 @@ public class ParserDQL extends ParserBase {
     }
 
     StatementQuery compileDeclareCursorOrNull(RangeGroup[] rangeGroups,
-            boolean isRoutine) {
+                                              boolean isRoutine) {
 
-        int sensitivity   = ResultConstants.SQL_ASENSITIVE;
+        int sensitivity = ResultConstants.SQL_ASENSITIVE;
         int scrollability = ResultConstants.SQL_NONSCROLLABLE;
-        int holdability   = ResultConstants.SQL_NONHOLDABLE;
+        int holdability = ResultConstants.SQL_NONHOLDABLE;
         int returnability = ResultConstants.SQL_WITHOUT_RETURN;
-        int position      = getPosition();
+        int position = getPosition();
 
         readThis(Tokens.DECLARE);
 
         HsqlName cursorName = readNewSchemaObjectName(SchemaObject.CURSOR,
-            false);
+                false);
 
         switch (token.tokenType) {
 
-            case Tokens.SENSITIVE :
+            case Tokens.SENSITIVE:
                 read();
 
                 sensitivity = ResultConstants.SQL_SENSITIVE;
                 break;
 
-            case Tokens.INSENSITIVE :
+            case Tokens.INSENSITIVE:
                 read();
 
                 sensitivity = ResultConstants.SQL_INSENSITIVE;
                 break;
 
-            case Tokens.ASENSITIVE :
+            case Tokens.ASENSITIVE:
                 read();
                 break;
 
-            default :
+            default:
         }
 
         if (token.tokenType == Tokens.NO) {
@@ -6792,10 +6791,10 @@ public class ParserDQL extends ParserBase {
         readThis(Tokens.FOR);
 
         int props = ResultProperties.getProperties(sensitivity,
-            ResultConstants.SQL_UPDATABLE, scrollability, holdability,
-            returnability);
+                ResultConstants.SQL_UPDATABLE, scrollability, holdability,
+                returnability);
         StatementQuery cs = compileCursorSpecification(rangeGroups, props,
-            isRoutine);
+                isRoutine);
 
         cs.setCursorName(cursorName);
 
@@ -6806,9 +6805,9 @@ public class ParserDQL extends ParserBase {
      * Retrieves a SELECT or other query expression Statement from this parse context.
      */
     StatementQuery compileCursorSpecification(RangeGroup[] rangeGroups,
-            int props, boolean isRoutine) {
+                                              int props, boolean isRoutine) {
 
-        OrderedHashSet  colNames        = null;
+        OrderedHashSet colNames = null;
         QueryExpression queryExpression = XreadQueryExpression();
 
         if (token.tokenType == Tokens.FOR) {
@@ -6872,10 +6871,10 @@ public class ParserDQL extends ParserBase {
         queryExpression.resolve(session, rangeGroups, null);
 
         StatementQuery cs = isRoutine
-                            ? new StatementCursor(session, queryExpression,
-                                compileContext)
-                            : new StatementQuery(session, queryExpression,
-                                compileContext);
+                ? new StatementCursor(session, queryExpression,
+                compileContext)
+                : new StatementQuery(session, queryExpression,
+                compileContext);
 
         return cs;
     }
@@ -6955,33 +6954,33 @@ public class ParserDQL extends ParserBase {
 
     public static final class CompileContext {
 
-        final Session        session;
-        final ParserBase     parser;
+        final Session session;
+        final ParserBase parser;
         final CompileContext baseContext;
-        final int            basePosition;
-        boolean              isViewTable;
+        final int basePosition;
+        boolean isViewTable;
 
         //
-        private int           subqueryDepth;
+        private int subqueryDepth;
         private HsqlArrayList namedSubqueries;
 
         //
-        private OrderedIntKeyHashMap parameters   = new OrderedIntKeyHashMap();
-        private HsqlArrayList usedSequences       = new HsqlArrayList(8, true);
-        private HsqlArrayList        usedRoutines = new HsqlArrayList(8, true);
+        private OrderedIntKeyHashMap parameters = new OrderedIntKeyHashMap();
+        private HsqlArrayList usedSequences = new HsqlArrayList(8, true);
+        private HsqlArrayList usedRoutines = new HsqlArrayList(8, true);
         private OrderedIntKeyHashMap rangeVariables =
-            new OrderedIntKeyHashMap();
+                new OrderedIntKeyHashMap();
         private HsqlArrayList usedObjects = new HsqlArrayList(8, true);
-        Type                  currentDomain;
-        boolean               contextuallyTypedExpression;
-        Routine               callProcedure;
+        Type currentDomain;
+        boolean contextuallyTypedExpression;
+        Routine callProcedure;
 
         //
         private RangeGroup[] outerRangeGroups = RangeGroup.emptyArray;
 
         //
         private final int initialRangeVarIndex;
-        private int       rangeVarIndex;
+        private int rangeVarIndex;
 
         public CompileContext(Session session) {
             this(session, null, null);
@@ -6990,17 +6989,17 @@ public class ParserDQL extends ParserBase {
         public CompileContext(Session session, ParserBase parser,
                               CompileContext baseContext) {
 
-            this.session     = session;
-            this.parser      = parser;
+            this.session = session;
+            this.parser = parser;
             this.baseContext = baseContext;
 
             if (baseContext == null) {
                 initialRangeVarIndex = rangeVarIndex = 1;
-                basePosition         = 0;
+                basePosition = 0;
             } else {
                 initialRangeVarIndex = rangeVarIndex =
-                    baseContext.getRangeVarCount();
-                basePosition  = baseContext.parser.getPosition();
+                        baseContext.getRangeVarCount();
+                basePosition = baseContext.parser.getPosition();
                 subqueryDepth = baseContext.getDepth();
             }
         }
@@ -7022,7 +7021,7 @@ public class ParserDQL extends ParserBase {
             outerRangeGroups = RangeGroup.emptyArray;
 
             //
-            currentDomain               = null;
+            currentDomain = null;
             contextuallyTypedExpression = false;
         }
 
@@ -7081,7 +7080,7 @@ public class ParserDQL extends ParserBase {
 
             if (rangeVariables.size() > 0) {
                 RangeVariable range = (RangeVariable) rangeVariables.getValue(
-                    rangeVariables.size() - 1);
+                        rangeVariables.size() - 1);
 
                 rangeVarIndex = range.rangePosition + 1;
             } else {
@@ -7136,7 +7135,7 @@ public class ParserDQL extends ParserBase {
             }
 
             range.rangePosition = getNextRangeVarIndex();
-            range.level         = subqueryDepth;
+            range.level = subqueryDepth;
 
             rangeVariables.put(position, range);
         }
@@ -7166,7 +7165,7 @@ public class ParserDQL extends ParserBase {
         public int getNextResultRangeVarIndex() {
 
             RangeVariable range = new RangeVariable(null, null, false,
-                RangeVariable.PLACEHOLDER_RANGE);
+                    RangeVariable.PLACEHOLDER_RANGE);
 
             registerRangeVariable(range);
 
@@ -7188,7 +7187,7 @@ public class ParserDQL extends ParserBase {
 
             for (int i = 0; i < rangeVariables.size(); i++) {
                 RangeVariable range =
-                    (RangeVariable) rangeVariables.getValue(i);
+                        (RangeVariable) rangeVariables.getValue(i);
 
                 if (range.rangeType != RangeVariable.PLACEHOLDER_RANGE) {
                     list.add(range);
@@ -7238,7 +7237,7 @@ public class ParserDQL extends ParserBase {
 
             for (int i = 0; i < usedRoutines.size(); i++) {
                 FunctionSQLInvoked function =
-                    (FunctionSQLInvoked) usedRoutines.get(i);
+                        (FunctionSQLInvoked) usedRoutines.get(i);
 
                 set.add(function.routine);
             }
@@ -7265,7 +7264,7 @@ public class ParserDQL extends ParserBase {
             }
 
             HashMappedList set =
-                (HashMappedList) namedSubqueries.get(subqueryDepth);
+                    (HashMappedList) namedSubqueries.get(subqueryDepth);
 
             if (set == null) {
                 set = new HashMappedList();
@@ -7279,7 +7278,7 @@ public class ParserDQL extends ParserBase {
             if (namedSubqueries != null) {
                 if (namedSubqueries.size() > subqueryDepth) {
                     HashMappedList set =
-                        (HashMappedList) namedSubqueries.get(subqueryDepth);
+                            (HashMappedList) namedSubqueries.get(subqueryDepth);
 
                     if (set != null) {
                         set.clear();
@@ -7293,7 +7292,7 @@ public class ParserDQL extends ParserBase {
             initSubqueryNames();
 
             HashMappedList set =
-                (HashMappedList) namedSubqueries.get(subqueryDepth);
+                    (HashMappedList) namedSubqueries.get(subqueryDepth);
             boolean added = set.add(name, null);
 
             if (!added) {
@@ -7304,7 +7303,7 @@ public class ParserDQL extends ParserBase {
         private void registerSubquery(String name, TableDerived td) {
 
             HashMappedList set =
-                (HashMappedList) namedSubqueries.get(subqueryDepth);
+                    (HashMappedList) namedSubqueries.get(subqueryDepth);
 
             set.put(name, td);
         }
@@ -7385,7 +7384,7 @@ public class ParserDQL extends ParserBase {
             }
 
             ExpressionColumn[] result =
-                new ExpressionColumn[parameters.size()];
+                    new ExpressionColumn[parameters.size()];
 
             parameters.valuesToArray(result);
             parameters.clear();
@@ -7411,7 +7410,7 @@ public class ParserDQL extends ParserBase {
 
             for (int i = 0; i < rangeVariables.size(); i++) {
                 RangeVariable range =
-                    (RangeVariable) rangeVariables.getValue(i);
+                        (RangeVariable) rangeVariables.getValue(i);
 
                 if (range.isViewSubquery) {
                     continue;

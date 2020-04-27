@@ -53,20 +53,21 @@ class BasicResolver implements IResolver {
     public String resolveProperties(String expression) {
         return expression;
     }
+
     public File resolveFile(String path) {
         File file = new File(path);
 
         if (parentDir != null && !file.isAbsolute()) {
             try {
                 path = this.parentDir.getCanonicalPath()
-                       + File.separatorChar
-                       + path;
+                        + File.separatorChar
+                        + path;
 
                 file = new File(path);
             } catch (IOException ex) {
                 path = this.parentDir.getAbsolutePath()
-                       + File.separatorChar
-                       + path;
+                        + File.separatorChar
+                        + path;
 
                 file = new File(path);
             }

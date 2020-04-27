@@ -1,4 +1,4 @@
-package com.database.demo.exception;
+package lu.waterhackers.map.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ResourceNotFoundException extends Throwable {
     private static final long serialVersionUID = 1L;
 
-    public ResourceNotFoundException(String s){
+    public ResourceNotFoundException(String s) {
         super(s);
     }
 }

@@ -70,12 +70,13 @@ class HsqlThreadFactory implements ThreadFactory {
 
     /**
      * Retrieves a thread instance for running the specified Runnable
+     *
      * @param r The runnable that the retrieved thread handles
      * @return the requested thread instance
      */
     public Thread newThread(Runnable r) {
         return factory == this ? new Thread(r)
-                               : factory.newThread(r);
+                : factory.newThread(r);
     }
 
     /**
@@ -84,16 +85,16 @@ class HsqlThreadFactory implements ThreadFactory {
      * this factory uses itself as the implementation.
      *
      * @param f the factory implementation that this factory will use
-     *      to produce threads
+     *          to produce threads
      * @return the previously installed factory implementation
      */
     public synchronized ThreadFactory setImpl(ThreadFactory f) {
 
         ThreadFactory old;
 
-        old     = factory;
+        old = factory;
         factory = (f == null) ? this
-                              : f;
+                : f;
 
         return old;
     }

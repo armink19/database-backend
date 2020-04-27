@@ -56,18 +56,18 @@ import java.util.zip.GZIPInputStream;
  * corresponds to ScriptWriterText.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- *  @version 2.5.0
- *  @since 1.7.2
+ * @version 2.5.0
+ * @since 1.7.2
  */
 public class ScriptReaderText extends ScriptReaderBase {
 
     // this is used only to enable reading one logged line at a time
-    LineReader      dataStreamIn;
-    InputStream     inputStream;
-    InputStream     bufferedStream;
+    LineReader dataStreamIn;
+    InputStream inputStream;
+    InputStream bufferedStream;
     GZIPInputStream gzipStream;
     RowInputTextLog rowIn;
-    boolean         isInsert;
+    boolean isInsert;
 
     ScriptReaderText(Database db, String fileName) {
         super(db, fileName);
@@ -79,7 +79,7 @@ public class ScriptReaderText extends ScriptReaderBase {
         super(db, fileName);
 
         inputStream =
-            database.logger.getFileAccess().openInputStreamElement(fileName);
+                database.logger.getFileAccess().openInputStreamElement(fileName);
         bufferedStream = new BufferedInputStream(inputStream);
 
         InputStream tempStream;
@@ -100,7 +100,7 @@ public class ScriptReaderText extends ScriptReaderBase {
         int insertErrorMode;
 
         if (database.recoveryMode == 0) {
-            errorLogger     = new RowInsertSimple.DefaultErrorHandler();
+            errorLogger = new RowInsertSimple.DefaultErrorHandler();
             insertErrorMode = RowInsertInterface.modes.discardOnError;
         } else {
             errorLogger = new RowInsertSimple.InsertErrorHandler(database,
@@ -117,9 +117,9 @@ public class ScriptReaderText extends ScriptReaderBase {
 
     protected void readDDL(Session session) {
 
-        for (;;) {
-            Statement cs     = null;
-            Result    result = null;
+        for (; ; ) {
+            Statement cs = null;
+            Result result = null;
 
             try {
                 boolean hasRow = readLoggedStatement(session);
@@ -171,13 +171,13 @@ public class ScriptReaderText extends ScriptReaderBase {
         String tablename = null;
 
         try {
-            for (;;) {
+            for (; ; ) {
                 try {
                     boolean hasRow = false;
 
                     if (isInsert) {
                         isInsert = false;
-                        hasRow   = true;
+                        hasRow = true;
                     } else {
                         hasRow = readLoggedStatement(session);
                     }
@@ -190,38 +190,38 @@ public class ScriptReaderText extends ScriptReaderBase {
 
                     switch (statementType) {
 
-                        case StatementLineTypes.SET_SCHEMA_STATEMENT : {
+                        case StatementLineTypes.SET_SCHEMA_STATEMENT: {
                             session.setSchema(currentSchema);
 
                             tablename = null;
 
                             break;
                         }
-                        case StatementLineTypes.INSERT_STATEMENT : {
+                        case StatementLineTypes.INSERT_STATEMENT: {
                             if (!rowIn.getTableName().equals(tablename)) {
                                 inserter.finishTable();
 
                                 tablename = rowIn.getTableName();
 
                                 String schema =
-                                    session.getSchemaName(currentSchema);
+                                        session.getSchemaName(currentSchema);
 
                                 currentTable =
-                                    database.schemaManager.getUserTable(
-                                        tablename, schema);
+                                        database.schemaManager.getUserTable(
+                                                tablename, schema);
                                 currentStore =
-                                    database.persistentStoreCollection
-                                        .getStore(currentTable);
+                                        database.persistentStoreCollection
+                                                .getStore(currentTable);
                             }
 
                             inserter.insert(currentTable, currentStore,
-                                            rowData);
+                                    rowData);
 
                             break;
                         }
-                        default : {
+                        default: {
                             HsqlException e =
-                                Error.error(ErrorCode.GENERAL_ERROR,
+                                    Error.error(ErrorCode.GENERAL_ERROR,
                                             statement);
 
                             throw e;
@@ -269,10 +269,10 @@ public class ScriptReaderText extends ScriptReaderBase {
         if (statement.startsWith("/*C")) {
             int endid = statement.indexOf('*', 4);
 
-            sessionNumber  = Integer.parseInt(statement.substring(3, endid));
-            statement      = statement.substring(endid + 2);
+            sessionNumber = Integer.parseInt(statement.substring(3, endid));
+            statement = statement.substring(endid + 2);
             sessionChanged = true;
-            statementType  = StatementLineTypes.SESSION_ID;
+            statementType = StatementLineTypes.SESSION_ID;
 
             return;
         }
@@ -285,28 +285,28 @@ public class ScriptReaderText extends ScriptReaderBase {
 
         switch (statementType) {
 
-            case StatementLineTypes.ANY_STATEMENT :
-            case StatementLineTypes.COMMIT_STATEMENT : {
-                rowData      = null;
+            case StatementLineTypes.ANY_STATEMENT:
+            case StatementLineTypes.COMMIT_STATEMENT: {
+                rowData = null;
                 currentTable = null;
 
                 return;
             }
-            case StatementLineTypes.SET_SCHEMA_STATEMENT : {
-                rowData       = null;
-                currentTable  = null;
+            case StatementLineTypes.SET_SCHEMA_STATEMENT: {
+                rowData = null;
+                currentTable = null;
                 currentSchema = rowIn.getSchemaName();
 
                 return;
             }
         }
 
-        String name   = rowIn.getTableName();
+        String name = rowIn.getTableName();
         String schema = session.getCurrentSchemaHsqlName().name;
 
         currentTable = database.schemaManager.getUserTable(name, schema);
         currentStore =
-            database.persistentStoreCollection.getStore(currentTable);
+                database.persistentStoreCollection.getStore(currentTable);
 
         Type[] colTypes;
 
@@ -327,19 +327,22 @@ public class ScriptReaderText extends ScriptReaderBase {
             if (dataStreamIn != null) {
                 dataStreamIn.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (gzipStream != null) {
                 gzipStream.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (inputStream != null) {
                 inputStream.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (errorLogger != null) {
@@ -347,7 +350,8 @@ public class ScriptReaderText extends ScriptReaderBase {
             }
 
             database.recoveryMode = 0;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     HsqlException getError(Throwable t, long lineCount) {
@@ -361,10 +365,10 @@ public class ScriptReaderText extends ScriptReaderBase {
         }
 
         return Error.error(t, ErrorCode.ERROR_IN_SCRIPT_FILE,
-                           ErrorCode.M_DatabaseScriptReader_read,
-                           new Object[] {
-            Long.valueOf(lineCount), t.toString()
-        });
+                ErrorCode.M_DatabaseScriptReader_read,
+                new Object[]{
+                        Long.valueOf(lineCount), t.toString()
+                });
     }
 
     private void handleError(HsqlException e) {

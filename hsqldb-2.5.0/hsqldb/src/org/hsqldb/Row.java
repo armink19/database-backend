@@ -47,20 +47,20 @@ import org.hsqldb.types.TimestampData;
  */
 public class Row implements CachedObject {
 
-    long                      position;
-    Object[]                  rowData;
+    long position;
+    Object[] rowData;
     public volatile RowAction rowAction;
-    protected TableBase       table;
+    protected TableBase table;
 
     public RowAction getAction() {
         return rowAction;
     }
 
     /**
-     *  Default constructor used only in subclasses.
+     * Default constructor used only in subclasses.
      */
     public Row(TableBase table, Object[] data) {
-        this.table   = table;
+        this.table = table;
         this.rowData = data;
     }
 
@@ -78,7 +78,7 @@ public class Row implements CachedObject {
     public Object[] getDataCopy() {
 
         Object[] newData = new Object[rowData.length];
-        Object[] data    = getData();
+        Object[] data = getData();
 
         System.arraycopy(data, 0, newData, 0, data.length);
 
@@ -88,7 +88,7 @@ public class Row implements CachedObject {
     boolean isDeleted(Session session, PersistentStore store) {
 
         RowAction action;
-        Row       row = (Row) store.get(this, false);
+        Row row = (Row) store.get(this, false);
 
         if (row == null) {
             return true;
@@ -107,7 +107,7 @@ public class Row implements CachedObject {
 
         if (table.isSystemVersioned) {
             TimestampData ts = (TimestampData) getField(
-                ((Table) table).systemPeriodStartColumn);
+                    ((Table) table).systemPeriodStartColumn);
 
             return ts;
         }
@@ -119,7 +119,7 @@ public class Row implements CachedObject {
 
         if (table.isSystemVersioned) {
             TimestampData ts = (TimestampData) getField(
-                ((Table) table).systemPeriodEndColumn);
+                    ((Table) table).systemPeriodEndColumn);
 
             return ts;
         }
@@ -131,7 +131,7 @@ public class Row implements CachedObject {
 
         if (table.isSystemVersioned) {
             TimestampData ts = (TimestampData) getField(
-                ((Table) table).systemPeriodEndColumn);
+                    ((Table) table).systemPeriodEndColumn);
 
             return DateTimeType.epochLimitSeconds == ts.getSeconds();
         }
@@ -139,7 +139,8 @@ public class Row implements CachedObject {
         return true;
     }
 
-    public void setStorageSize(int size) {}
+    public void setStorageSize(int size) {
+    }
 
     public int getStorageSize() {
         return 0;
@@ -157,7 +158,8 @@ public class Row implements CachedObject {
         return true;
     }
 
-    public void updateAccessCount(int count) {}
+    public void updateAccessCount(int count) {
+    }
 
     public int getAccessCount() {
         return 0;
@@ -183,7 +185,8 @@ public class Row implements CachedObject {
         return false;
     }
 
-    public void setChanged(boolean flag) {}
+    public void setChanged(boolean flag) {
+    }
 
     public boolean isKeepInMemory() {
         return true;
@@ -197,13 +200,17 @@ public class Row implements CachedObject {
         return true;
     }
 
-    public void setInMemory(boolean in) {}
+    public void setInMemory(boolean in) {
+    }
 
-    public void delete(PersistentStore store) {}
+    public void delete(PersistentStore store) {
+    }
 
-    public void restore() {}
+    public void restore() {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public int getRealSize(RowOutputInterface out) {
         return 0;
@@ -217,11 +224,14 @@ public class Row implements CachedObject {
         return 0;
     }
 
-    public void read(RowInputInterface in) {}
+    public void read(RowInputInterface in) {
+    }
 
-    public void write(RowOutputInterface out) {}
+    public void write(RowOutputInterface out) {
+    }
 
-    public void write(RowOutputInterface out, LongLookup lookup) {}
+    public void write(RowOutputInterface out, LongLookup lookup) {
+    }
 
     /**
      * Lifetime scope of this method is limited depends on the operations
@@ -239,7 +249,7 @@ public class Row implements CachedObject {
 
         if (obj instanceof Row) {
             return ((Row) obj).table == table
-                   && ((Row) obj).position == position;
+                    && ((Row) obj).position == position;
         }
 
         return false;

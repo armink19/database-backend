@@ -59,11 +59,11 @@ class TestScripts extends TestUtil {
             System.exit(2);
         }
 
-        ArrayList scripts   = new ArrayList();
-        ArrayList connIds   = new ArrayList();
-        ArrayList retains   = new ArrayList();
-        int       i         = -1;
-        int       curscript = 0;
+        ArrayList scripts = new ArrayList();
+        ArrayList connIds = new ArrayList();
+        ArrayList retains = new ArrayList();
+        int i = -1;
+        int curscript = 0;
 
         // java.util.ArrayLists may contain null elements.
         connIds.add(null);
@@ -77,7 +77,7 @@ class TestScripts extends TestUtil {
 
                 if (newName == null
                         || connIds.set(connIds.size() - 1, getIdName(argv[i]))
-                           != null) {
+                        != null) {
                     System.err.println(SYNTAX_MSG);
                     System.exit(2);
                 }
@@ -110,9 +110,9 @@ class TestScripts extends TestUtil {
         }
 
         test(DEF_URL, DEF_USER, DEF_PASSWORD, DEF_DB,
-             (String[]) scripts.toArray(new String[0]),
-             (String[]) connIds.toArray(new String[0]),
-             (Boolean[]) retains.toArray(new Boolean[0]));
+                (String[]) scripts.toArray(new String[0]),
+                (String[]) connIds.toArray(new String[0]),
+                (Boolean[]) retains.toArray(new Boolean[0]));
     }
 
     private static String getIdName(String s) {
@@ -125,20 +125,20 @@ class TestScripts extends TestUtil {
 
         if (nameStart == s.length()) {
             throw new RuntimeException(
-                "Leave off '=' if you do not want to name a connection");
+                    "Leave off '=' if you do not want to name a connection");
         }
 
         return s.substring(nameStart);
     }
 
     private static final String SYNTAX_MSG = "SYNTAX  java "
-        + TestScripts.class.getName()
-        + " [--ephConnId=x | --persistConnId=x] file1.txt...";
+            + TestScripts.class.getName()
+            + " [--ephConnId=x | --persistConnId=x] file1.txt...";
 
     static String DEF_DB = "test3";
     static String DEF_URL = "jdbc:hsqldb:" + DEF_DB
-                            + ";sql.enforce_strict_size=true";
-    static String DEF_USER     = "SA";
+            + ";sql.enforce_strict_size=true";
+    static String DEF_USER = "SA";
     static String DEF_PASSWORD = "";
 
     static void test(String url, String user, String password, String db,
@@ -161,7 +161,7 @@ class TestScripts extends TestUtil {
             DriverManager.registerDriver(new org.hsqldb.jdbc.JDBCDriver());
 
             Connection cConnection = null;
-            String     id;
+            String id;
 
             for (int i = 0; i < scriptList.length; i++) {
                 id = idList[i];
@@ -169,7 +169,7 @@ class TestScripts extends TestUtil {
                 System.out.println("ID: " + id);
 
                 cConnection = ((id == null) ? null
-                                            : (Connection) connMap.get(id));
+                        : (Connection) connMap.get(id));
 
                 if (cConnection == null) {
                     System.out.println("Getting NEW conn");
@@ -187,7 +187,7 @@ class TestScripts extends TestUtil {
 
                 testScript(cConnection, scriptList[i]);
 
-                if (persistList[i] == null ||!persistList[i].booleanValue()) {
+                if (persistList[i] == null || !persistList[i].booleanValue()) {
                     if (id != null) {
                         connMap.remove(id);
                         System.out.println("Removed conn");

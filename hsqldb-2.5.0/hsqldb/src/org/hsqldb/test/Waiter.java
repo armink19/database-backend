@@ -36,13 +36,13 @@ import java.util.Map;
 
 /**
  * Single-use synchronization object.
- *
+ * <p>
  * Design would be more scalable if there were a separate collection class,
  * instead of the static Waiter.map.  The limitation is acceptable since
  * there's no use case for running multiple Test Runners simultaneously
  * from a single JVM (one Test runner can handle multiple test scripts
  * simultaneously or synchronously).
- *
+ * <p>
  * (It would be much work to make the collection non-static, because that
  * would require a refactor of TestUtil with proper OOD).
  */
@@ -57,8 +57,13 @@ public class Waiter {
     private boolean waiting = false;  // a client is waiting (in waitFor()).
     private boolean abort = false;  // Make fail if partner failed
 
-    public boolean isNotified() { return notified; }
-    public boolean isWaiting() { return waiting; }
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public boolean isWaiting() {
+        return waiting;
+    }
 
     private Waiter(String key) {
         this.key = key;
@@ -66,7 +71,7 @@ public class Waiter {
     }
 
     /**
-     * @param enforceSequence  Fail if waitFor() called before resume()
+     * @param enforceSequence Fail if waitFor() called before resume()
      */
     public synchronized void waitFor(boolean enforceSequence) {
         if (abort)
@@ -75,7 +80,7 @@ public class Waiter {
             if (enforceSequence)
                 throw new RuntimeException(
                         "Request to wait on '" + key
-                        + "', but this object has already been notified");
+                                + "', but this object has already been notified");
             return;
         }
         waiting = true;
@@ -84,7 +89,7 @@ public class Waiter {
         } catch (InterruptedException ie) {
             throw new RuntimeException(
                     "Unexpected interrupted while waiting for '"
-                    + key + "'", ie);
+                            + key + "'", ie);
         } finally {
             waiting = false;
         }
@@ -92,11 +97,11 @@ public class Waiter {
         if (!notified)
             throw new RuntimeException(
                     "Exiting waitFor() on '" + key
-                    + "' even though not 'notified'");
+                            + "' even though not 'notified'");
     }
 
     /**
-     * @param enforceSequence  Fail if waitFor() called before resume()
+     * @param enforceSequence Fail if waitFor() called before resume()
      */
     public synchronized void resume(boolean enforceSequence) {
         if (enforceSequence && !waiting) {

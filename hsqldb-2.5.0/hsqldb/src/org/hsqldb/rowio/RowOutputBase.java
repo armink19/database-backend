@@ -52,30 +52,31 @@ import java.math.BigDecimal;
  * @since 1.7.0
  */
 abstract class RowOutputBase extends HsqlByteArrayOutputStream
-implements RowOutputInterface {
+        implements RowOutputInterface {
 
     /**
-     *  Constructor used for persistent storage of a Table row
+     * Constructor used for persistent storage of a Table row
      */
     public RowOutputBase() {
         super();
     }
 
     /**
-     *  Constructor used for result sets
+     * Constructor used for result sets
      */
     public RowOutputBase(int initialSize) {
         super(initialSize);
     }
 
     /**
-     *  Constructor used for network transmission of result sets
+     * Constructor used for network transmission of result sets
      */
     public RowOutputBase(byte[] buffer) {
         super(buffer);
     }
 
-    protected void writeFieldPrefix() {}
+    protected void writeFieldPrefix() {
+    }
 
     protected abstract void writeFieldType(Type type);
 
@@ -102,10 +103,10 @@ implements RowOutputInterface {
     protected abstract void writeTimestamp(TimestampData o, Type type);
 
     protected abstract void writeYearMonthInterval(IntervalMonthData o,
-            Type type);
+                                                   Type type);
 
     protected abstract void writeDaySecondInterval(IntervalSecondData o,
-            Type type);
+                                                   Type type);
 
     protected abstract void writeOther(JavaObjectData o);
 
@@ -122,27 +123,27 @@ implements RowOutputInterface {
     protected abstract void writeArray(Object[] o, Type type);
 
     /**
-     *  This method is called to write data for a table row.
+     * This method is called to write data for a table row.
      */
     public void writeData(Row row, Type[] types) {
         writeData(types.length, types, row.getData(), null, null);
     }
 
     /**
-     *  This method is called directly to write data for a delete statement.
+     * This method is called directly to write data for a delete statement.
      */
     public void writeData(int l, Type[] types, Object[] data,
                           HashMappedList cols, int[] primaryKeys) {
 
         boolean hasPK = primaryKeys != null && primaryKeys.length != 0;
-        int     limit = hasPK ? primaryKeys.length
-                              : l;
+        int limit = hasPK ? primaryKeys.length
+                : l;
 
         for (int i = 0; i < limit; i++) {
-            int    j = hasPK ? primaryKeys[i]
-                             : i;
+            int j = hasPK ? primaryKeys[i]
+                    : i;
             Object o = data[j];
-            Type   t = types[j];
+            Type t = types[j];
 
             if (cols != null) {
                 ColumnSchema col = (ColumnSchema) cols.get(j);
@@ -167,109 +168,109 @@ implements RowOutputInterface {
 
         switch (t.typeCode) {
 
-            case Types.SQL_ALL_TYPES :
+            case Types.SQL_ALL_TYPES:
                 break;
 
-            case Types.SQL_CHAR :
-            case Types.SQL_VARCHAR :
+            case Types.SQL_CHAR:
+            case Types.SQL_VARCHAR:
                 writeChar((String) o, t);
                 break;
 
-            case Types.TINYINT :
-            case Types.SQL_SMALLINT :
+            case Types.TINYINT:
+            case Types.SQL_SMALLINT:
                 writeSmallint((Number) o);
                 break;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 writeInteger((Number) o);
                 break;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 writeBigint((Number) o);
                 break;
 
-            case Types.SQL_REAL :
-            case Types.SQL_FLOAT :
-            case Types.SQL_DOUBLE :
+            case Types.SQL_REAL:
+            case Types.SQL_FLOAT:
+            case Types.SQL_DOUBLE:
                 writeReal((Double) o);
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 writeDecimal((BigDecimal) o, t);
                 break;
 
-            case Types.SQL_BOOLEAN :
+            case Types.SQL_BOOLEAN:
                 writeBoolean((Boolean) o);
                 break;
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 writeDate((TimestampData) o, t);
                 break;
 
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 writeTime((TimeData) o, t);
                 break;
 
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 writeTimestamp((TimestampData) o, t);
                 break;
 
-            case Types.SQL_INTERVAL_YEAR :
-            case Types.SQL_INTERVAL_YEAR_TO_MONTH :
-            case Types.SQL_INTERVAL_MONTH :
+            case Types.SQL_INTERVAL_YEAR:
+            case Types.SQL_INTERVAL_YEAR_TO_MONTH:
+            case Types.SQL_INTERVAL_MONTH:
                 writeYearMonthInterval((IntervalMonthData) o, t);
                 break;
 
-            case Types.SQL_INTERVAL_DAY :
-            case Types.SQL_INTERVAL_DAY_TO_HOUR :
-            case Types.SQL_INTERVAL_DAY_TO_MINUTE :
-            case Types.SQL_INTERVAL_DAY_TO_SECOND :
-            case Types.SQL_INTERVAL_HOUR :
-            case Types.SQL_INTERVAL_HOUR_TO_MINUTE :
-            case Types.SQL_INTERVAL_HOUR_TO_SECOND :
-            case Types.SQL_INTERVAL_MINUTE :
-            case Types.SQL_INTERVAL_MINUTE_TO_SECOND :
-            case Types.SQL_INTERVAL_SECOND :
+            case Types.SQL_INTERVAL_DAY:
+            case Types.SQL_INTERVAL_DAY_TO_HOUR:
+            case Types.SQL_INTERVAL_DAY_TO_MINUTE:
+            case Types.SQL_INTERVAL_DAY_TO_SECOND:
+            case Types.SQL_INTERVAL_HOUR:
+            case Types.SQL_INTERVAL_HOUR_TO_MINUTE:
+            case Types.SQL_INTERVAL_HOUR_TO_SECOND:
+            case Types.SQL_INTERVAL_MINUTE:
+            case Types.SQL_INTERVAL_MINUTE_TO_SECOND:
+            case Types.SQL_INTERVAL_SECOND:
                 writeDaySecondInterval((IntervalSecondData) o, t);
                 break;
 
-            case Types.OTHER :
+            case Types.OTHER:
                 writeOther((JavaObjectData) o);
                 break;
 
-            case Types.SQL_BLOB :
+            case Types.SQL_BLOB:
                 writeBlob((BlobData) o, t);
                 break;
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 writeClob((ClobData) o, t);
                 break;
 
-            case Types.SQL_ARRAY :
+            case Types.SQL_ARRAY:
                 writeArray((Object[]) o, t);
                 break;
 
-            case Types.SQL_GUID :
+            case Types.SQL_GUID:
                 writeUUID((BinaryData) o);
                 break;
 
-            case Types.SQL_BINARY :
-            case Types.SQL_VARBINARY :
+            case Types.SQL_BINARY:
+            case Types.SQL_VARBINARY:
                 writeBinary((BinaryData) o);
                 break;
 
-            case Types.SQL_BIT :
-            case Types.SQL_BIT_VARYING :
+            case Types.SQL_BIT:
+            case Types.SQL_BIT_VARYING:
                 writeBit((BinaryData) o);
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "RowOutputBase - "
-                                         + t.getNameString());
+                        "RowOutputBase - "
+                                + t.getNameString());
         }
     }
 

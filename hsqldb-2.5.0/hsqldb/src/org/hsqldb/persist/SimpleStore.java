@@ -48,15 +48,16 @@ import org.hsqldb.rowio.RowInputInterface;
  */
 public abstract class SimpleStore implements PersistentStore {
 
-    protected DataFileCache     cache;
+    protected DataFileCache cache;
     protected TableSpaceManager spaceManager;
-    protected int               defaultObjectSize;
+    protected int defaultObjectSize;
 
     public boolean isRowStore() {
         return false;
     }
 
-    public void set(CachedObject object) {}
+    public void set(CachedObject object) {
+    }
 
     public CachedObject get(long i) {
         return cache.get(i, this, false);
@@ -87,7 +88,8 @@ public abstract class SimpleStore implements PersistentStore {
         return true;
     }
 
-    public void commitPersistence(CachedObject object) {}
+    public void commitPersistence(CachedObject object) {
+    }
 
     public int getDefaultObjectSize() {
         return defaultObjectSize;
@@ -98,7 +100,8 @@ public abstract class SimpleStore implements PersistentStore {
         throw Error.runtimeError(ErrorCode.U_S0500, "PersistentStore");
     }
 
-    public void removeAll() {}
+    public void removeAll() {
+    }
 
     public DataFileCache getCache() {
         return cache;
@@ -116,13 +119,15 @@ public abstract class SimpleStore implements PersistentStore {
         return cache == null;
     }
 
-    public void reindex(Session session, Index index) {}
+    public void reindex(Session session, Index index) {
+    }
 
     public void setCache(DataFileCache cache) {
         this.cache = cache;
     }
 
-    public void release() {}
+    public void release() {
+    }
 
     public PersistentStore getAccessorStore(Index index) {
         return null;
@@ -149,21 +154,27 @@ public abstract class SimpleStore implements PersistentStore {
         return 0;
     }
 
-    public void setElementCount(Index key, long size, long uniqueSize) {}
+    public void setElementCount(Index key, long size, long uniqueSize) {
+    }
 
-    public void setAccessor(Index key, CachedObject accessor) {}
+    public void setAccessor(Index key, CachedObject accessor) {
+    }
 
-    public void setAccessor(Index key, long accessor) {}
+    public void setAccessor(Index key, long accessor) {
+    }
 
     public boolean hasNull(int pos) {
         return false;
     }
 
-    public void resetAccessorKeys(Session session, Index[] keys) {}
+    public void resetAccessorKeys(Session session, Index[] keys) {
+    }
 
-    public void setMemory(boolean mode) {}
+    public void setMemory(boolean mode) {
+    }
 
-    public void delete(Session session, Row row) {}
+    public void delete(Session session, Row row) {
+    }
 
     public RowAction addDeleteActionToRow(Session session, Row row,
                                           int[] colMap, boolean isMV) {
@@ -174,9 +185,11 @@ public abstract class SimpleStore implements PersistentStore {
         return object;
     }
 
-    public void indexRow(Session session, Row row) {}
+    public void indexRow(Session session, Row row) {
+    }
 
-    public void indexRows(Session session) {}
+    public void indexRows(Session session) {
+    }
 
     public RowIterator rowIterator() {
         return null;
@@ -186,20 +199,27 @@ public abstract class SimpleStore implements PersistentStore {
         return null;
     }
 
-    public void moveDataToSpace(Session session) {}
+    public void moveDataToSpace(Session session) {
+    }
 
     public void moveData(Session session, PersistentStore other,
-                         int[] colIndex, int adjust) {}
+                         int[] colIndex, int adjust) {
+    }
 
-    public void setReadOnly(boolean readonly) {}
+    public void setReadOnly(boolean readonly) {
+    }
 
-    public void readLock() {}
+    public void readLock() {
+    }
 
-    public void readUnlock() {}
+    public void readUnlock() {
+    }
 
-    public void writeLock() {}
+    public void writeLock() {
+    }
 
-    public void writeUnlock() {}
+    public void writeUnlock() {
+    }
 
     public TableBase getTable() {
         return null;
@@ -209,13 +229,17 @@ public abstract class SimpleStore implements PersistentStore {
         return 0;
     }
 
-    public void setTimestamp(long timestamp) {}
+    public void setTimestamp(long timestamp) {
+    }
 
     public void commitRow(Session session, Row row, int changeAction,
-                          int txModel) {}
+                          int txModel) {
+    }
 
     public void rollbackRow(Session session, Row row, int changeAction,
-                            int txModel) {}
+                            int txModel) {
+    }
 
-    public void postCommitAction(Session session, RowAction rowAction) {}
+    public void postCommitAction(Session session, RowAction rowAction) {
+    }
 }

@@ -41,16 +41,14 @@ import java.util.GregorianCalendar;
 
 /**
  * @author karl
- *
  */
 public class TestKarl {
 
-    static final String SHUTDOWN             = "SHUTDOWN";
+    static final String SHUTDOWN = "SHUTDOWN";
     static final String SHUTDOWN_IMMEDIATELY = "SHUTDOWN IMMEDIATELY";
-    static final String SHUTDOWN_COMPACT     = "SHUTDOWN COMPACT";
+    static final String SHUTDOWN_COMPACT = "SHUTDOWN COMPACT";
 
     /**
-     *
      * @param args
      */
     public static void main(String[] args) {
@@ -77,13 +75,13 @@ public class TestKarl {
             copy("save/waehler.csv", "db/waehler.csv");
 
             // config test
-            String  shutdown   = SHUTDOWN;
+            String shutdown = SHUTDOWN;
             boolean autocommit = false;
 
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
             c = DriverManager.getConnection("jdbc:hsqldb:file:db/brwahl",
-                                            "sa", "");
+                    "sa", "");
 
             c.setAutoCommit(autocommit);
 
@@ -112,7 +110,7 @@ public class TestKarl {
             System.out.println("\nDB OK? ...");
 
             c = DriverManager.getConnection("jdbc:hsqldb:file:db/brwahl",
-                                            "sa", "");
+                    "sa", "");
 
             c.setAutoCommit(false);
             printTable(c, "WAEHLER");
@@ -150,7 +148,7 @@ public class TestKarl {
      * @throws SQLException
      */
     private static void doCreateTableTest(Connection p_connection)
-    throws SQLException {
+            throws SQLException {
 
         System.out.println("CREATE TESTTABLE START ...");
 
@@ -163,7 +161,7 @@ public class TestKarl {
         System.out.println("INSERT INTO TESTTABLE START ...");
 
         PreparedStatement p = p_connection.prepareStatement(
-            "INSERT INTO TEST (TEST) values (?)");
+                "INSERT INTO TEST (TEST) values (?)");
 
         p.setInt(1, 123);
         p.execute();
@@ -176,12 +174,12 @@ public class TestKarl {
      * @throws SQLException
      */
     private static void doUpdateInsertDeleteWaehler(Connection p_connection)
-    throws SQLException {
+            throws SQLException {
 
         System.out.println("UPDATE WAEHLER START ...");
 
         PreparedStatement p = p_connection.prepareStatement(
-            "UPDATE WAEHLER SET AUSTRITTSDATUM=? WHERE NAME=?");
+                "UPDATE WAEHLER SET AUSTRITTSDATUM=? WHERE NAME=?");
 
         p.setDate(1, null);
         p.setString(2, "Muster1");
@@ -191,7 +189,7 @@ public class TestKarl {
         System.out.println("INSERT INTO WAEHLER START ...");
 
         p = p_connection.prepareStatement(
-            "INSERT INTO WAEHLER (NAME, AUSTRITTSDATUM) VALUES (?,?)");
+                "INSERT INTO WAEHLER (NAME, AUSTRITTSDATUM) VALUES (?,?)");
 
         Calendar cal = GregorianCalendar.getInstance();
 
@@ -203,7 +201,7 @@ public class TestKarl {
         System.out.println("DELETE FROM WAEHLER START ...");
 
         p = p_connection.prepareStatement(
-            "DELETE FROM WAEHLER WHERE NAME = ?");
+                "DELETE FROM WAEHLER WHERE NAME = ?");
 
         p.setString(1, "Muster2");
         p.execute();
@@ -221,9 +219,9 @@ public class TestKarl {
 
         System.out.println("GET TABLE " + p_table + " START ...");
 
-        Statement st        = p_connection.createStatement();
-        ResultSet rs        = st.executeQuery("SELECT * FROM " + p_table);
-        int       col_count = rs.getMetaData().getColumnCount();
+        Statement st = p_connection.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM " + p_table);
+        int col_count = rs.getMetaData().getColumnCount();
 
         for (int i = 1; i <= col_count; i++) {
             System.out.print(rs.getMetaData().getColumnLabel(i) + "\t");
@@ -249,12 +247,12 @@ public class TestKarl {
      * @throws SQLException
      */
     private static void printMeta(Connection p_connection)
-    throws SQLException {
+            throws SQLException {
 
         System.out.println("GET METADATA START ...");
 
         ResultSet rs = p_connection.getMetaData().getTables(null, null, null,
-            null);
+                null);
 
         System.out.println(rs.toString());
 
@@ -280,16 +278,16 @@ public class TestKarl {
 
     private static void copy(String src, String dest) throws IOException {
 
-        File inputFile  = new File(src);
+        File inputFile = new File(src);
         File outputFile = new File(dest);
 
         if (!inputFile.exists()) {
             return;
         }
 
-        FileInputStream  in  = new FileInputStream(inputFile);
+        FileInputStream in = new FileInputStream(inputFile);
         FileOutputStream out = new FileOutputStream(outputFile);
-        int              c;
+        int c;
 
         while ((c = in.read()) != -1) {
             out.write(c);

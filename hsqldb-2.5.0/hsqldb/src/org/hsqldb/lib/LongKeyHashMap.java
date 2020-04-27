@@ -37,19 +37,18 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.3
  * @since 1.9.0
  */
 public class LongKeyHashMap extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
 
     //
-    ReentrantReadWriteLock           lock = new ReentrantReadWriteLock(true);
-    ReentrantReadWriteLock.ReadLock  readLock  = lock.readLock();
+    ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+    ReentrantReadWriteLock.ReadLock readLock = lock.readLock();
     ReentrantReadWriteLock.WriteLock writeLock = lock.writeLock();
 
     public LongKeyHashMap() {
@@ -57,9 +56,9 @@ public class LongKeyHashMap extends BaseHashMap {
     }
 
     public LongKeyHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.longKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
     }
 
     public Lock getReadLock() {
@@ -163,8 +162,8 @@ public class LongKeyHashMap extends BaseHashMap {
             }
 
             Object[] array = new Object[size()];
-            int      i     = 0;
-            Iterator it    = LongKeyHashMap.this.new BaseHashIterator(false);
+            int i = 0;
+            Iterator it = LongKeyHashMap.this.new BaseHashIterator(false);
 
             while (it.hasNext()) {
                 array[i++] = it.next();

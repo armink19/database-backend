@@ -36,7 +36,7 @@ import java.util.Comparator;
 /**
  * FastQSorts the [l,r] partition (inclusive) of the specified array of
  * Rows, using the comparator.<p>
- *
+ * <p>
  * Searches an ordered array.<p>
  *
  * @author Tony Lai (tony_lai@users dot sourceforge.net)
@@ -49,19 +49,20 @@ public class ArraySort {
     /**
      * Returns the index of the lowest element == the given search target,
      * or -1
+     *
      * @return index or a negative value if not found
      */
     public static int searchFirst(Object[] array, int start, int limit,
                                   Object value, Comparator c) {
 
-        int low   = start;
-        int high  = limit;
+        int low = start;
+        int high = limit;
         int found = limit;
         int mid;
         int compare;
 
         while (low < high) {
-            mid     = (low + high) >>> 1;
+            mid = (low + high) >>> 1;
             compare = c.compare(value, array[mid]);
 
             if (compare < 0) {
@@ -69,19 +70,19 @@ public class ArraySort {
             } else if (compare > 0) {
                 low = mid + 1;
             } else {
-                high  = mid;
+                high = mid;
                 found = mid;
             }
         }
 
         return found == limit ? -low - 1
-                              : found;
+                : found;
     }
 
     public static int deDuplicate(Object[] array, int limit,
                                   Comparator comparator) {
 
-        int baseIndex    = 0;
+        int baseIndex = 0;
         int currentIndex = 1;
 
         if (limit < 2) {
@@ -90,7 +91,7 @@ public class ArraySort {
 
         for (; currentIndex < limit; currentIndex++) {
             int compare = comparator.compare(array[baseIndex],
-                                             array[currentIndex]);
+                    array[currentIndex]);
 
             if (compare == 0) {
                 continue;
@@ -105,7 +106,7 @@ public class ArraySort {
     }
 
     public static void sort(Object[] array, int limit, Comparator comparator
-                            ) {
+    ) {
 
         if (limit < 2) {
             return;
@@ -145,10 +146,12 @@ public class ArraySort {
             i = l;
             v = j;
 
-            for (;;) {
-                while (comparator.compare(array[++i], array[v]) < 0) {}
+            for (; ; ) {
+                while (comparator.compare(array[++i], array[v]) < 0) {
+                }
 
-                while (comparator.compare(array[v], array[--j]) < 0) {}
+                while (comparator.compare(array[v], array[--j]) < 0) {
+                }
 
                 if (j < i) {
                     break;

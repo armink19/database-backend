@@ -52,7 +52,7 @@ import java.net.URL;
 public class ClientConnectionHTTP extends ClientConnection {
 
     static final String ENCODING = "ISO-8859-1";
-    static final int    IDLENGTH = 12;    // length of int + long for db and session
+    static final int IDLENGTH = 12;    // length of int + long for db and session
 
     // IDs
     private HttpURLConnection httpConnection = null;
@@ -62,7 +62,7 @@ public class ClientConnectionHTTP extends ClientConnection {
                                 boolean isTLSWrapper, String user,
                                 String password, int timeZoneSeconds) {
         super(host, port, path, database, isTLS, isTLSWrapper, user, password,
-              timeZoneSeconds);
+                timeZoneSeconds);
     }
 
     public ClientConnectionHTTP(ClientConnectionHTTP other) {
@@ -71,11 +71,12 @@ public class ClientConnectionHTTP extends ClientConnection {
 
     // Empty since HTTP has an empty handshake() method. execute() will open connection
     // when it needs to
-    protected void initConnection(String host, int port, boolean isTLS) {}
+    protected void initConnection(String host, int port, boolean isTLS) {
+    }
 
     /**
      * This just opens (a new or re-uses a connection) Keep-Alive.
-     *
+     * <p>
      * Contrary to before, the dataOutput and dataInput are not connected to the
      * connection's Output- and Input-Streams here, because when connecting to
      * the input stream here, somehow rules out writing to the output stream.
@@ -83,8 +84,8 @@ public class ClientConnectionHTTP extends ClientConnection {
     protected void openConnection(String host, int port, boolean isTLS) {
 
         try {
-            URL    url = null;
-            String s   = "";
+            URL url = null;
+            String s = "";
 
             if (!path.endsWith("/")) {
                 s = "/";
@@ -92,10 +93,10 @@ public class ClientConnectionHTTP extends ClientConnection {
 
             if (isTLS) {
                 url = new URL("https://" + host + ":" + port + path + s
-                              + database);    // PROTECT/servlet/hsqldb
+                        + database);    // PROTECT/servlet/hsqldb
             } else {
                 url = new URL("http://" + host + ":" + port + path + s
-                              + database);    // PROTECT/servlet/hsqldb
+                        + database);    // PROTECT/servlet/hsqldb
             }
 
             httpConnection = (HttpURLConnection) url.openConnection();
@@ -131,8 +132,8 @@ public class ClientConnectionHTTP extends ClientConnection {
 
     protected void write(Result r) throws IOException, HsqlException {
 
-        HsqlByteArrayOutputStream memStream  = new HsqlByteArrayOutputStream();
-        DataOutputStream          tempOutput = new DataOutputStream(memStream);
+        HsqlByteArrayOutputStream memStream = new HsqlByteArrayOutputStream();
+        DataOutputStream tempOutput = new DataOutputStream(memStream);
 
         r.write(this, tempOutput, rowOut);
         httpConnection.setRequestMethod("POST");
@@ -141,10 +142,10 @@ public class ClientConnectionHTTP extends ClientConnection {
 
         //httpConnection.setRequestProperty("Accept-Encoding", "gzip");
         httpConnection.setRequestProperty("Content-Type",
-                                          "application/octet-stream");
+                "application/octet-stream");
         httpConnection.setRequestProperty("Content-Length",
-                                          String.valueOf(IDLENGTH
-                                              + memStream.size()));
+                String.valueOf(IDLENGTH
+                        + memStream.size()));
 
         dataOutput = new DataOutputStream(httpConnection.getOutputStream());
 
@@ -157,7 +158,7 @@ public class ClientConnectionHTTP extends ClientConnection {
     protected Result read() throws IOException, HsqlException {
 
         dataInput = new DataInputStream(
-            new BufferedInputStream(httpConnection.getInputStream()));
+                new BufferedInputStream(httpConnection.getInputStream()));
 
         rowOut.reset();
 

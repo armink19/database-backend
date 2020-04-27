@@ -53,10 +53,10 @@ import java.math.BigInteger;
 public class RowOutputBinary extends RowOutputBase {
 
     public static final int INT_STORE_SIZE = 4;
-    int                     storageSize;
-    int                     sizePosition;
-    final int               scale;    // 2 to power n where n >= 0
-    final int               mask;
+    int storageSize;
+    int sizePosition;
+    final int scale;    // 2 to power n where n >= 0
+    final int mask;
 
     public RowOutputBinary() {
         this(new byte[64]);
@@ -66,8 +66,8 @@ public class RowOutputBinary extends RowOutputBase {
 
         super(initialSize);
 
-        this.scale        = scale;
-        this.mask         = -scale;
+        this.scale = scale;
+        this.mask = -scale;
         this.sizePosition = -1;
     }
 
@@ -80,12 +80,12 @@ public class RowOutputBinary extends RowOutputBase {
 
         super(buffer);
 
-        this.scale        = 1;
-        this.mask         = -scale;
+        this.scale = 1;
+        this.mask = -scale;
         this.sizePosition = -1;
     }
 
-// fredt@users - comment - methods for writing column type, name and data size
+    // fredt@users - comment - methods for writing column type, name and data size
     public void writeIntData(int i, int position) {
 
         int temp = count;
@@ -111,7 +111,8 @@ public class RowOutputBinary extends RowOutputBase {
         storageSize = size;
     }
 
-    public void setMode(int mode) {}
+    public void setMode(int mode) {
+    }
 
     public void writeEnd() {
 
@@ -154,16 +155,16 @@ public class RowOutputBinary extends RowOutputBase {
     }
 
     /**
-     *  Calculate the size of byte array required to store a row.
+     * Calculate the size of byte array required to store a row.
      *
-     * @param  row - a database row
-     * @return  size of byte array
+     * @param row - a database row
+     * @return size of byte array
      */
     public int getSize(Row row) {
 
-        Object[] data  = row.getData();
-        Type[]   types = row.getTable().getColumnTypes();
-        int      cols  = row.getTable().getDataColumnCount();
+        Object[] data = row.getData();
+        Type[] types = row.getTable().getColumnTypes();
+        int cols = row.getTable().getDataColumnCount();
 
         return INT_STORE_SIZE + getSize(data, cols, types);
     }
@@ -202,9 +203,9 @@ public class RowOutputBinary extends RowOutputBase {
 
     protected void writeDecimal(BigDecimal o, Type type) {
 
-        int        scale   = o.scale();
-        BigInteger bigint  = o.unscaledValue();
-        byte[]     bytearr = bigint.toByteArray();
+        int scale = o.scale();
+        BigInteger bigint = o.unscaledValue();
+        byte[] bytearr = bigint.toByteArray();
 
         writeByteArray(bytearr);
         writeInt(scale);
@@ -212,7 +213,7 @@ public class RowOutputBinary extends RowOutputBase {
 
     protected void writeBoolean(Boolean o) {
         write(o.booleanValue() ? 1
-                               : 0);
+                : 0);
     }
 
     protected void writeDate(TimestampData o, Type type) {
@@ -294,7 +295,7 @@ public class RowOutputBinary extends RowOutputBase {
         }
     }
 
-// fredt@users - comment - helper and conversion methods
+    // fredt@users - comment - helper and conversion methods
     public void writeByteArray(byte[] b) {
         writeInt(b.length);
         write(b, 0, b.length);
@@ -321,8 +322,8 @@ public class RowOutputBinary extends RowOutputBase {
     /**
      * Calculate the size of byte array required to store a row.
      *
-     * @param data - the row data
-     * @param l - number of data[] elements to include in calculation
+     * @param data  - the row data
+     * @param l     - number of data[] elements to include in calculation
      * @param types - array of java.sql.Types values
      * @return size of byte array
      */
@@ -349,103 +350,103 @@ public class RowOutputBinary extends RowOutputBase {
 
         switch (type.typeCode) {
 
-            case Types.SQL_ALL_TYPES :
+            case Types.SQL_ALL_TYPES:
                 break;
 
-            case Types.SQL_CHAR :
-            case Types.SQL_VARCHAR :
+            case Types.SQL_CHAR:
+            case Types.SQL_VARCHAR:
                 s += INT_STORE_SIZE;
                 s += StringConverter.getUTFSize((String) o);
                 break;
 
-            case Types.TINYINT :
-            case Types.SQL_SMALLINT :
+            case Types.TINYINT:
+            case Types.SQL_SMALLINT:
                 s += 2;
                 break;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 s += 4;
                 break;
 
-            case Types.SQL_BIGINT :
-            case Types.SQL_REAL :
-            case Types.SQL_FLOAT :
-            case Types.SQL_DOUBLE :
+            case Types.SQL_BIGINT:
+            case Types.SQL_REAL:
+            case Types.SQL_FLOAT:
+            case Types.SQL_DOUBLE:
                 s += 8;
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 s += 8;
 
                 BigDecimal bigdecimal = (BigDecimal) o;
-                BigInteger bigint     = bigdecimal.unscaledValue();
+                BigInteger bigint = bigdecimal.unscaledValue();
 
                 s += bigint.toByteArray().length;
                 break;
 
-            case Types.SQL_BOOLEAN :
+            case Types.SQL_BOOLEAN:
                 s += 1;
                 break;
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 s += 8;
                 break;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 s += 8;
                 break;
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 s += 12;
                 break;
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 s += 12;
                 break;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 s += 16;
                 break;
 
-            case Types.SQL_INTERVAL_YEAR :
-            case Types.SQL_INTERVAL_YEAR_TO_MONTH :
-            case Types.SQL_INTERVAL_MONTH :
+            case Types.SQL_INTERVAL_YEAR:
+            case Types.SQL_INTERVAL_YEAR_TO_MONTH:
+            case Types.SQL_INTERVAL_MONTH:
                 s += 8;
                 break;
 
-            case Types.SQL_INTERVAL_DAY :
-            case Types.SQL_INTERVAL_DAY_TO_HOUR :
-            case Types.SQL_INTERVAL_DAY_TO_MINUTE :
-            case Types.SQL_INTERVAL_DAY_TO_SECOND :
-            case Types.SQL_INTERVAL_HOUR :
-            case Types.SQL_INTERVAL_HOUR_TO_MINUTE :
-            case Types.SQL_INTERVAL_HOUR_TO_SECOND :
-            case Types.SQL_INTERVAL_MINUTE :
-            case Types.SQL_INTERVAL_MINUTE_TO_SECOND :
-            case Types.SQL_INTERVAL_SECOND :
+            case Types.SQL_INTERVAL_DAY:
+            case Types.SQL_INTERVAL_DAY_TO_HOUR:
+            case Types.SQL_INTERVAL_DAY_TO_MINUTE:
+            case Types.SQL_INTERVAL_DAY_TO_SECOND:
+            case Types.SQL_INTERVAL_HOUR:
+            case Types.SQL_INTERVAL_HOUR_TO_MINUTE:
+            case Types.SQL_INTERVAL_HOUR_TO_SECOND:
+            case Types.SQL_INTERVAL_MINUTE:
+            case Types.SQL_INTERVAL_MINUTE_TO_SECOND:
+            case Types.SQL_INTERVAL_SECOND:
                 s += 12;
                 break;
 
-            case Types.SQL_BINARY :
-            case Types.SQL_VARBINARY :
-            case Types.SQL_GUID :
+            case Types.SQL_BINARY:
+            case Types.SQL_VARBINARY:
+            case Types.SQL_GUID:
                 s += INT_STORE_SIZE;
                 s += ((BinaryData) o).length(null);
                 break;
 
-            case Types.SQL_BIT :
-            case Types.SQL_BIT_VARYING :
+            case Types.SQL_BIT:
+            case Types.SQL_BIT_VARYING:
                 s += INT_STORE_SIZE;
                 s += ((BinaryData) o).length(null);
                 break;
 
-            case Types.SQL_CLOB :
-            case Types.SQL_BLOB :
+            case Types.SQL_CLOB:
+            case Types.SQL_BLOB:
                 s += 8;
                 break;
 
-            case Types.SQL_ARRAY : {
+            case Types.SQL_ARRAY: {
                 s += 4;
 
                 Object[] array = (Object[]) o;
@@ -458,14 +459,14 @@ public class RowOutputBinary extends RowOutputBase {
 
                 break;
             }
-            case Types.OTHER :
+            case Types.OTHER:
                 JavaObjectData jo = (JavaObjectData) o;
 
                 s += INT_STORE_SIZE;
                 s += jo.getBytesLength();
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "RowOutputBinary");
         }
 
@@ -473,7 +474,7 @@ public class RowOutputBinary extends RowOutputBase {
     }
 
     /**
-     * @param  extra amount of extra space
+     * @param extra amount of extra space
      */
     public void ensureRoom(int extra) {
         super.ensureRoom(extra);
@@ -483,7 +484,7 @@ public class RowOutputBinary extends RowOutputBase {
 
         super.reset();
 
-        storageSize  = 0;
+        storageSize = 0;
         sizePosition = -1;
     }
 
@@ -491,7 +492,7 @@ public class RowOutputBinary extends RowOutputBase {
 
         super.reset(newSize);
 
-        storageSize  = 0;
+        storageSize = 0;
         sizePosition = -1;
     }
 
@@ -499,7 +500,7 @@ public class RowOutputBinary extends RowOutputBase {
 
         super.reset(buffer);
 
-        storageSize  = 0;
+        storageSize = 0;
         sizePosition = -1;
     }
 

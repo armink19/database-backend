@@ -42,10 +42,10 @@ import java.io.*;
  * @since 1.7.0
  */
 public class HsqlByteArrayOutputStream extends OutputStream
-implements DataOutput {
+        implements DataOutput {
 
     protected byte[] buffer;
-    protected int    count;
+    protected int count;
 
     public HsqlByteArrayOutputStream() {
         this(128);
@@ -85,7 +85,7 @@ implements DataOutput {
 
         buffer = new byte[128];
 
-        for (;;) {
+        for (; ; ) {
             int read = input.read(buffer, count, buffer.length - count);
 
             if (read == -1) {
@@ -150,7 +150,7 @@ implements DataOutput {
         ensureRoom(1);
 
         buffer[count++] = (byte) (v ? 1
-                                    : 0);
+                : 0);
     }
 
     public void writeByte(int v) {
@@ -208,13 +208,14 @@ implements DataOutput {
         }
 
         buffer[initpos++] = (byte) (bytecount >>> 8);
-        buffer[initpos]   = (byte) bytecount;
+        buffer[initpos] = (byte) bytecount;
     }
 
     /**
      * does nothing
      */
-    public void flush() throws java.io.IOException {}
+    public void flush() throws java.io.IOException {
+    }
 
     // methods that extend java.io.OutputStream
     public void write(int b) {
@@ -240,7 +241,8 @@ implements DataOutput {
         return new String(buffer, 0, count);
     }
 
-    public void close() throws IOException {}
+    public void close() throws IOException {
+    }
 
     // additional public methods not in similar java.util classes
     public void writeNoCheck(int b) {
@@ -274,7 +276,7 @@ implements DataOutput {
                 break;
             }
 
-            left  -= read;
+            left -= read;
             count += read;
         }
 
@@ -364,7 +366,7 @@ implements DataOutput {
     public void ensureRoom(int extra) {
 
         long newcount = count + extra;
-        long newsize  = buffer.length;
+        long newsize = buffer.length;
 
         if (newcount > Integer.MAX_VALUE) {
             throw new OutOfMemoryError("2GB maximum buffer length exceeded");
@@ -393,12 +395,12 @@ implements DataOutput {
 
         if (newSize > buffer.length) {
             newSize = (int) ArrayUtil.getBinaryMultipleCeiling(newSize, 4096);
-            buffer  = new byte[newSize];
+            buffer = new byte[newSize];
         }
     }
 
     public void reset(byte[] buffer) {
-        count       = 0;
+        count = 0;
         this.buffer = buffer;
     }
 

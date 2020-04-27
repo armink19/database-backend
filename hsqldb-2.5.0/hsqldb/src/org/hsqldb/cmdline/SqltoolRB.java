@@ -38,12 +38,12 @@ import org.hsqldb.lib.ValidatingResourceBundle;
 
 /**
  * Resource Bundle for SqlTool and associated classes.
- *
+ * <p>
  * Purpose of this class is to wrap a RefCapablePropertyResourceBundle to
- *  reliably detect any possible use of a missing property key as soon as
- *  this class is clinitted.
+ * reliably detect any possible use of a missing property key as soon as
+ * this class is clinitted.
  * The reason for this is to allow us developers to detect all such errors
- *  before end-users ever use this class.
+ * before end-users ever use this class.
  */
 public enum SqltoolRB implements RefCapableRBInterface {
     SqlTool_syntax,
@@ -267,13 +267,13 @@ public enum SqltoolRB implements RefCapableRBInterface {
     no_timestamp_format,
     else_without_if,
     import_col_dup,
-    desturl_nowrite
-    ;
+    desturl_nowrite;
 
     private static ValidatingResourceBundle vrb =
             new ValidatingResourceBundle(
                     SqltoolRB.class.getPackage().getName() + ".sqltool",
                     SqltoolRB.class);
+
     static {
         vrb.setMissingPosValueBehavior(ValidatingResourceBundle.NOOP_BEHAVIOR);
         vrb.setMissingPropertyBehavior(ValidatingResourceBundle.NOOP_BEHAVIOR);
@@ -282,54 +282,70 @@ public enum SqltoolRB implements RefCapableRBInterface {
     public String getString() {
         return vrb.getString(this);
     }
+
     public String toString() {
         return ValidatingResourceBundle.resourceKeyFor(this);
     }
+
     public String getExpandedString() {
         return vrb.getExpandedString(this);
     }
+
     public String getExpandedString(String... strings) {
         return vrb.getExpandedString(this, strings);
     }
+
     public String getString(Throwable t) {
         return vrb.getString(this,
                 (t.getMessage() == null)
-                ? t.toString()
-                : (t.getClass().getSimpleName() + ": " + t.getMessage()));
+                        ? t.toString()
+                        : (t.getClass().getSimpleName() + ": " + t.getMessage()));
     }
+
     public String getString(String... strings) {
         return vrb.getString(this, strings);
     }
+
     public String getString(int i1) {
         return vrb.getString(this, i1);
     }
+
     public String getString(int i1, int i2) {
         return vrb.getString(this, i1, i2);
     }
+
     public String getString(int i1, int i2, int i3) {
         return vrb.getString(this, i1, i2, i3);
     }
+
     public String getString(int i1, String s2) {
         return vrb.getString(this, i1, s2);
     }
+
     public String getString(String s1, int i2) {
         return vrb.getString(this, s1, i2);
     }
+
     public String getString(int i1, int i2, String s3) {
         return vrb.getString(this, i1, i2, s3);
     }
+
     public String getString(int i1, String s2, int i3) {
         return vrb.getString(this, i1, s2, i3);
     }
+
     public String getString(String s1, int i2, int i3) {
         return vrb.getString(this, s1, i2, i3);
     }
+
     public String getString(int i1, String s2, String s3) {
         return vrb.getString(this, i1, s3, s3);
     }
+
     public String getString(String s1, String s2, int i3) {
         return vrb.getString(this, s1, s2, i3);
     }
+
     public String getString(String s1, int i2, String s3) {
         return vrb.getString(this, s1, i2, s3);
     }

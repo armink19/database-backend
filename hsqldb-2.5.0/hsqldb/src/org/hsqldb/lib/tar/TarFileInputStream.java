@@ -40,7 +40,7 @@ import java.util.zip.GZIPInputStream;
  * FileInputStream, yet we must use public methods of the underlying
  * FileInputStream internally.  Can't accomplish these goals in Java if we
  * subclass.
- * <P>
+ * <p>
  * This class is ignorant about Tar header fields, attributes and such.
  * It is concerned with reading and writing blocks of data in conformance with
  * Tar formatting, in a way convenient to those who want to get the header and
@@ -78,8 +78,8 @@ public class TarFileInputStream {
 
     /* This is not a "Reader", but the byte "Stream" that we read() from. */
     protected byte[] readBuffer;
-    protected int    readBufferBlocks;
-    protected int    compressionType;
+    protected int readBufferBlocks;
+    protected int compressionType;
 
     /**
      * Convenience wrapper to use default readBufferBlocks and compressionType.
@@ -98,7 +98,7 @@ public class TarFileInputStream {
     public TarFileInputStream(File sourceFile,
                               int compressionType) throws IOException {
         this(sourceFile, compressionType,
-             TarFileOutputStream.Compression.DEFAULT_BLOCKS_PER_RECORD);
+                TarFileOutputStream.Compression.DEFAULT_BLOCKS_PER_RECORD);
     }
 
     public int getReadBufferBlocks() {
@@ -109,7 +109,7 @@ public class TarFileInputStream {
      * This class does no validation or enforcement of file naming conventions.
      * If desired, the caller should enforce extensions like "tar" and
      * "tar.gz" (and that they match the specified compression type).
-     * <P>
+     * <p>
      * This object will automatically release its I/O resources when you get
      * false back from a readNextHeaderBlock() call.
      * If you abort before then, you must call the close() method like for a
@@ -128,28 +128,28 @@ public class TarFileInputStream {
 
         if (!sourceFile.canRead()) {
             throw new IOException(
-                RB.read_denied.getString(sourceFile.getAbsolutePath()));
+                    RB.read_denied.getString(sourceFile.getAbsolutePath()));
         }
 
         this.readBufferBlocks = readBufferBlocks;
-        this.compressionType  = compressionType;
-        readBuffer            = new byte[readBufferBlocks * 512];
+        this.compressionType = compressionType;
+        readBuffer = new byte[readBufferBlocks * 512];
 
         switch (compressionType) {
 
-            case TarFileOutputStream.Compression.NO_COMPRESSION :
+            case TarFileOutputStream.Compression.NO_COMPRESSION:
                 readStream = new FileInputStream(sourceFile);
                 break;
 
-            case TarFileOutputStream.Compression.GZIP_COMPRESSION :
+            case TarFileOutputStream.Compression.GZIP_COMPRESSION:
                 readStream =
-                    new GZIPInputStream(new FileInputStream(sourceFile),
-                                        readBuffer.length);
+                        new GZIPInputStream(new FileInputStream(sourceFile),
+                                readBuffer.length);
                 break;
 
-            default :
+            default:
                 throw new IllegalArgumentException(
-                    RB.compression_unknown.getString(compressionType));
+                        RB.compression_unknown.getString(compressionType));
         }
     }
 
@@ -157,25 +157,25 @@ public class TarFileInputStream {
      * readBlocks(int) is the method that USERS of this class should use to
      * read file data from the tar file.
      * This method reads from the tar file and writes to the readBuffer array.
-     * <P>
+     * <p>
      * This class and subclasses should read from the underlying readStream
      * <b>ONLY WITH THIS METHOD</b>.
      * That way we can be confident that bytesRead will always be accurate.
      * </P> <P>
      * This method is different from a typical Java byte array read command
      * in that when reading tar files <OL>
-     *   <LI>we always know ahead-of-time how many bytes we should read, and
-     *   <LI>we always want to read quantities of bytes in multiples of 512.
+     * <LI>we always know ahead-of-time how many bytes we should read, and
+     * <LI>we always want to read quantities of bytes in multiples of 512.
      * </OL>
      * </P>
      *
-     * @param blocks  How many 512 blocks to read.
-     * @throws IOException for an I/O error on the underlying InputStream
+     * @param blocks How many 512 blocks to read.
+     * @throws IOException           for an I/O error on the underlying InputStream
      * @throws TarMalformatException if no I/O error occurred, but we failed to
      *                               read the exact number of bytes requested.
      */
     public void readBlocks(int blocks)
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         /* int for blocks should support sizes up to about 1T, according to
          * my off-the-cuff calculations */
@@ -192,21 +192,21 @@ public class TarFileInputStream {
 
         if (i != blocks * 512) {
             throw new TarMalformatException(
-                RB.insufficient_read.getString(blocks * 512, i));
+                    RB.insufficient_read.getString(blocks * 512, i));
         }
     }
 
     /**
      * Work-around for the problem that compressed InputReaders don't fill
      * the read buffer before returning.
-     *
+     * <p>
      * Has visibility 'protected' so that subclasses may override with
      * different algorithms, or use different algorithms for different
      * compression stream.
      */
     protected void readCompressedBlocks(int blocks) throws IOException {
 
-        int bytesSoFar    = 0;
+        int bytesSoFar = 0;
         int requiredBytes = 512 * blocks;
 
         // This method works with individual bytes!
@@ -214,15 +214,15 @@ public class TarFileInputStream {
 
         while (bytesSoFar < requiredBytes) {
             i = readStream.read(readBuffer, bytesSoFar,
-                                requiredBytes - bytesSoFar);
+                    requiredBytes - bytesSoFar);
 
             if (i < 0) {
                 throw new EOFException(
-                    RB.decompression_ranout.getString(
-                        bytesSoFar, requiredBytes));
+                        RB.decompression_ranout.getString(
+                                bytesSoFar, requiredBytes));
             }
 
-            bytesRead  += i;
+            bytesRead += i;
             bytesSoFar += i;
         }
     }
@@ -230,7 +230,7 @@ public class TarFileInputStream {
     /**
      * readBlock() and readNextHeaderBlock are the methods that USERS of this
      * class should use to read header blocks from the tar file.
-     * <P>
+     * <p>
      * readBlock() should be used when you know that the current block should
      * contain what you want.
      * E.g. you know that the very first block of a tar file should contain
@@ -246,19 +246,19 @@ public class TarFileInputStream {
     /**
      * readBlock() and readNextHeaderBlock are the methods that USERS of this
      * class should use to read header blocks from the tar file.
-     * <P>
+     * <p>
      * readNextHeaderBlock continues working through the Tar File from the
      * current point until it finds a block with a non-0 first byte.
      * </P>
      *
-     * @return  True if a header block was read and place at beginning of the
-     *          readBuffer array.  False if EOF was encountered without finding
-     *          any blocks with first byte != 0.  If false is returned, we have
-     *          automatically closed the this TarFileInputStream too.
+     * @return True if a header block was read and place at beginning of the
+     * readBuffer array.  False if EOF was encountered without finding
+     * any blocks with first byte != 0.  If false is returned, we have
+     * automatically closed the this TarFileInputStream too.
      * @see #readBlock
      */
     public boolean readNextHeaderBlock()
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         // We read a-byte-at-a-time because there should only be 2 empty blocks
         // between each Tar Entry.

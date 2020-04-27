@@ -33,11 +33,11 @@ package org.hsqldb.lib.tar;
 
 /**
  * Purely static structure defining our interface to the Tar Entry Header.
- *
+ * <p>
  * The fields controlled here are fields for the individual tar file entries
  * in an archive.  There is no such thing as a Header Field at the top archive
  * level.
- * <P>
+ * <p>
  * We use header field names as they are specified in the FreeBSD man page for
  * tar in section 5 (Solaris and Linux have no such page in section 5).
  * Where we use a constant, the constant name is just the FreeBSD field name
@@ -48,14 +48,14 @@ package org.hsqldb.lib.tar;
  * We purposefully define no variable for this list of fields, since
  * we DO NOT WANT TO access or change these values, due to application
  * goals or JVM limitations:<UL>
- *   <LI>gid
- *   <LI>uid
- *   <LI>linkname
- *   <LI>magic (UStar ID),
- *   <LI>magic version
- *   <LI>group name
- *   <LI>device major num
- *   <LI>device minor num
+ * <LI>gid
+ * <LI>uid
+ * <LI>linkname
+ * <LI>magic (UStar ID),
+ * <LI>magic version
+ * <LI>group name
+ * <LI>device major num
+ * <LI>device minor num
  * </UL>
  * Our application has no use for these, or Java has no ability to
  * work with them.
@@ -91,12 +91,12 @@ public enum TarHeaderField {
     size(124, 135),
     mtime(136, 147),  // (File.lastModified()|*.getTime())/1000
     checksum(148, 156),// "Queer terminator" in original code.  ???
-                      // Pax UStore does not follow spec and delimits this
-                      // field like any other numeric, skipping the space byte.
+    // Pax UStore does not follow spec and delimits this
+    // field like any other numeric, skipping the space byte.
     typeflag(156, 157), // 1-byte CODE
-        // With current version, we are never doing anything with this
-        // field.  In future, we will support x and/or g type here.
-        // N.b. Gnu Tar does not honor this Stop.
+    // With current version, we are never doing anything with this
+    // field.  In future, we will support x and/or g type here.
+    // N.b. Gnu Tar does not honor this Stop.
 
     // The remaining are from UStar format:
     magic(257, 263),
@@ -109,11 +109,17 @@ public enum TarHeaderField {
         this.start = start;
         this.stop = stop;
     }
+
     private int start, stop;
 
     // The getters below throw RuntimExceptions instead of
     // TarMalformatExceptions because these errors indicate a dev problem,
     // not some problem with a Header, or generating or reading a Header.
-    public int getStart() { return start; }
-    public int getStop() { return stop; }
+    public int getStart() {
+        return start;
+    }
+
+    public int getStop() {
+        return stop;
+    }
 }

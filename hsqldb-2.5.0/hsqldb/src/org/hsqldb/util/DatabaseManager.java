@@ -54,7 +54,7 @@ import java.util.ArrayList;
  * "--switch" because "-switch" usage is ambiguous as used here.  Single
  * switches should be reserved for single-letter switches which can be mixed
  * like * "-u -r -l" = "-url".  -blaine
-*/
+ */
 
 /**
  * AWT Tool for manageing a JDBC database.
@@ -71,8 +71,8 @@ import java.util.ArrayList;
  *              --dir <path>          default directory
  *              --script <file>       reads from script file
  * }
- *</pre>
- *
+ * </pre>
+ * <p>
  * Originally in HypersonicSQL. Extended in various versions of HSQLDB.
  *
  * @author Thomas Mueller (Hypersonic SQL Group)
@@ -80,65 +80,66 @@ import java.util.ArrayList;
  * @since Hypersonic SQL
  */
 public class DatabaseManager extends Applet
-implements ActionListener, WindowListener, KeyListener {
+        implements ActionListener, WindowListener, KeyListener {
 
-    static final String    NL           = System.getProperty("line.separator");
-    static final int       iMaxRecent   = 24;
+    static final String NL = System.getProperty("line.separator");
+    static final int iMaxRecent = 24;
     private static boolean TT_AVAILABLE = false;
 
     static {
         try {
             Class.forName(DatabaseManager.class.getPackage().getName()
-                          + ".Transfer");
+                    + ".Transfer");
 
             TT_AVAILABLE = true;
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+        }
     }
 
     private static final String HELP_TEXT =
-        "See the forums, mailing lists, and HSQLDB User Guide\n"
-        + "at http://hsqldb.org.\n\n"
-        + "Please paste the following version identifier with any\n"
-        + "problem reports or help requests:  $Revision: 5982 $"
-        + (TT_AVAILABLE ? ""
-                        : ("\n\nTransferTool classes are not in CLASSPATH.\n"
-                           + "To enable the Tools menu, add 'transfer.jar' to your class path."));
+            "See the forums, mailing lists, and HSQLDB User Guide\n"
+                    + "at http://hsqldb.org.\n\n"
+                    + "Please paste the following version identifier with any\n"
+                    + "problem reports or help requests:  $Revision: 5982 $"
+                    + (TT_AVAILABLE ? ""
+                    : ("\n\nTransferTool classes are not in CLASSPATH.\n"
+                    + "To enable the Tools menu, add 'transfer.jar' to your class path."));
     ;
     private static final String ABOUT_TEXT =
-        "$Revision: 5982 $ of DatabaseManager\n\n"
-        + "Copyright (c) 1995-2000, The Hypersonic SQL Group.\n"
-        + "Copyright (c) 2001-2019, The HSQL Development Group.\n"
-        + "http://hsqldb.org  (User Guide available at this site).\n\n\n"
-        + "You may use and redistribute according to the HSQLDB\n"
-        + "license documented in the source code and at the web\n"
-        + "site above."          //
-        + (TT_AVAILABLE ? "\n\nTransferTool options are available."
-                        : "");
-    Connection       cConn;
+            "$Revision: 5982 $ of DatabaseManager\n\n"
+                    + "Copyright (c) 1995-2000, The Hypersonic SQL Group.\n"
+                    + "Copyright (c) 2001-2019, The HSQL Development Group.\n"
+                    + "http://hsqldb.org  (User Guide available at this site).\n\n\n"
+                    + "You may use and redistribute according to the HSQLDB\n"
+                    + "license documented in the source code and at the web\n"
+                    + "site above."          //
+                    + (TT_AVAILABLE ? "\n\nTransferTool options are available."
+                    : "");
+    Connection cConn;
     DatabaseMetaData dMeta;
-    Statement        sStatement;
-    Menu             mRecent;
-    String[]         sRecent;
-    int              iRecent;
-    TextArea         txtCommand;
-    Button           butExecute;
-    Button           butClear;
-    Tree             tTree;
-    Panel            pResult;
-    long             lTime;
-    int              iResult;    // 0: grid; 1: text
-    Grid             gResult;
-    TextArea         txtResult;
-    boolean          bHelp;
-    Frame            fMain;
-    Image            imgEmpty;
-    static boolean   bMustExit;
-    String           ifHuge = "";
+    Statement sStatement;
+    Menu mRecent;
+    String[] sRecent;
+    int iRecent;
+    TextArea txtCommand;
+    Button butExecute;
+    Button butClear;
+    Tree tTree;
+    Panel pResult;
+    long lTime;
+    int iResult;    // 0: grid; 1: text
+    Grid gResult;
+    TextArea txtResult;
+    boolean bHelp;
+    Frame fMain;
+    Image imgEmpty;
+    static boolean bMustExit;
+    String ifHuge = "";
 
     // (ulrivo): variables set by arguments from the commandline
-    static String defDriver   = "org.hsqldb.jdbcDriver";
-    static String defURL      = "jdbc:hsqldb:mem:.";
-    static String defUser     = "SA";
+    static String defDriver = "org.hsqldb.jdbcDriver";
+    static String defURL = "jdbc:hsqldb:mem:.";
+    static String defUser = "SA";
     static String defPassword = "";
     static String defScript;
     static String defDirectory;
@@ -152,13 +153,14 @@ implements ActionListener, WindowListener, KeyListener {
         if (cConn != null) {
             try {
                 cConn.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         }
 
         cConn = c;
 
         try {
-            dMeta      = cConn.getMetaData();
+            dMeta = cConn.getMetaData();
             sStatement = cConn.createStatement();
 
             refreshTree();
@@ -187,9 +189,9 @@ implements ActionListener, WindowListener, KeyListener {
 
         System.getProperties().put("sun.java2d.noddraw", "true");
 
-        String  urlid        = null;
-        String  rcFile       = null;
-        boolean autoConnect  = false;
+        String urlid = null;
+        String rcFile = null;
+        boolean autoConnect = false;
         boolean urlidConnect = false;
 
         bMustExit = false;
@@ -224,18 +226,18 @@ implements ActionListener, WindowListener, KeyListener {
         System.getProperties().put("sun.java2d.noddraw", "true");
 
         // (ulrivo): read all arguments from the command line
-        String  currentArg;
-        String  lowerArg;
-        String  urlid        = null;
-        String  rcFile       = null;
-        boolean autoConnect  = false;
+        String currentArg;
+        String lowerArg;
+        String urlid = null;
+        String rcFile = null;
+        boolean autoConnect = false;
         boolean urlidConnect = false;
 
         bMustExit = true;
 
         for (int i = 0; i < arg.length; i++) {
             currentArg = arg[i];
-            lowerArg   = arg[i].toLowerCase();
+            lowerArg = arg[i].toLowerCase();
 
             if (lowerArg.startsWith("--")) {
                 lowerArg = lowerArg.substring(1);
@@ -246,28 +248,28 @@ implements ActionListener, WindowListener, KeyListener {
                 //
             } else if (i == arg.length - 1) {
                 throw new IllegalArgumentException("No value for argument "
-                                                   + currentArg);
+                        + currentArg);
             }
 
             i++;
 
             if (lowerArg.equals("-driver")) {
-                defDriver   = arg[i];
+                defDriver = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-url")) {
-                defURL      = arg[i];
+                defURL = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-user")) {
-                defUser     = arg[i];
+                defUser = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-password")) {
                 defPassword = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-urlid")) {
-                urlid        = arg[i];
+                urlid = arg[i];
                 urlidConnect = true;
             } else if (lowerArg.equals("-rcfile")) {
-                rcFile       = arg[i];
+                rcFile = arg[i];
                 urlidConnect = true;
             } else if (lowerArg.equals("-dir")) {
                 defDirectory = arg[i];
@@ -288,8 +290,8 @@ implements ActionListener, WindowListener, KeyListener {
                  * determine that there was an invocation problem).
                  */
                 throw new IllegalArgumentException(
-                    "invalid argrument " + currentArg + " try:  java... "
-                    + DatabaseManager.class.getName() + " --help");
+                        "invalid argrument " + currentArg + " try:  java... "
+                                + DatabaseManager.class.getName() + " --help");
 
                 // No reason to localize, since the main syntax message is
                 // not localized.
@@ -305,16 +307,16 @@ implements ActionListener, WindowListener, KeyListener {
         try {
             if (autoConnect && urlidConnect) {
                 throw new IllegalArgumentException(
-                    "You may not specify both (urlid) AND (url/user/password).");
+                        "You may not specify both (urlid) AND (url/user/password).");
             }
 
             if (autoConnect) {
                 c = ConnectionDialog.createConnection(defDriver, defURL,
-                                                      defUser, defPassword);
+                        defUser, defPassword);
             } else if (urlidConnect) {
                 if (urlid == null) {
                     throw new IllegalArgumentException(
-                        "You must specify an 'urlid' to use an RC file");
+                            "You must specify an 'urlid' to use an RC file");
                 }
 
                 autoConnect = true;
@@ -324,7 +326,7 @@ implements ActionListener, WindowListener, KeyListener {
                 }
 
                 c = new RCData(new File(rcFile), urlid).getConnection(null,
-                               System.getProperty("javax.net.ssl.trustStore"));
+                        System.getProperty("javax.net.ssl.trustStore"));
             } else {
                 c = ConnectionDialog.createConnection(m.fMain, "Connect");
             }
@@ -342,18 +344,18 @@ implements ActionListener, WindowListener, KeyListener {
     private static void showUsage() {
 
         System.out.println(
-            "Usage: java DatabaseManager [--options]\n"
-            + "where options include:\n"
-            + "    --help                show this message\n"
-            + "    --driver <classname>  jdbc driver class\n"
-            + "    --url <name>          jdbc url\n"
-            + "    --user <name>         username used for connection\n"
-            + "    --password <password> password for this user\n"
-            + "    --urlid <urlid>       use url/user/password/driver in rc file\n"
-            + "    --rcfile <file>       (defaults to 'dbmanager.rc' in home dir)\n"
-            + "    --dir <path>          default directory\n"
-            + "    --script <file>       reads from script file\n"
-            + "    --noexit              do not call system.exit()");
+                "Usage: java DatabaseManager [--options]\n"
+                        + "where options include:\n"
+                        + "    --help                show this message\n"
+                        + "    --driver <classname>  jdbc driver class\n"
+                        + "    --url <name>          jdbc url\n"
+                        + "    --user <name>         username used for connection\n"
+                        + "    --password <password> password for this user\n"
+                        + "    --urlid <urlid>       use url/user/password/driver in rc file\n"
+                        + "    --rcfile <file>       (defaults to 'dbmanager.rc' in home dir)\n"
+                        + "    --dir <path>          default directory\n"
+                        + "    --script <file>       reads from script file\n"
+                        + "    --noexit              do not call system.exit()");
     }
 
     void insertTestData() {
@@ -362,11 +364,11 @@ implements ActionListener, WindowListener, KeyListener {
             DatabaseManagerCommon.createTestTables(sStatement);
             refreshTree();
             txtCommand.setText(
-                DatabaseManagerCommon.createTestData(sStatement));
+                    DatabaseManagerCommon.createTestData(sStatement));
             refreshTree();
 
             for (int i = 0; i < DatabaseManagerCommon.testDataSql.length;
-                    i++) {
+                 i++) {
                 addToRecent(DatabaseManagerCommon.testDataSql[i]);
             }
 
@@ -389,24 +391,24 @@ implements ActionListener, WindowListener, KeyListener {
 
         // used shortcuts: CERGTSIUDOLM
         String[] fitems = {
-            "-Connect...", "--", "-Open Script...", "-Save Script...",
-            "-Save Result...", "-Save Result csv...", "--", "-Exit"
+                "-Connect...", "--", "-Open Script...", "-Save Script...",
+                "-Save Result...", "-Save Result csv...", "--", "-Exit"
         };
 
         addMenu(bar, "File", fitems);
 
         String[] vitems = {
-            "RRefresh Tree", "--", "GResults in Grid", "TResults in Text",
-            "--", "1Shrink Tree", "2Enlarge Tree", "3Shrink Command",
-            "4Enlarge Command"
+                "RRefresh Tree", "--", "GResults in Grid", "TResults in Text",
+                "--", "1Shrink Tree", "2Enlarge Tree", "3Shrink Command",
+                "4Enlarge Command"
         };
 
         addMenu(bar, "View", vitems);
 
         String[] sitems = {
-            "SSELECT", "IINSERT", "UUPDATE", "DDELETE", "--", "-CREATE TABLE",
-            "-DROP TABLE", "-CREATE INDEX", "-DROP INDEX", "--", "-CHECKPOINT",
-            "-SCRIPT", "-SET", "-SHUTDOWN", "--", "-Test Script"
+                "SSELECT", "IINSERT", "UUPDATE", "DDELETE", "--", "-CREATE TABLE",
+                "-DROP TABLE", "-CREATE INDEX", "-DROP INDEX", "--", "-CHECKPOINT",
+                "-SCRIPT", "-SET", "-SHUTDOWN", "--", "-Test Script"
         };
 
         addMenu(bar, "Command", sitems);
@@ -418,20 +420,20 @@ implements ActionListener, WindowListener, KeyListener {
         bar.add(mRecent);
 
         String[] soptions = {
-            "-AutoCommit on", "-AutoCommit off", "OCommit", "LRollback", "--",
-            "-Disable MaxRows", "-Set MaxRows to 100", "--", "-Logging on",
-            "-Logging off", "--", "-Insert test data"
+                "-AutoCommit on", "-AutoCommit off", "OCommit", "LRollback", "--",
+                "-Disable MaxRows", "-Set MaxRows to 100", "--", "-Logging on",
+                "-Logging off", "--", "-Insert test data"
         };
 
         addMenu(bar, "Options", soptions);
 
         String[] stools = {
-            "-Dump", "-Restore", "-Transfer"
+                "-Dump", "-Restore", "-Transfer"
         };
 
         addMenu(bar, "Tools", stools);
 
-        Menu     hMenu = new Menu("Help");
+        Menu hMenu = new Menu("Help");
         MenuItem aItem = new MenuItem("About");
 
         aItem.setShortcut(new MenuShortcut('A'));
@@ -453,13 +455,13 @@ implements ActionListener, WindowListener, KeyListener {
 
         sRecent = new String[iMaxRecent];
 
-        Dimension d    = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension size = fMain.getSize();
 
         // (ulrivo): full size on screen with less than 640 width
         if (d.width >= 640) {
             fMain.setLocation((d.width - size.width) / 2,
-                              (d.height - size.height) / 2);
+                    (d.height - size.height) / 2);
         } else {
             fMain.setLocation(0, 0);
             fMain.setSize(d);
@@ -500,7 +502,7 @@ implements ActionListener, WindowListener, KeyListener {
 
         for (int i = 0; i < m.length; i++) {
             MenuItem item = new MenuItem(m[i].substring(1));
-            char     c    = m[i].charAt(0);
+            char c = m[i].charAt(0);
 
             if (c != '-') {
                 item.setShortcut(new MenuShortcut(c));
@@ -511,9 +513,11 @@ implements ActionListener, WindowListener, KeyListener {
         }
     }
 
-    public void keyPressed(KeyEvent k) {}
+    public void keyPressed(KeyEvent k) {
+    }
 
-    public void keyReleased(KeyEvent k) {}
+    public void keyReleased(KeyEvent k) {
+    }
 
     public void keyTyped(KeyEvent k) {
 
@@ -535,8 +539,8 @@ implements ActionListener, WindowListener, KeyListener {
             }
         }
 
-        if (s == null) {}
-        else if (s.equals("Execute")) {
+        if (s == null) {
+        } else if (s.equals("Execute")) {
             execute();
         } else if (s.equals("Clear")) {
             clear();
@@ -545,21 +549,21 @@ implements ActionListener, WindowListener, KeyListener {
         } else if (s.equals("Transfer")) {
             Transfer.work(null);
         } else if (s.equals("Dump")) {
-            Transfer.work(new String[]{ "-d" });
+            Transfer.work(new String[]{"-d"});
         } else if (s.equals("Restore")) {
-            Transfer.work(new String[]{ "-r" });
+            Transfer.work(new String[]{"-r"});
             refreshTree();
         } else if (s.equals("Logging on")) {
             setLogToSystem(true);
         } else if (s.equals("Logging off")) {
             setLogToSystem(false);
         } else if (s.equals("Help")) {
-            showHelp(new String[] {
-                "", HELP_TEXT
+            showHelp(new String[]{
+                    "", HELP_TEXT
             });
         } else if (s.equals("About")) {
-            showHelp(new String[] {
-                "", ABOUT_TEXT
+            showHelp(new String[]{
+                    "", ABOUT_TEXT
             });
         } else if (s.equals("Refresh Tree")) {
             refreshTree();
@@ -578,7 +582,7 @@ implements ActionListener, WindowListener, KeyListener {
             pResult.doLayout();
         } else if (s.equals("Open Script...")) {
             FileDialog f = new FileDialog(fMain, "Open Script",
-                                          FileDialog.LOAD);
+                    FileDialog.LOAD);
 
             // (ulrivo): set default directory if set from command line
             if (defDirectory != null) {
@@ -597,7 +601,7 @@ implements ActionListener, WindowListener, KeyListener {
 
                 if (4096 <= ifHuge.length()) {
                     buf.append(
-                        "This huge file cannot be edited.\n Please execute or clear\n");
+                            "This huge file cannot be edited.\n Please execute or clear\n");
                     txtCommand.setText(buf.toString());
                 } else {
                     txtCommand.setText(ifHuge);
@@ -605,7 +609,7 @@ implements ActionListener, WindowListener, KeyListener {
             }
         } else if (s.equals("Save Script...")) {
             FileDialog f = new FileDialog(fMain, "Save Script",
-                                          FileDialog.SAVE);
+                    FileDialog.SAVE);
 
             // (ulrivo): set default directory if set from command line
             if (defDirectory != null) {
@@ -618,11 +622,11 @@ implements ActionListener, WindowListener, KeyListener {
 
             if (file != null) {
                 DatabaseManagerCommon.writeFile(f.getDirectory() + file,
-                                                txtCommand.getText());
+                        txtCommand.getText());
             }
         } else if (s.equals("Save Result csv...")) {
             FileDialog f = new FileDialog(fMain, "Save Result CSV",
-                                          FileDialog.SAVE);
+                    FileDialog.SAVE);
 
             // (ulrivo): set default directory if set from command line
             if (defDirectory != null) {
@@ -631,7 +635,7 @@ implements ActionListener, WindowListener, KeyListener {
 
             f.setVisible(true);
 
-            String dir  = f.getDirectory();
+            String dir = f.getDirectory();
             String file = f.getFile();
 
             if (dir != null) {
@@ -644,7 +648,7 @@ implements ActionListener, WindowListener, KeyListener {
             }
         } else if (s.equals("Save Result...")) {
             FileDialog f = new FileDialog(fMain, "Save Result",
-                                          FileDialog.SAVE);
+                    FileDialog.SAVE);
 
             // (ulrivo): set default directory if set from command line
             if (defDirectory != null) {
@@ -658,7 +662,7 @@ implements ActionListener, WindowListener, KeyListener {
             if (file != null) {
                 showResultInText();
                 DatabaseManagerCommon.writeFile(f.getDirectory() + file,
-                                                txtResult.getText());
+                        txtResult.getText());
             }
         } else if (s.equals("Results in Text")) {
             iResult = 1;
@@ -670,11 +674,13 @@ implements ActionListener, WindowListener, KeyListener {
         } else if (s.equals("AutoCommit on")) {
             try {
                 cConn.setAutoCommit(true);
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         } else if (s.equals("AutoCommit off")) {
             try {
                 cConn.setAutoCommit(false);
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         } else if (s.equals("Enlarge Tree")) {
             Dimension d = tTree.getMinimumSize();
 
@@ -699,26 +705,30 @@ implements ActionListener, WindowListener, KeyListener {
             int i = txtCommand.getRows() - 1;
 
             txtCommand.setRows(i < 1 ? 1
-                                     : i);
+                    : i);
             fMain.pack();
         } else if (s.equals("Commit")) {
             try {
                 cConn.commit();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         } else if (s.equals("Insert test data")) {
             insertTestData();
         } else if (s.equals("Rollback")) {
             try {
                 cConn.rollback();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         } else if (s.equals("Disable MaxRows")) {
             try {
                 sStatement.setMaxRows(0);
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         } else if (s.equals("Set MaxRows to 100")) {
             try {
                 sStatement.setMaxRows(100);
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         } else if (s.equals("SELECT")) {
             showHelp(DatabaseManagerCommon.selectHelp);
         } else if (s.equals("INSERT")) {
@@ -762,11 +772,14 @@ implements ActionListener, WindowListener, KeyListener {
         txtCommand.setCaretPosition(help[0].length());
     }
 
-    public void windowActivated(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {
+    }
 
-    public void windowDeactivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {
+    }
 
-    public void windowClosed(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {
+    }
 
     public void windowClosing(WindowEvent ev) {
 
@@ -774,7 +787,8 @@ implements ActionListener, WindowListener, KeyListener {
             if (cConn != null) {
                 cConn.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         fMain.dispose();
 
@@ -783,11 +797,14 @@ implements ActionListener, WindowListener, KeyListener {
         }
     }
 
-    public void windowDeiconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {
+    }
 
-    public void windowIconified(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {
+    }
 
-    public void windowOpened(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {
+    }
 
     /**
      * Clear SQL Statements.
@@ -862,14 +879,14 @@ implements ActionListener, WindowListener, KeyListener {
             addToRecent(txtCommand.getText());
         } catch (SQLException e) {
             lTime = System.nanoTime() - lTime;
-            g[0]  = "SQL Error";
+            g[0] = "SQL Error";
 
             gResult.setHead(g);
 
             String s = e.getMessage();
 
-            s    += " / Error Code: " + e.getErrorCode();
-            s    += " / State: " + e.getSQLState();
+            s += " / Error Code: " + e.getErrorCode();
+            s += " / State: " + e.getSQLState();
             g[0] = s;
 
             gResult.addRow(g);
@@ -918,9 +935,9 @@ implements ActionListener, WindowListener, KeyListener {
         }
 
         try {
-            ResultSetMetaData m   = r.getMetaData();
-            int               col = m.getColumnCount();
-            String[]          h   = new String[col];
+            ResultSetMetaData m = r.getMetaData();
+            int col = m.getColumnCount();
+            String[] h = new String[col];
 
             // int[]             p   = new int[col];
             for (int i = 1; i <= col; i++) {
@@ -948,14 +965,15 @@ implements ActionListener, WindowListener, KeyListener {
             }
 
             r.close();
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
     }
 
     void testPerformance() {
 
-        String        all   = txtCommand.getText();
-        StringBuilder b     = new StringBuilder();
-        long          total = 0;
+        String all = txtCommand.getText();
+        StringBuilder b = new StringBuilder();
+        long total = 0;
 
         lTime = 0;
 
@@ -983,7 +1001,7 @@ implements ActionListener, WindowListener, KeyListener {
         lTime = System.nanoTime() - lTime;
 
         while (!all.equals("")) {
-            int    i = all.indexOf(';');
+            int i = all.indexOf(';');
             String sql;
 
             if (i != -1) {
@@ -1009,9 +1027,9 @@ implements ActionListener, WindowListener, KeyListener {
             try {
                 l = DatabaseManagerCommon.testStatement(sStatement, sql, max);
                 total += l;
-                g[0]  = String.valueOf(l);
-                g[1]  = String.valueOf(max);
-                g[3]  = "";
+                g[0] = String.valueOf(l);
+                g[1] = String.valueOf(max);
+                g[3] = "";
             } catch (SQLException e) {
                 g[0] = g[1] = "n/a";
                 g[3] = e.toString();
@@ -1035,13 +1053,13 @@ implements ActionListener, WindowListener, KeyListener {
     void saveAsCsv(String filename) {
 
         try {
-            File      file   = new File(filename);
+            File file = new File(filename);
             CSVWriter writer = new CSVWriter(file, null);
-            String[]  col    = gResult.getHead();
-            int       width  = col.length;
-            ArrayList<String[]> data   = gResult.getData();
-            String[]  row;
-            int       height = data.size();
+            String[] col = gResult.getHead();
+            int width = col.length;
+            ArrayList<String[]> data = gResult.getData();
+            String[] row;
+            int height = data.size();
 
             writer.writeHeader(col);
 
@@ -1073,12 +1091,12 @@ implements ActionListener, WindowListener, KeyListener {
 
     void showResultInText() {
 
-        String[] col   = gResult.getHead();
-        int      width = col.length;
-        int[]    size  = new int[width];
+        String[] col = gResult.getHead();
+        int width = col.length;
+        int[] size = new int[width];
         ArrayList<String[]> data = gResult.getData();
         String[] row;
-        int      height = data.size();
+        int height = data.size();
 
         for (int i = 0; i < width; i++) {
             size[i] = col[i].length();
@@ -1132,11 +1150,11 @@ implements ActionListener, WindowListener, KeyListener {
             b.append(NL);
         }
 
-        long millis   = lTime / 1000000;
+        long millis = lTime / 1000000;
         long fraction = (lTime % 1000000) / 100000;
 
         b.append(NL + height + " row(s) in " + millis + '.' + fraction
-                 + " ms");
+                + " ms");
         txtResult.setText(b.toString());
     }
 
@@ -1169,7 +1187,7 @@ implements ActionListener, WindowListener, KeyListener {
 
     private void initGUI() {
 
-        Panel pQuery   = new Panel();
+        Panel pQuery = new Panel();
         Panel pCommand = new Panel();
 
         pResult = new Panel();
@@ -1190,7 +1208,7 @@ implements ActionListener, WindowListener, KeyListener {
         txtResult.setFont(new Font("Courier", Font.PLAIN, 12));
 
         butExecute = new Button("Execute");
-        butClear   = new Button("Clear");
+        butClear = new Button("Clear");
 
         butExecute.addActionListener(this);
         butClear.addActionListener(this);
@@ -1234,23 +1252,23 @@ implements ActionListener, WindowListener, KeyListener {
 
             cConn.setAutoCommit(false);
 
-            int color_table  = Color.yellow.getRGB();
+            int color_table = Color.yellow.getRGB();
             int color_column = Color.orange.getRGB();
-            int color_index  = Color.red.getRGB();
+            int color_index = Color.red.getRGB();
 
             tTree.addRow("", dMeta.getURL(), "-", 0);
 
             String[] usertables = {
-                "TABLE", "GLOBAL TEMPORARY", "VIEW"
+                    "TABLE", "GLOBAL TEMPORARY", "VIEW"
             };
 
             // fredt@users Schema support
             ArrayList<String> schemas = new ArrayList<String>();
-            ArrayList<String> tables  = new ArrayList<String>();
+            ArrayList<String> tables = new ArrayList<String>();
 
             // sqlbob@users Added remarks.
             ArrayList<String> remarks = new ArrayList<String>();
-            ResultSet result  = dMeta.getTables(null, null, null, usertables);
+            ResultSet result = dMeta.getTables(null, null, null, usertables);
 
             try {
                 while (result.next()) {
@@ -1263,9 +1281,9 @@ implements ActionListener, WindowListener, KeyListener {
             }
 
             for (int i = 0; i < tables.size(); i++) {
-                String name   = (String) tables.get(i);
+                String name = (String) tables.get(i);
                 String schema = (String) schemas.get(i);
-                String key    = "tab-" + name + "-";
+                String key = "tab-" + name + "-";
 
                 tTree.addRow(key, name, "+", color_table);
 
@@ -1284,7 +1302,7 @@ implements ActionListener, WindowListener, KeyListener {
 
                 try {
                     while (col.next()) {
-                        String c  = col.getString(4);
+                        String c = col.getString(4);
                         String k1 = key + "col-" + c + "-";
 
                         tTree.addRow(k1, c, "+", color_column);
@@ -1294,7 +1312,7 @@ implements ActionListener, WindowListener, KeyListener {
                         tTree.addRow(k1 + "t", "Type: " + type);
 
                         boolean nullable = col.getInt(11)
-                                           != DatabaseMetaData.columnNoNulls;
+                                != DatabaseMetaData.columnNoNulls;
 
                         tTree.addRow(k1 + "n", "Nullable: " + nullable);
                     }
@@ -1305,14 +1323,14 @@ implements ActionListener, WindowListener, KeyListener {
                 tTree.addRow(key + "ind", "Indices", "+", 0);
 
                 ResultSet ind = dMeta.getIndexInfo(null, schema, name, false,
-                                                   false);
+                        false);
                 String oldiname = null;
 
                 try {
                     while (ind.next()) {
                         boolean nonunique = ind.getBoolean(4);
-                        String  iname     = ind.getString(6);
-                        String  k2        = key + "ind-" + iname + "-";
+                        String iname = ind.getString(6);
+                        String k2 = key + "ind-" + iname + "-";
 
                         if ((oldiname == null || !oldiname.equals(iname))) {
                             tTree.addRow(k2, iname, "+", color_index);
@@ -1337,7 +1355,7 @@ implements ActionListener, WindowListener, KeyListener {
             tTree.addRow("pd", "Driver: " + dMeta.getDriverName());
             tTree.addRow("pp", "Product: " + dMeta.getDatabaseProductName());
             tTree.addRow("pv",
-                         "Version: " + dMeta.getDatabaseProductVersion());
+                    "Version: " + dMeta.getDatabaseProductVersion());
         } catch (SQLException e) {
             tTree.addRow("", "Error getting metadata:", "-", 0);
             tTree.addRow("-", e.getMessage());
@@ -1345,7 +1363,8 @@ implements ActionListener, WindowListener, KeyListener {
         } finally {
             try {
                 cConn.setAutoCommit(wasAutoCommit);
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
         }
 
         tTree.update();
@@ -1355,10 +1374,11 @@ implements ActionListener, WindowListener, KeyListener {
 
         try {
             PrintWriter newPrintWriter = (value) ? new PrintWriter(System.out)
-                                                 : null;
+                    : null;
 
             DriverManager.setLogWriter(newPrintWriter);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
 }

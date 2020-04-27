@@ -48,34 +48,35 @@ import org.hsqldb.types.Type;
  */
 public final class SortAndSlice {
 
-    static final SortAndSlice noSort        = new SortAndSlice();
-    static final int[]        defaultLimits = new int[] {
-        0, Integer.MAX_VALUE, Integer.MAX_VALUE
+    static final SortAndSlice noSort = new SortAndSlice();
+    static final int[] defaultLimits = new int[]{
+            0, Integer.MAX_VALUE, Integer.MAX_VALUE
     };
 
     //
-    public int[]       sortOrder;
-    public boolean[]   sortDescending;
-    public boolean[]   sortNullsLast;
+    public int[] sortOrder;
+    public boolean[] sortDescending;
+    public boolean[] sortNullsLast;
     public Collation[] collations;
-    boolean            sortUnion;
-    HsqlArrayList      exprList = new HsqlArrayList();
-    ExpressionOp       limitCondition;
-    public int         columnCount;
-    boolean            hasNullsLast;
-    boolean            strictLimit;
-    boolean            zeroLimit;
-    boolean            usingIndex;
-    boolean            allDescending;
-    public boolean     skipSort       = false;    // true when result can be used as is
-    public boolean     skipFullResult = false;    // true when result can be sliced as is
-    public Index   index;
-    public Table   primaryTable;
-    public Index   primaryTableIndex;
-    public int[]   colIndexes;
+    boolean sortUnion;
+    HsqlArrayList exprList = new HsqlArrayList();
+    ExpressionOp limitCondition;
+    public int columnCount;
+    boolean hasNullsLast;
+    boolean strictLimit;
+    boolean zeroLimit;
+    boolean usingIndex;
+    boolean allDescending;
+    public boolean skipSort = false;    // true when result can be used as is
+    public boolean skipFullResult = false;    // true when result can be sliced as is
+    public Index index;
+    public Table primaryTable;
+    public Index primaryTableIndex;
+    public int[] colIndexes;
     public boolean isGenerated;
 
-    public SortAndSlice() {}
+    public SortAndSlice() {
+    }
 
     public HsqlArrayList getExpressionList() {
         return exprList;
@@ -115,19 +116,19 @@ public final class SortAndSlice {
 
     public void prepareSingleColumn(int colIndex) {
 
-        sortOrder      = new int[1];
+        sortOrder = new int[1];
         sortDescending = new boolean[1];
-        sortNullsLast  = new boolean[1];
-        sortOrder[0]   = colIndex;
-        columnCount    = 1;
+        sortNullsLast = new boolean[1];
+        sortOrder[0] = colIndex;
+        columnCount = 1;
     }
 
     public void prepareMultiColumn(int count) {
 
-        sortOrder      = new int[count];
+        sortOrder = new int[count];
         sortDescending = new boolean[count];
-        sortNullsLast  = new boolean[count];
-        columnCount    = count;
+        sortNullsLast = new boolean[count];
+        columnCount = count;
 
         for (int i = 0; i < count; i++) {
             sortOrder[i] = i;
@@ -142,9 +143,9 @@ public final class SortAndSlice {
             return;
         }
 
-        sortOrder      = new int[columnCount + degree];
+        sortOrder = new int[columnCount + degree];
         sortDescending = new boolean[columnCount + degree];
-        sortNullsLast  = new boolean[columnCount + degree];
+        sortNullsLast = new boolean[columnCount + degree];
 
         ArrayUtil.fillSequence(sortOrder);
 
@@ -152,8 +153,8 @@ public final class SortAndSlice {
             ExpressionOrderBy sort = (ExpressionOrderBy) exprList.get(i);
 
             sortDescending[i] = sort.isDescending();
-            sortNullsLast[i]  = sort.isNullsLast();
-            hasNullsLast      |= sortNullsLast[i];
+            sortNullsLast[i] = sort.isNullsLast();
+            hasNullsLast |= sortNullsLast[i];
         }
     }
 
@@ -165,9 +166,9 @@ public final class SortAndSlice {
             return;
         }
 
-        sortOrder      = new int[columnCount];
+        sortOrder = new int[columnCount];
         sortDescending = new boolean[columnCount];
-        sortNullsLast  = new boolean[columnCount];
+        sortNullsLast = new boolean[columnCount];
 
         for (int i = 0; i < columnCount; i++) {
             ExpressionOrderBy sort = (ExpressionOrderBy) exprList.get(i);
@@ -179,8 +180,8 @@ public final class SortAndSlice {
             }
 
             sortDescending[i] = sort.isDescending();
-            sortNullsLast[i]  = sort.isNullsLast();
-            hasNullsLast      |= sortNullsLast[i];
+            sortNullsLast[i] = sort.isNullsLast();
+            hasNullsLast |= sortNullsLast[i];
 
             if (sort.collation != null) {
                 if (collations == null) {
@@ -203,8 +204,8 @@ public final class SortAndSlice {
         }
 
         for (int i = 0; i < columnCount; i++) {
-            ExpressionOrderBy sort     = (ExpressionOrderBy) exprList.get(i);
-            Type              dataType = sort.getLeftNode().getDataType();
+            ExpressionOrderBy sort = (ExpressionOrderBy) exprList.get(i);
+            Type dataType = sort.getLeftNode().getDataType();
 
             if (dataType.isArrayType() || dataType.isLobType()) {
                 throw Error.error(ErrorCode.X_42534);
@@ -271,7 +272,7 @@ public final class SortAndSlice {
             return;
         }
 
-        primaryTable      = select.rangeVariables[0].getTable();
+        primaryTable = select.rangeVariables[0].getTable();
         primaryTableIndex = primaryTable.getFullIndexForColumns(colIndexes);
     }
 
@@ -312,13 +313,13 @@ public final class SortAndSlice {
                 }
             }
 
-            skipSort       = true;
+            skipSort = true;
             skipFullResult = true;
         } else if (!select.rangeVariables[0].joinConditions[0]
                 .hasIndexCondition()) {
             if (select.rangeVariables[0].setSortIndex(primaryTableIndex,
                     allDescending)) {
-                skipSort       = true;
+                skipSort = true;
                 skipFullResult = true;
             }
         }
@@ -326,8 +327,8 @@ public final class SortAndSlice {
 
     public boolean prepareSpecial(Session session, QuerySpecification select) {
 
-        Expression e      = select.exprColumns[select.indexStartAggregates];
-        int        opType = e.getType();
+        Expression e = select.exprColumns[select.indexStartAggregates];
+        int opType = e.getType();
 
         e = e.getLeftNode();
 
@@ -370,21 +371,21 @@ public final class SortAndSlice {
             }
 
             Expression[] conditions = new Expression[]{
-                ExpressionLogical.newNotNullCondition(e) };
+                    ExpressionLogical.newNotNullCondition(e)};
 
             select.rangeVariables[0].joinConditions[0].addIndexCondition(
-                conditions, index, 1);
+                    conditions, index, 1);
 
             if (opType == OpTypes.MAX) {
                 select.rangeVariables[0].reverseOrder();
             }
         }
 
-        columnCount    = 1;
-        sortOrder      = new int[columnCount];
+        columnCount = 1;
+        sortOrder = new int[columnCount];
         sortDescending = new boolean[columnCount];
-        sortNullsLast  = new boolean[columnCount];
-        skipSort       = true;
+        sortNullsLast = new boolean[columnCount];
+        skipSort = true;
         skipFullResult = true;
 
         return true;
@@ -396,25 +397,25 @@ public final class SortAndSlice {
             return defaultLimits;
         }
 
-        int     skipRows   = 0;
-        int     limitRows  = Integer.MAX_VALUE;
-        int     limitFetch = Integer.MAX_VALUE;
-        boolean hasLimits  = false;
+        int skipRows = 0;
+        int limitRows = Integer.MAX_VALUE;
+        int limitFetch = Integer.MAX_VALUE;
+        boolean hasLimits = false;
 
         if (hasLimit()) {
             Integer value =
-                (Integer) limitCondition.getLeftNode().getValue(session);
+                    (Integer) limitCondition.getLeftNode().getValue(session);
 
             if (value == null || value.intValue() < 0) {
                 throw Error.error(ErrorCode.X_2201X);
             }
 
-            skipRows  = value.intValue();
+            skipRows = value.intValue();
             hasLimits = skipRows != 0;
 
             if (limitCondition.getRightNode() != null) {
                 value =
-                    (Integer) limitCondition.getRightNode().getValue(session);
+                        (Integer) limitCondition.getRightNode().getValue(session);
 
                 if (value == null || value.intValue() < 0
                         || (strictLimit && value.intValue() == 0)) {
@@ -460,8 +461,8 @@ public final class SortAndSlice {
                 }
             }
 
-            return new int[] {
-                skipRows, limitRows, limitFetch
+            return new int[]{
+                    skipRows, limitRows, limitFetch
             };
         }
 
@@ -476,7 +477,7 @@ public final class SortAndSlice {
 
         if (hasOrder()) {
             Index orderIndex = table.createAndAddIndexStructure(session, null,
-                sortOrder, sortDescending, sortNullsLast, false, false, false);
+                    sortOrder, sortDescending, sortNullsLast, false, false, false);
 
             if (collations != null) {
                 for (int i = 0; i < columnCount; i++) {
@@ -484,9 +485,9 @@ public final class SortAndSlice {
                         Type type = orderIndex.getColumnTypes()[i];
 
                         type = Type.getType(type.typeCode,
-                                            type.getCharacterSet(),
-                                            collations[i], type.precision,
-                                            type.scale);
+                                type.getCharacterSet(),
+                                collations[i], type.precision,
+                                type.scale);
                         orderIndex.getColumnTypes()[i] = type;
                     }
                 }

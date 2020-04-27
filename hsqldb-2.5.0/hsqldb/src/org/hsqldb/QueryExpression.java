@@ -57,30 +57,29 @@ import org.hsqldb.types.Types;
  * @todo 1.9.0 - review these
  * - work out usage of getMainSelect etc and add relevant methods
  * - Result metadata for the final result of QueryExpression
- *
  */
 public class QueryExpression implements RangeGroup {
 
-    public static final int NOUNION       = 0,
-                            UNION         = 1,
-                            UNION_ALL     = 2,
-                            INTERSECT     = 3,
-                            INTERSECT_ALL = 4,
-                            EXCEPT_ALL    = 5,
-                            EXCEPT        = 6,
-                            UNION_TERM    = 7;
+    public static final int NOUNION = 0,
+            UNION = 1,
+            UNION_ALL = 2,
+            INTERSECT = 3,
+            INTERSECT_ALL = 4,
+            EXCEPT_ALL = 5,
+            EXCEPT = 6,
+            UNION_TERM = 7;
 
     //
-    int                     columnCount;
+    int columnCount;
     private QueryExpression leftQueryExpression;
     private QueryExpression rightQueryExpression;
-    SortAndSlice            sortAndSlice;
-    private int             unionType;
-    private boolean         unionCorresponding;
-    private OrderedHashSet  unionCorrespondingColumns;
-    int[]                   unionColumnMap;
-    Type[]                  unionColumnTypes;
-    boolean                 isFullOrder;
+    SortAndSlice sortAndSlice;
+    private int unionType;
+    private boolean unionCorresponding;
+    private OrderedHashSet unionCorrespondingColumns;
+    int[] unionColumnMap;
+    Type[] unionColumnTypes;
+    boolean isFullOrder;
 
     //
     HsqlList unresolvedExpressions;
@@ -96,10 +95,10 @@ public class QueryExpression implements RangeGroup {
 
     //
     ResultMetaData resultMetaData;
-    boolean[]      accessibleColumns;
+    boolean[] accessibleColumns;
 
     //
-    View    view;
+    View view;
     boolean isBaseMergeable;
     boolean isMergeable;
     boolean isUpdatable;
@@ -118,10 +117,10 @@ public class QueryExpression implements RangeGroup {
 
     //
     public TableBase resultTable;
-    public Index     mainIndex;
-    public Index     fullIndex;
-    public Index     orderIndex;
-    public Index     idIndex;
+    public Index mainIndex;
+    public Index fullIndex;
+    public Index orderIndex;
+    public Index idIndex;
 
     //
     CompileContext compileContext;
@@ -129,7 +128,7 @@ public class QueryExpression implements RangeGroup {
     //
     QueryExpression(CompileContext compileContext) {
         this.compileContext = compileContext;
-        sortAndSlice        = SortAndSlice.noSort;
+        sortAndSlice = SortAndSlice.noSort;
     }
 
     public QueryExpression(CompileContext compileContext,
@@ -137,7 +136,7 @@ public class QueryExpression implements RangeGroup {
 
         this(compileContext);
 
-        sortAndSlice             = SortAndSlice.noSort;
+        sortAndSlice = SortAndSlice.noSort;
         this.leftQueryExpression = leftQueryExpression;
     }
 
@@ -163,15 +162,15 @@ public class QueryExpression implements RangeGroup {
 
     void addUnion(QueryExpression queryExpression, int unionType) {
 
-        sortAndSlice              = SortAndSlice.noSort;
+        sortAndSlice = SortAndSlice.noSort;
         this.rightQueryExpression = queryExpression;
-        this.unionType            = unionType;
+        this.unionType = unionType;
 
         setFullOrder();
     }
 
     void addSortAndSlice(SortAndSlice sortAndSlice) {
-        this.sortAndSlice      = sortAndSlice;
+        this.sortAndSlice = sortAndSlice;
         sortAndSlice.sortUnion = true;
     }
 
@@ -212,8 +211,8 @@ public class QueryExpression implements RangeGroup {
 
         if (targetTypes != null) {
             for (int i = 0;
-                    i < unionColumnTypes.length && i < targetTypes.length;
-                    i++) {
+                 i < unionColumnTypes.length && i < targetTypes.length;
+                 i++) {
                 if (unionColumnTypes[i] == null) {
                     unionColumnTypes[i] = targetTypes[i];
                 }
@@ -251,29 +250,29 @@ public class QueryExpression implements RangeGroup {
 
             unionColumnTypes = new Type[columnCount];
             leftQueryExpression.unionColumnMap =
-                rightQueryExpression.unionColumnMap = new int[columnCount];
+                    rightQueryExpression.unionColumnMap = new int[columnCount];
 
             ArrayUtil.fillSequence(leftQueryExpression.unionColumnMap);
             resolveColumnReferencesInUnionOrderBy();
 
-            accessibleColumns    = leftQueryExpression.accessibleColumns;
+            accessibleColumns = leftQueryExpression.accessibleColumns;
             isReferencesResolved = true;
 
             return;
         }
 
-        String[] leftNames  = leftQueryExpression.getColumnNames();
+        String[] leftNames = leftQueryExpression.getColumnNames();
         String[] rightNames = rightQueryExpression.getColumnNames();
 
         if (unionCorrespondingColumns == null) {
             unionCorrespondingColumns = new OrderedHashSet();
 
-            OrderedIntHashSet leftColumns  = new OrderedIntHashSet();
+            OrderedIntHashSet leftColumns = new OrderedIntHashSet();
             OrderedIntHashSet rightColumns = new OrderedIntHashSet();
 
             for (int i = 0; i < leftNames.length; i++) {
-                String name  = leftNames[i];
-                int    index = ArrayUtil.find(rightNames, name);
+                String name = leftNames[i];
+                int index = ArrayUtil.find(rightNames, name);
 
                 if (name.length() > 0 && index != -1) {
                     if (!leftQueryExpression.accessibleColumns[i]) {
@@ -294,17 +293,17 @@ public class QueryExpression implements RangeGroup {
                 throw Error.error(ErrorCode.X_42578);
             }
 
-            leftQueryExpression.unionColumnMap  = leftColumns.toArray();
+            leftQueryExpression.unionColumnMap = leftColumns.toArray();
             rightQueryExpression.unionColumnMap = rightColumns.toArray();
         } else {
             leftQueryExpression.unionColumnMap =
-                new int[unionCorrespondingColumns.size()];
+                    new int[unionCorrespondingColumns.size()];
             rightQueryExpression.unionColumnMap =
-                new int[unionCorrespondingColumns.size()];
+                    new int[unionCorrespondingColumns.size()];
 
             for (int i = 0; i < unionCorrespondingColumns.size(); i++) {
-                String name  = (String) unionCorrespondingColumns.get(i);
-                int    index = ArrayUtil.find(leftNames, name);
+                String name = (String) unionCorrespondingColumns.get(i);
+                int index = ArrayUtil.find(leftNames, name);
 
                 if (index == -1) {
                     throw Error.error(ErrorCode.X_42501);
@@ -329,7 +328,7 @@ public class QueryExpression implements RangeGroup {
             }
         }
 
-        columnCount      = unionCorrespondingColumns.size();
+        columnCount = unionCorrespondingColumns.size();
         unionColumnTypes = new Type[columnCount];
 
         resolveColumnReferencesInUnionOrderBy();
@@ -356,7 +355,7 @@ public class QueryExpression implements RangeGroup {
 
         for (int i = 0; i < orderCount; i++) {
             Expression sort = (Expression) sortAndSlice.exprList.get(i);
-            Expression e    = sort.getLeftNode();
+            Expression e = sort.getLeftNode();
 
             if (e.getType() == OpTypes.VALUE) {
                 if (e.getDataType().typeCode == Types.SQL_INTEGER) {
@@ -370,7 +369,7 @@ public class QueryExpression implements RangeGroup {
                 }
             } else if (e.getType() == OpTypes.COLUMN) {
                 int index = ArrayUtil.find(unionColumnNames,
-                                           e.getColumnName());
+                        e.getColumnName());
 
                 if (index >= 0) {
                     sort.getLeftNode().queryTableColumnIndex = index;
@@ -416,19 +415,19 @@ public class QueryExpression implements RangeGroup {
         }
 
         ArrayUtil.projectRowReverse(leftQueryExpression.unionColumnTypes,
-                                    leftQueryExpression.unionColumnMap,
-                                    unionColumnTypes);
+                leftQueryExpression.unionColumnMap,
+                unionColumnTypes);
         leftQueryExpression.resolveTypesPartOne(session);
         ArrayUtil.projectRow(leftQueryExpression.unionColumnTypes,
-                             leftQueryExpression.unionColumnMap,
-                             unionColumnTypes);
+                leftQueryExpression.unionColumnMap,
+                unionColumnTypes);
         ArrayUtil.projectRowReverse(rightQueryExpression.unionColumnTypes,
-                                    rightQueryExpression.unionColumnMap,
-                                    unionColumnTypes);
+                rightQueryExpression.unionColumnMap,
+                unionColumnTypes);
         rightQueryExpression.resolveTypesPartOne(session);
         ArrayUtil.projectRow(rightQueryExpression.unionColumnTypes,
-                             rightQueryExpression.unionColumnMap,
-                             unionColumnTypes);
+                rightQueryExpression.unionColumnMap,
+                unionColumnTypes);
 
         isPartOneResolved = true;
     }
@@ -444,8 +443,8 @@ public class QueryExpression implements RangeGroup {
         }
 
         ArrayUtil.projectRowReverse(leftQueryExpression.unionColumnTypes,
-                                    leftQueryExpression.unionColumnMap,
-                                    unionColumnTypes);
+                leftQueryExpression.unionColumnMap,
+                unionColumnTypes);
 
         if (isRecursive) {
             leftQueryExpression.resolveTypesPartTwoRecursive(session);
@@ -454,7 +453,7 @@ public class QueryExpression implements RangeGroup {
 
             for (int i = 0; i < recursiveTable.colTypes.length; i++) {
                 recursiveTable.getColumn(i).setType(
-                    recursiveTable.colTypes[i]);
+                        recursiveTable.colTypes[i]);
             }
 
             recursiveTable.getFullIndex(session);
@@ -464,28 +463,28 @@ public class QueryExpression implements RangeGroup {
 
         leftQueryExpression.resolveTypesPartThree(session);
         ArrayUtil.projectRowReverse(rightQueryExpression.unionColumnTypes,
-                                    rightQueryExpression.unionColumnMap,
-                                    unionColumnTypes);
+                rightQueryExpression.unionColumnMap,
+                unionColumnTypes);
         rightQueryExpression.resolveTypesPartTwo(session);
         rightQueryExpression.resolveTypesPartThree(session);
 
         //
-        ResultMetaData leftMeta  = leftQueryExpression.getMetaData();
+        ResultMetaData leftMeta = leftQueryExpression.getMetaData();
         ResultMetaData rightMeta = rightQueryExpression.getMetaData();
 
         for (int i = 0; i < leftQueryExpression.unionColumnMap.length; i++) {
-            int        leftIndex  = leftQueryExpression.unionColumnMap[i];
-            int        rightIndex = rightQueryExpression.unionColumnMap[i];
-            ColumnBase column     = leftMeta.columns[leftIndex];
+            int leftIndex = leftQueryExpression.unionColumnMap[i];
+            int rightIndex = rightQueryExpression.unionColumnMap[i];
+            ColumnBase column = leftMeta.columns[leftIndex];
             byte leftNullability =
-                leftMeta.columns[leftIndex].getNullability();
+                    leftMeta.columns[leftIndex].getNullability();
             byte rightNullability =
-                rightMeta.columns[rightIndex].getNullability();
+                    rightMeta.columns[rightIndex].getNullability();
 
             if (rightNullability == SchemaObject.Nullability
                     .NULLABLE || (rightNullability == SchemaObject.Nullability
-                        .NULLABLE_UNKNOWN && leftNullability == SchemaObject
-                        .Nullability.NO_NULLS)) {
+                    .NULLABLE_UNKNOWN && leftNullability == SchemaObject
+                    .Nullability.NO_NULLS)) {
                 if (column instanceof ColumnSchema) {
                     column = new ColumnBase();
 
@@ -500,7 +499,7 @@ public class QueryExpression implements RangeGroup {
 
         if (unionCorresponding || isRecursive) {
             resultMetaData = leftQueryExpression.getMetaData().getNewMetaData(
-                leftQueryExpression.unionColumnMap);
+                    leftQueryExpression.unionColumnMap);
 
             createTable(session);
         }
@@ -512,7 +511,7 @@ public class QueryExpression implements RangeGroup {
                 if (queryExpression.leftQueryExpression == null
                         || queryExpression.unionCorresponding) {
                     sortAndSlice.setIndex(session,
-                                          queryExpression.resultTable);
+                            queryExpression.resultTable);
 
                     break;
                 }
@@ -527,7 +526,7 @@ public class QueryExpression implements RangeGroup {
     void resolveTypesPartThree(Session session) {
 
         compileContext = null;
-        isResolved     = true;
+        isResolved = true;
 
         if (isRecursive) {
             recursiveTable.queryExpression.isCorrelated = false;
@@ -536,8 +535,8 @@ public class QueryExpression implements RangeGroup {
 
     public Object[] getValues(Session session) {
 
-        Result r    = getResult(session, 2);
-        int    size = r.getNavigator().getSize();
+        Result r = getResult(session, 2);
+        int size = r.getNavigator().getSize();
 
         if (size == 0) {
             return new Object[r.metaData.getColumnCount()];
@@ -548,12 +547,13 @@ public class QueryExpression implements RangeGroup {
         }
     }
 
-    public void addExtraConditions(Expression e) {}
+    public void addExtraConditions(Expression e) {
+    }
 
     public Object[] getSingleRowValues(Session session) {
 
-        Result r    = getResult(session, 2);
-        int    size = r.getNavigator().getSize();
+        Result r = getResult(session, 2);
+        int size = r.getNavigator().getSize();
 
         if (size == 0) {
             return null;
@@ -577,22 +577,22 @@ public class QueryExpression implements RangeGroup {
             return getResultRecursive(session);
         }
 
-        int    currentMaxRows = unionType == UNION_ALL ? maxRows
-                                                       : 0;
+        int currentMaxRows = unionType == UNION_ALL ? maxRows
+                : 0;
         Result first = leftQueryExpression.getResult(session, currentMaxRows);
         RowSetNavigatorData navigator =
-            (RowSetNavigatorData) first.getNavigator();
+                (RowSetNavigatorData) first.getNavigator();
         Result second = rightQueryExpression.getResult(session,
-            currentMaxRows);
+                currentMaxRows);
         RowSetNavigatorData rightNavigator =
-            (RowSetNavigatorData) second.getNavigator();
+                (RowSetNavigatorData) second.getNavigator();
 
         if (unionCorresponding) {
             RowSetNavigatorData rowSet;
             boolean memory =
-                session.resultMaxMemoryRows == 0
-                || (navigator.getSize() < session.resultMaxMemoryRows
-                    && rightNavigator.getSize() < session.resultMaxMemoryRows);
+                    session.resultMaxMemoryRows == 0
+                            || (navigator.getSize() < session.resultMaxMemoryRows
+                            && rightNavigator.getSize() < session.resultMaxMemoryRows);
 
             if (memory) {
                 rowSet = new RowSetNavigatorData(session, this);
@@ -623,31 +623,31 @@ public class QueryExpression implements RangeGroup {
 
         switch (unionType) {
 
-            case UNION :
+            case UNION:
                 navigator.union(session, rightNavigator);
                 break;
 
-            case UNION_ALL :
+            case UNION_ALL:
                 navigator.unionAll(session, rightNavigator);
                 break;
 
-            case INTERSECT :
+            case INTERSECT:
                 navigator.intersect(session, rightNavigator);
                 break;
 
-            case INTERSECT_ALL :
+            case INTERSECT_ALL:
                 navigator.intersectAll(session, rightNavigator);
                 break;
 
-            case EXCEPT :
+            case EXCEPT:
                 navigator.except(session, rightNavigator);
                 break;
 
-            case EXCEPT_ALL :
+            case EXCEPT_ALL:
                 navigator.exceptAll(session, rightNavigator);
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "QueryExpression");
         }
 
@@ -673,7 +673,7 @@ public class QueryExpression implements RangeGroup {
         recursiveTable.materialise(session);
 
         RowSetNavigatorData recNav = recursiveTable.getNavigator(session);
-        Result              result = Result.newResult(recNav);
+        Result result = Result.newResult(recNav);
 
         result.metaData = resultMetaData;
 
@@ -681,7 +681,7 @@ public class QueryExpression implements RangeGroup {
             tempResult = rightQueryExpression.getResult(session, 0);
 
             RowSetNavigatorData tempNavigator =
-                (RowSetNavigatorData) tempResult.getNavigator();
+                    (RowSetNavigatorData) tempResult.getNavigator();
 
             if (tempNavigator.isEmpty()) {
                 break;
@@ -691,17 +691,17 @@ public class QueryExpression implements RangeGroup {
 
             switch (unionType) {
 
-                case UNION :
+                case UNION:
                     recNav.union(session, tempNavigator);
                     break;
 
-                case UNION_ALL :
+                case UNION_ALL:
                     recNav.unionAll(session, tempNavigator);
                     break;
 
-                default :
+                default:
                     throw Error.runtimeError(ErrorCode.U_S0500,
-                                             "QueryExpression");
+                            "QueryExpression");
             }
 
             if (startSize == recNav.getSize()) {
@@ -721,8 +721,8 @@ public class QueryExpression implements RangeGroup {
         OrderedHashSet subqueries = leftQueryExpression.getSubqueries();
 
         subqueries =
-            OrderedHashSet.addAll(subqueries,
-                                  rightQueryExpression.getSubqueries());
+                OrderedHashSet.addAll(subqueries,
+                        rightQueryExpression.getSubqueries());
 
         return subqueries;
     }
@@ -749,11 +749,13 @@ public class QueryExpression implements RangeGroup {
         return leftQueryExpression.getMainSelect();
     }
 
-    /** @todo 1.9.0 review */
+    /**
+     * @todo 1.9.0 review
+     */
     public String describe(Session session, int blanks) {
 
         StringBuilder sb;
-        String        temp;
+        String temp;
         StringBuilder b = new StringBuilder(blanks);
 
         for (int i = 0; i < blanks; i++) {
@@ -764,31 +766,31 @@ public class QueryExpression implements RangeGroup {
 
         switch (unionType) {
 
-            case UNION :
+            case UNION:
                 temp = Tokens.T_UNION;
                 break;
 
-            case UNION_ALL :
+            case UNION_ALL:
                 temp = Tokens.T_UNION + ' ' + Tokens.T_ALL;
                 break;
 
-            case INTERSECT :
+            case INTERSECT:
                 temp = Tokens.T_INTERSECT;
                 break;
 
-            case INTERSECT_ALL :
+            case INTERSECT_ALL:
                 temp = Tokens.T_INTERSECT + ' ' + Tokens.T_ALL;
                 break;
 
-            case EXCEPT :
+            case EXCEPT:
                 temp = Tokens.T_EXCEPT;
                 break;
 
-            case EXCEPT_ALL :
+            case EXCEPT_ALL:
                 temp = Tokens.T_EXCEPT + ' ' + Tokens.T_ALL;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "QueryExpression");
         }
 
@@ -849,7 +851,7 @@ public class QueryExpression implements RangeGroup {
     public int getColumnCount() {
 
         if (unionCorrespondingColumns == null) {
-            int left  = leftQueryExpression.getColumnCount();
+            int left = leftQueryExpression.getColumnCount();
             int right = rightQueryExpression.getColumnCount();
 
             if (left != right) {
@@ -863,7 +865,7 @@ public class QueryExpression implements RangeGroup {
     }
 
     public OrderedHashSet collectAllExpressions(OrderedHashSet set,
-            OrderedIntHashSet typeSet, OrderedIntHashSet stopAtTypeSet) {
+                                                OrderedIntHashSet typeSet, OrderedIntHashSet stopAtTypeSet) {
 
         set = leftQueryExpression.collectAllExpressions(set, typeSet,
                 stopAtTypeSet);
@@ -920,10 +922,10 @@ public class QueryExpression implements RangeGroup {
      */
     public void setView(View view) {
 
-        this.view             = view;
-        this.isUpdatable      = true;
+        this.view = view;
+        this.isUpdatable = true;
         this.acceptsSequences = true;
-        this.isTopLevel       = true;
+        this.isTopLevel = true;
     }
 
     /**
@@ -961,18 +963,18 @@ public class QueryExpression implements RangeGroup {
 
     void createResultTable(Session session) {
 
-        HsqlName       tableName;
+        HsqlName tableName;
         HashMappedList columnList;
-        int            tableType;
+        int tableType;
 
         tableName = session.database.nameManager.getSubqueryTableName();
         tableType = persistenceScope == TableBase.SCOPE_STATEMENT
-                    ? TableBase.SYSTEM_SUBQUERY
-                    : TableBase.RESULT_TABLE;
+                ? TableBase.SYSTEM_SUBQUERY
+                : TableBase.RESULT_TABLE;
         columnList = leftQueryExpression.getUnionColumns();
         resultTable = new TableDerived(session.database, tableName, tableType,
-                                       unionColumnTypes, columnList,
-                                       ValuePool.emptyIntArray);
+                unionColumnTypes, columnList,
+                ValuePool.emptyIntArray);
     }
 
     public void setColumnsDefined() {
@@ -1015,11 +1017,11 @@ public class QueryExpression implements RangeGroup {
 
         if (unionCorresponding || leftQueryExpression == null) {
             HashMappedList columns = ((TableDerived) resultTable).columnList;
-            HashMappedList list    = new HashMappedList();
+            HashMappedList list = new HashMappedList();
 
             for (int i = 0; i < unionColumnMap.length; i++) {
                 ColumnSchema column =
-                    (ColumnSchema) columns.get(unionColumnMap[i]);
+                        (ColumnSchema) columns.get(unionColumnMap[i]);
                 String name = (String) columns.getKey(unionColumnMap[i]);
                 list.add(name, column);
             }
@@ -1037,7 +1039,7 @@ public class QueryExpression implements RangeGroup {
         }
 
         HashMappedList list = ((TableDerived) resultTable).columnList;
-        HsqlName[]     resultColumnNames = new HsqlName[list.size()];
+        HsqlName[] resultColumnNames = new HsqlName[list.size()];
 
         for (int i = 0; i < resultColumnNames.length; i++) {
             resultColumnNames[i] = ((ColumnSchema) list.get(i)).getName();
@@ -1101,11 +1103,11 @@ public class QueryExpression implements RangeGroup {
     boolean isEquivalent(QueryExpression other) {
 
         return leftQueryExpression.isEquivalent(other.leftQueryExpression)
-               && unionType == other.unionType
-               && (rightQueryExpression == null
-                   ? other.rightQueryExpression == null
-                   : rightQueryExpression.isEquivalent(
-                       other.rightQueryExpression));
+                && unionType == other.unionType
+                && (rightQueryExpression == null
+                ? other.rightQueryExpression == null
+                : rightQueryExpression.isEquivalent(
+                other.rightQueryExpression));
     }
 
     public void replaceColumnReferences(Session session, RangeVariable range, Expression[] list) {
@@ -1126,10 +1128,11 @@ public class QueryExpression implements RangeGroup {
                                    int resultRangePosition) {
 
         leftQueryExpression.replaceExpressions(expressions,
-                                               resultRangePosition);
+                resultRangePosition);
         rightQueryExpression.replaceExpressions(expressions,
                 resultRangePosition);
     }
 
-    public void setAsExists() {}
+    public void setAsExists() {
+    }
 }

@@ -44,82 +44,82 @@ public class TestPreparedStatements extends TestCase {
 
     private class sqlStmt {
 
-        boolean  prepare;
-        boolean  update;
-        String   command;
+        boolean prepare;
+        boolean update;
+        String command;
         Object[] args;
-        Object   ret;
+        Object ret;
 
         sqlStmt(String c) {
 
             command = c;
             prepare = false;
-            update  = false;
+            update = false;
         }
 
         sqlStmt(String c, boolean p, boolean u, Object[] a) {
 
             command = c;
             prepare = p;
-            update  = u;
-            args    = a;
+            update = u;
+            args = a;
         }
 
         sqlStmt(String c, boolean p, boolean u, Object[] a, Object r) {
 
             command = c;
             prepare = p;
-            update  = u;
-            args    = a;
-            ret     = r;
+            update = u;
+            args = a;
+            ret = r;
         }
     }
 
     private sqlStmt[] stmtArray = {
-        new sqlStmt("drop table public.ivtest if exists cascade"),
-        new sqlStmt(
-            "create cached table ivtest(interval1 INTERVAL YEAR TO MONTH,"
-            + " interval2 INTERVAL DAY TO SECOND(3))"),
-        new sqlStmt("drop table public.dttest if exists cascade"),
-        new sqlStmt("create cached table dttest(adate date not null, "
+            new sqlStmt("drop table public.ivtest if exists cascade"),
+            new sqlStmt(
+                    "create cached table ivtest(interval1 INTERVAL YEAR TO MONTH,"
+                            + " interval2 INTERVAL DAY TO SECOND(3))"),
+            new sqlStmt("drop table public.dttest if exists cascade"),
+            new sqlStmt("create cached table dttest(adate date not null, "
                     + "atime time not null,bg int, primary key(adate,atime))"),
-        new sqlStmt(
-            "insert into dttest values(current_date - 10 day, current_time + 1 hour, 1)",
-            false, true, null),
-        new sqlStmt(
-            "insert into dttest values(current_date - 8 day, current_time - 5 hour, 2)",
-            false, true, null),
-        new sqlStmt(
-            "insert into dttest values(current_date - 7 day, current_time - 4 hour, 3)",
-            false, true, null),
-        new sqlStmt("insert into dttest values(current_date, '12:44:31', 4)",
+            new sqlStmt(
+                    "insert into dttest values(current_date - 10 day, current_time + 1 hour, 1)",
                     false, true, null),
-        new sqlStmt(
-            "insert into dttest values(current_date + 3 day, current_time - 12 hour, 5)",
-            false, true, null),
-        new sqlStmt("insert into dttest values(current_date + 1 day, current_time - 1 hour, 6)", false, true, null),
-        new sqlStmt("select atime adate from dttest where atime =  ? and adate = ?",
-                    true, false, new Object[] {
-            "12:44:31", new java.sql.Date(System.currentTimeMillis())
-        }), new sqlStmt("insert into ivtest values ?, ?", true, true,
-                        new Object[] {
-            "1-10", "10 02:15:30.333"
-        }), new sqlStmt(
+            new sqlStmt(
+                    "insert into dttest values(current_date - 8 day, current_time - 5 hour, 2)",
+                    false, true, null),
+            new sqlStmt(
+                    "insert into dttest values(current_date - 7 day, current_time - 4 hour, 3)",
+                    false, true, null),
+            new sqlStmt("insert into dttest values(current_date, '12:44:31', 4)",
+                    false, true, null),
+            new sqlStmt(
+                    "insert into dttest values(current_date + 3 day, current_time - 12 hour, 5)",
+                    false, true, null),
+            new sqlStmt("insert into dttest values(current_date + 1 day, current_time - 1 hour, 6)", false, true, null),
+            new sqlStmt("select atime adate from dttest where atime =  ? and adate = ?",
+                    true, false, new Object[]{
+                    "12:44:31", new java.sql.Date(System.currentTimeMillis())
+            }), new sqlStmt("insert into ivtest values ?, ?", true, true,
+            new Object[]{
+                    "1-10", "10 02:15:30.333"
+            }), new sqlStmt(
             "insert into ivtest values CAST (? AS INTERVAL YEAR TO MONTH), CAST (? AS INTERVAL DAY TO SECOND)",
-            true, true, new Object[] {
+            true, true, new Object[]{
             "1-10", "10 02:15:30.333"
-        }), new sqlStmt("script", true, false, null),
-        new sqlStmt("drop table public.bintest if exists cascade"),
-        new sqlStmt("create cached table bintest(val BIGINT, id BINARY(100))"),
-        new sqlStmt("insert into bintest values ?, ?", true, true,
-                    new Object[] {
-            10L, new byte[] {
-                1, 2, 3, 4, 5
-            }
-        }), new sqlStmt("select val from bintest where id = ?", true, false,
-                        new Object[]{ new byte[] {
-            1, 2, 3, 4, 5
-        } }, 10L),
+    }), new sqlStmt("script", true, false, null),
+            new sqlStmt("drop table public.bintest if exists cascade"),
+            new sqlStmt("create cached table bintest(val BIGINT, id BINARY(100))"),
+            new sqlStmt("insert into bintest values ?, ?", true, true,
+                    new Object[]{
+                            10L, new byte[]{
+                            1, 2, 3, 4, 5
+                    }
+                    }), new sqlStmt("select val from bintest where id = ?", true, false,
+            new Object[]{new byte[]{
+                    1, 2, 3, 4, 5
+            }}, 10L),
     };
 
     public TestPreparedStatements(String name) {
@@ -134,7 +134,8 @@ public class TestPreparedStatements extends TestCase {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
             con = java.sql.DriverManager.getConnection(url, "sa", "");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public void testA() {
@@ -148,21 +149,21 @@ public class TestPreparedStatements extends TestCase {
                 System.out.println(" -- #" + i + " ----------------------- ");
 
                 if (stmtArray[i].prepare) {
-                    Object[]          stmtArgs = stmtArray[i].args;
-                    PreparedStatement ps       = null;
+                    Object[] stmtArgs = stmtArray[i].args;
+                    PreparedStatement ps = null;
 
                     System.out.println(" -- preparing\n<<<\n"
-                                       + stmtArray[i].command + "\n>>>\n");
+                            + stmtArray[i].command + "\n>>>\n");
 
                     ps = con.prepareStatement(stmtArray[i].command);
 
                     if (stmtArgs != null) {
                         System.out.print(" -- setting " + stmtArgs.length
-                                         + " Args [");
+                                + " Args [");
 
                         for (j = 0; j < stmtArgs.length; j++) {
                             System.out.print((j > 0 ? "; "
-                                                    : "") + stmtArgs[j]);
+                                    : "") + stmtArgs[j]);
                             ps.setObject(j + 1, stmtArgs[j]);
                         }
 
@@ -175,10 +176,10 @@ public class TestPreparedStatements extends TestCase {
                         int r = ps.executeUpdate();
 
                         System.out.println(" ***** ps.executeUpdate gave me "
-                                           + r);
+                                + r);
                     } else {
-                        boolean b     = ps.execute();
-                        int     count = 0;
+                        boolean b = ps.execute();
+                        int count = 0;
 
                         if (b) {
                             ResultSet rs = ps.getResultSet();
@@ -186,25 +187,25 @@ public class TestPreparedStatements extends TestCase {
                             while (rs.next()) {
                                 if (count == 0 && stmtArray[i].ret != null) {
                                     super.assertEquals(stmtArray[i].ret,
-                                                       rs.getObject(1));
+                                            rs.getObject(1));
                                 }
 
                                 count++;
                             }
 
                             System.out.print(
-                                " ***** ps.execute returned result row count "
-                                + count);
+                                    " ***** ps.execute returned result row count "
+                                            + count);
                         } else {
                             System.out.print(" ***** ps.execute gave me " + b);
                         }
                     }
                 } else {
                     System.out.println(" -- executing directly\n<<<\n"
-                                       + stmtArray[i].command + "\n>>>\n");
+                            + stmtArray[i].command + "\n>>>\n");
 
                     Statement s = con.createStatement();
-                    boolean   b = s.execute(stmtArray[i].command);
+                    boolean b = s.execute(stmtArray[i].command);
 
                     System.out.println(" ***** st.execute gave me " + b);
                 }
@@ -223,20 +224,20 @@ public class TestPreparedStatements extends TestCase {
 
         statement.execute("DROP TABLE IF EXISTS users CASCADE");
         statement.execute(
-            "CREATE TABLE IF NOT EXISTS users (id INTEGER, name VARCHAR(25), PRIMARY KEY(id))");
+                "CREATE TABLE IF NOT EXISTS users (id INTEGER, name VARCHAR(25), PRIMARY KEY(id))");
         statement.executeUpdate("INSERT INTO users VALUES(1, 'Ramiro')");
         statement.executeUpdate("INSERT INTO users VALUES(2, 'Chanukya')");
 
         String storedProcedure1 =
-            "CREATE PROCEDURE sp_say_hi(IN greeting_p VARCHAR(10)) "
-            + "READS SQL DATA DYNAMIC RESULT SETS 2 " + "BEGIN ATOMIC "
-            + "DECLARE result CURSOR WITH RETURN FOR SELECT COALESCE(greeting_p, 'Hi')+' '+name as greeting FROM users FOR READ ONLY; "
-            + "DECLARE result1 CURSOR WITH RETURN FOR SELECT * FROM users FOR READ ONLY; "
-            + "OPEN result; " + "OPEN result1; " + "END";
+                "CREATE PROCEDURE sp_say_hi(IN greeting_p VARCHAR(10)) "
+                        + "READS SQL DATA DYNAMIC RESULT SETS 2 " + "BEGIN ATOMIC "
+                        + "DECLARE result CURSOR WITH RETURN FOR SELECT COALESCE(greeting_p, 'Hi')+' '+name as greeting FROM users FOR READ ONLY; "
+                        + "DECLARE result1 CURSOR WITH RETURN FOR SELECT * FROM users FOR READ ONLY; "
+                        + "OPEN result; " + "OPEN result1; " + "END";
 
         statement.execute(storedProcedure1);
 
-        String            sqlCall           = "CALL sp_say_hi(?)";
+        String sqlCall = "CALL sp_say_hi(?)";
         CallableStatement callableStatement = con.prepareCall(sqlCall);
 
         callableStatement.setObject("GREETING_P", "Hola");
@@ -280,7 +281,7 @@ public class TestPreparedStatements extends TestCase {
 
         statement.execute("DROP TABLE IF EXISTS testusers");
         statement.execute(
-            "CREATE TABLE IF NOT EXISTS testusers (id INTEGER, name VARCHAR(25), PRIMARY KEY(id))");
+                "CREATE TABLE IF NOT EXISTS testusers (id INTEGER, name VARCHAR(25), PRIMARY KEY(id))");
         statement.executeUpdate("INSERT INTO testusers VALUES(1, 'John')");
         statement.executeUpdate("INSERT INTO testusers VALUES(2, 'Tom')");
         statement.executeUpdate("INSERT INTO testusers VALUES(3, 'Carl')");
@@ -290,11 +291,11 @@ public class TestPreparedStatements extends TestCase {
 
         String select = "SELECT name FROM testusers WHERE name IN (UNNEST(?))";
         PreparedStatement preparedStatement = con.prepareStatement(select,
-            ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        String[] ids   = new String[] {
-            "Paul", "Greg", "Tom"
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        String[] ids = new String[]{
+                "Paul", "Greg", "Tom"
         };
-        Array    array = con.createArrayOf("VARCHAR", ids);
+        Array array = con.createArrayOf("VARCHAR", ids);
 
         preparedStatement.setArray(1, array);
 
@@ -306,7 +307,7 @@ public class TestPreparedStatements extends TestCase {
 
     public void testD() throws SQLException, ClassNotFoundException {
 
-        String            select            = "SET SCHEMA ?";
+        String select = "SET SCHEMA ?";
         PreparedStatement preparedStatement = con.prepareStatement(select);
 
         preparedStatement.setString(1, "INFORMATION_SCHEMA");
@@ -325,7 +326,7 @@ public class TestPreparedStatements extends TestCase {
 
         statement.execute("DROP TABLE IF EXISTS testusers");
         statement.execute(
-            "CREATE TABLE IF NOT EXISTS testusers (id INTEGER, name VARCHAR(25), PRIMARY KEY(id))");
+                "CREATE TABLE IF NOT EXISTS testusers (id INTEGER, name VARCHAR(25), PRIMARY KEY(id))");
 
         try {
             statement.executeUpdate("INSERT INTO testusers VALUES(1, 'John')");
@@ -333,14 +334,15 @@ public class TestPreparedStatements extends TestCase {
             statement.executeUpdate("INSERT INTO testusers VALUES(3, 'Carl')");
             statement.executeUpdate("INSERT INTO testusers VALUES(4, 'Greg')");
             statement.executeUpdate(
-                "INSERT INTO testusers VALUES(5, 'David')");
+                    "INSERT INTO testusers VALUES(5, 'David')");
             statement.executeUpdate(
-                "INSERT INTO testusers VALUES(6, 'Keith')");
-        } catch (SQLException e) {}
+                    "INSERT INTO testusers VALUES(6, 'Keith')");
+        } catch (SQLException e) {
+        }
 
         String select = "SELECT name FROM testusers WHERE name = ?";
         PreparedStatement preparedStatementOne = con.prepareStatement(select,
-            ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
         preparedStatementOne.setString(1, "Tom");
 
@@ -349,7 +351,7 @@ public class TestPreparedStatements extends TestCase {
         assertTrue(result1.next());
 
         PreparedStatement preparedStatementTwo = con.prepareStatement(select,
-            ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
         preparedStatementTwo.setString(1, "Tom");
 
@@ -380,7 +382,7 @@ public class TestPreparedStatements extends TestCase {
         st.execute("INSERT INTO testtable VALUES (sysdate)");
 
         PreparedStatement pst = con.prepareStatement(
-            "select * from testtable where column1 between ?-? and ?");
+                "select * from testtable where column1 between ?-? and ?");
         Date date = new Date(System.currentTimeMillis());
 
         pst.setDate(1, date);
@@ -408,7 +410,7 @@ public class TestPreparedStatements extends TestCase {
         assertTrue(genFound);
 
         PreparedStatement pst = con.prepareStatement(
-            "select * from testtable where column1 between ?-? and ?");
+                "select * from testtable where column1 between ?-? and ?");
         Date date = new Date(System.currentTimeMillis());
 
         pst.setDate(1, date);

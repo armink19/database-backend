@@ -55,12 +55,12 @@ public class IntervalMonthData {
     }
 
     public static IntervalMonthData newIntervalYear(long years,
-            IntervalType type) {
+                                                    IntervalType type) {
         return new IntervalMonthData(years * 12, type);
     }
 
     public static IntervalMonthData newIntervalMonth(long months,
-            IntervalType type) {
+                                                     IntervalType type) {
         return new IntervalMonthData(months, type);
     }
 

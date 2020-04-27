@@ -42,17 +42,17 @@ import org.hsqldb.types.Type;
  */
 public class Token {
 
-    String  tokenString = "";
-    int     tokenType   = Tokens.X_UNKNOWN_TOKEN;
-    Type    dataType;
-    Object  tokenValue;
-    String  namePrefix;
-    String  namePrePrefix;
-    String  namePrePrePrefix;
-    String  charsetSchema;
-    String  charsetName;
-    String  fullString;
-    int     lobMultiplierType = Tokens.X_UNKNOWN_TOKEN;
+    String tokenString = "";
+    int tokenType = Tokens.X_UNKNOWN_TOKEN;
+    Type dataType;
+    Object tokenValue;
+    String namePrefix;
+    String namePrePrefix;
+    String namePrePrePrefix;
+    String charsetSchema;
+    String charsetName;
+    String fullString;
+    int lobMultiplierType = Tokens.X_UNKNOWN_TOKEN;
     boolean isDelimiter;
     boolean isDelimitedIdentifier;
     boolean isDelimitedPrefix;
@@ -66,37 +66,37 @@ public class Token {
     boolean isMalformed;
 
     //
-    int     position;
-    Object  expression;
+    int position;
+    Object expression;
     boolean hasColumnList;
 
     void reset() {
 
-        tokenString              = "";
-        tokenType                = Tokens.X_UNKNOWN_TOKEN;
-        dataType                 = null;
-        tokenValue               = null;
-        namePrefix               = null;
-        namePrePrefix            = null;
-        namePrePrePrefix         = null;
-        charsetSchema            = null;
-        charsetName              = null;
-        fullString               = null;
-        lobMultiplierType        = Tokens.X_UNKNOWN_TOKEN;
-        isDelimiter              = false;
-        isDelimitedIdentifier    = false;
-        isDelimitedPrefix        = false;
-        isDelimitedPrePrefix     = false;
-        isDelimitedPrePrePrefix  = false;
-        isUndelimitedIdentifier  = false;
-        hasIrregularChar         = false;
-        isReservedIdentifier     = false;
+        tokenString = "";
+        tokenType = Tokens.X_UNKNOWN_TOKEN;
+        dataType = null;
+        tokenValue = null;
+        namePrefix = null;
+        namePrePrefix = null;
+        namePrePrePrefix = null;
+        charsetSchema = null;
+        charsetName = null;
+        fullString = null;
+        lobMultiplierType = Tokens.X_UNKNOWN_TOKEN;
+        isDelimiter = false;
+        isDelimitedIdentifier = false;
+        isDelimitedPrefix = false;
+        isDelimitedPrePrefix = false;
+        isDelimitedPrePrePrefix = false;
+        isUndelimitedIdentifier = false;
+        hasIrregularChar = false;
+        isReservedIdentifier = false;
         isCoreReservedIdentifier = false;
-        isHostParameter          = false;
-        isMalformed              = false;
+        isHostParameter = false;
+        isMalformed = false;
 
         //
-        expression    = null;
+        expression = null;
         hasColumnList = false;
     }
 
@@ -104,28 +104,28 @@ public class Token {
 
         Token token = new Token();
 
-        token.tokenString              = tokenString;
-        token.tokenType                = tokenType;
-        token.dataType                 = dataType;
-        token.tokenValue               = tokenValue;
-        token.namePrefix               = namePrefix;
-        token.namePrePrefix            = namePrePrefix;
-        token.namePrePrePrefix         = namePrePrePrefix;
-        token.charsetSchema            = charsetSchema;
-        token.charsetName              = charsetName;
-        token.fullString               = fullString;
-        token.lobMultiplierType        = lobMultiplierType;
-        token.isDelimiter              = isDelimiter;
-        token.isDelimitedIdentifier    = isDelimitedIdentifier;
-        token.isDelimitedPrefix        = isDelimitedPrefix;
-        token.isDelimitedPrePrefix     = isDelimitedPrePrefix;
-        token.isDelimitedPrePrePrefix  = isDelimitedPrePrePrefix;
-        token.isUndelimitedIdentifier  = isUndelimitedIdentifier;
-        token.hasIrregularChar         = hasIrregularChar;
-        token.isReservedIdentifier     = isReservedIdentifier;
+        token.tokenString = tokenString;
+        token.tokenType = tokenType;
+        token.dataType = dataType;
+        token.tokenValue = tokenValue;
+        token.namePrefix = namePrefix;
+        token.namePrePrefix = namePrePrefix;
+        token.namePrePrePrefix = namePrePrePrefix;
+        token.charsetSchema = charsetSchema;
+        token.charsetName = charsetName;
+        token.fullString = fullString;
+        token.lobMultiplierType = lobMultiplierType;
+        token.isDelimiter = isDelimiter;
+        token.isDelimitedIdentifier = isDelimitedIdentifier;
+        token.isDelimitedPrefix = isDelimitedPrefix;
+        token.isDelimitedPrePrefix = isDelimitedPrePrefix;
+        token.isDelimitedPrePrePrefix = isDelimitedPrePrePrefix;
+        token.isUndelimitedIdentifier = isUndelimitedIdentifier;
+        token.hasIrregularChar = hasIrregularChar;
+        token.isReservedIdentifier = isReservedIdentifier;
         token.isCoreReservedIdentifier = isCoreReservedIdentifier;
-        token.isHostParameter          = isHostParameter;
-        token.isMalformed              = isMalformed;
+        token.isHostParameter = isHostParameter;
+        token.isMalformed = isMalformed;
 
         return token;
     }
@@ -146,17 +146,17 @@ public class Token {
 
         if (expression instanceof ExpressionColumn) {
             if (tokenType == Tokens.ASTERISK) {
-                StringBuilder sb         = new StringBuilder();
-                Expression    expression = (Expression) this.expression;
+                StringBuilder sb = new StringBuilder();
+                Expression expression = (Expression) this.expression;
 
                 if (expression.opType == OpTypes.MULTICOLUMN
                         && expression.nodes.length > 0) {
                     sb.append(' ');
 
                     for (int i = 0; i < expression.nodes.length; i++) {
-                        Expression   e = expression.nodes[i];
+                        Expression e = expression.nodes[i];
                         ColumnSchema c = e.getColumn();
-                        String       name;
+                        String name;
 
                         if (e.opType == OpTypes.COALESCE) {
                             if (i > 0) {
@@ -170,12 +170,12 @@ public class Token {
 
                         if (e.getRangeVariable().tableAlias == null) {
                             name = c.getName()
-                                .getSchemaQualifiedStatementName();
+                                    .getSchemaQualifiedStatementName();
                         } else {
                             RangeVariable range = e.getRangeVariable();
 
                             name = range.tableAlias.getStatementName() + '.'
-                                   + c.getName().statementName;
+                                    + c.getName().statementName;
                         }
 
                         if (i > 0) {
@@ -206,15 +206,15 @@ public class Token {
             isDelimiter = false;
 
             String nameString =
-                ((SchemaObject) expression).getName()
-                    .getSchemaQualifiedStatementName();
+                    ((SchemaObject) expression).getName()
+                            .getSchemaQualifiedStatementName();
 
             if (hasColumnList) {
                 Table table = ((Table) expression);
 
                 nameString +=
-                    table.getColumnListSQL(table.defaultColumnMap,
-                                           table.defaultColumnMap.length);
+                        table.getColumnListSQL(table.defaultColumnMap,
+                                table.defaultColumnMap.length);
             }
 
             return nameString;
@@ -267,21 +267,21 @@ public class Token {
         return sb.toString();
     }
 
-/*
-    for (int i = 0; i < tokens.length; i++) {
-        if (tokens[i].schemaObjectIdentifier instanceof Expression) {
-            ColumnSchema column =
-                ((Expression) tokens[i].schemaObjectIdentifier)
-                    .getColumn();
+    /*
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i].schemaObjectIdentifier instanceof Expression) {
+                ColumnSchema column =
+                    ((Expression) tokens[i].schemaObjectIdentifier)
+                        .getColumn();
 
-            tokens[i].schemaObjectIdentifier = column.getName();
+                tokens[i].schemaObjectIdentifier = column.getName();
+            }
         }
-    }
-*/
+    */
     static String getSQL(Token[] tokens) {
 
-        boolean       wasDelimiter = true;
-        StringBuilder sb           = new StringBuilder();
+        boolean wasDelimiter = true;
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < tokens.length; i++) {
             String sql = tokens[i].getSQL();

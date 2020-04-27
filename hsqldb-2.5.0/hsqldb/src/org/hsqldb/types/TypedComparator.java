@@ -36,17 +36,17 @@ import org.hsqldb.SortAndSlice;
 import org.hsqldb.lib.ObjectComparator;
 
 /**
-  * Comparator with sort order and null order.<p>
-  *
-  * @author Fred Toussi (fredt@users dot sourceforge.net)
-  * @version 2.5.0
-  * @since 2.4.0
+ * Comparator with sort order and null order.<p>
+ *
+ * @author Fred Toussi (fredt@users dot sourceforge.net)
+ * @version 2.5.0
+ * @since 2.4.0
  */
 public class TypedComparator implements ObjectComparator {
 
     final Session session;
-    Type          type;
-    SortAndSlice  sort;
+    Type type;
+    SortAndSlice sort;
 
     public TypedComparator(Session session) {
         this.session = session;

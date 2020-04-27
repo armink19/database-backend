@@ -38,14 +38,15 @@ import java.sql.*;
 
 /**
  * Test sql statements via jdbc against in-memory database
+ *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  */
 public class TestSql extends TestBase {
 
-    Statement         stmnt;
+    Statement stmnt;
     PreparedStatement pstmnt;
-    Connection        connection;
-    String            getColumnName = "false";
+    Connection connection;
+    String getColumnName = "false";
 
     public TestSql(String name) {
         super(name);
@@ -56,7 +57,7 @@ public class TestSql extends TestBase {
         super.setUp();
 
         connection = super.newConnection();
-        stmnt      = connection.createStatement();
+        stmnt = connection.createStatement();
     }
 
     public void testMetaData() {
@@ -65,11 +66,11 @@ public class TestSql extends TestBase {
         String ddl02 = "DROP TABLE ADDRESSBOOK_CATEGORY IF EXISTS";
         String ddl03 = "DROP TABLE USER IF EXISTS";
         String ddl1 =
-            "CREATE TABLE USER(USER_ID INTEGER NOT NULL PRIMARY KEY,LOGIN_ID VARCHAR(128) NOT NULL,USER_NAME VARCHAR(254) DEFAULT ' ' NOT NULL,CREATE_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,UPDATE_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,LAST_ACCESS_DATE TIMESTAMP,CONSTRAINT IXUQ_LOGIN_ID0 UNIQUE(LOGIN_ID))";
+                "CREATE TABLE USER(USER_ID INTEGER NOT NULL PRIMARY KEY,LOGIN_ID VARCHAR(128) NOT NULL,USER_NAME VARCHAR(254) DEFAULT ' ' NOT NULL,CREATE_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,UPDATE_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,LAST_ACCESS_DATE TIMESTAMP,CONSTRAINT IXUQ_LOGIN_ID0 UNIQUE(LOGIN_ID))";
         String ddl2 =
-            "CREATE TABLE ADDRESSBOOK_CATEGORY(USER_ID INTEGER NOT NULL,CATEGORY_ID INTEGER DEFAULT 0 NOT NULL,CATEGORY_NAME VARCHAR(60) DEFAULT '' NOT NULL,CONSTRAINT SYS_PK_ADDRESSBOOK_CATEGORY PRIMARY KEY(USER_ID,CATEGORY_ID),CONSTRAINT FK_ADRBKCAT1 FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID) ON DELETE CASCADE)";
+                "CREATE TABLE ADDRESSBOOK_CATEGORY(USER_ID INTEGER NOT NULL,CATEGORY_ID INTEGER DEFAULT 0 NOT NULL,CATEGORY_NAME VARCHAR(60) DEFAULT '' NOT NULL,CONSTRAINT SYS_PK_ADDRESSBOOK_CATEGORY PRIMARY KEY(USER_ID,CATEGORY_ID),CONSTRAINT FK_ADRBKCAT1 FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID) ON DELETE CASCADE)";
         String ddl3 =
-            "CREATE TABLE ADDRESSBOOK(USER_ID INTEGER NOT NULL,ADDRESSBOOK_ID INTEGER NOT NULL,CATEGORY_ID INTEGER DEFAULT 0 NOT NULL,FIRST VARCHAR(64) DEFAULT '' NOT NULL,LAST VARCHAR(64) DEFAULT '' NOT NULL,NOTE VARCHAR(128) DEFAULT '' NOT NULL,CONSTRAINT SYS_PK_ADDRESSBOOK PRIMARY KEY(USER_ID,ADDRESSBOOK_ID),CONSTRAINT FK_ADRBOOK1 FOREIGN KEY(USER_ID,CATEGORY_ID) REFERENCES ADDRESSBOOK_CATEGORY(USER_ID,CATEGORY_ID) ON DELETE CASCADE)";
+                "CREATE TABLE ADDRESSBOOK(USER_ID INTEGER NOT NULL,ADDRESSBOOK_ID INTEGER NOT NULL,CATEGORY_ID INTEGER DEFAULT 0 NOT NULL,FIRST VARCHAR(64) DEFAULT '' NOT NULL,LAST VARCHAR(64) DEFAULT '' NOT NULL,NOTE VARCHAR(128) DEFAULT '' NOT NULL,CONSTRAINT SYS_PK_ADDRESSBOOK PRIMARY KEY(USER_ID,ADDRESSBOOK_ID),CONSTRAINT FK_ADRBOOK1 FOREIGN KEY(USER_ID,CATEGORY_ID) REFERENCES ADDRESSBOOK_CATEGORY(USER_ID,CATEGORY_ID) ON DELETE CASCADE)";
         String result1 = "1";
         String result2 = "2";
         String result3 = "3";
@@ -124,17 +125,17 @@ public class TestSql extends TestBase {
                 System.out.println(md.getSchemaTerm());
                 System.out.println(md.getSearchStringEscape());
                 System.out.println(
-                    "Testing DatabaseMetaData.getSQLKeywords()");
+                        "Testing DatabaseMetaData.getSQLKeywords()");
                 System.out.println(md.getSQLKeywords());
                 System.out.println(md.getSQLStateType());
                 System.out.println(
-                    "Testing DatabaseMetaData.getStringFunctions()");
+                        "Testing DatabaseMetaData.getStringFunctions()");
                 System.out.println(md.getStringFunctions());
                 System.out.println(
-                    "Testing DatabaseMetaData.getSystemFunctions()");
+                        "Testing DatabaseMetaData.getSystemFunctions()");
                 System.out.println(md.getSystemFunctions());
                 System.out.println(
-                    "Testing DatabaseMetaData.getTimeDateFunctions()");
+                        "Testing DatabaseMetaData.getTimeDateFunctions()");
                 System.out.println(md.getTimeDateFunctions());
                 System.out.println(md.getURL());
                 System.out.println(md.getUserName());
@@ -146,8 +147,8 @@ public class TestSql extends TestBase {
 
                 rs = md.getPrimaryKeys(null, null, "USER");
 
-                ResultSetMetaData rsmd    = rs.getMetaData();
-                String            result0 = "";
+                ResultSetMetaData rsmd = rs.getMetaData();
+                String result0 = "";
 
                 for (; rs.next(); ) {
                     for (int i = 0; i < rsmd.getColumnCount(); i++) {
@@ -166,8 +167,8 @@ public class TestSql extends TestBase {
 
                 rs = md.getBestRowIdentifier(null, null, "USER", 0, true);
 
-                ResultSetMetaData rsmd    = rs.getMetaData();
-                String            result0 = "";
+                ResultSetMetaData rsmd = rs.getMetaData();
+                String result0 = "";
 
                 for (; rs.next(); ) {
                     for (int i = 0; i < rsmd.getColumnCount(); i++) {
@@ -201,8 +202,8 @@ public class TestSql extends TestBase {
 
             {
                 ResultSet rs = md.getCrossReference(null, null,
-                                                    "ADDRESSBOOK_CATEGORY",
-                                                    null, null, "ADDRESSBOOK");
+                        "ADDRESSBOOK_CATEGORY",
+                        null, null, "ADDRESSBOOK");
                 ResultSetMetaData rsmd = rs.getMetaData();
 
                 result2 = "";
@@ -220,7 +221,7 @@ public class TestSql extends TestBase {
             }
 
             {
-                ResultSet         rs = md.getExportedKeys(null, null, "USER");
+                ResultSet rs = md.getExportedKeys(null, null, "USER");
                 ResultSetMetaData rsmd = rs.getMetaData();
 
                 result3 = "";
@@ -239,8 +240,8 @@ public class TestSql extends TestBase {
 
             {
                 ResultSet rs = md.getCrossReference(null, null, "USER", null,
-                                                    null,
-                                                    "ADDRESSBOOK_CATEGORY");
+                        null,
+                        "ADDRESSBOOK_CATEGORY");
                 ResultSetMetaData rsmd = rs.getMetaData();
 
                 result4 = "";
@@ -260,13 +261,13 @@ public class TestSql extends TestBase {
             {
                 stmnt.execute("DROP TABLE T IF EXISTS;");
                 stmnt.execute(
-                    "CREATE TABLE T (I IDENTITY, A CHAR(20), B CHAR(20));");
+                        "CREATE TABLE T (I IDENTITY, A CHAR(20), B CHAR(20));");
                 stmnt.execute(
-                    "INSERT INTO T VALUES (NULL, 'get_column_name', '"
-                    + getColumnName + "');");
+                        "INSERT INTO T VALUES (NULL, 'get_column_name', '"
+                                + getColumnName + "');");
 
                 ResultSet rs = stmnt.executeQuery(
-                    "SELECT I, A, B, A \"aliasA\", B \"aliasB\", 1 FROM T;");
+                        "SELECT I, A, B, A \"aliasA\", B \"aliasB\", 1 FROM T;");
                 ResultSetMetaData rsmd = rs.getMetaData();
 
                 result5 = "";
@@ -274,7 +275,7 @@ public class TestSql extends TestBase {
                 for (; rs.next(); ) {
                     for (int i = 0; i < rsmd.getColumnCount(); i++) {
                         result5 += rsmd.getColumnName(i + 1) + ":"
-                                   + rs.getString(i + 1) + ":";
+                                + rs.getString(i + 1) + ":";
                     }
 
                     result5 += "\n";
@@ -283,13 +284,13 @@ public class TestSql extends TestBase {
                 rs.close();
 
                 rs = stmnt.executeQuery(
-                    "SELECT I, A, B, A \"aliasA\", B \"aliasB\", 1 FROM T;");
+                        "SELECT I, A, B, A \"aliasA\", B \"aliasB\", 1 FROM T;");
                 rsmd = rs.getMetaData();
 
                 for (; rs.next(); ) {
                     for (int i = 0; i < rsmd.getColumnCount(); i++) {
                         result5 += rsmd.getColumnLabel(i + 1) + ":"
-                                   + rs.getString(i + 1) + ":";
+                                + rs.getString(i + 1) + ":";
                     }
 
                     result5 += "\n";
@@ -297,7 +298,7 @@ public class TestSql extends TestBase {
 
                 System.out.println(result5);
                 System.out.println("first column identity: "
-                                   + rsmd.isAutoIncrement(1));
+                        + rsmd.isAutoIncrement(1));
                 rsmd.isCaseSensitive(1);
                 rsmd.isCurrency(1);
                 rsmd.isDefinitelyWritable(1);
@@ -310,7 +311,7 @@ public class TestSql extends TestBase {
 
                 // test identity with PreparedStatement
                 pstmnt = connection.prepareStatement(
-                    "INSERT INTO T VALUES (?,?,?)");
+                        "INSERT INTO T VALUES (?,?,?)");
 
                 pstmnt.setString(1, null);
                 pstmnt.setString(2, "test");
@@ -344,26 +345,25 @@ public class TestSql extends TestBase {
      * Because all values were turned into strings with toString before
      * PreparedStatement.executeQuery() was called, special values such as
      * NaN were not accepted.
-     *
+     * <p>
      * This test can be extended to cover various conversions through JDBC
-     *
      */
     public void testDoubleNaN() {
 
-        double  value    = 0;
+        double value = 0;
         boolean wasEqual = false;
-        String  message  = "DB operation completed";
-        String  ddl1     = "DROP TABLE t1 IF EXISTS;";
+        String message = "DB operation completed";
+        String ddl1 = "DROP TABLE t1 IF EXISTS;";
         String ddl2 =
-            "CREATE TABLE t1 ( d DECIMAL, f DOUBLE, l BIGINT, i INTEGER, s SMALLINT, t TINYINT, "
-            + "dt DATE DEFAULT CURRENT_DATE, ti TIME DEFAULT CURRENT_TIME, ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP );";
+                "CREATE TABLE t1 ( d DECIMAL, f DOUBLE, l BIGINT, i INTEGER, s SMALLINT, t TINYINT, "
+                        + "dt DATE DEFAULT CURRENT_DATE, ti TIME DEFAULT CURRENT_TIME, ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP );";
 
         try {
             stmnt.execute(ddl1);
             stmnt.execute(ddl2);
 
             PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO t1 (d,f,l,i,s,t,dt,ti,ts) VALUES (?,?,?,?,?,?,?,?,?)");
+                    "INSERT INTO t1 (d,f,l,i,s,t,dt,ti,ts) VALUES (?,?,?,?,?,?,?,?,?)");
 
             ps.setString(1, "0.2");
             ps.setDouble(2, 0.2);
@@ -374,7 +374,7 @@ public class TestSql extends TestBase {
             ps.setDate(7, new java.sql.Date(System.currentTimeMillis()));
             ps.setTime(8, new java.sql.Time(System.currentTimeMillis()));
             ps.setTimestamp(
-                9, new java.sql.Timestamp(System.currentTimeMillis()));
+                    9, new java.sql.Timestamp(System.currentTimeMillis()));
             ps.execute();
             ps.setInt(1, 0);
             ps.setDouble(2, java.lang.Double.NaN);
@@ -385,7 +385,7 @@ public class TestSql extends TestBase {
 
             // allowed conversions
             ps.setTimestamp(
-                7, new java.sql.Timestamp(System.currentTimeMillis() + 1));
+                    7, new java.sql.Timestamp(System.currentTimeMillis() + 1));
             ps.setTime(8, new java.sql.Time(System.currentTimeMillis() + 1));
             ps.setDate(9, new java.sql.Date(System.currentTimeMillis() + 1));
             ps.execute();
@@ -405,7 +405,7 @@ public class TestSql extends TestBase {
             ps.setObject(7, new java.sql.Date(System.currentTimeMillis() + 2));
             ps.setObject(8, new java.sql.Time(System.currentTimeMillis() + 2));
             ps.setObject(9, new java.sql.Timestamp(System.currentTimeMillis()
-                                                   + 2));
+                    + 2));
             ps.execute();
             ps.setObject(1, Float.valueOf(0), Types.INTEGER);
             ps.setObject(4, Float.valueOf(1), Types.INTEGER);
@@ -413,7 +413,7 @@ public class TestSql extends TestBase {
             ps.execute();
 
             ResultSet rs =
-                stmnt.executeQuery("SELECT d, f, l, i, s*2, t FROM t1");
+                    stmnt.executeQuery("SELECT d, f, l, i, s*2, t FROM t1");
             boolean result = rs.next();
 
             value = rs.getDouble(2);
@@ -422,8 +422,8 @@ public class TestSql extends TestBase {
             int integerValue = rs.getInt(4);
 
             if (rs.next()) {
-                value        = rs.getDouble(2);
-                wasEqual     = Double.isNaN(value);
+                value = rs.getDouble(2);
+                wasEqual = Double.isNaN(value);
                 integerValue = rs.getInt(4);
 
                 // tests for conversion
@@ -432,12 +432,12 @@ public class TestSql extends TestBase {
             }
 
             if (rs.next()) {
-                value    = rs.getDouble(2);
+                value = rs.getDouble(2);
                 wasEqual = wasEqual && value == Double.POSITIVE_INFINITY;
             }
 
             if (rs.next()) {
-                value    = rs.getDouble(2);
+                value = rs.getDouble(2);
                 wasEqual = wasEqual && value == Double.NEGATIVE_INFINITY;
             }
 
@@ -454,14 +454,15 @@ public class TestSql extends TestBase {
                 // cause errors
                 ps.setString(5, "three");
                 fail("update did not fail");
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
 
             {
                 stmnt.execute("drop table CDTYPE if exists");
 
                 // test for the value MAX(column) in an empty table
                 stmnt.execute(
-                    "CREATE TABLE cdType (ID INTEGER NOT NULL, name VARCHAR(50), PRIMARY KEY(ID))");
+                        "CREATE TABLE cdType (ID INTEGER NOT NULL, name VARCHAR(50), PRIMARY KEY(ID))");
 
                 rs = stmnt.executeQuery("SELECT MAX(ID) FROM cdType");
 
@@ -474,12 +475,12 @@ public class TestSql extends TestBase {
                 }
 
                 stmnt.executeUpdate(
-                    "INSERT INTO cdType VALUES (10,'Test String');");
+                        "INSERT INTO cdType VALUES (10,'Test String');");
                 stmnt.execute("CALL IDENTITY();");
 
                 try {
                     stmnt.executeUpdate(
-                        "INSERT INTO cdType VALUES (10,'Test String');");
+                            "INSERT INTO cdType VALUES (10,'Test String');");
                 } catch (SQLException e1) {
                     stmnt.execute("ROLLBACK");
                     connection.rollback();
@@ -499,12 +500,12 @@ public class TestSql extends TestBase {
 
         try {
             String ddl =
-                "drop table PRICE_RELATE_USER_ORDER_V2 if exists;"
-                + "create table PRICE_RELATE_USER_ORDER_V2 "
-                + "(ID_ORDER_V2 BIGINT, ID_USER NUMERIC, DATE_CREATE TIMESTAMP)";
+                    "drop table PRICE_RELATE_USER_ORDER_V2 if exists;"
+                            + "create table PRICE_RELATE_USER_ORDER_V2 "
+                            + "(ID_ORDER_V2 BIGINT, ID_USER NUMERIC, DATE_CREATE TIMESTAMP)";
             String sql = "insert into PRICE_RELATE_USER_ORDER_V2 "
-                         + "(ID_ORDER_V2, ID_USER, DATE_CREATE) " + "values "
-                         + "(?, ?, ?)";
+                    + "(ID_ORDER_V2, ID_USER, DATE_CREATE) " + "values "
+                    + "(?, ?, ?)";
             Statement st = connection.createStatement();
 
             st.execute(ddl);
@@ -514,7 +515,7 @@ public class TestSql extends TestBase {
             ps.setLong(1, 1);
             ps.setNull(2, Types.NUMERIC);
             ps.setTimestamp(
-                3, new java.sql.Timestamp(System.currentTimeMillis()));
+                    3, new java.sql.Timestamp(System.currentTimeMillis()));
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -531,27 +532,27 @@ public class TestSql extends TestBase {
 
         try {
             PreparedStatement pstmt =
-                connection.prepareStatement("drop table test if exists");
+                    connection.prepareStatement("drop table test if exists");
 
             pstmt.execute();
 
             pstmt =
-                connection.prepareStatement("create table test (id integer)");
+                    connection.prepareStatement("create table test (id integer)");
 
             pstmt.execute();
 
             pstmt =
-                connection.prepareStatement("insert into test values (10)");
+                    connection.prepareStatement("insert into test values (10)");
 
             pstmt.execute();
 
             pstmt =
-                connection.prepareStatement("insert into test values (20)");
+                    connection.prepareStatement("insert into test values (20)");
 
             pstmt.execute();
 
             pstmt = connection.prepareStatement(
-                "select count(*) from test where id is null");
+                    "select count(*) from test where id is null");
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -562,7 +563,7 @@ public class TestSql extends TestBase {
             assertEquals(0, count);
 
             pstmt =
-                connection.prepareStatement("select limit ? 2  id from test");
+                    connection.prepareStatement("select limit ? 2  id from test");
 
             pstmt.setInt(1, 0);
 
@@ -592,11 +593,11 @@ public class TestSql extends TestBase {
     public void testX1() {
 
         String tableDDL =
-            "create table lo_attribute ( "
-            + "learningid varchar(15) not null, "
-            + "ordering integer not null,"
-            + "attribute_value_data varchar(85),"
-            + "constraint PK_LO_ATTR primary key (learningid, ordering))";
+                "create table lo_attribute ( "
+                        + "learningid varchar(15) not null, "
+                        + "ordering integer not null,"
+                        + "attribute_value_data varchar(85),"
+                        + "constraint PK_LO_ATTR primary key (learningid, ordering))";
 
         try {
             Statement stmt = connection.createStatement();
@@ -604,17 +605,17 @@ public class TestSql extends TestBase {
             stmt.execute("drop table lo_attribute if exists");
             stmt.execute(tableDDL);
             stmt.execute(
-                "insert into lo_attribute values('abcd', 10, 'cdef')");
+                    "insert into lo_attribute values('abcd', 10, 'cdef')");
             stmt.execute(
-                "insert into lo_attribute values('bcde', 20, 'cdef')");
+                    "insert into lo_attribute values('bcde', 20, 'cdef')");
         } catch (SQLException e) {
             assertEquals(0, 1);
         }
 
         try {
             String prepared =
-                "update lo_attribute set "
-                + " ordering = (ordering - 1) where ordering > ?";
+                    "update lo_attribute set "
+                            + " ordering = (ordering - 1) where ordering > ?";
             PreparedStatement ps = connection.prepareStatement(prepared);
 
             ps.setInt(1, 10);
@@ -627,7 +628,7 @@ public class TestSql extends TestBase {
             connection.setAutoCommit(false);
 
             java.sql.Savepoint savepoint =
-                connection.setSavepoint("savepoint");
+                    connection.setSavepoint("savepoint");
 
             connection.createStatement().executeQuery("CALL true;");
             connection.rollback(savepoint);
@@ -646,7 +647,7 @@ public class TestSql extends TestBase {
 
         try {
             Connection conn = newConnection();
-            Statement  stmt = conn.createStatement();
+            Statement stmt = conn.createStatement();
 
             stmt.execute("DROP TABLE test1 IF EXISTS");
             stmt.execute("DROP TABLE test2 IF EXISTS");
@@ -656,7 +657,7 @@ public class TestSql extends TestBase {
             stmt.execute("INSERT INTO test2 VALUES(2)");
 
             ResultSet rs = stmt.executeQuery(
-                "select id,null as b1 from test2 union select id, b1 from test1");
+                    "select id,null as b1 from test2 union select id, b1 from test1");
             Boolean[] array = new Boolean[2];
 
             for (int i = 0; rs.next(); i++) {
@@ -670,13 +671,13 @@ public class TestSql extends TestBase {
             }
 
             boolean result = (array[0] == null && array[1] == Boolean.TRUE)
-                             || (array[0] == Boolean.TRUE && array[1] == null);
+                    || (array[0] == Boolean.TRUE && array[1] == null);
 
             assertTrue(result);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("TestSql.testUnionColumnType() error: "
-                               + e.getMessage());
+                    + e.getMessage());
         }
     }
 
@@ -687,17 +688,17 @@ public class TestSql extends TestBase {
         st.execute("DROP TABLE t1 if exists;");
         st.execute("DROP TABLE t2 if exists;");
         st.execute(
-            "CREATE TABLE t1 (id int not null, v1 int, v2 int, primary key(id))");
+                "CREATE TABLE t1 (id int not null, v1 int, v2 int, primary key(id))");
         st.execute(
-            "CREATE TABLE t2 (id int not null, v1 int, v3 int, primary key(id))");
+                "CREATE TABLE t2 (id int not null, v1 int, v3 int, primary key(id))");
         st.execute("INSERT INTO t1 values(1,1,1)");
         st.execute("INSERT INTO t1 values(2,2,2)");
         st.execute("INSERT INTO t2 values(1,3,3)");
 
         ResultSet rs = st.executeQuery(
-            "select t as atable, a as idvalue, b as value1, c as value2, d as value3 from("
-            + "(select 't1' as t, t1.id as a, t1.v1 as b, t1.v2 as c, null as d from t1) union"
-            + "(select 't2' as t, t2.id as a, t2.v1 as b, null as c, t2.v3 as d from t2)) order by atable, idvalue");
+                "select t as atable, a as idvalue, b as value1, c as value2, d as value3 from("
+                        + "(select 't1' as t, t1.id as a, t1.v1 as b, t1.v2 as c, null as d from t1) union"
+                        + "(select 't2' as t, t2.id as a, t2.v1 as b, null as c, t2.v3 as d from t2)) order by atable, idvalue");
 
         assertTrue(rs.next());
         assertEquals("t1", rs.getObject("atable"));
@@ -722,7 +723,7 @@ public class TestSql extends TestBase {
 
     public void testPreparedWithManyParams() throws Exception {
 
-        int    count    = 40;
+        int count = 40;
         String tabledef = "CREATE TABLE T1 (";
 
         for (int i = 0; i < count; i++) {
@@ -772,17 +773,17 @@ public class TestSql extends TestBase {
     }
 
     static byte[] b1 = {
-        0, 1, -128, 44, 12
+            0, 1, -128, 44, 12
     };
     static byte[] b2 = {
-        10, 127
+            10, 127
     };
 
     public void testBinaryFunction() throws Exception {
 
         Statement sStatement = null;
         ResultSet r;
-        boolean   mismatch;
+        boolean mismatch;
 
         sStatement = connection.createStatement();
 
@@ -790,7 +791,7 @@ public class TestSql extends TestBase {
 
             // prepared statements
             String s =
-                "create table bintest(id int primary key, bin varbinary(100))";
+                    "create table bintest(id int primary key, bin varbinary(100))";
 
             sStatement.execute(s);
 
@@ -811,7 +812,7 @@ public class TestSql extends TestBase {
             byte[] b2n;
 
             s = "select \"org.hsqldb.lib.ArrayUtil.countStartElementsAt\"(bin,0, ?) "
-                + "from bintest";
+                    + "from bintest";
             p = connection.prepareStatement(s);
 
             p.setBytes(1, b2);
@@ -827,8 +828,8 @@ public class TestSql extends TestBase {
             int integer2 = r.getInt(1);
 
             s = "select \"org.hsqldb.lib.StringConverter.hexStringToByteArray\""
-                + "(\"org.hsqldb.lib.StringConverter.byteArrayToHexString\"(x'abcd')) "
-                + "from bintest";
+                    + "(\"org.hsqldb.lib.StringConverter.byteArrayToHexString\"(x'abcd')) "
+                    + "from bintest";
             r = sStatement.executeQuery(s);
 
             r.next();
@@ -841,7 +842,7 @@ public class TestSql extends TestBase {
 
             //--
             s = "select \"org.hsqldb.lib.StringConverter.byteArrayToHexString\"(bin) "
-                + "from bintest";
+                    + "from bintest";
             r = sStatement.executeQuery(s);
 
             r.next();
@@ -851,7 +852,7 @@ public class TestSql extends TestBase {
             r.next();
 
             b1n = r.getBytes(1);
-            s   = "create table obj(id int,o object)";
+            s = "create table obj(id int,o object)";
 
             sStatement.execute(s);
 
@@ -861,7 +862,7 @@ public class TestSql extends TestBase {
             p.setInt(1, 1);
 
             int[] ia1 = {
-                1, 2, 3
+                    1, 2, 3
             };
 
             p.setObject(2, ia1);
@@ -915,9 +916,9 @@ public class TestSql extends TestBase {
     public static void main(String[] argv) {
 
         TestResult result = new TestResult();
-        TestCase   testA  = new TestSql("testMetaData");
-        TestCase   testB  = new TestSql("testDoubleNaN");
-        TestCase   testC  = new TestSql("testAny");
+        TestCase testA = new TestSql("testMetaData");
+        TestCase testB = new TestSql("testDoubleNaN");
+        TestCase testC = new TestSql("testAny");
 
         testA.run(result);
         testB.run(result);

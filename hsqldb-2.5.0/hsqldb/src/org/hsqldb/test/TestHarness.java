@@ -53,13 +53,13 @@ import java.util.Properties;
  */
 public class TestHarness extends JFrame {
 
-    protected String    dbURL;
+    protected String dbURL;
     protected JTextArea textArea;
 
     public static void main(String[] args) {
 
         if (args.length == 0) {
-            args = new String[]{ "testrecovery" };
+            args = new String[]{"testrecovery"};
         }
 
         try {
@@ -108,8 +108,8 @@ public class TestHarness extends JFrame {
 
         textArea = new JTextArea();
 
-        JPanel  buttons = new JPanel(new FlowLayout());
-        JButton close   = new JButton("Close Gracefully");
+        JPanel buttons = new JPanel(new FlowLayout());
+        JButton close = new JButton("Close Gracefully");
 
         close.addActionListener(new ActionListener() {
 
@@ -160,14 +160,14 @@ public class TestHarness extends JFrame {
             if (con != null) {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(
-                    "SELECT NEXT VALUE FOR MySeq FROM Dummy");
+                        "SELECT NEXT VALUE FOR MySeq FROM Dummy");
 
                 rs.next();
 
                 int id = rs.getInt(1);
 
                 stmt.executeUpdate("INSERT INTO MyTable (Id, Name) VALUES ("
-                                   + id + ", 'This is row #" + id + "')");
+                        + id + ", 'This is row #" + id + "')");
                 append("Row #" + id + " added");
                 stmt.close();
                 con.close();
@@ -185,7 +185,7 @@ public class TestHarness extends JFrame {
             if (con != null) {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(
-                    "SELECT * FROM MyTable ORDER BY Id ASC");
+                        "SELECT * FROM MyTable ORDER BY Id ASC");
 
                 append("Listing 'MyTable'....");
 
@@ -237,10 +237,10 @@ public class TestHarness extends JFrame {
                 stmt.execute("CREATE USER abcd PASSWORD 'dcba'");
                 stmt.execute("CREATE SEQUENCE MySeq");
                 stmt.execute(
-                    "CREATE TABLE MyTable (Id INT PRIMARY KEY, Name VARCHAR(100) NOT NULL)");
+                        "CREATE TABLE MyTable (Id INT PRIMARY KEY, Name VARCHAR(100) NOT NULL)");
                 stmt.execute("CREATE TABLE Dummy (Blah VARCHAR(100) NOT NULL)");
                 stmt.execute(
-                    "INSERT INTO Dummy (Blah) VALUES ('dummy value')");
+                        "INSERT INTO Dummy (Blah) VALUES ('dummy value')");
                 stmt.execute("GRANT ALL ON MyTable TO abcd");
                 stmt.execute("GRANT ALL ON Dummy TO abcd");
                 stmt.execute("GRANT ALL ON SEQUENCE MySeq TO abcd");

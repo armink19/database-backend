@@ -34,14 +34,13 @@ package org.hsqldb.lib;
 import org.hsqldb.map.BaseHashMap;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.2.7
  * @since 1.9.0
  */
 public class OrderedLongKeyHashMap extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
 
     public OrderedLongKeyHashMap() {
@@ -49,24 +48,24 @@ public class OrderedLongKeyHashMap extends BaseHashMap {
     }
 
     public OrderedLongKeyHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.longKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
 
         isList = true;
     }
 
     public OrderedLongKeyHashMap(int initialCapacity,
                                  boolean hasThirdValue)
-                                 throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.longKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
 
-        objectKeyTable   = new Object[objectValueTable.length];
+        objectKeyTable = new Object[objectValueTable.length];
         isTwoObjectValue = true;
-        isList           = true;
+        isList = true;
 
         if (hasThirdValue) {
             objectValueTable2 = new Object[objectValueTable.length];

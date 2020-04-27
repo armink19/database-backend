@@ -49,13 +49,13 @@ import java.io.InputStream;
  */
 public class BlobInputStream extends InputStream {
 
-    final BlobData                blob;
-    final long                    availableLength;
-    long                          bufferOffset;
-    long                          currentPosition;
-    byte[]                        buffer;
-    boolean                       isClosed;
-    int                           streamBlockSize;
+    final BlobData blob;
+    final long availableLength;
+    long bufferOffset;
+    long currentPosition;
+    byte[] buffer;
+    boolean isClosed;
+    int streamBlockSize;
     public final SessionInterface session;
 
     public BlobInputStream(SessionInterface session, BlobData blob,
@@ -63,8 +63,8 @@ public class BlobInputStream extends InputStream {
 
         final long blobLength = blob.length(session);
 
-        this.session         = session;
-        this.blob            = blob;
+        this.session = session;
+        this.blob = blob;
         this.availableLength = offset + Math.min(length, blobLength - offset);
         this.currentPosition = offset;
         this.streamBlockSize = session.getStreamBlockSize();

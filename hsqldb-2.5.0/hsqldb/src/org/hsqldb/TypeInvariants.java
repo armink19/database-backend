@@ -85,11 +85,11 @@ public class TypeInvariants {
         name = HsqlNameManager.newInfoSchemaObjectName("TIME_STAMP", false,
                 SchemaObject.DOMAIN);
         TIME_STAMP = new DateTimeType(Types.SQL_TIMESTAMP,
-                                      Types.SQL_TIMESTAMP, 6);
+                Types.SQL_TIMESTAMP, 6);
         TIME_STAMP.userTypeModifier = new UserTypeModifier(name,
                 SchemaObject.DOMAIN, TIME_STAMP);
 
-       name = HsqlNameManager.newInfoSchemaObjectName("NCNAME",
+        name = HsqlNameManager.newInfoSchemaObjectName("NCNAME",
                 false, SchemaObject.DOMAIN);
         NCNAME = new CharacterType(Types.SQL_VARCHAR, (1 << 12));
         NCNAME.userTypeModifier = new UserTypeModifier(name,

@@ -41,27 +41,27 @@ import org.hsqldb.result.Result;
 /**
  * This class manages the reuse of Statement objects for prepared
  * statements for a Session instance.<p>
- *
+ * <p>
  * A compiled statement is registered by a session to be managed. Once
  * registered, it is linked with one or more sessions.<p>
- *
+ * <p>
  * The sql statement text distinguishes different compiled statements and acts
  * as lookup key when a session initially looks for an existing instance of
  * the compiled sql statement.<p>
- *
+ * <p>
  * Once a session is linked with a statement, it uses the unique compiled
  * statement id for the sql statement to access the statement.<p>
- *
+ * <p>
  * Changes to database structure via DDL statements, will result in all
  * registered Statement objects to become invalidated. This is done by
  * comparing the schema change and compile timestamps. When a session
  * subsequently attempts to use an invalidated Statement via its id, it will
  * reinstantiate the Statement using its sql statement still held by this class.<p>
- *
+ * <p>
  * This class keeps count of the number of time each registered compiled
  * statement is linked to a session. It unregisters a compiled statement when
  * no session remains linked to it.<p>
- *
+ * <p>
  * Modified by fredt@users from the original by campbell-burnet@users to simplify,
  * support multiple identical prepared statements per session, and avoid
  * memory leaks. Modified further to support schemas. Changed implementation
@@ -69,7 +69,6 @@ import org.hsqldb.result.Result;
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- *
  * @version 2.3.5
  * @since 1.7.2
  */
@@ -81,13 +80,19 @@ public final class StatementManager {
      */
     private Database database;
 
-    /** Map: Schema id (int) => {Map: SQL String => Compiled Statement id (long)} */
+    /**
+     * Map: Schema id (int) => {Map: SQL String => Compiled Statement id (long)}
+     */
     private IntKeyHashMap schemaMap;
 
-    /** Map: Compiled statement id (int) => CompiledStatement object. */
+    /**
+     * Map: Compiled statement id (int) => CompiledStatement object.
+     */
     private LongKeyHashMap csidMap;
 
-    /** Map: Compiled statement id (int) => number of uses of the statement */
+    /**
+     * Map: Compiled statement id (int) => number of uses of the statement
+     */
     private LongKeyIntValueHashMap useMap;
 
     /**
@@ -100,15 +105,15 @@ public final class StatementManager {
      * Constructs a new instance of <code>CompiledStatementManager</code>.
      *
      * @param database the Database instance for which this object is to
-     *      manage compiled statement objects.
+     *                 manage compiled statement objects.
      */
     StatementManager(Database database) {
 
         this.database = database;
-        schemaMap     = new IntKeyHashMap();
-        csidMap       = new LongKeyHashMap();
-        useMap        = new LongKeyIntValueHashMap();
-        next_cs_id    = 0;
+        schemaMap = new IntKeyHashMap();
+        csidMap = new LongKeyHashMap();
+        useMap = new LongKeyIntValueHashMap();
+        next_cs_id = 0;
     }
 
     /**
@@ -141,14 +146,14 @@ public final class StatementManager {
      * statement has been registered.
      *
      * @param schema the schema id
-     * @param sql the SQL String
+     * @param sql    the SQL String
      * @return the compiled statement identifier associated with the
-     *      specified SQL String
+     * specified SQL String
      */
     private long getStatementID(HsqlName schema, String sql) {
 
         LongValueHashMap sqlMap =
-            (LongValueHashMap) schemaMap.get(schema.hashCode());
+                (LongValueHashMap) schemaMap.get(schema.hashCode());
 
         if (sqlMap == null) {
             return -1;
@@ -163,7 +168,7 @@ public final class StatementManager {
      * has been invalidated and cannot be recompiled
      *
      * @param session the session
-     * @param csid the identifier of the requested CompiledStatement object
+     * @param csid    the identifier of the requested CompiledStatement object
      * @return the requested CompiledStatement object
      */
     public synchronized Statement getStatement(Session session, long csid) {
@@ -195,15 +200,15 @@ public final class StatementManager {
     /**
      * Recompiles an existing statement
      *
-     * @param session the session
+     * @param session   the session
      * @param statement the old CompiledStatement object
      * @return the requested CompiledStatement object
      */
     public synchronized Statement getStatement(Session session,
-            Statement statement) {
+                                               Statement statement) {
 
-        long      csid = statement.getID();
-        Statement cs   = (Statement) csidMap.get(csid);
+        long csid = statement.getID();
+        Statement cs = (Statement) csidMap.get(csid);
 
         if (cs != null) {
             return getStatement(session, csid);
@@ -216,13 +221,13 @@ public final class StatementManager {
 
     private Statement recompileStatement(Session session, Statement cs) {
 
-        HsqlName  oldSchema = session.getCurrentSchemaHsqlName();
+        HsqlName oldSchema = session.getCurrentSchemaHsqlName();
         Statement newStatement;
 
         // revalidate with the original schema
         try {
             HsqlName schema = cs.getSchemaName();
-            int      props  = cs.getCursorPropertiesRequest();
+            int props = cs.getCursorPropertiesRequest();
 
             if (schema != null) {
 
@@ -247,13 +252,13 @@ public final class StatementManager {
             }
 
             newStatement.setCompileTimestamp(
-                database.txManager.getGlobalChangeTimestamp());
+                    database.txManager.getGlobalChangeTimestamp());
 
             if (setGenerated) {
                 StatementDML si = (StatementDML) cs;
 
                 newStatement.setGeneratedColumnInfo(si.generatedType,
-                                                    si.generatedInputMetaData);
+                        si.generatedInputMetaData);
             }
         } catch (Throwable t) {
             return null;
@@ -266,22 +271,22 @@ public final class StatementManager {
 
     /**
      * Registers a compiled statement to be managed.
-     *
+     * <p>
      * The only caller should be a Session that is attempting to prepare
      * a statement for the first time or process a statement that has been
      * invalidated due to DDL changes.
      *
      * @param csid existing id or negative if the statement is not yet managed
-     * @param cs The CompiledStatement to add
+     * @param cs   The CompiledStatement to add
      * @return The compiled statement id assigned to the CompiledStatement
-     *  object
+     * object
      */
     private long registerStatement(long csid, Statement cs) {
 
         cs.setCompileTimestamp(database.txManager.getGlobalChangeTimestamp());
 
-        int              schemaid = cs.getSchemaName().hashCode();
-        LongValueHashMap sqlMap   = (LongValueHashMap) schemaMap.get(schemaid);
+        int schemaid = cs.getSchemaName().hashCode();
+        LongValueHashMap sqlMap = (LongValueHashMap) schemaMap.get(schemaid);
 
         if (sqlMap == null) {
             sqlMap = new LongValueHashMap();
@@ -328,7 +333,7 @@ public final class StatementManager {
         if (cs != null) {
             int schemaid = cs.getSchemaName().hashCode();
             LongValueHashMap sqlMap =
-                (LongValueHashMap) schemaMap.get(schemaid);
+                    (LongValueHashMap) schemaMap.get(schemaid);
             String sql = cs.getSQL();
 
             sqlMap.remove(sql);
@@ -341,16 +346,16 @@ public final class StatementManager {
      * Compiles an SQL statement and returns a CompiledStatement Object
      *
      * @param session the session
-     * @throws Throwable
      * @return CompiledStatement
+     * @throws Throwable
      */
     synchronized Statement compile(Session session,
                                    Result cmd) throws Throwable {
 
-        int       props = cmd.getExecuteProperties();
-        Statement cs    = null;
-        String    sql   = cmd.getMainString();
-        long      csid  = getStatementID(session.currentSchema, sql);
+        int props = cmd.getExecuteProperties();
+        Statement cs = null;
+        String sql = cmd.getMainString();
+        long csid = getStatementID(session.currentSchema, sql);
 
         if (csid >= 0) {
             cs = (Statement) csidMap.get(csid);
@@ -371,7 +376,7 @@ public final class StatementManager {
 
         useMap.put(csid, useCount);
         cs.setGeneratedColumnInfo(cmd.getGeneratedResultType(),
-                                  cmd.getGeneratedResultMetaData());
+                cmd.getGeneratedResultMetaData());
 
         return cs;
     }

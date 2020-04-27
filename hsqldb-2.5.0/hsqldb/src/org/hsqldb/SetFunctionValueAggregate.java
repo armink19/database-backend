@@ -51,19 +51,18 @@ import java.math.RoundingMode;
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
  * @since 1.7.2
- *
  */
 public class SetFunctionValueAggregate implements SetFunction {
 
-    private HashSet       distinctValues;
+    private HashSet distinctValues;
     private final boolean isDistinct;
 
     //
     private final Session session;
-    private final int     setType;
-    private final int     typeCode;
-    private final Type    type;
-    private final Type    returnType;
+    private final int setType;
+    private final int typeCode;
+    private final Type type;
+    private final Type returnType;
 
     //
     private final TypedComparator comparator;
@@ -72,20 +71,20 @@ public class SetFunctionValueAggregate implements SetFunction {
     private long count;
 
     //
-    private boolean    hasNull;
-    private boolean    every = true;
-    private boolean    some  = false;
-    private long       currentLong;
-    private double     currentDouble;
+    private boolean hasNull;
+    private boolean every = true;
+    private boolean some = false;
+    private long currentLong;
+    private double currentDouble;
     private BigDecimal currentBigDecimal;
-    private Object     currentValue;
+    private Object currentValue;
 
     SetFunctionValueAggregate(Session session, int setType, Type type,
                               Type returnType, boolean isDistinct) {
 
-        this.session    = session;
-        this.setType    = setType;
-        this.type       = type;
+        this.session = session;
+        this.setType = setType;
+        this.type = type;
         this.returnType = returnType;
         this.isDistinct = isDistinct;
 
@@ -107,8 +106,8 @@ public class SetFunctionValueAggregate implements SetFunction {
 
         switch (setType) {
 
-            case OpTypes.VAR_SAMP :
-            case OpTypes.STDDEV_SAMP :
+            case OpTypes.VAR_SAMP:
+            case OpTypes.STDDEV_SAMP:
                 this.sample = true;
         }
 
@@ -125,9 +124,11 @@ public class SetFunctionValueAggregate implements SetFunction {
         }
     }
 
-    public void reset() {}
+    public void reset() {
+    }
 
-    public void add(Object itemLeft, Object itemRight) {}
+    public void add(Object itemLeft, Object itemRight) {
+    }
 
     public void add(Object item) {
 
@@ -145,26 +146,26 @@ public class SetFunctionValueAggregate implements SetFunction {
 
         switch (setType) {
 
-            case OpTypes.COUNT :
+            case OpTypes.COUNT:
                 return;
 
-            case OpTypes.AVG :
-            case OpTypes.SUM : {
+            case OpTypes.AVG:
+            case OpTypes.SUM: {
                 switch (typeCode) {
 
-                    case Types.TINYINT :
-                    case Types.SQL_SMALLINT :
-                    case Types.SQL_INTEGER :
+                    case Types.TINYINT:
+                    case Types.SQL_SMALLINT:
+                    case Types.SQL_INTEGER:
                         currentLong += ((Number) item).intValue();
 
                         return;
 
-                    case Types.SQL_INTERVAL_SECOND : {
+                    case Types.SQL_INTERVAL_SECOND: {
                         if (item instanceof IntervalSecondData) {
                             addLong(((IntervalSecondData) item).getSeconds());
 
                             currentLong +=
-                                ((IntervalSecondData) item).getNanos();
+                                    ((IntervalSecondData) item).getNanos();
 
                             if (currentLong > 1000000000) {
                                 addLong(currentLong / 1000000000);
@@ -175,16 +176,16 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                         return;
                     }
-                    case Types.SQL_INTERVAL_MONTH : {
+                    case Types.SQL_INTERVAL_MONTH: {
                         if (item instanceof IntervalMonthData) {
                             addLong(((IntervalMonthData) item).units);
                         }
 
                         return;
                     }
-                    case Types.SQL_DATE :
-                    case Types.SQL_TIMESTAMP :
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
+                    case Types.SQL_DATE:
+                    case Types.SQL_TIMESTAMP:
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
                         addLong(((TimestampData) item).getSeconds());
 
                         currentLong += ((TimestampData) item).getNanos();
@@ -199,34 +200,34 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                         return;
                     }
-                    case Types.SQL_BIGINT :
+                    case Types.SQL_BIGINT:
                         addLong(((Number) item).longValue());
 
                         return;
 
-                    case Types.SQL_REAL :
-                    case Types.SQL_FLOAT :
-                    case Types.SQL_DOUBLE :
+                    case Types.SQL_REAL:
+                    case Types.SQL_FLOAT:
+                    case Types.SQL_DOUBLE:
                         currentDouble += ((Number) item).doubleValue();
 
                         return;
 
-                    case Types.SQL_NUMERIC :
-                    case Types.SQL_DECIMAL :
+                    case Types.SQL_NUMERIC:
+                    case Types.SQL_DECIMAL:
                         if (currentBigDecimal == null) {
                             currentBigDecimal = (BigDecimal) item;
                         } else {
                             currentBigDecimal =
-                                currentBigDecimal.add((BigDecimal) item);
+                                    currentBigDecimal.add((BigDecimal) item);
                         }
 
                         return;
 
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_42563);
                 }
             }
-            case OpTypes.MIN : {
+            case OpTypes.MIN: {
                 if (currentValue == null) {
                     currentValue = item;
 
@@ -239,7 +240,7 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                 return;
             }
-            case OpTypes.MAX : {
+            case OpTypes.MAX: {
                 if (currentValue == null) {
                     currentValue = item;
 
@@ -252,7 +253,7 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                 return;
             }
-            case OpTypes.EVERY :
+            case OpTypes.EVERY:
                 if (!(item instanceof Boolean)) {
                     throw Error.error(ErrorCode.X_42563);
                 }
@@ -261,7 +262,7 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                 return;
 
-            case OpTypes.SOME :
+            case OpTypes.SOME:
                 if (!(item instanceof Boolean)) {
                     throw Error.error(ErrorCode.X_42563);
                 }
@@ -270,20 +271,20 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                 return;
 
-            case OpTypes.STDDEV_POP :
-            case OpTypes.STDDEV_SAMP :
-            case OpTypes.VAR_POP :
-            case OpTypes.VAR_SAMP :
+            case OpTypes.STDDEV_POP:
+            case OpTypes.STDDEV_SAMP:
+            case OpTypes.VAR_POP:
+            case OpTypes.VAR_SAMP:
                 addDataPoint((Number) item);
 
                 return;
 
-            case OpTypes.USER_AGGREGATE :
+            case OpTypes.USER_AGGREGATE:
                 currentValue = item;
 
                 return;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SetFunction");
         }
     }
@@ -305,7 +306,7 @@ public class SetFunctionValueAggregate implements SetFunction {
                     ArraySort.sort(array, array.length, comparator);
 
                     count = ArraySort.deDuplicate(array, array.length,
-                                                  comparator);
+                            comparator);
                 }
             }
 
@@ -318,45 +319,45 @@ public class SetFunctionValueAggregate implements SetFunction {
 
         switch (setType) {
 
-            case OpTypes.AVG : {
+            case OpTypes.AVG: {
                 switch (typeCode) {
 
-                    case Types.TINYINT :
-                    case Types.SQL_SMALLINT :
-                    case Types.SQL_INTEGER :
+                    case Types.TINYINT:
+                    case Types.SQL_SMALLINT:
+                    case Types.SQL_INTEGER:
                         if (returnType.scale != 0) {
                             return returnType.divide(session,
-                                                     Long.valueOf(currentLong),
-                                                     Long.valueOf(count));
+                                    Long.valueOf(currentLong),
+                                    Long.valueOf(count));
                         }
 
                         return Long.valueOf(currentLong / count);
 
-                    case Types.SQL_BIGINT : {
+                    case Types.SQL_BIGINT: {
                         long value = getLongSum().divide(
-                            BigInteger.valueOf(count)).longValue();
+                                BigInteger.valueOf(count)).longValue();
 
                         return Long.valueOf(value);
                     }
-                    case Types.SQL_REAL :
-                    case Types.SQL_FLOAT :
-                    case Types.SQL_DOUBLE :
+                    case Types.SQL_REAL:
+                    case Types.SQL_FLOAT:
+                    case Types.SQL_DOUBLE:
                         return Double.valueOf(currentDouble / count);
 
-                    case Types.SQL_NUMERIC :
-                    case Types.SQL_DECIMAL :
+                    case Types.SQL_NUMERIC:
+                    case Types.SQL_DECIMAL:
                         if (returnType.scale == type.scale) {
                             return currentBigDecimal.divide(
-                                new BigDecimal(count), RoundingMode.DOWN);
+                                    new BigDecimal(count), RoundingMode.DOWN);
                         } else {
                             return returnType.divide(session,
-                                                     currentBigDecimal,
-                                                     Long.valueOf(count));
+                                    currentBigDecimal,
+                                    Long.valueOf(count));
                         }
-                    case Types.SQL_INTERVAL_SECOND :
-                    case Types.SQL_INTERVAL_MONTH : {
+                    case Types.SQL_INTERVAL_SECOND:
+                    case Types.SQL_INTERVAL_MONTH: {
                         BigInteger[] bi = getLongSum().divideAndRemainder(
-                            BigInteger.valueOf(count));
+                                BigInteger.valueOf(count));
 
                         if (NumberType.compareToLongLimits(bi[0]) != 0) {
                             throw Error.error(ErrorCode.X_22015);
@@ -364,59 +365,59 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                         if (type.isIntervalDaySecondType()) {
                             long nanos =
-                                (bi[1].longValue() * DTIType
-                                    .limitNanoseconds + currentLong) / count;
+                                    (bi[1].longValue() * DTIType
+                                            .limitNanoseconds + currentLong) / count;
 
                             return new IntervalSecondData(bi[0].longValue(),
-                                                          nanos,
-                                                          (IntervalType) type,
-                                                          true);
+                                    nanos,
+                                    (IntervalType) type,
+                                    true);
                         } else {
                             return IntervalMonthData.newIntervalMonth(
-                                bi[0].longValue(), (IntervalType) type);
+                                    bi[0].longValue(), (IntervalType) type);
                         }
                     }
-                    case Types.SQL_DATE :
-                    case Types.SQL_TIMESTAMP :
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
+                    case Types.SQL_DATE:
+                    case Types.SQL_TIMESTAMP:
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
                         BigInteger bi =
-                            getLongSum().divide(BigInteger.valueOf(count));
+                                getLongSum().divide(BigInteger.valueOf(count));
 
                         if (NumberType.compareToLongLimits(bi) != 0) {
                             throw Error.error(ErrorCode.X_22015);
                         }
 
                         return new TimestampData(bi.longValue(),
-                                                 (int) currentLong,
-                                                 (int) currentDouble);
+                                (int) currentLong,
+                                (int) currentDouble);
                     }
-                    default :
+                    default:
                         throw Error.runtimeError(ErrorCode.U_S0500,
-                                                 "SetFunction");
+                                "SetFunction");
                 }
             }
-            case OpTypes.SUM : {
+            case OpTypes.SUM: {
                 switch (typeCode) {
 
-                    case Types.TINYINT :
-                    case Types.SQL_SMALLINT :
-                    case Types.SQL_INTEGER :
+                    case Types.TINYINT:
+                    case Types.SQL_SMALLINT:
+                    case Types.SQL_INTEGER:
                         return Long.valueOf(currentLong);
 
-                    case Types.SQL_BIGINT :
+                    case Types.SQL_BIGINT:
                         return new BigDecimal(getLongSum());
 
-                    case Types.SQL_REAL :
-                    case Types.SQL_FLOAT :
-                    case Types.SQL_DOUBLE :
+                    case Types.SQL_REAL:
+                    case Types.SQL_FLOAT:
+                    case Types.SQL_DOUBLE:
                         return Double.valueOf(currentDouble);
 
-                    case Types.SQL_NUMERIC :
-                    case Types.SQL_DECIMAL :
+                    case Types.SQL_NUMERIC:
+                    case Types.SQL_DECIMAL:
                         return currentBigDecimal;
 
-                    case Types.SQL_INTERVAL_SECOND :
-                    case Types.SQL_INTERVAL_MONTH : {
+                    case Types.SQL_INTERVAL_SECOND:
+                    case Types.SQL_INTERVAL_MONTH: {
                         BigInteger bi = getLongSum();
 
                         if (NumberType.compareToLongLimits(bi) != 0) {
@@ -425,43 +426,43 @@ public class SetFunctionValueAggregate implements SetFunction {
 
                         if (type.isIntervalDaySecondType()) {
                             return new IntervalSecondData(bi.longValue(),
-                                                          currentLong,
-                                                          (IntervalType) type,
-                                                          true);
+                                    currentLong,
+                                    (IntervalType) type,
+                                    true);
                         } else {
                             return IntervalMonthData.newIntervalMonth(
-                                bi.longValue(), (IntervalType) type);
+                                    bi.longValue(), (IntervalType) type);
                         }
                     }
-                    default :
+                    default:
                         throw Error.runtimeError(ErrorCode.U_S0500,
-                                                 "SetFunction");
+                                "SetFunction");
                 }
             }
-            case OpTypes.MIN :
-            case OpTypes.MAX :
+            case OpTypes.MIN:
+            case OpTypes.MAX:
                 return currentValue;
 
-            case OpTypes.EVERY :
+            case OpTypes.EVERY:
                 return every ? Boolean.TRUE
-                             : Boolean.FALSE;
+                        : Boolean.FALSE;
 
-            case OpTypes.SOME :
+            case OpTypes.SOME:
                 return some ? Boolean.TRUE
-                            : Boolean.FALSE;
+                        : Boolean.FALSE;
 
-            case OpTypes.STDDEV_POP :
-            case OpTypes.STDDEV_SAMP :
+            case OpTypes.STDDEV_POP:
+            case OpTypes.STDDEV_SAMP:
                 return getStdDev();
 
-            case OpTypes.VAR_POP :
-            case OpTypes.VAR_SAMP :
+            case OpTypes.VAR_POP:
+            case OpTypes.VAR_SAMP:
                 return getVariance();
 
-            case OpTypes.USER_AGGREGATE :
+            case OpTypes.USER_AGGREGATE:
                 return currentValue;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SetFunction");
         }
     }
@@ -473,14 +474,14 @@ public class SetFunctionValueAggregate implements SetFunction {
      * BigInteger object for each addition.
      */
     static final BigInteger multiplier =
-        BigInteger.valueOf(0x0000000100000000L);
+            BigInteger.valueOf(0x0000000100000000L);
     long hi;
     long lo;
 
     private void addLong(long value) {
 
-        if (value == 0) {}
-        else if (value > 0) {
+        if (value == 0) {
+        } else if (value > 0) {
             hi += value >> 32;
             lo += value & 0x00000000ffffffffL;
         } else {
@@ -497,8 +498,8 @@ public class SetFunctionValueAggregate implements SetFunction {
 
     private BigInteger getLongSum() {
 
-        BigInteger biglo  = BigInteger.valueOf(lo);
-        BigInteger bighi  = BigInteger.valueOf(hi);
+        BigInteger biglo = BigInteger.valueOf(lo);
+        BigInteger bighi = BigInteger.valueOf(hi);
         BigInteger result = (bighi.multiply(multiplier)).add(biglo);
 
 /*
@@ -512,9 +513,9 @@ public class SetFunctionValueAggregate implements SetFunction {
     // end long sum
     // statistics support - written by Campbell
     // this section was originally an independent class
-    private double  sk;
-    private double  vk;
-    private long    n;
+    private double sk;
+    private double vk;
+    private long n;
     private boolean initialized;
     private boolean sample;
 
@@ -522,7 +523,7 @@ public class SetFunctionValueAggregate implements SetFunction {
 
         double xi;
         double xsi;
-        long   nm1;
+        long nm1;
 
         if (x == null) {
             return;
@@ -531,9 +532,9 @@ public class SetFunctionValueAggregate implements SetFunction {
         xi = x.doubleValue();
 
         if (!initialized) {
-            n           = 1;
-            sk          = xi;
-            vk          = 0.0;
+            n = 1;
+            sk = xi;
+            vk = 0.0;
             initialized = true;
 
             return;
@@ -543,8 +544,8 @@ public class SetFunctionValueAggregate implements SetFunction {
 
         nm1 = (n - 1);
         xsi = (sk - (xi * nm1));
-        vk  += ((xsi * xsi) / n) / nm1;
-        sk  += xi;
+        vk += ((xsi * xsi) / n) / nm1;
+        sk += xi;
     }
 
     private Double getVariance() {
@@ -554,8 +555,8 @@ public class SetFunctionValueAggregate implements SetFunction {
         }
 
         return sample ? (n == 1) ? null    // NULL (not NaN) is correct in this case
-                                 : Double.valueOf(vk / (double) (n - 1))
-                      : Double.valueOf(vk / (double) (n));
+                : Double.valueOf(vk / (double) (n - 1))
+                : Double.valueOf(vk / (double) (n));
     }
 
     private Double getStdDev() {
@@ -565,9 +566,9 @@ public class SetFunctionValueAggregate implements SetFunction {
         }
 
         return sample ? (n == 1) ? null    // NULL (not NaN) is correct in this case
-                                 : Double.valueOf(Math.sqrt(vk
-                                 / (double) (n - 1)))
-                      : Double.valueOf(Math.sqrt(vk / (double) (n)));
+                : Double.valueOf(Math.sqrt(vk
+                / (double) (n - 1)))
+                : Double.valueOf(Math.sqrt(vk / (double) (n)));
     }
 
     // end statistics support

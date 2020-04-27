@@ -34,7 +34,6 @@ package org.hsqldb.util;
 // sqlbob@users 20020407 - patch 1.7.0 - reengineering
 
 /**
- *
  * @version 1.7.0
  */
 interface Traceable {

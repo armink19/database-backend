@@ -79,7 +79,7 @@ import java.io.UTFDataFormatException;
 /**
  * Collection of static methods for converting strings between different
  * formats and to and from byte arrays.<p>
- *
+ * <p>
  * Includes two methods based on Hypersonic code as indicated.
  *
  * @author Thomas Mueller (Hypersonic SQL Group)
@@ -90,9 +90,9 @@ import java.io.UTFDataFormatException;
 public class StringConverter {
 
     private static final byte[] HEXBYTES = {
-        (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5',
-        (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 'a', (byte) 'b',
-        (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f'
+            (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5',
+            (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 'a', (byte) 'b',
+            (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f'
     };
 
     private static int getNibble(int value) {
@@ -115,20 +115,18 @@ public class StringConverter {
     /**
      * Converts a hexadecimal string into a byte array
      *
-     *
      * @param s hexadecimal string
-     *
      * @return byte array for the hex string
      * @throws IOException
      */
     public static byte[] hexStringToByteArray(String s) throws IOException {
 
-        int     l    = s.length();
-        byte[]  data = new byte[l / 2 + (l % 2)];
-        int     n,
-                b    = 0;
+        int l = s.length();
+        byte[] data = new byte[l / 2 + (l % 2)];
+        int n,
+                b = 0;
         boolean high = true;
-        int     i    = 0;
+        int i = 0;
 
         for (int j = 0; j < l; j++) {
             char c = s.charAt(j);
@@ -141,22 +139,22 @@ public class StringConverter {
 
             if (n == -1) {
                 throw new IOException(
-                    "hexadecimal string contains non hex character");    //NOI18N
+                        "hexadecimal string contains non hex character");    //NOI18N
             }
 
             if (high) {
-                b    = (n & 0xf) << 4;
+                b = (n & 0xf) << 4;
                 high = false;
             } else {
-                b         += (n & 0xf);
-                high      = true;
+                b += (n & 0xf);
+                high = true;
                 data[i++] = (byte) b;
             }
         }
 
         if (!high) {
             throw new IOException(
-                "hexadecimal string with odd number of characters");    //NOI18N
+                    "hexadecimal string with odd number of characters");    //NOI18N
         }
 
         if (i < data.length) {
@@ -168,16 +166,17 @@ public class StringConverter {
 
     /**
      * Compacts a bit string into a BitMap
+     *
      * @param s bit string
      * @return BitMap for the bit string
      * @throws IOException
      */
     public static BitMap sqlBitStringToBitMap(String s) throws IOException {
 
-        int    l = s.length();
-        int    n;
-        int    bitIndex = 0;
-        BitMap map      = new BitMap(0, true);
+        int l = s.length();
+        int n;
+        int bitIndex = 0;
+        BitMap map = new BitMap(0, true);
 
         for (int j = 0; j < l; j++) {
             char c = s.charAt(j);
@@ -190,7 +189,7 @@ public class StringConverter {
 
             if (n != 0 && n != 1) {
                 throw new IOException(
-                    "hexadecimal string contains non hex character");    //NOI18N
+                        "hexadecimal string contains non hex character");    //NOI18N
             }
 
             if (n == 1) {
@@ -208,15 +207,13 @@ public class StringConverter {
     /**
      * Converts a byte array into a hexadecimal string
      *
-     *
      * @param b byte array
-     *
      * @return hex string
      */
     public static String byteArrayToHexString(byte[] b) {
 
-        int    len = b.length;
-        char[] s   = new char[len * 2];
+        int len = b.length;
+        char[] s = new char[len * 2];
 
         for (int i = 0, j = 0; i < len; i++) {
             int c = ((int) b[i]) & 0xff;
@@ -231,15 +228,13 @@ public class StringConverter {
     /**
      * Converts a byte array into an SQL hexadecimal string
      *
-     *
      * @param b byte array
-     *
      * @return hex string
      */
     public static String byteArrayToSQLHexString(byte[] b) {
 
-        int    len = b.length;
-        char[] s   = new char[len * 2 + 3];
+        int len = b.length;
+        char[] s = new char[len * 2 + 3];
 
         s[0] = 'X';
         s[1] = '\'';
@@ -261,8 +256,7 @@ public class StringConverter {
     /**
      * Converts a byte array into a bit string
      *
-     *
-     * @param bytes byte array
+     * @param bytes    byte array
      * @param bitCount number of bits
      * @return hex string
      */
@@ -274,7 +268,7 @@ public class StringConverter {
             byte b = bytes[j / 8];
 
             s[j] = BitMap.isSet(b, j % 8) ? '1'
-                                          : '0';
+                    : '0';
         }
 
         return new String(s);
@@ -283,8 +277,7 @@ public class StringConverter {
     /**
      * Converts a byte array into an SQL binary string
      *
-     *
-     * @param bytes byte array
+     * @param bytes    byte array
      * @param bitCount number of bits
      * @return hex string
      */
@@ -301,7 +294,7 @@ public class StringConverter {
             byte b = bytes[j / 8];
 
             s[pos++] = BitMap.isSet(b, j % 8) ? '1'
-                                              : '0';
+                    : '0';
         }
 
         s[pos] = '\'';
@@ -313,9 +306,9 @@ public class StringConverter {
      * Converts a byte array into hexadecimal characters which are written as
      * ASCII to the given output stream.
      *
-     * @param o output array
+     * @param o    output array
      * @param from offset into output array
-     * @param b input array
+     * @param b    input array
      * @return written count
      */
     public static int writeHexBytes(byte[] o, final int from, byte[] b) {
@@ -337,8 +330,9 @@ public class StringConverter {
 
         try {
             return (charset == null) ? new String(b)
-                                     : new String(b, charset);
-        } catch (Exception e) {}
+                    : new String(b, charset);
+        } catch (Exception e) {
+        }
 
         return null;
     }
@@ -354,22 +348,22 @@ public class StringConverter {
      * characters in input are added to output without conversion. The escape
      * sequence is backslash, letter u, xxxx, where xxxx is the hex
      * representation of the character code. (fredt@users)<p>
-     *
+     * <p>
      * Method based on Hypersonic Code
      *
-     * @param b output stream to wite to
-     * @param s Java string
+     * @param b                  output stream to wite to
+     * @param s                  Java string
      * @param doubleSingleQuotes boolean
      */
     public static void stringToUnicodeBytes(HsqlByteArrayOutputStream b,
-            String s, boolean doubleSingleQuotes) {
+                                            String s, boolean doubleSingleQuotes) {
 
         if (s == null) {
             return;
         }
 
-        final int len    = s.length();
-        int       extras = 0;
+        final int len = s.length();
+        int extras = 0;
 
         if (len == 0) {
             return;
@@ -429,7 +423,7 @@ public class StringConverter {
      * Hsqldb specific decoding used only for log files. This method converts
      * the 7 bit escaped ASCII strings in a log file back into Java Unicode
      * strings. See stringToUnicodeBytes() above. <p>
-     *
+     * <p>
      * Method based on Hypersonic Code
      *
      * @param s encoded ASCII string in byte array
@@ -441,9 +435,9 @@ public class StringConverter {
             return s;
         }
 
-        int    len = s.length();
-        char[] b   = new char[len];
-        int    j   = 0;
+        int len = s.length();
+        char[] b = new char[len];
+        int j = 0;
 
         for (int i = 0; i < len; i++) {
             char c = s.charAt(i);
@@ -457,9 +451,9 @@ public class StringConverter {
                     // 4 characters read should always return 0-15
                     int k = getNibble(s.charAt(++i)) << 12;
 
-                    k      += getNibble(s.charAt(++i)) << 8;
-                    k      += getNibble(s.charAt(++i)) << 4;
-                    k      += getNibble(s.charAt(++i));
+                    k += getNibble(s.charAt(++i)) << 8;
+                    k += getNibble(s.charAt(++i)) << 4;
+                    k += getNibble(s.charAt(++i));
                     b[j++] = (char) k;
                 } else {
                     b[j++] = c;
@@ -508,8 +502,8 @@ public class StringConverter {
 
             switch (c >> 4) {
 
-                case 12 :
-                case 13 :
+                case 12:
+                case 13:
 
                     /* 110x xxxx   10xx xxxx*/
                     count += 2;
@@ -525,10 +519,10 @@ public class StringConverter {
                     }
 
                     buf[bcount++] = (char) (((c & 0x1F) << 6)
-                                            | (char2 & 0x3F));
+                            | (char2 & 0x3F));
                     break;
 
-                case 14 :
+                case 14:
 
                     /* 1110 xxxx  10xx xxxx  10xx xxxx */
                     count += 3;
@@ -545,11 +539,11 @@ public class StringConverter {
                     }
 
                     buf[bcount++] = (char) (((c & 0x0F) << 12)
-                                            | ((char2 & 0x3F) << 6)
-                                            | ((char3 & 0x3F)));
+                            | ((char2 & 0x3F) << 6)
+                            | ((char3 & 0x3F)));
                     break;
 
-                default :
+                default:
 
                     /* 10xx xxxx,  1111 xxxx */
                     throw new UTFDataFormatException();
@@ -564,16 +558,17 @@ public class StringConverter {
      * Writes a string to the specified DataOutput using UTF-8 encoding in a
      * machine-independent manner.
      * <p>
-     * @param      str   a string to be written.
-     * @param      out   destination to write to
-     * @return     The number of bytes written out.
+     *
+     * @param str a string to be written.
+     * @param out destination to write to
+     * @return The number of bytes written out.
      */
     public static int stringToUTFBytes(String str,
                                        HsqlByteArrayOutputStream out) {
 
         int strlen = str.length();
         int c,
-            count  = 0;
+                count = 0;
 
         if (out.count + strlen + 8 > out.buffer.length) {
             out.ensureRoom(strlen + 8);
@@ -592,11 +587,11 @@ public class StringConverter {
                 out.buffer[out.count++] = (byte) (0xE0 | ((c >> 12) & 0x0F));
                 out.buffer[out.count++] = (byte) (0x80 | ((c >> 6) & 0x3F));
                 out.buffer[out.count++] = (byte) (0x80 | ((c) & 0x3F));
-                count                   += 3;
+                count += 3;
             } else {
                 out.buffer[out.count++] = (byte) (0xC0 | ((c >> 6) & 0x1F));
                 out.buffer[out.count++] = (byte) (0x80 | ((c) & 0x3F));
-                count                   += 2;
+                count += 2;
             }
 
             if (out.count + 8 > out.buffer.length) {
@@ -610,8 +605,8 @@ public class StringConverter {
     public static int getUTFSize(String s) {
 
         int len = (s == null) ? 0
-                              : s.length();
-        int l   = 0;
+                : s.length();
+        int l = 0;
 
         for (int i = 0; i < len; i++) {
             int c = s.charAt(i);
@@ -631,13 +626,13 @@ public class StringConverter {
     /**
      * Using an output stream, returns a String from an InputStream.
      *
-     * @param is InputStream to read from
+     * @param is       InputStream to read from
      * @param encoding character encoding of the string
-     * @throws IOException
      * @return a Java string
+     * @throws IOException
      */
     public static String inputStreamToString(InputStream is,
-            String encoding) throws IOException {
+                                             String encoding) throws IOException {
 
         HsqlByteArrayOutputStream baOS = new HsqlByteArrayOutputStream(1024);
 
@@ -660,12 +655,12 @@ public class StringConverter {
      * Returns the quoted version of the string using the quotechar argument.
      * doublequote argument indicates whether each instance of quotechar inside
      * the string is doubled.<p>
-     *
+     * <p>
      * null string argument returns null. If the caller needs the literal
      * "NULL" it should created it itself<p>
      *
-     * @param s Java string
-     * @param quoteChar character used for quoting
+     * @param s          Java string
+     * @param quoteChar  character used for quoting
      * @param extraQuote true if quoteChar itself should be repeated
      * @return String
      */
@@ -676,12 +671,12 @@ public class StringConverter {
             return null;
         }
 
-        int    count = extraQuote ? count(s, quoteChar)
-                                  : 0;
-        int    len   = s.length();
-        char[] b     = new char[2 + count + len];
-        int    i     = 0;
-        int    j     = 0;
+        int count = extraQuote ? count(s, quoteChar)
+                : 0;
+        int len = s.length();
+        char[] b = new char[2 + count + len];
+        int i = 0;
+        int j = 0;
 
         b[j++] = quoteChar;
 
@@ -709,7 +704,7 @@ public class StringConverter {
      */
     static int count(final String s, final char c) {
 
-        int pos   = 0;
+        int pos = 0;
         int count = 0;
 
         if (s != null) {
@@ -737,7 +732,7 @@ public class StringConverter {
         }
 
         final int len = s.length();
-        char[]    chars;
+        char[] chars;
 
         if (len == 0) {
             return;
@@ -772,7 +767,7 @@ public class StringConverter {
 
     /**
      * Returns a string representation in UUID form from a binary string.
-     *
+     * <p>
      * UUID string is composed of 8-4-4-4-12 hexadecimal characters.
      *
      * @param b the byte array
@@ -789,12 +784,12 @@ public class StringConverter {
         }
 
         char[] chars = new char[36];
-        int    hexIndex;
+        int hexIndex;
 
         for (int i = 0, j = 0; i < b.length; ) {
-            hexIndex   = (b[i] & 0xf0) >> 4;
+            hexIndex = (b[i] & 0xf0) >> 4;
             chars[j++] = (char) HEXBYTES[hexIndex];
-            hexIndex   = b[i] & 0xf;
+            hexIndex = b[i] & 0xf;
             chars[j++] = (char) HEXBYTES[hexIndex];
 
             i++;
@@ -851,10 +846,10 @@ public class StringConverter {
         byte[] bytes = new byte[16];
 
         for (int i = 0, j = 0; i < bytes.length; ) {
-            char c    = s.charAt(j++);
-            int  high = getNibble(c);
+            char c = s.charAt(j++);
+            int high = getNibble(c);
 
-            c        = s.charAt(j++);
+            c = s.charAt(j++);
             bytes[i] = (byte) ((high << 4) + getNibble(c));
 
             i++;

@@ -43,9 +43,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- *  Provides methods for reading the data for a row from a
- *  byte array. The format of data is that used for storage of cached
- *  tables by v.1.6.x databases, apart from strings.
+ * Provides methods for reading the data for a row from a
+ * byte array. The format of data is that used for storage of cached
+ * tables by v.1.6.x databases, apart from strings.
  *
  * @author Bob Preston (sqlbob@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
@@ -54,7 +54,7 @@ import java.math.BigInteger;
  */
 public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
-    public boolean          ignoreDataErrors;
+    public boolean ignoreDataErrors;
     private RowOutputBinary out;
 
     public RowInputBinary() {
@@ -86,7 +86,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             super.readFully(b);
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -96,7 +96,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             return super.readLong();
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -106,7 +106,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             return super.readInt();
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -116,7 +116,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             return super.readShort();
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -126,7 +126,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             return super.readChar();
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -136,7 +136,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             return super.readByte();
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -146,7 +146,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
             return super.readBoolean();
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -161,18 +161,18 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
             if (length < 0) {
                 throw Error.error(ErrorCode.GENERAL_IO_ERROR,
-                                  "RowInputBinary - negative length");
+                        "RowInputBinary - negative length");
             }
 
             String s = StringConverter.readUTF(buffer, pos, length);
 
-            s   = ValuePool.getString(s);
+            s = ValuePool.getString(s);
             pos += length;
 
             return s;
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.GENERAL_IO_ERROR,
-                              "RowInputBinary" + ' ' + getFilePosition());
+                    "RowInputBinary" + ' ' + getFilePosition());
         }
     }
 
@@ -205,8 +205,8 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
     protected BigDecimal readDecimal(Type type) {
 
-        byte[]     bytes  = readByteArray();
-        int        scale  = readInt();
+        byte[] bytes = readByteArray();
+        int scale = readInt();
         BigInteger bigint = new BigInteger(bytes);
 
         return ValuePool.getBigDecimal(new BigDecimal(bigint, scale));
@@ -214,7 +214,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
     protected Boolean readBoole() {
         return readBoolean() ? Boolean.TRUE
-                             : Boolean.FALSE;
+                : Boolean.FALSE;
     }
 
     protected TimeData readTime(Type type) {
@@ -252,7 +252,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
     protected IntervalSecondData readDaySecondInterval(Type type) {
 
         long seconds = readLong();
-        int  nanos   = readInt();
+        int nanos = readInt();
 
         return new IntervalSecondData(seconds, nanos, (IntervalType) type);
     }
@@ -263,8 +263,8 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
     protected BinaryData readBit() {
 
-        int    length = readInt();
-        byte[] b      = new byte[(length + 7) / 8];
+        int length = readInt();
+        byte[] b = new byte[(length + 7) / 8];
 
         readFully(b);
 
@@ -297,7 +297,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
         type = type.collectionBaseType();
 
-        int      size = readInt();
+        int size = readInt();
         Object[] data = new Object[size];
 
         for (int i = 0; i < size; i++) {
@@ -312,7 +312,7 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
      */
     public int[] readIntArray() throws IOException {
 
-        int   size = readInt();
+        int size = readInt();
         int[] data = new int[size];
 
         for (int i = 0; i < size; i++) {
@@ -336,8 +336,8 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
     // helper methods
     public byte[] readByteArray() {
 
-        int    length = readInt();
-        byte[] b      = new byte[length];
+        int length = readInt();
+        byte[] b = new byte[length];
 
         readFully(b);
 
@@ -355,8 +355,8 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
 
     public char[] readCharArray() throws IOException {
 
-        int    length = readInt();
-        char[] c      = new char[length];
+        int length = readInt();
+        char[] c = new char[length];
 
         if (count - pos < c.length) {
             pos = count;
@@ -375,9 +375,8 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
     }
 
     /**
-     *  Used to reset the row, ready for Result data to be written into the
-     *  byte[] buffer by an external routine.
-     *
+     * Used to reset the row, ready for Result data to be written into the
+     * byte[] buffer by an external routine.
      */
     public void resetRow(int rowsize) {
 
@@ -391,9 +390,8 @@ public class RowInputBinary extends RowInputBase implements RowInputInterface {
     }
 
     /**
-     *  Used to reset the row, ready for a new db row to be written into the
-     *  byte[] buffer by an external routine.
-     *
+     * Used to reset the row, ready for a new db row to be written into the
+     * byte[] buffer by an external routine.
      */
     public void resetRow(long filepos, int rowsize) {
 

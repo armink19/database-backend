@@ -42,17 +42,22 @@ package org.hsqldb.lib;
  */
 public class HsqlTaskQueue {
 
-    /** The thread used to process commands */
+    /**
+     * The thread used to process commands
+     */
     protected Thread taskRunnerThread;
 
-    /** Special queue element to signal termination */
+    /**
+     * Special queue element to signal termination
+     */
     protected static final Runnable SHUTDOWNTASK = new Runnable() {
-        public void run() {}
+        public void run() {
+        }
     };
 
     /**
      * true if thread should shut down after processing current task.
-     *
+     * <p>
      * Once set true, stays true forever
      */
     protected volatile boolean isShutdown;
@@ -65,7 +70,8 @@ public class HsqlTaskQueue {
 
         try {
             taskRunnerThread.setContextClassLoader(null);
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+        }
 
         taskRunnerThread = null;
     }
@@ -108,7 +114,8 @@ public class HsqlTaskQueue {
 
     protected final TaskRunner taskRunner = new TaskRunner();
 
-    public HsqlTaskQueue() {}
+    public HsqlTaskQueue() {
+    }
 
     public boolean isShutdown() {
         return isShutdown;

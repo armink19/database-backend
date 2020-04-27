@@ -43,7 +43,7 @@ import java.sql.*;
 public class TestLobs extends TestBase {
 
     Connection connection;
-    Statement  statement;
+    Statement statement;
 
     public TestLobs(String name) {
 
@@ -59,7 +59,7 @@ public class TestLobs extends TestBase {
 
         try {
             connection = super.newConnection();
-            statement  = connection.createStatement();
+            statement = connection.createStatement();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -72,7 +72,7 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE BLOBTEST IF EXISTS";
             String ddl1 =
-                "CREATE TABLE BLOBTEST(ID IDENTITY, BLOBFIELD BLOB(100000))";
+                    "CREATE TABLE BLOBTEST(ID IDENTITY, BLOBFIELD BLOB(100000))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
@@ -83,18 +83,18 @@ public class TestLobs extends TestBase {
 
         try {
             String dml0 = "insert into blobtest(blobfield) values(?)";
-            String            dql0 = "select * from blobtest;";
-            PreparedStatement ps   = connection.prepareStatement(dml0);
-            byte[]            data = new byte[] {
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            String dql0 = "select * from blobtest;";
+            PreparedStatement ps = connection.prepareStatement(dml0);
+            byte[] data = new byte[]{
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
             };
-            Blob              blob = new JDBCBlob(data);
+            Blob blob = new JDBCBlob(data);
 
             ps.setBlob(1, blob);
             ps.executeUpdate();
 
             data[4] = 50;
-            blob    = new JDBCBlob(data);
+            blob = new JDBCBlob(data);
 
             ps.setBlob(1, blob);
             ps.executeUpdate();
@@ -110,7 +110,7 @@ public class TestLobs extends TestBase {
 
             rs.next();
 
-            Blob   blob2 = rs.getBlob(2);
+            Blob blob2 = rs.getBlob(2);
             byte[] data1 = blob1.getBytes(1, 10);
             byte[] data2 = blob2.getBytes(1, 10);
 
@@ -126,16 +126,16 @@ public class TestLobs extends TestBase {
         System.out.println("Starting (sub-)test: " + getName());
 
         ResultSet rs;
-        byte[]    ba;
-        byte[]    baR1 = new byte[] {
-            (byte) 0xF1, (byte) 0xF2, (byte) 0xF3, (byte) 0xF4, (byte) 0xF5,
-            (byte) 0xF6, (byte) 0xF7, (byte) 0xF8, (byte) 0xF9, (byte) 0xFA,
-            (byte) 0xFB
+        byte[] ba;
+        byte[] baR1 = new byte[]{
+                (byte) 0xF1, (byte) 0xF2, (byte) 0xF3, (byte) 0xF4, (byte) 0xF5,
+                (byte) 0xF6, (byte) 0xF7, (byte) 0xF8, (byte) 0xF9, (byte) 0xFA,
+                (byte) 0xFB
         };
-        byte[] baR2 = new byte[] {
-            (byte) 0xE1, (byte) 0xE2, (byte) 0xE3, (byte) 0xE4, (byte) 0xE5,
-            (byte) 0xE6, (byte) 0xE7, (byte) 0xE8, (byte) 0xE9, (byte) 0xEA,
-            (byte) 0xEB
+        byte[] baR2 = new byte[]{
+                (byte) 0xE1, (byte) 0xE2, (byte) 0xE3, (byte) 0xE4, (byte) 0xE5,
+                (byte) 0xE6, (byte) 0xE7, (byte) 0xE8, (byte) 0xE9, (byte) 0xEA,
+                (byte) 0xEB
         };
 
         try {
@@ -147,7 +147,7 @@ public class TestLobs extends TestBase {
             st.executeUpdate("CREATE TABLE blo (id INTEGER, b blob( 100))");
 
             PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO blo(id, b) values(2, ?)");
+                    "INSERT INTO blo(id, b) values(2, ?)");
 
             //st.executeUpdate("INSERT INTO blo (id, b) VALUES (1, x'A003')");
             ps.setBlob(1, new SerialBlob(baR1));
@@ -168,13 +168,13 @@ public class TestLobs extends TestBase {
 
             if (baOut.length != baR1.length) {
                 assertTrue("Expected array len " + baR1.length + ", got len "
-                           + baOut.length, false);
+                        + baOut.length, false);
             }
 
             for (int i = 0; i < baOut.length; i++) {
                 if (baOut[i] != baR1[i]) {
                     assertTrue("Expected array len " + baR1.length
-                               + ", got len " + baOut.length, false);
+                            + ", got len " + baOut.length, false);
                 }
             }
 
@@ -188,7 +188,7 @@ public class TestLobs extends TestBase {
 
 //            ba = rs.getBytes("b"); doesn't convert but throws ClassCast
             blob1 = rs.getBlob("b");
-            ba    = blob1.getBytes(1, baR2.length);
+            ba = blob1.getBytes(1, baR2.length);
 
             if (ba.length != baR2.length) {
                 assertTrue("row2 byte length differs", false);
@@ -205,7 +205,7 @@ public class TestLobs extends TestBase {
 
             // again with stream
             ps.setBinaryStream(1, new HsqlByteArrayInputStream(baR1),
-                               baR1.length);
+                    baR1.length);
             ps.executeUpdate();
 
             rs = st.executeQuery("SELECT b FROM blo WHERE id = 2");
@@ -223,13 +223,13 @@ public class TestLobs extends TestBase {
 
             if (baOut.length != baR1.length) {
                 assertTrue("Expected array len " + baR1.length + ", got len "
-                           + baOut.length, false);
+                        + baOut.length, false);
             }
 
             for (int i = 0; i < baOut.length; i++) {
                 if (baOut[i] != baR1[i]) {
                     assertTrue("Expected array len " + baR1.length
-                               + ", got len " + baOut.length, false);
+                            + ", got len " + baOut.length, false);
                 }
             }
 
@@ -248,18 +248,19 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE CLOBTEST IF EXISTS";
             String ddl1 =
-                "CREATE TABLE CLOBTEST(ID IDENTITY, CLOBFIELD CLOB(100000))";
+                    "CREATE TABLE CLOBTEST(ID IDENTITY, CLOBFIELD CLOB(100000))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
             String dml0 = "insert into clobtest(clobfield) values(?)";
-            String            dql0 = "select * from clobtest;";
-            PreparedStatement ps   = connection.prepareStatement(dml0);
-            String            data = "Testing clob insert and select ops";
-            Clob              clob = new JDBCClob(data);
+            String dql0 = "select * from clobtest;";
+            PreparedStatement ps = connection.prepareStatement(dml0);
+            String data = "Testing clob insert and select ops";
+            Clob clob = new JDBCClob(data);
 
             ps.setClob(1, clob);
             ps.executeUpdate();
@@ -281,7 +282,7 @@ public class TestLobs extends TestBase {
 
             rs.next();
 
-            Clob   clob2  = rs.getClob(2);
+            Clob clob2 = rs.getClob(2);
             String string = rs.getString(2);
             int data1 = clob1.getSubString(1, data.length()).indexOf("insert");
             int data2 = clob2.getSubString(1, data.length()).indexOf("INSERT");
@@ -295,7 +296,7 @@ public class TestLobs extends TestBase {
 
             rs.next();
 
-            InputStream   is = rs.getAsciiStream(2);
+            InputStream is = rs.getAsciiStream(2);
             StringBuilder sb = new StringBuilder();
 
             try {
@@ -308,7 +309,8 @@ public class TestLobs extends TestBase {
 
                     sb.append((char) c);
                 }
-            } catch (IOException ie) {}
+            } catch (IOException ie) {
+            }
 
             string = rs.getString(2);
 
@@ -328,18 +330,19 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE CLOBTEST IF EXISTS";
             String ddl1 =
-                "CREATE TABLE CLOBTEST(ID IDENTITY, V VARCHAR(10), I INT, CLOBFIELD CLOB(100000))";
+                    "CREATE TABLE CLOBTEST(ID IDENTITY, V VARCHAR(10), I INT, CLOBFIELD CLOB(100000))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
             String dml0 = "insert into clobtest values(default, ?, ?, ?)";
-            String            dql0 = "select * from clobtest;";
-            PreparedStatement ps   = connection.prepareStatement(dml0);
-            String            data = "Testing clob insert and select ops";
-            Clob              clob = new JDBCClob(data);
+            String dql0 = "select * from clobtest;";
+            PreparedStatement ps = connection.prepareStatement(dml0);
+            String data = "Testing clob insert and select ops";
+            Clob clob = new JDBCClob(data);
 
             ps.setString(1, "test");
             ps.setInt(2, 5);
@@ -353,7 +356,7 @@ public class TestLobs extends TestBase {
             ps.executeUpdate();
 
             PreparedStatement ps2 = connection.prepareStatement(dql0);
-            ResultSet         rs  = ps2.executeQuery();
+            ResultSet rs = ps2.executeQuery();
 
             rs.next();
 
@@ -368,7 +371,7 @@ public class TestLobs extends TestBase {
             assertTrue(data1 == data2 && data1 > 0);
 
             //
-            Clob   clob3  = new JDBCClob(data);
+            Clob clob3 = new JDBCClob(data);
             Reader reader = clob3.getCharacterStream();
 
             ps.setCharacterStream(3, reader, (int) clob3.length());
@@ -380,7 +383,8 @@ public class TestLobs extends TestBase {
             try {
                 ps.setCharacterStream(3, reader, (int) clob3.length());
                 ps.executeUpdate();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+            }
 
             connection.commit();
         } catch (SQLException e) {
@@ -396,31 +400,33 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE VARIABLE IF EXISTS";
             String ddl1 =
-                "CREATE TABLE VARIABLE (stateid varchar(128), varid numeric(16,0), "
-                + "scalabilitypassivated char(1) DEFAULT 'N', value clob (2G), scopeguid varchar(128),"
-                + "primary key (stateid, varid, scalabilitypassivated, scopeguid))";
+                    "CREATE TABLE VARIABLE (stateid varchar(128), varid numeric(16,0), "
+                            + "scalabilitypassivated char(1) DEFAULT 'N', value clob (2G), scopeguid varchar(128),"
+                            + "primary key (stateid, varid, scalabilitypassivated, scopeguid))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
             String dml0 = "INSERT INTO VARIABLE VALUES (?, ?, 'N', ?, ?)";
             String dml1 =
-                "UPDATE VARIABLE SET value = ? WHERE stateid = ? AND "
-                + "varid = ? AND scalabilitypassivated = 'N' AND scopeguid = ?";
+                    "UPDATE VARIABLE SET value = ? WHERE stateid = ? AND "
+                            + "varid = ? AND scalabilitypassivated = 'N' AND scopeguid = ?";
             PreparedStatement ps = connection.prepareStatement(dml0);
 
             //
-            String resourceFileName  = "/org/hsqldb/resources/lob-schema.sql";
+            String resourceFileName = "/org/hsqldb/resources/lob-schema.sql";
             InputStreamReader reader = null;
 
             try {
                 InputStream fis =
-                    getClass().getResourceAsStream(resourceFileName);
+                        getClass().getResourceAsStream(resourceFileName);
 
                 reader = new InputStreamReader(fis, "ISO-8859-1");
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
             ps.setString(1, "test-id-1");
             ps.setLong(2, 23456789123456L);
@@ -430,15 +436,16 @@ public class TestLobs extends TestBase {
 
             try {
                 InputStream fis =
-                    getClass().getResourceAsStream(resourceFileName);
+                        getClass().getResourceAsStream(resourceFileName);
 
-                fis    = getClass().getResourceAsStream(resourceFileName);
+                fis = getClass().getResourceAsStream(resourceFileName);
                 reader = new InputStreamReader(fis, "ISO-8859-1");
 
                 for (int i = 0; i < 100; i++) {
                     reader.read();
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
             //
             ps.setString(1, "test-id-2");
@@ -457,15 +464,16 @@ public class TestLobs extends TestBase {
             //
             try {
                 InputStream fis =
-                    getClass().getResourceAsStream(resourceFileName);
+                        getClass().getResourceAsStream(resourceFileName);
 
-                fis    = getClass().getResourceAsStream(resourceFileName);
+                fis = getClass().getResourceAsStream(resourceFileName);
                 reader = new InputStreamReader(fis, "ISO-8859-1");
 
                 for (int i = 0; i < 100; i++) {
                     reader.read();
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
             ps = connection.prepareStatement(dml1);
 
@@ -488,28 +496,29 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE VARIABLE IF EXISTS";
             String ddl1 =
-                "CREATE TABLE VARIABLE (stateid varchar(128), varid numeric(16,0), "
-                + "scalabilitypassivated char(1) DEFAULT 'N', value clob(20000), scopeguid varchar(128),"
-                + "primary key (stateid, varid, scalabilitypassivated, scopeguid))";
+                    "CREATE TABLE VARIABLE (stateid varchar(128), varid numeric(16,0), "
+                            + "scalabilitypassivated char(1) DEFAULT 'N', value clob(20000), scopeguid varchar(128),"
+                            + "primary key (stateid, varid, scalabilitypassivated, scopeguid))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
             String dml0 = "INSERT INTO VARIABLE VALUES (?, ?, 'N', ?, ?)";
             String dml1 =
-                "UPDATE VARIABLE SET value = ? WHERE stateid = ? AND "
-                + "varid = ? AND scalabilitypassivated = 'N' AND scopeguid = ?";
+                    "UPDATE VARIABLE SET value = ? WHERE stateid = ? AND "
+                            + "varid = ? AND scalabilitypassivated = 'N' AND scopeguid = ?";
             PreparedStatement ps = connection.prepareStatement(dml0);
 
             connection.setAutoCommit(false);
 
             //
             JDBCClob dataClob =
-                new JDBCClob("the quick brown fox jumps on the lazy dog");
-            Reader    reader = null;
-            StopWatch sw     = new StopWatch();
+                    new JDBCClob("the quick brown fox jumps on the lazy dog");
+            Reader reader = null;
+            StopWatch sw = new StopWatch();
 
             sw.start();
 
@@ -559,9 +568,9 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE VARIABLE IF EXISTS";
             String ddl1 =
-                "CREATE TABLE VARIABLE (stateid varchar(128), varid numeric(16,0), "
-                + "scalabilitypassivated char(1) DEFAULT 'N', value clob(2000), scopeguid varchar(128),"
-                + "primary key (stateid, varid, scalabilitypassivated, scopeguid))";
+                    "CREATE TABLE VARIABLE (stateid varchar(128), varid numeric(16,0), "
+                            + "scalabilitypassivated char(1) DEFAULT 'N', value clob(2000), scopeguid varchar(128),"
+                            + "primary key (stateid, varid, scalabilitypassivated, scopeguid))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
@@ -572,17 +581,17 @@ public class TestLobs extends TestBase {
         try {
             String dml0 = "INSERT INTO VARIABLE VALUES (?, ?, 'N', ?, ?)";
             String dml1 =
-                "UPDATE VARIABLE SET varid = varid + 1 WHERE stateid = ? AND "
-                + "varid = ? AND scalabilitypassivated = 'N' AND scopeguid = ?";
+                    "UPDATE VARIABLE SET varid = varid + 1 WHERE stateid = ? AND "
+                            + "varid = ? AND scalabilitypassivated = 'N' AND scopeguid = ?";
             PreparedStatement ps = connection.prepareStatement(dml0);
 
             connection.setAutoCommit(false);
 
             //
             JDBCClob dataClob =
-                new JDBCClob("the quick brown fox jumps on the lazy dog");
-            Reader    reader = null;
-            StopWatch sw     = new StopWatch();
+                    new JDBCClob("the quick brown fox jumps on the lazy dog");
+            Reader reader = null;
+            StopWatch sw = new StopWatch();
 
             sw.start();
 
@@ -618,21 +627,21 @@ public class TestLobs extends TestBase {
             ResultSet rs = statement.executeQuery("SELECT * FROM VARIABLE");
 
             while (rs.next()) {
-                Clob clob       = rs.getClob(4);
+                Clob clob = rs.getClob(4);
                 long dataLength = dataClob.length();
                 long clobLength = clob.length();
 
                 assertTrue(dataLength == clobLength);
                 assertTrue(
-                    dataClob.getSubString(1, 30).equals(
-                        clob.getSubString(1, 30)));
+                        dataClob.getSubString(1, 30).equals(
+                                clob.getSubString(1, 30)));
             }
 
             rs = statement.executeQuery(
-                "SELECT CAST(SUBSTRING(VALUE FROM 19) AS VARCHAR(100)),STATEID,"
-                + "CHARACTER_LENGTH(VALUE),CAST(VALUE AS VARCHAR(100)) FROM "
-                + "VARIABLE WHERE VALUE='THE QUICK BROWN FOX JUMPS ON THE LAZY DOG'"
-                + "AND STATEID>'TEST-ID-197'");
+                    "SELECT CAST(SUBSTRING(VALUE FROM 19) AS VARCHAR(100)),STATEID,"
+                            + "CHARACTER_LENGTH(VALUE),CAST(VALUE AS VARCHAR(100)) FROM "
+                            + "VARIABLE WHERE VALUE='THE QUICK BROWN FOX JUMPS ON THE LAZY DOG'"
+                            + "AND STATEID>'TEST-ID-197'");
 
             while (rs.next()) {
                 assertTrue(rs.getString(1).equals("x jumps on the lazy dog"));
@@ -653,21 +662,22 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE CLOBTEST IF EXISTS";
             String ddl1 =
-                "CREATE TABLE CLOBTEST(ID IDENTITY, CLOBFIELD CLOB(100000))";
+                    "CREATE TABLE CLOBTEST(ID IDENTITY, CLOBFIELD CLOB(100000))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
             String dml0 = "insert into clobtest(clobfield) values ?";
-            String            value = "0123456789";
-            PreparedStatement ps    = connection.prepareStatement(dml0);
+            String value = "0123456789";
+            PreparedStatement ps = connection.prepareStatement(dml0);
 
             ps.setString(1, value);
             ps.executeUpdate();
 
-            String dq1   = "select CHARACTER_LENGTH(clobfield) from clobtest;";
+            String dq1 = "select CHARACTER_LENGTH(clobfield) from clobtest;";
             ResultSet rs = statement.executeQuery(dq1);
 
             rs.next();
@@ -692,7 +702,7 @@ public class TestLobs extends TestBase {
             }
 
             ps.setCharacterStream(1, new CharArrayReader(testChars),
-                                  testChars.length);
+                    testChars.length);
             ps.executeUpdate();
 
             String dq2 = "select clobfield from clobtest;";
@@ -701,7 +711,7 @@ public class TestLobs extends TestBase {
 
             rs.next();
 
-            Reader reader   = rs.getCharacterStream(1);
+            Reader reader = rs.getCharacterStream(1);
             char[] newChars = new char[testChars.length];
 
             try {
@@ -728,23 +738,24 @@ public class TestLobs extends TestBase {
         try {
             String ddl0 = "DROP TABLE CLOBTEST IF EXISTS";
             String ddl1 =
-                "CREATE TABLE CLOBTEST(ID IDENTITY, CLOBFIELD CLOB(100000))";
+                    "CREATE TABLE CLOBTEST(ID IDENTITY, CLOBFIELD CLOB(100000))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
             String dml0 = "insert into clobtest(clobfield) values ?";
-            String            value = "0123456789";
-            PreparedStatement ps    = connection.prepareStatement(dml0);
-            Clob              clob  = connection.createClob();
+            String value = "0123456789";
+            PreparedStatement ps = connection.prepareStatement(dml0);
+            Clob clob = connection.createClob();
 
             clob.setString(1, value);
             ps.setClob(1, clob);
             ps.executeUpdate();
 
-            String dq1   = "select CHARACTER_LENGTH(clobfield) from clobtest;";
+            String dq1 = "select CHARACTER_LENGTH(clobfield) from clobtest;";
             ResultSet rs = statement.executeQuery(dq1);
 
             rs.next();
@@ -769,7 +780,7 @@ public class TestLobs extends TestBase {
             }
 
             ps.setCharacterStream(1, new CharArrayReader(testChars),
-                                  testChars.length);
+                    testChars.length);
             ps.executeUpdate();
 
             String dq2 = "select clobfield from clobtest;";
@@ -778,7 +789,7 @@ public class TestLobs extends TestBase {
 
             rs.next();
 
-            Reader reader   = rs.getCharacterStream(1);
+            Reader reader = rs.getCharacterStream(1);
             char[] newChars = new char[testChars.length];
 
             try {
@@ -837,14 +848,15 @@ public class TestLobs extends TestBase {
 
             statement.execute(ddl1);
             statement.execute(ddl2);
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         try {
-            String            dml0 = "insert into blobtest values(1, ?)";
-            String            dql0 = "select * from blobtest";
-            PreparedStatement ps   = connection.prepareStatement(dml0);
-            byte[]            data = new byte[] {
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            String dml0 = "insert into blobtest values(1, ?)";
+            String dql0 = "select * from blobtest";
+            PreparedStatement ps = connection.prepareStatement(dml0);
+            byte[] data = new byte[]{
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10
             };
 
             connection.setAutoCommit(false);
@@ -856,7 +868,7 @@ public class TestLobs extends TestBase {
             ps.executeUpdate();
 
             data[4] = 50;
-            blob    = new JDBCBlob(data);
+            blob = new JDBCBlob(data);
 
             ps.setBlob(1, blob);
             ps.executeUpdate();
@@ -873,7 +885,7 @@ public class TestLobs extends TestBase {
 
             rs.next();
 
-            Blob   blob2 = rs.getBlob(2);
+            Blob blob2 = rs.getBlob(2);
             byte[] data1 = blob1.getBytes(1, 10);
             byte[] data2 = blob2.getBytes(1, 10);
 
@@ -896,31 +908,31 @@ public class TestLobs extends TestBase {
             System.out.println("Running insert...");
 
             PreparedStatement insert =
-                connection.prepareStatement("insert into BLOBTEST values(?)");
+                    connection.prepareStatement("insert into BLOBTEST values(?)");
 
             insert.setBytes(1, new byte[]{});
             insert.executeUpdate();
             System.out.println("Running update...");
 
             PreparedStatement update = connection.prepareStatement(
-                "update BLOBTEST set BT_BLOB = CONCAT(BT_BLOB,?)");
+                    "update BLOBTEST set BT_BLOB = CONCAT(BT_BLOB,?)");
 
-            update.setBytes(1, new byte[] {
-                1, 2, 3
+            update.setBytes(1, new byte[]{
+                    1, 2, 3
             });
             update.executeUpdate();
             System.out.println("Running select...");
 
             PreparedStatement select =
-                connection.prepareStatement("select BT_BLOB from BLOBTEST");
+                    connection.prepareStatement("select BT_BLOB from BLOBTEST");
             ResultSet result = select.executeQuery();
 
             System.out.println("Results: " + result.getFetchSize());
 
             while (result.next()) {
                 byte[] data = result.getBytes(1);
-                String s    = data == null ? "null"
-                                           : String.valueOf(data.length);
+                String s = data == null ? "null"
+                        : String.valueOf(data.length);
 
                 System.out.println("Result: " + s);
             }
@@ -930,53 +942,53 @@ public class TestLobs extends TestBase {
         }
     }
 
-/*
-    public static void main(String[] args) throws SQLException {
-         Connection con = null;
-         PreparedStatement st = null;
-         ResultSet rs = null;
-         try {
+    /*
+        public static void main(String[] args) throws SQLException {
+             Connection con = null;
+             PreparedStatement st = null;
+             ResultSet rs = null;
+             try {
 
-             DriverManager.registerDriver(new org.hsqldb.jdbc.JDBCDriver());
-             con = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:7001",
- "sa", null);
-//            con = DriverManager.getConnection("jdbc:hsqldb:mem:mymemdb", "sa", null);
+                 DriverManager.registerDriver(new org.hsqldb.jdbc.JDBCDriver());
+                 con = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:7001",
+     "sa", null);
+    //            con = DriverManager.getConnection("jdbc:hsqldb:mem:mymemdb", "sa", null);
 
-//            con.createStatement().execute("drop table aaa");
-             con.createStatement().execute("create table aaa (a integer, b blob)");
+    //            con.createStatement().execute("drop table aaa");
+                 con.createStatement().execute("create table aaa (a integer, b blob)");
 
-             String insert = "insert into aaa values (1, ?)";
+                 String insert = "insert into aaa values (1, ?)";
 
-             st = con.prepareStatement(insert);
+                 st = con.prepareStatement(insert);
 
-             byte[] b = {0, 1};
+                 byte[] b = {0, 1};
 
-             Blob blob = con.createBlob();
-             blob.setBytes(1, b);
-             st.setBlob(1, blob);
+                 Blob blob = con.createBlob();
+                 blob.setBytes(1, b);
+                 st.setBlob(1, blob);
 
-//            this does not work too !!!
-//            st.setBytes(1, b);
+    //            this does not work too !!!
+    //            st.setBytes(1, b);
 
-             System.out.println("execute");
-             st.execute();
-             System.out.println("execute end");
-             con.commit();
-             System.out.println("commit");
+                 System.out.println("execute");
+                 st.execute();
+                 System.out.println("execute end");
+                 con.commit();
+                 System.out.println("commit");
 
-             con.createStatement().execute("shutdown script");
-         } catch (SQLException e) {
-             e.printStackTrace();
-         } finally {
-             if (st != null) {
-                 st.close();
-             }
-             if (con != null) {
-                 con.close();
+                 con.createStatement().execute("shutdown script");
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             } finally {
+                 if (st != null) {
+                     st.close();
+                 }
+                 if (con != null) {
+                     con.close();
+                 }
              }
          }
-     }
-*/
+    */
     protected void tearDown() {
 
         System.out.println("TearDown (sub-)test: " + getName());
@@ -990,7 +1002,8 @@ public class TestLobs extends TestBase {
             if (!isNetwork) {
                 connection.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         super.tearDown();
     }

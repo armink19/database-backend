@@ -45,16 +45,14 @@ import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version 2.0.1
  * @version 1.9.0
  */
 public class ScriptWriterEncode extends ScriptWriterText {
 
-    Crypto                    crypto;
+    Crypto crypto;
     HsqlByteArrayOutputStream byteOut;
-    OutputStream              cryptOut;
+    OutputStream cryptOut;
 
     public ScriptWriterEncode(Database db, OutputStream outputStream,
                               FileAccess.FileSync descriptor,
@@ -63,14 +61,14 @@ public class ScriptWriterEncode extends ScriptWriterText {
         super(db, outputStream, descriptor, includeCached);
 
         try {
-            cryptOut      = crypto.getOutputStream(fileStreamOut);
+            cryptOut = crypto.getOutputStream(fileStreamOut);
             fileStreamOut = new GZIPOutputStream(cryptOut);
-            isCrypt       = true;
+            isCrypt = true;
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_Message_Pair, new Object[] {
-                e.toString(), outFile
-            });
+                    ErrorCode.M_Message_Pair, new Object[]{
+                            e.toString(), outFile
+                    });
         }
     }
 
@@ -80,14 +78,14 @@ public class ScriptWriterEncode extends ScriptWriterText {
         super(db, file, includeCached, true, false);
 
         try {
-            cryptOut      = crypto.getOutputStream(fileStreamOut);
+            cryptOut = crypto.getOutputStream(fileStreamOut);
             fileStreamOut = new GZIPOutputStream(cryptOut);
-            isCrypt       = true;
+            isCrypt = true;
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_Message_Pair, new Object[] {
-                e.toString(), outFile
-            });
+                    ErrorCode.M_Message_Pair, new Object[]{
+                            e.toString(), outFile
+                    });
         }
     }
 
@@ -96,15 +94,15 @@ public class ScriptWriterEncode extends ScriptWriterText {
         super(db, file, false, false, false);
 
         this.crypto = crypto;
-        byteOut     = new HsqlByteArrayOutputStream();
-        isCrypt     = true;
+        byteOut = new HsqlByteArrayOutputStream();
+        isCrypt = true;
     }
 
     protected void openFile() {
 
         try {
-            FileAccess   fa  = isUserScript ? FileUtil.getFileUtil()
-                                            : database.logger.getFileAccess();
+            FileAccess fa = isUserScript ? FileUtil.getFileUtil()
+                    : database.logger.getFileAccess();
             OutputStream fos = fa.openOutputStreamElement(outFile, true);
 
             outDescriptor = fa.getFileSync(fos);
@@ -112,9 +110,9 @@ public class ScriptWriterEncode extends ScriptWriterText {
             fileStreamOut = new BufferedOutputStream(fos, 1 << 14);
         } catch (IOException e) {
             throw Error.error(e, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_Message_Pair, new Object[] {
-                e.toString(), outFile
-            });
+                    ErrorCode.M_Message_Pair, new Object[]{
+                            e.toString(), outFile
+                    });
         }
     }
 
@@ -151,7 +149,7 @@ public class ScriptWriterEncode extends ScriptWriterText {
                 byteOut.ensureRoom(count + 4);
 
                 count = crypto.encode(rowOut.getBuffer(), 0, rowOut.size(),
-                                      byteOut.getBuffer(), 4);
+                        byteOut.getBuffer(), 4);
 
                 byteOut.setPosition(0);
                 byteOut.writeInt(count);

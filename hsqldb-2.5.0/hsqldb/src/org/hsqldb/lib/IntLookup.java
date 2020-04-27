@@ -34,7 +34,6 @@ package org.hsqldb.lib;
 import java.util.NoSuchElementException;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.0
  * @since 1.8.0

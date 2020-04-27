@@ -49,7 +49,7 @@ public class BitMapCachedObject extends CachedObjectBase {
     BitMap bitMap;
 
     public BitMapCachedObject(int capacity) {
-        bitMap     = new BitMap(new int[capacity]);
+        bitMap = new BitMap(new int[capacity]);
         hasChanged = true;
     }
 
@@ -57,8 +57,8 @@ public class BitMapCachedObject extends CachedObjectBase {
 
         this.position = in.getFilePosition();
 
-        int[] array    = bitMap.getIntArray();
-        int   capacity = array.length;
+        int[] array = bitMap.getIntArray();
+        int capacity = array.length;
 
         for (int i = 0; i < capacity; i++) {
             array[i] = in.readInt();
@@ -81,8 +81,8 @@ public class BitMapCachedObject extends CachedObjectBase {
 
     public void write(RowOutputInterface out, LongLookup lookup) {
 
-        int[] array    = bitMap.getIntArray();
-        int   capacity = array.length;
+        int[] array = bitMap.getIntArray();
+        int capacity = array.length;
 
         out.setStorageSize(storageSize);
 

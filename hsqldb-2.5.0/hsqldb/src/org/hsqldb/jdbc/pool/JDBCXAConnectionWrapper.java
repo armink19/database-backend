@@ -45,15 +45,15 @@ import java.sql.Savepoint;
  * according to chapter 12 of the JDBC 3.0 specification, by returning this
  * wrapped JDBCConnection to end-users.
  * Global transaction services and XAResources will not use this wrapper.
- * <P>
+ * <p>
  * The new implementation extends JDBCConnection. A new object is created
  * based on the session / session proxy of the JDBCXAConnection object in the
  * constructor. (fredt)<p>
  *
- * @version 2.2.9
- * @since 2.0.0
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @version 2.2.9
  * @see org.hsqldb.jdbc.JDBCConnection
+ * @since 2.0.0
  */
 public class JDBCXAConnectionWrapper extends JDBCConnection {
 
@@ -74,7 +74,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
      * Interceptor method, because this method is prohibited within
      * any global transaction.
      * See section 1.2.4 of the JDBC 3.0 spec.
-     * 
+     *
      * @param autoCommit
      * @throws SQLException on error
      */
@@ -87,7 +87,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
      * Interceptor method, because this method is prohibited within
      * any global transaction.
      * See section 1.2.4 of the JDBC 3.0 spec.
-     * 
+     *
      * @throws SQLException on error
      */
     public void commit() throws SQLException {
@@ -99,7 +99,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
      * Interceptor method, because this method is prohibited within
      * any global transaction.
      * See section 1.2.4 of the JDBC 3.0 spec.
-     * 
+     *
      * @throws SQLException on error
      */
     public void rollback() throws SQLException {
@@ -111,7 +111,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
      * Interceptor method, because this method is prohibited within
      * any global transaction.
      * See section 1.2.4 of the JDBC 3.0 spec.
-     * 
+     *
      * @throws SQLException on error
      */
     public void rollback(Savepoint savepoint) throws SQLException {
@@ -123,7 +123,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
      * Interceptor method, because this method is prohibited within
      * any global transaction.
      * See section 1.2.4 of the JDBC 3.0 spec.
-     * 
+     *
      * @throws SQLException on error
      */
     public Savepoint setSavepoint() throws SQLException {
@@ -149,7 +149,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
      * Interceptor method, because there may be XA implications to
      * calling the method within a global transaction.
      * See section 1.2.4 of the JDBC 3.0 spec.<p>
-     *
+     * <p>
      * HSQLDB does not allow changing the isolation level inside a transaction
      * of any kind.<p>
      *
@@ -166,7 +166,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
     public JDBCXAConnectionWrapper(JDBCXAResource xaResource,
                                    JDBCXAConnection xaConnection,
                                    JDBCConnection databaseConnection)
-                                   throws SQLException {
+            throws SQLException {
         // todo: Review JDBCXADataSource and this class.
         //       Under current implementation, because we do not pass a
         //       JDBCXAConnection instance to the constructor to pick
@@ -196,7 +196,7 @@ public class JDBCXAConnectionWrapper extends JDBCConnection {
 
         if (xaResource.withinGlobalTransaction()) {
             throw new SQLException(
-                "Method prohibited within a global transaction");
+                    "Method prohibited within a global transaction");
         }
     }
 }

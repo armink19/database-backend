@@ -39,11 +39,11 @@ import java.util.Set;
 
 /**
  * Purpose of this class is to wrap a RefCapablePropertyResourceBundle to
- *  reliably detect any possible use of a missing property key as soon as
- *  this class is clinitted.
+ * reliably detect any possible use of a missing property key as soon as
+ * this class is clinitted.
  * The reason for this is to allow us developers to detect all such errors
- *  before end-users ever use this class.
- *
+ * before end-users ever use this class.
+ * <p>
  * See SqltoolRB for an example implementation of this abstract class.
  */
 public class ValidatingResourceBundle {
@@ -83,40 +83,48 @@ public class ValidatingResourceBundle {
 
     // The following methods are a passthru wrappers for the wrapped RCPRB.
 
-    /** @see RefCapablePropertyResourceBundle#getString(String) */
+    /**
+     * @see RefCapablePropertyResourceBundle#getString(String)
+     */
     public String getString(Enum<?> key) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
+                            + enumType.getName() + ":  " + key);
         return wrappedRCPRB.getString(key.toString());
     }
 
-    /** @see RefCapablePropertyResourceBundle#getString(String, String[], int) */
+    /**
+     * @see RefCapablePropertyResourceBundle#getString(String, String[], int)
+     */
     public String getString(Enum<?> key, String... strings) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
+                            + enumType.getName() + ":  " + key);
         return wrappedRCPRB.getString(
                 key.toString(), strings, missingPosValueBehavior);
     }
 
-    /** @see RefCapablePropertyResourceBundle#getExpandedString(String, int) */
+    /**
+     * @see RefCapablePropertyResourceBundle#getExpandedString(String, int)
+     */
     public String getExpandedString(Enum<?> key) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
+                            + enumType.getName() + ":  " + key);
         return wrappedRCPRB.getExpandedString(key.toString(), missingPropertyBehavior);
     }
 
-    /** @see RefCapablePropertyResourceBundle#getExpandedString(String, String[], int, int) */
+    /**
+     * @see RefCapablePropertyResourceBundle#getExpandedString(String, String[], int, int)
+     */
     public String getExpandedString(Enum<?> key, String... strings) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
+                            + enumType.getName() + ":  " + key);
         return wrappedRCPRB.getExpandedString(key.toString(), strings,
                 missingPropertyBehavior, missingPosValueBehavior);
     }
@@ -128,23 +136,24 @@ public class ValidatingResourceBundle {
      * Set behavior for get*String*() method when a referred-to
      * System Property is not set.  Set to one of
      * <UL>
-     *  <LI>RefCapablePropertyResourceBundle.THROW_BEHAVIOR
-     *  <LI>RefCapablePropertyResourceBundle.EMPTYSTRING_BEHAVIOR
-     *  <LI>RefCapablePropertyResourceBundle.NOOP_BEHAVIOR
+     * <LI>RefCapablePropertyResourceBundle.THROW_BEHAVIOR
+     * <LI>RefCapablePropertyResourceBundle.EMPTYSTRING_BEHAVIOR
+     * <LI>RefCapablePropertyResourceBundle.NOOP_BEHAVIOR
      * </UL>
      * The first value is the default.
      */
     public void setMissingPropertyBehavior(int missingPropertyBehavior) {
         this.missingPropertyBehavior = missingPropertyBehavior;
     }
+
     /**
      * Set behavior for get*String(String, String[]) method when a
      * positional index (like %{4}) is used but no subs value was given for
      * that index.  Set to one of
      * <UL>
-     *  <LI>RefCapablePropertyResourceBundle.THROW_BEHAVIOR
-     *  <LI>RefCapablePropertyResourceBundle.EMPTYSTRING_BEHAVIOR
-     *  <LI>RefCapablePropertyResourceBundle.NOOP_BEHAVIOR
+     * <LI>RefCapablePropertyResourceBundle.THROW_BEHAVIOR
+     * <LI>RefCapablePropertyResourceBundle.EMPTYSTRING_BEHAVIOR
+     * <LI>RefCapablePropertyResourceBundle.NOOP_BEHAVIOR
      * </UL>
      * The first value is the default.
      */
@@ -155,6 +164,7 @@ public class ValidatingResourceBundle {
     public int getMissingPropertyBehavior() {
         return missingPropertyBehavior;
     }
+
     public int getMissingPosValueBehavior() {
         return missingPosValueBehavior;
     }
@@ -179,7 +189,7 @@ public class ValidatingResourceBundle {
         if (resKeysFromEls.size() > 0)
             throw new RuntimeException(
                     "Resource Bundle pre-validation failed.  "
-                    + "Missing property with key:  " + resKeysFromEls);
+                            + "Missing property with key:  " + resKeysFromEls);
     }
 
     /* Convenience wrappers follow for getString(int, String[]) for up to
@@ -189,43 +199,47 @@ public class ValidatingResourceBundle {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {Integer.toString(i1)});
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{Integer.toString(i1)});
     }
+
     public String getString(Enum<?> key, int i1, int i2) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            Integer.toString(i1), Integer.toString(i2)
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                Integer.toString(i1), Integer.toString(i2)
         });
     }
+
     public String getString(Enum<?> key, int i1, int i2, int i3) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            Integer.toString(i1), Integer.toString(i2), Integer.toString(i3)
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                Integer.toString(i1), Integer.toString(i2), Integer.toString(i3)
         });
     }
+
     public String getString(Enum<?> key, int i1, String s2) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            Integer.toString(i1), s2
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                Integer.toString(i1), s2
         });
     }
+
     public String getString(Enum<?> key, String s1, int i2) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            s1, Integer.toString(i2)
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                s1, Integer.toString(i2)
         });
     }
 
@@ -233,54 +247,59 @@ public class ValidatingResourceBundle {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            Integer.toString(i1), Integer.toString(i2), s3
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                Integer.toString(i1), Integer.toString(i2), s3
         });
     }
+
     public String getString(Enum<?> key, int i1, String s2, int i3) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            Integer.toString(i1), s2, Integer.toString(i3)
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                Integer.toString(i1), s2, Integer.toString(i3)
         });
     }
+
     public String getString(Enum<?> key, String s1, int i2, int i3) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            s1, Integer.toString(i2), Integer.toString(i3)
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                s1, Integer.toString(i2), Integer.toString(i3)
         });
     }
+
     public String getString(Enum<?> key, int i1, String s2, String s3) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            Integer.toString(i1), s2, s3
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                Integer.toString(i1), s2, s3
         });
     }
+
     public String getString(Enum<?> key, String s1, String s2, int i3) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            s1, s2, Integer.toString(i3)
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                s1, s2, Integer.toString(i3)
         });
     }
+
     public String getString(Enum<?> key, String s1, int i2, String s3) {
         if (!enumType.isInstance(key))
             throw new IllegalArgumentException(
                     "Key is a " + key.getClass().getName() + ",not a "
-                    + enumType.getName() + ":  " + key);
-        return getString(key, new String[] {
-            s1, Integer.toString(i2), s3
+                            + enumType.getName() + ":  " + key);
+        return getString(key, new String[]{
+                s1, Integer.toString(i2), s3
         });
     }
 }

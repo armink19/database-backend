@@ -39,7 +39,7 @@ import java.io.IOException;
  * Mixed NIO / non-NIO version of ScaledRAFile.
  * This class is used only for storing a CACHED
  * TABLE .data file and cannot be used for TEXT TABLE source files.
- *
+ * <p>
  * Due to various issues with java.nio classes, this class will use a mapped
  * channel of fixed size. After reaching this size, the file and channel are
  * closed and a new one opened, up to the maximum size.
@@ -50,22 +50,22 @@ import java.io.IOException;
  */
 public final class RAFileHybrid implements RandomAccessInterface {
 
-    final Database        database;
-    final String          fileName;
-    final boolean         isReadOnly;
-    boolean               preNio;
-    boolean               isNio;
-    long                  initialMaxLength = RAFileNIO.largeBufferSize / 2;
+    final Database database;
+    final String fileName;
+    final boolean isReadOnly;
+    boolean preNio;
+    boolean isNio;
+    long initialMaxLength = RAFileNIO.largeBufferSize / 2;
     RandomAccessInterface store;
 
     public RAFileHybrid(Database database, String name,
                         boolean readOnly) throws IOException {
 
-        this.database   = database;
-        this.fileName   = name;
+        this.database = database;
+        this.fileName = name;
         this.isReadOnly = readOnly;
 
-        long         fileLength;
+        long fileLength;
         java.io.File fi = new java.io.File(name);
 
         fileLength = fi.length();
@@ -128,7 +128,8 @@ public final class RAFileHybrid implements RandomAccessInterface {
         } else if (preNio) {
             try {
                 newStore(newLength);
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
 
         if (store.ensureLength(newLength)) {
@@ -136,7 +137,8 @@ public final class RAFileHybrid implements RandomAccessInterface {
         } else if (isNio) {
             try {
                 newStore(newLength);
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
 
         return store.ensureLength(newLength);
@@ -170,13 +172,13 @@ public final class RAFileHybrid implements RandomAccessInterface {
         if (preNio && initialMaxLength <= requiredPosition) {
             try {
                 store = new RAFileNIO(database.logger, fileName, isReadOnly,
-                                      requiredPosition,
-                                      database.logger.propNioMaxSize);
+                        requiredPosition,
+                        database.logger.propNioMaxSize);
 
                 store.seek(currentPosition);
 
                 preNio = false;
-                isNio  = true;
+                isNio = true;
 
                 return;
             } catch (Throwable e) {

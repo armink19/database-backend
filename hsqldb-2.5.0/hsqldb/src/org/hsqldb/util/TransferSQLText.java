@@ -41,12 +41,12 @@ import java.util.*;
  */
 class TransferSQLText extends DataAccessPoint {
 
-    String              sFileName              = null;
-    BufferedWriter      WTextWrite             = null;
-    BufferedReader      WTextRead              = null;
-    protected boolean   StructureAlreadyParsed = false;
-    Hashtable           DbStmts                = null;
-    protected JDBCTypes JDBCT                  = null;
+    String sFileName = null;
+    BufferedWriter WTextWrite = null;
+    BufferedReader WTextRead = null;
+    protected boolean StructureAlreadyParsed = false;
+    Hashtable DbStmts = null;
+    protected JDBCTypes JDBCT = null;
 
     TransferSQLText(String _FileName,
                     Traceable t) throws DataAccessPointException {
@@ -54,7 +54,7 @@ class TransferSQLText extends DataAccessPoint {
         super(t);
 
         sFileName = _FileName;
-        JDBCT     = new JDBCTypes();
+        JDBCT = new JDBCTypes();
 
         if (sFileName == null) {
             throw new DataAccessPointException("File name not initialized");
@@ -137,24 +137,23 @@ class TransferSQLText extends DataAccessPoint {
             try {
                 WTextWrite.flush();
                 WTextWrite.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
     }
 
     /**
      * Method declaration
      *
-     *
      * @param type
      * @param r
      * @param p
-     *
      * @throws SQLException
      */
     private void transferRow(TransferResultSet r) throws Exception {
 
         String sLast = "";
-        int    len   = r.getColumnCount();
+        int len = r.getColumnCount();
 
         if (WTextWrite == null) {
             try {
@@ -175,7 +174,7 @@ class TransferSQLText extends DataAccessPoint {
             if (o == null) {
                 sLast += " value=<null>";
             } else {
-                o     = helper.convertColumnValue(o, i + 1, t);
+                o = helper.convertColumnValue(o, i + 1, t);
                 sLast += " value=\'" + o.toString() + "\'";
             }
 
@@ -194,22 +193,22 @@ class TransferSQLText extends DataAccessPoint {
         String columnName;
         String columnType;
         String options;
-        int    start;
-        int    len;
+        int start;
+        int len;
 
         public ColumnDef() {
 
             columnName = "";
             columnType = "";
-            options    = "";
-            start      = 0;
-            len        = 0;
+            options = "";
+            start = 0;
+            len = 0;
         }
     }
 
     ColumnDef getColumnDef(String ColumnsDesc, int curPos) {
 
-        int       nextPos   = 0;
+        int nextPos = 0;
         ColumnDef columnDef = new TransferSQLText.ColumnDef();
 
         columnDef.start = curPos;
@@ -239,23 +238,24 @@ class TransferSQLText extends DataAccessPoint {
             }
 
             columnDef.len += i;
-            stbuff        = stbuff.substring(i);
+            stbuff = stbuff.substring(i);
 
             while (stbuff.charAt(nextPos) != ' ') {
                 nextPos++;
             }
 
             columnDef.columnName = stbuff.substring(0, nextPos);
-            stbuff               = stbuff.substring(nextPos);
-            columnDef.len        += nextPos;
-            nextPos              = 0;
+            stbuff = stbuff.substring(nextPos);
+            columnDef.len += nextPos;
+            nextPos = 0;
 
             if (!columnDef.columnName.toUpperCase().equals("CONSTRAINT")) {
                 i = 0;
 
-                for (; i < stbuff.length() && stbuff.charAt(i) == ' '; i++) {}
+                for (; i < stbuff.length() && stbuff.charAt(i) == ' '; i++) {
+                }
 
-                stbuff        = stbuff.substring(i);
+                stbuff = stbuff.substring(i);
                 columnDef.len += i;
 
                 while ((stbuff.charAt(nextPos) != '(')
@@ -268,9 +268,9 @@ class TransferSQLText extends DataAccessPoint {
 
                 columnDef.columnType = stbuff.substring(0,
                         nextPos).toUpperCase();
-                stbuff        = stbuff.substring(nextPos);
+                stbuff = stbuff.substring(nextPos);
                 columnDef.len += nextPos;
-                nextPos       = 0;
+                nextPos = 0;
             }
 
             while ((stbuff.charAt(nextPos) != ',')
@@ -287,7 +287,7 @@ class TransferSQLText extends DataAccessPoint {
             }
 
             columnDef.options = stbuff.substring(0, nextPos);
-            columnDef.len     += nextPos;
+            columnDef.len += nextPos;
         } catch (Exception e) {
             columnDef = new TransferSQLText.ColumnDef();
         }
@@ -297,17 +297,17 @@ class TransferSQLText extends DataAccessPoint {
 
     String translateTypes(String CreateLine, TransferTable TTable,
                           DataAccessPoint Dest)
-                          throws DataAccessPointException {
+            throws DataAccessPointException {
 
-        String    translatedLine = "";
-        JDBCTypes JDBCT          = new JDBCTypes();
-        int       currentPos     = 0;
-        String    columnName     = "";
-        String    columnType     = "";
-        int       colnum         = 0;
+        String translatedLine = "";
+        JDBCTypes JDBCT = new JDBCTypes();
+        int currentPos = 0;
+        String columnName = "";
+        String columnType = "";
+        int colnum = 0;
         ColumnDef cDef;
 
-        currentPos     = CreateLine.indexOf('(') + 1;
+        currentPos = CreateLine.indexOf('(') + 1;
         translatedLine = CreateLine.substring(0, currentPos);
 
         do {
@@ -322,8 +322,8 @@ class TransferSQLText extends DataAccessPoint {
 
             if (columnName.toUpperCase().indexOf("CONSTRAINT") >= 0) {
                 translatedLine +=
-                    CreateLine.substring(currentPos, currentPos + cDef.len)
-                    + ",";
+                        CreateLine.substring(currentPos, currentPos + cDef.len)
+                                + ",";
                 currentPos += cDef.len + 1;
 
                 colnum++;
@@ -335,10 +335,11 @@ class TransferSQLText extends DataAccessPoint {
 
             try {
                 Integer inttype = Integer.valueOf(
-                    Dest.helper.convertToType(JDBCT.toInt(columnType)));
+                        Dest.helper.convertToType(JDBCT.toInt(columnType)));
 
                 columnType = (String) TTable.hTypes.get(inttype);
-            } catch (Exception JDBCtypeEx) {}
+            } catch (Exception JDBCtypeEx) {
+            }
 
             if (cDef.options != null) {
                 columnType += cDef.options;
@@ -352,13 +353,13 @@ class TransferSQLText extends DataAccessPoint {
             }
 
             translatedLine += columnName + " " + columnType + ",";
-            currentPos     += cDef.len + 1;
+            currentPos += cDef.len + 1;
 
             colnum++;
         } while (true);
 
         return translatedLine.substring(0, translatedLine.length() - 1)
-               + ");";
+                + ");";
     }
 
     void parseFileForTables() throws DataAccessPointException {
@@ -373,15 +374,15 @@ class TransferSQLText extends DataAccessPoint {
             }
         }
 
-        String        currentLine  = "";
-        String        Token        = "";
-        String        name         = "";
+        String currentLine = "";
+        String Token = "";
+        String name = "";
         TransferTable relatedTable = null;
 
         try {
             while ((currentLine = WTextRead.readLine()) != null) {
                 currentLine = currentLine.trim() + ";";
-                Tokenizer   = new StringTokenizer(currentLine);
+                Tokenizer = new StringTokenizer(currentLine);
 
                 try {
                     Token = Tokenizer.nextToken();
@@ -403,17 +404,17 @@ class TransferSQLText extends DataAccessPoint {
                     try {
                         name = Tokenizer.nextToken(" (;");
                         relatedTable = new TransferTable(this, name, "",
-                                                         Token, tracer);
-                        relatedTable.Stmts.bCreate      = false;
-                        relatedTable.Stmts.bDelete      = false;
-                        relatedTable.Stmts.bDrop        = false;
+                                Token, tracer);
+                        relatedTable.Stmts.bCreate = false;
+                        relatedTable.Stmts.bDelete = false;
+                        relatedTable.Stmts.bDrop = false;
                         relatedTable.Stmts.bCreateIndex = false;
-                        relatedTable.Stmts.bDropIndex   = false;
-                        relatedTable.Stmts.bInsert      = false;
-                        relatedTable.Stmts.bAlter       = false;
+                        relatedTable.Stmts.bDropIndex = false;
+                        relatedTable.Stmts.bInsert = false;
+                        relatedTable.Stmts.bAlter = false;
 
                         DbStmts.put(relatedTable.Stmts.sSourceTable,
-                                    relatedTable);
+                                relatedTable);
                     } catch (NoSuchElementException NSE) {
                         continue;
                     }
@@ -426,7 +427,7 @@ class TransferSQLText extends DataAccessPoint {
 
     void parseFileForTheRest(TransferTable TTable,
                              DataAccessPoint Dest)
-                             throws DataAccessPointException {
+            throws DataAccessPointException {
 
         StringTokenizer Tokenizer;
 
@@ -440,15 +441,15 @@ class TransferSQLText extends DataAccessPoint {
             }
         }
 
-        String        currentLine  = "";
-        String        Token        = "";
-        String        name         = "";
+        String currentLine = "";
+        String Token = "";
+        String name = "";
         TransferTable relatedTable = null;
 
         try {
             while ((currentLine = WTextRead.readLine()) != null) {
                 currentLine = currentLine.trim() + ";";
-                Tokenizer   = new StringTokenizer(currentLine);
+                Tokenizer = new StringTokenizer(currentLine);
 
                 try {
                     Token = Tokenizer.nextToken();
@@ -465,19 +466,19 @@ class TransferSQLText extends DataAccessPoint {
                         if (!Tokenizer.nextToken().toUpperCase().equals(
                                 "INTO")) {
                             throw new DataAccessPointException(
-                                "Error in INSERT statement: no INTO found");
+                                    "Error in INSERT statement: no INTO found");
                         }
 
                         Token = Tokenizer.nextToken();
 
                         if ((relatedTable =
                                 (TransferTable) DbStmts.get(Token)) != null) {
-                            relatedTable.Stmts.bDelete     = true;
-                            relatedTable.Stmts.bInsert     = true;
+                            relatedTable.Stmts.bDelete = true;
+                            relatedTable.Stmts.bInsert = true;
                             relatedTable.Stmts.sDestInsert = currentLine;
                             relatedTable.Stmts.sDestDelete =
-                                "DELETE FROM "
-                                + relatedTable.Stmts.sSourceTable + ";";
+                                    "DELETE FROM "
+                                            + relatedTable.Stmts.sSourceTable + ";";
                         }
 
                         continue;
@@ -491,7 +492,7 @@ class TransferSQLText extends DataAccessPoint {
                             continue;
                         }
 
-                        name  = Tokenizer.nextToken();
+                        name = Tokenizer.nextToken();
                         Token = Tokenizer.nextToken().toUpperCase();
 
                         if (!Token.equals("ADD")) {
@@ -508,11 +509,11 @@ class TransferSQLText extends DataAccessPoint {
                                 relatedTable.Stmts.sDestAlter = "";
                             }
 
-                            relatedTable.Stmts.bAlter     = true;
+                            relatedTable.Stmts.bAlter = true;
                             relatedTable.Stmts.sDestAlter += currentLine;
                         } else {
                             throw new DataAccessPointException(
-                                "table not found");
+                                    "table not found");
                         }
 
                         Token = Tokenizer.nextToken();
@@ -523,8 +524,8 @@ class TransferSQLText extends DataAccessPoint {
 
                         relatedTable.Stmts.bDrop = true;
                         relatedTable.Stmts.sDestDrop =
-                            "ALTER TABLE " + name + " DROP CONSTRAINT "
-                            + Token + ";" + relatedTable.Stmts.sDestDrop;
+                                "ALTER TABLE " + name + " DROP CONSTRAINT "
+                                        + Token + ";" + relatedTable.Stmts.sDestDrop;
 
                         continue;
                     } catch (NoSuchElementException NSE) {
@@ -542,22 +543,22 @@ class TransferSQLText extends DataAccessPoint {
 
                         if (!DbStmts.containsKey(name)) {
                             throw new DataAccessPointException(
-                                "error: index is created before the table");
+                                    "error: index is created before the table");
                         }
 
                         relatedTable = (TransferTable) DbStmts.get(name);
                         relatedTable.Stmts.bCreate = true;
-                        relatedTable.Stmts.bDrop   = true;
+                        relatedTable.Stmts.bDrop = true;
 
 //                        relatedTable.Stmts.sDestCreate = currentLine;
                         relatedTable.Stmts.sDestCreate =
-                            translateTypes(currentLine, TTable, Dest);
+                                translateTypes(currentLine, TTable, Dest);
                         relatedTable.Stmts.sDestDrop =
-                            "DROP " + relatedTable.Stmts.sType + " " + name
-                            + ";";
+                                "DROP " + relatedTable.Stmts.sType + " " + name
+                                        + ";";
 
                         DbStmts.put(relatedTable.Stmts.sSourceTable,
-                                    relatedTable);
+                                relatedTable);
                     } catch (NoSuchElementException NSE) {
                         continue;
                     }
@@ -567,12 +568,12 @@ class TransferSQLText extends DataAccessPoint {
                     try {
                         while ((Token =
                                 Tokenizer.nextToken()).toUpperCase().equals(
-                                    "INDEX")) {
+                                "INDEX")) {
                             ;
                         }
 
                         String IndexdropCommand = "DROP INDEX " + Token
-                                                  + " ;";
+                                + " ;";
 
                         while ((Token = Tokenizer.nextToken(
                                 " (")).toUpperCase().equals("ON")) {
@@ -583,7 +584,7 @@ class TransferSQLText extends DataAccessPoint {
 
                         if (!DbStmts.containsKey(Token)) {
                             throw new DataAccessPointException(
-                                "error: index is created before the table");
+                                    "error: index is created before the table");
                         }
 
                         relatedTable = (TransferTable) DbStmts.get(Token);
@@ -596,8 +597,8 @@ class TransferSQLText extends DataAccessPoint {
                             relatedTable.Stmts.sDestDropIndex = "";
                         }
 
-                        relatedTable.Stmts.bCreateIndex     = true;
-                        relatedTable.Stmts.bDropIndex       = true;
+                        relatedTable.Stmts.bCreateIndex = true;
+                        relatedTable.Stmts.bDropIndex = true;
                         relatedTable.Stmts.sDestCreateIndex += currentLine;
                         relatedTable.Stmts.sDestDropIndex += IndexdropCommand;
                     } catch (NoSuchElementException NSE) {
@@ -624,7 +625,8 @@ class TransferSQLText extends DataAccessPoint {
                 WTextRead.close();
 
                 WTextRead = null;
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
 
         this.parseFileForTables();
@@ -642,7 +644,7 @@ class TransferSQLText extends DataAccessPoint {
 
     void getTableStructure(TransferTable TTable,
                            DataAccessPoint Dest)
-                           throws DataAccessPointException {
+            throws DataAccessPointException {
 
         if (!StructureAlreadyParsed) {
             if (WTextRead != null) {
@@ -650,7 +652,8 @@ class TransferSQLText extends DataAccessPoint {
                     WTextRead.close();
 
                     WTextRead = null;
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
             }
 
             this.parseFileForTheRest(TTable, Dest);
@@ -658,10 +661,10 @@ class TransferSQLText extends DataAccessPoint {
     }
 
     TransferResultSet getData(String statement)
-    throws DataAccessPointException {
+            throws DataAccessPointException {
 
         StringTokenizer Tokenizer;
-        String          tableName = "";
+        String tableName = "";
 
         try {
             Tokenizer = new StringTokenizer(statement);
@@ -673,7 +676,7 @@ class TransferSQLText extends DataAccessPoint {
             tableName = Tokenizer.nextToken(" ;");
         } catch (NoSuchElementException NSE) {
             throw new DataAccessPointException(
-                "Table name not found in statement: " + statement);
+                    "Table name not found in statement: " + statement);
         }
 
         if (WTextRead != null) {
@@ -681,17 +684,18 @@ class TransferSQLText extends DataAccessPoint {
                 WTextRead.close();
 
                 WTextRead = null;
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
 
         return (this.parseFileForData(tableName));
     }
 
     TransferResultSet parseFileForData(String tableName)
-    throws DataAccessPointException {
+            throws DataAccessPointException {
 
         TransferResultSet trsData = new TransferResultSet();
-        StringTokenizer   Tokenizer;
+        StringTokenizer Tokenizer;
 
         if (WTextRead == null) {
             try {
@@ -707,7 +711,7 @@ class TransferSQLText extends DataAccessPoint {
         try {
             while ((currentLine = WTextRead.readLine()) != null) {
                 currentLine = currentLine.trim() + ";";
-                Tokenizer   = new StringTokenizer(currentLine);
+                Tokenizer = new StringTokenizer(currentLine);
 
                 try {
                     Token = Tokenizer.nextToken();
@@ -726,7 +730,7 @@ class TransferSQLText extends DataAccessPoint {
                 try {
                     if (!Tokenizer.nextToken().toUpperCase().equals("INTO")) {
                         throw new DataAccessPointException(
-                            "Error in INSERT statement: no INTO found");
+                                "Error in INSERT statement: no INTO found");
                     }
 
                     Token = Tokenizer.nextToken();
@@ -735,10 +739,10 @@ class TransferSQLText extends DataAccessPoint {
                         continue;
                     }
 
-                    int    iParsedRows   = 0;
-                    Vector vColumnNames  = new Vector();
+                    int iParsedRows = 0;
+                    Vector vColumnNames = new Vector();
                     Vector vColumnValues = new Vector();
-                    Vector vColumnTypes  = new Vector();
+                    Vector vColumnTypes = new Vector();
 
                     while ((currentLine = WTextRead.readLine()) != null) {
                         currentLine = currentLine.trim();
@@ -752,26 +756,26 @@ class TransferSQLText extends DataAccessPoint {
 
                             iColumnNb = vColumnNames.size();
 
-                            String[] Names  = new String[iColumnNb + 1];
-                            int[]    Types  = new int[iColumnNb + 1];
+                            String[] Names = new String[iColumnNb + 1];
+                            int[] Types = new int[iColumnNb + 1];
                             Object[] Values = new Object[iColumnNb + 1];
 
                             for (int Idx = 0; Idx < iColumnNb; Idx++) {
                                 Names[Idx + 1] =
-                                    (String) vColumnNames.elementAt(Idx);
+                                        (String) vColumnNames.elementAt(Idx);
                                 Types[Idx + 1] =
-                                    ((Integer) vColumnTypes.elementAt(
-                                        Idx)).intValue();
+                                        ((Integer) vColumnTypes.elementAt(
+                                                Idx)).intValue();
                                 Values[Idx + 1] =
-                                    vColumnValues.elementAt(Idx);
+                                        vColumnValues.elementAt(Idx);
                             }
 
                             try {
                                 trsData.addRow(Names, Types, Values,
-                                               iColumnNb);
+                                        iColumnNb);
                             } catch (Exception e) {
                                 throw new DataAccessPointException(
-                                    e.getMessage());
+                                        e.getMessage());
                             }
 
                             iColumnNb = 0;
@@ -784,17 +788,17 @@ class TransferSQLText extends DataAccessPoint {
                         }
 
                         Tokenizer = new StringTokenizer(currentLine);
-                        Token     = Tokenizer.nextToken("=");
+                        Token = Tokenizer.nextToken("=");
 
                         if (Token.equals("Number of Rows")) {
                             int iNbRows =
-                                Integer.parseInt(Tokenizer.nextToken());
+                                    Integer.parseInt(Tokenizer.nextToken());
 
                             if (iNbRows != iParsedRows) {
                                 throw new DataAccessPointException(
-                                    "Number of parsed rows (" + iParsedRows
-                                    + ") is different from the expected ("
-                                    + iNbRows + ")");
+                                        "Number of parsed rows (" + iParsedRows
+                                                + ") is different from the expected ("
+                                                + iNbRows + ")");
                             }
 
                             return trsData;
@@ -817,7 +821,7 @@ class TransferSQLText extends DataAccessPoint {
                                 iType = JDBCT.toInt(Token.toUpperCase());
                             } catch (Exception e) {
                                 throw new DataAccessPointException(
-                                    "Unknown type: " + Token);
+                                        "Unknown type: " + Token);
                             }
 
                             vColumnTypes.addElement(Integer.valueOf(iType));
@@ -828,17 +832,17 @@ class TransferSQLText extends DataAccessPoint {
                         if (Token.equals("value")) {
                             int iStart = currentLine.indexOf("value=") + 6;
                             String sValue =
-                                currentLine.substring(iStart).trim();
+                                    currentLine.substring(iStart).trim();
 
                             if (sValue.indexOf("<null>") >= 0) {
                                 vColumnValues.addElement(null);
                             } else {
-                                int    i       = sValue.indexOf('\'') + 1;
+                                int i = sValue.indexOf('\'') + 1;
                                 String sbToken = sValue.substring(i);
 
-                                i       = sbToken.lastIndexOf('\'');
+                                i = sbToken.lastIndexOf('\'');
                                 sbToken = sbToken.substring(0, i);
-                                Token   = sbToken;
+                                Token = sbToken;
 
                                 vColumnValues.addElement(Token);
                             }

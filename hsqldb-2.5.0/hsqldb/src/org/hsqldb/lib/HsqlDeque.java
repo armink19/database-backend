@@ -48,8 +48,8 @@ import java.util.NoSuchElementException;
 public class HsqlDeque extends BaseList implements HsqlList {
 
     private Object[] list;
-    private int      firstindex = 0;    // index of first list element
-    private int      endindex   = 0;    // index of last list element + 1
+    private int firstindex = 0;    // index of first list element
+    private int endindex = 0;    // index of last list element + 1
 
     // can grow to fill list
     // if elementCount == 0 then firstindex == endindex
@@ -110,7 +110,7 @@ public class HsqlDeque extends BaseList implements HsqlList {
             endindex++;
         } else {
             System.arraycopy(list, firstindex, list, firstindex - 1,
-                             index - firstindex);
+                    index - firstindex);
 
             firstindex--;
             index--;
@@ -123,7 +123,7 @@ public class HsqlDeque extends BaseList implements HsqlList {
 
     public Object set(int i, Object o) throws IndexOutOfBoundsException {
 
-        int    index  = getInternalIndex(i);
+        int index = getInternalIndex(i);
         Object result = list[index];
 
         list[index] = o;
@@ -176,15 +176,15 @@ public class HsqlDeque extends BaseList implements HsqlList {
         return o;
     }
 
-/*
-    public Object remove(int i){
-        return get(i);
-    }
+    /*
+        public Object remove(int i){
+            return get(i);
+        }
 
-    public void add(int i, Object o) {
+        public void add(int i, Object o) {
 
-    }
-*/
+        }
+    */
     public boolean add(Object o) {
 
         resetCapacity();
@@ -262,8 +262,8 @@ public class HsqlDeque extends BaseList implements HsqlList {
 
     public Object remove(int index) {
 
-        int    target = getInternalIndex(index);
-        Object value  = list[target];
+        int target = getInternalIndex(index);
+        Object value = list[target];
 
         if (target == firstindex) {
             list[firstindex] = null;
@@ -275,7 +275,7 @@ public class HsqlDeque extends BaseList implements HsqlList {
             }
         } else if (target > firstindex) {
             System.arraycopy(list, firstindex, list, firstindex + 1,
-                             target - firstindex);
+                    target - firstindex);
 
             list[firstindex] = null;
 
@@ -286,7 +286,7 @@ public class HsqlDeque extends BaseList implements HsqlList {
             }
         } else {
             System.arraycopy(list, target + 1, list, target,
-                             endindex - target - 1);
+                    endindex - target - 1);
 
             endindex--;
 
@@ -330,7 +330,7 @@ public class HsqlDeque extends BaseList implements HsqlList {
         Object[] newList = new Object[list.length * 2];
 
         System.arraycopy(list, firstindex, newList, firstindex,
-                         list.length - firstindex);
+                list.length - firstindex);
 
         if (endindex <= firstindex) {
             System.arraycopy(list, 0, newList, list.length, endindex);

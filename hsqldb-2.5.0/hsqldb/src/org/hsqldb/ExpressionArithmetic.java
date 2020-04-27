@@ -52,20 +52,20 @@ public class ExpressionArithmetic extends Expression {
 
         super(type);
 
-        nodes        = new Expression[BINARY];
-        nodes[LEFT]  = left;
+        nodes = new Expression[BINARY];
+        nodes[LEFT] = left;
         nodes[RIGHT] = right;
 
         switch (opType) {
 
-            case OpTypes.ADD :
-            case OpTypes.SUBTRACT :
-            case OpTypes.MULTIPLY :
-            case OpTypes.DIVIDE :
-            case OpTypes.CONCAT :
+            case OpTypes.ADD:
+            case OpTypes.SUBTRACT:
+            case OpTypes.MULTIPLY:
+            case OpTypes.DIVIDE:
+            case OpTypes.CONCAT:
                 return;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -74,15 +74,15 @@ public class ExpressionArithmetic extends Expression {
 
         super(type);
 
-        nodes       = new Expression[UNARY];
+        nodes = new Expression[UNARY];
         nodes[LEFT] = e;
 
         switch (opType) {
 
-            case OpTypes.NEGATE :
+            case OpTypes.NEGATE:
                 return;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -93,7 +93,7 @@ public class ExpressionArithmetic extends Expression {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 if (valueData == null) {
                     return Tokens.T_NULL;
                 }
@@ -105,45 +105,45 @@ public class ExpressionArithmetic extends Expression {
                 return dataType.convertToSQLString(valueData);
         }
 
-        String left  = getContextSQL(nodes.length > 0 ? nodes[LEFT]
-                                                      : null);
+        String left = getContextSQL(nodes.length > 0 ? nodes[LEFT]
+                : null);
         String right = getContextSQL(nodes.length > 1 ? nodes[RIGHT]
-                                                      : null);
+                : null);
 
         switch (opType) {
 
-            case OpTypes.CAST :
+            case OpTypes.CAST:
                 sb.append(' ').append(Tokens.T_CAST).append('(');
                 sb.append(left).append(' ').append(Tokens.T_AS).append(' ');
                 sb.append(dataType.getTypeDefinition());
                 sb.append(')');
                 break;
 
-            case OpTypes.NEGATE :
+            case OpTypes.NEGATE:
                 sb.append('-').append(left);
                 break;
 
-            case OpTypes.ADD :
+            case OpTypes.ADD:
                 sb.append(left).append('+').append(right);
                 break;
 
-            case OpTypes.SUBTRACT :
+            case OpTypes.SUBTRACT:
                 sb.append(left).append('-').append(right);
                 break;
 
-            case OpTypes.MULTIPLY :
+            case OpTypes.MULTIPLY:
                 sb.append(left).append('*').append(right);
                 break;
 
-            case OpTypes.DIVIDE :
+            case OpTypes.DIVIDE:
                 sb.append(left).append('/').append(right);
                 break;
 
-            case OpTypes.CONCAT :
+            case OpTypes.CONCAT:
                 sb.append(left).append("||").append(right);
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
 
@@ -162,17 +162,17 @@ public class ExpressionArithmetic extends Expression {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 sb.append("VALUE = ").append(
-                    dataType.convertToSQLString(valueData));
+                        dataType.convertToSQLString(valueData));
                 sb.append(", TYPE = ").append(dataType.getNameString());
 
                 return sb.toString();
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
 
-            //
-            case OpTypes.VALUELIST :
+                //
+            case OpTypes.VALUELIST:
                 sb.append("VALUELIST ");
                 sb.append(" TYPE = ").append(dataType.getNameString());
 
@@ -182,37 +182,37 @@ public class ExpressionArithmetic extends Expression {
                 }
                 break;
 
-            case OpTypes.NEGATE :
+            case OpTypes.NEGATE:
                 sb.append("NEGATE ");
                 break;
 
-            case OpTypes.ADD :
+            case OpTypes.ADD:
                 sb.append("ADD ");
                 break;
 
-            case OpTypes.SUBTRACT :
+            case OpTypes.SUBTRACT:
                 sb.append("SUBTRACT ");
                 break;
 
-            case OpTypes.MULTIPLY :
+            case OpTypes.MULTIPLY:
                 sb.append("MULTIPLY ");
                 break;
 
-            case OpTypes.DIVIDE :
+            case OpTypes.DIVIDE:
                 sb.append("DIVIDE ");
                 break;
 
-            case OpTypes.CONCAT :
+            case OpTypes.CONCAT:
                 sb.append("CONCAT ");
                 break;
 
-            case OpTypes.CAST :
+            case OpTypes.CAST:
                 sb.append("CAST ");
                 sb.append(dataType.getTypeDefinition());
                 sb.append(' ');
                 break;
 
-            default :
+            default:
         }
 
         if (getLeftNode() != null) {
@@ -231,8 +231,8 @@ public class ExpressionArithmetic extends Expression {
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
 
         if (opType == OpTypes.VALUE) {
             return unresolvedSet;
@@ -261,10 +261,10 @@ public class ExpressionArithmetic extends Expression {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 break;
 
-            case OpTypes.NEGATE :
+            case OpTypes.NEGATE:
                 if (nodes[LEFT].isUnresolvedParam()
                         || nodes[LEFT].dataType == null) {
                     throw Error.error(ErrorCode.X_42567);
@@ -281,13 +281,13 @@ public class ExpressionArithmetic extends Expression {
                 }
                 break;
 
-            case OpTypes.ADD :
+            case OpTypes.ADD:
 
                 // special case for concat using +
                 if ((nodes[LEFT].dataType != null && nodes[LEFT].dataType
                         .isCharacterType()) || (nodes[RIGHT].dataType != null
-                                                && nodes[RIGHT].dataType
-                                                    .isCharacterType())) {
+                        && nodes[RIGHT].dataType
+                        .isCharacterType())) {
                     opType = OpTypes.CONCAT;
 
                     resolveTypesForConcat(session, parent);
@@ -295,18 +295,18 @@ public class ExpressionArithmetic extends Expression {
                     break;
                 }
 
-            // fall through
-            case OpTypes.SUBTRACT :
-            case OpTypes.MULTIPLY :
-            case OpTypes.DIVIDE :
+                // fall through
+            case OpTypes.SUBTRACT:
+            case OpTypes.MULTIPLY:
+            case OpTypes.DIVIDE:
                 resolveTypesForArithmetic(session, parent);
                 break;
 
-            case OpTypes.CONCAT :
+            case OpTypes.CONCAT:
                 resolveTypesForConcat(session, parent);
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -332,12 +332,12 @@ public class ExpressionArithmetic extends Expression {
 
         if (nodes[LEFT].isUnresolvedParam()
                 && nodes[RIGHT].isUnresolvedParam()) {
-            nodes[LEFT].dataType  = Type.SQL_INTEGER;
+            nodes[LEFT].dataType = Type.SQL_INTEGER;
             nodes[RIGHT].dataType = Type.SQL_INTEGER;
         }
 
         if (nodes[LEFT].dataType == null && nodes[RIGHT].dataType == null) {
-            nodes[LEFT].dataType  = Type.SQL_INTEGER;
+            nodes[LEFT].dataType = Type.SQL_INTEGER;
             nodes[RIGHT].dataType = Type.SQL_INTEGER;
         }
 
@@ -350,18 +350,18 @@ public class ExpressionArithmetic extends Expression {
                 if (parent != null) {
                     switch (parent.opType) {
 
-                        case OpTypes.EQUAL :
-                        case OpTypes.GREATER_EQUAL :
-                        case OpTypes.SMALLER_EQUAL :
-                        case OpTypes.SMALLER :
-                        case OpTypes.GREATER :
+                        case OpTypes.EQUAL:
+                        case OpTypes.GREATER_EQUAL:
+                        case OpTypes.SMALLER_EQUAL:
+                        case OpTypes.SMALLER:
+                        case OpTypes.GREATER:
                             for (int i = 0; i < parent.nodes.length; i++) {
                                 if (parent.nodes[i] != this) {
                                     if (parent.nodes[i].dataType != null
                                             && parent.nodes[i].dataType
-                                                .isDateTimeType()) {
+                                            .isDateTimeType()) {
                                         nodes[LEFT].dataType =
-                                            parent.nodes[i].dataType;
+                                                parent.nodes[i].dataType;
                                     }
 
                                     break;
@@ -369,7 +369,7 @@ public class ExpressionArithmetic extends Expression {
                             }
                             break;
 
-                        default :
+                        default:
                     }
                 }
             }
@@ -377,32 +377,32 @@ public class ExpressionArithmetic extends Expression {
             if (nodes[LEFT].dataType == null) {
                 switch (opType) {
 
-                    case OpTypes.SUBTRACT :
+                    case OpTypes.SUBTRACT:
                         if (nodes[RIGHT].dataType.isIntervalType()) {
                             nodes[LEFT].dataType =
-                                Type.SQL_TIMESTAMP_WITH_TIME_ZONE;
+                                    Type.SQL_TIMESTAMP_WITH_TIME_ZONE;
                         }
                         break;
 
-                    case OpTypes.ADD :
+                    case OpTypes.ADD:
                         if (nodes[RIGHT].dataType.isDateTimeType()) {
                             if (nodes[RIGHT].dataType.typeComparisonGroup
                                     == Types.SQL_DATE) {
                                 nodes[LEFT].dataType =
-                                    Type
-                                    .SQL_INTERVAL_YEAR_TO_MONTH_MAX_PRECISION;
+                                        Type
+                                                .SQL_INTERVAL_YEAR_TO_MONTH_MAX_PRECISION;
                             } else {
                                 nodes[LEFT].dataType =
-                                    Type
-                                    .SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION;
+                                        Type
+                                                .SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION;
                             }
                         } else if (nodes[RIGHT].dataType.isIntervalType()) {
                             nodes[LEFT].dataType =
-                                Type.SQL_TIMESTAMP_WITH_TIME_ZONE;
+                                    Type.SQL_TIMESTAMP_WITH_TIME_ZONE;
                         }
                         break;
 
-                    default :
+                    default:
                 }
             }
 
@@ -416,8 +416,8 @@ public class ExpressionArithmetic extends Expression {
 
             switch (opType) {
 
-                case OpTypes.MULTIPLY :
-                case OpTypes.DIVIDE :
+                case OpTypes.MULTIPLY:
+                case OpTypes.DIVIDE:
                     if (nodes[LEFT].dataType.isIntervalType()) {
                         nodes[RIGHT].dataType = Type.SQL_DECIMAL;
                     } else {
@@ -425,20 +425,20 @@ public class ExpressionArithmetic extends Expression {
                     }
                     break;
 
-                case OpTypes.SUBTRACT :
-                case OpTypes.ADD :
+                case OpTypes.SUBTRACT:
+                case OpTypes.ADD:
                     if (nodes[LEFT].dataType.isDateTimeType()) {
 
                         // datetime subtract - type predetermined
                         if (dataType != null && dataType.isIntervalType()) {
                             nodes[RIGHT].dataType = nodes[LEFT].dataType;
                         } else if (nodes[LEFT].dataType.typeComparisonGroup
-                                   == Types.SQL_DATE) {
+                                == Types.SQL_DATE) {
                             nodes[RIGHT].dataType =
-                                Type.SQL_INTERVAL_YEAR_TO_MONTH_MAX_PRECISION;
+                                    Type.SQL_INTERVAL_YEAR_TO_MONTH_MAX_PRECISION;
                         } else {
                             nodes[RIGHT].dataType =
-                                Type.SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION;
+                                    Type.SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION;
                         }
                     } else {
                         nodes[RIGHT].dataType = nodes[LEFT].dataType;
@@ -478,7 +478,7 @@ public class ExpressionArithmetic extends Expression {
                     }
                 } else {
                     Type type = nodes[LEFT].dataType.getCombinedType(session,
-                        nodes[RIGHT].dataType, opType);
+                            nodes[RIGHT].dataType, opType);
 
                     if (type == null) {
                         throw Error.error(ErrorCode.X_42562);
@@ -491,7 +491,7 @@ public class ExpressionArithmetic extends Expression {
                     } else if (type.isNumberType()) {
                         nodes[LEFT] = new ExpressionOp(nodes[LEFT], dataType);
                         nodes[RIGHT] = new ExpressionOp(nodes[RIGHT],
-                                                        dataType);
+                                dataType);
 
                         nodes[LEFT].resolveTypes(session, this);
                         nodes[RIGHT].resolveTypes(session, this);
@@ -512,7 +512,7 @@ public class ExpressionArithmetic extends Expression {
 
                     Expression temp = nodes[LEFT];
 
-                    nodes[LEFT]  = nodes[RIGHT];
+                    nodes[LEFT] = nodes[RIGHT];
                     nodes[RIGHT] = temp;
                 } else if (nodes[RIGHT].dataType.isNumberType()) {
                     if (!session.database.sqlSyntaxOra) {
@@ -561,7 +561,7 @@ public class ExpressionArithmetic extends Expression {
                     throw Error.error(ErrorCode.X_42563);
                 }
 
-                nodes[RIGHT]  = e.getLeftNode();
+                nodes[RIGHT] = e.getLeftNode();
                 e.nodes[LEFT] = this;
 
                 parent.replaceNode(this, e);
@@ -581,8 +581,8 @@ public class ExpressionArithmetic extends Expression {
             }
 
             Type newType = CharacterType.getCharacterType(Types.SQL_VARCHAR,
-                nodes[RIGHT].dataType.displaySize(),
-                nodes[LEFT].dataType.getCollation());
+                    nodes[RIGHT].dataType.displaySize(),
+                    nodes[LEFT].dataType.getCollation());
 
             nodes[RIGHT] = ExpressionOp.getCastExpression(session,
                     nodes[RIGHT], newType);
@@ -595,8 +595,8 @@ public class ExpressionArithmetic extends Expression {
             }
 
             Type newType = CharacterType.getCharacterType(Types.SQL_VARCHAR,
-                nodes[LEFT].dataType.displaySize(),
-                nodes[RIGHT].dataType.getCollation());
+                    nodes[LEFT].dataType.displaySize(),
+                    nodes[RIGHT].dataType.getCollation());
 
             nodes[LEFT] = ExpressionOp.getCastExpression(session, nodes[LEFT],
                     newType);
@@ -619,28 +619,28 @@ public class ExpressionArithmetic extends Expression {
 
         switch (type.typeCode) {
 
-            case Types.SQL_CHAR :
-            case Types.SQL_VARCHAR :
+            case Types.SQL_CHAR:
+            case Types.SQL_VARCHAR:
                 return Type.SQL_VARCHAR_DEFAULT;
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 return Type.SQL_CLOB;
 
-            case Types.SQL_BINARY :
-            case Types.SQL_VARBINARY :
+            case Types.SQL_BINARY:
+            case Types.SQL_VARBINARY:
                 return Type.SQL_VARBINARY_DEFAULT;
 
-            case Types.SQL_BLOB :
+            case Types.SQL_BLOB:
                 return Type.SQL_BLOB;
 
-            case Types.SQL_BIT :
-            case Types.SQL_BIT_VARYING :
+            case Types.SQL_BIT:
+            case Types.SQL_BIT_VARYING:
                 return Type.SQL_BIT_VARYING_MAX_LENGTH;
 
-            case Types.SQL_ARRAY :
+            case Types.SQL_ARRAY:
                 return type;
 
-            default :
+            default:
                 return null;
         }
     }
@@ -649,10 +649,10 @@ public class ExpressionArithmetic extends Expression {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 return valueData;
 
-            case OpTypes.NEGATE :
+            case OpTypes.NEGATE:
                 return dataType.negate(nodes[LEFT].getValue(session,
                         nodes[LEFT].dataType));
         }
@@ -662,19 +662,19 @@ public class ExpressionArithmetic extends Expression {
 
         switch (opType) {
 
-            case OpTypes.ADD :
+            case OpTypes.ADD:
                 return dataType.add(session, a, b, nodes[RIGHT].dataType);
 
-            case OpTypes.SUBTRACT :
+            case OpTypes.SUBTRACT:
                 return dataType.subtract(session, a, b, nodes[RIGHT].dataType);
 
-            case OpTypes.MULTIPLY :
+            case OpTypes.MULTIPLY:
                 return dataType.multiply(a, b);
 
-            case OpTypes.DIVIDE :
+            case OpTypes.DIVIDE:
                 return dataType.divide(session, a, b);
 
-            case OpTypes.CONCAT :
+            case OpTypes.CONCAT:
                 if (!session.database.sqlConcatNulls
                         && nodes[LEFT].dataType.isCharacterType()) {
                     if (a == null && b != null) {
@@ -686,7 +686,7 @@ public class ExpressionArithmetic extends Expression {
 
                 return dataType.concat(session, a, b);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }

@@ -58,13 +58,13 @@ public class TableDerived extends Table {
 
     //
     QueryExpression queryExpression;
-    Expression      dataExpression;
-    boolean         uniqueRows;
-    boolean         uniquePredicate;
-    String          sql;
-    View            view;
-    int             depth;
-    boolean         canRecompile = false;
+    Expression dataExpression;
+    boolean uniqueRows;
+    boolean uniquePredicate;
+    String sql;
+    View view;
+    int depth;
+    boolean canRecompile = false;
 
     public TableDerived(Database database, HsqlName name, int type) {
 
@@ -73,15 +73,15 @@ public class TableDerived extends Table {
         switch (type) {
 
             // for special use, not INFORMATION_SCHEMA views
-            case TableBase.CHANGE_SET_TABLE :
-            case TableBase.SYSTEM_TABLE :
-            case TableBase.FUNCTION_TABLE :
-            case TableBase.VIEW_TABLE :
-            case TableBase.RESULT_TABLE :
-            case TableBase.SYSTEM_SUBQUERY :
+            case TableBase.CHANGE_SET_TABLE:
+            case TableBase.SYSTEM_TABLE:
+            case TableBase.FUNCTION_TABLE:
+            case TableBase.VIEW_TABLE:
+            case TableBase.RESULT_TABLE:
+            case TableBase.SYSTEM_SUBQUERY:
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Table");
         }
     }
@@ -92,9 +92,9 @@ public class TableDerived extends Table {
 
         this(database, name, type);
 
-        this.colTypes   = columnTypes;
+        this.colTypes = columnTypes;
         this.columnList = columnList;
-        columnCount     = columnList.size();
+        columnCount = columnList.size();
 
         createPrimaryKey(null, pkColumns, true);
     }
@@ -107,25 +107,25 @@ public class TableDerived extends Table {
 
         switch (type) {
 
-            case TableBase.SYSTEM_SUBQUERY :
-            case TableBase.VIEW_TABLE :
+            case TableBase.SYSTEM_SUBQUERY:
+            case TableBase.VIEW_TABLE:
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Table");
         }
 
         this.queryExpression = queryExpression;
-        this.dataExpression  = dataExpression;
-        this.depth           = depth;
+        this.dataExpression = dataExpression;
+        this.depth = depth;
 
         switch (opType) {
 
-            case OpTypes.EXISTS :
+            case OpTypes.EXISTS:
                 queryExpression.setSingleRow();
                 break;
 
-            case OpTypes.IN :
+            case OpTypes.IN:
                 if (queryExpression != null) {
                     queryExpression.setFullOrder();
                 }
@@ -133,17 +133,17 @@ public class TableDerived extends Table {
                 uniqueRows = true;
                 break;
 
-            case OpTypes.UNIQUE :
+            case OpTypes.UNIQUE:
                 queryExpression.setFullOrder();
 
                 uniquePredicate = true;
                 break;
 
-            case OpTypes.MATCH_SIMPLE :
+            case OpTypes.MATCH_SIMPLE:
                 queryExpression.setFullOrder();
                 break;
 
-            default :
+            default:
         }
 
         if (dataExpression != null) {
@@ -158,7 +158,7 @@ public class TableDerived extends Table {
 
         if (isRecompiled()) {
             ParserDQL p = new ParserDQL(session, new Scanner(),
-                                        baseContext);
+                    baseContext);
             p.compileContext.setCurrentSubquery(tableName);
 
             p.reset(session, sql);
@@ -167,14 +167,14 @@ public class TableDerived extends Table {
             td = p.XreadSubqueryTableBody(tableName, OpTypes.TABLE_SUBQUERY);
 
             td.queryExpression.resolve(session,
-                                       p.compileContext.getOuterRanges(),
-                                       null);
+                    p.compileContext.getOuterRanges(),
+                    null);
 
-            td.columnList   = columnList;
-            td.columnCount  = columnList.size();
-            td.triggerList  = triggerList;
+            td.columnList = columnList;
+            td.columnCount = columnList.size();
+            td.triggerList = triggerList;
             td.triggerLists = triggerLists;
-            td.view         = view;
+            td.view = view;
 
             td.createPrimaryKey();
         }
@@ -201,7 +201,7 @@ public class TableDerived extends Table {
         }
 
         return queryExpression == null ? false
-                                       : queryExpression.isInsertable();
+                : queryExpression.isInsertable();
     }
 
     public boolean isUpdatable() {
@@ -211,7 +211,7 @@ public class TableDerived extends Table {
         }
 
         return queryExpression == null ? false
-                                       : queryExpression.isUpdatable();
+                : queryExpression.isUpdatable();
     }
 
     public int[] getUpdatableColumns() {
@@ -252,14 +252,14 @@ public class TableDerived extends Table {
 
     public Table getBaseTable() {
         return queryExpression == null ? this
-                                       : queryExpression.getBaseTable();
+                : queryExpression.getBaseTable();
     }
 
     public int[] getBaseTableColumnMap() {
 
         return queryExpression == null ? null
-                                       : queryExpression
-                                           .getBaseTableColumnMap();
+                : queryExpression
+                .getBaseTableColumnMap();
     }
 
     public QueryExpression getQueryExpression() {
@@ -284,7 +284,7 @@ public class TableDerived extends Table {
         }
 
         if (queryExpression != null) {
-            columnList  = queryExpression.getColumns();
+            columnList = queryExpression.getColumns();
             columnCount = queryExpression.getColumnCount();
 
             setTableIndexesForSubquery(session);
@@ -315,7 +315,7 @@ public class TableDerived extends Table {
 
     private void setTableIndexesForSubquery(Session session) {
 
-        int[]   cols         = null;
+        int[] cols = null;
         boolean hasFullIndex = false;
 
         if (queryExpression != null) {
@@ -331,7 +331,7 @@ public class TableDerived extends Table {
         }
 
         int[] pkcols = uniqueRows ? cols
-                                  : null;
+                : null;
 
         createPrimaryKey(null, pkcols, false);
 
@@ -400,7 +400,7 @@ public class TableDerived extends Table {
 
             if (uniqueRows) {
                 RowSetNavigatorData navigator =
-                    ((RowSetNavigatorData) result.getNavigator());
+                        ((RowSetNavigatorData) result.getNavigator());
 
                 navigator.removeDuplicates(session);
             }
@@ -463,7 +463,7 @@ public class TableDerived extends Table {
     public RowSetNavigatorData getNavigator(Session session) {
 
         RowSetNavigatorData navigator = new RowSetNavigatorDataTable(session,
-            this);
+                this);
 
         return navigator;
     }

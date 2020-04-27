@@ -41,7 +41,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
     public void testInsert() {
 
-        String     s = null;
+        String s = null;
         Connection c = null;
 
         try {
@@ -68,7 +68,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
     public void testMerge() {
 
-        String     s = null;
+        String s = null;
         Connection c = null;
 
         try {
@@ -96,7 +96,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
     private void testWithSQL(Connection c, String s) {
 
         boolean successPrepared = false;
-        boolean successDirect   = false;
+        boolean successDirect = false;
 
         try {
             Statement st = c.createStatement();
@@ -112,7 +112,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
             }
 
             PreparedStatement ps = c.prepareStatement(s,
-                Statement.RETURN_GENERATED_KEYS);
+                    Statement.RETURN_GENERATED_KEYS);
 
             ps.execute();
 
@@ -126,7 +126,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new int[]{ 1 });
+            ps = c.prepareStatement(s, new int[]{1});
 
             ps.execute();
 
@@ -140,7 +140,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new String[]{ "I" });
+            ps = c.prepareStatement(s, new String[]{"I"});
 
             ps.execute();
 
@@ -155,8 +155,8 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new String[] {
-                "I", "C"
+            ps = c.prepareStatement(s, new String[]{
+                    "I", "C"
             });
 
             ps.execute();
@@ -173,8 +173,8 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new String[] {
-                "C", "I"
+            ps = c.prepareStatement(s, new String[]{
+                    "C", "I"
             });
 
             ps.execute();
@@ -200,33 +200,33 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
     public void testInsertUpdate() throws SQLException {
 
-        Connection conn            = newConnection();
-        boolean    successPrepared = false;
-        boolean    successDirect   = false;
+        Connection conn = newConnection();
+        boolean successPrepared = false;
+        boolean successDirect = false;
         String create = "CREATE TABLE PUBLIC.BEWERTUNG ("
-                        + "BEWERTUNGSID INTEGER NOT NULL IDENTITY,"
-                        + "TID INTEGER," + "JURORID INTEGER NOT NULL,"
-                        + "RUNDE INTEGER NOT NULL,"
-                        + "CONSTRAINT SYS_PK_10126 PRIMARY KEY (BEWERTUNGSID),"
-                        + ") ";
+                + "BEWERTUNGSID INTEGER NOT NULL IDENTITY,"
+                + "TID INTEGER," + "JURORID INTEGER NOT NULL,"
+                + "RUNDE INTEGER NOT NULL,"
+                + "CONSTRAINT SYS_PK_10126 PRIMARY KEY (BEWERTUNGSID),"
+                + ") ";
         String sqlquery =
-            "MERGE INTO bewertung pu USING " + "(VALUES ?,?,?) AS "
-            + "temp (tid,jurorid,runde) "
-            + "ON temp.tid = pu.tid and temp.jurorid=pu.jurorid and temp.runde=pu.runde "
-            + "WHEN MATCHED THEN UPDATE SET RUNDE = 103 "
-            + "WHEN NOT MATCHED THEN INSERT (TID,JURORID,RUNDE) "
-            + "VALUES (temp.tid,temp.jurorid,temp.runde)";
+                "MERGE INTO bewertung pu USING " + "(VALUES ?,?,?) AS "
+                        + "temp (tid,jurorid,runde) "
+                        + "ON temp.tid = pu.tid and temp.jurorid=pu.jurorid and temp.runde=pu.runde "
+                        + "WHEN MATCHED THEN UPDATE SET RUNDE = 103 "
+                        + "WHEN NOT MATCHED THEN INSERT (TID,JURORID,RUNDE) "
+                        + "VALUES (temp.tid,temp.jurorid,temp.runde)";
 
         conn.createStatement().execute(create);
         PreparedStatement preparedStatement = conn.prepareStatement(sqlquery,
-            Statement.RETURN_GENERATED_KEYS);
+                Statement.RETURN_GENERATED_KEYS);
 
         preparedStatement.setInt(1, 1);    //TID
         preparedStatement.setInt(2, 2);    //JURORID
         preparedStatement.setInt(3, 3);    //RUNDE
 
-        int       rowsAffected = preparedStatement.executeUpdate();
-        ResultSet rs           = preparedStatement.getGeneratedKeys();
+        int rowsAffected = preparedStatement.executeUpdate();
+        ResultSet rs = preparedStatement.getGeneratedKeys();
 
         if (rs.next()) {
             System.out.println(rs.getInt(1));
@@ -235,7 +235,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
         }
 
         rowsAffected = preparedStatement.executeUpdate();
-        rs           = preparedStatement.getGeneratedKeys();
+        rs = preparedStatement.getGeneratedKeys();
 
         if (rs.next()) {
             System.out.println(rs.getInt(1));
@@ -247,12 +247,12 @@ public class TestJDBCGeneratedColumns extends TestBase {
     public void testBatchInsert() {
 
         boolean successPrepared = false;
-        boolean successDirect   = false;
+        boolean successDirect = false;
 
         try {
-            Connection c  = newConnection();
-            Statement  st = c.createStatement();
-            String     s  = "DROP TABLE T IF EXISTS";
+            Connection c = newConnection();
+            Statement st = c.createStatement();
+            String s = "DROP TABLE T IF EXISTS";
 
             st.execute(s);
 
@@ -263,14 +263,14 @@ public class TestJDBCGeneratedColumns extends TestBase {
             s = "INSERT INTO T (C) VALUES('TEST')";
 
             PreparedStatement ps = c.prepareStatement(s,
-                Statement.RETURN_GENERATED_KEYS);
+                    Statement.RETURN_GENERATED_KEYS);
 
             ps.addBatch();
             ps.addBatch();
             ps.executeBatch();
 
-            ResultSet rs  = ps.getGeneratedKeys();
-            int       val = 33;
+            ResultSet rs = ps.getGeneratedKeys();
+            int val = 33;
 
             while (rs.next()) {
                 System.out.println("" + rs.getInt(1));
@@ -282,7 +282,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new int[]{ 1 });
+            ps = c.prepareStatement(s, new int[]{1});
 
             ps.addBatch();
             ps.addBatch();
@@ -300,7 +300,7 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new String[]{ "I" });
+            ps = c.prepareStatement(s, new String[]{"I"});
 
             ps.addBatch();
             ps.addBatch();
@@ -319,8 +319,8 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new String[] {
-                "I", "C"
+            ps = c.prepareStatement(s, new String[]{
+                    "I", "C"
             });
 
             ps.addBatch();
@@ -341,8 +341,8 @@ public class TestJDBCGeneratedColumns extends TestBase {
 
             ps.close();
 
-            ps = c.prepareStatement(s, new String[] {
-                "C", "I"
+            ps = c.prepareStatement(s, new String[]{
+                    "C", "I"
             });
 
             ps.addBatch();

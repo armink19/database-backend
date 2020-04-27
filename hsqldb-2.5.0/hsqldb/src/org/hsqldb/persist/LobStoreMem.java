@@ -40,40 +40,40 @@ import org.hsqldb.lib.HsqlArrayList;
  */
 public class LobStoreMem implements LobStore {
 
-    final int     lobBlockSize;
-    int           blocksInLargeBlock = 128;
-    int           largeBlockSize;
+    final int lobBlockSize;
+    int blocksInLargeBlock = 128;
+    int largeBlockSize;
     HsqlArrayList byteStoreList;
 
     public LobStoreMem(int lobBlockSize) {
 
         this.lobBlockSize = lobBlockSize;
-        largeBlockSize    = lobBlockSize * blocksInLargeBlock;
-        byteStoreList     = new HsqlArrayList();
+        largeBlockSize = lobBlockSize * blocksInLargeBlock;
+        byteStoreList = new HsqlArrayList();
     }
 
     public byte[] getBlockBytes(int blockAddress, int blockCount) {
 
-        byte[] dataBytes       = new byte[blockCount * lobBlockSize];
-        int    dataBlockOffset = 0;
+        byte[] dataBytes = new byte[blockCount * lobBlockSize];
+        int dataBlockOffset = 0;
 
         while (blockCount > 0) {
-            int    largeBlockIndex   = blockAddress / blocksInLargeBlock;
+            int largeBlockIndex = blockAddress / blocksInLargeBlock;
             byte[] largeBlock = (byte[]) byteStoreList.get(largeBlockIndex);
-            int    blockOffset       = blockAddress % blocksInLargeBlock;
-            int    currentBlockCount = blockCount;
+            int blockOffset = blockAddress % blocksInLargeBlock;
+            int currentBlockCount = blockCount;
 
             if ((blockOffset + currentBlockCount) > blocksInLargeBlock) {
                 currentBlockCount = blocksInLargeBlock - blockOffset;
             }
 
             System.arraycopy(largeBlock, blockOffset * lobBlockSize,
-                             dataBytes, dataBlockOffset * lobBlockSize,
-                             currentBlockCount * lobBlockSize);
+                    dataBytes, dataBlockOffset * lobBlockSize,
+                    currentBlockCount * lobBlockSize);
 
-            blockAddress    += currentBlockCount;
+            blockAddress += currentBlockCount;
             dataBlockOffset += currentBlockCount;
-            blockCount      -= currentBlockCount;
+            blockCount -= currentBlockCount;
         }
 
         return dataBytes;
@@ -92,20 +92,20 @@ public class LobStoreMem implements LobStore {
             }
 
             byte[] largeBlock = (byte[]) byteStoreList.get(largeBlockIndex);
-            int    blockOffset       = blockAddress % blocksInLargeBlock;
-            int    currentBlockCount = blockCount;
+            int blockOffset = blockAddress % blocksInLargeBlock;
+            int currentBlockCount = blockCount;
 
             if ((blockOffset + currentBlockCount) > blocksInLargeBlock) {
                 currentBlockCount = blocksInLargeBlock - blockOffset;
             }
 
             System.arraycopy(dataBytes, dataBlockOffset * lobBlockSize,
-                             largeBlock, blockOffset * lobBlockSize,
-                             currentBlockCount * lobBlockSize);
+                    largeBlock, blockOffset * lobBlockSize,
+                    currentBlockCount * lobBlockSize);
 
-            blockAddress    += currentBlockCount;
+            blockAddress += currentBlockCount;
             dataBlockOffset += currentBlockCount;
-            blockCount      -= currentBlockCount;
+            blockCount -= currentBlockCount;
         }
     }
 
@@ -120,19 +120,19 @@ public class LobStoreMem implements LobStore {
             }
 
             byte[] largeBlock = (byte[]) byteStoreList.get(largeBlockIndex);
-            int    offsetInLargeBlock = (int) (position % largeBlockSize);
-            int    currentLength      = length;
+            int offsetInLargeBlock = (int) (position % largeBlockSize);
+            int currentLength = length;
 
             if ((offsetInLargeBlock + currentLength) > largeBlockSize) {
                 currentLength = largeBlockSize - offsetInLargeBlock;
             }
 
             System.arraycopy(dataBytes, offset, largeBlock,
-                             offsetInLargeBlock, currentLength);
+                    offsetInLargeBlock, currentLength);
 
             position += currentLength;
-            offset   += currentLength;
-            length   -= currentLength;
+            offset += currentLength;
+            length -= currentLength;
         }
     }
 
@@ -155,5 +155,6 @@ public class LobStoreMem implements LobStore {
         byteStoreList.clear();
     }
 
-    public void synch() {}
+    public void synch() {
+    }
 }

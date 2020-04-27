@@ -48,10 +48,10 @@ import org.hsqldb.rowio.RowInputInterface;
  */
 public interface PersistentStore {
 
-    int               SHORT_STORE_SIZE = 2;
-    int               INT_STORE_SIZE   = 4;
-    int               LONG_STORE_SIZE  = 8;
-    PersistentStore[] emptyArray       = new PersistentStore[]{};
+    int SHORT_STORE_SIZE = 2;
+    int INT_STORE_SIZE = 4;
+    int LONG_STORE_SIZE = 8;
+    PersistentStore[] emptyArray = new PersistentStore[]{};
 
     boolean isRowStore();
 
@@ -67,15 +67,21 @@ public interface PersistentStore {
 
     void set(CachedObject object);
 
-    /** get object */
+    /**
+     * get object
+     */
     CachedObject get(long key);
 
-    /** get object with keep, ensuring future gets will return the same instance of the object */
+    /**
+     * get object with keep, ensuring future gets will return the same instance of the object
+     */
     CachedObject get(long key, boolean keep);
 
     CachedObject get(CachedObject object, boolean keep);
 
-    /** add new object */
+    /**
+     * add new object
+     */
     void add(CachedObject object, boolean keep);
 
     void add(Session session, CachedObject object, boolean tx);
@@ -98,10 +104,14 @@ public interface PersistentStore {
 
     void removeAll();
 
-    /** remove both persisted and cached copies */
+    /**
+     * remove both persisted and cached copies
+     */
     void remove(CachedObject object);
 
-    /** commit persisted image */
+    /**
+     * commit persisted image
+     */
     void commitPersistence(CachedObject object);
 
     //

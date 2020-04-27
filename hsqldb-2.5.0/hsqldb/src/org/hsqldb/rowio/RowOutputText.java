@@ -42,7 +42,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 
 /**
- *  Class for writing the data for a database row in text table format.
+ * Class for writing the data for a database row in text table format.
  *
  * @author Bob Preston (sqlbob@users dot sourceforge.net)
  * @version 2.5.0
@@ -50,14 +50,14 @@ import java.math.BigDecimal;
  */
 public class RowOutputText extends RowOutputBase {
 
-    protected String           fieldSep;
-    protected String           varSep;
-    protected String           longvarSep;
-    private boolean            fieldSepEnd;
-    private boolean            varSepEnd;
-    private boolean            longvarSepEnd;
-    private String             nextSep = "";
-    private boolean            nextSepEnd;
+    protected String fieldSep;
+    protected String varSep;
+    protected String longvarSep;
+    private boolean fieldSepEnd;
+    private boolean varSepEnd;
+    private boolean longvarSepEnd;
+    private String nextSep = "";
+    private boolean nextSepEnd;
     protected TextFileSettings textFileSettings;
 
     public RowOutputText(TextFileSettings textFileSettings) {
@@ -70,24 +70,24 @@ public class RowOutputText extends RowOutputBase {
     private void initTextDatabaseRowOutput(TextFileSettings textFileSettings) {
 
         this.textFileSettings = textFileSettings;
-        this.fieldSep         = textFileSettings.fs;
-        this.varSep           = textFileSettings.vs;
-        this.longvarSep       = textFileSettings.lvs;
+        this.fieldSep = textFileSettings.fs;
+        this.varSep = textFileSettings.vs;
+        this.longvarSep = textFileSettings.lvs;
 
         //-- Newline indicates that field should match to end of line.
         if (fieldSep.endsWith("\n")) {
             fieldSepEnd = true;
-            fieldSep    = fieldSep.substring(0, fieldSep.length() - 1);
+            fieldSep = fieldSep.substring(0, fieldSep.length() - 1);
         }
 
         if (varSep.endsWith("\n")) {
             varSepEnd = true;
-            varSep    = varSep.substring(0, varSep.length() - 1);
+            varSep = varSep.substring(0, varSep.length() - 1);
         }
 
         if (longvarSep.endsWith("\n")) {
             longvarSepEnd = true;
-            longvarSep    = longvarSep.substring(0, longvarSep.length() - 1);
+            longvarSep = longvarSep.substring(0, longvarSep.length() - 1);
         }
     }
 
@@ -95,9 +95,11 @@ public class RowOutputText extends RowOutputBase {
         return pos;
     }
 
-    public void setStorageSize(int size) {}
+    public void setStorageSize(int size) {
+    }
 
-    public void setMode(int mode) {}
+    public void setMode(int mode) {
+    }
 
     public void writeEnd() {
 
@@ -112,7 +114,7 @@ public class RowOutputText extends RowOutputBase {
     public void writeSize(int size) {
 
         // initialise at the start of row
-        nextSep    = "";
+        nextSep = "";
         nextSepEnd = false;
     }
 
@@ -134,7 +136,7 @@ public class RowOutputText extends RowOutputBase {
 
         write(bytes, 0, bytes.length);
 
-        nextSep    = fieldSep;
+        nextSep = fieldSep;
         nextSepEnd = fieldSepEnd;
     }
 
@@ -150,7 +152,7 @@ public class RowOutputText extends RowOutputBase {
 
         write(bytes, 0, bytes.length);
 
-        nextSep    = varSep;
+        nextSep = varSep;
         nextSepEnd = varSepEnd;
     }
 
@@ -166,7 +168,7 @@ public class RowOutputText extends RowOutputBase {
 
         write(bytes, 0, bytes.length);
 
-        nextSep    = longvarSep;
+        nextSep = longvarSep;
         nextSepEnd = longvarSepEnd;
     }
 
@@ -174,7 +176,7 @@ public class RowOutputText extends RowOutputBase {
 
         if (s.indexOf('\n') != -1 || s.indexOf('\r') != -1) {
             throw new IllegalArgumentException(
-                Error.getMessage(ErrorCode.TEXT_STRING_HAS_NEWLINE));
+                    Error.getMessage(ErrorCode.TEXT_STRING_HAS_NEWLINE));
         } else if (s.contains(sep)) {
             return null;
         }
@@ -221,7 +223,7 @@ public class RowOutputText extends RowOutputBase {
 
         writeBytes(Integer.toString(i));
 
-        nextSep    = fieldSep;
+        nextSep = fieldSep;
         nextSepEnd = fieldSepEnd;
     }
 
@@ -250,20 +252,20 @@ public class RowOutputText extends RowOutputBase {
         }
     }
 
-// fredt@users - comment - methods used for writing each SQL type
+    // fredt@users - comment - methods used for writing each SQL type
     protected void writeFieldType(Type type) {
 
         writeBytes(nextSep);
 
         switch (type.typeCode) {
 
-            case Types.SQL_VARCHAR :
-                nextSep    = varSep;
+            case Types.SQL_VARCHAR:
+                nextSep = varSep;
                 nextSepEnd = varSepEnd;
                 break;
 
-            default :
-                nextSep    = fieldSep;
+            default:
+                nextSep = fieldSep;
                 nextSepEnd = fieldSepEnd;
                 break;
         }
@@ -277,17 +279,17 @@ public class RowOutputText extends RowOutputBase {
 
         switch (t.typeCode) {
 
-            case Types.SQL_CHAR :
+            case Types.SQL_CHAR:
                 writeString(s);
 
                 break;
 
-            case Types.SQL_VARCHAR :
+            case Types.SQL_VARCHAR:
                 writeVarString(s);
 
                 break;
 
-            default :
+            default:
                 writeLongVarString(s);
 
                 break;
@@ -348,7 +350,7 @@ public class RowOutputText extends RowOutputBase {
     protected void writeBit(BinaryData o) {
 
         String s = StringConverter.byteArrayToBitString(o.getBytes(),
-            (int) o.bitLength(null));
+                (int) o.bitLength(null));
 
         writeString(s);
     }
@@ -405,7 +407,7 @@ public class RowOutputText extends RowOutputBase {
 
         super.reset();
 
-        nextSep    = "";
+        nextSep = "";
         nextSepEnd = false;
     }
 

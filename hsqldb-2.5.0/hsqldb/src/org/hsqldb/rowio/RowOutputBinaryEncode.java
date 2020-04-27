@@ -64,8 +64,8 @@ public class RowOutputBinaryEncode extends RowOutputBinary {
 
             int origLength = count - start - INT_STORE_SIZE;
             int newLength = crypto.encode(buffer, start + INT_STORE_SIZE,
-                                          origLength, buffer,
-                                          start + INT_STORE_SIZE);
+                    origLength, buffer,
+                    start + INT_STORE_SIZE);
 
             writeIntData(newLength, start);
 
@@ -74,10 +74,10 @@ public class RowOutputBinaryEncode extends RowOutputBinary {
     }
 
     /**
-     *  Calculate the size of byte array required to store a row.
+     * Calculate the size of byte array required to store a row.
      *
-     * @param  row - a database row
-     * @return  size of byte array
+     * @param row - a database row
+     * @return size of byte array
      */
     public int getSize(Row row) {
 
@@ -85,7 +85,7 @@ public class RowOutputBinaryEncode extends RowOutputBinary {
 
         if (crypto != null) {
             size = crypto.getEncodedSize(size - INT_STORE_SIZE)
-                   + INT_STORE_SIZE * 2;
+                    + INT_STORE_SIZE * 2;
         }
 
         return size;

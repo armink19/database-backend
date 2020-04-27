@@ -43,18 +43,18 @@ import java.sql.SQLException;
 /**
  * Subclass of JDBCPooledConnection implements the XAConnection interface.
  * For use by global transaction service managers.<p>
- *
+ * <p>
  * Each instance has an JDBCXAResource inherits the superclass's two
  * JDBCConnection objects, one for internal access, and one for user access.<P>
- *
+ * <p>
  * The getConnection() method returns a user connection and links this with
  * the JDBCXAResource. This puts the object in the inUse state.
  * When the user connection is closed, the object is put in the free state.
  *
- * @version 2.2.9
- * @since HSQLDB 2.0
  * @author Fred Toussi (fredt at users.sourceforge.net)
+ * @version 2.2.9
  * @see javax.sql.XAConnection
+ * @since HSQLDB 2.0
  */
 public class JDBCXAConnection extends JDBCPooledConnection implements XAConnection {
 
@@ -73,8 +73,8 @@ public class JDBCXAConnection extends JDBCPooledConnection implements XAConnecti
     /**
      * Returns a connection that can be used by the user application.
      *
-     * @throws SQLException if a lease has already been given on this connection
      * @return Connection
+     * @throws SQLException if a lease has already been given on this connection
      */
     synchronized public Connection getConnection() throws SQLException {
 

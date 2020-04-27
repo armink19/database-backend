@@ -38,7 +38,7 @@ import java.sql.*;
 public class TestTypeConversion extends TestBase {
 
     Connection connection;
-    Statement  statement;
+    Statement statement;
 
     public TestTypeConversion(String name) {
 
@@ -53,7 +53,7 @@ public class TestTypeConversion extends TestBase {
         super.setUp();
 
         connection = super.newConnection();
-        statement  = connection.createStatement();
+        statement = connection.createStatement();
     }
 
     public void testStreams() {
@@ -61,7 +61,7 @@ public class TestTypeConversion extends TestBase {
         try {
             String ddl0 = "DROP TABLE BSTREAM IF EXISTS";
             String ddl1 =
-                "CREATE TABLE BSTREAM(A INT IDENTITY PRIMARY KEY, B VARBINARY(20))";
+                    "CREATE TABLE BSTREAM(A INT IDENTITY PRIMARY KEY, B VARBINARY(20))";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
@@ -71,14 +71,14 @@ public class TestTypeConversion extends TestBase {
         }
 
         try {
-            String            dml0 = "insert into bstream values(default, ?)";
-            String            dql0 = "select * from bstream where a = ?";
-            PreparedStatement ps1  = connection.prepareStatement(dml0);
-            PreparedStatement ps2  = connection.prepareStatement(dql0);
-            byte[]            data = new byte[] {
-                0x10, 0x11, 0x12, 0x13, 0x14, 0x15
+            String dml0 = "insert into bstream values(default, ?)";
+            String dql0 = "select * from bstream where a = ?";
+            PreparedStatement ps1 = connection.prepareStatement(dml0);
+            PreparedStatement ps2 = connection.prepareStatement(dql0);
+            byte[] data = new byte[]{
+                    0x10, 0x11, 0x12, 0x13, 0x14, 0x15
             };
-            InputStream       is   = new ByteArrayInputStream(data);
+            InputStream is = new ByteArrayInputStream(data);
 
             ps1.setBinaryStream(1, is);
             ps1.execute();
@@ -108,8 +108,8 @@ public class TestTypeConversion extends TestBase {
         try {
             String ddl0 = "DROP TABLE BITTEST IF EXISTS";
             String ddl1 =
-                "CREATE TABLE BITTEST(BITA BIT(1), BITB BIT(2), "
-                + "BITVA BIT VARYING(1), BITVB BIT VARYING(2), ID IDENTITY)";
+                    "CREATE TABLE BITTEST(BITA BIT(1), BITB BIT(2), "
+                            + "BITVA BIT VARYING(1), BITVB BIT VARYING(2), ID IDENTITY)";
 
             statement.execute(ddl0);
             statement.execute(ddl1);
@@ -120,9 +120,9 @@ public class TestTypeConversion extends TestBase {
 
         try {
             String dml0 = "insert into bittest values(?, ?, ?, ?, default)";
-            String            dql0 = "select * from bittest;";
-            PreparedStatement ps   = connection.prepareStatement(dml0);
-            byte[]            data = new byte[]{ -0x80 };
+            String dql0 = "select * from bittest;";
+            PreparedStatement ps = connection.prepareStatement(dml0);
+            byte[] data = new byte[]{-0x80};
 
             ps.setBoolean(1, true);
             ps.setBytes(2, data);
@@ -131,7 +131,7 @@ public class TestTypeConversion extends TestBase {
             ps.executeUpdate();
 
             //
-            data = new byte[]{ 0 };
+            data = new byte[]{0};
 
             ps.setBoolean(1, false);
             ps.setBytes(2, data);
@@ -180,9 +180,9 @@ public class TestTypeConversion extends TestBase {
             statement.execute(ddl1);
             statement.execute(dml1);
 
-            PreparedStatement ps      = connection.prepareStatement(dml2);
-            Object[]          objects = new Object[] {
-                "1", 3, 9
+            PreparedStatement ps = connection.prepareStatement(dml2);
+            Object[] objects = new Object[]{
+                    "1", 3, 9
             };
             Array array = connection.createArrayOf("INTEGER", objects);
 

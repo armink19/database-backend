@@ -45,7 +45,7 @@ import java.io.Reader;
 public class CharArrayWriter {
 
     protected char[] buffer;
-    protected int    count;
+    protected int count;
 
     public CharArrayWriter(int size) {
         this.buffer = new char[size];
@@ -72,7 +72,7 @@ public class CharArrayWriter {
                 break;
             }
 
-            left  -= read;
+            left -= read;
             count += read;
         }
     }
@@ -81,7 +81,7 @@ public class CharArrayWriter {
 
         buffer = new char[128];
 
-        for (;;) {
+        for (; ; ) {
             int read = reader.read(buffer, count, buffer.length - count);
 
             if (read == -1) {
@@ -116,7 +116,7 @@ public class CharArrayWriter {
                 break;
             }
 
-            left  -= read;
+            left -= read;
             count += read;
         }
 
@@ -155,7 +155,7 @@ public class CharArrayWriter {
     }
 
     public void reset(char[] buffer) {
-        count       = 0;
+        count = 0;
         this.buffer = buffer;
     }
 
@@ -183,8 +183,10 @@ public class CharArrayWriter {
 
         count = newPos;
     }
+
     /**
      * Converts input data to a string.
+     *
      * @return the string.
      */
     public String toString() {

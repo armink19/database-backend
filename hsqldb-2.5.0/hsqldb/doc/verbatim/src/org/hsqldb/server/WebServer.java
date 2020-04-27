@@ -43,32 +43,32 @@ import org.hsqldb.resources.ResourceBundleHandler;
 // campbell-burnet@users 20030510 - patch 1.7.2 - general lint removal
 
 /**
- *  The HSQLDB HTTP protocol network database server. <p>
- *
- *  WebServer has two distinct functions:<p>
- *
- *  The primary function is to allow client/server access to HSQLDB databases
- *  via the HTTP protocol. This protocol is less efficient than the HSQL
- *  protocol used by the Server class and should be used only in situations
- *  where sandboxes or firewalls between the client and the server do not
- *  allow the use of the HSQL protocol. One example is client/server access by
- *  an applet running in browsers on remote hosts and accessing the database
- *  engine on the HTTP server from which the applet originated. From version
- *  1.7.2, HTTP database connections are persistent and support transactions.
- *  Similar to HSQL connections, they should be explicitly closed to free the
- *  server resources. <p>
- *
- *  The secondary function of WebServer is to act as a simple general purpose
- *  HTTP server. It is aimed to support the minimum requirements set out by
- *  the HTTP/1.0 standard. The HEAD and GET methods can be used to query and
- *  retrieve static files from the HTTP server.<p>
- *
- *  Both the database server and HTTP server functions of WebServer can be
- *  configured with the webserver.properties file. It contains entries for the
- *  database server similar to those for the HSQL protocol Server class. In
- *  addition, a list mapping different file endings to their mime types may be
- *  included in this file. (fredt@users) <p>
- *
+ * The HSQLDB HTTP protocol network database server. <p>
+ * <p>
+ * WebServer has two distinct functions:<p>
+ * <p>
+ * The primary function is to allow client/server access to HSQLDB databases
+ * via the HTTP protocol. This protocol is less efficient than the HSQL
+ * protocol used by the Server class and should be used only in situations
+ * where sandboxes or firewalls between the client and the server do not
+ * allow the use of the HSQL protocol. One example is client/server access by
+ * an applet running in browsers on remote hosts and accessing the database
+ * engine on the HTTP server from which the applet originated. From version
+ * 1.7.2, HTTP database connections are persistent and support transactions.
+ * Similar to HSQL connections, they should be explicitly closed to free the
+ * server resources. <p>
+ * <p>
+ * The secondary function of WebServer is to act as a simple general purpose
+ * HTTP server. It is aimed to support the minimum requirements set out by
+ * the HTTP/1.0 standard. The HEAD and GET methods can be used to query and
+ * retrieve static files from the HTTP server.<p>
+ * <p>
+ * Both the database server and HTTP server functions of WebServer can be
+ * configured with the webserver.properties file. It contains entries for the
+ * database server similar to those for the HSQL protocol Server class. In
+ * addition, a list mapping different file endings to their mime types may be
+ * included in this file. (fredt@users) <p>
+ * <p>
  * From the command line, the options are as follows:
  * <pre>
  * +-----------------+-------------+----------+------------------------------+
@@ -84,8 +84,8 @@ import org.hsqldb.resources.ResourceBundleHandler;
  * | --no_system_exit| true|false  | false    | do not issue System.exit()   |
  * +-----------------+-------------+----------+------------------------------+
  * </pre>
- *
- *  Example of the webserver.properties file:
+ * <p>
+ * Example of the webserver.properties file:
  *
  * <pre>
  * server.port=80
@@ -123,18 +123,18 @@ public class WebServer extends Server {
      * HTTP error pages.
      */
     static int webBundleHandle =
-        ResourceBundleHandler.getBundleHandle("webserver-pages", null);
+            ResourceBundleHandler.getBundleHandle("webserver-pages", null);
 
     public WebServer() {
         super(ServerConstants.SC_PROTOCOL_HTTP);
     }
 
     /**
-     *  Starts a new WebServer.
+     * Starts a new WebServer.
      *
-     * @param  args the "command line" parameters with which to start
-     *      the WebServer.  "-?" will cause the command line arguments
-     *      help to be printed to the standard output
+     * @param args the "command line" parameters with which to start
+     *             the WebServer.  "-?" will cause the command line arguments
+     *             help to be printed to the standard output
      */
     public static void main(String[] args) {
 
@@ -156,18 +156,18 @@ public class WebServer extends Server {
         String propsExtension = "";
 
         if (propsPath == null) {
-            propsPath      = "webserver";
+            propsPath = "webserver";
             propsExtension = ".properties";
         }
 
         propsPath = FileUtil.getFileUtil().canonicalOrAbsolutePath(propsPath);
 
         ServerProperties fileProps = ServerConfiguration.getPropertiesFromFile(
-            ServerConstants.SC_PROTOCOL_HTTP, propsPath, propsExtension);
+                ServerConstants.SC_PROTOCOL_HTTP, propsPath, propsExtension);
         ServerProperties props =
-            fileProps == null
-            ? new ServerProperties(ServerConstants.SC_PROTOCOL_HTTP)
-            : fileProps;
+                fileProps == null
+                        ? new ServerProperties(ServerConstants.SC_PROTOCOL_HTTP)
+                        : fileProps;
 
         props.addProperties(argProps);
         ServerConfiguration.translateDefaultDatabaseProperty(props);
@@ -196,7 +196,7 @@ public class WebServer extends Server {
 
         if (fileProps != null) {
             server.print("Loaded properties from [" + propsPath
-                         + ".properties]");
+                    + ".properties]");
         } else {
             server.print("Could not load properties from file");
             server.print("Using cli/default properties only");
@@ -213,7 +213,7 @@ public class WebServer extends Server {
      */
     public String getDefaultWebPage() {
         return serverProperties.getProperty(
-            ServerProperties.sc_key_web_default_page);
+                ServerProperties.sc_key_web_default_page);
     }
 
     /**
@@ -224,12 +224,12 @@ public class WebServer extends Server {
      */
     public String getHelpString() {
         return ResourceBundleHandler.getString(serverBundleHandle,
-                                               "webserver.help");
+                "webserver.help");
     }
 
     /**
      * Retrieves this server's product name.  <p>
-     *
+     * <p>
      * Typically, this will be something like: "HSQLDB xxx server".
      *
      * @return the product name of this server
@@ -246,7 +246,7 @@ public class WebServer extends Server {
      */
     public String getProtocol() {
         return isTls() ? "HTTPS"
-                       : "HTTP";
+                : "HTTP";
     }
 
     /**

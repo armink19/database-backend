@@ -47,16 +47,16 @@ import java.sql.*;
  */
 public class TestJDBCSavepoints extends TestCase {
 
-//  You change the url and serverProps to reflect your preferred settings
+    //  You change the url and serverProps to reflect your preferred settings
     // String serverProps = "database.0=mem:test;dbname.0=;silent=false;trace=true" // debugging
     String serverProps =
-        "database.0=mem:test;dbname.0=;silent=true;trace=false";
+            "database.0=mem:test;dbname.0=;silent=true;trace=false";
     String url = "jdbc:hsqldb:hsql://localhost";
 
     // String     url = "jdbc:hsqldb:http://localhost";
-    String     user;
-    String     password;
-    Statement  stmt;
+    String user;
+    String password;
+    Statement stmt;
     Connection conn1;
     Connection conn2;
 
@@ -73,12 +73,12 @@ public class TestJDBCSavepoints extends TestCase {
     protected void setUp() throws Exception {
 
         super.setUp();
-        user     = "sa";
+        user = "sa";
         password = "";
-        stmt     = null;
-        conn1    = null;
-        conn2    = null;
-        server   = new Server();
+        stmt = null;
+        conn1 = null;
+        conn2 = null;
+        server = new Server();
 
 //        server = new WebServer();
         server.putPropertiesFromString(serverProps);
@@ -89,7 +89,7 @@ public class TestJDBCSavepoints extends TestCase {
 
             conn1 = DriverManager.getConnection(url, user, password);
             conn2 = DriverManager.getConnection(url, user, password);
-            stmt  = conn1.createStatement();
+            stmt = conn1.createStatement();
         } catch (Exception e) {
 
             //e.printStackTrace();
@@ -121,19 +121,19 @@ public class TestJDBCSavepoints extends TestCase {
 
     public void testJDBCSavepoints() throws Exception {
 
-        String            sql;
-        String            msg;
-        int               i;
+        String sql;
+        String msg;
+        int i;
         PreparedStatement ps;
-        ResultSet         rs;
-        Savepoint         sp1;
-        Savepoint         sp2;
-        Savepoint         sp3;
-        Savepoint         sp4;
-        Savepoint         sp5;
-        Savepoint         sp6;
-        Savepoint         sp7;
-        int               rowcount = 0;
+        ResultSet rs;
+        Savepoint sp1;
+        Savepoint sp2;
+        Savepoint sp3;
+        Savepoint sp4;
+        Savepoint sp5;
+        Savepoint sp6;
+        Savepoint sp7;
+        int rowcount = 0;
 
         sql = "drop table t if exists";
 
@@ -163,7 +163,7 @@ public class TestJDBCSavepoints extends TestCase {
         conn1.setAutoCommit(false);
 
         sql = "insert into t values(?,?,?,?)";
-        ps  = conn1.prepareStatement(sql);
+        ps = conn1.prepareStatement(sql);
 
         ps.setString(2, "Mary");
         ps.setString(3, "Peterson-Clancy");
@@ -211,7 +211,7 @@ public class TestJDBCSavepoints extends TestCase {
         sp5 = conn1.setSavepoint("savepoint5");
         sp6 = conn1.setSavepoint("savepoint6");
         sp7 = conn1.setSavepoint("savepoint7");
-        rs  = stmt.executeQuery("select count(*) from t");
+        rs = stmt.executeQuery("select count(*) from t");
 
         rs.next();
 
@@ -226,7 +226,8 @@ public class TestJDBCSavepoints extends TestCase {
 
         try {
             assertEquals(msg, 50, rowcount);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         conn2.setAutoCommit(false);
         conn2.setSavepoint("savepoint1");
@@ -240,7 +241,8 @@ public class TestJDBCSavepoints extends TestCase {
         try {
             conn2.releaseSavepoint(sp2);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //-- test 4 : A JDBC Savepoint shall be invalid if used to roll back to
         //            an SQL-savepoint in an SQL-session other than that of the
@@ -249,24 +251,26 @@ public class TestJDBCSavepoints extends TestCase {
             conn2.rollback(sp1);
 
             msg = "succesful rollback to savepoint on "
-                  + "non-originating connection";
+                    + "non-originating connection";
 
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //-- test 5 : Direct execution of a <release savepoint> statement shall
         //            not fail to release an existing indicated savepoint,
         //            regardless of how the indicated savepoint was created
         msg = "direct execution of <release savepoint> statement failed to "
-              + "release JDBC-created SQL-savepoint with identical savepoint name";
+                + "release JDBC-created SQL-savepoint with identical savepoint name";
 
         try {
             conn2.createStatement().executeUpdate(
-                "release savepoint \"savepoint2\"");
+                    "release savepoint \"savepoint2\"");
         } catch (Exception e) {
             try {
                 assertTrue(msg, false);
-            } catch (Exception e2) {}
+            } catch (Exception e2) {
+            }
         }
 
         //-- test 6 : Direct execution of a <rollback to savepoint> statement
@@ -274,18 +278,19 @@ public class TestJDBCSavepoints extends TestCase {
         //            savepoint due and only due to how the indicated savepoint
         //            was created
         msg = "direct execution of <rollback to savepoint> statement failed to "
-              + "roll back to existing JDBC-created SQL-savepoint with identical "
-              + "savepoint name";
+                + "roll back to existing JDBC-created SQL-savepoint with identical "
+                + "savepoint name";
 
         try {
             conn2.createStatement().executeUpdate(
-                "rollback to savepoint \"savepoint1\"");
+                    "rollback to savepoint \"savepoint1\"");
         } catch (Exception e) {
             e.printStackTrace();
 
             try {
                 assertTrue(msg, false);
-            } catch (Exception e2) {}
+            } catch (Exception e2) {
+            }
         }
 
         conn1.releaseSavepoint(sp6);
@@ -296,7 +301,8 @@ public class TestJDBCSavepoints extends TestCase {
         try {
             conn1.releaseSavepoint(sp6);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //-- test 8 : Releasing an SQL-savepoint shall destroy all subsequent SQL-
         //            savepoints in the same savepoint level
@@ -305,7 +311,8 @@ public class TestJDBCSavepoints extends TestCase {
         try {
             conn1.releaseSavepoint(sp7);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //-- test 9 : Releasing an SQL-savepoint shall not affect preceding
         //            savepoints
@@ -316,7 +323,8 @@ public class TestJDBCSavepoints extends TestCase {
         } catch (Exception e) {
             try {
                 assertTrue(msg, false);
-            } catch (Exception e2) {}
+            } catch (Exception e2) {
+            }
         }
 
         conn1.rollback(sp4);
@@ -335,7 +343,8 @@ public class TestJDBCSavepoints extends TestCase {
 
         try {
             assertEquals(msg, 40, rowcount);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //-- test 11 : An SQL-savepoint shall be destroyed in the
         //            process of rolling back to that savepoint
@@ -344,7 +353,8 @@ public class TestJDBCSavepoints extends TestCase {
         try {
             conn1.rollback(sp4);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         conn1.rollback(sp3);
 
@@ -362,7 +372,8 @@ public class TestJDBCSavepoints extends TestCase {
 
         try {
             assertEquals(msg, 30, rowcount);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         //-- test 13 : An SQL-savepoint shall be destroyed in the
         //            process of rolling back to that savepoint
@@ -371,7 +382,8 @@ public class TestJDBCSavepoints extends TestCase {
         try {
             conn1.releaseSavepoint(sp3);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         conn1.rollback(sp1);
 
@@ -379,12 +391,13 @@ public class TestJDBCSavepoints extends TestCase {
         //            shall be destroyed by the process of rolling back to
         //            a preceeding savepoint (in the same savepoint level)
         msg = "savepoint rolled back without raising an exception after "
-              + "rollback to a preceeding savepoint";
+                + "rollback to a preceeding savepoint";
 
         try {
             conn1.rollback(sp2);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         conn1.rollback();
 
@@ -392,12 +405,13 @@ public class TestJDBCSavepoints extends TestCase {
         //            shall be destroyed by the process of
         //            rolling back the active transaction
         msg = "savepoint released succesfully when it should have been "
-              + "destroyed by a full rollback";
+                + "destroyed by a full rollback";
 
         try {
             conn1.releaseSavepoint(sp1);
             assertTrue(msg, false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         conn1.setAutoCommit(false);
 
@@ -480,12 +494,12 @@ public class TestJDBCSavepoints extends TestCase {
 
     public void testJDBCAutoSavepoints() throws Exception {
 
-        String            sql;
-        int               i;
+        String sql;
+        int i;
         PreparedStatement ps;
-        ResultSet         rs;
-        Savepoint         sp1;
-        int               rowcount = 0;
+        ResultSet rs;
+        Savepoint sp1;
+        int rowcount = 0;
 
         sql = "drop table t if exists";
 
@@ -499,7 +513,7 @@ public class TestJDBCSavepoints extends TestCase {
         conn1.setAutoCommit(false);
 
         sql = "insert into t values(?,?,?,?)";
-        ps  = conn1.prepareStatement(sql);
+        ps = conn1.prepareStatement(sql);
 
         ps.setString(2, "Mary");
         ps.setString(3, "Peterson-Clancy");
@@ -537,13 +551,13 @@ public class TestJDBCSavepoints extends TestCase {
      */
     public static void main(String[] args) throws Exception {
 
-        TestResult            result;
-        TestCase              test;
+        TestResult result;
+        TestCase test;
         java.util.Enumeration failures;
-        int                   count;
+        int count;
 
         result = new TestResult();
-        test   = new TestJDBCSavepoints("testJDBCSavepoints");
+        test = new TestJDBCSavepoints("testJDBCSavepoints");
 
         test.run(result);
 

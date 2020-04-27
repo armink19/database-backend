@@ -1,11 +1,9 @@
-package com.database.demo.controller;
+package lu.waterhackers.map.controller;
 
-import com.database.demo.exception.ResourceNotFoundException;
-import com.database.demo.model.Sample;
-import com.database.demo.repository.SampleRepository;
+import lu.waterhackers.map.exception.ResourceNotFoundException;
+import lu.waterhackers.map.model.Sample;
+import lu.waterhackers.map.repository.SampleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +14,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1")
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-@ComponentScan(basePackageClasses = { JpaBaseConfiguration.class})
+
 
 public class SampleController {
     @Autowired
-    private  SampleRepository sampleRepository;
-
-
+    private SampleRepository sampleRepository;
 
 
     @GetMapping("/samples")

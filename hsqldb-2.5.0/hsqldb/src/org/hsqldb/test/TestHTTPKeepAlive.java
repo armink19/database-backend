@@ -79,9 +79,9 @@ import java.util.Enumeration;
  */
 public class TestHTTPKeepAlive extends TestBase {
 
-    static Integer     failCount    = 0;
-    static Integer     executeCount = 0;
-    private Statement  stmnt;
+    static Integer failCount = 0;
+    static Integer executeCount = 0;
+    private Statement stmnt;
     private Connection connection;
 
     public TestHTTPKeepAlive(String name) {
@@ -93,10 +93,10 @@ public class TestHTTPKeepAlive extends TestBase {
         super.setUp();
 
         connection = newConnection();
-        stmnt      = connection.createStatement();
+        stmnt = connection.createStatement();
 
         stmnt.execute(
-            "CREATE TABLE IF NOT EXISTS link_table (id INTEGER PRIMARY KEY NOT NULL, other TINYINT NOT NULL)");
+                "CREATE TABLE IF NOT EXISTS link_table (id INTEGER PRIMARY KEY NOT NULL, other TINYINT NOT NULL)");
         stmnt.execute("INSERT INTO link_table VALUES ((0, 1),(1, 2))");
     }
 
@@ -163,7 +163,8 @@ public class TestHTTPKeepAlive extends TestBase {
                         }
                     }
                 }
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {
+            }
         }
     }
 
@@ -190,20 +191,21 @@ public class TestHTTPKeepAlive extends TestBase {
             t2.join();
             t3.join();
             t4.join();
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
 
         System.out.println("testKeepAlive completed " + executeCount
-                           + "connections.\n");
+                + "connections.\n");
     }
 
     public static void main(String[] argv) {
 
-        TestResult result        = new TestResult();
-        TestCase   testKeepAlive = new TestHTTPKeepAlive("testKeepAlive");
+        TestResult result = new TestResult();
+        TestCase testKeepAlive = new TestHTTPKeepAlive("testKeepAlive");
 
         testKeepAlive.run(result);
         System.out.println("TestKeepAlive error count: "
-                           + result.failureCount());
+                + result.failureCount());
 
         Enumeration e = result.failures();
 

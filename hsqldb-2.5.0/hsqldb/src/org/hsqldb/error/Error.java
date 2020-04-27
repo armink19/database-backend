@@ -49,18 +49,18 @@ import java.lang.reflect.Field;
 public class Error {
 
     //
-    public static boolean TRACE          = false;
+    public static boolean TRACE = false;
     public static boolean TRACESYSTEMOUT = false;
 
     //
     private static final String defaultMessage = "S1000 General error";
-    private static final String errPropsName   = "sql-state-messages";
+    private static final String errPropsName = "sql-state-messages";
     private static final int bundleHandle =
-        ResourceBundleHandler.getBundleHandle(errPropsName, null);
-    private static final String MESSAGE_TAG      = "$$";
-    private static final int    SQL_STATE_DIGITS = 5;
-    private static final int    SQL_CODE_DIGITS  = 4;
-    private static final int    ERROR_CODE_BASE  = 11;
+            ResourceBundleHandler.getBundleHandle(errPropsName, null);
+    private static final String MESSAGE_TAG = "$$";
+    private static final int SQL_STATE_DIGITS = 5;
+    private static final int SQL_CODE_DIGITS = 4;
+    private static final int ERROR_CODE_BASE = 11;
 
     public static RuntimeException runtimeError(int code, String add) {
 
@@ -82,7 +82,7 @@ public class Error {
         }
 
         return new HsqlException(t, s.substring(SQL_STATE_DIGITS + 1),
-                                 s.substring(0, SQL_STATE_DIGITS), -code);
+                s.substring(0, SQL_STATE_DIGITS), -code);
     }
 
     public static HsqlException parseError(int code, String add,
@@ -96,11 +96,11 @@ public class Error {
 
         if (lineNumber > 1) {
             add = getMessage(ErrorCode.M_parse_line);
-            s   = s + " :" + add + lineNumber;
+            s = s + " :" + add + lineNumber;
         }
 
         return new HsqlException(null, s.substring(SQL_STATE_DIGITS + 1),
-                                 s.substring(0, SQL_STATE_DIGITS), -code);
+                s.substring(0, SQL_STATE_DIGITS), -code);
     }
 
     public static HsqlException error(int code) {
@@ -112,7 +112,7 @@ public class Error {
         String message = getMessage(code, 0, null);
 
         return new HsqlException(t, message.substring(0, SQL_STATE_DIGITS),
-                                 -code);
+                -code);
     }
 
     /**
@@ -121,22 +121,21 @@ public class Error {
      * $$ markers for each context variable. Context variables are supplied in
      * the add parameters.
      *
-     * @param code      main error code
-     * @param subCode   sub error code (if 0 => no subMessage!)
-     * @param   add     optional parameters
-     *
+     * @param code    main error code
+     * @param subCode sub error code (if 0 => no subMessage!)
+     * @param add     optional parameters
      * @return an <code>HsqlException</code>
      */
     public static HsqlException error(Throwable t, int code, int subCode,
                                       final Object[] add) {
 
         String message = getMessage(code, subCode, add);
-        int    sqlCode = subCode < ERROR_CODE_BASE ? code
-                                                   : subCode;
+        int sqlCode = subCode < ERROR_CODE_BASE ? code
+                : subCode;
 
         return new HsqlException(t, message.substring(SQL_STATE_DIGITS + 1),
-                                 message.substring(0, SQL_STATE_DIGITS),
-                                 -sqlCode);
+                message.substring(0, SQL_STATE_DIGITS),
+                -sqlCode);
     }
 
     public static HsqlException parseError(int code, int subCode,
@@ -152,12 +151,12 @@ public class Error {
         }
 
         int sqlCode = subCode < ERROR_CODE_BASE ? code
-                                                : subCode;
+                : subCode;
 
         return new HsqlException(null,
-                                 message.substring(SQL_STATE_DIGITS + 1),
-                                 message.substring(0, SQL_STATE_DIGITS),
-                                 -sqlCode);
+                message.substring(SQL_STATE_DIGITS + 1),
+                message.substring(0, SQL_STATE_DIGITS),
+                -sqlCode);
     }
 
     public static HsqlException error(int code, int code2) {
@@ -166,8 +165,9 @@ public class Error {
 
     /**
      * For SIGNAL and RESIGNAL
-     * @see HsqlException#HsqlException(Throwable,String, String, int)
+     *
      * @return an <code>HsqlException</code>
+     * @see HsqlException#HsqlException(Throwable, String, String, int)
      */
     public static HsqlException error(String message, String sqlState) {
 
@@ -190,16 +190,15 @@ public class Error {
      * $$ markers for each context variable. Context variables are supplied in
      * the add parameter. (by Loic Lefevre)
      *
-     * @param message  message string
-     * @param add      optional parameters
-     *
+     * @param message message string
+     * @param add     optional parameters
      * @return an <code>HsqlException</code>
      */
     private static String insertStrings(String message, Object[] add) {
 
-        StringBuilder sb        = new StringBuilder(message.length() + 32);
-        int           lastIndex = 0;
-        int           escIndex  = message.length();
+        StringBuilder sb = new StringBuilder(message.length() + 32);
+        int lastIndex = 0;
+        int escIndex = message.length();
 
         // removed test: i < add.length
         // because if mainErrorMessage is equal to "blabla $$"
@@ -214,7 +213,7 @@ public class Error {
 
             sb.append(message, lastIndex, escIndex);
             sb.append(add[i] == null ? "null exception message"
-                                     : add[i].toString());
+                    : add[i].toString());
 
             lastIndex = escIndex + MESSAGE_TAG.length();
         }
@@ -231,8 +230,8 @@ public class Error {
      * This method is be used when throwing exception other
      * than <code>HsqlException</code>.
      *
-     * @param errorCode    the error code associated to the error message
-     * @return  the error message associated with the error code
+     * @param errorCode the error code associated to the error message
+     * @return the error message associated with the error code
      */
     public static String getMessage(final int errorCode) {
         return getMessage(errorCode, 0, null);
@@ -242,8 +241,8 @@ public class Error {
      * Returns the error SQL STATE sting given the error code.<br/>
      * This method is be used when throwing exception based on other exceptions.
      *
-     * @param errorCode    the error code associated to the error message
-     * @return  the error message associated with the error code
+     * @param errorCode the error code associated to the error message
+     * @return the error message associated with the error code
      */
     public static String getStateString(final int errorCode) {
         return getMessage(errorCode, 0, null).substring(0, SQL_STATE_DIGITS);
@@ -253,9 +252,9 @@ public class Error {
      * Returns the error message given the error code.<br/> This method is used
      * when throwing exception other than <code>HsqlException</code>.
      *
-     * @param code the code for the error message
+     * @param code    the code for the error message
      * @param subCode the code for the addon message
-     * @param add value(s) to use to replace the placeholer(s)
+     * @param add     value(s) to use to replace the placeholer(s)
      * @return the error message associated with the error code
      */
     public static String getMessage(final int code, int subCode,
@@ -277,7 +276,7 @@ public class Error {
     private static String getResourceString(int code) {
 
         String key = StringUtil.toZeroPaddedString(code, SQL_CODE_DIGITS,
-            SQL_CODE_DIGITS);
+                SQL_CODE_DIGITS);
         String string = ResourceBundleHandler.getString(bundleHandle, key);
 
         if (string == null) {
@@ -293,7 +292,6 @@ public class Error {
 
     /**
      * Used to print messages to System.out
-     *
      *
      * @param message message to print
      */
@@ -316,7 +314,8 @@ public class Error {
                     return fields[i].getInt(ErrorCode.class);
                 }
             }
-        } catch (IllegalAccessException e) {}
+        } catch (IllegalAccessException e) {
+        }
 
         return -1;
     }

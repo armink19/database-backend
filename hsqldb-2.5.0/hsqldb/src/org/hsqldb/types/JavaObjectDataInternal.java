@@ -39,7 +39,7 @@ import java.io.Serializable;
 
 /**
  * Represents of an instance of an OTHER field value for direct storage.<p>
- *
+ * <p>
  * Objects need not implement Serializable to be stored in the mem: database.
  * They are stored as-is and reflect any changes to the stored Objects by the
  * application program.
@@ -55,7 +55,7 @@ public class JavaObjectDataInternal extends JavaObjectData {
     /**
      * Constructor used inside the engine when an already serialized
      * Object is read from a file.
-     *
+     * <p>
      * If the Object is not serializable, this method throws an exception.
      */
     public JavaObjectDataInternal(byte[] data) {
@@ -80,7 +80,8 @@ public class JavaObjectDataInternal extends JavaObjectData {
             if (object instanceof Serializable) {
                 return InOutUtil.serialize((Serializable) object);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return new byte[]{};
     }
@@ -93,7 +94,8 @@ public class JavaObjectDataInternal extends JavaObjectData {
 
                 return data.length;
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return 0;
     }

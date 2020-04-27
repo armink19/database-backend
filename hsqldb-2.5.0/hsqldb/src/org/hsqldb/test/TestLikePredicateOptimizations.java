@@ -55,13 +55,13 @@ public class TestLikePredicateOptimizations extends TestBase {
     /* Implements the TestLikePredicate test */
     public void test() throws Exception {
 
-        Connection        conn = newConnection();
-        Statement         stmt = conn.createStatement();
+        Connection conn = newConnection();
+        Statement stmt = conn.createStatement();
         PreparedStatement pstmt;
-        ResultSet         rs;
-        String            sql;
-        int               expectedCount;
-        int               actualCount;
+        ResultSet rs;
+        String sql;
+        int expectedCount;
+        int actualCount;
 
         stmt.execute("drop table test if exists");
         stmt.execute("drop table empty if exists");
@@ -86,7 +86,7 @@ public class TestLikePredicateOptimizations extends TestBase {
 
         stmt.execute(sql);
 
-        sql   = "insert into test values(?)";
+        sql = "insert into test values(?)";
         pstmt = conn.prepareStatement(sql);
 
         for (int i = 0; i < 10000; i++) {
@@ -106,7 +106,7 @@ public class TestLikePredicateOptimizations extends TestBase {
             countOne++;
         }
 
-        sql   = "select TOP 20 * from test where name like ? order by name";
+        sql = "select TOP 20 * from test where name like ? order by name";
         pstmt = conn.prepareStatement(sql);
 
         pstmt.setString(1, "%me4%");
@@ -117,7 +117,7 @@ public class TestLikePredicateOptimizations extends TestBase {
             countTwo++;
         }
 
-        assertEquals("\"" + sql + "\"", countOne, countTwo );
+        assertEquals("\"" + sql + "\"", countOne, countTwo);
 
 //
         sql = "select count(*) from test where name = (select max(name) from empty)";
@@ -128,7 +128,7 @@ public class TestLikePredicateOptimizations extends TestBase {
         expectedCount = rs.getInt(1);
         sql = "select count(*) from test where name like (select min(name) from empty)";
         pstmt = conn.prepareStatement(sql);
-        rs    = pstmt.executeQuery();
+        rs = pstmt.executeQuery();
 
         rs.next();
 
@@ -151,14 +151,14 @@ public class TestLikePredicateOptimizations extends TestBase {
 
 // --
         sql = "select count(*) from test where name = ''";
-        rs  = stmt.executeQuery(sql);
+        rs = stmt.executeQuery(sql);
 
         rs.next();
 
         expectedCount = rs.getInt(1);
-        sql           = "select count(*) from test where name like ''";
-        pstmt         = conn.prepareStatement(sql);
-        rs            = pstmt.executeQuery();
+        sql = "select count(*) from test where name like ''";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
         rs.next();
 
@@ -183,14 +183,14 @@ public class TestLikePredicateOptimizations extends TestBase {
 // --
 // --
         sql = "select count(*) from test where name is not null";
-        rs  = stmt.executeQuery(sql);
+        rs = stmt.executeQuery(sql);
 
         rs.next();
 
         expectedCount = rs.getInt(1);
-        sql           = "select count(*) from test where name like '%'";
-        pstmt         = conn.prepareStatement(sql);
-        rs            = pstmt.executeQuery();
+        sql = "select count(*) from test where name like '%'";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
         rs.next();
 
@@ -205,9 +205,9 @@ public class TestLikePredicateOptimizations extends TestBase {
         rs.next();
 
         expectedCount = rs.getInt(1);
-        sql           = "select count(*) from test where name like 'name44%'";
-        pstmt         = conn.prepareStatement(sql);
-        rs            = pstmt.executeQuery();
+        sql = "select count(*) from test where name like 'name44%'";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
         rs.next();
 
@@ -222,9 +222,9 @@ public class TestLikePredicateOptimizations extends TestBase {
         rs.next();
 
         expectedCount = rs.getInt(1);
-        sql           = "select count(*) from test where name like 'name4%5'";
-        pstmt         = conn.prepareStatement(sql);
-        rs            = pstmt.executeQuery();
+        sql = "select count(*) from test where name like 'name4%5'";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
         rs.next();
 
@@ -233,14 +233,14 @@ public class TestLikePredicateOptimizations extends TestBase {
         assertEquals("\"" + sql + "\"", expectedCount, actualCount);
 
         sql = "select count(*) from test";
-        rs  = stmt.executeQuery(sql);
+        rs = stmt.executeQuery(sql);
 
         rs.next();
 
         expectedCount = rs.getInt(1);
-        sql           = "select count(*) from test where name like '%'";
-        pstmt         = conn.prepareStatement(sql);
-        rs            = pstmt.executeQuery();
+        sql = "select count(*) from test where name like '%'";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
         rs.next();
 
@@ -249,22 +249,22 @@ public class TestLikePredicateOptimizations extends TestBase {
         assertEquals("\"" + sql + "\"", expectedCount, actualCount);
 
 // --
-        String result  = "true";
+        String result = "true";
         String presult = "false";
 
         stmt.execute("drop table test1 if exists");
 
-        sql   = "CREATE TABLE test1 (col CHAR(30))";
+        sql = "CREATE TABLE test1 (col CHAR(30))";
         pstmt = conn.prepareStatement(sql);
 
         pstmt.execute();
 
-        sql   = "INSERT INTO test1 (col) VALUES ('one')";
+        sql = "INSERT INTO test1 (col) VALUES ('one')";
         pstmt = conn.prepareStatement(sql);
 
         pstmt.execute();
 
-        sql   = "SELECT * FROM test1 WHERE ( col LIKE ? )";
+        sql = "SELECT * FROM test1 WHERE ( col LIKE ? )";
         pstmt = conn.prepareStatement(sql);
 
         pstmt.setString(1, "on%");
@@ -275,9 +275,9 @@ public class TestLikePredicateOptimizations extends TestBase {
             presult = rs.getString("COL");
         }
 
-        sql   = "SELECT * FROM test1 WHERE ( col LIKE 'one' )";
+        sql = "SELECT * FROM test1 WHERE ( col LIKE 'one' )";
         pstmt = conn.prepareStatement(sql);
-        rs    = pstmt.executeQuery();
+        rs = pstmt.executeQuery();
 
         if (rs.next()) {
             result = rs.getString("COL");
@@ -285,10 +285,10 @@ public class TestLikePredicateOptimizations extends TestBase {
 
         assertEquals("\"" + sql + "\"", result, presult);
 
-        sql   = "SELECT * FROM test1 WHERE ( col LIKE 'one' ESCAPE CAST(? AS CHAR) )";
+        sql = "SELECT * FROM test1 WHERE ( col LIKE 'one' ESCAPE CAST(? AS CHAR) )";
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, "%");
-        rs    = pstmt.executeQuery();
+        rs = pstmt.executeQuery();
 
         if (rs.next()) {
             result = rs.getString("COL");
@@ -296,10 +296,10 @@ public class TestLikePredicateOptimizations extends TestBase {
 
         assertEquals("\"" + sql + "\"", result, presult);
 
-        sql   = "SELECT * FROM test1 WHERE ( col LIKE 'one' ESCAPE ? )";
+        sql = "SELECT * FROM test1 WHERE ( col LIKE 'one' ESCAPE ? )";
         pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, "%");
-        rs    = pstmt.executeQuery();
+        rs = pstmt.executeQuery();
 
         if (rs.next()) {
             result = rs.getString("COL");
@@ -311,20 +311,20 @@ public class TestLikePredicateOptimizations extends TestBase {
     /* Runs TestLikePredicate test from the command line*/
     public static void main(String[] args) throws Exception {
 
-        TestResult            result;
-        TestCase              test;
+        TestResult result;
+        TestCase test;
         java.util.Enumeration failures;
-        int                   count;
+        int count;
 
         result = new TestResult();
-        test   = new TestLikePredicateOptimizations("test");
+        test = new TestLikePredicateOptimizations("test");
 
         test.run(result);
 
         count = result.failureCount();
 
         System.out.println("TestLikePredicateOptimizations failure count: "
-                           + count);
+                + count);
 
         failures = result.failures();
 

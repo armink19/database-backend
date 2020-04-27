@@ -44,41 +44,38 @@ import java.util.StringTokenizer;
  * A list of ACL permit and deny entries with a permitAccess method
  * which tells whether candidate addresses are permitted or denied
  * by this ACL list.
- * <P>
+ * <p>
  * The ACL file is reloaded whenever a modification to it is detected.
  * If you copy in a file with an older file date, you will need to touch it.
- * <P>
+ * <p>
  * The public runtime method is permitAccess().
  * The public setup method is the constructor.
- * <P>
+ * <p>
  * Each non-comment line in the ACL file must be a rule of the format:
  * <PRE><CODE>
- *     {allow|deny} &lt;ip_address&gt;[/significant-bits]
+ * {allow|deny} &lt;ip_address&gt;[/significant-bits]
  * </CODE></PRE>
  * For example
  * <PRE><CODE>
- *     allow ahostname
- *     deny ahost.domain.com
- *     allow 127.0.0.1
- *     allow 2001:db8::/32
+ * allow ahostname
+ * deny ahost.domain.com
+ * allow 127.0.0.1
+ * allow 2001:db8::/32
  * </CODE></PRE>
  *
- * <P>
+ * <p>
  * In order to detect bit specification mistakes, we require that
  * non-significant bits be zero in the values.
  * An undesirable consequence of this is, you can't use a specification like
  * the following to mean "all of the hosts on the same network as x.admc.com":
  * <PRE><CODE>
- *     allow x.admc.com/24
+ * allow x.admc.com/24
  * </CODE></PRE>
- *
- *
- *
- * @see #ServerAcl(File)
- * @see #permitAccess
  *
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @version 2.3.0
+ * @see #ServerAcl(File)
+ * @see #permitAccess
  * @since 2.0.0
  **/
 public final class ServerAcl {
@@ -90,11 +87,11 @@ public final class ServerAcl {
         }
     }
 
-    protected static final byte[] ALL_SET_4BYTES  = new byte[] {
-        -1, -1, -1, -1
+    protected static final byte[] ALL_SET_4BYTES = new byte[]{
+            -1, -1, -1, -1
     };
-    protected static final byte[] ALL_SET_16BYTES = new byte[] {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+    protected static final byte[] ALL_SET_16BYTES = new byte[]{
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
     };
 
     // -1 is all-bits-on in 2's-complement for signed values.
@@ -104,7 +101,7 @@ public final class ServerAcl {
 
         private byte[] value;
         private byte[] mask;    // These are the bits in candidate which must match
-        private int    bitBlockSize;
+        private int bitBlockSize;
         public boolean allow;
 
         public AclEntry(byte[] value, int bitBlockSize,
@@ -114,36 +111,36 @@ public final class ServerAcl {
 
             switch (value.length) {
 
-                case 4 :
+                case 4:
                     allOn = ALL_SET_4BYTES;
                     break;
 
-                case 16 :
+                case 16:
                     allOn = ALL_SET_16BYTES;
                     break;
 
-                default :
+                default:
                     throw new IllegalArgumentException(
-                        "Only 4 and 16 bytes supported, not " + value.length);
+                            "Only 4 and 16 bytes supported, not " + value.length);
             }
 
             if (bitBlockSize > value.length * 8) {
                 throw new IllegalArgumentException(
-                    "Specified " + bitBlockSize
-                    + " significant bits, but value only has "
-                    + (value.length * 8) + " bits");
+                        "Specified " + bitBlockSize
+                                + " significant bits, but value only has "
+                                + (value.length * 8) + " bits");
             }
 
             this.bitBlockSize = bitBlockSize;
-            this.value        = value;
+            this.value = value;
             mask = BitMap.leftShift(allOn, value.length * 8 - bitBlockSize);
 
             if (mask.length != value.length) {
                 throw new RuntimeException(
-                    "Basic program assertion failed.  "
-                    + "Generated mask length " + mask.length
-                    + " (bytes) does not match given value length "
-                    + value.length + " (bytes).");
+                        "Basic program assertion failed.  "
+                                + "Generated mask length " + mask.length
+                                + " (bytes) does not match given value length "
+                                + value.length + " (bytes).");
             }
 
             this.allow = allow;
@@ -156,10 +153,10 @@ public final class ServerAcl {
             StringBuilder sb = new StringBuilder("Addrs ");
 
             sb.append((value.length == 16)
-                      ? ("[" + ServerAcl.colonNotation(value) + ']')
-                      : ServerAcl.dottedNotation(value));
+                    ? ("[" + ServerAcl.colonNotation(value) + ']')
+                    : ServerAcl.dottedNotation(value));
             sb.append("/" + bitBlockSize + ' ' + (allow ? "ALLOW"
-                                                        : "DENY"));
+                    : "DENY"));
 
             return sb.toString();
         }
@@ -171,23 +168,22 @@ public final class ServerAcl {
             }
 
             return !BitMap.hasAnyBitSet(BitMap.xor(value,
-                                                   BitMap.and(candidate,
-                                                       mask)));
+                    BitMap.and(candidate,
+                            mask)));
         }
 
         public void validateMask() throws AclFormatException {
 
             if (BitMap.hasAnyBitSet(BitMap.and(value, BitMap.not(mask)))) {
                 throw new AclFormatException(
-                    "The base address '" + ServerAcl.dottedNotation(value)
-                    + "' is too specific for block-size-spec /"
-                    + bitBlockSize);
+                        "The base address '" + ServerAcl.dottedNotation(value)
+                                + "' is too specific for block-size-spec /"
+                                + bitBlockSize);
             }
         }
     }
 
     /**
-     *
      * @param uba Unsigned byte array
      * @return String
      */
@@ -207,7 +203,6 @@ public final class ServerAcl {
     }
 
     /**
-     *
      * @param uba Unsigned byte array
      * @return String
      */
@@ -216,7 +211,7 @@ public final class ServerAcl {
         // TODO:  handle odd byte lengths.
         if ((uba.length / 2) * 2 != uba.length) {
             throw new RuntimeException(
-                "At this time .colonNotation only handles even byte quantities");
+                    "At this time .colonNotation only handles even byte quantities");
         }
 
         StringBuilder sb = new StringBuilder();
@@ -227,7 +222,7 @@ public final class ServerAcl {
             }
 
             sb.append(Integer.toHexString((uba[i] & 0xff) * 256
-                                          + (uba[i + 1] & 0xff)));
+                    + (uba[i + 1] & 0xff)));
         }
 
         return sb.toString();
@@ -254,27 +249,27 @@ public final class ServerAcl {
         return sb.toString();
     }
 
-    private List            aclEntries;
+    private List aclEntries;
     static private AclEntry PROHIBIT_ALL_IPV4;
     static private AclEntry PROHIBIT_ALL_IPV6;
 
     static {
         try {
             PROHIBIT_ALL_IPV4 =
-                new AclEntry(InetAddress.getByName("0.0.0.0").getAddress(), 0,
-                             false);
+                    new AclEntry(InetAddress.getByName("0.0.0.0").getAddress(), 0,
+                            false);
             PROHIBIT_ALL_IPV6 =
-                new AclEntry(InetAddress.getByName("::").getAddress(), 0,
-                             false);
+                    new AclEntry(InetAddress.getByName("::").getAddress(), 0,
+                            false);
         } catch (UnknownHostException uke) {
 
             // Should never reach here, since no name service is needed to
             // look up either address.
             throw new RuntimeException(
-                "Unexpected problem in static initializer", uke);
+                    "Unexpected problem in static initializer", uke);
         } catch (AclFormatException afe) {
             throw new RuntimeException(
-                "Unexpected problem in static initializer", afe);
+                    "Unexpected problem in static initializer", afe);
         }
     }
 
@@ -286,9 +281,9 @@ public final class ServerAcl {
      * name resolution system. If the given String can't be resolved to an IP
      * addr, false is returned.
      *
-     * @see #permitAccess(byte[])
      * @param s String
      * @return boolean
+     * @see #permitAccess(byte[])
      */
     public boolean permitAccess(String s) {
 
@@ -302,10 +297,9 @@ public final class ServerAcl {
     }
 
     /**
-     *
-     * @return true if access for the candidate address should be permitted,
-     *   false if access should be denied.
      * @param addr byte[]
+     * @return true if access for the candidate address should be permitted,
+     * false if access should be denied.
      */
     public boolean permitAccess(byte[] addr) {
 
@@ -323,7 +317,7 @@ public final class ServerAcl {
         }
 
         throw new RuntimeException("No rule matches address '"
-                                   + ServerAcl.dottedNotation(addr) + "'");
+                + ServerAcl.dottedNotation(addr) + "'");
     }
 
     private void println(String s) {
@@ -339,11 +333,12 @@ public final class ServerAcl {
     private File aclFile;
     private long lastLoadTime = 0;
 
-    private static final class InternalException extends Exception {}
+    private static final class InternalException extends Exception {
+    }
 
     public ServerAcl(File aclFile) throws IOException, AclFormatException {
         this.aclFile = aclFile;
-        aclEntries   = load();
+        aclEntries = load();
     }
 
     synchronized protected void ensureAclsUptodate() {
@@ -367,31 +362,31 @@ public final class ServerAcl {
 
         if (!aclFile.exists()) {
             throw new IOException("File '" + aclFile.getAbsolutePath()
-                                  + "' is not present");
+                    + "' is not present");
         }
 
         if (!aclFile.isFile()) {
             throw new IOException("'" + aclFile.getAbsolutePath()
-                                  + "' is not a regular file");
+                    + "' is not a regular file");
         }
 
         if (!aclFile.canRead()) {
             throw new IOException("'" + aclFile.getAbsolutePath()
-                                  + "' is not accessible");
+                    + "' is not accessible");
         }
 
-        String          line;
-        String          ruleTypeString;
+        String line;
+        String ruleTypeString;
         StringTokenizer toker;
-        String          addrString,
-                        bitString = null;
-        int             slashIndex;
-        int             linenum = 0;
-        byte[]          addr;
-        boolean         allow;
-        int             bits;
-        BufferedReader  br      = new BufferedReader(new FileReader(aclFile));
-        List<AclEntry>  newAcls = new ArrayList<AclEntry>();
+        String addrString,
+                bitString = null;
+        int slashIndex;
+        int linenum = 0;
+        byte[] addr;
+        boolean allow;
+        int bits;
+        BufferedReader br = new BufferedReader(new FileReader(aclFile));
+        List<AclEntry> newAcls = new ArrayList<AclEntry>();
 
         try {
             while ((line = br.readLine()) != null) {
@@ -415,17 +410,17 @@ public final class ServerAcl {
                     }
 
                     ruleTypeString = toker.nextToken();
-                    addrString     = toker.nextToken();
-                    slashIndex     = addrString.indexOf('/');
+                    addrString = toker.nextToken();
+                    slashIndex = addrString.indexOf('/');
 
                     if (slashIndex > -1) {
-                        bitString  = addrString.substring(slashIndex + 1);
+                        bitString = addrString.substring(slashIndex + 1);
                         addrString = addrString.substring(0, slashIndex);
                     }
 
                     addr = InetAddress.getByName(addrString).getAddress();
                     bits = (bitString == null) ? (addr.length * 8)
-                                               : Integer.parseInt(bitString);
+                            : Integer.parseInt(bitString);
 
                     if (ruleTypeString.equalsIgnoreCase("allow")) {
                         allow = true;
@@ -444,21 +439,21 @@ public final class ServerAcl {
                     }
                 } catch (NumberFormatException nfe) {
                     throw new AclFormatException("Syntax error at ACL file '"
-                                                 + aclFile.getAbsolutePath()
-                                                 + "', line " + linenum);
+                            + aclFile.getAbsolutePath()
+                            + "', line " + linenum);
                 } catch (InternalException ie) {
                     throw new AclFormatException("Syntax error at ACL file '"
-                                                 + aclFile.getAbsolutePath()
-                                                 + "', line " + linenum);
+                            + aclFile.getAbsolutePath()
+                            + "', line " + linenum);
                 }
 
                 try {
                     newAcls.add(new AclEntry(addr, bits, allow));
                 } catch (AclFormatException afe) {
                     throw new AclFormatException("Syntax error at ACL file '"
-                                                 + aclFile.getAbsolutePath()
-                                                 + "', line " + linenum + ": "
-                                                 + afe.toString());
+                            + aclFile.getAbsolutePath()
+                            + "', line " + linenum + ": "
+                            + afe.toString());
                 }
             }
         } finally {
@@ -480,38 +475,38 @@ public final class ServerAcl {
      *
      * @param sa String[]
      * @throws AclFormatException when badly formatted
-     * @throws IOException when io error
+     * @throws IOException        when io error
      */
     public static void main(String[] sa)
-    throws AclFormatException, IOException {
+            throws AclFormatException, IOException {
 
         if (sa.length > 1) {
             throw new RuntimeException("Try: java -cp path/to/hsqldb.jar "
-                                       + ServerAcl.class.getName()
-                                       + " --help");
+                    + ServerAcl.class.getName()
+                    + " --help");
         }
 
         if (sa.length > 0 && sa[0].equals("--help")) {
             System.err.println("SYNTAX: java -cp path/to/hsqldb.jar "
-                               + ServerAcl.class.getName()
-                               + " [filepath.txt]");
+                    + ServerAcl.class.getName()
+                    + " [filepath.txt]");
             System.err.println("ACL file path defaults to 'acl.txt' in the "
-                               + "current directory.");
+                    + "current directory.");
             System.exit(0);
         }
 
         ServerAcl serverAcl = new ServerAcl(new File((sa.length == 0)
-            ? "acl.txt"
-            : sa[0]));
+                ? "acl.txt"
+                : sa[0]));
 
         serverAcl.setPrintWriter(new PrintWriter(System.out));
         System.out.println(serverAcl.toString());
 
         BufferedReader br =
-            new BufferedReader(new InputStreamReader(System.in));
+                new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Enter hostnames or IP addresses to be tested "
-                           + "(one per line).");
+                + "(one per line).");
 
         String s;
 

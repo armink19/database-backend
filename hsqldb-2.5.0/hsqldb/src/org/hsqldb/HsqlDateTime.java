@@ -45,10 +45,10 @@ import java.util.*;
  * collection of static methods to convert Date and Timestamp strings
  * into corresponding Java objects and perform other Calendar related
  * operation.<p>
- *
+ * <p>
  * Was reviewed for 1.7.2 resulting in centralising all DATETIME related
  * operations.<p>
- *
+ * <p>
  * From version 2.0.0, HSQLDB supports TIME ZONE with datetime types. The
  * values are stored internally as UTC seconds from 1970, regardless of the
  * time zone of the JVM, and converted as and when required, to the local
@@ -60,33 +60,33 @@ import java.util.*;
  */
 public class HsqlDateTime {
 
-    public static final Locale    defaultLocale  = Locale.UK;
+    public static final Locale defaultLocale = Locale.UK;
     private static final Calendar tempCalDefault = new GregorianCalendar();
     private static final Calendar tempCalGMT =
-        new GregorianCalendar(TimeZone.getTimeZone("GMT"), defaultLocale);
-    private static final Date   tempDate    = new Date(0);
+            new GregorianCalendar(TimeZone.getTimeZone("GMT"), defaultLocale);
+    private static final Date tempDate = new Date(0);
     private static final String sdfdPattern = "yyyy-MM-dd";
     private static final SimpleDateFormat sdfd =
-        new SimpleDateFormat(sdfdPattern);
+            new SimpleDateFormat(sdfdPattern);
     private static final String sdftPattern = "HH:mm:ss";
     private static final SimpleDateFormat sdft =
-        new SimpleDateFormat(sdftPattern);
+            new SimpleDateFormat(sdftPattern);
     private static final String sdftsPattern = "yyyy-MM-dd HH:mm:ss";
     private static final SimpleDateFormat sdfts =
-        new SimpleDateFormat(sdftsPattern);
+            new SimpleDateFormat(sdftsPattern);
     private static final String sdftsSysPattern = "yyyy-MM-dd HH:mm:ss.SSS";
     private static final SimpleDateFormat sdftsSys =
-        new SimpleDateFormat(sdftsSysPattern);
+            new SimpleDateFormat(sdftsSysPattern);
     private static final Date sysDate = new java.util.Date();
 
     static {
         TimeZone.getDefault();
         tempCalGMT.setLenient(false);
         sdfd.setCalendar(new GregorianCalendar(TimeZone.getTimeZone("GMT"),
-                                               defaultLocale));
+                defaultLocale));
         sdfd.setLenient(false);
         sdft.setCalendar(new GregorianCalendar(TimeZone.getTimeZone("GMT"),
-                                               defaultLocale));
+                defaultLocale));
         sdft.setLenient(false);
         sdfts.setCalendar(new GregorianCalendar(TimeZone.getTimeZone("GMT"),
                 defaultLocale));
@@ -168,18 +168,18 @@ public class HsqlDateTime {
     }
 
     public static long convertMillisToCalendar(Calendar calendar,
-            long millis) {
+                                               long millis) {
 
         synchronized (tempCalGMT) {
             synchronized (calendar) {
                 calendar.clear();
                 tempCalGMT.setTimeInMillis(millis);
                 calendar.set(tempCalGMT.get(Calendar.YEAR),
-                             tempCalGMT.get(Calendar.MONTH),
-                             tempCalGMT.get(Calendar.DAY_OF_MONTH),
-                             tempCalGMT.get(Calendar.HOUR_OF_DAY),
-                             tempCalGMT.get(Calendar.MINUTE),
-                             tempCalGMT.get(Calendar.SECOND));
+                        tempCalGMT.get(Calendar.MONTH),
+                        tempCalGMT.get(Calendar.DAY_OF_MONTH),
+                        tempCalGMT.get(Calendar.HOUR_OF_DAY),
+                        tempCalGMT.get(Calendar.MINUTE),
+                        tempCalGMT.get(Calendar.SECOND));
 
                 return calendar.getTimeInMillis();
             }
@@ -187,23 +187,23 @@ public class HsqlDateTime {
     }
 
     public static long convertMillisFromCalendar(Calendar calendar,
-            long millis) {
+                                                 long millis) {
         return convertMillisFromCalendar(tempCalGMT, calendar, millis);
     }
 
     public static long convertMillisFromCalendar(Calendar clendarGMT,
-            Calendar calendar, long millis) {
+                                                 Calendar calendar, long millis) {
 
         synchronized (clendarGMT) {
             synchronized (calendar) {
                 clendarGMT.clear();
                 calendar.setTimeInMillis(millis);
                 clendarGMT.set(calendar.get(Calendar.YEAR),
-                               calendar.get(Calendar.MONTH),
-                               calendar.get(Calendar.DAY_OF_MONTH),
-                               calendar.get(Calendar.HOUR_OF_DAY),
-                               calendar.get(Calendar.MINUTE),
-                               calendar.get(Calendar.SECOND));
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH),
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        calendar.get(Calendar.SECOND));
 
                 return clendarGMT.getTimeInMillis();
             }
@@ -214,8 +214,8 @@ public class HsqlDateTime {
      * Sets the time in the given Calendar using the given milliseconds value; wrapper method to
      * allow use of more efficient JDK1.4 method on JDK1.4 (was protected in earlier versions).
      *
-     * @param       cal                             the Calendar
-     * @param       millis                  the time value in milliseconds
+     * @param cal    the Calendar
+     * @param millis the time value in milliseconds
      */
     public static void setTimeInMillis(Calendar cal, long millis) {
         cal.setTimeInMillis(millis);
@@ -271,7 +271,7 @@ public class HsqlDateTime {
 
     public static int getZoneSeconds(Calendar calendar) {
         return (calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET))
-               / 1000;
+                / 1000;
     }
 
     public static int getZoneMillis(Calendar calendar, long millis) {
@@ -280,7 +280,8 @@ public class HsqlDateTime {
 
     /**
      * Returns the indicated part of the given millisecond date object.
-     * @param m the millisecond time value from which to extract the indicated part
+     *
+     * @param m    the millisecond time value from which to extract the indicated part
      * @param part an integer code corresponding to the desired date part
      * @return the indicated part of the given <code>java.util.Date</code> object
      */
@@ -303,7 +304,7 @@ public class HsqlDateTime {
 
             switch (part) {
 
-                case Types.DTI_WEEK_OF_YEAR : {
+                case Types.DTI_WEEK_OF_YEAR: {
                     int dayWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
                     calendar.add(Calendar.DAY_OF_YEAR, 1 - dayWeek);
@@ -311,7 +312,7 @@ public class HsqlDateTime {
 
                     break;
                 }
-                default : {
+                default: {
                     zeroFromPart(calendar, part);
 
                     break;
@@ -332,47 +333,47 @@ public class HsqlDateTime {
 
             switch (part) {
 
-                case Types.SQL_INTERVAL_YEAR :
+                case Types.SQL_INTERVAL_YEAR:
                     if (calendar.get(Calendar.MONTH) > 6) {
                         calendar.add(Calendar.YEAR, 1);
                     }
                     break;
 
-                case Types.SQL_INTERVAL_MONTH :
+                case Types.SQL_INTERVAL_MONTH:
                     if (calendar.get(Calendar.DAY_OF_MONTH) > 15) {
                         calendar.add(Calendar.MONTH, 1);
                     }
                     break;
 
-                case Types.SQL_INTERVAL_DAY :
+                case Types.SQL_INTERVAL_DAY:
                     if (calendar.get(Calendar.HOUR_OF_DAY) > 11) {
                         calendar.add(Calendar.DAY_OF_MONTH, 1);
                     }
                     break;
 
-                case Types.SQL_INTERVAL_HOUR :
+                case Types.SQL_INTERVAL_HOUR:
                     if (calendar.get(Calendar.MINUTE) > 29) {
                         calendar.add(Calendar.HOUR_OF_DAY, 1);
                     }
                     break;
 
-                case Types.SQL_INTERVAL_MINUTE :
+                case Types.SQL_INTERVAL_MINUTE:
                     if (calendar.get(Calendar.SECOND) > 29) {
                         calendar.add(Calendar.MINUTE, 1);
                     }
                     break;
 
-                case Types.SQL_INTERVAL_SECOND :
+                case Types.SQL_INTERVAL_SECOND:
                     if (calendar.get(Calendar.MILLISECOND) > 499) {
                         calendar.add(Calendar.SECOND, 1);
                     }
                     break;
 
-                case Types.DTI_WEEK_OF_YEAR : {
+                case Types.DTI_WEEK_OF_YEAR: {
                     int dayYear = calendar.get(Calendar.DAY_OF_YEAR);
-                    int year    = calendar.get(Calendar.YEAR);
-                    int week    = calendar.get(Calendar.WEEK_OF_YEAR);
-                    int day     = calendar.get(Calendar.DAY_OF_WEEK);
+                    int year = calendar.get(Calendar.YEAR);
+                    int week = calendar.get(Calendar.WEEK_OF_YEAR);
+                    int day = calendar.get(Calendar.DAY_OF_WEEK);
 
                     calendar.clear();
                     calendar.set(Calendar.YEAR, year);
@@ -409,85 +410,87 @@ public class HsqlDateTime {
 
         switch (part) {
 
-            case Types.SQL_INTERVAL_YEAR :
+            case Types.SQL_INTERVAL_YEAR:
                 cal.set(Calendar.MONTH, 0);
-            case Types.SQL_INTERVAL_MONTH :
+            case Types.SQL_INTERVAL_MONTH:
                 cal.set(Calendar.DAY_OF_MONTH, 1);
-            case Types.SQL_INTERVAL_DAY :
+            case Types.SQL_INTERVAL_DAY:
                 cal.set(Calendar.HOUR_OF_DAY, 0);
-            case Types.SQL_INTERVAL_HOUR :
+            case Types.SQL_INTERVAL_HOUR:
                 cal.set(Calendar.MINUTE, 0);
-            case Types.SQL_INTERVAL_MINUTE :
+            case Types.SQL_INTERVAL_MINUTE:
                 cal.set(Calendar.SECOND, 0);
-            case Types.SQL_INTERVAL_SECOND :
+            case Types.SQL_INTERVAL_SECOND:
                 cal.set(Calendar.MILLISECOND, 0);
-            default :
+            default:
         }
     }
 
     //J-
 
-    private static final char[][] dateTokens     = {
-        { 'R', 'R', 'R', 'R' }, { 'I', 'Y', 'Y', 'Y' }, { 'Y', 'Y', 'Y', 'Y' },
-        { 'I', 'Y' }, { 'Y', 'Y' },
-        { 'B', 'C' }, { 'B', '.', 'C', '.' }, { 'A', 'D' }, { 'A', '.', 'D', '.' },
-        { 'M', 'O', 'N' }, { 'M', 'O', 'N', 'T', 'H' },
-        { 'M', 'M' },
-        { 'D', 'A', 'Y' }, { 'D', 'Y' },
-        { 'W', 'W' }, { 'I', 'W' }, { 'D', 'D' }, { 'D', 'D', 'D' },
-        { 'W' },
-        { 'H', 'H', '2', '4' }, { 'H', 'H', '1', '2' }, { 'H', 'H' },
-        { 'M', 'I' },
-        { 'S', 'S' },
-        { 'A', 'M' }, { 'P', 'M' }, { 'A', '.', 'M', '.' }, { 'P', '.', 'M', '.' },
-        { 'F', 'F' }
+    private static final char[][] dateTokens = {
+            {'R', 'R', 'R', 'R'}, {'I', 'Y', 'Y', 'Y'}, {'Y', 'Y', 'Y', 'Y'},
+            {'I', 'Y'}, {'Y', 'Y'},
+            {'B', 'C'}, {'B', '.', 'C', '.'}, {'A', 'D'}, {'A', '.', 'D', '.'},
+            {'M', 'O', 'N'}, {'M', 'O', 'N', 'T', 'H'},
+            {'M', 'M'},
+            {'D', 'A', 'Y'}, {'D', 'Y'},
+            {'W', 'W'}, {'I', 'W'}, {'D', 'D'}, {'D', 'D', 'D'},
+            {'W'},
+            {'H', 'H', '2', '4'}, {'H', 'H', '1', '2'}, {'H', 'H'},
+            {'M', 'I'},
+            {'S', 'S'},
+            {'A', 'M'}, {'P', 'M'}, {'A', '.', 'M', '.'}, {'P', '.', 'M', '.'},
+            {'F', 'F'}
     };
 
     private static final String[] javaDateTokens = {
-        "yyyy", "'*IYYY'", "yyyy",
-        "'*IY'", "yy",
-        "G", "G", "G", "G",
-        "MMM", "MMMMM",
-        "MM",
-        "EEEE", "EE",
-        "'*WW'", "'*IW'", "dd", "D",
-        "'*W'",
-        "HH", "KK", "KK",
-        "mm", "ss",
-        "aaa", "aaa", "aaa", "aaa",
-        "SSS"
+            "yyyy", "'*IYYY'", "yyyy",
+            "'*IY'", "yy",
+            "G", "G", "G", "G",
+            "MMM", "MMMMM",
+            "MM",
+            "EEEE", "EE",
+            "'*WW'", "'*IW'", "dd", "D",
+            "'*W'",
+            "HH", "KK", "KK",
+            "mm", "ss",
+            "aaa", "aaa", "aaa", "aaa",
+            "SSS"
     };
 
     private static final int[] sqlIntervalCodes = {
-        -1, -1, Types.SQL_INTERVAL_YEAR,
-        -1, Types.SQL_INTERVAL_YEAR,
-        -1, -1, -1, -1,
-        Types.SQL_INTERVAL_MONTH, Types.SQL_INTERVAL_MONTH,
-        Types.SQL_INTERVAL_MONTH,
-        -1, -1,
-        Types.DTI_WEEK_OF_YEAR, -1, Types.SQL_INTERVAL_DAY, Types.SQL_INTERVAL_DAY,
-        -1,
-        Types.SQL_INTERVAL_HOUR, -1, Types.SQL_INTERVAL_HOUR,
-        Types.SQL_INTERVAL_MINUTE,
-        Types.SQL_INTERVAL_SECOND,
-        -1,-1,-1,-1,
-        -1
+            -1, -1, Types.SQL_INTERVAL_YEAR,
+            -1, Types.SQL_INTERVAL_YEAR,
+            -1, -1, -1, -1,
+            Types.SQL_INTERVAL_MONTH, Types.SQL_INTERVAL_MONTH,
+            Types.SQL_INTERVAL_MONTH,
+            -1, -1,
+            Types.DTI_WEEK_OF_YEAR, -1, Types.SQL_INTERVAL_DAY, Types.SQL_INTERVAL_DAY,
+            -1,
+            Types.SQL_INTERVAL_HOUR, -1, Types.SQL_INTERVAL_HOUR,
+            Types.SQL_INTERVAL_MINUTE,
+            Types.SQL_INTERVAL_SECOND,
+            -1, -1, -1, -1,
+            -1
     };
 
     //J+
 
-    /** Indicates end-of-input */
+    /**
+     * Indicates end-of-input
+     */
     private static final char e = 0xffff;
 
     public static TimestampData toDate(String string, String pattern,
                                        SimpleDateFormat format,
                                        boolean fraction) {
 
-        long   millis;
-        int    nanos       = 0;
+        long millis;
+        int nanos = 0;
         String javaPattern = HsqlDateTime.toJavaDatePattern(pattern);
         String tempPattern = null;
-        int    matchIndex  = javaPattern.indexOf("*IY");
+        int matchIndex = javaPattern.indexOf("*IY");
 
         if (matchIndex >= 0) {
             throw Error.error(ErrorCode.X_22511);
@@ -510,7 +513,7 @@ public class HsqlDateTime {
         if (matchIndex >= 0) {
             tempPattern = javaPattern;
             javaPattern = javaPattern.substring(0, matchIndex)
-                          + javaPattern.substring(matchIndex + 3);
+                    + javaPattern.substring(matchIndex + 3);
         }
 
         try {
@@ -528,14 +531,14 @@ public class HsqlDateTime {
                 format.applyPattern(javaPattern);
 
                 long tempMillis = format.parse(string).getTime();
-                int  factor     = 1;
+                int factor = 1;
 
                 tempMillis -= millis;
-                nanos      = (int) tempMillis;
+                nanos = (int) tempMillis;
 
                 while (tempMillis > 1000) {
                     tempMillis /= 10;
-                    factor     *= 10;
+                    factor *= 10;
                 }
 
                 nanos *= (1000000 / factor);
@@ -558,20 +561,20 @@ public class HsqlDateTime {
             throw Error.error(ErrorCode.X_22511);
         }
 
-        String result     = format.format(date);
-        int    matchIndex = result.indexOf("*IY");
+        String result = format.format(date);
+        int matchIndex = result.indexOf("*IY");
 
         if (matchIndex >= 0) {
-            Calendar cal         = format.getCalendar();
-            int      matchLength = 3;
-            int      temp        = result.indexOf("*IYYY");
+            Calendar cal = format.getCalendar();
+            int matchLength = 3;
+            int temp = result.indexOf("*IYYY");
 
             if (temp >= 0) {
                 matchLength = 5;
-                matchIndex  = temp;
+                matchIndex = temp;
             }
 
-            int year       = cal.get(Calendar.YEAR);
+            int year = cal.get(Calendar.YEAR);
             int weekOfYear = cal.get(Calendar.WEEK_OF_YEAR);
 
             if (weekOfYear == 1 && cal.get(Calendar.DAY_OF_YEAR) > 360) {
@@ -596,14 +599,14 @@ public class HsqlDateTime {
         matchIndex = result.indexOf("*WW");
 
         if (matchIndex >= 0) {
-            Calendar      cal         = format.getCalendar();
-            int           matchLength = 3;
-            int           dayOfYear   = cal.get(Calendar.DAY_OF_YEAR);
-            int           weekOfYear  = ((dayOfYear - 1) / 7) + 1;
-            StringBuilder sb          = new StringBuilder(result);
+            Calendar cal = format.getCalendar();
+            int matchLength = 3;
+            int dayOfYear = cal.get(Calendar.DAY_OF_YEAR);
+            int weekOfYear = ((dayOfYear - 1) / 7) + 1;
+            StringBuilder sb = new StringBuilder(result);
 
             sb.replace(matchIndex, matchIndex + matchLength,
-                       String.valueOf(weekOfYear));
+                    String.valueOf(weekOfYear));
 
             result = sb.toString();
         }
@@ -611,14 +614,14 @@ public class HsqlDateTime {
         matchIndex = result.indexOf("*IW");
 
         if (matchIndex >= 0) {
-            Calendar cal         = format.getCalendar();
-            int      matchLength = 3;
+            Calendar cal = format.getCalendar();
+            int matchLength = 3;
             int weekOfYear = getDateTimePart(cal, date.getTime(),
-                                             Calendar.WEEK_OF_YEAR);
+                    Calendar.WEEK_OF_YEAR);
             StringBuilder sb = new StringBuilder(result);
 
             sb.replace(matchIndex, matchIndex + matchLength,
-                       String.valueOf(weekOfYear));
+                    String.valueOf(weekOfYear));
 
             result = sb.toString();
         }
@@ -626,14 +629,14 @@ public class HsqlDateTime {
         matchIndex = result.indexOf("*W");
 
         if (matchIndex >= 0) {
-            Calendar      cal         = format.getCalendar();
-            int           matchLength = 2;
-            int           dayOfMonth  = cal.get(Calendar.DAY_OF_MONTH);
-            int           weekOfMonth = ((dayOfMonth - 1) / 7) + 1;
-            StringBuilder sb          = new StringBuilder(result);
+            Calendar cal = format.getCalendar();
+            int matchLength = 2;
+            int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+            int weekOfMonth = ((dayOfMonth - 1) / 7) + 1;
+            StringBuilder sb = new StringBuilder(result);
 
             sb.replace(matchIndex, matchIndex + matchLength,
-                       String.valueOf(weekOfMonth));
+                    String.valueOf(weekOfMonth));
 
             result = sb.toString();
         }
@@ -648,15 +651,15 @@ public class HsqlDateTime {
      */
     public static String toJavaDatePattern(String format) {
 
-        int           len = format.length();
-        char          ch;
-        StringBuilder sb               = new StringBuilder(len);
-        Tokenizer     tokenizer        = new Tokenizer();
-        int           limitQuotedToken = -1;
+        int len = format.length();
+        char ch;
+        StringBuilder sb = new StringBuilder(len);
+        Tokenizer tokenizer = new Tokenizer();
+        int limitQuotedToken = -1;
 
         for (int i = 0; i <= len; i++) {
             ch = (i == len) ? e
-                            : format.charAt(i);
+                    : format.charAt(i);
 
             if (tokenizer.isInQuotes()) {
                 if (tokenizer.isQuoteChar(ch)) {
@@ -674,8 +677,8 @@ public class HsqlDateTime {
 
             if (!tokenizer.next(ch, i)) {
                 if (tokenizer.consumed) {
-                    int    index = tokenizer.getLastMatch();
-                    String s     = javaDateTokens[index];
+                    int index = tokenizer.getLastMatch();
+                    String s = javaDateTokens[index];
 
                     // consecutive quoted tokens
                     if (s.startsWith("\'") && s.endsWith("\'")) {
@@ -703,7 +706,7 @@ public class HsqlDateTime {
                         //
                     } else {
                         throw Error.error(ErrorCode.X_22007,
-                                          format.substring(i));
+                                format.substring(i));
                     }
                 }
 
@@ -722,13 +725,13 @@ public class HsqlDateTime {
 
     public static int toStandardIntervalPart(String format) {
 
-        int       len = format.length();
-        char      ch;
+        int len = format.length();
+        char ch;
         Tokenizer tokenizer = new Tokenizer();
 
         for (int i = 0; i <= len; i++) {
             ch = (i == len) ? e
-                            : format.charAt(i);
+                    : format.charAt(i);
 
             if (!tokenizer.next(ch, i)) {
                 int index = tokenizer.getLastMatch();
@@ -751,13 +754,13 @@ public class HsqlDateTime {
 
         private java.util.Date date = new java.util.Date();
         private SimpleDateFormat dateFormat =
-            new SimpleDateFormat(sdftsSysPattern);
+                new SimpleDateFormat(sdftsSysPattern);
 
         public SystemTimeString() {
 
             dateFormat.setCalendar(
-                new GregorianCalendar(
-                    TimeZone.getTimeZone("GMT"), defaultLocale));
+                    new GregorianCalendar(
+                            TimeZone.getTimeZone("GMT"), defaultLocale));
             dateFormat.setLenient(false);
         }
 
@@ -774,42 +777,41 @@ public class HsqlDateTime {
      */
     static class Tokenizer {
 
-        private int     lastMatched;
-        private int     matchOffset;
-        private int     offset;
-        private long    state;
+        private int lastMatched;
+        private int matchOffset;
+        private int offset;
+        private long state;
         private boolean consumed;
         private boolean isInQuotes;
         private boolean matched;
 
         //
-        private final char    quoteChar;
-        private final char[]  literalChars;
-        private static char[] defaultLiterals = new char[] {
-            ' ', ',', '-', '.', '/', ':', ';'
+        private final char quoteChar;
+        private final char[] literalChars;
+        private static char[] defaultLiterals = new char[]{
+                ' ', ',', '-', '.', '/', ':', ';'
         };
-        char[][]              tokens;
+        char[][] tokens;
 
         public Tokenizer() {
 
-            this.quoteChar    = '\"';
+            this.quoteChar = '\"';
             this.literalChars = defaultLiterals;
-            tokens            = dateTokens;
+            tokens = dateTokens;
 
             reset();
         }
 
         /**
          * Resets for next reuse.
-         *
          */
         public void reset() {
 
             lastMatched = -1;
-            offset      = -1;
-            state       = 0;
-            consumed    = false;
-            matched     = false;
+            offset = -1;
+            state = 0;
+            consumed = false;
+            matched = false;
         }
 
         /**
@@ -879,6 +881,7 @@ public class HsqlDateTime {
 
         /**
          * Sets the specified bit.
+         *
          * @param bit
          */
         private void setBit(int bit) {
@@ -894,8 +897,8 @@ public class HsqlDateTime {
         public boolean next(char ch, int position) {
 
             int index = ++offset;
-            int len   = offset + 1;
-            int left  = 0;
+            int len = offset + 1;
+            int left = 0;
 
             matched = false;
 
@@ -906,8 +909,8 @@ public class HsqlDateTime {
                             setBit(i);
 
                             lastMatched = i;
-                            consumed    = true;
-                            matched     = true;
+                            consumed = true;
+                            matched = true;
                             matchOffset = position;
                         } else {
                             ++left;

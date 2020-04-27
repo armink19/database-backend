@@ -54,11 +54,11 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * Acts as a buffer manager for a single TEXT table and its Row data.<p>
- *
+ * <p>
  * Handles read/write operations on the table's text format data file using a
  * compatible pair of org.hsqldb.rowio input/output class instances.
- *
- *
+ * <p>
+ * <p>
  * fredt - This used to write rows as soon as they are inserted
  * but now this is subject to transaction management.
  * A memory buffer contains the rows not yet committed.
@@ -75,26 +75,26 @@ public class TextCache extends DataFileCache {
     TextFileSettings textFileSettings;
 
     //state of Cache
-    protected String          header;
-    protected Table           table;
-    private LongKeyHashMap    uncommittedCache;
+    protected String header;
+    protected Table table;
+    private LongKeyHashMap uncommittedCache;
     HsqlByteArrayOutputStream buffer = new HsqlByteArrayOutputStream(128);
 
     //
 
     /**
-     *  The source string for a cached table is evaluated and the parameters
-     *  are used to open the source file.<p>
-     *
-     *  Settings are used in this order: (1) settings specified in the
-     *  source string for the table (2) global database settings in
-     *  *.properties file (3) program defaults
+     * The source string for a cached table is evaluated and the parameters
+     * are used to open the source file.<p>
+     * <p>
+     * Settings are used in this order: (1) settings specified in the
+     * source string for the table (2) global database settings in
+     * *.properties file (3) program defaults
      */
     TextCache(Table table, String name) {
 
         super(table.database, name);
 
-        this.table       = table;
+        this.table = table;
         uncommittedCache = new LongKeyHashMap();
     }
 
@@ -102,7 +102,7 @@ public class TextCache extends DataFileCache {
                               boolean defrag) {
 
         this.database = database;
-        fa            = FileUtil.getFileUtil();
+        fa = FileUtil.getFileUtil();
         textFileSettings = new TextFileSettings(database.getProperties(),
                 settingsString);
         dataFileName = textFileSettings.getFileName();
@@ -111,29 +111,29 @@ public class TextCache extends DataFileCache {
             throw Error.error(ErrorCode.X_S0501);
         }
 
-        dataFileName  = ((FileUtil) fa).canonicalOrAbsolutePath(dataFileName);
-        maxCacheRows  = textFileSettings.getMaxCacheRows();
+        dataFileName = ((FileUtil) fa).canonicalOrAbsolutePath(dataFileName);
+        maxCacheRows = textFileSettings.getMaxCacheRows();
         maxCacheBytes = textFileSettings.getMaxCacheBytes();
 
         // max size is 256G
-        maxDataFileSize  = (long) Integer.MAX_VALUE * Logger.largeDataFactor;
+        maxDataFileSize = (long) Integer.MAX_VALUE * Logger.largeDataFactor;
         cachedRowPadding = 1;
-        dataFileScale    = 1;
+        dataFileScale = 1;
     }
 
     protected void initBuffers() {
 
         if (textFileSettings.isQuoted || textFileSettings.isAllQuoted) {
-            rowIn  = new RowInputTextQuoted(textFileSettings);
+            rowIn = new RowInputTextQuoted(textFileSettings);
             rowOut = new RowOutputTextQuoted(textFileSettings);
         } else {
-            rowIn  = new RowInputText(textFileSettings);
+            rowIn = new RowInputText(textFileSettings);
             rowOut = new RowOutputText(textFileSettings);
         }
     }
 
     /**
-     *  Opens a data source file.
+     * Opens a data source file.
      */
     public void open(boolean readonly) {
 
@@ -141,11 +141,11 @@ public class TextCache extends DataFileCache {
 
         try {
             int type = database.getType() == DatabaseType.DB_RES
-                       ? RAFile.DATA_FILE_JAR
-                       : RAFile.DATA_FILE_TEXT;
+                    ? RAFile.DATA_FILE_JAR
+                    : RAFile.DATA_FILE_TEXT;
 
             dataFile = RAFile.newScaledRAFile(database, dataFileName,
-                                              readonly, type);
+                    readonly, type);
             fileFreePosition = dataFile.length();
 
             if (fileFreePosition > maxDataFileSize) {
@@ -157,10 +157,10 @@ public class TextCache extends DataFileCache {
             spaceManager = new DataSpaceManagerSimple(this, readonly);
         } catch (Throwable t) {
             throw Error.error(t, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_TextCache_opening_file_error,
-                              new Object[] {
-                dataFileName, t.toString()
-            });
+                    ErrorCode.M_TextCache_opening_file_error,
+                    new Object[]{
+                            dataFileName, t.toString()
+                    });
         }
 
         cacheReadonly = readonly;
@@ -171,9 +171,9 @@ public class TextCache extends DataFileCache {
     }
 
     /**
-     *  Writes newly created rows to disk. In the current implementation,
-     *  such rows have already been saved, so this method just removes a
-     *  source file that has no rows.
+     * Writes newly created rows to disk. In the current implementation,
+     * such rows have already been saved, so this method just removes a
+     * source file that has no rows.
      */
     public void close() {
 
@@ -187,7 +187,7 @@ public class TextCache extends DataFileCache {
             cache.saveAll();
 
             boolean empty = (dataFile.length()
-                             <= textFileSettings.bytesForLineEnd.length);
+                    <= textFileSettings.bytesForLineEnd.length);
 
             dataFile.synch();
             dataFile.close();
@@ -201,10 +201,10 @@ public class TextCache extends DataFileCache {
             uncommittedCache.clear();
         } catch (Throwable t) {
             throw Error.error(t, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_TextCache_closing_file_error,
-                              new Object[] {
-                dataFileName, t.toString()
-            });
+                    ErrorCode.M_TextCache_closing_file_error,
+                    new Object[]{
+                            dataFileName, t.toString()
+                    });
         } finally {
             writeLock.unlock();
         }
@@ -233,10 +233,10 @@ public class TextCache extends DataFileCache {
             }
         } catch (Throwable t) {
             throw Error.error(t, ErrorCode.FILE_IO_ERROR,
-                              ErrorCode.M_TextCache_purging_file_error,
-                              new Object[] {
-                dataFileName, t.toString()
-            });
+                    ErrorCode.M_TextCache_purging_file_error,
+                    new Object[]{
+                            dataFileName, t.toString()
+                    });
         } finally {
             writeLock.unlock();
         }
@@ -250,7 +250,7 @@ public class TextCache extends DataFileCache {
         writeLock.lock();
 
         try {
-            long         pos = object.getPos();
+            long pos = object.getPos();
             CachedObject row = (CachedObject) uncommittedCache.remove(pos);
 
             if (row != null) {
@@ -278,7 +278,7 @@ public class TextCache extends DataFileCache {
 
         try {
             int length = row.getStorageSize();
-            int count  = length - textFileSettings.bytesForLineEnd.length;
+            int count = length - textFileSettings.bytesForLineEnd.length;
 
             rowOut.reset();
 
@@ -318,7 +318,9 @@ public class TextCache extends DataFileCache {
         }
     }
 
-    /** cannot use isInMemory() for text cached object */
+    /**
+     * cannot use isInMemory() for text cached object
+     */
     public CachedObject get(CachedObject object, PersistentStore store,
                             boolean keep) {
 
@@ -342,18 +344,18 @@ public class TextCache extends DataFileCache {
                 buffer.setSize(object.getStorageSize());
 
                 String rowString =
-                    buffer.toString(textFileSettings.charEncoding);
+                        buffer.toString(textFileSettings.charEncoding);
 
                 ((RowInputText) rowIn).setSource(rowString, object.getPos(),
-                                                 buffer.size());
+                        buffer.size());
                 store.get(object, rowIn);
                 cache.put(object);
 
                 return object;
             } catch (Throwable t) {
                 database.logger.logSevereEvent(dataFileName
-                                               + " getFromFile problem "
-                                               + object.getPos(), t);
+                        + " getFromFile problem "
+                        + object.getPos(), t);
                 cache.clearUnchanged();
 
                 return object;
@@ -411,8 +413,8 @@ public class TextCache extends DataFileCache {
                 this.header = header;
             } catch (HsqlException e) {
                 throw new HsqlException(
-                    e, Error.getMessage(ErrorCode.GENERAL_IO_ERROR),
-                    ErrorCode.GENERAL_IO_ERROR);
+                        e, Error.getMessage(ErrorCode.GENERAL_IO_ERROR),
+                        ErrorCode.GENERAL_IO_ERROR);
             }
 
             return;
@@ -424,7 +426,7 @@ public class TextCache extends DataFileCache {
     private void writeHeader(String header) {
 
         try {
-            byte[] buf       = null;
+            byte[] buf = null;
             String firstLine = header + TextFileSettings.NL;
 
             try {

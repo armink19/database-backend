@@ -50,21 +50,21 @@ import java.util.regex.Pattern;
 /**
  * Manages all the details we need to connect up to JDBC database(s),
  * in a declarative way.
- * <P>
+ * <p>
  * The file <CODE>src/org/hsqldb/sample/SqlFileEmbedder.java</CODE>
  * in the HSQLDB distribution provides an example of how to use RCData for your
  * own programs.
  *
- * @see <A href="../../../../util-guide/sqltool-chapt.html#sqltool_auth-sect"
- *      target="guide">
- *     The RC File section of the HyperSQL Utilities Guide</A>
- * @see org.hsqldb.sample.SqlFileEmbedder
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @see <A href="../../../../util-guide/sqltool-chapt.html#sqltool_auth-sect"
+ * target="guide">
+ * The RC File section of the HyperSQL Utilities Guide</A>
+ * @see org.hsqldb.sample.SqlFileEmbedder
  */
 public class RCData {
 
-    public static final String DEFAULT_JDBC_DRIVER   = "org.hsqldb.jdbc.JDBCDriver";
-    private String             defaultJdbcDriverName = DEFAULT_JDBC_DRIVER;
+    public static final String DEFAULT_JDBC_DRIVER = "org.hsqldb.jdbc.JDBCDriver";
+    private String defaultJdbcDriverName = DEFAULT_JDBC_DRIVER;
 
     public void setDefaultJdbcDriver(String defaultJdbcDriverName) {
         this.defaultJdbcDriverName = defaultJdbcDriverName;
@@ -77,23 +77,23 @@ public class RCData {
     /**
      * DISABLED DUE TO SECURITY CONCERNS.
      * Just for testing and debugging.
-     *
+     * <p>
      * N.b. this echoes passwords!
-    public void report() {
-        System.err.println("urlid: " + id + ", url: " + url + ", username: "
-                           + username + ", password: " + password);
-    }
+     * public void report() {
+     * System.err.println("urlid: " + id + ", url: " + url + ", username: "
+     * + username + ", password: " + password);
+     * }
      */
 
     public String toString() {
         return "id: " + angleBracketNull(id)
-          + ", url: " + angleBracketNull(url)
-          + ", username: " + angleBracketNull(username)
-          + ", password: <" + (password == null ? "NULL" : "PRESENT") + ">"
-          + ", ti: " + angleBracketNull(ti)
-          + ", driver: " + angleBracketNull(driver)
-          + ", truststore: " + angleBracketNull(truststore)
-          + ", libpath: " + angleBracketNull(libpath);
+                + ", url: " + angleBracketNull(url)
+                + ", username: " + angleBracketNull(username)
+                + ", password: <" + (password == null ? "NULL" : "PRESENT") + ">"
+                + ", ti: " + angleBracketNull(ti)
+                + ", driver: " + angleBracketNull(driver)
+                + ", truststore: " + angleBracketNull(truststore)
+                + ", libpath: " + angleBracketNull(libpath);
     }
 
     private static String angleBracketNull(final String s) {
@@ -105,7 +105,7 @@ public class RCData {
      * Creates a RCDataObject by looking up the given key in the
      * given authentication file.
      *
-     * @param file File containing the authentication information.
+     * @param file  File containing the authentication information.
      * @param dbKey Key to look up in the file.
      *              If null, then will echo all urlids in the file to stdout.
      *              (A rather ill-conceived design).
@@ -121,91 +121,91 @@ public class RCData {
 
         if (!file.canRead()) {
             throw new IOException("Please set up authentication file '" + file
-                                  + "'");
+                    + "'");
         }
 
         // System.err.println("Using RC file '" + file + "'");
         StringTokenizer tokenizer = null;
-        boolean         loadingStanza   = false;
-        String          s;
-        String[]        tokens;
-        String          keyword, value;
-        int             linenum = 0;
-        BufferedReader  br      = new BufferedReader(new FileReader(file));
+        boolean loadingStanza = false;
+        String s;
+        String[] tokens;
+        String keyword, value;
+        int linenum = 0;
+        BufferedReader br = new BufferedReader(new FileReader(file));
 
         try {
-        while ((s = br.readLine()) != null) {
-            ++linenum;
+            while ((s = br.readLine()) != null) {
+                ++linenum;
 
-            s = s.trim();
+                s = s.trim();
 
-            if (s.length() == 0) {
-                continue;
-            }
-
-            if (s.charAt(0) == '#') {
-                continue;
-            }
-
-            tokenizer = new StringTokenizer(s);
-
-            if (tokenizer.countTokens() == 1) {
-                keyword = tokenizer.nextToken();
-                value   = "";
-            } else if (tokenizer.countTokens() > 1) {
-                keyword = tokenizer.nextToken();
-                value   = tokenizer.nextToken("").trim();
-            } else {
-                throw new Exception("Corrupt line " + linenum + " in '" + file
-                                    + "':  " + s);
-            }
-
-            if (keyword.equals("urlid")) {
-                tokens = value.split("\\s*,\\s*", -1);
-                for (int i = 0; i < tokens.length; i++) {
-                    if (idPatterns.contains(tokens[i]))
-                        throw new Exception("ID Pattern '" + tokens[i]
-                          + "' repeated at line " + linenum + " in '"
-                          + file + "'");
-                    idPatterns.add(tokens[i]);
-                    if (dbKey == null) {
-                        System.out.println(tokens[i]);
-                        continue;
-                    }
-                    loadingStanza =
-                      Pattern.compile(tokens[i]).matcher(dbKey).matches();
-                    if (id == null && loadingStanza) id = dbKey;
+                if (s.length() == 0) {
+                    continue;
                 }
 
-                continue;
-            }
-            if (dbKey == null) continue;
+                if (s.charAt(0) == '#') {
+                    continue;
+                }
 
-            if (loadingStanza) {
-                if (keyword.equals("url")) {
-                    url = value;
-                } else if (keyword.equals("username")) {
-                    username = value;
-                } else if (keyword.equals("driver")) {
-                    driver = value;
-                } else if (keyword.equals("charset")) {
-                    charset = value;
-                } else if (keyword.equals("truststore")) {
-                    truststore = value;
-                } else if (keyword.equals("password")) {
-                    password = value;
-                } else if (keyword.equals("transiso")) {
-                    ti = value;
-                } else if (keyword.equals("libpath")) {
-                    libpath = value;
+                tokenizer = new StringTokenizer(s);
+
+                if (tokenizer.countTokens() == 1) {
+                    keyword = tokenizer.nextToken();
+                    value = "";
+                } else if (tokenizer.countTokens() > 1) {
+                    keyword = tokenizer.nextToken();
+                    value = tokenizer.nextToken("").trim();
                 } else {
-                    throw new Exception("Bad line " + linenum + " in '" + file
-                                        + "':  " + s);
+                    throw new Exception("Corrupt line " + linenum + " in '" + file
+                            + "':  " + s);
+                }
+
+                if (keyword.equals("urlid")) {
+                    tokens = value.split("\\s*,\\s*", -1);
+                    for (int i = 0; i < tokens.length; i++) {
+                        if (idPatterns.contains(tokens[i]))
+                            throw new Exception("ID Pattern '" + tokens[i]
+                                    + "' repeated at line " + linenum + " in '"
+                                    + file + "'");
+                        idPatterns.add(tokens[i]);
+                        if (dbKey == null) {
+                            System.out.println(tokens[i]);
+                            continue;
+                        }
+                        loadingStanza =
+                                Pattern.compile(tokens[i]).matcher(dbKey).matches();
+                        if (id == null && loadingStanza) id = dbKey;
+                    }
+
+                    continue;
+                }
+                if (dbKey == null) continue;
+
+                if (loadingStanza) {
+                    if (keyword.equals("url")) {
+                        url = value;
+                    } else if (keyword.equals("username")) {
+                        username = value;
+                    } else if (keyword.equals("driver")) {
+                        driver = value;
+                    } else if (keyword.equals("charset")) {
+                        charset = value;
+                    } else if (keyword.equals("truststore")) {
+                        truststore = value;
+                    } else if (keyword.equals("password")) {
+                        password = value;
+                    } else if (keyword.equals("transiso")) {
+                        ti = value;
+                    } else if (keyword.equals("libpath")) {
+                        libpath = value;
+                    } else {
+                        throw new Exception("Bad line " + linenum + " in '" + file
+                                + "':  " + s);
+                    }
                 }
             }
-        }
         } finally {
-            try  {
+            try {
                 br.close();
             } catch (IOException ioe) {
                 // Can only report on so many errors at one time
@@ -221,18 +221,18 @@ public class RCData {
 
         if (libpath != null) {
             throw new IllegalArgumentException(
-                "Sorry, 'libpath' not supported yet");
+                    "Sorry, 'libpath' not supported yet");
         }
 
         if (id == null)
             throw new IllegalArgumentException(
-                "No match for '" + dbKey + "' in file '" + file + "'");
+                    "No match for '" + dbKey + "' in file '" + file + "'");
     }
 
     /**
      * Convenience constructor for backward compatibility.
      *
-     * @see #RCData(String,String,String,String,String,String,String,String)
+     * @see #RCData(String, String, String, String, String, String, String, String)
      */
     public RCData(String id, String url, String username, String password,
                   String driver, String charset,
@@ -253,39 +253,39 @@ public class RCData {
     /**
      * Creates a new <code>RCData</code> object.
      *
-     * <P>
+     * <p>
      * The parameters driver, charset, truststore, and libpath are optional.
      * Setting these parameters to <code>NULL</code> will set them to their
      * default values.
      *
-     * @param id The identifier for these connection settings
-     * @param url The URL of the database to connect to
-     * @param username The username to log in as
-     * @param password The password of the username
-     * @param driver The JDBC driver to use
-     * @param charset The character set to use
+     * @param id         The identifier for these connection settings
+     * @param url        The URL of the database to connect to
+     * @param username   The username to log in as
+     * @param password   The password of the username
+     * @param driver     The JDBC driver to use
+     * @param charset    The character set to use
      * @param truststore The trust store to use
-     * @param libpath The JDBC library to add to CLASSPATH
-     * @param ti The transaction level
+     * @param libpath    The JDBC library to add to CLASSPATH
+     * @param ti         The transaction level
      * @throws Exception if the a non-optional parameter is set to <code>NULL</code>
      */
     public RCData(String id, String url, String username, String password,
                   String driver, String charset, String truststore,
                   String libpath, String ti) throws Exception {
 
-        this.id         = id;
-        this.url        = url;
-        this.username   = username;
-        this.password   = password;
-        this.ti         = ti;
-        this.driver     = driver;
-        this.charset    = charset;
+        this.id = id;
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.ti = ti;
+        this.driver = driver;
+        this.charset = charset;
         this.truststore = truststore;
-        this.libpath    = libpath;
+        this.libpath = libpath;
 
         if (libpath != null) {
             throw new IllegalArgumentException(
-                "Sorry, 'libpath' not supported yet");
+                    "Sorry, 'libpath' not supported yet");
         }
 
         // We now require only id to be set by this constructor.
@@ -314,11 +314,11 @@ public class RCData {
      *
      * @return New JDBC Connection
      * @throws ClassNotFoundException on class not found
-     * @throws SQLException on database access error
-     * @throws MalformedURLException on malformed URL
+     * @throws SQLException           on database access error
+     * @throws MalformedURLException  on malformed URL
      */
     public Connection getConnection()
-    throws ClassNotFoundException, SQLException, MalformedURLException {
+            throws ClassNotFoundException, SQLException, MalformedURLException {
         return getConnection(null, null);
     }
 
@@ -326,17 +326,17 @@ public class RCData {
      * Gets a JDBC Connection using the data of this RCData object with
      * specified override elements
      *
-     * @param curDriverIn driver
+     * @param curDriverIn     driver
      * @param curTrustStoreIn trusted store
      * @return New JDBC Connection
      * @throws ClassNotFoundException on class not found
-     * @throws MalformedURLException on malformed URL
-     * @throws SQLException on database access error
+     * @throws MalformedURLException  on malformed URL
+     * @throws SQLException           on database access error
      */
     public Connection getConnection(String curDriverIn, String curTrustStoreIn)
-                                    throws ClassNotFoundException,
-                                           MalformedURLException,
-                                           SQLException {
+            throws ClassNotFoundException,
+            MalformedURLException,
+            SQLException {
 
         // Local vars to satisfy compiler warnings
         String curDriver = null;
@@ -348,7 +348,7 @@ public class RCData {
 
             // If explicit driver not specified
             curDriver = ((driver == null) ? DEFAULT_JDBC_DRIVER
-                                          : driver);
+                    : driver);
         } else {
             curDriver = expandSysPropVars(curDriverIn);
         }
@@ -370,15 +370,15 @@ public class RCData {
         String urlString = null;
         if (url == null) {
             throw new MalformedURLException(
-              "url string is required to establish a connection, but is null"
-              );
+                    "url string is required to establish a connection, but is null"
+            );
         }
 
         try {
             urlString = expandSysPropVars(url);
         } catch (IllegalArgumentException iae) {
             throw new MalformedURLException(iae.toString() + " for URL '"
-                                            + url + "'");
+                    + url + "'");
         }
 
         String userString = null;
@@ -387,8 +387,8 @@ public class RCData {
             userString = expandSysPropVars(username);
         } catch (IllegalArgumentException iae) {
             throw new MalformedURLException(iae.toString()
-                                            + " for user name '" + username
-                                            + "'");
+                    + " for user name '" + username
+                    + "'");
         }
 
         String passwordString = null;
@@ -397,7 +397,7 @@ public class RCData {
             passwordString = expandSysPropVars(password);
         } catch (IllegalArgumentException iae) {
             throw new MalformedURLException(iae.toString()
-                                            + " for password");
+                    + " for password");
         }
 
         Class.forName(curDriver);
@@ -405,9 +405,9 @@ public class RCData {
         // service resource file.  Consider checking for that.
 
         Connection c = (userString == null)
-                     ? DriverManager.getConnection(urlString)
-                     : DriverManager.getConnection(urlString, userString,
-                                                   passwordString);
+                ? DriverManager.getConnection(urlString)
+                : DriverManager.getConnection(urlString, userString,
+                passwordString);
         if (ti != null) RCData.setTI(c, ti);
         // Would like to verify the setting made by checking
         // c.getTransactionIsolation().  Unfortunately, the spec allows for
@@ -428,7 +428,7 @@ public class RCData {
     public static String expandSysPropVars(String inString) {
 
         String outString = inString;
-        int    varOffset, varEnd;
+        int varOffset, varEnd;
         String varVal, varName;
 
         while (true) {
@@ -456,11 +456,11 @@ public class RCData {
 
             if (varVal == null) {
                 throw new IllegalArgumentException(
-                    "No Java system property with name '" + varName + "'");
+                        "No Java system property with name '" + varName + "'");
             }
 
             outString = outString.substring(0, varOffset) + varVal
-                        + outString.substring(varEnd + 1);
+                    + outString.substring(varEnd + 1);
         }
 
         return outString;
@@ -485,7 +485,7 @@ public class RCData {
         if (i < 0) {
             throw new SQLException(
                     "Trans. isol. value not supported by "
-                    + RCData.class.getName() + ": " + tiString);
+                            + RCData.class.getName() + ": " + tiString);
         }
         c.setTransactionIsolation(i);
     }
@@ -493,7 +493,7 @@ public class RCData {
     /**
      * Return a String representation for the given numerical
      * java.sql.Connection Transaction level.
-     * <P>
+     * <p>
      * Database implementations are free to provide their own transaction
      * isolation levels, so you can't depend upon this method to much.
      *

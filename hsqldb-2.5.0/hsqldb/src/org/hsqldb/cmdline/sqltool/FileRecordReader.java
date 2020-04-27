@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
  * not a Reader in the sense of java.io.Reader.
  * It is a 'reader' in the sense that it provides a method that reads and
  * return records from a text file.
- *
+ * <p>
  * The unique use case here is that records are delimited with a regular
  * expression pattern yet the file contents are read incrementally to minimize
  * RAM usage.
@@ -75,7 +75,7 @@ public class FileRecordReader {
             String filePath, String recordDelimiterRegex, String encoding)
             throws IOException, UnsupportedEncodingException {
         this(new URL("file", null, filePath),
-          recordDelimiterRegex, encoding);
+                recordDelimiterRegex, encoding);
     }
 
     /**
@@ -105,9 +105,9 @@ public class FileRecordReader {
         String tableName = url.getPath();
         int i;
         i = tableName.lastIndexOf('/');
-        if (i > 0) tableName = tableName.substring(i+1);
+        if (i > 0) tableName = tableName.substring(i + 1);
         i = tableName.lastIndexOf('\\');
-        if (i > 0) tableName = tableName.substring(i+1);
+        if (i > 0) tableName = tableName.substring(i + 1);
         return tableName;
     }
 
@@ -128,7 +128,7 @@ public class FileRecordReader {
         if (sa.length != 2)
             throw new IllegalArgumentException(
                     "SYNTAX: java " + FileRecordReader.class.getName()
-                    + " file.txt RECORD_DELIM");
+                            + " file.txt RECORD_DELIM");
         FileRecordReader frr = new FileRecordReader(sa[0], sa[1], "UTF-8");
         int i = 0;
         String r;
@@ -148,7 +148,7 @@ public class FileRecordReader {
             matcher = recordPattern.matcher(stringBuffer);
             if (matcher.matches()) {
                 String rec = matcher.group(1);
-                stringBuffer.delete(0,  matcher.end(2));
+                stringBuffer.delete(0, matcher.end(2));
                 //System.err.println("    REM=(" + stringBuffer + ')');
                 return rec;
             }
@@ -166,7 +166,7 @@ public class FileRecordReader {
     }
 
     /**
-     * @param increaseBuffer.  If true, grab 2 x as many bytes as previous read.
+     * @param increaseBuffer. If true, grab 2 x as many bytes as previous read.
      * @throws IOException
      */
     private void reload(boolean increaseBuffer) throws IOException {

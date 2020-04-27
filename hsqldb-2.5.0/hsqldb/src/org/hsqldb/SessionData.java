@@ -55,8 +55,8 @@ import java.io.*;
  */
 public class SessionData {
 
-    private final Database                  database;
-    private final Session                   session;
+    private final Database database;
+    private final Session session;
     public PersistentStoreCollectionSession persistentStoreCollection;
 
     // large results
@@ -72,9 +72,9 @@ public class SessionData {
     public SessionData(Database database, Session session) {
 
         this.database = database;
-        this.session  = session;
+        this.session = session;
         persistentStoreCollection =
-            new PersistentStoreCollectionSession(session);
+                new PersistentStoreCollectionSession(session);
     }
 
     public PersistentStore getSubqueryRowStore(TableBase table) {
@@ -87,7 +87,7 @@ public class SessionData {
     }
 
     public PersistentStore getNewResultRowStore(TableBase table,
-            boolean isCached) {
+                                                boolean isCached) {
 
         try {
             PersistentStore store = persistentStoreCollection.getStore(table);
@@ -97,7 +97,8 @@ public class SessionData {
             }
 
             return store;
-        } catch (HsqlException e) {}
+        } catch (HsqlException e) {
+        }
 
         throw Error.runtimeError(ErrorCode.U_S0500, "SessionData");
     }
@@ -190,7 +191,7 @@ public class SessionData {
             resultMap.put(result.getResultId(), result);
 
             result.rsProperties =
-                ResultProperties.addIsHeld(result.rsProperties, true);
+                    ResultProperties.addIsHeld(result.rsProperties, true);
         }
 
         if (copy) {
@@ -202,7 +203,7 @@ public class SessionData {
 
     Result getDataResultSlice(long id, int offset, int count) {
 
-        Result          result = (Result) resultMap.get(id);
+        Result result = (Result) resultMap.get(id);
         RowSetNavigator source = result.getNavigator();
 
         if (offset + count > source.getSize()) {
@@ -221,7 +222,7 @@ public class SessionData {
 
     RowSetNavigatorClient getRowSetSlice(long id, int offset, int count) {
 
-        Result          result = (Result) resultMap.get(id);
+        Result result = (Result) resultMap.get(id);
         RowSetNavigator source = result.getNavigator();
 
         if (offset + count > source.getSize()) {
@@ -277,7 +278,7 @@ public class SessionData {
 
     // lob creation
     boolean hasLobOps;
-    long    firstNewLobID;
+    long firstNewLobID;
 
     public void registerNewLob(long lobID) {
 
@@ -290,7 +291,7 @@ public class SessionData {
 
     public void clearLobOps() {
         firstNewLobID = 0;
-        hasLobOps     = false;
+        hasLobOps = false;
     }
 
     public long getFirstLobID() {
@@ -340,8 +341,8 @@ public class SessionData {
                 }
 
                 database.lobManager.adjustUsageCount(session,
-                                                     ((LobData) value).getId(),
-                                                     adjust);
+                        ((LobData) value).getId(),
+                        adjust);
 
                 hasLobOps = true;
             }
@@ -359,7 +360,7 @@ public class SessionData {
 
             switch (result.getSubType()) {
 
-                case ResultLob.LobResultTypes.REQUEST_CREATE_BYTES : {
+                case ResultLob.LobResultTypes.REQUEST_CREATE_BYTES: {
                     long blobId;
                     long blobLength = result.getBlockLength();
 
@@ -374,7 +375,7 @@ public class SessionData {
                     if (inputStream == null) {
 
                         // embedded session + known lob length
-                        blobId      = result.getLobID();
+                        blobId = result.getLobID();
                         inputStream = result.getInputStream();
                     } else {
 
@@ -390,11 +391,11 @@ public class SessionData {
 
                     countStream.setCount(blobLength);
                     database.lobManager.setBytesForNewBlob(
-                        blobId, countStream, result.getBlockLength());
+                            blobId, countStream, result.getBlockLength());
 
                     break;
                 }
-                case ResultLob.LobResultTypes.REQUEST_CREATE_CHARS : {
+                case ResultLob.LobResultTypes.REQUEST_CREATE_CHARS: {
                     long clobId;
                     long clobLength = result.getBlockLength();
 
@@ -412,7 +413,7 @@ public class SessionData {
                         // embedded session + known lob length
                         if (result.getReader() != null) {
                             inputStream =
-                                new ReaderInputStream(result.getReader());
+                                    new ReaderInputStream(result.getReader());
                         } else {
                             inputStream = result.getInputStream();
                         }
@@ -430,30 +431,30 @@ public class SessionData {
 
                     countStream.setCount(clobLength * 2);
                     database.lobManager.setCharsForNewClob(
-                        clobId, countStream, result.getBlockLength());
+                            clobId, countStream, result.getBlockLength());
 
                     break;
                 }
-                case ResultLob.LobResultTypes.REQUEST_SET_BYTES : {
+                case ResultLob.LobResultTypes.REQUEST_SET_BYTES: {
 
                     // server session + unknown lob length
-                    long   blobId     = resultLobs.get(result.getLobID());
-                    long   dataLength = result.getBlockLength();
-                    byte[] byteArray  = result.getByteArray();
+                    long blobId = resultLobs.get(result.getLobID());
+                    long dataLength = result.getBlockLength();
+                    byte[] byteArray = result.getByteArray();
                     Result actionResult = database.lobManager.setBytes(blobId,
-                        result.getOffset(), byteArray, (int) dataLength);
+                            result.getOffset(), byteArray, (int) dataLength);
 
                     // FIXME: actionResult not used anymore!?
                     break;
                 }
-                case ResultLob.LobResultTypes.REQUEST_SET_CHARS : {
+                case ResultLob.LobResultTypes.REQUEST_SET_CHARS: {
 
                     // server session + unknown lob length
-                    long   clobId     = resultLobs.get(result.getLobID());
-                    long   dataLength = result.getBlockLength();
-                    char[] charArray  = result.getCharArray();
+                    long clobId = resultLobs.get(result.getLobID());
+                    long dataLength = result.getBlockLength();
+                    char[] charArray = result.getCharArray();
                     Result actionResult = database.lobManager.setChars(clobId,
-                        result.getOffset(), charArray, (int) dataLength);
+                            result.getOffset(), charArray, (int) dataLength);
 
                     // FIXME: actionResult not used anymore!?
                     break;
@@ -471,9 +472,9 @@ public class SessionData {
 
         //
         long currentOffset = result.getOffset();
-        int  bufferLength  = session.getStreamBlockSize();
+        int bufferLength = session.getStreamBlockSize();
         HsqlByteArrayOutputStream byteArrayOS =
-            new HsqlByteArrayOutputStream(bufferLength);
+                new HsqlByteArrayOutputStream(bufferLength);
 
         while (true) {
             byteArrayOS.reset();
@@ -485,8 +486,8 @@ public class SessionData {
 
             byte[] byteArray = byteArrayOS.getBuffer();
             Result actionResult =
-                database.lobManager.setBytes(result.getLobID(), currentOffset,
-                                             byteArray, byteArrayOS.size());
+                    database.lobManager.setBytes(result.getLobID(), currentOffset,
+                            byteArray, byteArrayOS.size());
 
             // FIXME: actionResult not used anymore!?
             currentOffset += byteArrayOS.size();
@@ -505,9 +506,9 @@ public class SessionData {
     private void allocateClobSegments(long lobID, long offset,
                                       Reader reader) throws IOException {
 
-        int             bufferLength  = session.getStreamBlockSize();
-        CharArrayWriter charWriter    = new CharArrayWriter(bufferLength);
-        long            currentOffset = offset;
+        int bufferLength = session.getStreamBlockSize();
+        CharArrayWriter charWriter = new CharArrayWriter(bufferLength);
+        long currentOffset = offset;
 
         while (true) {
             charWriter.reset();
@@ -520,7 +521,7 @@ public class SessionData {
             }
 
             Result actionResult = database.lobManager.setChars(lobID,
-                currentOffset, charArray, charWriter.size());
+                    currentOffset, charArray, charWriter.size());
 
             // FIXME: actionResult not used anymore!?
             currentOffset += charWriter.size();
@@ -555,7 +556,7 @@ public class SessionData {
         for (int i = 0; i < data.length; i++) {
             if (data[i] instanceof BlobDataID) {
                 BlobData blob = (BlobDataID) data[i];
-                long     id   = blob.getId();
+                long id = blob.getId();
 
                 if (id < 0) {
                     id = resultLobs.get(id);
@@ -566,7 +567,7 @@ public class SessionData {
                 // handle invalid id;
             } else if (data[i] instanceof ClobDataID) {
                 ClobData clob = (ClobDataID) data[i];
-                long     id   = clob.getId();
+                long id = clob.getId();
 
                 if (id < 0) {
                     id = resultLobs.get(id);
@@ -581,9 +582,9 @@ public class SessionData {
 
     ClobData createClobFromFile(String filename, String encoding) {
 
-        File        file       = getFile(filename);
-        long        fileLength = file.length();
-        InputStream is         = null;
+        File file = getFile(filename);
+        long fileLength = file.length();
+        InputStream is = null;
 
         try {
             ClobData clob = session.createClob(fileLength);
@@ -602,15 +603,16 @@ public class SessionData {
                 if (is != null) {
                     is.close();
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
 
     BlobData createBlobFromFile(String filename) {
 
-        File        file       = getFile(filename);
-        long        fileLength = file.length();
-        InputStream is         = null;
+        File file = getFile(filename);
+        long fileLength = file.length();
+        InputStream is = null;
 
         try {
             BlobData blob = session.createBlob(fileLength);
@@ -618,7 +620,7 @@ public class SessionData {
             is = new FileInputStream(file);
 
             database.lobManager.setBytesForNewBlob(blob.getId(), is,
-                                                   fileLength);
+                    fileLength);
 
             return blob;
         } catch (IOException e) {
@@ -628,7 +630,8 @@ public class SessionData {
                 if (is != null) {
                     is.close();
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
 
@@ -642,7 +645,7 @@ public class SessionData {
             throw Error.error(ErrorCode.ACCESS_IS_DENIED, name);
         }
 
-        File    file   = new File(fileName);
+        File file = new File(fileName);
         boolean exists = file.exists();
 
         if (!exists) {
@@ -663,12 +666,12 @@ public class SessionData {
     public Object getSequenceValue(NumberSequence sequence) {
 
         if (sequenceMap == null) {
-            sequenceMap       = new HashMap();
+            sequenceMap = new HashMap();
             sequenceUpdateMap = new HashMap();
         }
 
-        HsqlName key   = sequence.getName();
-        Object   value = sequenceMap.get(key);
+        HsqlName key = sequence.getName();
+        Object value = sequenceMap.get(key);
 
         if (value == null) {
             value = sequence.getValueObject();
@@ -682,6 +685,6 @@ public class SessionData {
 
     public Object getSequenceCurrent(NumberSequence sequence) {
         return sequenceUpdateMap == null ? null
-                                         : sequenceUpdateMap.get(sequence);
+                : sequenceUpdateMap.get(sequence);
     }
 }

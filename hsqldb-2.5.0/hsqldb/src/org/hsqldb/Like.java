@@ -78,7 +78,7 @@ import org.hsqldb.types.*;
 
 /**
  * Reusable object for processing LIKE queries.
- *
+ * <p>
  * Rewritten in HSQLDB based on original Hypersonic code.<p>
  *
  * @author Fred Toussi (fredt@users dot sourceforge dot net)
@@ -94,22 +94,23 @@ import org.hsqldb.types.*;
 class Like implements Cloneable {
 
     private static final BinaryData maxByteValue =
-        new BinaryData(new byte[]{ -128 }, false);
-    private char[]   cLike;
-    private int[]    wildCardType;
-    private int      iLen;
-    private boolean  isIgnoreCase;
-    private int      iFirstWildCard;
-    private boolean  isNull;
-    int              escapeChar;
-    boolean          hasCollation;
+            new BinaryData(new byte[]{-128}, false);
+    private char[] cLike;
+    private int[] wildCardType;
+    private int iLen;
+    private boolean isIgnoreCase;
+    private int iFirstWildCard;
+    private boolean isNull;
+    int escapeChar;
+    boolean hasCollation;
     static final int UNDERSCORE_CHAR = 1;
-    static final int PERCENT_CHAR    = 2;
-    boolean          isVariable      = true;
-    boolean          isBinary        = false;
-    Type             dataType;
+    static final int PERCENT_CHAR = 2;
+    boolean isVariable = true;
+    boolean isBinary = false;
+    Type dataType;
 
-    Like() {}
+    Like() {
+    }
 
     void setParams(boolean collation) {
         hasCollation = collation;
@@ -123,10 +124,10 @@ class Like implements Cloneable {
 
         if (iLen == 0) {
             return isBinary ? BinaryData.zeroLengthBinary
-                            : "";
+                    : "";
         }
 
-        StringBuilder             sb = null;
+        StringBuilder sb = null;
         HsqlByteArrayOutputStream os = null;
 
         if (isBinary) {
@@ -150,7 +151,7 @@ class Like implements Cloneable {
         }
 
         return isBinary ? new BinaryData(os.toByteArray(), false)
-                        : sb.toString();
+                : sb.toString();
     }
 
     Boolean compare(Session session, Object o) {
@@ -171,12 +172,12 @@ class Like implements Cloneable {
 
         if (o instanceof ClobData) {
             o = ((ClobData) o).getChars(session, 0,
-                                        (int) ((ClobData) o).length(session));
+                    (int) ((ClobData) o).length(session));
         }
 
         return compareAt(session, o, 0, 0, iLen, length, cLike, wildCardType)
-               ? Boolean.TRUE
-               : Boolean.FALSE;
+                ? Boolean.TRUE
+                : Boolean.FALSE;
     }
 
     char getChar(Session session, Object o, int i) {
@@ -218,20 +219,20 @@ class Like implements Cloneable {
         for (; i < iLen; i++) {
             switch (wildCardType[i]) {
 
-                case 0 :                  // general character
+                case 0:                  // general character
                     if ((j >= jLen)
                             || (cLike[i] != getChar(session, o, j++))) {
                         return false;
                     }
                     break;
 
-                case UNDERSCORE_CHAR :    // underscore: do not test this character
+                case UNDERSCORE_CHAR:    // underscore: do not test this character
                     if (j++ >= jLen) {
                         return false;
                     }
                     break;
 
-                case PERCENT_CHAR :       // percent: none or any character(s)
+                case PERCENT_CHAR:       // percent: none or any character(s)
                     if (++i >= iLen) {
                         return true;
                     }
@@ -239,7 +240,7 @@ class Like implements Cloneable {
                     while (j < jLen) {
                         if ((cLike[i] == getChar(session, o, j))
                                 && compareAt(session, o, i, j, iLen, jLen,
-                                             cLike, wildCardType)) {
+                                cLike, wildCardType)) {
                             return true;
                         }
 
@@ -292,16 +293,16 @@ class Like implements Cloneable {
             pattern = ((CharacterType) dataType).upper(null, pattern);
         }
 
-        iLen           = 0;
+        iLen = 0;
         iFirstWildCard = -1;
 
         int l = getLength(session, pattern);
 
-        cLike        = new char[l];
+        cLike = new char[l];
         wildCardType = new int[l];
 
         boolean bEscaping = false,
-                bPercent  = false;
+                bPercent = false;
 
         for (int i = 0; i < l; i++) {
             char c = getChar(session, pattern, i);
@@ -322,7 +323,7 @@ class Like implements Cloneable {
                         continue;
                     }
 
-                    bPercent           = true;
+                    bPercent = true;
                     wildCardType[iLen] = PERCENT_CHAR;
 
                     if (iFirstWildCard == -1) {
@@ -333,7 +334,7 @@ class Like implements Cloneable {
                 }
             } else {
                 if (c == escapeChar || c == '_' || c == '%') {
-                    bPercent  = false;
+                    bPercent = false;
                     bEscaping = false;
                 } else {
                     throw Error.error(ErrorCode.X_22025);
@@ -350,7 +351,7 @@ class Like implements Cloneable {
         for (int i = 0; i < iLen - 1; i++) {
             if ((wildCardType[i] == PERCENT_CHAR)
                     && (wildCardType[i + 1] == UNDERSCORE_CHAR)) {
-                wildCardType[i]     = UNDERSCORE_CHAR;
+                wildCardType[i] = UNDERSCORE_CHAR;
                 wildCardType[i + 1] = PERCENT_CHAR;
             }
         }

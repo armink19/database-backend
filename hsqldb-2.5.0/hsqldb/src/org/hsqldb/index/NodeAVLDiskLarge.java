@@ -42,17 +42,18 @@ import org.hsqldb.rowio.RowOutputInterface;
 import java.io.IOException;
 
 /**
- *  Subclass of NodeAVL for huge databases.
+ * Subclass of NodeAVL for huge databases.
+ *
  * @author Fred Toussi (fredt@users dot sourceforge dot net)
  * @version 2.3.4
  * @since 2.2.9
  */
 public class NodeAVLDiskLarge extends NodeAVL {
 
-    private long            iLeft   = NO_POS;
-    private long            iRight  = NO_POS;
-    private long            iParent = NO_POS;
-    private int             iId;    // id of Index object for this Node
+    private long iLeft = NO_POS;
+    private long iRight = NO_POS;
+    private long iParent = NO_POS;
+    private int iId;    // id of Index object for this Node
     public static final int SIZE_IN_BYTE = 4 * 4;
 
     public NodeAVLDiskLarge(RowAVLDisk r, RowInputInterface in,
@@ -65,14 +66,14 @@ public class NodeAVLDiskLarge extends NodeAVL {
         int ext = in.readInt();
 
         iBalance = (byte) ext;
-        iLeft    = in.readInt() & 0xffffffffL;
-        iRight   = in.readInt() & 0xffffffffL;
-        iParent  = in.readInt() & 0xffffffffL;
+        iLeft = in.readInt() & 0xffffffffL;
+        iRight = in.readInt() & 0xffffffffL;
+        iParent = in.readInt() & 0xffffffffL;
 
         if (ext > 0xff) {
             iParent |= (((long) ext << 8) & 0xff00000000L);
-            iLeft   |= (((long) ext << 16) & 0xff00000000L);
-            iRight  |= (((long) ext << 24) & 0xff00000000L);
+            iLeft |= (((long) ext << 16) & 0xff00000000L);
+            iRight |= (((long) ext << 24) & 0xff00000000L);
         }
 
         if (iLeft == 0) {
@@ -97,9 +98,9 @@ public class NodeAVLDiskLarge extends NodeAVL {
 
     public void delete() {
 
-        iLeft    = NO_POS;
-        iRight   = NO_POS;
-        iParent  = NO_POS;
+        iLeft = NO_POS;
+        iRight = NO_POS;
+        iParent = NO_POS;
         iBalance = 0;
 
         ((RowAVLDisk) row).setNodesChanged();
@@ -141,7 +142,7 @@ public class NodeAVLDiskLarge extends NodeAVL {
             }
 
             store.getCache().logSevereEvent(tableName + " NodeAVLDiskLarge "
-                                            + row.getPos(), null);
+                    + row.getPos(), null);
 
             return this;
         }
@@ -152,7 +153,7 @@ public class NodeAVLDiskLarge extends NodeAVL {
     private NodeAVLDiskLarge findNode(PersistentStore store, long pos) {
 
         NodeAVLDiskLarge ret = null;
-        RowAVLDisk       r   = (RowAVLDisk) store.get(pos, false);
+        RowAVLDisk r = (RowAVLDisk) store.get(pos, false);
 
         if (r != null) {
             ret = (NodeAVLDiskLarge) r.getNode(iId);
@@ -245,18 +246,18 @@ public class NodeAVLDiskLarge extends NodeAVL {
 
     public NodeAVL child(PersistentStore store, boolean isleft) {
         return isleft ? getLeft(store)
-                      : getRight(store);
+                : getRight(store);
     }
 
     NodeAVL setParent(PersistentStore store, NodeAVL n) {
 
-        RowAVLDisk       row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDiskLarge node = (NodeAVLDiskLarge) row.getNode(iId);
 
         row.setNodesChanged();
 
         node.iParent = n == null ? NO_POS
-                                 : n.getPos();
+                : n.getPos();
 
         row.keepInMemory(false);
 
@@ -265,7 +266,7 @@ public class NodeAVLDiskLarge extends NodeAVL {
 
     public NodeAVL setBalance(PersistentStore store, int b) {
 
-        RowAVLDisk       row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDiskLarge node = (NodeAVLDiskLarge) row.getNode(iId);
 
         row.setNodesChanged();
@@ -279,11 +280,11 @@ public class NodeAVLDiskLarge extends NodeAVL {
 
     NodeAVL setLeft(PersistentStore store, NodeAVL n) {
 
-        RowAVLDisk       row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDiskLarge node = (NodeAVLDiskLarge) row.getNode(iId);
 
         node.iLeft = n == null ? NO_POS
-                               : n.getPos();
+                : n.getPos();
 
         row.setNodesChanged();
         row.keepInMemory(false);
@@ -293,11 +294,11 @@ public class NodeAVLDiskLarge extends NodeAVL {
 
     NodeAVL setRight(PersistentStore store, NodeAVL n) {
 
-        RowAVLDisk       row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDiskLarge node = (NodeAVLDiskLarge) row.getNode(iId);
 
         node.iRight = n == null ? NO_POS
-                                : n.getPos();
+                : n.getPos();
 
         row.setNodesChanged();
         row.keepInMemory(false);
@@ -352,7 +353,8 @@ public class NodeAVLDiskLarge extends NodeAVL {
         return NodeAVLDiskLarge.SIZE_IN_BYTE;
     }
 
-    public void setInMemory(boolean in) {}
+    public void setInMemory(boolean in) {
+    }
 
     public void write(RowOutputInterface out) {
         write(out, null);
@@ -360,10 +362,10 @@ public class NodeAVLDiskLarge extends NodeAVL {
 
     public void write(RowOutputInterface out, LongLookup lookup) {
 
-        long leftTemp   = getTranslatePointer(iLeft, lookup);
-        long rightTemp  = getTranslatePointer(iRight, lookup);
+        long leftTemp = getTranslatePointer(iLeft, lookup);
+        long rightTemp = getTranslatePointer(iRight, lookup);
         long parentTemp = getTranslatePointer(iParent, lookup);
-        int  ext        = 0;
+        int ext = 0;
 
         ext |= (int) ((parentTemp & 0xff00000000L) >> 8);
         ext |= (int) ((leftTemp & 0xff00000000L) >> 16);
@@ -396,29 +398,35 @@ public class NodeAVLDiskLarge extends NodeAVL {
         return newPointer;
     }
 
-    public void restore() {}
+    public void restore() {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
-    public void updateAccessCount(int count) {}
+    public void updateAccessCount(int count) {
+    }
 
     public int getAccessCount() {
         return 0;
     }
 
-    public void setStorageSize(int size) {}
+    public void setStorageSize(int size) {
+    }
 
     public int getStorageSize() {
         return 0;
     }
 
-    public void setPos(long pos) {}
+    public void setPos(long pos) {
+    }
 
     public boolean hasChanged() {
         return false;
     }
 
-    public void setChanged(boolean flag) {}
+    public void setChanged(boolean flag) {
+    }
 
     public boolean isKeepInMemory() {
         return false;

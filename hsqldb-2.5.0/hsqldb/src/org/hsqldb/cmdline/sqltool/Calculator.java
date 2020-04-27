@@ -47,20 +47,28 @@ public class Calculator {
         MULTIPLY('*'),
         DIVIDE('/'),
         REM('%'),
-        POWER('^')
-        ;
-        MathOp(char c) { this.c = c; }
+        POWER('^');
+
+        MathOp(char c) {
+            this.c = c;
+        }
+
         private char c;
-        public String toString() { return Character.toString(c); }
+
+        public String toString() {
+            return Character.toString(c);
+        }
+
         public static MathOp valueOf(char c) {
             for (MathOp o : MathOp.values())
                 if (o.c == c) return o;
             return null;
         }
     }
+
     private EnumSet<MathOp> TradOrLParen =
             EnumSet.of(MathOp.ADD, MathOp.SUBTRACT, MathOp.LPAREN,
-            MathOp.MULTIPLY, MathOp.DIVIDE, MathOp.REM, MathOp.POWER);
+                    MathOp.MULTIPLY, MathOp.DIVIDE, MathOp.REM, MathOp.POWER);
 
     private long deref(String varName) {
         if (!vars.containsKey(varName))
@@ -98,10 +106,18 @@ public class Calculator {
             // System.err.println("Trying '" + token + "'");
             val = deref(token);
         }
-        private Atom(MathOp op) { this.op = op; }
-        private Atom(long val) { this.val = val; }
+
+        private Atom(MathOp op) {
+            this.op = op;
+        }
+
+        private Atom(long val) {
+            this.val = val;
+        }
+
         public MathOp op;
         public long val;
+
         public String toString() {
             return (op == null) ? Long.toString(val) : op.toString();
         }
@@ -120,26 +136,27 @@ public class Calculator {
         Atom atom = null, prePrevAtom;
         int prevIndex;
         NEXT_TOKEN:
-        for (String token : sa) try {
-            atom = new Atom(token);
-            prevIndex = atoms.size() - 1;
-            if (prevIndex < 0) continue;
-            if (atoms.get(prevIndex).op != MathOp.SUBTRACT) continue;
-            prePrevAtom = (prevIndex > 0) ? atoms.get(prevIndex-1) : null;
-            if (prePrevAtom != null && !TradOrLParen.contains(prePrevAtom.op))
-                continue;
+        for (String token : sa)
+            try {
+                atom = new Atom(token);
+                prevIndex = atoms.size() - 1;
+                if (prevIndex < 0) continue;
+                if (atoms.get(prevIndex).op != MathOp.SUBTRACT) continue;
+                prePrevAtom = (prevIndex > 0) ? atoms.get(prevIndex - 1) : null;
+                if (prePrevAtom != null && !TradOrLParen.contains(prePrevAtom.op))
+                    continue;
 
-            if (atom.op == null) {
-                atoms.remove(prevIndex);
-                atom.val *= -1;
-            } else if (atom.op == MathOp.LPAREN) {
-                atoms.remove(prevIndex);
-                atoms.add(new Atom(-1L));
-                atoms.add(new Atom(MathOp.MULTIPLY));
+                if (atom.op == null) {
+                    atoms.remove(prevIndex);
+                    atom.val *= -1;
+                } else if (atom.op == MathOp.LPAREN) {
+                    atoms.remove(prevIndex);
+                    atoms.add(new Atom(-1L));
+                    atoms.add(new Atom(MathOp.MULTIPLY));
+                }
+            } finally {
+                atoms.add(atom);
             }
-        } finally {
-            atoms.add(atom);
-        }
     }
 
     /**
@@ -152,6 +169,7 @@ public class Calculator {
         this(s.replaceAll("([-()*/+^])", " $1 ")
                 .trim().split("\\s+"), vars);
     }
+
     /**
      * If atoms[startAtomIndex] == '(', then last visited atoms will be the
      * next top-level (un-paired) ')'.
@@ -177,18 +195,18 @@ public class Calculator {
             }
             atom = atoms.get(i);
             if (atom.op != null) switch (atom.op) {
-              case RPAREN:
-                if (!stopAtParenClose)
-                    throw new IllegalStateException(
-                            "Unbalanced '" + MathOp.RPAREN + "'");
-                atoms.remove(i);
-                break PAREN_SEEKER;
-              case LPAREN: // Recurse.  Reduction inside of reduce().
-                atoms.remove(i);
-                atoms.add(i, new Atom(reduce(i, true)));
-                break;
-              default:
-                // Intentionally empty
+                case RPAREN:
+                    if (!stopAtParenClose)
+                        throw new IllegalStateException(
+                                "Unbalanced '" + MathOp.RPAREN + "'");
+                    atoms.remove(i);
+                    break PAREN_SEEKER;
+                case LPAREN: // Recurse.  Reduction inside of reduce().
+                    atoms.remove(i);
+                    atoms.add(i, new Atom(reduce(i, true)));
+                    break;
+                default:
+                    // Intentionally empty
             }
         }
         int remaining = i - startAtomIndex;
@@ -204,7 +222,7 @@ public class Calculator {
         if (atom.op != null)
             throw new IllegalStateException(
                     "Expected initial value expected but got operation "
-                    + atom.op);
+                            + atom.op);
         while (startAtomIndex + remaining > i + 1) {
             if (startAtomIndex + remaining < i + 3)
                 throw new IllegalStateException(
@@ -239,7 +257,7 @@ public class Calculator {
         if (atom.op != null)
             throw new IllegalStateException(
                     "Expected initial value expected but got operation "
-                    + atom.op);
+                            + atom.op);
         while (startAtomIndex + remaining > i + 1) {
             if (startAtomIndex + remaining < i + 3)
                 throw new IllegalStateException(
@@ -294,14 +312,14 @@ public class Calculator {
                 throw new IllegalStateException(
                         "Value expected but got operation " + atom.op);
             switch (op) {
-              case ADD:
-                total += atom.val;
-                break;
-              case SUBTRACT:
-                total -= atom.val;
-                break;
-              default:
-                throw new IllegalStateException("Unknown operator: " + op);
+                case ADD:
+                    total += atom.val;
+                    break;
+                case SUBTRACT:
+                    total -= atom.val;
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown operator: " + op);
             }
         }
 
@@ -346,18 +364,18 @@ public class Calculator {
      * and returns the value ready to be assigned to it.
      */
     public static long reassignValue(String assignee,
-            Map<String, String> valMap, String opStr, String expr) {
+                                     Map<String, String> valMap, String opStr, String expr) {
         long outVal = 0;
         try {
             outVal = Long.parseLong(valMap.get(assignee));
         } catch (NumberFormatException nfe) {
             throw new IllegalArgumentException(
                     "Can not perform a self-operation on a non-integer: "
-                    + assignee);
+                            + assignee);
         }
         Long rhValObj = (expr == null || expr.trim().length() < 1) ? null
                 : Long.valueOf(
-                        new Calculator(expr, valMap).reduce(0, false));
+                new Calculator(expr, valMap).reduce(0, false));
         if (opStr.equals("++")) {
             if (rhValObj != null)
                 throw new IllegalStateException(

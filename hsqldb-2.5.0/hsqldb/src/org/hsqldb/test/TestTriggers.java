@@ -39,7 +39,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- *
  * @author fredt
  */
 public class TestTriggers extends TestBase {
@@ -135,14 +134,14 @@ public class TestTriggers extends TestBase {
         st.execute("alter table testtrig alter column c1 restart with 0");
         clearCalls();
         st.execute(
-            "insert into testtrig values (default, 'inserted val 1', 100)");
+                "insert into testtrig values (default, 'inserted val 1', 100)");
         checkCallCount(3);
         checkCalls(Trigger.INSERT_AFTER, 1);
         checkCalls(Trigger.INSERT_BEFORE_ROW, 1);
         checkCalls(Trigger.INSERT_AFTER_ROW, 1);
         clearCalls();
         st.execute(
-            "insert into testtrig (c2, c3) select c2, c3 from testtrig where c1 < 0");
+                "insert into testtrig (c2, c3) select c2, c3 from testtrig where c1 < 0");
         checkCallCount(1);
         checkCalls(Trigger.INSERT_AFTER, 1);
         checkCalls(Trigger.INSERT_BEFORE_ROW, 0);
@@ -170,7 +169,7 @@ public class TestTriggers extends TestBase {
 
     void checkCalls(int trigType, int callCount) {
         assertEquals("call count mismatch", TriggerClass.callCounts[trigType],
-                     callCount);
+                callCount);
     }
 
     void clearCalls() {

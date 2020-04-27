@@ -36,8 +36,8 @@ package org.hsqldb.auth;
  * Function methods, they are POJO beans to be managed by AuthBeanMultiplexer
  * (which does have a real HyperSQL Authentication Function static method).
  *
- * @see AuthBeanMultiplexer for how these beans are used.
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @see AuthBeanMultiplexer for how these beans are used.
  * @since 2.0.1
  */
 public interface AuthFunctionBean {
@@ -51,14 +51,14 @@ public interface AuthFunctionBean {
      *
      * @param userName String
      * @param password String
-     * @throws Exception If user should not be allowed access to the specified
-     *         database.  Other registered AuthFunctionBeans will not be attempted.
-     * @throws RuntimeException Upon system problem.  The exception will be
-     *         logged to the HyperSQL application logger and other registered
-     *         AuthFunctionBeans (if any) will be attempted.
      * @return null or String[] according to the contract of HyperSQL
-     *         authentication function contract, except that the role/schema
-     *         list is returned as a String[] instead of a java.sql.Array.
+     * authentication function contract, except that the role/schema
+     * list is returned as a String[] instead of a java.sql.Array.
+     * @throws Exception        If user should not be allowed access to the specified
+     *                          database.  Other registered AuthFunctionBeans will not be attempted.
+     * @throws RuntimeException Upon system problem.  The exception will be
+     *                          logged to the HyperSQL application logger and other registered
+     *                          AuthFunctionBeans (if any) will be attempted.
      */
     String[] authenticate(String userName, String password) throws Exception;
 }

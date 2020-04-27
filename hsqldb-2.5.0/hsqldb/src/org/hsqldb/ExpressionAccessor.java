@@ -49,8 +49,8 @@ public class ExpressionAccessor extends Expression {
 
         super(OpTypes.ARRAY_ACCESS);
 
-        nodes = new Expression[] {
-            left, right
+        nodes = new Expression[]{
+                left, right
         };
     }
 
@@ -59,8 +59,8 @@ public class ExpressionAccessor extends Expression {
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
 
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i] == null) {
@@ -164,8 +164,8 @@ public class ExpressionAccessor extends Expression {
 
     public String getSQL() {
 
-        StringBuilder sb   = new StringBuilder(64);
-        String        left = getContextSQL(nodes[LEFT]);
+        StringBuilder sb = new StringBuilder(64);
+        String left = getContextSQL(nodes[LEFT]);
 
         sb.append(left).append('[');
         sb.append(nodes[RIGHT].getSQL()).append(']');

@@ -45,30 +45,30 @@ import org.hsqldb.rights.Grantee;
  */
 public class Charset implements SchemaObject {
 
-    public static final int[][] uppercaseLetters   = new int[][] {
-        {
-            'A', 'Z'
-        }
+    public static final int[][] uppercaseLetters = new int[][]{
+            {
+                    'A', 'Z'
+            }
     };
-    public static final int[][] unquotedIdentifier = new int[][] {
-        {
-            '0', '9'
-        }, {
+    public static final int[][] unquotedIdentifier = new int[][]{
+            {
+                    '0', '9'
+            }, {
             'A', 'Z'
-        }, {
+    }, {
             '_', '_'
-        }
+    }
     };
-    public static final int[][] basicIdentifier    = new int[][] {
-        {
-            '0', '9'
-        }, {
+    public static final int[][] basicIdentifier = new int[][]{
+            {
+                    '0', '9'
+            }, {
             'A', 'Z'
-        }, {
+    }, {
             '_', '_'
-        }, {
+    }, {
             'a', 'z'
-        }
+    }
     };
     public static final Charset SQL_TEXT;
     public static final Charset SQL_IDENTIFIER_CHARSET;
@@ -147,7 +147,7 @@ public class Charset implements SchemaObject {
          */
     }
 
-    final HsqlName        name;
+    final HsqlName name;
     final public HsqlName base;
 
     //
@@ -198,14 +198,15 @@ public class Charset implements SchemaObject {
         return null;
     }
 
-    public void compile(Session session, SchemaObject parentObject) {}
+    public void compile(Session session, SchemaObject parentObject) {
+    }
 
     public String getSQL() {
 
         StringBuilder sb = new StringBuilder();
 
         sb.append(Tokens.T_CREATE).append(' ').append(
-            Tokens.T_CHARACTER).append(' ').append(Tokens.T_SET).append(' ');
+                Tokens.T_CHARACTER).append(' ').append(Tokens.T_SET).append(' ');
 
         if (SqlInvariants.INFORMATION_SCHEMA.equals(name.schema.name)) {
             sb.append(name.getStatementName());
@@ -215,7 +216,7 @@ public class Charset implements SchemaObject {
 
         if (base != null) {
             sb.append(' ').append(Tokens.T_AS).append(' ').append(
-                Tokens.T_GET);
+                    Tokens.T_GET);
             sb.append(' ');
 
             if (SqlInvariants.INFORMATION_SCHEMA.equals(base.schema.name)) {

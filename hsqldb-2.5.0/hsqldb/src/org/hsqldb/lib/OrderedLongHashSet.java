@@ -45,10 +45,10 @@ public class OrderedLongHashSet extends BaseHashMap {
     }
 
     public OrderedLongHashSet(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.longKeyOrValue,
-              BaseHashMap.noKeyOrValue, false);
+                BaseHashMap.noKeyOrValue, false);
 
         isList = true;
     }
@@ -126,8 +126,8 @@ public class OrderedLongHashSet extends BaseHashMap {
 
     public boolean addAll(Collection col) {
 
-        int      oldSize = size();
-        Iterator it      = col.iterator();
+        int oldSize = size();
+        Iterator it = col.iterator();
 
         while (it.hasNext()) {
             add(it.nextLong());
@@ -138,8 +138,8 @@ public class OrderedLongHashSet extends BaseHashMap {
 
     public long[] toArray() {
 
-        int   lookup = -1;
-        long[] array  = new long[size()];
+        int lookup = -1;
+        long[] array = new long[size()];
 
         for (int i = 0; i < array.length; i++) {
             lookup = super.nextLookup(lookup);

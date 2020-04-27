@@ -47,9 +47,9 @@ public class IntKeyLongValueHashMap extends BaseHashMap {
     }
 
     public IntKeyLongValueHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.intKeyOrValue,
-              BaseHashMap.longKeyOrValue, false);
+                BaseHashMap.longKeyOrValue, false);
     }
 
     public long get(int key) throws NoSuchElementException {

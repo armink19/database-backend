@@ -33,18 +33,32 @@ package org.hsqldb.lib;
 
 public interface RefCapableRBInterface {
     String getString();
+
     String getString(String... strings);
+
     String getExpandedString();
+
     String getExpandedString(String... strings);
+
     String getString(int i1);
+
     String getString(int i1, int i2);
+
     String getString(int i1, int i2, int i3);
+
     String getString(int i1, String s2);
+
     String getString(String s1, int i2);
+
     String getString(int i1, int i2, String s3);
+
     String getString(int i1, String s2, int i3);
+
     String getString(String s1, int i2, int i3);
+
     String getString(int i1, String s2, String s3);
+
     String getString(String s1, String s2, int i3);
+
     String getString(String s1, int i2, String s3);
 }

@@ -41,28 +41,28 @@ package org.hsqldb.types;
 public class TimestampData {
 
     final long seconds;
-    final int  nanos;
-    final int  zone;
+    final int nanos;
+    final int zone;
 
     public TimestampData(long seconds) {
 
         this.seconds = seconds;
-        this.nanos   = 0;
-        this.zone    = 0;
+        this.nanos = 0;
+        this.zone = 0;
     }
 
     public TimestampData(long seconds, int nanos) {
 
         this.seconds = seconds;
-        this.nanos   = nanos;
-        this.zone    = 0;
+        this.nanos = nanos;
+        this.zone = 0;
     }
 
     public TimestampData(long seconds, int nanos, int zoneSeconds) {
 
         this.seconds = seconds;
-        this.nanos   = nanos;
-        this.zone    = zoneSeconds;
+        this.nanos = nanos;
+        this.zone = zoneSeconds;
     }
 
     public long getSeconds() {
@@ -85,8 +85,8 @@ public class TimestampData {
 
         if (other instanceof TimestampData) {
             return seconds == ((TimestampData) other).seconds
-                   && nanos == ((TimestampData) other).nanos
-                   && zone == ((TimestampData) other).zone;
+                    && nanos == ((TimestampData) other).nanos
+                    && zone == ((TimestampData) other).zone;
         }
 
         return false;
@@ -109,6 +109,6 @@ public class TimestampData {
         }
 
         return diff > 0 ? 1
-                        : -1;
+                : -1;
     }
 }

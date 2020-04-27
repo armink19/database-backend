@@ -63,8 +63,8 @@ public class AuthUtils {
         ResultSet rs = null;
         try {
             rs = st.executeQuery(
-                "SELECT initial_schema FROM information_schema.system_users\n"
-                + "WHERE user_name = current_user");
+                    "SELECT initial_schema FROM information_schema.system_users\n"
+                            + "WHERE user_name = current_user");
             if (!rs.next()) {
                 throw new IllegalStateException(
                         "Failed to retrieve initial_schema for current user");

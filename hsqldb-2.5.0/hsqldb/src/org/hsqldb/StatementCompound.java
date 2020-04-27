@@ -44,61 +44,61 @@ import org.hsqldb.types.Type;
 
 /**
  * Implementation of Statement for PSM compound statements.
-
+ *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
  * @since 1.9.0
  */
 public class StatementCompound extends Statement implements RangeGroup {
 
-    final boolean       isLoop;
-    HsqlName            label;
-    StatementHandler[]  handlers = StatementHandler.emptyExceptionHandlerArray;
-    boolean             hasUndoHandler;
-    StatementQuery      loopCursor;
-    Statement[]         statements;
+    final boolean isLoop;
+    HsqlName label;
+    StatementHandler[] handlers = StatementHandler.emptyExceptionHandlerArray;
+    boolean hasUndoHandler;
+    StatementQuery loopCursor;
+    Statement[] statements;
     StatementExpression condition;
-    boolean             isAtomic;
+    boolean isAtomic;
 
     //
-    ColumnSchema[]    variables      = ColumnSchema.emptyArray;
-    StatementCursor[] cursors        = StatementCursor.emptyArray;
-    HashMappedList    scopeVariables = new HashMappedList();
-    RangeVariable[]   rangeVariables = RangeVariable.emptyArray;
-    Table[]           tables         = Table.emptyArray;
-    HashMappedList    scopeTables;
+    ColumnSchema[] variables = ColumnSchema.emptyArray;
+    StatementCursor[] cursors = StatementCursor.emptyArray;
+    HashMappedList scopeVariables = new HashMappedList();
+    RangeVariable[] rangeVariables = RangeVariable.emptyArray;
+    Table[] tables = Table.emptyArray;
+    HashMappedList scopeTables;
 
     //
     int variablesOffset;
 
     //
     public static final StatementCompound[] emptyStatementArray =
-        new StatementCompound[]{};
+            new StatementCompound[]{};
 
     StatementCompound(int type, HsqlName label, StatementCompound parent) {
 
         super(type, StatementTypes.X_SQL_CONTROL);
 
-        this.label             = label;
+        this.label = label;
         isTransactionStatement = false;
 
         switch (type) {
 
-            case StatementTypes.FOR :
-            case StatementTypes.LOOP :
-            case StatementTypes.WHILE :
-            case StatementTypes.REPEAT :
+            case StatementTypes.FOR:
+            case StatementTypes.LOOP:
+            case StatementTypes.WHILE:
+            case StatementTypes.REPEAT:
                 isLoop = true;
                 break;
 
-            case StatementTypes.BEGIN_END :
-            case StatementTypes.IF :
+            case StatementTypes.BEGIN_END:
+            case StatementTypes.IF:
                 isLoop = false;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "StatementCompound");
+                        "StatementCompound");
         }
 
         this.parent = parent;
@@ -224,10 +224,10 @@ public class StatementCompound extends Statement implements RangeGroup {
 
     void setLocalDeclarations(Object[] declarations) {
 
-        int varCount     = 0;
+        int varCount = 0;
         int handlerCount = 0;
-        int cursorCount  = 0;
-        int tableCount   = 0;
+        int cursorCount = 0;
+        int tableCount = 0;
 
         for (int i = 0; i < declarations.length; i++) {
             if (declarations[i] instanceof ColumnSchema) {
@@ -257,10 +257,10 @@ public class StatementCompound extends Statement implements RangeGroup {
             cursors = new StatementCursor[cursorCount];
         }
 
-        varCount     = 0;
+        varCount = 0;
         handlerCount = 0;
-        tableCount   = 0;
-        cursorCount  = 0;
+        tableCount = 0;
+        cursorCount = 0;
 
         for (int i = 0; i < declarations.length; i++) {
             if (declarations[i] instanceof StatementCursor) {
@@ -297,13 +297,13 @@ public class StatementCompound extends Statement implements RangeGroup {
         loopCursor = cursorStatement;
 
         HsqlName[] colNames =
-            cursorStatement.queryExpression.getResultColumnNames();
+                cursorStatement.queryExpression.getResultColumnNames();
         Type[] colTypes = cursorStatement.queryExpression.getColumnTypes();
         ColumnSchema[] columns = new ColumnSchema[colNames.length];
 
         for (int i = 0; i < colNames.length; i++) {
             columns[i] = new ColumnSchema(colNames[i], colTypes[i], false,
-                                          false, null);
+                    false, null);
 
             columns[i].setParameterMode(SchemaObject.ParameterModes.PARAM_IN);
         }
@@ -330,32 +330,32 @@ public class StatementCompound extends Statement implements RangeGroup {
 
         switch (type) {
 
-            case StatementTypes.BEGIN_END : {
+            case StatementTypes.BEGIN_END: {
                 initialiseVariables(session);
 
                 result = executeBlock(session);
 
                 break;
             }
-            case StatementTypes.FOR :
+            case StatementTypes.FOR:
                 result = executeForLoop(session);
                 break;
 
-            case StatementTypes.LOOP :
-            case StatementTypes.WHILE :
-            case StatementTypes.REPEAT : {
+            case StatementTypes.LOOP:
+            case StatementTypes.WHILE:
+            case StatementTypes.REPEAT: {
                 result = executeLoop(session);
 
                 break;
             }
-            case StatementTypes.IF : {
+            case StatementTypes.IF: {
                 result = executeIf(session);
 
                 break;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "StatementCompound");
+                        "StatementCompound");
         }
 
         if (result.isError()) {
@@ -367,15 +367,15 @@ public class StatementCompound extends Statement implements RangeGroup {
 
     private Result executeBlock(Session session) {
 
-        Result  result = Result.updateZeroResult;
-        boolean push   = !root.isTrigger();
+        Result result = Result.updateZeroResult;
+        boolean push = !root.isTrigger();
 
         if (push) {
             session.sessionContext.push();
 
             if (hasUndoHandler) {
                 String name = HsqlNameManager.getAutoSavepointNameString(
-                    session.actionTimestamp, session.sessionContext.depth);
+                        session.actionTimestamp, session.sessionContext.depth);
 
                 session.savepoint(name);
             }
@@ -403,7 +403,7 @@ public class StatementCompound extends Statement implements RangeGroup {
                 if (result.getMainString() == null) {
                     result = Result.updateZeroResult;
                 } else if (label != null
-                           && label.name.equals(result.getMainString())) {
+                        && label.name.equals(result.getMainString())) {
                     result = Result.updateZeroResult;
                 }
             }
@@ -442,24 +442,24 @@ public class StatementCompound extends Statement implements RangeGroup {
                  */
                 if (handler.handlesCondition(sqlState)) {
                     String labelString = label == null ? null
-                                                       : label.name;
+                            : label.name;
 
                     switch (handler.handlerType) {
 
-                        case StatementHandler.CONTINUE :
+                        case StatementHandler.CONTINUE:
                             result = Result.updateZeroResult;
                             break;
 
-                        case StatementHandler.UNDO :
+                        case StatementHandler.UNDO:
                             session.rollbackToSavepoint();
 
                             result = Result.newPSMResult(StatementTypes.LEAVE,
-                                                         labelString, null);
+                                    labelString, null);
                             break;
 
-                        case StatementHandler.EXIT :
+                        case StatementHandler.EXIT:
                             result = Result.newPSMResult(StatementTypes.LEAVE,
-                                                         labelString, null);
+                                    labelString, null);
                             break;
                     }
 
@@ -470,7 +470,7 @@ public class StatementCompound extends Statement implements RangeGroup {
 
                         // parent should handle this
                     } else if (actionResult.getType()
-                               == ResultConstants.VALUE) {
+                            == ResultConstants.VALUE) {
                         result = actionResult;
                     }
                 }
@@ -500,7 +500,7 @@ public class StatementCompound extends Statement implements RangeGroup {
             Object[] data = queryResult.navigator.getCurrent();
 
             initialiseVariables(session, data,
-                                queryResult.metaData.getColumnCount());
+                    queryResult.metaData.getColumnCount());
 
             for (int i = 0; i < statements.length; i++) {
                 result = executeProtected(session, statements[i]);
@@ -646,7 +646,7 @@ public class StatementCompound extends Statement implements RangeGroup {
 
     private Result executeIf(Session session) {
 
-        Result  result  = Result.updateZeroResult;
+        Result result = Result.updateZeroResult;
         boolean execute = false;
 
         for (int i = 0; i < statements.length; i++) {
@@ -694,7 +694,7 @@ public class StatementCompound extends Statement implements RangeGroup {
         int actionIndex = session.rowActionList.size();
 
         session.actionTimestamp =
-            session.database.txManager.getNextGlobalChangeTimestamp();
+                session.database.txManager.getNextGlobalChangeTimestamp();
 
         Result result = statement.execute(session);
 
@@ -712,8 +712,8 @@ public class StatementCompound extends Statement implements RangeGroup {
                     || statements[i].getType() == StatementTypes.ITERATE) {
                 if (!findLabel((StatementSimple) statements[i])) {
                     throw Error.error(
-                        ErrorCode.X_42508,
-                        ((StatementSimple) statements[i]).label.name);
+                            ErrorCode.X_42508,
+                            ((StatementSimple) statements[i]).label.name);
                 }
 
                 continue;
@@ -735,8 +735,8 @@ public class StatementCompound extends Statement implements RangeGroup {
         }
 
         OrderedHashSet writeTableNamesSet = new OrderedHashSet();
-        OrderedHashSet readTableNamesSet  = new OrderedHashSet();
-        OrderedHashSet set                = new OrderedHashSet();
+        OrderedHashSet readTableNamesSet = new OrderedHashSet();
+        OrderedHashSet set = new OrderedHashSet();
 
         for (int i = 0; i < variables.length; i++) {
             OrderedHashSet refs = variables[i].getReferences();
@@ -815,14 +815,14 @@ public class StatementCompound extends Statement implements RangeGroup {
         if (parent != null && parent.scopeVariables != null) {
             for (int i = 0; i < parent.scopeVariables.size(); i++) {
                 list.add(parent.scopeVariables.getKey(i),
-                         parent.scopeVariables.get(i));
+                        parent.scopeVariables.get(i));
             }
         }
 
         variablesOffset = list.size();
 
         for (int i = 0; i < variables.length; i++) {
-            String  name  = variables[i].getName().name;
+            String name = variables[i].getName().name;
             boolean added = list.add(name, variables[i]);
 
             if (!added) {
@@ -838,7 +838,7 @@ public class StatementCompound extends Statement implements RangeGroup {
 
         RangeVariable[] parameterRangeVariables = root.getRangeVariables();
         RangeVariable range = new RangeVariable(list, null, true,
-            RangeVariable.VARIALBE_RANGE);
+                RangeVariable.VARIALBE_RANGE);
 
         rangeVariables = new RangeVariable[parameterRangeVariables.length + 1];
 
@@ -859,8 +859,8 @@ public class StatementCompound extends Statement implements RangeGroup {
             return;
         }
 
-        HashSet           statesSet = new HashSet();
-        OrderedIntHashSet typesSet  = new OrderedIntHashSet();
+        HashSet statesSet = new HashSet();
+        OrderedIntHashSet typesSet = new OrderedIntHashSet();
 
         for (int i = 0; i < handlers.length; i++) {
             int[] types = handlers[i].getConditionTypes();
@@ -892,12 +892,12 @@ public class StatementCompound extends Statement implements RangeGroup {
         if (parent != null && parent.scopeTables != null) {
             for (int i = 0; i < parent.scopeTables.size(); i++) {
                 list.add(parent.scopeTables.getKey(i),
-                         parent.scopeTables.get(i));
+                        parent.scopeTables.get(i));
             }
         }
 
         for (int i = 0; i < tables.length; i++) {
-            String  name  = tables[i].getName().name;
+            String name = tables[i].getName().name;
             boolean added = list.add(name, tables[i]);
 
             if (!added) {
@@ -918,11 +918,11 @@ public class StatementCompound extends Statement implements RangeGroup {
 
         for (int i = 0; i < cursors.length; i++) {
             StatementCursor cursor = cursors[i];
-            boolean         added  = list.add(cursor.getCursorName().name);
+            boolean added = list.add(cursor.getCursorName().name);
 
             if (!added) {
                 throw Error.error(ErrorCode.X_42606,
-                                  cursor.getCursorName().name);
+                        cursor.getCursorName().name);
             }
         }
     }
@@ -946,14 +946,15 @@ public class StatementCompound extends Statement implements RangeGroup {
 
     private void initialiseVariables(Session session) {
 
-        Object[] vars   = session.sessionContext.routineVariables;
-        int      offset = parent == null ? 0
-                                         : parent.scopeVariables.size();
+        Object[] vars = session.sessionContext.routineVariables;
+        int offset = parent == null ? 0
+                : parent.scopeVariables.size();
 
         for (int i = 0; i < variables.length; i++) {
             try {
                 vars[offset + i] = variables[i].getDefaultValue(session);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
     }
 

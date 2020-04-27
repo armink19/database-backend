@@ -47,17 +47,17 @@ import org.hsqldb.rights.Grantee;
 public class UserTypeModifier {
 
     final HsqlName name;
-    final int      schemaObjectType;
-    final Type     dataType;
-    Constraint[]   constraints = Constraint.emptyArray;
-    Expression     defaultExpression;
-    boolean        isNullable = true;
+    final int schemaObjectType;
+    final Type dataType;
+    Constraint[] constraints = Constraint.emptyArray;
+    Expression defaultExpression;
+    boolean isNullable = true;
 
     public UserTypeModifier(HsqlName name, int type, Type dataType) {
 
-        this.name             = name;
+        this.name = name;
         this.schemaObjectType = type;
-        this.dataType         = dataType;
+        this.dataType = dataType;
     }
 
     public int schemaObjectType() {
@@ -80,8 +80,8 @@ public class UserTypeModifier {
         for (int i = 0; i < constraints.length; i++) {
             if (constraints[i].getName().name.equals(name)) {
                 constraints =
-                    (Constraint[]) ArrayUtil.toAdjustedArray(constraints,
-                        null, i, -1);
+                        (Constraint[]) ArrayUtil.toAdjustedArray(constraints,
+                                null, i, -1);
 
                 break;
             }
@@ -196,7 +196,7 @@ public class UserTypeModifier {
 
         if (schemaObjectType == SchemaObject.TYPE) {
             sb.append(Tokens.T_CREATE).append(' ').append(
-                Tokens.T_TYPE).append(' ');
+                    Tokens.T_TYPE).append(' ');
             sb.append(name.getSchemaQualifiedStatementName());
             sb.append(' ').append(Tokens.T_AS).append(' ');
             sb.append(dataType.getDefinition());
@@ -210,7 +210,7 @@ public class UserTypeModifier {
             }
         } else {
             sb.append(Tokens.T_CREATE).append(' ').append(
-                Tokens.T_DOMAIN).append(' ');
+                    Tokens.T_DOMAIN).append(' ');
             sb.append(name.getSchemaQualifiedStatementName());
             sb.append(' ').append(Tokens.T_AS).append(' ');
             sb.append(dataType.getDefinition());
@@ -232,7 +232,7 @@ public class UserTypeModifier {
                 sb.append(' ').append(Tokens.T_CONSTRAINT).append(' ');
                 sb.append(constraints[i].getName().statementName).append(' ');
                 sb.append(Tokens.T_CHECK).append('(').append(
-                    constraints[i].getCheckSQL()).append(')');
+                        constraints[i].getCheckSQL()).append(')');
             }
         }
 

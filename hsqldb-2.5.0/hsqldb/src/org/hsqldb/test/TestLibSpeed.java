@@ -39,85 +39,85 @@ import org.hsqldb.lib.*;
 public class TestLibSpeed {
 
     static final String[][] sNumeric = {
-        {
-            "ABS", "org.hsqldb.Library.abs"
-        }, {
+            {
+                    "ABS", "org.hsqldb.Library.abs"
+            }, {
             "ACOS", "java.lang.Math.acos"
-        }, {
+    }, {
             "ASIN", "java.lang.Math.asin"
-        }, {
+    }, {
             "ATAN", "java.lang.Math.atan"
-        }, {
+    }, {
             "ATAN2", "java.lang.Math.atan2"
-        }, {
+    }, {
             "CEILING", "java.lang.Math.ceil"
-        }, {
+    }, {
             "COS", "java.lang.Math.cos"
-        }, {
+    }, {
             "COT", "org.hsqldb.Library.cot"
-        }, {
+    }, {
             "DEGREES", "java.lang.Math.toDegrees"
-        }, {
+    }, {
             "EXP", "java.lang.Math.exp"
-        }, {
+    }, {
             "FLOOR", "java.lang.Math.floor"
-        }, {
+    }, {
             "LOG", "java.lang.Math.log"
-        }, {
+    }, {
             "LOG10", "org.hsqldb.Library.log10"
-        }, {
+    }, {
             "MOD", "org.hsqldb.Library.mod"
-        }, {
+    }, {
             "PI", "org.hsqldb.Library.pi"
-        }, {
+    }, {
             "POWER", "java.lang.Math.pow"
-        }, {
+    }, {
             "RADIANS", "java.lang.Math.toRadians"
-        }, {
+    }, {
             "RAND", "java.lang.Math.random"
-        }, {
+    }, {
             "ROUND", "org.hsqldb.Library.round"
-        }, {
+    }, {
             "SIGN", "org.hsqldb.Library.sign"
-        }, {
+    }, {
             "SIN", "java.lang.Math.sin"
-        }, {
+    }, {
             "SQRT", "java.lang.Math.sqrt"
-        }, {
+    }, {
             "TAN", "java.lang.Math.tan"
-        }, {
+    }, {
             "TRUNCATE", "org.hsqldb.Library.truncate"
-        }, {
+    }, {
             "BITAND", "org.hsqldb.Library.bitand"
-        }, {
+    }, {
             "BITOR", "org.hsqldb.Library.bitor"
-        }, {
+    }, {
             "ROUNDMAGIC", "org.hsqldb.Library.roundMagic"
-        }
+    }
     };
-    static HashSet          hashSet  = new HashSet();
+    static HashSet hashSet = new HashSet();
     static DoubleIntIndex doubleIntLookup =
-        new DoubleIntIndex(sNumeric.length, false);
+            new DoubleIntIndex(sNumeric.length, false);
     static IntKeyIntValueHashMap intKeyIntValueHashLookup =
-        new IntKeyIntValueHashMap();
+            new IntKeyIntValueHashMap();
     static IntValueHashMap intValueHashLookup =
-        new IntValueHashMap(sNumeric.length);
+            new IntValueHashMap(sNumeric.length);
     static IntKeyHashMap intKeyHashLookup = new IntKeyHashMap();
 
     static {
         doubleIntLookup.setKeysSearchTarget();
 
         java.util.Random randomgen = new java.util.Random();
-        int[]            row       = new int[2];
+        int[] row = new int[2];
 
         for (int i = 0; i < sNumeric.length; i++) {
             hashSet.add(sNumeric[i][0]);
             intKeyIntValueHashLookup.put(randomgen.nextInt(sNumeric.length),
-                                         i);
+                    i);
             intKeyHashLookup.put(i, Integer.valueOf(i));
             doubleIntLookup.add(randomgen.nextInt(sNumeric.length), i);
             intValueHashLookup.put(sNumeric[i][0],
-                                   randomgen.nextInt(sNumeric.length));
+                    randomgen.nextInt(sNumeric.length));
         }
     }
 
@@ -126,8 +126,8 @@ public class TestLibSpeed {
     public TestLibSpeed() {
 
         java.util.Random randomgen = new java.util.Random();
-        StopWatch        sw        = new StopWatch();
-        int              dummy     = 0;
+        StopWatch sw = new StopWatch();
+        int dummy = 0;
 
         System.out.println("set lookup ");
 
@@ -158,7 +158,7 @@ public class TestLibSpeed {
             }
 
             System.out.println("IntKeyIntValueHashMap Lookup with array "
-                               + sw.elapsedTime());
+                    + sw.elapsedTime());
             sw.zero();
 
             for (int j = 0; j < count; j++) {
@@ -198,7 +198,7 @@ public class TestLibSpeed {
             }
 
             System.out.println("IntKeyIntValueHashMap Lookup "
-                               + sw.elapsedTime());
+                    + sw.elapsedTime());
             sw.zero();
 
             for (int j = 0; j < count; j++) {

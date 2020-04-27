@@ -41,7 +41,7 @@ import org.hsqldb.rowio.RowInputInterface;
 
 /**
  * Subclass of Table to handle TEXT data source. <p>
- *
+ * <p>
  * Extends Table to provide the notion of an SQL base table object whose
  * data is read from and written to a text format data file.
  *
@@ -51,8 +51,8 @@ import org.hsqldb.rowio.RowInputInterface;
  */
 public class TextTable extends Table {
 
-    String  dataSource  = "";
-    boolean isReversed  = false;
+    String dataSource = "";
+    boolean isReversed = false;
     boolean isConnected = false;
 
 //    TextCache cache;
@@ -60,7 +60,7 @@ public class TextTable extends Table {
     /**
      * Constructs a new TextTable from the given arguments.
      *
-     * @param db the owning database
+     * @param db   the owning database
      * @param name the table's HsqlName
      * @param type code (normal or temp text table)
      */
@@ -96,11 +96,11 @@ public class TextTable extends Table {
 
         store = database.persistentStoreCollection.getStore(this);
 
-        TextCache      cache    = null;
-        TextFileReader reader   = null;
-        boolean        readOnly = isReadOnly || database.isReadOnly();
+        TextCache cache = null;
+        TextFileReader reader = null;
+        boolean readOnly = isReadOnly || database.isReadOnly();
         String securePath = database.logger.getSecurePath(dataSource, false,
-            true);
+                true);
 
         if (securePath == null) {
             throw (Error.error(ErrorCode.ACCESS_IS_DENIED, dataSource));
@@ -108,9 +108,9 @@ public class TextTable extends Table {
 
         try {
             cache =
-                (TextCache) database.logger.textTableManager
-                    .openTextFilePersistence(this, securePath, readOnly,
-                                             isReversed);
+                    (TextCache) database.logger.textTableManager
+                            .openTextFilePersistence(this, securePath, readOnly,
+                                    isReversed);
 
             store.setCache(cache);
 
@@ -125,7 +125,7 @@ public class TextTable extends Table {
             readDataIntoTable(session, store, reader);
         } catch (Throwable t) {
             long linenumber = reader == null ? 0
-                                             : reader.getLineNumber();
+                    : reader.getLineNumber();
 
             store.removeAll();
 
@@ -141,13 +141,13 @@ public class TextTable extends Table {
             // everything is in order here.
             // At this point table should either have a valid (old) data
             // source and cache or have an empty source and null cache.
-            throw Error.error(t, ErrorCode.TEXT_FILE, 0, new Object[] {
-                Long.valueOf(linenumber), t.toString()
+            throw Error.error(t, ErrorCode.TEXT_FILE, 0, new Object[]{
+                    Long.valueOf(linenumber), t.toString()
             });
         }
 
         isConnected = true;
-        isReadOnly  = withReadOnlyData;
+        isReadOnly = withReadOnlyData;
     }
 
     private void readDataIntoTable(Session session, PersistentStore store,
@@ -182,7 +182,7 @@ public class TextTable extends Table {
         this.store = null;
 
         PersistentStore store =
-            database.persistentStoreCollection.getStore(this);
+                database.persistentStoreCollection.getStore(this);
 
         store.release();
 
@@ -193,13 +193,13 @@ public class TextTable extends Table {
      * This method does some of the work involved with managing the creation
      * and opening of the cache, the rest is done in Log.java and
      * TextCache.java.
-     *
+     * <p>
      * Better clarification of the role of the methods is needed.
      */
     private void openCache(Session session, String dataSourceNew,
                            boolean isReversedNew, boolean isReadOnlyNew) {
 
-        String  dataSourceOld = dataSource;
+        String dataSourceOld = dataSource;
         boolean isReversedOld = isReversed;
         boolean isReadOnlyOld = isReadOnly;
 
@@ -236,7 +236,7 @@ public class TextTable extends Table {
             //
         } else {
             session.getGrantee().checkSchemaUpdateOrGrantRights(
-                getSchemaName().name);
+                    getSchemaName().name);
         }
 
         dataSourceNew = dataSourceNew.trim();
@@ -263,7 +263,7 @@ public class TextTable extends Table {
     public void setHeader(String header) {
 
         PersistentStore store =
-            database.persistentStoreCollection.getStore(this);
+                database.persistentStoreCollection.getStore(this);
         TextCache cache = (TextCache) store.getCache();
 
         if (cache != null && cache.isIgnoreFirstLine()) {
@@ -278,14 +278,14 @@ public class TextTable extends Table {
     private String getHeader() {
 
         PersistentStore store =
-            database.persistentStoreCollection.getStore(this);
-        TextCache cache  = (TextCache) store.getCache();
-        String    header = cache == null ? null
-                                         : cache.getHeader();
+                database.persistentStoreCollection.getStore(this);
+        TextCache cache = (TextCache) store.getCache();
+        String header = cache == null ? null
+                : cache.getHeader();
 
         return header == null ? null
-                              : StringConverter.toQuotedString(header, '\'',
-                              true);
+                : StringConverter.toQuotedString(header, '\'',
+                true);
     }
 
     /**
@@ -307,7 +307,7 @@ public class TextTable extends Table {
 
     public boolean isDataReadOnly() {
         return !isConnected() || super.isDataReadOnly()
-               || store.getCache().isDataReadOnly();
+                || store.getCache().isDataReadOnly();
     }
 
     public void setDataReadOnly(boolean value) {

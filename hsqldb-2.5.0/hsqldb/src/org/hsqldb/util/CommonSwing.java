@@ -51,48 +51,48 @@ import java.awt.*;
 class CommonSwing {
 
     protected static String messagerHeader = "Database Manager Swing Error";
-    protected static String Native         = "Native";
-    protected static String Java           = "Java";
-    protected static String Motif          = "Motif";
-    protected static String plaf           = "plaf";
-    protected static String GTK            = "GTK";
+    protected static String Native = "Native";
+    protected static String Java = "Java";
+    protected static String Motif = "Motif";
+    protected static String plaf = "plaf";
+    protected static String GTK = "GTK";
 
     // (ulrivo): An actual Image.
     static Image getIcon(String target) {
 
         if (target.equalsIgnoreCase("SystemCursor")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("Hourglass.gif")).getImage());
+                    CommonSwing.class.getResource("Hourglass.gif")).getImage());
         } else if (target.equalsIgnoreCase("Frame")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("hsqldb.gif")).getImage());
+                    CommonSwing.class.getResource("hsqldb.gif")).getImage());
         } else if (target.equalsIgnoreCase("Execute")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("run_exc.gif")).getImage());
+                    CommonSwing.class.getResource("run_exc.gif")).getImage());
         } else if (target.equalsIgnoreCase("StatusRunning")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("RedCircle.gif")).getImage());
+                    CommonSwing.class.getResource("RedCircle.gif")).getImage());
         } else if (target.equalsIgnoreCase("StatusReady")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("GreenCircle.gif")).getImage());
+                    CommonSwing.class.getResource("GreenCircle.gif")).getImage());
         } else if (target.equalsIgnoreCase("Clear")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("Clear.png")).getImage());
+                    CommonSwing.class.getResource("Clear.png")).getImage());
         } else if (target.equalsIgnoreCase("Problem")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("problems.gif")).getImage());
+                    CommonSwing.class.getResource("problems.gif")).getImage());
         } else if (target.equalsIgnoreCase("BoldFont")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("Bold.gif")).getImage());
+                    CommonSwing.class.getResource("Bold.gif")).getImage());
         } else if (target.equalsIgnoreCase("ItalicFont")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("Italic.gif")).getImage());
+                    CommonSwing.class.getResource("Italic.gif")).getImage());
         } else if (target.equalsIgnoreCase("ColorSelection")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("Colors.png")).getImage());
+                    CommonSwing.class.getResource("Colors.png")).getImage());
         } else if (target.equalsIgnoreCase("Close")) {
             return (new ImageIcon(
-                CommonSwing.class.getResource("Close.png")).getImage());
+                    CommonSwing.class.getResource("Close.png")).getImage());
         } else {
             return (null);
         }
@@ -105,12 +105,12 @@ class CommonSwing {
          * Display Jpanel Error messages any text Errors. Overloads
          * errorMessage(Exception exceptionMsg)
          */
-        Object[] options = { "OK" };
+        Object[] options = {"OK"};
 
         JOptionPane.showOptionDialog(null, errorMessage, messagerHeader,
-                                     JOptionPane.DEFAULT_OPTION,
-                                     JOptionPane.WARNING_MESSAGE, null,
-                                     options, options[0]);
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE, null,
+                options, options[0]);
 
         // DatabaseManagerSwing.StatusMessage(READY_STATUS);
     }
@@ -126,12 +126,12 @@ class CommonSwing {
          * Display Jpanel Error messages any SQL Errors. Overloads
          * errorMessage(String e)
          */
-        Object[] options = { "OK", };
+        Object[] options = {"OK",};
 
         JOptionPane.showOptionDialog(null, exceptionMsg, messagerHeader,
-                                     JOptionPane.DEFAULT_OPTION,
-                                     JOptionPane.ERROR_MESSAGE, null,
-                                     options, options[0]);
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.ERROR_MESSAGE, null,
+                options, options[0]);
 
         if (!quiet) {
             exceptionMsg.printStackTrace();
@@ -143,20 +143,20 @@ class CommonSwing {
     // (weconsultants@users: Callable setFramePositon method
     static void setFramePositon(JFrame inTargetFrame) {
 
-        Dimension d    = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension size = inTargetFrame.getSize();
 
         // (ulrivo): full size on screen with less than 640 width
         if (d.width >= 640) {
             inTargetFrame.setLocation((d.width - size.width) / 2,
-                                      (d.height - size.height) / 2);
+                    (d.height - size.height) / 2);
         } else {
             inTargetFrame.setLocation(0, 0);
             inTargetFrame.setSize(d);
         }
     }
 
-// (weconsultants@users: Commented out, Not need now. Was not being called anyway.. Could delete?
+    // (weconsultants@users: Commented out, Not need now. Was not being called anyway.. Could delete?
 //    static void setDefaultColor() {
 //
 //        Color hsqlBlue = new Color(102, 153, 204);
@@ -205,13 +205,13 @@ class CommonSwing {
         try {
             if (targetTheme.equalsIgnoreCase(Native)) {
                 UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
+                        UIManager.getSystemLookAndFeelClassName());
             } else if (targetTheme.equalsIgnoreCase(Java)) {
                 UIManager.setLookAndFeel(
-                    UIManager.getCrossPlatformLookAndFeelClassName());
+                        UIManager.getCrossPlatformLookAndFeelClassName());
             } else if (targetTheme.equalsIgnoreCase(Motif)) {
                 UIManager.setLookAndFeel(
-                    "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+                        "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
             }
 
 //            if (targetTheme.equalsIgnoreCase(plaf)){

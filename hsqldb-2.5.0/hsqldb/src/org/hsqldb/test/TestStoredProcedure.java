@@ -56,29 +56,30 @@ public class TestStoredProcedure extends TestBase {
     public void testOne() throws Exception {
 
         Connection conn = newConnection();
-        Statement  statement;
+        Statement statement;
 
         try {
             statement = conn.createStatement();
 
             ResultSet rs = statement.executeQuery(
-                "call \"org.hsqldb.test.TestStoredProcedure.procTest1\"()");
+                    "call \"org.hsqldb.test.TestStoredProcedure.procTest1\"()");
 
             rs.next();
 
             int cols = rs.getInt(1);
 
             assertFalse("test result not correct", false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             statement = conn.createStatement();
 
             statement.execute(
-                "CREATE temp TABLE MYTABLE(COL1 INTEGER,COL2 VARCHAR(10));");
+                    "CREATE temp TABLE MYTABLE(COL1 INTEGER,COL2 VARCHAR(10));");
             statement.execute(
-                "CREATE PROCEDURE proc1(IN P1 INT, IN P2 INT, OUT P3 INT) "
-                + "SPECIFIC P2 LANGUAGE JAVA DETERMINISTIC MODIFIES SQL DATA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procTest2'");
+                    "CREATE PROCEDURE proc1(IN P1 INT, IN P2 INT, OUT P3 INT) "
+                            + "SPECIFIC P2 LANGUAGE JAVA DETERMINISTIC MODIFIES SQL DATA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procTest2'");
 
             CallableStatement c = conn.prepareCall("call proc1(1,2,?)");
 
@@ -88,9 +89,9 @@ public class TestStoredProcedure extends TestBase {
 
             c.close();
             statement.execute(
-                "CREATE FUNCTION func1(IN P1 INT, IN P2 INT) "
-                + "RETURNS TABLE(C1 INT, C2 INT) "
-                + "SPECIFIC F1 LANGUAGE JAVA DETERMINISTIC EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.funcTest1'");
+                    "CREATE FUNCTION func1(IN P1 INT, IN P2 INT) "
+                            + "RETURNS TABLE(C1 INT, C2 INT) "
+                            + "SPECIFIC F1 LANGUAGE JAVA DETERMINISTIC EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.funcTest1'");
 
             c = conn.prepareCall("call func1(1,2)");
 
@@ -117,8 +118,8 @@ public class TestStoredProcedure extends TestBase {
     public void testTwo() throws Exception {
 
         Connection conn = newConnection();
-        Statement  statement;
-        int        updateCount;
+        Statement statement;
+        int updateCount;
 
         try {
             statement = conn.createStatement();
@@ -126,10 +127,10 @@ public class TestStoredProcedure extends TestBase {
             statement.execute("create user testuser password 'test'");
             statement.execute("create table testtable(v varchar(20))");
             statement.execute(
-                "insert into testtable values ('tennis'), ('tent'), ('television'), ('radio')");
+                    "insert into testtable values ('tennis'), ('tent'), ('television'), ('radio')");
 
             ResultSet rs = statement.executeQuery(
-                "call \"org.hsqldb.test.TestStoredProcedure.funcTest2\"('test')");
+                    "call \"org.hsqldb.test.TestStoredProcedure.funcTest2\"('test')");
 
             rs.next();
 
@@ -138,8 +139,8 @@ public class TestStoredProcedure extends TestBase {
             rs.close();
             assertTrue("test result not correct", b);
             statement.execute(
-                "create function func2(varchar(20)) returns boolean "
-                + "SPECIFIC F2 LANGUAGE JAVA DETERMINISTIC NO SQL CALLED ON NULL INPUT EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.funcTest2'");
+                    "create function func2(varchar(20)) returns boolean "
+                            + "SPECIFIC F2 LANGUAGE JAVA DETERMINISTIC NO SQL CALLED ON NULL INPUT EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.funcTest2'");
 
             rs = statement.executeQuery("call func2('test')");
 
@@ -151,7 +152,7 @@ public class TestStoredProcedure extends TestBase {
             assertTrue("test result not correct", b);
 
             rs = statement.executeQuery(
-                "select count(*) from testtable where func2(v)");
+                    "select count(*) from testtable where func2(v)");
 
             rs.next();
 
@@ -159,7 +160,7 @@ public class TestStoredProcedure extends TestBase {
 
             assertTrue("test result not correct", count == 3);
             statement.execute(
-                "grant execute on specific function public.f2 to testuser");
+                    "grant execute on specific function public.f2 to testuser");
 
             boolean isResult = statement.execute("call func2('test')");
 
@@ -182,15 +183,15 @@ public class TestStoredProcedure extends TestBase {
     public void testThree() throws SQLException {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("declare varone int default 0;");
         st.execute(
-            "create procedure proc_inout_result (inout intp int) "
-            + " language java reads sql data external name 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procWithResultOne'");
+                "create procedure proc_inout_result (inout intp int) "
+                        + " language java reads sql data external name 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procWithResultOne'");
 
         CallableStatement cs =
-            conn.prepareCall("call proc_inout_result(varone)");
+                conn.prepareCall("call proc_inout_result(varone)");
         boolean isResult = cs.execute();
 
         assertFalse(isResult);
@@ -207,15 +208,15 @@ public class TestStoredProcedure extends TestBase {
     public void testFour() throws SQLException {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("declare varone int default 0;");
         st.execute(
-            "create procedure proc_inout_result_two (inout intp int) "
-            + " language java reads sql data dynamic result sets 2 external name 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procWithResultTwo'");
+                "create procedure proc_inout_result_two (inout intp int) "
+                        + " language java reads sql data dynamic result sets 2 external name 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procWithResultTwo'");
 
         CallableStatement cs =
-            conn.prepareCall("call proc_inout_result_two(varone)");
+                conn.prepareCall("call proc_inout_result_two(varone)");
         boolean isResult = cs.execute();
 
         assertFalse(isResult);
@@ -241,14 +242,14 @@ public class TestStoredProcedure extends TestBase {
     public void testFourParams() throws SQLException {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute(
-            "create procedure proc_inout_result_two_params (inout intp int) "
-            + " language java reads sql data dynamic result sets 2 external name 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procWithResultTwo'");
+                "create procedure proc_inout_result_two_params (inout intp int) "
+                        + " language java reads sql data dynamic result sets 2 external name 'CLASSPATH:org.hsqldb.test.TestStoredProcedure.procWithResultTwo'");
 
         CallableStatement cs =
-            conn.prepareCall("{call proc_inout_result_two_params(?)}");
+                conn.prepareCall("{call proc_inout_result_two_params(?)}");
 
         cs.setInt(1, 0);
 
@@ -284,14 +285,14 @@ public class TestStoredProcedure extends TestBase {
     public void testFive() throws SQLException {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute(
-            "create function func_table (in namep varchar(128)) returns table(cola varchar(128), colb varchar(128)) "
-            + "return table(select schema_name, schema_owner from information_schema.schemata where schema_owner=namep);");
+                "create function func_table (in namep varchar(128)) returns table(cola varchar(128), colb varchar(128)) "
+                        + "return table(select schema_name, schema_owner from information_schema.schemata where schema_owner=namep);");
 
         CallableStatement cs = conn.prepareCall("call func_table('_SYSTEM')");
-        boolean           isResult = cs.execute();
+        boolean isResult = cs.execute();
 
         assertTrue(isResult);
 
@@ -316,23 +317,23 @@ public class TestStoredProcedure extends TestBase {
     }
 
     String testSixProcedure =
-        "CREATE PROCEDURE get_columns_and_table(tname VARCHAR(128), sname VARCHAR(128)) "
-        + "READS SQL DATA DYNAMIC RESULT SETS 2 " + "BEGIN ATOMIC "
-        + "DECLARE result1 CURSOR FOR SELECT * FROM information_schema.columns "
-        + "WHERE table_name = tname AND table_schema = sname; "
-        + "DECLARE result2 CURSOR FOR SELECT * FROM information_schema.tables "
-        + "WHERE table_name = tname AND table_schema = sname; "
-        + "OPEN result1; " + "OPEN result2; " + "END";
+            "CREATE PROCEDURE get_columns_and_table(tname VARCHAR(128), sname VARCHAR(128)) "
+                    + "READS SQL DATA DYNAMIC RESULT SETS 2 " + "BEGIN ATOMIC "
+                    + "DECLARE result1 CURSOR FOR SELECT * FROM information_schema.columns "
+                    + "WHERE table_name = tname AND table_schema = sname; "
+                    + "DECLARE result2 CURSOR FOR SELECT * FROM information_schema.tables "
+                    + "WHERE table_name = tname AND table_schema = sname; "
+                    + "OPEN result1; " + "OPEN result2; " + "END";
 
     public void testSix() throws SQLException {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute(testSixProcedure);
 
         CallableStatement cs = conn.prepareCall(
-            "call get_columns_and_table('TABLES', 'INFORMATION_SCHEMA')");
+                "call get_columns_and_table('TABLES', 'INFORMATION_SCHEMA')");
         boolean isResult = cs.execute();
 
         assertFalse(isResult);
@@ -381,7 +382,7 @@ public class TestStoredProcedure extends TestBase {
 
         st = conn.createStatement();
         isResult = st.execute(
-            "call get_columns_and_table('TABLES', 'INFORMATION_SCHEMA')");
+                "call get_columns_and_table('TABLES', 'INFORMATION_SCHEMA')");
 
         assertFalse(isResult);
         st.getMoreResults();
@@ -402,7 +403,7 @@ public class TestStoredProcedure extends TestBase {
         }
 
         PreparedStatement ps = conn.prepareStatement(
-            "call get_columns_and_table('TABLES', 'INFORMATION_SCHEMA')");
+                "call get_columns_and_table('TABLES', 'INFORMATION_SCHEMA')");
 
         isResult = ps.execute();
 
@@ -428,16 +429,16 @@ public class TestStoredProcedure extends TestBase {
 
     public static void procWithResultOne(Integer[] intparam,
                                          ResultSet[] resultparam)
-                                         throws SQLException {
+            throws SQLException {
 
         Connection conn =
-            DriverManager.getConnection("jdbc:default:connection");
+                DriverManager.getConnection("jdbc:default:connection");
 
         conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(
-            "select count(*) from information_schema.columns where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
+                "select count(*) from information_schema.columns where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
 
         if (rs.next()) {
             intparam[0] = rs.getInt(1);
@@ -446,19 +447,19 @@ public class TestStoredProcedure extends TestBase {
         }
 
         resultparam[0] = st.executeQuery(
-            "select table_schema, table_name from information_schema.tables where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
+                "select table_schema, table_name from information_schema.tables where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
     }
 
     public static void procWithResultTwo(Connection conn, Integer[] intparam,
                                          ResultSet[] resultparamOne,
                                          ResultSet[] resultparamTwo)
-                                         throws SQLException {
+            throws SQLException {
 
         conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(
-            "select count(*) from information_schema.columns where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
+                "select count(*) from information_schema.columns where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
 
         if (rs.next()) {
             intparam[0] = rs.getInt(1);
@@ -467,15 +468,15 @@ public class TestStoredProcedure extends TestBase {
         }
 
         resultparamOne[0] = st.executeQuery(
-            "select table_schema, table_name from information_schema.tables where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
+                "select table_schema, table_name from information_schema.tables where table_name='LOB_IDS' and table_schema='SYSTEM_LOBS'");
         resultparamTwo[0] = st.executeQuery(
-            "select table_schema, table_name from information_schema.tables where table_name='LOBS' and table_schema='SYSTEM_LOBS'");
+                "select table_schema, table_name from information_schema.tables where table_name='LOBS' and table_schema='SYSTEM_LOBS'");
     }
 
     public static void procTest1(Connection conn)
-    throws java.sql.SQLException {
+            throws java.sql.SQLException {
 
-        int                cols;
+        int cols;
         java.sql.Statement stmt = conn.createStatement();
 
         stmt.execute("insert into mytable values(1,'test1');");
@@ -494,7 +495,7 @@ public class TestStoredProcedure extends TestBase {
                                  Integer[] p3) throws java.sql.SQLException {
 
         Connection conn =
-            DriverManager.getConnection("jdbc:default:connection");
+                DriverManager.getConnection("jdbc:default:connection");
         java.sql.Statement stmt = conn.createStatement();
 
         stmt.execute("insert into mytable values(" + p1 + ",'test1')");
@@ -502,7 +503,7 @@ public class TestStoredProcedure extends TestBase {
 
         java.sql.ResultSet rs = stmt.executeQuery("select * from mytable");
         java.sql.ResultSetMetaData meta = rs.getMetaData();
-        int                        cols = meta.getColumnCount();
+        int cols = meta.getColumnCount();
 
         p3[0] = Integer.valueOf(cols);
 
@@ -514,9 +515,9 @@ public class TestStoredProcedure extends TestBase {
                                       int p2) throws java.sql.SQLException {
 
         Connection conn =
-            DriverManager.getConnection("jdbc:default:connection");
+                DriverManager.getConnection("jdbc:default:connection");
         java.sql.PreparedStatement stmt = conn.prepareStatement(
-            "select * from mytable where col1 = ? or col1 = ?");
+                "select * from mytable where col1 = ? or col1 = ?");
 
         stmt.setInt(1, p1);
         stmt.setInt(2, p2);
@@ -528,7 +529,7 @@ public class TestStoredProcedure extends TestBase {
 
     public static boolean funcTest2(Connection conn,
                                     String value)
-                                    throws java.sql.SQLException {
+            throws java.sql.SQLException {
 
         if (value != null && value.startsWith("te")) {
             return true;
@@ -537,17 +538,18 @@ public class TestStoredProcedure extends TestBase {
         return false;
     }
 
-    public static void procTest3(Integer value) throws java.sql.SQLException {}
+    public static void procTest3(Integer value) throws java.sql.SQLException {
+    }
 
     public static void main(String[] args) throws Exception {
 
-        TestResult            result;
-        TestCase              test;
+        TestResult result;
+        TestCase test;
         java.util.Enumeration failures;
-        int                   count;
+        int count;
 
         result = new TestResult();
-        test   = new TestStoredProcedure("test");
+        test = new TestStoredProcedure("test");
 
         test.run(result);
 

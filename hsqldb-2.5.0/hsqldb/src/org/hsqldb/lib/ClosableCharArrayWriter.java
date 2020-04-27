@@ -43,21 +43,21 @@ import java.io.Writer;
 /**
  * Provides Closable semantics ordinarily missing in a
  * {@link java.io.CharArrayWriter}. <p>
- *
+ * <p>
  * Accumulates output in a character array that automatically grows as needed.<p>
- *
+ * <p>
  * Data is retrieved using <tt>toCharArray()</tt>, <tt>toCharArrayReader()</tt>
  * and <tt>toString()</tt>. <p>
- *
+ * <p>
  * {@link #close() Closing} a <tt>ClosableCharArrayWriter</tt> prevents
  * further write operations, but all other operations will succeed until after
  * the first invocation of {@link #free() free()}.<p>
- *
+ * <p>
  * Freeing a <tt>ClosableCharArrayWriter</tt> closes the writer and
  * releases its internal buffer, preventing successful invocation of all
  * operations, with the exception of <tt>size()<tt>, <tt>close()</tt>,
  * <tt>isClosed()</tt>, <tt>free()</tt> and <tt>isFreed()</tt>. <p>
- *
+ * <p>
  * This class is especially useful when an accumulating writer must be
  * handed off to an extenal client under contract that the writer should
  * exhibit true Closable behaviour, both in response to internally tracked
@@ -91,7 +91,7 @@ public class ClosableCharArrayWriter extends Writer {
 
     /**
      * Creates a new writer. <p>
-     *
+     * <p>
      * The buffer capacity is initially 32 characters, although its size
      * automatically increases when necessary.
      */
@@ -104,13 +104,13 @@ public class ClosableCharArrayWriter extends Writer {
      * <tt>size</tt>, in characters.
      *
      * @param size the initial size.
-     * @exception IllegalArgumentException if <tt>size</tt> is negative.
+     * @throws IllegalArgumentException if <tt>size</tt> is negative.
      */
     public ClosableCharArrayWriter(int size) throws IllegalArgumentException {
 
         if (size < 0) {
             throw new IllegalArgumentException("Negative initial size: "
-                                               + size);    // NOI18N
+                    + size);    // NOI18N
         }
 
         buf = new char[size];
@@ -121,8 +121,8 @@ public class ClosableCharArrayWriter extends Writer {
      *
      * @param c the single character to be written.
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #close() closed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #close() closed}.
      */
     public synchronized void write(int c) throws IOException {
 
@@ -135,18 +135,18 @@ public class ClosableCharArrayWriter extends Writer {
         }
 
         buf[count] = (char) c;
-        count      = newcount;
+        count = newcount;
     }
 
     /**
      * Writes the designated portion of the designated character array <p>.
      *
-     * @param c the source character sequence.
+     * @param c   the source character sequence.
      * @param off the start offset in the source character sequence.
      * @param len the number of characters to write.
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #close() closed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #close() closed}.
      */
     public synchronized void write(char[] c, int off,
                                    int len) throws IOException {
@@ -173,7 +173,7 @@ public class ClosableCharArrayWriter extends Writer {
 
     /**
      * Efficiently writes the designated portion of the designated string. <p>
-     *
+     * <p>
      * The operation occurs as if by calling
      * <tt>str.getChars(off, off + len, buf, count)</tt>. <p>
      *
@@ -181,8 +181,8 @@ public class ClosableCharArrayWriter extends Writer {
      * @param off the start offset in the string.
      * @param len the number of characters to write.
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #close() closed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #close() closed}.
      */
     public synchronized void write(String str, int off,
                                    int len) throws IOException {
@@ -213,8 +213,8 @@ public class ClosableCharArrayWriter extends Writer {
      * By default, does nothing. <p>
      *
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #close() closed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #close() closed}.
      */
     public void flush() throws IOException {
         checkClosed();
@@ -223,13 +223,13 @@ public class ClosableCharArrayWriter extends Writer {
     /**
      * Writes the complete contents of this writer's buffered data to the
      * specified writer. <p>
-     *
+     * <p>
      * The operation occurs as if by calling <tt>out.write(buf, 0, count)</tt>.
      *
      * @param out the writer to which to write the data.
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #free() freed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #free() freed}.
      */
     public synchronized void writeTo(Writer out) throws IOException {
 
@@ -243,11 +243,11 @@ public class ClosableCharArrayWriter extends Writer {
     /**
      * Returns the current capacity of this writer's data buffer.
      *
-     * @return  the current capacity (the length of the internal
-     *          data array)
+     * @return the current capacity (the length of the internal
+     * data array)
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #free() freed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #free() freed}.
      */
     public synchronized int capacity() throws IOException {
 
@@ -261,10 +261,10 @@ public class ClosableCharArrayWriter extends Writer {
      * currently accumulated output is effectively discarded. Further write
      * operations will reuse the allocated buffer space.
      *
-     * @see #count
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this output stream has been {@link #close() closed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this output stream has been {@link #close() closed}.
+     * @see #count
      */
     public synchronized void reset() throws IOException {
 
@@ -275,7 +275,7 @@ public class ClosableCharArrayWriter extends Writer {
 
     /**
      * Attempts to reduce this writer's buffer capacity to its current size. <p>
-     *
+     * <p>
      * If the buffer is larger than necessary to hold its current sequence of
      * characters, then it may be resized to become more space efficient.
      * Calling this method may, but is not required to, affect the value
@@ -296,10 +296,10 @@ public class ClosableCharArrayWriter extends Writer {
      * have been copied into it.
      *
      * @return the current contents of this writer, as a character array.
-     * @see #size()
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #free() freed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #free() freed}.
+     * @see #size()
      */
     public synchronized char[] toCharArray() throws IOException {
 
@@ -312,9 +312,9 @@ public class ClosableCharArrayWriter extends Writer {
      * Returns the current size of this writer's accumulated character data.
      *
      * @return the value of the <tt>count</tt> field, which is the number
-     *      of valid characters accumulated in this writer.
-     * @see #count
+     * of valid characters accumulated in this writer.
      * @throws java.io.IOException never
+     * @see #count
      */
     public synchronized int size() throws IOException {
         return count;
@@ -323,8 +323,8 @@ public class ClosableCharArrayWriter extends Writer {
     /**
      * Sets the size of this writer's accumulated character data. <p>
      *
-     * @param   newSize the new size of this writer's accumulated data
-     * @throws  ArrayIndexOutOfBoundsException if new size is negative
+     * @param newSize the new size of this writer's accumulated data
+     * @throws ArrayIndexOutOfBoundsException if new size is negative
      */
     public synchronized void setSize(int newSize) {
 
@@ -340,18 +340,18 @@ public class ClosableCharArrayWriter extends Writer {
     /**
      * Performs an efficient (zero-copy) conversion of the character data
      * accumulated in this writer to a reader. <p>
-     *
+     * <p>
      * To ensure the integrity of the resulting reader, {@link #free()
      * free} is invoked upon this writer as a side-effect.
      *
      * @return a reader representing this writer's accumulated
-     *      character data
+     * character data
      * @throws java.io.IOException if an I/O error occurs.
-     *      In particular, an <tt>IOException</tt> may be thrown
-     *      if this writer has been {@link #free() freed}.
+     *                             In particular, an <tt>IOException</tt> may be thrown
+     *                             if this writer has been {@link #free() freed}.
      */
     public synchronized CharArrayReader toCharArrayReader()
-    throws IOException {
+            throws IOException {
 
         checkFreed();
 
@@ -368,7 +368,7 @@ public class ClosableCharArrayWriter extends Writer {
      *
      * @return String constructed from this writer's accumulated data
      * @throws RuntimeException may be thrown if this writer has been
-     *      {@link #free() freed}.
+     *                          {@link #free() freed}.
      */
     public synchronized String toString() {
 
@@ -383,7 +383,7 @@ public class ClosableCharArrayWriter extends Writer {
 
     /**
      * Closes this object for further writing. <p>
-     *
+     * <p>
      * Other operations may continue to succeed until after the first invocation
      * of {@link #free() free()}. <p>
      *
@@ -405,14 +405,14 @@ public class ClosableCharArrayWriter extends Writer {
      * garbage collection. <p>
      *
      * @throws java.io.IOException if an I/O error occurs while closing
-     *      this writer (default: never).
+     *                             this writer (default: never).
      */
     public synchronized void free() throws IOException {
 
         closed = true;
-        freed  = true;
-        buf    = null;
-        count  = 0;
+        freed = true;
+        buf = null;
+        count = 0;
     }
 
     /**
@@ -446,7 +446,7 @@ public class ClosableCharArrayWriter extends Writer {
      * Retrieves a copy of <tt>original</tt> with the given
      * <tt>newLength</tt>. <p>
      *
-     * @param original the object to copy
+     * @param original  the object to copy
      * @param newLength the length of the copy
      * @return copy of <tt>original</tt> with the given <tt>newLength</tt>
      */
@@ -455,7 +455,7 @@ public class ClosableCharArrayWriter extends Writer {
         char[] copy = new char[newLength];
 
         System.arraycopy(original, 0, copy, 0,
-                         Math.min(original.length, newLength));
+                Math.min(original.length, newLength));
 
         return copy;
     }

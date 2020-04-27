@@ -44,18 +44,21 @@ import org.hsqldb.lib.StringConverter;
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
- *
  * @version 2.3.2
  * @since 1.8.0
  */
 public class User extends Grantee {
 
-    /** password. */
+    /**
+     * password.
+     */
     private String password;
     public boolean isLocalOnly;
     public boolean isExternalOnly;
 
-    /** default schema when new Sessions started (defaults to PUBLIC schema) */
+    /**
+     * default schema when new Sessions started (defaults to PUBLIC schema)
+     */
     private HsqlName initialSchema = null;
 
     /**
@@ -122,12 +125,12 @@ public class User extends Grantee {
         }
 
         HsqlName schema =
-            granteeManager.database.schemaManager.findSchemaHsqlName(
-                getName().getNameString());
+                granteeManager.database.schemaManager.findSchemaHsqlName(
+                        getName().getNameString());
 
         if (schema == null) {
             return granteeManager.database.schemaManager
-                .getDefaultSchemaHsqlName();
+                    .getDefaultSchemaHsqlName();
         } else {
             return schema;
         }
@@ -138,7 +141,7 @@ public class User extends Grantee {
      * caller should verify that the given schemaName exists.
      *
      * @param schema An existing schema.  Null value allowed,
-     *                   which means use the DB default session schema.
+     *               which means use the DB default session schema.
      */
     public void setInitialSchema(HsqlName schema) {
         initialSchema = schema;
@@ -161,7 +164,6 @@ public class User extends Grantee {
 
     /**
      * Returns the DDL string for local authentication.
-     *
      */
     public String getLocalUserSQL() {
 
@@ -178,10 +180,9 @@ public class User extends Grantee {
 
     /**
      * Returns the SQL string for setting password digest.
-     *
      */
     public String getSetUserPasswordDigestSQL(String password,
-            boolean isDigest) {
+                                              boolean isDigest) {
 
         if (!isDigest) {
             password = granteeManager.digest(password);
@@ -201,10 +202,9 @@ public class User extends Grantee {
 
     /**
      * Returns the SQL string for setting password digest.
-     *
      */
     public static String getSetCurrentPasswordDigestSQL(GranteeManager manager,
-            String password, boolean isDigest) {
+                                                        String password, boolean isDigest) {
 
         if (!isDigest) {
             password = manager.digest(password);
@@ -224,7 +224,7 @@ public class User extends Grantee {
      * this user
      *
      * @return the redo log character sequence for connecting
-     *      this user
+     * this user
      */
     public String getConnectUserSQL() {
 

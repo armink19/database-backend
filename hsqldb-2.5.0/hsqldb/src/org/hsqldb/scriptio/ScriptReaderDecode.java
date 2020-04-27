@@ -46,7 +46,6 @@ import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
  * @since 1.9.0
@@ -54,9 +53,9 @@ import java.util.zip.GZIPInputStream;
 public class ScriptReaderDecode extends ScriptReaderText {
 
     DataInputStream dataInput;
-    InputStream     cryptoStream;
-    Crypto          crypto;
-    byte[]          buffer = new byte[256];
+    InputStream cryptoStream;
+    Crypto crypto;
+    byte[] buffer = new byte[256];
 
     public ScriptReaderDecode(Database db, String fileName, Crypto crypto,
                               boolean forLog) throws IOException {
@@ -67,17 +66,17 @@ public class ScriptReaderDecode extends ScriptReaderText {
 
         try {
             inputStream =
-                db.logger.getFileAccess().openInputStreamElement(fileName);
+                    db.logger.getFileAccess().openInputStreamElement(fileName);
             bufferedStream = new BufferedInputStream(inputStream);
-            rowIn          = new RowInputTextLog();
+            rowIn = new RowInputTextLog();
 
             if (forLog) {
                 dataInput = new DataInputStream(bufferedStream);
             } else {
                 cryptoStream = crypto.getInputStream(bufferedStream);
-                gzipStream   = new GZIPInputStream(cryptoStream);
+                gzipStream = new GZIPInputStream(cryptoStream);
                 dataStreamIn = new LineReader(gzipStream,
-                                              JavaSystem.CS_ISO_8859_1);
+                        JavaSystem.CS_ISO_8859_1);
             }
         } catch (Throwable t) {
             close();
@@ -129,31 +128,36 @@ public class ScriptReaderDecode extends ScriptReaderText {
             if (dataStreamIn != null) {
                 dataStreamIn.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (gzipStream != null) {
                 gzipStream.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (cryptoStream != null) {
                 cryptoStream.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (inputStream != null) {
                 inputStream.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (dataInput != null) {
                 dataInput.close();
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         try {
             if (errorLogger != null) {
@@ -161,6 +165,7 @@ public class ScriptReaderDecode extends ScriptReaderText {
             }
 
             database.recoveryMode = 0;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

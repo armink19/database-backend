@@ -44,7 +44,7 @@ import org.hsqldb.error.ErrorCode;
  */
 public class RowType extends Type {
 
-    final Type[]    dataTypes;
+    final Type[] dataTypes;
     TypedComparator comparator;
 
     public RowType(Type[] dataTypes) {
@@ -128,9 +128,9 @@ public class RowType extends Type {
             return 1;
         }
 
-        Object[] arra   = (Object[]) a;
-        Object[] arrb   = (Object[]) b;
-        int      length = arra.length;
+        Object[] arra = (Object[]) a;
+        Object[] arrb = (Object[]) b;
+        int length = arra.length;
 
         if (arrb.length < length) {
             length = arrb.length;
@@ -195,7 +195,7 @@ public class RowType extends Type {
 
         for (int i = 0; i < arra.length; i++) {
             arrb[i] = dataTypes[i].convertToType(session, arra[i],
-                                                 otherTypes[i]);
+                    otherTypes[i]);
         }
 
         return arrb;
@@ -221,8 +221,8 @@ public class RowType extends Type {
             return Tokens.T_NULL;
         }
 
-        Object[]      array = (Object[]) a;
-        StringBuilder sb    = new StringBuilder();
+        Object[] array = (Object[]) a;
+        StringBuilder sb = new StringBuilder();
 
         sb.append(Tokens.T_ROW);
         sb.append('(');
@@ -310,7 +310,7 @@ public class RowType extends Type {
             throw Error.error(ErrorCode.X_42562);
         }
 
-        Type[] newTypes   = new Type[dataTypes.length];
+        Type[] newTypes = new Type[dataTypes.length];
         Type[] otherTypes = ((RowType) other).getTypesArray();
 
         if (dataTypes.length != otherTypes.length) {
@@ -338,7 +338,7 @@ public class RowType extends Type {
             throw Error.error(ErrorCode.X_42562);
         }
 
-        Type[] newTypes   = new Type[dataTypes.length];
+        Type[] newTypes = new Type[dataTypes.length];
         Type[] otherTypes = ((RowType) other).getTypesArray();
 
         if (dataTypes.length != otherTypes.length) {
@@ -372,9 +372,9 @@ public class RowType extends Type {
             return 1;
         }
 
-        Object[] arra   = (Object[]) a;
-        Object[] arrb   = (Object[]) b;
-        int      length = sort.columnCount;
+        Object[] arra = (Object[]) a;
+        Object[] arrb = (Object[]) b;
+        int length = sort.columnCount;
 
         for (int i = 0; i < length; i++) {
             int pos = sort.sortOrder[i];
@@ -443,7 +443,7 @@ public class RowType extends Type {
             return 0;
         }
 
-        int      hash  = 0;
+        int hash = 0;
         Object[] array = (Object[]) a;
 
         for (int i = 0; i < dataTypes.length && i < 4; i++) {
@@ -456,8 +456,8 @@ public class RowType extends Type {
     synchronized TypedComparator getComparator(Session session) {
 
         if (comparator == null) {
-            TypedComparator c    = new TypedComparator(session);
-            SortAndSlice    sort = new SortAndSlice();
+            TypedComparator c = new TypedComparator(session);
+            SortAndSlice sort = new SortAndSlice();
 
             sort.prepareMultiColumn(dataTypes.length);
             c.setType(this, sort);
@@ -469,7 +469,7 @@ public class RowType extends Type {
     }
 
     public static String convertToSQLString(Object[] array, Type[] types,
-            int maxUnitLength) {
+                                            int maxUnitLength) {
 
         if (array == null) {
             return Tokens.T_NULL;

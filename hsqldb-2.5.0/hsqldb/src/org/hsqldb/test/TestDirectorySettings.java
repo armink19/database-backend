@@ -32,9 +32,9 @@
 package org.hsqldb.test;
 
 public class TestDirectorySettings {
-    public static String fileBase    = "c:/hsql/";
+    public static String fileBase = "c:/hsql/";
     public static String fileBaseURL = "jdbc:hsqldb:file:" + fileBase;
 
-    public static String fileBaseUser    = "c:/hsql_dbs/";
+    public static String fileBaseUser = "c:/hsql_dbs/";
     public static String fileBaseURLUser = "jdbc:hsqldb:file:" + fileBaseUser;
 }

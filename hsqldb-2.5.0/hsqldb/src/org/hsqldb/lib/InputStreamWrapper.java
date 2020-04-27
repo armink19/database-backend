@@ -42,8 +42,8 @@ import java.io.InputStream;
 public class InputStreamWrapper implements InputStreamInterface {
 
     InputStream is;
-    long        limitSize   = -1;
-    long        fetchedSize = 0;
+    long limitSize = -1;
+    long fetchedSize = 0;
 
     public InputStreamWrapper(InputStream is) {
         this.is = is;
@@ -62,7 +62,7 @@ public class InputStreamWrapper implements InputStreamInterface {
                 return -1;
             } else {
                 throw new IOException("stream not reached the end"
-                                      + fetchedSize + " " + limitSize);
+                        + fetchedSize + " " + limitSize);
             }
         }
 
@@ -92,7 +92,7 @@ public class InputStreamWrapper implements InputStreamInterface {
                 return -1;
             } else {
                 throw new IOException("stream not reached the end"
-                                      + fetchedSize + " " + limitSize);
+                        + fetchedSize + " " + limitSize);
             }
         }
 

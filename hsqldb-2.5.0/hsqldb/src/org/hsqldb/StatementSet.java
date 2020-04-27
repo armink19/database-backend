@@ -54,13 +54,13 @@ public class StatementSet extends StatementDMQL {
 
     //
     Expression[] targets;
-    int[]        variableIndexes;
-    Type[]       sourceTypes;
+    int[] variableIndexes;
+    Type[] sourceTypes;
 
     //
-    final int               operationType;
-    public static final int TRIGGER_SET  = 1;
-    public static final int SELECT_INTO  = 2;
+    final int operationType;
+    public static final int TRIGGER_SET = 1;
+    public static final int SELECT_INTO = 2;
     public static final int VARIABLE_SET = 3;
 
     /**
@@ -71,17 +71,17 @@ public class StatementSet extends StatementDMQL {
                  Expression[] colExpressions, CompileContext compileContext) {
 
         super(StatementTypes.ASSIGNMENT, StatementTypes.X_SQL_DATA_CHANGE,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
-        this.operationType        = TRIGGER_SET;
-        this.targets              = targets;
-        this.targetTable          = table;
-        this.baseTable            = targetTable.getBaseTable();
-        this.updateColumnMap      = indexes;
-        this.updateExpressions    = colExpressions;
-        this.updateCheckColumns   = targetTable.getColumnCheckList(indexes);
+        this.operationType = TRIGGER_SET;
+        this.targets = targets;
+        this.targetTable = table;
+        this.baseTable = targetTable.getBaseTable();
+        this.updateColumnMap = indexes;
+        this.updateExpressions = colExpressions;
+        this.updateCheckColumns = targetTable.getColumnCheckList(indexes);
         this.targetRangeVariables = rangeVars;
-        isTransactionStatement    = false;
+        isTransactionStatement = false;
 
         setDatabaseObjects(session, compileContext);
         checkAccessRights(session);
@@ -95,11 +95,11 @@ public class StatementSet extends StatementDMQL {
 
         super(StatementTypes.ASSIGNMENT, StatementTypes.X_SQL_CONTROL, null);
 
-        this.operationType     = VARIABLE_SET;
-        this.targets           = targets;
-        this.expression        = e;
-        variableIndexes        = indexes;
-        sourceTypes            = expression.getNodeDataTypes();
+        this.operationType = VARIABLE_SET;
+        this.targets = targets;
+        this.expression = e;
+        variableIndexes = indexes;
+        sourceTypes = expression.getNodeDataTypes();
         isTransactionStatement = false;
 
         setDatabaseObjects(session, compileContext);
@@ -114,11 +114,11 @@ public class StatementSet extends StatementDMQL {
 
         super(StatementTypes.ASSIGNMENT, StatementTypes.X_SQL_CONTROL, null);
 
-        this.operationType     = SELECT_INTO;
-        this.queryExpression   = query;
-        this.targets           = targets;
-        variableIndexes        = indexes;
-        sourceTypes            = query.getColumnTypes();
+        this.operationType = SELECT_INTO;
+        this.queryExpression = query;
+        this.targets = targets;
+        variableIndexes = indexes;
+        sourceTypes = query.getColumnTypes();
         isTransactionStatement = false;
 
         setDatabaseObjects(session, compileContext);
@@ -158,11 +158,11 @@ public class StatementSet extends StatementDMQL {
 
         switch (operationType) {
 
-            case StatementSet.TRIGGER_SET :
+            case StatementSet.TRIGGER_SET:
                 result = executeTriggerSetStatement(session);
                 break;
 
-            case StatementSet.SELECT_INTO : {
+            case StatementSet.SELECT_INTO: {
                 Object[] values = queryExpression.getSingleRowValues(session);
 
                 if (values == null) {
@@ -174,11 +174,11 @@ public class StatementSet extends StatementDMQL {
                 }
 
                 result = performAssignment(session, variableIndexes, targets,
-                                           values, sourceTypes);
+                        values, sourceTypes);
 
                 break;
             }
-            case StatementSet.VARIABLE_SET : {
+            case StatementSet.VARIABLE_SET: {
                 Object[] values = getExpressionValues(session);
 
                 if (values == null) {
@@ -188,11 +188,11 @@ public class StatementSet extends StatementDMQL {
                 }
 
                 result = performAssignment(session, variableIndexes, targets,
-                                           values, sourceTypes);
+                        values, sourceTypes);
 
                 break;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementSet");
         }
 
@@ -206,21 +206,21 @@ public class StatementSet extends StatementDMQL {
 
         switch (operationType) {
 
-            case StatementSet.TRIGGER_SET :
+            case StatementSet.TRIGGER_SET:
                 for (int i = 0; i < updateExpressions.length; i++) {
                     updateExpressions[i].collectObjectNames(references);
                 }
                 break;
 
-            case StatementSet.SELECT_INTO :
-            case StatementSet.VARIABLE_SET : {
+            case StatementSet.SELECT_INTO:
+            case StatementSet.VARIABLE_SET: {
                 if (expression != null) {
                     expression.collectObjectNames(references);
                 }
 
                 break;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementSet");
         }
     }
@@ -231,16 +231,16 @@ public class StatementSet extends StatementDMQL {
 
         switch (operationType) {
 
-            case StatementSet.TRIGGER_SET :
+            case StatementSet.TRIGGER_SET:
                 return sql;
 
-            case StatementSet.VARIABLE_SET : {
+            case StatementSet.VARIABLE_SET: {
 
                 /** @todo - cover row assignment */
                 sb.append(Tokens.T_SET).append(' ');
                 sb.append(targets[0].getColumn().getName().statementName);
                 sb.append(' ').append('=').append(' ').append(
-                    expression.getSQL());
+                        expression.getSQL());
 
                 break;
             }
@@ -291,16 +291,16 @@ public class StatementSet extends StatementDMQL {
 
     Result executeTriggerSetStatement(Session session) {
 
-        Table        table          = targetTable;
-        int[]        colMap         = updateColumnMap;    // column map
+        Table table = targetTable;
+        int[] colMap = updateColumnMap;    // column map
         Expression[] colExpressions = updateExpressions;
-        Type[]       colTypes       = table.getColumnTypes();
+        Type[] colTypes = table.getColumnTypes();
         int index = targetRangeVariables[TriggerDef.NEW_ROW].rangePosition;
-        Object[]     oldData = session.sessionContext.triggerArguments[index];
-        Object[]     data = (Object[]) ArrayUtil.duplicateArray(oldData);
+        Object[] oldData = session.sessionContext.triggerArguments[index];
+        Object[] data = (Object[]) ArrayUtil.duplicateArray(oldData);
 
         StatementDML.getUpdatedData(session, targets, table, colMap,
-                                    colExpressions, colTypes, data);
+                colExpressions, colTypes, data);
         ArrayUtil.copyArray(data, oldData, data.length);
 
         return Result.updateOneResult;
@@ -314,8 +314,8 @@ public class StatementSet extends StatementDMQL {
         }
 
         for (int i = 0; i < rangeVariables.length; i++) {
-            Table    rangeTable = rangeVariables[i].rangeTable;
-            HsqlName name       = rangeTable.getName();
+            Table rangeTable = rangeVariables[i].rangeTable;
+            HsqlName name = rangeTable.getName();
 
             if (rangeTable.isDataReadOnly() || rangeTable.isTemp()) {
                 continue;
@@ -343,7 +343,8 @@ public class StatementSet extends StatementDMQL {
         }
     }
 
-    void collectTableNamesForWrite(OrderedHashSet set) {}
+    void collectTableNamesForWrite(OrderedHashSet set) {
+    }
 
     public void checkIsNotColumnTarget() {
 
@@ -352,7 +353,7 @@ public class StatementSet extends StatementDMQL {
 
             if (col.getType() == SchemaObject.COLUMN) {
                 throw Error.error(ErrorCode.X_0U000,
-                                  col.getName().statementName);
+                        col.getName().statementName);
             }
         }
     }
@@ -365,7 +366,7 @@ public class StatementSet extends StatementDMQL {
             values = expression.getRowValue(session);
         } else if (expression.getType() == OpTypes.ROW_SUBQUERY) {
             values =
-                expression.table.queryExpression.getSingleRowValues(session);
+                    expression.table.queryExpression.getSingleRowValues(session);
 
             if (values == null) {
 
@@ -373,7 +374,7 @@ public class StatementSet extends StatementDMQL {
                 return null;
             }
         } else {
-            values    = new Object[1];
+            values = new Object[1];
             values[0] = expression.getValue(session);
         }
 
@@ -389,37 +390,37 @@ public class StatementSet extends StatementDMQL {
 
             switch (targets[j].getColumn().getType()) {
 
-                case SchemaObject.PARAMETER :
+                case SchemaObject.PARAMETER:
                     data = session.sessionContext.routineArguments;
                     break;
 
-                case SchemaObject.VARIABLE :
+                case SchemaObject.VARIABLE:
                     data = session.sessionContext.routineVariables;
                     break;
 
-                case SchemaObject.COLUMN :
+                case SchemaObject.COLUMN:
                     data = session.sessionContext
-                        .triggerArguments[TriggerDef.NEW_ROW];
+                            .triggerArguments[TriggerDef.NEW_ROW];
                     break;
             }
 
-            int    colIndex = variableIndexes[j];
-            Object value    = values[j];
-            Type   targetType;
+            int colIndex = variableIndexes[j];
+            Object value = values[j];
+            Type targetType;
 
             if (targets[j].getType() == OpTypes.ARRAY_ACCESS) {
                 targetType =
-                    targets[j].getLeftNode().getColumn().getDataType()
-                        .collectionBaseType();
+                        targets[j].getLeftNode().getColumn().getDataType()
+                                .collectionBaseType();
                 value = targetType.convertToType(session, value,
-                                                 sourceTypes[j]);
+                        sourceTypes[j]);
                 data[colIndex] =
-                    ((ExpressionAccessor) targets[j]).getUpdatedArray(session,
-                        (Object[]) data[colIndex], value, true);
+                        ((ExpressionAccessor) targets[j]).getUpdatedArray(session,
+                                (Object[]) data[colIndex], value, true);
             } else {
                 targetType = targets[j].getColumn().getDataType();
                 value = targetType.convertToType(session, value,
-                                                 sourceTypes[j]);
+                        sourceTypes[j]);
                 data[colIndex] = value;
             }
         }

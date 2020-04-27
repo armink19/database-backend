@@ -44,14 +44,14 @@ public class TestDatetimeSimple extends TestCase {
 
     private Calendar calendar = Calendar.getInstance();
     static String connectionURL =
-        "jdbc:hsqldb:file:/hsql/tests/testdatetimesimple";
+            "jdbc:hsqldb:file:/hsql/tests/testdatetimesimple";
 
     static {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
         } catch (ClassNotFoundException cnfe) {
             throw new RuntimeException(
-                "<clinit> failed.  JDBC Driver class not in CLASSPATH");
+                    "<clinit> failed.  JDBC Driver class not in CLASSPATH");
         }
     }
 
@@ -60,14 +60,14 @@ public class TestDatetimeSimple extends TestCase {
         System.out.println("testTimestampParam " + TimeZone.getDefault());
 
         Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:db", "sa",
-            "");
+                "");
         Statement stmt = c.createStatement();
 
         stmt.execute("create table dual (c0 integer)");
         stmt.executeUpdate("insert into dual values (2)");
 
         ResultSet set = stmt.executeQuery(
-            "select to_number(to_char((select current_timestamp + c0  day from dual), 'YYYYMMDD')) from dual");
+                "select to_number(to_char((select current_timestamp + c0  day from dual), 'YYYYMMDD')) from dual");
 
         if (set.next()) {
             System.out.println("stmt res=" + set.getInt(1));
@@ -76,7 +76,7 @@ public class TestDatetimeSimple extends TestCase {
         set.close();
 
         PreparedStatement pstmt = c.prepareStatement(
-            "select to_number(to_char((select ? + c0  day from dual), 'YYYYMMDD')) from dual");
+                "select to_number(to_char((select ? + c0  day from dual), 'YYYYMMDD')) from dual");
 
         pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
 
@@ -87,7 +87,7 @@ public class TestDatetimeSimple extends TestCase {
         }
 
         pstmt = c.prepareStatement(
-            "select to_number(to_char((select ? - c0  day from dual), 'YYYYMMDD')) from dual");
+                "select to_number(to_char((select ? - c0  day from dual), 'YYYYMMDD')) from dual");
 
         pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
 
@@ -98,7 +98,7 @@ public class TestDatetimeSimple extends TestCase {
         }
 
         pstmt = c.prepareStatement(
-            "select extract(hour from ((localtimestamp + 26 hour) - ?) day to hour ) from dual");
+                "select extract(hour from ((localtimestamp + 26 hour) - ?) day to hour ) from dual");
 
         pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
 
@@ -109,7 +109,7 @@ public class TestDatetimeSimple extends TestCase {
         }
 
         pstmt = c.prepareStatement(
-            "select extract(hour from (localtimestamp + 27 hour) - cast(? as timestamp) ) from dual");
+                "select extract(hour from (localtimestamp + 27 hour) - cast(? as timestamp) ) from dual");
 
         pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
 
@@ -128,9 +128,9 @@ public class TestDatetimeSimple extends TestCase {
         TestUtil.deleteDatabase("/hsql/tests/testdatetimesimple");
 
         Connection conn = DriverManager.getConnection(connectionURL, "SA", "");
-        ResultSet         rs;
+        ResultSet rs;
         PreparedStatement ps;
-        Statement         st = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.executeUpdate("SET TIME ZONE INTERVAL '-5:00' HOUR TO MINUTE");
         st.executeUpdate("DROP TABLE t IF EXISTS");
@@ -141,13 +141,13 @@ public class TestDatetimeSimple extends TestCase {
 
         rs.next();
         System.out.println("Object: " + rs.getObject("d")               //
-                           + " ; Timestamp: " + rs.getTimestamp("d")    //
-                           + " ; Date: " + rs.getDate("d")              //
-                           + " ; String: " + rs.getString("d"));
+                + " ; Timestamp: " + rs.getTimestamp("d")    //
+                + " ; Date: " + rs.getDate("d")              //
+                + " ; String: " + rs.getString("d"));
         rs.close();
 
         rs = st.executeQuery("SELECT count(*) c FROM t WHERE d = "
-                             + "'2008-11-27'");
+                + "'2008-11-27'");
 
         rs.next();
         System.out.println("Match? " + (rs.getInt("c") > 0));
@@ -176,13 +176,13 @@ public class TestDatetimeSimple extends TestCase {
 
         rs.next();
         System.out.println("Object: " + rs.getObject("d")                 //
-                           + " ; Date: " + rs.getDate("d")                //
-                           + " ; Timestamp: " + rs.getTimestamp("d") +    //
-                               "; String: " + rs.getString("d"));
+                + " ; Date: " + rs.getDate("d")                //
+                + " ; Timestamp: " + rs.getTimestamp("d") +    //
+                "; String: " + rs.getString("d"));
         rs.close();
 
         rs = st.executeQuery("SELECT count(*) c FROM t WHERE d = "
-                             + "'2008-10-27'");
+                + "'2008-10-27'");
 
         /* FRED:  When the DATE value is inserted with a TIMESTAMP,
          * all matches using a date fail.  The query here fails regardless
@@ -199,7 +199,7 @@ public class TestDatetimeSimple extends TestCase {
         in both cases, the string is not a valid timestamp string
         */
         st.executeUpdate(
-            "INSERT INTO t2 VALUES(1, timestamp '2008-11-27 12:30:00')");
+                "INSERT INTO t2 VALUES(1, timestamp '2008-11-27 12:30:00')");
         st.executeUpdate("INSERT INTO t2 VALUES(1, '2008-11-27 12:30:00')");
 
         /** FOLLOWING ALL WORK AS EXPECTED: */
@@ -213,9 +213,9 @@ public class TestDatetimeSimple extends TestCase {
 
         rs.next();
         System.out.println("Object: " + rs.getObject("ts")               //
-                           + " ; Timestamp: " + rs.getTimestamp("ts")    //
-                           + " ; Date: " + rs.getObject("ts")            //
-                           + "; String: " + rs.getString("ts"));
+                + " ; Timestamp: " + rs.getTimestamp("ts")    //
+                + " ; Date: " + rs.getObject("ts")            //
+                + "; String: " + rs.getString("ts"));
         rs.close();
 
         // these failed execute in original version
@@ -231,13 +231,13 @@ public class TestDatetimeSimple extends TestCase {
         TestUtil.deleteDatabase("/hsql/tests/testdatetimesimple");
 
         Connection conn = DriverManager.getConnection(connectionURL, "SA", "");
-        ResultSet          rs;
-        PreparedStatement  ps;
-        String             s;
-        Object             o;
-        java.sql.Date      d;
+        ResultSet rs;
+        PreparedStatement ps;
+        String s;
+        Object o;
+        java.sql.Date d;
         java.sql.Timestamp ts;
-        Statement          st = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.executeUpdate("SET TIME ZONE INTERVAL '-5:00' HOUR TO MINUTE");
         st.executeUpdate("DROP TABLE t3 IF EXISTS");
@@ -248,60 +248,60 @@ public class TestDatetimeSimple extends TestCase {
 
         rs.next();
 
-        s  = rs.getString("d");
-        o  = rs.getObject("d");
-        d  = rs.getDate("d");
+        s = rs.getString("d");
+        o = rs.getObject("d");
+        d = rs.getDate("d");
         ts = rs.getTimestamp("d");
 
         System.out.println("2008-11-27 INSERTED" + "\n    String: " + s
-                           + "\n    Object: " + o + "\n    Date: " + dump(d)
-                           + "\n    Timestamp: " + dump(ts) + '\n');
+                + "\n    Object: " + o + "\n    Date: " + dump(d)
+                + "\n    Timestamp: " + dump(ts) + '\n');
         rs.close();
         st.executeUpdate("DROP TABLE ts IF EXISTS");
         st.executeUpdate(
-            "CREATE TABLE ts(id integer generated by default as identity (start with 1), ts timestamp, tsz timestamp with time zone)");
+                "CREATE TABLE ts(id integer generated by default as identity (start with 1), ts timestamp, tsz timestamp with time zone)");
         st.executeUpdate(
-            "INSERT INTO ts VALUES DEFAULT, LOCALTIMESTAMP, CURRENT_TIMESTAMP");
+                "INSERT INTO ts VALUES DEFAULT, LOCALTIMESTAMP, CURRENT_TIMESTAMP");
 
         rs = st.executeQuery("CALL CURRENT_DATE");
 
         rs.next();
 
-        o  = rs.getObject(1);
-        d  = rs.getDate(1);
-        s  = rs.getString(1);
+        o = rs.getObject(1);
+        d = rs.getDate(1);
+        s = rs.getString(1);
         ts = rs.getTimestamp(1);
 
         System.out.println("CURRENT_DATE @" + new java.util.Date()
-                           + "\n    String: " + s + "\n    Object: " + o
-                           + "\n    Date: " + dump(d) + "\n    Timestamp: "
-                           + dump(ts) + '\n');
+                + "\n    String: " + s + "\n    Object: " + o
+                + "\n    Date: " + dump(d) + "\n    Timestamp: "
+                + dump(ts) + '\n');
         rs.close();
 
         rs = st.executeQuery("CALL LOCALTIMESTAMP");
 
         rs.next();
 
-        o  = rs.getObject(1);
-        s  = rs.getString(1);
+        o = rs.getObject(1);
+        s = rs.getString(1);
         ts = rs.getTimestamp(1);
 
         System.out.println("LOCALTIMESTAMP @" + new java.util.Date()
-                           + "\n    String: " + s + "\n    Object: " + o
-                           + "\n    Timestamp: " + dump(ts) + '\n');
+                + "\n    String: " + s + "\n    Object: " + o
+                + "\n    Timestamp: " + dump(ts) + '\n');
         rs.close();
 
         rs = st.executeQuery("CALL CURRENT_TIMESTAMP");
 
         rs.next();
 
-        s  = rs.getString(1);
-        o  = rs.getObject(1);
+        s = rs.getString(1);
+        o = rs.getObject(1);
         ts = rs.getTimestamp(1);
 
         System.out.println("CURRENT_TIMESTAMP @" + new java.util.Date()
-                           + "\n    String: " + s + "\n    Object: " + o
-                           + "\n    Timestamp: " + dump(ts) + '\n');
+                + "\n    String: " + s + "\n    Object: " + o
+                + "\n    Timestamp: " + dump(ts) + '\n');
         rs.close();
         st.executeUpdate("SHUTDOWN");
         conn.close();
@@ -310,21 +310,22 @@ public class TestDatetimeSimple extends TestCase {
     public void testDateRangeCheck() throws SQLException {
 
         Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:db", "sa",
-            "");
+                "");
         Statement stmt = c.createStatement();
 
         stmt.execute("create table testdate (d date)");
         stmt.executeUpdate("insert into testdate values DATE'2017-01-19'");
 
         PreparedStatement pstmt =
-            c.prepareStatement("insert into testdate values ?");
+                c.prepareStatement("insert into testdate values ?");
 
         try {
             calendar.set(2500, 1, 1);
             pstmt.setDate(1, new Date(calendar.getTimeInMillis()));
             pstmt.executeUpdate();
             fail("invalid date beyond 9999CE accepted");
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
     }
 
     public static String dump(java.sql.Timestamp t) {
@@ -338,8 +339,8 @@ public class TestDatetimeSimple extends TestCase {
     public static void main(String[] argv) {
 
         TestDatetimeSimple testA = new TestDatetimeSimple();
-        String[]           zones = {
-            "GMT+05:00", "GMT", "GMT-05:00"
+        String[] zones = {
+                "GMT+05:00", "GMT", "GMT-05:00"
         };
 
         try {

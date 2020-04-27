@@ -58,7 +58,7 @@ public class SpringExtAuth {
 
     /**
      * @throws SQLException If Setup of emulation database failed, or if the
-     *         application JDBC work fails.
+     *                      application JDBC work fails.
      */
     static public void main(String[] sa) throws SQLException {
         if (sa.length != 1) throw new IllegalArgumentException(SYNTAX_MSG);
@@ -77,7 +77,7 @@ public class SpringExtAuth {
 
         SpringExtAuth.prepMemoryDatabases(!sa[0].equals("HsqldbSlave"));
         ApplicationContext ctx =
-            new ClassPathXmlApplicationContext("beandefs.xml", authSpringFile);
+                new ClassPathXmlApplicationContext("beandefs.xml", authSpringFile);
         ListableBeanFactory bf = (ListableBeanFactory) ctx;
         JdbcAppClass appBean = bf.getBean("appBean", JdbcAppClass.class);
         appBean.doJdbcWork();
@@ -87,7 +87,7 @@ public class SpringExtAuth {
      * This method prepares a memory-only catalog.
      * After this method runs, a new Connection using the same JDBC URL will
      * behave just like connecting to a populated, persistent catalog.
-     *
+     * <p>
      * Purposefully not using declarative settings here because this is purely
      * emulation setup.
      * A real application won't have any method corresponding to this method.
@@ -101,15 +101,15 @@ public class SpringExtAuth {
         try {
             c = DriverManager.getConnection(
                     "jdbc:hsqldb:mem:localDb", "SA", "");
-                    // JDBC URL here must match that configured within the bean
-                    // 'appBean' in "beandefs.xml" file
+            // JDBC URL here must match that configured within the bean
+            // 'appBean' in "beandefs.xml" file
             c.setAutoCommit(false);
             st = c.createStatement();
             st.executeUpdate("SET DATABASE UNIQUE NAME \"AUTHSAMPLEDBNAME\"");
             st.executeUpdate(
                     "SET DATABASE AUTHENTICATION FUNCTION EXTERNAL NAME "
-                    + "'CLASSPATH:"
-                    + "org.hsqldb.auth.AuthBeanMultiplexer.authenticate'");
+                            + "'CLASSPATH:"
+                            + "org.hsqldb.auth.AuthBeanMultiplexer.authenticate'");
             // DB Name here must match that configured in either
             // "ldapbeans.xml" or "slavebean.xml", depending on whether you are
             // running in LDAP or HsqldbSlave mode, correspondingly.
@@ -144,8 +144,8 @@ public class SpringExtAuth {
         try {
             c = DriverManager.getConnection(
                     "jdbc:hsqldb:mem:masterDb", "SA", "");
-                    // JDBC URL here must match that configured for bean
-                    // 'slaveSetup' in "slavebeans.xml" file
+            // JDBC URL here must match that configured for bean
+            // 'slaveSetup' in "slavebeans.xml" file
             c.setAutoCommit(false);
             st = c.createStatement();
             st.executeUpdate("SET PASSWORD 'SECRET9123113'");

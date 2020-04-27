@@ -55,19 +55,19 @@ import java.util.Properties;
  * @since JDK 1.2, HSQLDB 2.0
  */
 public class JDBCPooledDataSource extends JDBCCommonDataSource
-implements ConnectionPoolDataSource, Serializable, Referenceable,
-           CommonDataSource {
+        implements ConnectionPoolDataSource, Serializable, Referenceable,
+        CommonDataSource {
 
     public PooledConnection getPooledConnection() throws SQLException {
 
         JDBCConnection connection =
-            (JDBCConnection) JDBCDriver.getConnection(url, connectionProps);
+                (JDBCConnection) JDBCDriver.getConnection(url, connectionProps);
 
         return new JDBCPooledConnection(connection);
     }
 
     public PooledConnection getPooledConnection(String user,
-            String password) throws SQLException {
+                                                String password) throws SQLException {
 
         Properties props = new Properties();
 
@@ -75,7 +75,7 @@ implements ConnectionPoolDataSource, Serializable, Referenceable,
         props.setProperty("password", password);
 
         JDBCConnection connection =
-            (JDBCConnection) JDBCDriver.getConnection(url, props);
+                (JDBCConnection) JDBCDriver.getConnection(url, props);
 
         return new JDBCPooledConnection(connection);
     }
@@ -84,19 +84,19 @@ implements ConnectionPoolDataSource, Serializable, Referenceable,
      * Retrieves the Reference of this object.
      *
      * @return The non-null javax.naming.Reference of this object.
-     * @exception NamingException If a naming exception was encountered
-     *          while retrieving the reference.
+     * @throws NamingException If a naming exception was encountered
+     *                         while retrieving the reference.
      */
     public Reference getReference() throws NamingException {
 
-        String    cname = "org.hsqldb.jdbc.JDBCDataSourceFactory";
-        Reference ref   = new Reference(getClass().getName(), cname, null);
+        String cname = "org.hsqldb.jdbc.JDBCDataSourceFactory";
+        Reference ref = new Reference(getClass().getName(), cname, null);
 
         ref.add(new StringRefAddr("database", getDatabase()));
         ref.add(new StringRefAddr("user", getUser()));
         ref.add(new StringRefAddr("password", password));
         ref.add(new StringRefAddr("loginTimeout",
-                                  Integer.toString(loginTimeout)));
+                Integer.toString(loginTimeout)));
 
         return ref;
     }

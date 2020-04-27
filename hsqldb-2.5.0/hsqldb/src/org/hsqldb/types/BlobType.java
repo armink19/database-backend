@@ -47,9 +47,9 @@ import org.hsqldb.jdbc.JDBCBlobClient;
  */
 public final class BlobType extends BinaryType {
 
-    public static final long maxBlobPrecision     = 1024L * 1024 * 1024 * 1024;
-    public static final int  defaultBlobSize      = 1024 * 1024 * 1024;
-    public static final int  defaultShortBlobSize = 16 * 1024 * 1024;
+    public static final long maxBlobPrecision = 1024L * 1024 * 1024 * 1024;
+    public static final int defaultBlobSize = 1024 * 1024 * 1024;
+    public static final int defaultShortBlobSize = 16 * 1024 * 1024;
 
     public BlobType(long precision) {
         super(Types.SQL_BLOB, precision);
@@ -57,7 +57,7 @@ public final class BlobType extends BinaryType {
 
     public int displaySize() {
         return precision > Integer.MAX_VALUE ? Integer.MAX_VALUE
-                                             : (int) precision;
+                : (int) precision;
     }
 
     public int getJDBCTypeCode() {
@@ -82,17 +82,17 @@ public final class BlobType extends BinaryType {
 
     public String getDefinition() {
 
-        long   factor     = precision;
+        long factor = precision;
         String multiplier = null;
 
         if (precision % (1024 * 1024 * 1024) == 0) {
-            factor     = precision / (1024 * 1024 * 1024);
+            factor = precision / (1024 * 1024 * 1024);
             multiplier = Tokens.T_G_FACTOR;
         } else if (precision % (1024 * 1024) == 0) {
-            factor     = precision / (1024 * 1024);
+            factor = precision / (1024 * 1024);
             multiplier = Tokens.T_M_FACTOR;
         } else if (precision % (1024) == 0) {
-            factor     = precision / (1024);
+            factor = precision / (1024);
             multiplier = Tokens.T_K_FACTOR;
         }
 
@@ -155,7 +155,9 @@ public final class BlobType extends BinaryType {
         return session.database.lobManager.compare((BlobData) a, (BlobData) b);
     }
 
-    /** @todo - implement */
+    /**
+     * @todo - implement
+     */
     public Object convertToTypeLimits(SessionInterface session, Object a) {
         return a;
     }
@@ -168,8 +170,8 @@ public final class BlobType extends BinaryType {
         }
 
         if (otherType.typeCode == Types.SQL_BLOB) {
-            BlobData b          = (BlobData) a;
-            long     blobLength = b.length(session);
+            BlobData b = (BlobData) a;
+            long blobLength = b.length(session);
 
             if (blobLength > precision) {
                 blobLength = precision;
@@ -186,8 +188,8 @@ public final class BlobType extends BinaryType {
 
         if (otherType.typeCode == Types.SQL_BINARY
                 || otherType.typeCode == Types.SQL_VARBINARY) {
-            BlobData b          = (BlobData) a;
-            long     blobLength = b.length(session);
+            BlobData b = (BlobData) a;
+            long blobLength = b.length(session);
 
             if (blobLength > precision) {
                 blobLength = precision;
@@ -227,7 +229,7 @@ public final class BlobType extends BinaryType {
         }
 
         if (otherType.typeCode == Types.SQL_CLOB) {
-            a         = Type.SQL_VARCHAR.convertToType(session, a, otherType);
+            a = Type.SQL_VARCHAR.convertToType(session, a, otherType);
             otherType = Type.SQL_VARCHAR;
         }
 

@@ -40,19 +40,19 @@ import java.util.Properties;
 
 /**
  * Common base for DataSource implementations.
- *
+ * <p>
  * This class implements the methods used for setting the properties for new
  * connections.
- *
+ * <p>
  * The setUrl() or setDatabase() methods are used to set the URL.
- *
+ * <p>
  * It is possible to set all the rest of required properties in a Properties
  * file and use the setProperties() method.
- *
+ * <p>
  * Alternatively, the setXXX() methods for user and password can be used.
- *
+ * <p>
  * It is best to use only one method for setting the properties.
- *
+ * <p>
  * If setXXX() methods are used, the values override the values set in a
  * call made to setProperties() before or after calling setXXX().
  *
@@ -61,7 +61,7 @@ import java.util.Properties;
  * @since JDK 1.2, HSQLDB 2.0
  */
 public abstract class JDBCCommonDataSource
-implements CommonDataSource, Serializable {
+        implements CommonDataSource, Serializable {
 
     /**
      * <p>Retrieves the log writer for this <code>DataSource</code>
@@ -79,8 +79,8 @@ implements CommonDataSource, Serializable {
      * default is for logging to be disabled.
      *
      * @return the log writer for this data source or null if
-     *        logging is disabled
-     * @exception java.sql.SQLException if a database access error occurs
+     * logging is disabled
+     * @throws java.sql.SQLException if a database access error occurs
      * @see #setLogWriter
      * @since 1.4
      */
@@ -104,7 +104,7 @@ implements CommonDataSource, Serializable {
      * disabled.
      *
      * @param out the new log writer; to disable logging, set to null
-     * @exception SQLException if a database access error occurs
+     * @throws SQLException if a database access error occurs
      * @see #getLogWriter
      * @since 1.4
      */
@@ -121,7 +121,7 @@ implements CommonDataSource, Serializable {
      * initially zero.
      *
      * @param seconds the data source login time limit
-     * @exception SQLException if a database access error occurs.
+     * @throws SQLException if a database access error occurs.
      * @see #getLoginTimeout
      * @since 1.4
      */
@@ -130,7 +130,7 @@ implements CommonDataSource, Serializable {
         loginTimeout = seconds;
 
         connectionProps.setProperty("loginTimeout",
-                                    Integer.toString(loginTimeout));
+                Integer.toString(loginTimeout));
     }
 
     /**
@@ -142,7 +142,7 @@ implements CommonDataSource, Serializable {
      * initially zero.
      *
      * @return the data source login time limit
-     * @exception SQLException if a database access error occurs.
+     * @throws SQLException if a database access error occurs.
      * @see #setLoginTimeout
      * @since 1.4
      */
@@ -255,7 +255,7 @@ implements CommonDataSource, Serializable {
      * Sets the jdbc database URL. <p>
      *
      * @param url the new value of this object's jdbc database connection
-     *      url attribute
+     *            url attribute
      */
     public void setUrl(String url) {
         this.url = url;
@@ -265,7 +265,7 @@ implements CommonDataSource, Serializable {
      * Sets the jdbc database URL. <p>
      *
      * @param url the new value of this object's jdbc database connection
-     *      url attribute
+     *            url attribute
      */
     public void setURL(String url) {
         this.url = url;
@@ -301,12 +301,12 @@ implements CommonDataSource, Serializable {
      * object.
      *
      * @param props properties.  If null, then existing properties will be
-     *                           cleared/replaced.
+     *              cleared/replaced.
      */
     public void setProperties(Properties props) {
 
         connectionProps = (props == null) ? new Properties()
-                                          : (Properties) props.clone();
+                : (Properties) props.clone();
 
         if (user != null) {
             connectionProps.setProperty("user", user);
@@ -318,7 +318,7 @@ implements CommonDataSource, Serializable {
 
         if (loginTimeout != 0) {
             connectionProps.setProperty("loginTimeout",
-                                        Integer.toString(loginTimeout));
+                    Integer.toString(loginTimeout));
         }
     }
 
@@ -336,38 +336,56 @@ implements CommonDataSource, Serializable {
      * @since JDK 1.7 M11 2010/09/10 (b123), HSQLDB 2.0.1
      */
     public java.util.logging.Logger getParentLogger()
-    throws java.sql.SQLFeatureNotSupportedException {
+            throws java.sql.SQLFeatureNotSupportedException {
         throw (java.sql
-            .SQLFeatureNotSupportedException) JDBCUtil.notSupported();
+                .SQLFeatureNotSupportedException) JDBCUtil.notSupported();
     }
 
     // ------------------------ internal implementation ------------------------
     protected Properties connectionProps = new Properties();
 
-    /** description of data source - informational */
+    /**
+     * description of data source - informational
+     */
     protected String description = null;
 
-    /** name of data source - informational */
+    /**
+     * name of data source - informational
+     */
     protected String dataSourceName = null;
 
-    /** name of server - informational */
+    /**
+     * name of server - informational
+     */
     protected String serverName = null;
 
-    /** network protocol - informational */
+    /**
+     * network protocol - informational
+     */
     protected String networkProtocol = null;
 
-    /** login timeout */
+    /**
+     * login timeout
+     */
     protected int loginTimeout = 0;
 
-    /** log writer */
+    /**
+     * log writer
+     */
     protected transient PrintWriter logWriter;
 
-    /** connection user */
+    /**
+     * connection user
+     */
     protected String user = null;
 
-    /** connection password */
+    /**
+     * connection password
+     */
     protected String password = null;
 
-    /** database URL */
+    /**
+     * database URL
+     */
     protected String url = null;
 }

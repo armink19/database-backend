@@ -45,21 +45,21 @@ import java.lang.reflect.Constructor;
  */
 public class BlockObjectStore extends SimpleStore {
 
-    final Class       objectClass;
+    final Class objectClass;
     final Constructor constructor;
-    final int         storageSize;
-    final int         blockSize;
+    final int storageSize;
+    final int blockSize;
 
     public BlockObjectStore(DataFileCache cache,
                             TableSpaceManager tableSpaceManager,
                             Class<?> objectClass, int storageSize,
                             int blockSize) {
 
-        this.cache        = cache;
+        this.cache = cache;
         this.spaceManager = tableSpaceManager;
-        this.objectClass  = objectClass;
-        this.blockSize    = blockSize;
-        this.storageSize  = storageSize;
+        this.objectClass = objectClass;
+        this.blockSize = blockSize;
+        this.storageSize = storageSize;
 
         try {
             this.constructor = objectClass.getConstructor(int.class);
@@ -125,8 +125,8 @@ public class BlockObjectStore extends SimpleStore {
 
         try {
             CachedObject object =
-                (CachedObject) constructor.newInstance(new Object[]{
-                    Integer.valueOf(blockSize) });
+                    (CachedObject) constructor.newInstance(new Object[]{
+                            Integer.valueOf(blockSize)});
 
             return object;
         } catch (Exception e) {

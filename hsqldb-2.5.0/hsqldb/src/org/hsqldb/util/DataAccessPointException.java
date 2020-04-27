@@ -32,7 +32,6 @@
 package org.hsqldb.util;
 
 /**
- *
  * @author Nicolas BAZIN, INGENICO
  * @version 1.7.0
  */

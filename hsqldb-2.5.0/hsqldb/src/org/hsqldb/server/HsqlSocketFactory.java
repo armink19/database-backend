@@ -47,7 +47,7 @@ import java.net.Socket;
  */
 public class HsqlSocketFactory {
 
-// ----------------------------- static members ---------------------------------
+    // ----------------------------- static members ---------------------------------
     private static HsqlSocketFactory plainImpl;
     private static HsqlSocketFactory sslImpl;
 
@@ -57,7 +57,8 @@ public class HsqlSocketFactory {
      * External construction disabled.  New factory instances are retrieved
      * through the newHsqlSocketFactory method instead.
      */
-    protected HsqlSocketFactory() throws Exception {}
+    protected HsqlSocketFactory() throws Exception {
+    }
 
 // ------------------------- factory builder method ----------------------------
 
@@ -66,16 +67,16 @@ public class HsqlSocketFactory {
      * determined by the specified argument, tls.
      *
      * @param tls whether to retrieve a factory producing SSL sockets
-     * @throws Exception if the new factory cannot be constructed or is
-     *      of the wrong type
      * @return a new factory
+     * @throws Exception if the new factory cannot be constructed or is
+     *                   of the wrong type
      */
     public static HsqlSocketFactory getInstance(boolean tls) throws Exception {
         return tls ? getSSLImpl()
-                   : getPlainImpl();
+                : getPlainImpl();
     }
 
-// -------------------------- public instance methods --------------------------
+    // -------------------------- public instance methods --------------------------
     public void configureSocket(Socket socket) {
 
         // default: do nothing
@@ -86,8 +87,8 @@ public class HsqlSocketFactory {
      * The socket is configured with the socket options
      * given to this factory.
      *
-     * @return the ServerSocket
      * @param port the port to which to bind the ServerSocket
+     * @return the ServerSocket
      * @throws Exception if a network error occurs
      */
     public ServerSocket createServerSocket(int port) throws Exception {
@@ -99,8 +100,8 @@ public class HsqlSocketFactory {
      * The socket is configured with the socket options
      * given to this factory.
      *
-     * @return the ServerSocket
      * @param port the port to which to bind the ServerSocket
+     * @return the ServerSocket
      * @throws Exception if a network error occurs
      */
     public ServerSocket createServerSocket(int port,
@@ -114,16 +115,16 @@ public class HsqlSocketFactory {
      * specified remote port. This socket is configured using the socket options
      * established for this factory.
      *
-     * @return the socket
      * @param socket the existing socket, can be null
-     * @param host the server host
-     * @param port the server port
+     * @param host   the server host
+     * @param port   the server port
+     * @return the socket
      * @throws Exception if a network error occurs
      */
     public Socket createSocket(Socket socket, String host,
                                int port) throws Exception {
         return socket == null ? new Socket(host, port)
-                              : socket;
+                : socket;
     }
 
     /**
@@ -131,9 +132,9 @@ public class HsqlSocketFactory {
      * specified remote port. This socket is configured using the socket options
      * established for this factory.
      *
-     * @return the socket
      * @param host the server host
      * @param port the server port
+     * @return the socket
      * @throws Exception if a network error occurs
      */
     public Socket createSocket(String host, int port) throws Exception {
@@ -149,7 +150,7 @@ public class HsqlSocketFactory {
         return false;
     }
 
-// ------------------------ static utility methods -----------------------------
+    // ------------------------ static utility methods -----------------------------
     private static HsqlSocketFactory getPlainImpl() throws Exception {
 
         synchronized (HsqlSocketFactory.class) {
@@ -166,7 +167,7 @@ public class HsqlSocketFactory {
         synchronized (HsqlSocketFactory.class) {
             if (sslImpl == null) {
                 sslImpl =
-                    newFactory("org.hsqldb.server.HsqlSocketFactorySecure");
+                        newFactory("org.hsqldb.server.HsqlSocketFactorySecure");
             }
         }
 
@@ -182,26 +183,26 @@ public class HsqlSocketFactory {
      * trusted that an  implementation is secure if it returns true
      * for calls to isSecure();
      *
-     * @return a new secure socket factory
      * @param implClass the fully qualified name of the desired
-     *      class to construct
+     *                  class to construct
+     * @return a new secure socket factory
      * @throws Exception if a new secure socket factory cannot
-     *      be constructed
+     *                   be constructed
      */
     private static HsqlSocketFactory newFactory(String implClass)
-    throws Exception {
+            throws Exception {
 
-        Class       clazz;
+        Class clazz;
         Constructor ctor;
-        Class[]     ctorParm;
-        Object[]    ctorArg;
-        Object      factory;
+        Class[] ctorParm;
+        Object[] ctorArg;
+        Object factory;
 
-        clazz    = Class.forName(implClass);
+        clazz = Class.forName(implClass);
         ctorParm = new Class[0];
 
         // protected constructor
-        ctor    = clazz.getDeclaredConstructor(ctorParm);
+        ctor = clazz.getDeclaredConstructor(ctorParm);
         ctorArg = new Object[0];
 
         try {
@@ -210,8 +211,8 @@ public class HsqlSocketFactory {
             Throwable t = e.getTargetException();
 
             throw (t instanceof Exception) ? ((Exception) t)
-                                           : new RuntimeException(
-                                               t.toString());
+                    : new RuntimeException(
+                    t.toString());
         }
 
         return (HsqlSocketFactory) factory;

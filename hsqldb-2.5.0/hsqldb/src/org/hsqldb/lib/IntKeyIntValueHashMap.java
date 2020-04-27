@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  */
 public class IntKeyIntValueHashMap extends BaseHashMap {
 
-    private Set        keySet;
+    private Set keySet;
     private Collection values;
 
     public IntKeyIntValueHashMap() {
@@ -50,9 +50,9 @@ public class IntKeyIntValueHashMap extends BaseHashMap {
     }
 
     public IntKeyIntValueHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.intKeyOrValue,
-              BaseHashMap.intKeyOrValue, false);
+                BaseHashMap.intKeyOrValue, false);
     }
 
     public int get(int key) throws NoSuchElementException {

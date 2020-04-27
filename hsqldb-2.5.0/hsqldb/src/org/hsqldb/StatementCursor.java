@@ -53,9 +53,9 @@ public class StatementCursor extends StatementQuery {
 
     Result getResult(Session session) {
 
-        Object[] data    = session.sessionContext.routineArguments;
-        Result   current = (Result) data[data.length - 1];
-        Result   head    = current;
+        Object[] data = session.sessionContext.routineArguments;
+        Result current = (Result) data[data.length - 1];
+        Result head = current;
 
         while (current != null) {
             if (getCursorName().name.equals(current.getMainString())) {
@@ -97,6 +97,7 @@ public class StatementCursor extends StatementQuery {
     /**
      * always readonly
      */
-    void collectTableNamesForWrite(OrderedHashSet set) {}
+    void collectTableNamesForWrite(OrderedHashSet set) {
+    }
 
 }

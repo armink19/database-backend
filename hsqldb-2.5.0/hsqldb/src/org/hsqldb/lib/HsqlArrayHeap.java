@@ -44,10 +44,10 @@ import java.util.Comparator;
  */
 public class HsqlArrayHeap implements HsqlHeap {
 
-// --------------------------------- members -----------------------------------
+    // --------------------------------- members -----------------------------------
     protected Comparator oc;
-    protected int        count;
-    protected Object[]   heap;
+    protected int count;
+    protected Object[] heap;
 
 // ------------------------------ constructors ---------------------------------
 
@@ -55,12 +55,12 @@ public class HsqlArrayHeap implements HsqlHeap {
      * Creates a new HsqlArrayHeap with the given initial capacity, using
      * the specified ObjectComparator to maintain the heap invariant.
      *
-     * @exception IllegalArgumentException if capacity less or equal to zero
-     *      or comparator is null
+     * @throws IllegalArgumentException if capacity less or equal to zero
+     *                                  or comparator is null
      */
     public HsqlArrayHeap(int capacity,
                          Comparator comparator)
-                         throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         if (capacity <= 0) {
             throw new IllegalArgumentException("" + capacity);
@@ -71,10 +71,10 @@ public class HsqlArrayHeap implements HsqlHeap {
         }
 
         heap = new Object[capacity];
-        oc   = comparator;
+        oc = comparator;
     }
 
-//    /** Copy constructor (optional) */
+    //    /** Copy constructor (optional) */
 //    public HsqlArrayHeap(HsqlArrayHeap other) {
 //        count = other.count;
 //        oc    = other.oc;
@@ -92,7 +92,7 @@ public class HsqlArrayHeap implements HsqlHeap {
     }
 
     public synchronized void add(Object o)
-    throws IllegalArgumentException, RuntimeException {
+            throws IllegalArgumentException, RuntimeException {
 
         int ci;    // current index
         int pi;    // parent index
@@ -129,7 +129,7 @@ public class HsqlArrayHeap implements HsqlHeap {
             }
 
             heap[ci] = heap[pi];
-            ci       = pi;
+            ci = pi;
         } while (true);
 
         heap[ci] = o;
@@ -151,10 +151,10 @@ public class HsqlArrayHeap implements HsqlHeap {
 
     public synchronized Object remove() {
 
-        int    ci;     // current index
-        int    li;     // left index
-        int    ri;     // right index
-        int    chi;    // child index
+        int ci;     // current index
+        int li;     // left index
+        int ri;     // right index
+        int chi;    // child index
         Object co;
         Object ro;
 
@@ -173,7 +173,7 @@ public class HsqlArrayHeap implements HsqlHeap {
             return ro;
         }
 
-        co          = heap[count];
+        co = heap[count];
         heap[count] = null;
 
         do {
@@ -183,16 +183,16 @@ public class HsqlArrayHeap implements HsqlHeap {
                 break;
             }
 
-            ri  = (ci << 1) + 2;
+            ri = (ci << 1) + 2;
             chi = (ri >= count || oc.compare(heap[li], heap[ri]) < 0) ? li
-                                                                      : ri;
+                    : ri;
 
             if (oc.compare(co, heap[chi]) <= 0) {
                 break;
             }
 
             heap[ci] = heap[chi];
-            ci       = chi;
+            ci = chi;
         } while (true);
 
         heap[ci] = co;
@@ -204,7 +204,7 @@ public class HsqlArrayHeap implements HsqlHeap {
         return count;
     }
 
-// ------------- standard object and collection methods (optional) -------------
+    // ------------- standard object and collection methods (optional) -------------
 //    public synchronized Object clone() throws CloneNotSupportedException {
 //        return new HsqlArrayHeap(this);
 //    }
@@ -301,7 +301,7 @@ public class HsqlArrayHeap implements HsqlHeap {
         return sb.toString();
     }
 
-//
+    //
 //    public void trim() {
 //
 //        Object[] oldheap;

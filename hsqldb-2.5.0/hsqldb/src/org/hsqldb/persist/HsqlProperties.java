@@ -58,19 +58,19 @@ import java.util.Properties;
 public class HsqlProperties {
 
     //
-    public static final int ANY_ERROR        = 0;
+    public static final int ANY_ERROR = 0;
     public static final int NO_VALUE_FOR_KEY = 1;
-    protected String        fileName;
-    protected String        fileExtension = "";
-    protected Properties    stringProps;
-    protected int[]         errorCodes = ValuePool.emptyIntArray;
-    protected String[]      errorKeys  = ValuePool.emptyStringArray;
-    protected FileAccess    fa;
-    protected HashMap       metaData;
+    protected String fileName;
+    protected String fileExtension = "";
+    protected Properties stringProps;
+    protected int[] errorCodes = ValuePool.emptyIntArray;
+    protected String[] errorKeys = ValuePool.emptyStringArray;
+    protected FileAccess fa;
+    protected HashMap metaData;
 
     public HsqlProperties() {
         stringProps = new Properties();
-        fileName    = null;
+        fileName = null;
     }
 
     public HsqlProperties(String fileName) {
@@ -79,20 +79,20 @@ public class HsqlProperties {
 
     public HsqlProperties(String fileName, String fileExtension) {
 
-        stringProps        = new Properties();
-        this.fileName      = fileName;
+        stringProps = new Properties();
+        this.fileName = fileName;
         this.fileExtension = fileExtension;
-        fa                 = FileUtil.getFileUtil();
+        fa = FileUtil.getFileUtil();
     }
 
     public HsqlProperties(HashMap meta, String fileName, FileAccess accessor,
                           boolean b) {
 
-        stringProps        = new Properties();
-        this.fileName      = fileName;
+        stringProps = new Properties();
+        this.fileName = fileName;
         this.fileExtension = ".properties";
-        fa                 = accessor;
-        metaData           = meta;
+        fa = accessor;
+        metaData = meta;
     }
 
     public HsqlProperties(Properties props) {
@@ -145,10 +145,11 @@ public class HsqlProperties {
 
         try {
             if (prop != null) {
-                prop         = prop.trim();
+                prop = prop.trim();
                 defaultValue = Integer.parseInt(prop);
             }
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException e) {
+        }
 
         return defaultValue;
     }
@@ -183,7 +184,7 @@ public class HsqlProperties {
         Enumeration keys = props.propertyNames();
 
         while (keys.hasMoreElements()) {
-            String key   = (String) keys.nextElement();
+            String key = (String) keys.nextElement();
             String value = props.getProperty(key);
 
             this.stringProps.put(key, value);
@@ -199,7 +200,7 @@ public class HsqlProperties {
         addProperties(props.stringProps);
     }
 
-// oj@openoffice.org
+    // oj@openoffice.org
     public boolean propertiesFileExists() {
 
         if (fileName == null) {
@@ -215,15 +216,15 @@ public class HsqlProperties {
 
         if (fileName == null || fileName.length() == 0) {
             throw new FileNotFoundException(
-                Error.getMessage(ErrorCode.M_HsqlProperties_load));
+                    Error.getMessage(ErrorCode.M_HsqlProperties_load));
         }
 
         if (!propertiesFileExists()) {
             return false;
         }
 
-        InputStream fis           = null;
-        String      propsFilename = fileName + fileExtension;
+        InputStream fis = null;
+        String propsFilename = fileName + fileExtension;
 
 // oj@openoffice.org
         try {
@@ -240,13 +241,13 @@ public class HsqlProperties {
     }
 
     /**
-     *  Saves the properties.
+     * Saves the properties.
      */
     public void save() throws Exception {
 
         if (fileName == null || fileName.length() == 0) {
             throw new java.io.FileNotFoundException(
-                Error.getMessage(ErrorCode.M_HsqlProperties_load));
+                    Error.getMessage(ErrorCode.M_HsqlProperties_load));
         }
 
         String filestring = fileName + fileExtension;
@@ -255,7 +256,7 @@ public class HsqlProperties {
     }
 
     /**
-     *  Saves the properties
+     * Saves the properties
      */
     public void save(String fileString) throws Exception {
 
@@ -266,7 +267,7 @@ public class HsqlProperties {
         OutputStream fos = fa.openOutputStreamElement(fileString, false);
         FileAccess.FileSync outDescriptor = fa.getFileSync(fos);
         String name = HsqlDatabaseProperties.PRODUCT_NAME + " "
-                      + HsqlDatabaseProperties.THIS_FULL_VERSION;
+                + HsqlDatabaseProperties.THIS_FULL_VERSION;
 
         stringProps.store(fos, name);
         fos.flush();
@@ -274,7 +275,7 @@ public class HsqlProperties {
         fos.close();
 
         outDescriptor = null;
-        fos           = null;
+        fos = null;
     }
 
     /**
@@ -289,7 +290,7 @@ public class HsqlProperties {
         errorKeys = (String[]) ArrayUtil.resizeArray(errorKeys,
                 errorKeys.length + 1);
         errorCodes[errorCodes.length - 1] = code;
-        errorKeys[errorKeys.length - 1]   = key;
+        errorKeys[errorKeys.length - 1] = key;
     }
 
     /**
@@ -297,7 +298,7 @@ public class HsqlProperties {
      * array of a Main method. Properties are in the form of "-key value"
      * pairs. Each key is prefixed with the type argument and a dot before
      * being inserted into the properties Object. <p>
-     *
+     * <p>
      * "--help" is treated as a key with no value and not inserted.
      */
     public static HsqlProperties argArrayToProps(String[] arg, String type) {
@@ -311,14 +312,14 @@ public class HsqlProperties {
                 props.addError(NO_VALUE_FOR_KEY, p.substring(1));
             } else if (p.startsWith("--")) {
                 String value = i + 1 < arg.length ? arg[i + 1]
-                                                  : "";
+                        : "";
 
                 props.setProperty(type + "." + p.substring(2), value);
 
                 i++;
             } else if (p.charAt(0) == '-') {
                 String value = i + 1 < arg.length ? arg[i + 1]
-                                                  : "";
+                        : "";
 
                 props.setProperty(type + "." + p.substring(1), value);
 
@@ -332,28 +333,28 @@ public class HsqlProperties {
     /**
      * Creates and populates a new HsqlProperties Object using a string
      * such as "key1=value1;key2=value2". <p>
-     *
+     * <p>
      * The string that represents the = sign above is specified as pairsep
      * and the one that represents the semicolon is specified as delimiter,
      * allowing any string to be used for either.<p>
-     *
+     * <p>
      * Leading / trailing spaces around the keys and values are discarded.<p>
-     *
+     * <p>
      * The string is parsed by (1) subdividing into segments by delimiter
      * (2) subdividing each segment in two by finding the first instance of
      * the pairsep (3) trimming each pair of segments from step 2 and
      * inserting into the properties object.<p>
-     *
+     * <p>
      * Each key is prefixed with the type argument and a dot before being
      * inserted.<p>
-     *
+     * <p>
      * Any key without a value is added to the list of errors.
      */
     public static HsqlProperties delimitedArgPairsToProps(String s,
-            String pairsep, String dlimiter, String type) {
+                                                          String pairsep, String dlimiter, String type) {
 
-        HsqlProperties props       = new HsqlProperties();
-        int            currentpair = 0;
+        HsqlProperties props = new HsqlProperties();
+        int currentpair = 0;
 
         while (true) {
             int nextpair = s.indexOf(dlimiter, currentpair);
@@ -364,15 +365,15 @@ public class HsqlProperties {
 
             // find value within the segment
             int valindex = s.substring(0, nextpair).indexOf(pairsep,
-                                       currentpair);
+                    currentpair);
 
             if (valindex == -1) {
                 props.addError(NO_VALUE_FOR_KEY,
-                               s.substring(currentpair, nextpair).trim());
+                        s.substring(currentpair, nextpair).trim());
             } else {
                 String key = s.substring(currentpair, valindex).trim();
                 String value = s.substring(valindex + pairsep.length(),
-                                           nextpair).trim();
+                        nextpair).trim();
 
                 if (type != null) {
                     key = type + "." + key;
@@ -403,26 +404,27 @@ public class HsqlProperties {
         return errorKeys;
     }
 
-    public void validate() {}
+    public void validate() {
+    }
 
     // column number mappings
-    public static final int indexName         = 0;
-    public static final int indexType         = 1;
-    public static final int indexClass        = 2;
-    public static final int indexIsRange      = 3;
+    public static final int indexName = 0;
+    public static final int indexType = 1;
+    public static final int indexClass = 2;
+    public static final int indexIsRange = 3;
     public static final int indexDefaultValue = 4;
-    public static final int indexRangeLow     = 5;
-    public static final int indexRangeHigh    = 6;
-    public static final int indexValues       = 7;
-    public static final int indexLimit        = 9;
+    public static final int indexRangeLow = 5;
+    public static final int indexRangeHigh = 6;
+    public static final int indexValues = 7;
+    public static final int indexLimit = 9;
 
     public static Object[] getMeta(String name, int type) {
 
         Object[] row = new Object[indexLimit];
 
-        row[indexName]         = name;
-        row[indexType]         = ValuePool.getInt(type);
-        row[indexClass]        = "Long";
+        row[indexName] = name;
+        row[indexType] = ValuePool.getInt(type);
+        row[indexClass] = "Long";
         row[indexDefaultValue] = Long.valueOf(0);
 
         return row;
@@ -433,9 +435,9 @@ public class HsqlProperties {
 
         Object[] row = new Object[indexLimit];
 
-        row[indexName]         = name;
-        row[indexType]         = ValuePool.getInt(type);
-        row[indexClass]        = "String";
+        row[indexName] = name;
+        row[indexType] = ValuePool.getInt(type);
+        row[indexClass] = "String";
         row[indexDefaultValue] = defaultValue;
 
         return row;
@@ -446,11 +448,11 @@ public class HsqlProperties {
 
         Object[] row = new Object[indexLimit];
 
-        row[indexName]         = name;
-        row[indexType]         = ValuePool.getInt(type);
-        row[indexClass]        = "Boolean";
+        row[indexName] = name;
+        row[indexType] = ValuePool.getInt(type);
+        row[indexClass] = "Boolean";
         row[indexDefaultValue] = defaultValue ? Boolean.TRUE
-                                              : Boolean.FALSE;
+                : Boolean.FALSE;
 
         return row;
     }
@@ -460,11 +462,11 @@ public class HsqlProperties {
 
         Object[] row = new Object[indexLimit];
 
-        row[indexName]         = name;
-        row[indexType]         = ValuePool.getInt(type);
-        row[indexClass]        = "Integer";
+        row[indexName] = name;
+        row[indexType] = ValuePool.getInt(type);
+        row[indexClass] = "Integer";
         row[indexDefaultValue] = ValuePool.getInt(defaultValue);
-        row[indexValues]       = values;
+        row[indexValues] = values;
 
         return row;
     }
@@ -474,13 +476,13 @@ public class HsqlProperties {
 
         Object[] row = new Object[indexLimit];
 
-        row[indexName]         = name;
-        row[indexType]         = ValuePool.getInt(type);
-        row[indexClass]        = "Integer";
+        row[indexName] = name;
+        row[indexType] = ValuePool.getInt(type);
+        row[indexClass] = "Integer";
         row[indexDefaultValue] = ValuePool.getInt(defaultValue);
-        row[indexIsRange]      = Boolean.TRUE;
-        row[indexRangeLow]     = ValuePool.getInt(rangeLow);
-        row[indexRangeHigh]    = ValuePool.getInt(rangeHigh);
+        row[indexIsRange] = Boolean.TRUE;
+        row[indexRangeLow] = ValuePool.getInt(rangeLow);
+        row[indexRangeHigh] = ValuePool.getInt(rangeHigh);
 
         return row;
     }
@@ -514,7 +516,7 @@ public class HsqlProperties {
                 int number = Integer.parseInt(value);
 
                 if (Boolean.TRUE.equals(meta[indexIsRange])) {
-                    int low  = ((Integer) meta[indexRangeLow]).intValue();
+                    int low = ((Integer) meta[indexRangeLow]).intValue();
                     int high = ((Integer) meta[indexRangeHigh]).intValue();
 
                     if (number < low || high < number) {
@@ -549,7 +551,7 @@ public class HsqlProperties {
 
         if (meta[indexClass].equals("Integer")) {
             if (Boolean.TRUE.equals(meta[indexIsRange])) {
-                int low  = ((Integer) meta[indexRangeLow]).intValue();
+                int low = ((Integer) meta[indexRangeLow]).intValue();
                 int high = ((Integer) meta[indexRangeHigh]).intValue();
 
                 if (number < low) {
@@ -581,7 +583,7 @@ public class HsqlProperties {
 
         if (meta[indexClass].equals("Integer")) {
             if (Boolean.TRUE.equals(meta[indexIsRange])) {
-                int low  = ((Integer) meta[indexRangeLow]).intValue();
+                int low = ((Integer) meta[indexRangeLow]).intValue();
                 int high = ((Integer) meta[indexRangeHigh]).intValue();
 
                 if (number < low || high < number) {
@@ -609,9 +611,9 @@ public class HsqlProperties {
 
         sb.append('{');
 
-        int         len  = stringProps.size();
-        Enumeration en   = stringProps.propertyNames();
-        List        list = Collections.list(en);
+        int len = stringProps.size();
+        Enumeration en = stringProps.propertyNames();
+        List list = Collections.list(en);
 
         Collections.sort(list);
 

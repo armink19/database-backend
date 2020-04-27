@@ -55,7 +55,7 @@ public class RowOutputTextQuoted extends RowOutputText {
                 || (sep.length() > 0 && s.contains(sep))
                 || hasUnprintable(s)) {
             s = StringConverter.toQuotedString(s, textFileSettings.quoteChar,
-                                               true);
+                    true);
         }
 
         return s;

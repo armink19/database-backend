@@ -42,14 +42,14 @@ package org.hsqldb.util.preprocessor;
  */
 public class Option {
 
-    public static final int DEFAULT   = 0;    // No options set
-    public static final int BACKUP    = 1<<0; // Backup source files?
-    public static final int FILTER    = 1<<1; // Remove directive lines?
-    public static final int INDENT    = 1<<2; // indent directive lines?
-    public static final int TEST_ONLY = 1<<3; // process only; don't save
-    public static final int VERBOSE   = 1<<4; // log detailed info
+    public static final int DEFAULT = 0;    // No options set
+    public static final int BACKUP = 1 << 0; // Backup source files?
+    public static final int FILTER = 1 << 1; // Remove directive lines?
+    public static final int INDENT = 1 << 2; // indent directive lines?
+    public static final int TEST_ONLY = 1 << 3; // process only; don't save
+    public static final int VERBOSE = 1 << 4; // log detailed info
 
-    private Option(){/*Construction Disabled*/}
+    private Option() {/*Construction Disabled*/}
 
     public static boolean isDefault(int options) {
         return options == DEFAULT;

@@ -42,20 +42,20 @@ import org.hsqldb.error.ErrorCode;
  */
 public class LobStoreRAFile implements LobStore {
 
-    final int             lobBlockSize;
-    String                fileName;
+    final int lobBlockSize;
+    String fileName;
     RandomAccessInterface file;
-    Database              database;
+    Database database;
 
     public LobStoreRAFile(Database database, int lobBlockSize) {
 
-        this.database     = database;
+        this.database = database;
         this.lobBlockSize = lobBlockSize;
-        this.fileName     = database.getPath() + ".lobs";
+        this.fileName = database.getPath() + ".lobs";
 
         try {
             boolean exists =
-                database.logger.getFileAccess().isStreamElement(fileName);
+                    database.logger.getFileAccess().isStreamElement(fileName);
 
             if (exists) {
                 openFile();
@@ -71,7 +71,7 @@ public class LobStoreRAFile implements LobStore {
             boolean readonly = database.isFilesReadOnly();
 
             file = new RAFileSimple(database.logger, fileName, readonly ? "r"
-                                                                        : "rws");
+                    : "rws");
         } catch (Throwable t) {
             throw Error.error(ErrorCode.DATA_FILE_ERROR, t);
         }
@@ -84,8 +84,8 @@ public class LobStoreRAFile implements LobStore {
         }
 
         try {
-            long   address   = (long) blockAddress * lobBlockSize;
-            int    count     = blockCount * lobBlockSize;
+            long address = (long) blockAddress * lobBlockSize;
+            int count = blockCount * lobBlockSize;
             byte[] dataBytes = new byte[count];
 
             file.seek(address);
@@ -106,7 +106,7 @@ public class LobStoreRAFile implements LobStore {
 
         try {
             long address = (long) blockAddress * lobBlockSize;
-            int  count   = blockCount * lobBlockSize;
+            int count = blockCount * lobBlockSize;
 
             file.seek(address);
             file.write(dataBytes, 0, count);

@@ -33,10 +33,10 @@ package org.hsqldb;
 
 /**
  * Interface for SQL set function values.
+ *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
  * @since 2.4.1
- *
  */
 public interface SetFunction {
 

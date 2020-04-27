@@ -45,26 +45,26 @@ import java.io.InputStream;
  * @since 1.7.2
  */
 public class HsqlByteArrayInputStream extends InputStream
-implements DataInput {
+        implements DataInput {
 
     protected byte[] buffer;
-    protected int    pos;
-    protected int    mark = 0;
-    protected int    count;
+    protected int pos;
+    protected int mark = 0;
+    protected int count;
 
     public HsqlByteArrayInputStream(byte[] buf) {
 
         this.buffer = buf;
-        this.pos    = 0;
-        this.count  = buf.length;
+        this.pos = 0;
+        this.count = buf.length;
     }
 
     public HsqlByteArrayInputStream(byte[] buf, int offset, int length) {
 
         this.buffer = buf;
-        this.pos    = offset;
-        this.count  = Math.min(offset + length, buf.length);
-        this.mark   = offset;
+        this.pos = offset;
+        this.count = Math.min(offset + length, buf.length);
+        this.mark = offset;
     }
 
     public final long getPos() {
@@ -220,10 +220,10 @@ implements DataInput {
         return result;
     }
 
-// methods that extend java.io.InputStream
+    // methods that extend java.io.InputStream
     public int read() {
         return (pos < count) ? (buffer[pos++] & 0xff)
-                             : -1;
+                : -1;
     }
 
     public int read(byte[] b, int off, int len) {
@@ -278,5 +278,6 @@ implements DataInput {
         pos = mark;
     }
 
-    public void close() throws IOException {}
+    public void close() throws IOException {
+    }
 }

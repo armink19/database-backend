@@ -47,7 +47,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.4.1
  * @since 1.9.0
@@ -56,38 +55,38 @@ import java.security.NoSuchProviderException;
 // support for IV parameters added by Shaun Murphy (shaunmurphy@users dot sourcedorge.net)
 public class Crypto {
 
-    final SecretKeySpec   key;
-    final Cipher          outCipher;
-    final Cipher          inCipher;
-    final Cipher          inStreamCipher;
-    final Cipher          outStreamCipher;
+    final SecretKeySpec key;
+    final Cipher outCipher;
+    final Cipher inCipher;
+    final Cipher inStreamCipher;
+    final Cipher outStreamCipher;
     final IvParameterSpec ivSpec;
 
     public Crypto(String keyString, String ivString, String cipherName,
                   String provider) {
 
         final String keyAlgorithm = (cipherName.contains("/"))
-                                    ? cipherName.substring(0,
-                                        cipherName.indexOf("/"))
-                                    : cipherName;
+                ? cipherName.substring(0,
+                cipherName.indexOf("/"))
+                : cipherName;
 
         try {
             byte[] encodedKey =
-                StringConverter.hexStringToByteArray(keyString);
+                    StringConverter.hexStringToByteArray(keyString);
 
             if (ivString != null && !ivString.isEmpty()) {
                 byte[] encodedIv =
-                    StringConverter.hexStringToByteArray(ivString);
+                        StringConverter.hexStringToByteArray(ivString);
 
                 ivSpec = new IvParameterSpec(encodedIv);
             } else {
                 ivSpec = null;
             }
 
-            key       = new SecretKeySpec(encodedKey, keyAlgorithm);
+            key = new SecretKeySpec(encodedKey, keyAlgorithm);
             outCipher = provider == null ? Cipher.getInstance(cipherName)
-                                         : Cipher.getInstance(cipherName,
-                                         provider);
+                    : Cipher.getInstance(cipherName,
+                    provider);
 
             if (ivSpec == null) {
                 outCipher.init(Cipher.ENCRYPT_MODE, key);
@@ -96,8 +95,8 @@ public class Crypto {
             }
 
             outStreamCipher = provider == null ? Cipher.getInstance(cipherName)
-                                               : Cipher.getInstance(cipherName,
-                                               provider);
+                    : Cipher.getInstance(cipherName,
+                    provider);
 
             if (ivSpec == null) {
                 outStreamCipher.init(Cipher.ENCRYPT_MODE, key);
@@ -106,8 +105,8 @@ public class Crypto {
             }
 
             inCipher = provider == null ? Cipher.getInstance(cipherName)
-                                        : Cipher.getInstance(cipherName,
-                                        provider);
+                    : Cipher.getInstance(cipherName,
+                    provider);
 
             if (ivSpec == null) {
                 inCipher.init(Cipher.DECRYPT_MODE, key);
@@ -116,8 +115,8 @@ public class Crypto {
             }
 
             inStreamCipher = provider == null ? Cipher.getInstance(cipherName)
-                                              : Cipher.getInstance(cipherName,
-                                              provider);
+                    : Cipher.getInstance(cipherName,
+                    provider);
 
             if (ivSpec == null) {
                 inStreamCipher.init(Cipher.DECRYPT_MODE, key);
@@ -196,7 +195,7 @@ public class Crypto {
             }
 
             return inCipher.doFinal(source, sourceOffset, length, dest,
-                                    destOffset);
+                    destOffset);
         } catch (java.security.InvalidKeyException e) {
             throw Error.error(ErrorCode.X_S0531, e);
         } catch (BadPaddingException e) {
@@ -225,7 +224,7 @@ public class Crypto {
             }
 
             return outCipher.doFinal(source, sourceOffset, length, dest,
-                                     destOffset);
+                    destOffset);
         } catch (java.security.InvalidKeyException e) {
             throw Error.error(ErrorCode.X_S0531, e);
         } catch (BadPaddingException e) {
@@ -243,11 +242,11 @@ public class Crypto {
 
         try {
             KeyGenerator generator = provider == null
-                                     ? KeyGenerator.getInstance(cipherName)
-                                     : KeyGenerator.getInstance(cipherName,
-                                         provider);
+                    ? KeyGenerator.getInstance(cipherName)
+                    : KeyGenerator.getInstance(cipherName,
+                    provider);
             SecretKey key = generator.generateKey();
-            byte[]    raw = key.getEncoded();
+            byte[] raw = key.getEncoded();
 
             return raw;
         } catch (java.security.NoSuchAlgorithmException e) {

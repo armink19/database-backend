@@ -56,6 +56,7 @@ public interface InputStreamInterface {
 
     /**
      * Invariant. Number of characters in stream, including any already read.
+     *
      * @return -1 if no explicit limit otherwise the limit
      */
     long getSizeLimit();

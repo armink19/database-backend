@@ -47,45 +47,49 @@ import java.util.Vector;
  */
 public class TestDataStructures extends TestCase {
 
-    private static final int NUMBER_OF_TEST_RUNS          = 100000;
+    private static final int NUMBER_OF_TEST_RUNS = 100000;
     private static final int NUMBER_OF_ITERATIONS_PER_RUN = 80;
-    private Random           randomGenerator;
+    private Random randomGenerator;
 
     //Commands
-    private static final int ADD        = 1;
-    private static final int ADD_AT     = 2;
-    private static final int GET        = 3;
-    private static final int REMOVE     = 4;
-    private static final int SET        = 5;
-    private static final int OPTIMIZE   = 6;
+    private static final int ADD = 1;
+    private static final int ADD_AT = 2;
+    private static final int GET = 3;
+    private static final int REMOVE = 4;
+    private static final int SET = 5;
+    private static final int OPTIMIZE = 6;
     private static final int REMOVE_ALL = 7;
-    private Vector           listCommandsCalled;
+    private Vector listCommandsCalled;
 
-    /** Creates a new instance of TestDataStructures */
+    /**
+     * Creates a new instance of TestDataStructures
+     */
     public TestDataStructures(String s) {
 
         super(s);
 
-        randomGenerator    = new Random(System.currentTimeMillis());
+        randomGenerator = new Random(System.currentTimeMillis());
         listCommandsCalled = new Vector(NUMBER_OF_ITERATIONS_PER_RUN);
     }
 
-    /** Runs a test on the hsqldb lists */
+    /**
+     * Runs a test on the hsqldb lists
+     */
     public void testLists() {
 
-        HsqlArrayList arrayList   = new HsqlArrayList();
-        HsqlDeque     deque       = new HsqlDeque();
-        Vector        vector      = new Vector();
+        HsqlArrayList arrayList = new HsqlArrayList();
+        HsqlDeque deque = new HsqlDeque();
+        Vector vector = new Vector();
         Vector listCommandsCalled = new Vector(NUMBER_OF_ITERATIONS_PER_RUN);
-        Integer       tempInt     = null;
-        int           tempCommandCode;
-        int           tempPosition;
-        boolean       arrayListException = false;
-        boolean       dequeException     = false;
-        boolean       vectorException    = false;
-        Object        arrayListObject    = null;
-        Object        linkedListObject   = null;
-        Object        vectorObject       = null;
+        Integer tempInt = null;
+        int tempCommandCode;
+        int tempPosition;
+        boolean arrayListException = false;
+        boolean dequeException = false;
+        boolean vectorException = false;
+        Object arrayListObject = null;
+        Object linkedListObject = null;
+        Object vectorObject = null;
 
         for (int i = 0; i < getRandomInt(3, 12); i++) {    // prime the contents with a couple items
             tempInt = getRandomInteger();
@@ -103,7 +107,7 @@ public class TestDataStructures extends TestCase {
 
             switch (tempCommandCode) {
 
-                case ADD :
+                case ADD:
                     tempInt = getRandomInteger();
 
                     listCommandsCalled.addElement("Add");
@@ -112,8 +116,8 @@ public class TestDataStructures extends TestCase {
                     vector.addElement(tempInt);
                     break;
 
-                case ADD_AT :
-                    tempInt      = getRandomInteger();
+                case ADD_AT:
+                    tempInt = getRandomInteger();
                     tempPosition = getRandomInt(0, vector.size());
 
                     listCommandsCalled.addElement("Add at " + tempPosition);
@@ -138,7 +142,7 @@ public class TestDataStructures extends TestCase {
                     compareLists(arrayList, deque, vector);
                     break;
 
-                case GET :
+                case GET:
                     tempPosition = getRandomInt(0, vector.size() - 1);
 
                     listCommandsCalled.addElement("Get " + tempPosition);
@@ -162,7 +166,7 @@ public class TestDataStructures extends TestCase {
                     }
                     break;
 
-                case REMOVE :
+                case REMOVE:
                     tempPosition = getRandomInt(0, vector.size() - 1);
 
                     listCommandsCalled.addElement("Remove " + tempPosition);
@@ -188,8 +192,8 @@ public class TestDataStructures extends TestCase {
                     }
                     break;
 
-                case SET :
-                    tempInt      = getRandomInteger();
+                case SET:
+                    tempInt = getRandomInteger();
                     tempPosition = getRandomInt(0, vector.size() - 1);
 
                     listCommandsCalled.addElement("Set " + tempPosition);
@@ -214,13 +218,13 @@ public class TestDataStructures extends TestCase {
                     compareLists(arrayList, deque, vector);
                     break;
 
-                case OPTIMIZE :
+                case OPTIMIZE:
                     listCommandsCalled.addElement("Optimize");
                     arrayList.trim();
                     vector.trimToSize();
                     break;
 
-                case REMOVE_ALL :
+                case REMOVE_ALL:
                     if (getRandomInt(0, 5) == 4) {    // to limit the frequency of this call
                         listCommandsCalled.addElement("Remove all");
 
@@ -237,7 +241,7 @@ public class TestDataStructures extends TestCase {
                     }
                     break;
 
-                default :
+                default:
             }
 
             if (arrayListException || dequeException || vectorException) {
@@ -247,10 +251,10 @@ public class TestDataStructures extends TestCase {
                         && vectorException)) {
                     if (!(arrayListException && vectorException)) {
                         System.out.println(
-                            "Exception discrepancy with vector and arraylist");
+                                "Exception discrepancy with vector and arraylist");
                     } else if (!(dequeException && vectorException)) {
                         System.out.println(
-                            "Exception discrepancy with vector and linkedlist");
+                                "Exception discrepancy with vector and linkedlist");
                     } else {
                         System.out.println("Error in TestDataStructures");
                     }
@@ -265,7 +269,7 @@ public class TestDataStructures extends TestCase {
             }
 
             if (!objectEquals(linkedListObject, arrayListObject,
-                              vectorObject)) {
+                    vectorObject)) {
                 System.out.println("Objects returned inconsistent");
                 this.printListCommandsCalled(listCommandsCalled);
                 fail("test failed");
@@ -284,7 +288,7 @@ public class TestDataStructures extends TestCase {
     public void compareLists(HsqlArrayList arrayList, HsqlDeque linkedList,
                              Vector vector) {
 
-        boolean arrayListError  = false;
+        boolean arrayListError = false;
         boolean linkedListError = false;
 
         if (!equalsVector(arrayList, vector)) {
@@ -306,7 +310,9 @@ public class TestDataStructures extends TestCase {
         }
     }
 
-    /** Prints the list of commands called so far */
+    /**
+     * Prints the list of commands called so far
+     */
     public void printListCommandsCalled(Vector commands) {
 
         int commandCode = 0;
@@ -318,7 +324,9 @@ public class TestDataStructures extends TestCase {
         System.out.flush();
     }
 
-    /** Returns whether three objects are equal */
+    /**
+     * Returns whether three objects are equal
+     */
     private boolean objectEquals(Object lObject, Object aObject,
                                  Object vObject) {
 
@@ -343,7 +351,9 @@ public class TestDataStructures extends TestCase {
         }
     }
 
-    /** Returns a random integer in the range of the lowBound and highBound */
+    /**
+     * Returns a random integer in the range of the lowBound and highBound
+     */
     private int getRandomInt(int lowBound, int highBound) {
 
         double random = randomGenerator.nextDouble();
@@ -359,20 +369,22 @@ public class TestDataStructures extends TestCase {
         return Integer.valueOf(getRandomInt(0, (int) (Integer.MAX_VALUE / 100.0)));
     }
 
-    /** Tells whether the given list contains the same data as the vector */
+    /**
+     * Tells whether the given list contains the same data as the vector
+     */
     private boolean equalsVector(HsqlList list, Vector vector) {
 
         if (list.size() != vector.size()) {
             return false;
         }
 
-        Iterator listElements   = list.iterator();
-        Enumeration             vectorElements = vector.elements();
-        Object                  listObj        = null;
-        Object                  vectorObj      = null;
+        Iterator listElements = list.iterator();
+        Enumeration vectorElements = vector.elements();
+        Object listObj = null;
+        Object vectorObj = null;
 
         while (listElements.hasNext()) {
-            listObj   = listElements.next();
+            listObj = listElements.next();
             vectorObj = vectorElements.nextElement();
 
             if (!listObj.equals(vectorObj)) {
@@ -424,14 +436,14 @@ public class TestDataStructures extends TestCase {
 
         randomGenerator = new Random(System.currentTimeMillis());
 
-        int           TEST_RUNS     = 100000;
-        int           LOOP_COUNT    = 1000;
-        HsqlArrayList arrayList     = new HsqlArrayList(TEST_RUNS);
-        ArrayList     utilArrayList = new ArrayList(TEST_RUNS);
-        Vector        vector        = new Vector(TEST_RUNS);
-        Integer       value         = Integer.valueOf(randomGenerator.nextInt());
-        Integer       INT_0         = Integer.valueOf(0);
-        StopWatch     sw            = new StopWatch();
+        int TEST_RUNS = 100000;
+        int LOOP_COUNT = 1000;
+        HsqlArrayList arrayList = new HsqlArrayList(TEST_RUNS);
+        ArrayList utilArrayList = new ArrayList(TEST_RUNS);
+        Vector vector = new Vector(TEST_RUNS);
+        Integer value = Integer.valueOf(randomGenerator.nextInt());
+        Integer INT_0 = Integer.valueOf(0);
+        StopWatch sw = new StopWatch();
 
         System.out.println(sw.currentElapsedTimeToMessage("time"));
 
@@ -446,7 +458,7 @@ public class TestDataStructures extends TestCase {
         }
 
         System.out.println(
-            sw.currentElapsedTimeToMessage("time HsqlArrayLsit"));
+                sw.currentElapsedTimeToMessage("time HsqlArrayLsit"));
         sw.zero();
 
         for (int i = 0; i < TEST_RUNS; i++) {
@@ -489,9 +501,9 @@ public class TestDataStructures extends TestCase {
         }
 
         System.out.println(
-            "After " + NUMBER_OF_TEST_RUNS + " tests of a maximum of "
-            + NUMBER_OF_ITERATIONS_PER_RUN
-            + " list commands each test, the list tests passed");
+                "After " + NUMBER_OF_TEST_RUNS + " tests of a maximum of "
+                        + NUMBER_OF_ITERATIONS_PER_RUN
+                        + " list commands each test, the list tests passed");
         test.testGrowth();
     }
 }

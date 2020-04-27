@@ -38,7 +38,7 @@ import junit.framework.TestSuite;
 import java.sql.*;
 
 /**
- *  Test handling of quote characters in strings
+ * Test handling of quote characters in strings
  *
  * @author <a href="mailto:david@walend.net">David Walend</a>
  * @author <a href="mailto:jvanzyl@zenplex.com">Jason van Zyl</a>
@@ -46,13 +46,13 @@ import java.sql.*;
 public class TestQuotes extends TestCase {
 
     private static final String CREATETABLE =
-        "create table if not exists quotetest (test varchar(100))";
+            "create table if not exists quotetest (test varchar(100))";
     private static final String DELETE = "delete from quotetest";
     private static final String TESTSTRING =
-        "insert into quotetest (test) values (?)";
+            "insert into quotetest (test) values (?)";
     private static final String NOQUOTES = "the house of the dog of kevin";
-    private static final String QUOTES   = "kevin's dog's house";
-    private static final String RESULT   = "select * from quotetest";
+    private static final String QUOTES = "kevin's dog's house";
+    private static final String RESULT = "select * from quotetest";
 
     public TestQuotes(String testName) {
         super(testName);
@@ -67,11 +67,11 @@ public class TestQuotes extends TestCase {
 
     public void testSetString() {
 
-        Connection        connection = null;
-        Statement         statement  = null;
+        Connection connection = null;
+        Statement statement = null;
         PreparedStatement pStatement = null;
-        ResultSet         rs1        = null;
-        ResultSet         rs2        = null;
+        ResultSet rs1 = null;
+        ResultSet rs2 = null;
 
         try {
             DriverManager.registerDriver(new org.hsqldb.jdbc.JDBCDriver());
@@ -94,7 +94,7 @@ public class TestQuotes extends TestCase {
             String result1 = rs1.getString(1);
 
             assertTrue("result1 is -" + result1 + "- not -" + NOQUOTES + "-",
-                       NOQUOTES.equals(result1));
+                    NOQUOTES.equals(result1));
             statement.executeUpdate(DELETE);
             pStatement.setString(1, QUOTES);
             pStatement.executeUpdate();

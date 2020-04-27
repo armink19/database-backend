@@ -107,8 +107,8 @@ class FindFile {
             // 'testfiles' in the URL is the name of the database
             // "SA" is the user name and "" is the (empty) password
             Connection conn =
-                DriverManager.getConnection("jdbc:hsqldb:testfiles", "SA",
-                                            "");
+                    DriverManager.getConnection("jdbc:hsqldb:testfiles", "SA",
+                            "");
 
             // Check the command line parameters
             if (arg.length == 1) {
@@ -160,8 +160,8 @@ class FindFile {
         // UCASE: This is a case insensitive search
         // ESCAPE ':' is used so it can be easily searched for '\'
         ResultSet result = stat.executeQuery("SELECT Path FROM Files WHERE "
-                                             + "UCASE(Path) LIKE '%" + name
-                                             + "%' ESCAPE ':'");
+                + "UCASE(Path) LIKE '%" + name
+                + "%' ESCAPE ':'");
 
         // Moves to the next record until no more records
         while (result.next()) {
@@ -197,14 +197,14 @@ class FindFile {
         // For compatibility to other database, use varchar(255)
         // In HSQL Database Engine, length is unlimited, like Java Strings
         stat.execute("CREATE TABLE Files"
-                     + "(Path varchar(255),Name varchar(255))");
+                + "(Path varchar(255),Name varchar(255))");
 
         // Close the Statement object, it is no longer used
         stat.close();
 
         // Use a PreparedStatement because Path and Name could contain '
         PreparedStatement prep =
-            conn.prepareCall("INSERT INTO Files (Path,Name) VALUES (?,?)");
+                conn.prepareCall("INSERT INTO Files (Path,Name) VALUES (?,?)");
 
         // Start with the 'root' directory and recurse all subdirectories
         fillPath(root, "", prep);

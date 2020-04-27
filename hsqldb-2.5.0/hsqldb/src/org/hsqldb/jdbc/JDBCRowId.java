@@ -44,7 +44,6 @@ import java.util.Arrays;
 //campbell-burnet@users 20060522 - doc 1.8.1 full synch up to Mustang Build 84
 
 /**
- *
  * The representation (mapping) in the Java programming language of an SQL ROWID
  * value. An SQL ROWID is a built-in type, a value of which can be thought of as
  * an address  for its identified row in a database table. Whether that address
@@ -74,9 +73,9 @@ import java.util.Arrays;
  * All methods on the <code>RowId</code> interface must be fully implemented if the
  * JDBC driver supports the data type.
  *
+ * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @see java.sql.DatabaseMetaData
  * @since JDK 1.6, HSQLDB 2.0
- * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  */
 public final class JDBCRowId implements RowId {
 
@@ -87,7 +86,7 @@ public final class JDBCRowId implements RowId {
 
     /**
      * Constructs a new JDBCRowId instance wrapping the given octet sequence. <p>
-     *
+     * <p>
      * This constructor may be used internally to retrieve result set values as
      * RowId objects, yet it also may need to be public to allow access from
      * other packages. As such (in the interest of efficiency) this object
@@ -121,10 +120,11 @@ public final class JDBCRowId implements RowId {
     /**
      * Constructs a new JDBCRowId instance whose internal octet sequence is
      * is that represented by the given hexadecimal character sequence. <p>
+     *
      * @param hex the hexadecimal character sequence from which to derive
-     *        the internal octet sequence
+     *            the internal octet sequence
      * @throws java.sql.SQLException if the argument is null or is not a valid
-     *         hexadecimal character sequence
+     *                               hexadecimal character sequence
      */
     public JDBCRowId(final String hex) throws SQLException {
 
@@ -136,7 +136,7 @@ public final class JDBCRowId implements RowId {
             this.id = StringConverter.hexStringToByteArray(hex);
         } catch (IOException e) {
             throw JDBCUtil.sqlException(ErrorCode.JDBC_INVALID_ARGUMENT,
-                                    "hex: " + e);
+                    "hex: " + e);
 
             // .illegalHexadecimalCharacterSequenceArgumentException("hex", e);
         }
@@ -158,13 +158,13 @@ public final class JDBCRowId implements RowId {
      * not identify the same row.
      *
      * @param obj the <code>Object</code> to compare this <code>RowId</code> object
-     *     against.
+     *            against.
      * @return true if the <code>RowId</code>s are equal; false otherwise
      * @since JDK 1.6, HSQLDB 2.0
      */
     public boolean equals(Object obj) {
         return (obj instanceof JDBCRowId)
-               && Arrays.equals(this.id, ((JDBCRowId) obj).id);
+                && Arrays.equals(this.id, ((JDBCRowId) obj).id);
     }
 
     /**
@@ -172,8 +172,8 @@ public final class JDBCRowId implements RowId {
      * designated by this <code>java.sql.RowId</code> object.
      *
      * @return an array of bytes, whose length is determined by the driver supplying
-     *     the connection, representing the value of the ROWID designated by this
-     *     java.sql.RowId object.
+     * the connection, representing the value of the ROWID designated by this
+     * java.sql.RowId object.
      */
     public byte[] getBytes() {
         return id.clone();
@@ -191,8 +191,8 @@ public final class JDBCRowId implements RowId {
      * the connection, and possibly not as a <code>ROWID</code> literal.
      *
      * @return a String whose format is determined by the driver supplying the
-     *     connection, representing the value of the <code>ROWID</code> designated
-     *     by this <code>java.sql.RowId</code>  object.
+     * connection, representing the value of the <code>ROWID</code> designated
+     * by this <code>java.sql.RowId</code>  object.
      */
     public String toString() {
         return StringConverter.byteArrayToHexString(id);

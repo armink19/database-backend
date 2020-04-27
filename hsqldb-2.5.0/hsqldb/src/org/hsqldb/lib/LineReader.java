@@ -49,17 +49,17 @@ import java.nio.charset.Charset;
  */
 public class LineReader {
 
-    boolean                   finished = false;
-    boolean                   wasCR    = false;
-    boolean                   wasEOL   = false;
-    HsqlByteArrayOutputStream baOS     = new HsqlByteArrayOutputStream(1024);
+    boolean finished = false;
+    boolean wasCR = false;
+    boolean wasEOL = false;
+    HsqlByteArrayOutputStream baOS = new HsqlByteArrayOutputStream(1024);
 
     //
     final InputStream stream;
-    final Charset     charset;
+    final Charset charset;
 
     public LineReader(InputStream stream, Charset charset) {
-        this.stream  = stream;
+        this.stream = stream;
         this.charset = charset;
     }
 
@@ -84,12 +84,12 @@ public class LineReader {
 
             switch (c) {
 
-                case '\r' : {
+                case '\r': {
                     wasCR = true;
 
                     break;
                 }
-                case '\n' : {
+                case '\n': {
                     if (wasCR) {
                         wasCR = false;
 
@@ -98,7 +98,7 @@ public class LineReader {
                         break;
                     }
                 }
-                default : {
+                default: {
                     baOS.write(c);
 
                     wasCR = false;

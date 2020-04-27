@@ -34,14 +34,13 @@ package org.hsqldb.lib;
 import org.hsqldb.map.BaseHashMap;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.3
  * @since 2.0.0
  */
 public class OrderedIntKeyHashMap extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
 
     public OrderedIntKeyHashMap() {
@@ -49,10 +48,10 @@ public class OrderedIntKeyHashMap extends BaseHashMap {
     }
 
     public OrderedIntKeyHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.intKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
 
         isList = true;
     }
@@ -110,7 +109,7 @@ public class OrderedIntKeyHashMap extends BaseHashMap {
     }
 
     public Object removeKeyAndValue(int index)
-    throws IndexOutOfBoundsException {
+            throws IndexOutOfBoundsException {
 
         checkRange(index);
 
@@ -124,7 +123,7 @@ public class OrderedIntKeyHashMap extends BaseHashMap {
     public void valuesToArray(Object[] array) {
 
         Iterator it = values().iterator();
-        int      i  = 0;
+        int i = 0;
 
         while (it.hasNext()) {
             array[i] = it.next();

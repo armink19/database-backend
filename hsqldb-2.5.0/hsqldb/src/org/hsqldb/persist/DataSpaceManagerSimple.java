@@ -40,12 +40,12 @@ import org.hsqldb.lib.DoubleIntIndex;
  */
 public class DataSpaceManagerSimple implements DataSpaceManager {
 
-    DataFileCache     cache;
+    DataFileCache cache;
     TableSpaceManager defaultSpaceManager;
-    int               fileBlockSize = DataSpaceManager.fixedBlockSizeUnit;
-    long              totalFragmentSize;
-    int               spaceIdSequence = tableIdFirst;
-    DoubleIntIndex    lookup;
+    int fileBlockSize = DataSpaceManager.fixedBlockSizeUnit;
+    long totalFragmentSize;
+    int spaceIdSequence = tableIdFirst;
+    DoubleIntIndex lookup;
 
     /**
      * Used for default, readonly, Text and Session data files
@@ -95,18 +95,19 @@ public class DataSpaceManagerSimple implements DataSpaceManager {
     public long getFileBlocks(int spaceId, int blockCount) {
 
         long filePosition = cache.enlargeFileSpace((long) blockCount
-            * fileBlockSize);
+                * fileBlockSize);
 
         return filePosition;
     }
 
-    public void freeTableSpace(int spaceId) {}
+    public void freeTableSpace(int spaceId) {
+    }
 
     public void freeTableSpace(int spaceId, DoubleIntIndex spaceList,
                                long offset, long limit, boolean full) {
 
         totalFragmentSize += spaceList.getTotalValues()
-                             * cache.getDataFileScale();
+                * cache.getDataFileScale();
 
         if (full) {
             if (cache.fileFreePosition == limit) {
@@ -138,7 +139,7 @@ public class DataSpaceManagerSimple implements DataSpaceManager {
                 spaceList.removeRange(0, extra);
 
                 totalFragmentSize -= spaceList.getTotalValues()
-                                     * cache.getDataFileScale();
+                        * cache.getDataFileScale();
             }
         }
     }
@@ -160,14 +161,14 @@ public class DataSpaceManagerSimple implements DataSpaceManager {
         long currentSize = cache.getFileFreePos();
         long totalBlocks = (currentSize + fileBlockSize) / fileBlockSize;
         long lastFreePosition = cache.enlargeFileSpace(totalBlocks
-            * fileBlockSize - currentSize);
+                * fileBlockSize - currentSize);
 
         defaultSpaceManager.initialiseFileBlock(lookup, lastFreePosition,
                 cache.getFileFreePos());
 
         if (lookup != null) {
             totalFragmentSize -= lookup.getTotalValues()
-                                 * cache.getDataFileScale();
+                    * cache.getDataFileScale();
             lookup = null;
         }
     }

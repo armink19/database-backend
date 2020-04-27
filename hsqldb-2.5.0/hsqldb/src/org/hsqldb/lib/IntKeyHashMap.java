@@ -34,14 +34,13 @@ package org.hsqldb.lib;
 import org.hsqldb.map.BaseHashMap;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.3
  * @since 1.7.2
  */
 public class IntKeyHashMap extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
 
     public IntKeyHashMap() {
@@ -50,7 +49,7 @@ public class IntKeyHashMap extends BaseHashMap {
 
     public IntKeyHashMap(int initialCapacity) throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.intKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
     }
 
     public Object get(int key) {
@@ -98,7 +97,7 @@ public class IntKeyHashMap extends BaseHashMap {
     public void valuesToArray(Object[] array) {
 
         Iterator it = values().iterator();
-        int      i  = 0;
+        int i = 0;
 
         while (it.hasNext()) {
             array[i] = it.next();

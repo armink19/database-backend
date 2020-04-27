@@ -48,20 +48,20 @@ import org.hsqldb.types.Type;
  */
 public class RowInsertVersioning implements RowInsertInterface {
 
-    final Session         session;
-    final ErrorLogger     callback;
-    final int             mode;
+    final Session session;
+    final ErrorLogger callback;
+    final int mode;
     RowSetNavigatorClient rowSet = new RowSetNavigatorClient(64);
-    Table                 table  = null;
-    PersistentStore       store;
-    Index                 index = null;
+    Table table = null;
+    PersistentStore store;
+    Index index = null;
 
     public RowInsertVersioning(Session session, ErrorLogger callback,
                                int mode) {
 
-        this.session  = session;
+        this.session = session;
         this.callback = callback;
-        this.mode     = mode;
+        this.mode = mode;
     }
 
     public void finishTable() {
@@ -90,7 +90,8 @@ public class RowInsertVersioning implements RowInsertInterface {
         }
     }
 
-    public void setStartLineNumber(long number) {}
+    public void setStartLineNumber(long number) {
+    }
 
     boolean isSameRowSet(Object[] rowData) {
 
@@ -107,10 +108,10 @@ public class RowInsertVersioning implements RowInsertInterface {
             return;
         }
 
-        int         startNewRow  = 0;
+        int startNewRow = 0;
         RowIterator it = index.findFirstRow(session, store, rowSet.getData(0));
-        boolean     reportFailed = false;
-        Row         currentRow   = null;
+        boolean reportFailed = false;
+        Row currentRow = null;
 
         while (it.next()) {
             if (!isSameRowSet(it.getCurrent())) {
@@ -119,16 +120,16 @@ public class RowInsertVersioning implements RowInsertInterface {
 
             currentRow = it.getCurrentRow();
 
-            TimestampData ts      = currentRow.getSystemStartVersion();
-            Object[]      newData = rowSet.getData(startNewRow);
+            TimestampData ts = currentRow.getSystemStartVersion();
+            Object[] newData = rowSet.getData(startNewRow);
             int compare = compareColumn(ts, newData,
-                                        table.getSystemPeriodStartIndex());
+                    table.getSystemPeriodStartIndex());
 
             if (compare < 0) {
                 // both start and end row TS are before new data row
                 ts = currentRow.getSystemEndVersion();
                 compare = compareColumn(ts, newData,
-                                        table.getSystemPeriodStartIndex());
+                        table.getSystemPeriodStartIndex());
 
                 if (compare <= 0) {
                     continue;
@@ -147,7 +148,7 @@ public class RowInsertVersioning implements RowInsertInterface {
 
             ts = currentRow.getSystemEndVersion();
             compare = compareColumn(ts, newData,
-                                    table.getSystemPeriodEndIndex());
+                    table.getSystemPeriodEndIndex());
 
             if (compare == 0) {
                 startNewRow++;
@@ -165,7 +166,7 @@ public class RowInsertVersioning implements RowInsertInterface {
         if (reportFailed) {
             for (int i = startNewRow; i < rowSet.getSize(); i++) {
                 Object[] newData = rowSet.getData(i);
-                Row      newRow  = new Row(table, newData);
+                Row newRow = new Row(table, newData);
 
                 callback.writeRow(0, newRow);
             }

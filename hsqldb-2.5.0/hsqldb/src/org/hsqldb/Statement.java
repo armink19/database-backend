@@ -49,7 +49,7 @@ import org.hsqldb.result.ResultProperties;
  */
 public abstract class Statement {
 
-    static final int META_RESET_VIEWS      = 1;
+    static final int META_RESET_VIEWS = 1;
     static final int META_RESET_STATEMENTS = 2;
 
     //
@@ -57,36 +57,52 @@ public abstract class Statement {
 
     //
     final int type;
-    int       group;
-    boolean   isLogged            = true;
-    boolean   isValid             = true;
-    int       statementReturnType = StatementTypes.RETURN_COUNT;
+    int group;
+    boolean isLogged = true;
+    boolean isValid = true;
+    int statementReturnType = StatementTypes.RETURN_COUNT;
 
-    /** the default schema name used to resolve names in the sql */
+    /**
+     * the default schema name used to resolve names in the sql
+     */
     HsqlName schemaName;
 
-    /** root in PSM */
+    /**
+     * root in PSM
+     */
     Routine root;
 
-    /** parent in PSM */
+    /**
+     * parent in PSM
+     */
     StatementCompound parent;
-    boolean           isError;
-    boolean           isTransactionStatement;
-    boolean           isExplain;
+    boolean isError;
+    boolean isTransactionStatement;
+    boolean isExplain;
 
-    /** SQL string for the statement */
+    /**
+     * SQL string for the statement
+     */
     String sql;
 
-    /** id in StatementManager */
+    /**
+     * id in StatementManager
+     */
     long id;
 
-    /** compileTimestamp */
+    /**
+     * compileTimestamp
+     */
     long compileTimestamp;
 
-    /** table names read - for concurrency control */
+    /**
+     * table names read - for concurrency control
+     */
     HsqlName[] readTableNames = HsqlName.emptyArray;
 
-    /** table names written - for concurrency control */
+    /**
+     * table names written - for concurrency control
+     */
     HsqlName[] writeTableNames = HsqlName.emptyArray;
 
     //
@@ -105,20 +121,21 @@ public abstract class Statement {
     /**
      * ResultMetaData for parameters
      */
-    ResultMetaData      parameterMetaData  = ResultMetaData.emptyParamMetaData;
-    static final String PCOL_PREFIX        = "@p";
+    ResultMetaData parameterMetaData = ResultMetaData.emptyParamMetaData;
+    static final String PCOL_PREFIX = "@p";
     static final String RETURN_COLUMN_NAME = "@p0";
 
     public abstract Result execute(Session session);
 
-    public void setParameters(ExpressionColumn[] params) {}
+    public void setParameters(ExpressionColumn[] params) {
+    }
 
     Statement(int type) {
         this.type = type;
     }
 
     Statement(int type, int group) {
-        this.type  = type;
+        this.type = type;
         this.group = group;
     }
 
@@ -192,9 +209,11 @@ public abstract class Statement {
         return isLogged;
     }
 
-    public void clearVariables() {}
+    public void clearVariables() {
+    }
 
-    public void resolve(Session session) {}
+    public void resolve(Session session) {
+    }
 
     public final HsqlName[] getTableNamesForRead() {
         return readTableNames;
@@ -208,7 +227,7 @@ public abstract class Statement {
 
         switch (group) {
 
-            case StatementTypes.X_SQL_SCHEMA_MANIPULATION :
+            case StatementTypes.X_SQL_SCHEMA_MANIPULATION:
 
                 // in MVCC log replay statement is not followed by COMMIT so no lock
                 if (type == StatementTypes.ALTER_SEQUENCE) {
@@ -221,15 +240,15 @@ public abstract class Statement {
 
                 return model == TransactionManager.MVCC;
 
-            case StatementTypes.X_SQL_SCHEMA_DEFINITION :
+            case StatementTypes.X_SQL_SCHEMA_DEFINITION:
                 return model == TransactionManager.MVCC;
 
-            case StatementTypes.X_HSQLDB_SCHEMA_MANIPULATION :
-            case StatementTypes.X_HSQLDB_DATABASE_OPERATION :
+            case StatementTypes.X_HSQLDB_SCHEMA_MANIPULATION:
+            case StatementTypes.X_HSQLDB_DATABASE_OPERATION:
                 return true;
 
-            case StatementTypes.X_HSQLDB_NONBLOCK_OPERATION :
-            default :
+            case StatementTypes.X_HSQLDB_NONBLOCK_OPERATION:
+            default:
                 return false;
         }
     }
@@ -238,12 +257,12 @@ public abstract class Statement {
 
         switch (group) {
 
-            case StatementTypes.X_SQL_SCHEMA_DEFINITION :
-            case StatementTypes.X_SQL_SCHEMA_MANIPULATION :
-            case StatementTypes.X_HSQLDB_SCHEMA_MANIPULATION :
+            case StatementTypes.X_SQL_SCHEMA_DEFINITION:
+            case StatementTypes.X_SQL_SCHEMA_MANIPULATION:
+            case StatementTypes.X_HSQLDB_SCHEMA_MANIPULATION:
                 return true;
 
-            default :
+            default:
                 return false;
         }
     }
@@ -264,7 +283,8 @@ public abstract class Statement {
         return null;
     }
 
-    public void setGeneratedColumnInfo(int mode, ResultMetaData meta) {}
+    public void setGeneratedColumnInfo(int mode, ResultMetaData meta) {
+    }
 
     public ResultMetaData getResultMetaData() {
         return ResultMetaData.emptyResultMetaData;
@@ -290,7 +310,8 @@ public abstract class Statement {
         cursorPropertiesRequest = props;
     }
 
-    public void clearStructures(Session session) {}
+    public void clearStructures(Session session) {
+    }
 
     void setDatabaseObjects(Session session, CompileContext compileContext) {
 
@@ -301,8 +322,8 @@ public abstract class Statement {
 
     void setParameterMetaData() {
 
-        int     offset;
-        int     idx;
+        int offset;
+        int idx;
         boolean hasReturnValue;
 
         offset = 0;
@@ -321,7 +342,7 @@ public abstract class Statement {
 //            offset = 1;
 //        }
         parameterMetaData =
-            ResultMetaData.newParameterMetaData(parameters.length);
+                ResultMetaData.newParameterMetaData(parameters.length);
 
 // NO: Not yet
 //        if (hasReturnValue) {
@@ -341,7 +362,7 @@ public abstract class Statement {
             // always i + 1.  We currently use the convention of @p0 to name the
             // return value OUT parameter
             parameterMetaData.columnLabels[idx] = StatementDMQL.PCOL_PREFIX
-                                                  + (i + 1);
+                    + (i + 1);
             parameterMetaData.columnTypes[idx] = parameters[i].dataType;
 
             if (parameters[i].dataType == null) {
@@ -352,15 +373,15 @@ public abstract class Statement {
 
             if (parameters[i].column != null
                     && parameters[i].column.getParameterMode()
-                       != SchemaObject.ParameterModes.PARAM_UNKNOWN) {
+                    != SchemaObject.ParameterModes.PARAM_UNKNOWN) {
                 parameterMode = parameters[i].column.getParameterMode();
             }
 
             parameterMetaData.paramModes[idx] = parameterMode;
             parameterMetaData.paramNullable[idx] =
-                parameters[i].column == null
-                ? SchemaObject.Nullability.NULLABLE
-                : parameters[i].column.getNullability();
+                    parameters[i].column == null
+                            ? SchemaObject.Nullability.NULLABLE
+                            : parameters[i].column.getNullability();
         }
     }
 }

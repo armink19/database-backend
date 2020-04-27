@@ -50,7 +50,7 @@ import java.sql.SQLException;
  * Used by a global transaction service to control HSQLDB transactions.
  * Not for use by end-users.
  * End manage global transactions using transaction APIs such as JTA.
- * <P>
+ * <p>
  * According to section 12.3 of the JDBC 3.0 spec, there is a
  * 1:1 correspondence between XAConnection and XAResource, and
  * <I>A given XAConnection object may be associated with at most one
@@ -71,16 +71,15 @@ import java.sql.SQLException;
  * N.b. The JDBC Spec does not state whether the prepare and forget
  * methods are XAResource-specific or XADataSource-specific.
  *
- * @version 2.3.3
- * @since 2.0.0
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @version 2.3.3
  * @see javax.transaction.xa.XAResource
+ * @since 2.0.0
  */
 public class JDBCXAResource implements XAResource {
 
     /**
-     * @todo:
-     * Make thread safe.
+     * @todo: Make thread safe.
      * Figure out how to ensure that orphaned transactions to do not make
      * a memory leak in JDBCXADataSource.resources.  I.e.,
      * JDBCXADataSource.removeResource() must be called even for all
@@ -91,26 +90,25 @@ public class JDBCXAResource implements XAResource {
      * called?).
      * The answer may be to implement Timeouts.
      */
-    private JDBCConnection   connection;
-    private boolean          originalAutoCommitMode;
-    static int               XA_STATE_INITIAL  = 0;
-    static int               XA_STATE_STARTED  = 1;
-    static int               XA_STATE_ENDED    = 2;
-    static int               XA_STATE_PREPARED = 3;
-    static int               XA_STATE_DISPOSED = 4;
-    int                      state             = XA_STATE_INITIAL;
+    private JDBCConnection connection;
+    private boolean originalAutoCommitMode;
+    static int XA_STATE_INITIAL = 0;
+    static int XA_STATE_STARTED = 1;
+    static int XA_STATE_ENDED = 2;
+    static int XA_STATE_PREPARED = 3;
+    static int XA_STATE_DISPOSED = 4;
+    int state = XA_STATE_INITIAL;
     private JDBCXADataSource xaDataSource;
-    Xid                      xid = null;
+    Xid xid = null;
 
     public boolean withinGlobalTransaction() {
         return state == XA_STATE_STARTED;
     }
 
     /**
-     *
-     * @throws XAException if the given Xid is the not the Xid of the current
-     *   transaction for this XAResource object.
      * @param xid Xid
+     * @throws XAException if the given Xid is the not the Xid of the current
+     *                     transaction for this XAResource object.
      */
     private void validateXid(Xid xid) throws XAException {
 
@@ -120,12 +118,12 @@ public class JDBCXAResource implements XAResource {
 
         if (this.xid == null) {
             throw new XAException(
-                "There is no live transaction for this XAResource");
+                    "There is no live transaction for this XAResource");
         }
 
         if (!xid.equals(this.xid)) {
             throw new XAException(
-                "Given Xid is not that associated with this XAResource object");
+                    "Given Xid is not that associated with this XAResource object");
         }
     }
 
@@ -133,13 +131,13 @@ public class JDBCXAResource implements XAResource {
      * Constructs a resource using the given data source and connection.
      *
      * @param xaDataSource JDBCXADataSource
-     * @param connection A non-wrapped JDBCConnection which we need in order to
-     *   do real (non-wrapped) commits, rollbacks, etc. This is not for the end
-     *   user. We need the real thing.
+     * @param connection   A non-wrapped JDBCConnection which we need in order to
+     *                     do real (non-wrapped) commits, rollbacks, etc. This is not for the end
+     *                     user. We need the real thing.
      */
     public JDBCXAResource(JDBCXADataSource xaDataSource,
                           JDBCConnection connection) {
-        this.connection   = connection;
+        this.connection = connection;
         this.xaDataSource = xaDataSource;
     }
 
@@ -152,7 +150,7 @@ public class JDBCXAResource implements XAResource {
      * Xid, not necessarily for the transaction associated with this XAResource
      * object.
      *
-     * @param xid Xid
+     * @param xid      Xid
      * @param onePhase boolean
      * @throws XAException on error
      */
@@ -176,20 +174,20 @@ public class JDBCXAResource implements XAResource {
     /**
      * This commits the connection associated with <i>this</i> XAResource.
      *
-     * @throws XAException generically, since the more specific exceptions
-     *   require a JTA API to compile.
      * @param onePhase boolean
+     * @throws XAException generically, since the more specific exceptions
+     *                     require a JTA API to compile.
      */
     public void commitThis(boolean onePhase) throws XAException {
 
         if (onePhase && state == XA_STATE_PREPARED) {
             throw new XAException(
-                "Transaction is in a 2-phase state when 1-phase is requested");
+                    "Transaction is in a 2-phase state when 1-phase is requested");
         }
 
         if ((!onePhase) && state != XA_STATE_PREPARED) {
             throw new XAException("Attempt to do a 2-phase commit when "
-                                  + "transaction is not prepared");
+                    + "transaction is not prepared");
         }
 
         //if (!onePhase) {
@@ -199,7 +197,7 @@ public class JDBCXAResource implements XAResource {
         try {
 
             /**
-             * @todo:  Determine if work was committed, rolled back, or both,
+             * @todo: Determine if work was committed, rolled back, or both,
              * and return appropriate Heuristic*Exception.
              * connection.commit();
              *  Commits the real, physical conn.
@@ -236,7 +234,8 @@ public class JDBCXAResource implements XAResource {
         }
 
         /** @todo - probably all flags can be ignored */
-        if (flags == XAResource.TMSUCCESS) {}
+        if (flags == XAResource.TMSUCCESS) {
+        }
 
         state = XA_STATE_ENDED;
     }
@@ -248,9 +247,9 @@ public class JDBCXAResource implements XAResource {
      * garbage-collectable after (a) this method is called, and (b) the tx
      * manager releases its handle to it.
      *
-     * @see javax.transaction.xa.XAResource#forget(Xid)
      * @param xid Xid
      * @throws XAException on error
+     * @see javax.transaction.xa.XAResource#forget(Xid)
      */
     public void forget(Xid xid) throws XAException {
 
@@ -264,8 +263,8 @@ public class JDBCXAResource implements XAResource {
 
         if (state != XA_STATE_PREPARED) {
             throw new XAException(
-                "Attempted to forget a XAResource that "
-                + "is not in a heuristically completed state");
+                    "Attempted to forget a XAResource that "
+                            + "is not in a heuristically completed state");
         }
 
         dispose();
@@ -274,9 +273,8 @@ public class JDBCXAResource implements XAResource {
     }
 
     /**
-     *
-     * @throws XAException on error
      * @return int
+     * @throws XAException on error
      */
     public int getTransactionTimeout() throws XAException {
         throw new XAException("Transaction timeouts not implemented yet");
@@ -303,9 +301,9 @@ public class JDBCXAResource implements XAResource {
      * Vote on whether to commit the global transaction. We assume Xid may be
      * different from this, as in commit() method.
      *
-     * @throws XAException to vote negative.
-     * @return commitType of XA_RDONLY or XA_OK. (Actually only XA_OK now).
      * @param xid Xid
+     * @return commitType of XA_RDONLY or XA_OK. (Actually only XA_OK now).
+     * @throws XAException to vote negative.
      */
     public int prepare(Xid xid) throws XAException {
 
@@ -321,12 +319,12 @@ public class JDBCXAResource implements XAResource {
     public int prepareThis() throws XAException {
 
         /**
-         * @todo:  This is where the real 2-phase work should be done to
+         * @todo: This is where the real 2-phase work should be done to
          * determine if a commit done here would succeed or not.
          */
 
         /**
-         * @todo:  May improve performance to return XA_RDONLY whenever
+         * @todo: May improve performance to return XA_RDONLY whenever
          * possible, but I don't know.
          * Could determine this by checking if DB instance is in RO mode,
          * or perhaps (with much difficulty) to determine if there have
@@ -356,8 +354,8 @@ public class JDBCXAResource implements XAResource {
      * XADataSource.
      *
      * @param flag int
-     * @throws XAException on error
      * @return Xid[]
+     * @throws XAException on error
      */
     public Xid[] recover(int flag) throws XAException {
         return xaDataSource.getPreparedXids();
@@ -377,7 +375,7 @@ public class JDBCXAResource implements XAResource {
 
         if (resource == null) {
             throw new XAException(
-                "The XADataSource has no such Xid in prepared state:  " + xid);
+                    "The XADataSource has no such Xid in prepared state:  " + xid);
         }
 
         resource.rollbackThis();
@@ -387,7 +385,7 @@ public class JDBCXAResource implements XAResource {
      * This rolls back the connection associated with <i>this</i> XAResource.
      *
      * @throws javax.transaction.xa.XAException generically, since the more
-     * specific exceptions require a JTA API to compile.
+     *                                          specific exceptions require a JTA API to compile.
      */
     /* @throws javax.transaction.HeuristicCommitException
      *         if work was committed.
@@ -403,7 +401,7 @@ public class JDBCXAResource implements XAResource {
         try {
 
             /**
-             * @todo:  Determine if work was committed, rolled back, or both,
+             * @todo: Determine if work was committed, rolled back, or both,
              * and return appropriate Heuristic Exception.
              */
             connection.rollback();    // real/phys.
@@ -415,10 +413,9 @@ public class JDBCXAResource implements XAResource {
     }
 
     /**
-     *
      * @param seconds int
-     * @throws XAException on error
      * @return boolean
+     * @throws XAException on error
      */
     public boolean setTransactionTimeout(int seconds) throws XAException {
         return false;
@@ -437,7 +434,7 @@ public class JDBCXAResource implements XAResource {
 
         if (xaDataSource == null) {
             throw new XAException(
-                "JDBCXAResource has not been associated with a XADataSource");
+                    "JDBCXAResource has not been associated with a XADataSource");
         }
 
         if (xid == null) {

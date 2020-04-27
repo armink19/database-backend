@@ -1,11 +1,11 @@
-package com.database.demo.model;
+package lu.waterhackers.map.model;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
-@Table (name = "samples")
+@Table(name = "samples")
 public class Sample {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +22,9 @@ public class Sample {
     private Double turbidity;
 
 
-    Sample(){}
+    Sample() {
+    }
+
     public Sample(String picture, Date date, Date time, String descripiton, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
         this.picture = picture;
         this.date = date;
@@ -43,6 +45,7 @@ public class Sample {
     public void setId(long id) {
         this.id = id;
     }
+
     @Column(name = "picture", nullable = false)
     public String getPicture() {
         return picture;
@@ -51,6 +54,7 @@ public class Sample {
     public void setPicture(String picture) {
         this.picture = picture;
     }
+
     @Column(name = "date", nullable = false)
     public Date getDate() {
         return date;
@@ -59,6 +63,7 @@ public class Sample {
     public void setDate(Date date) {
         this.date = date;
     }
+
     @Column(name = "time", nullable = false)
     public Date getTime() {
         return time;
@@ -67,6 +72,7 @@ public class Sample {
     public void setTime(Date time) {
         this.time = time;
     }
+
     @Column(name = "description", nullable = false)
     public String getDescripiton() {
         return descripiton;
@@ -75,6 +81,7 @@ public class Sample {
     public void setDescripiton(String descripiton) {
         this.descripiton = descripiton;
     }
+
     @Column(name = "address", nullable = false)
     public String getAddress() {
         return address;
@@ -83,6 +90,7 @@ public class Sample {
     public void setAddress(String address) {
         this.address = address;
     }
+
     @Column(name = "watersource", nullable = false)
     public String getWatersource() {
         return watersource;
@@ -91,6 +99,7 @@ public class Sample {
     public void setWatersource(String watersource) {
         this.watersource = watersource;
     }
+
     @Column(name = "temperature", nullable = false)
     public Double getTemperature() {
         return temperature;
@@ -99,6 +108,7 @@ public class Sample {
     public void setTemperature(Double temperature) {
         this.temperature = temperature;
     }
+
     @Column(name = "ph", nullable = false)
     public Double getPh() {
         return ph;
@@ -107,6 +117,7 @@ public class Sample {
     public void setPh(Double ph) {
         this.ph = ph;
     }
+
     @Column(name = "dissolvedoxygen", nullable = false)
     public Double getDissolvedoxygen() {
         return dissolvedoxygen;
@@ -115,6 +126,7 @@ public class Sample {
     public void setDissolvedoxygen(Double dissolvedoxygen) {
         this.dissolvedoxygen = dissolvedoxygen;
     }
+
     @Column(name = "turbidity", nullable = false)
     public Double getTurbidity() {
         return turbidity;

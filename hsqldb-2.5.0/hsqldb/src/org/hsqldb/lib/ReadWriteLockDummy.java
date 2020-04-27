@@ -48,9 +48,11 @@ public class ReadWriteLockDummy implements ReadWriteLock {
 
     public static class LockDummy implements Lock {
 
-        public void lock() {}
+        public void lock() {
+        }
 
-        public void lockInterruptibly() throws InterruptedException {}
+        public void lockInterruptibly() throws InterruptedException {
+        }
 
         public boolean tryLock() {
             return false;
@@ -61,7 +63,8 @@ public class ReadWriteLockDummy implements ReadWriteLock {
             return false;
         }
 
-        public void unlock() {}
+        public void unlock() {
+        }
 
         public Condition newCondition() {
             return null;

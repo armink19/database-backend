@@ -48,11 +48,11 @@ import java.sql.Types;
 class PostgresTransferHelper extends TransferHelper {
 
     private final int PostgreSQL = 0;
-    private final int HSQLDB     = 1;
-    String[][]        Funcs      = {
-        {
-            "now()", "\'now\'"
-        }
+    private final int HSQLDB = 1;
+    String[][] Funcs = {
+            {
+                    "now()", "\'now\'"
+            }
     };
 
     PostgresTransferHelper() {
@@ -78,8 +78,8 @@ class PostgresTransferHelper extends TransferHelper {
                               String columnType, ResultSet columnDesc,
                               int columnIndex) throws SQLException {
 
-        String SeqName   = new String("_" + columnDesc.getString(4) + "_seq");
-        int    spaceleft = 31 - SeqName.length();
+        String SeqName = new String("_" + columnDesc.getString(4) + "_seq");
+        int spaceleft = 31 - SeqName.length();
 
         if (t.Stmts.sDestTable.length() > spaceleft) {
             SeqName = t.Stmts.sDestTable.substring(0, spaceleft) + SeqName;
@@ -97,15 +97,15 @@ class PostgresTransferHelper extends TransferHelper {
 
         for (int Idx = 0; Idx < Funcs.length; Idx++) {
             String PostgreSQL_func = Funcs[Idx][PostgreSQL];
-            int    iStartPos       = columnType.indexOf(PostgreSQL_func);
+            int iStartPos = columnType.indexOf(PostgreSQL_func);
 
             if (iStartPos >= 0) {
                 String NewColumnType = columnType.substring(0, iStartPos);
 
                 NewColumnType += Funcs[Idx][HSQLDB];
                 NewColumnType +=
-                    columnType.substring(iStartPos
-                                         + PostgreSQL_func.length());
+                        columnType.substring(iStartPos
+                                + PostgreSQL_func.length());
                 columnType = NewColumnType;
             }
         }
@@ -119,12 +119,12 @@ class PostgresTransferHelper extends TransferHelper {
 
         if (columnType.equals("SERIAL")) {
             String SeqName = new String("_" + columnDesc.getString(4)
-                                        + "_seq");
+                    + "_seq");
             int spaceleft = 31 - SeqName.length();
 
             if (t.Stmts.sDestTable.length() > spaceleft) {
                 SeqName = t.Stmts.sDestTable.substring(0, spaceleft)
-                          + SeqName;
+                        + SeqName;
             } else {
                 SeqName = t.Stmts.sDestTable + SeqName;
             }
@@ -136,14 +136,14 @@ class PostgresTransferHelper extends TransferHelper {
 
         for (int Idx = 0; Idx < Funcs.length; Idx++) {
             String HSQLDB_func = Funcs[Idx][HSQLDB];
-            int    iStartPos   = columnType.indexOf(HSQLDB_func);
+            int iStartPos = columnType.indexOf(HSQLDB_func);
 
             if (iStartPos >= 0) {
                 String NewColumnType = columnType.substring(0, iStartPos);
 
                 NewColumnType += Funcs[Idx][PostgreSQL];
                 NewColumnType += columnType.substring(iStartPos
-                                                      + HSQLDB_func.length());
+                        + HSQLDB_func.length());
                 columnType = NewColumnType;
             }
         }
@@ -155,7 +155,8 @@ class PostgresTransferHelper extends TransferHelper {
 
         try {
             db.setAutoCommit(false);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     void endDataTransfer() {
@@ -163,6 +164,7 @@ class PostgresTransferHelper extends TransferHelper {
         try {
             db.commit();
             db.execute("VACUUM ANALYZE");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

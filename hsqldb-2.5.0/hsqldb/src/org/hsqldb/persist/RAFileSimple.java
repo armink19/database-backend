@@ -44,21 +44,21 @@ import java.io.RandomAccessFile;
  * for backup and lobs.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version  2.3.3
- * @since  1.9.0
+ * @version 2.3.3
+ * @since 1.9.0
  */
 final class RAFileSimple implements RandomAccessInterface {
 
-    final RandomAccessFile  file;
-    final boolean           readOnly;
+    final RandomAccessFile file;
+    final boolean readOnly;
     final EventLogInterface logger;
 
     RAFileSimple(EventLogInterface logger, String name,
                  String openMode) throws FileNotFoundException, IOException {
 
-        this.file   = new RandomAccessFile(name, openMode);
+        this.file = new RandomAccessFile(name, openMode);
         this.logger = logger;
-        readOnly    = openMode.equals("r");
+        readOnly = openMode.equals("r");
     }
 
     public long length() throws IOException {

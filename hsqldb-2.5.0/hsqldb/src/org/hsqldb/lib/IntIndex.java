@@ -33,7 +33,7 @@ package org.hsqldb.lib;
 
 /**
  * Maintains an ordered  integer index. Equal keys are allowed.
- *
+ * <p>
  * findXXX() methods return the array index into the list
  * containing a matching key, or  or -1 if not found.<p>
  *
@@ -43,19 +43,19 @@ package org.hsqldb.lib;
  */
 public class IntIndex {
 
-    private int           count = 0;
-    private int           capacity;
-    private boolean       sorted       = true;
+    private int count = 0;
+    private int capacity;
+    private boolean sorted = true;
     private final boolean fixedSize;
-    private int[]         keys;
+    private int[] keys;
 
-//
+    //
     private int targetSearchValue;
 
     public IntIndex(int capacity, boolean fixedSize) {
 
-        this.capacity  = capacity;
-        this.keys      = new int[capacity];
+        this.capacity = capacity;
+        this.keys = new int[capacity];
         this.fixedSize = fixedSize;
     }
 
@@ -70,7 +70,8 @@ public class IntIndex {
 
     /**
      * Modifies an existing pair.
-     * @param i the index
+     *
+     * @param i   the index
      * @param key the key
      */
     public synchronized void setKey(int i, int key) {
@@ -170,6 +171,7 @@ public class IntIndex {
     /**
      * Adds a key, ensuring no duplicate key already exists in the
      * current search target column.
+     *
      * @param key the key
      * @return true or false depending on success
      */
@@ -209,6 +211,7 @@ public class IntIndex {
     /**
      * Adds a key, maintaining sort order on
      * current search target column.
+     *
      * @param key the key
      * @return index of added key or -1 if full
      */
@@ -265,7 +268,7 @@ public class IntIndex {
         int index = findFirstGreaterEqualSlotIndex(value);
 
         return index == count ? -1
-                              : index;
+                : index;
     }
 
     /**
@@ -344,6 +347,7 @@ public class IntIndex {
      * returns the index of the empty row past the end of the array if
      * the search value is larger than all the values / keys in the searched
      * column.
+     *
      * @param value the value
      * @return the index
      */
@@ -361,18 +365,19 @@ public class IntIndex {
     /**
      * Returns the index of the lowest element == the given search target,
      * or -1
+     *
      * @return index or -1 if not found
      */
     private int binaryFirstSearch() {
 
-        int low     = 0;
-        int high    = count;
-        int mid     = 0;
+        int low = 0;
+        int high = count;
+        int mid = 0;
         int compare = 0;
-        int found   = count;
+        int found = count;
 
         while (low < high) {
-            mid     = (low + high) >>> 1;
+            mid = (low + high) >>> 1;
             compare = compare(mid);
 
             if (compare < 0) {
@@ -380,29 +385,30 @@ public class IntIndex {
             } else if (compare > 0) {
                 low = mid + 1;
             } else {
-                high  = mid;
+                high = mid;
                 found = mid;
             }
         }
 
         return found == count ? -1
-                              : found;
+                : found;
     }
 
     /**
      * Returns the index of the lowest element >= the given search target,
      * or count
-     *     @return the index
+     *
+     * @return the index
      */
     private int binarySlotSearch() {
 
-        int low     = 0;
-        int high    = count;
-        int mid     = 0;
+        int low = 0;
+        int high = count;
+        int mid = 0;
         int compare = 0;
 
         while (low < high) {
-            mid     = (low + high) >>> 1;
+            mid = (low + high) >>> 1;
             compare = compare(mid);
 
             if (compare <= 0) {
@@ -418,17 +424,18 @@ public class IntIndex {
     /**
      * Returns the index of the lowest element > the given search target
      * or count or -1 if target is found
+     *
      * @return the index
      */
     private int binaryEmptySlotSearch() {
 
-        int low     = 0;
-        int high    = count;
-        int mid     = 0;
+        int low = 0;
+        int high = count;
+        int mid = 0;
         int compare = 0;
 
         while (low < high) {
-            mid     = (low + high) >>> 1;
+            mid = (low + high) >>> 1;
             compare = compare(mid);
 
             if (compare < 0) {
@@ -452,20 +459,20 @@ public class IntIndex {
      */
     private synchronized void fastQuickSort() {
 
-        DoubleIntIndex indices   = new DoubleIntIndex(32);
-        int            threshold = 16;
+        DoubleIntIndex indices = new DoubleIntIndex(32);
+        int threshold = 16;
 
         indices.push(0, count - 1);
 
         while (indices.size() > 0) {
             int start = indices.peekKey();
-            int end   = indices.peekValue();
+            int end = indices.peekValue();
 
             indices.pop();
 
             if (end - start >= threshold) {
                 int pivot = partition(start, end,
-                                      start + ((end - start) >>> 1));
+                        start + ((end - start) >>> 1));
 
                 indices.push(start, pivot - 1);
                 indices.push(pivot + 1, end);
@@ -536,10 +543,12 @@ public class IntIndex {
             i = l;
             v = j;
 
-            for (;;) {
-                while (lessThan(++i, v)) {}
+            for (; ; ) {
+                while (lessThan(++i, v)) {
+                }
 
-                while (lessThan(v, --j)) {}
+                while (lessThan(v, --j)) {
+                }
 
                 if (j < i) {
                     break;
@@ -592,6 +601,7 @@ public class IntIndex {
     /**
      * Check if targeted column value in the row indexed i is less than the
      * search target object.
+     *
      * @param i the index
      * @return -1, 0 or +1
      */
@@ -608,6 +618,7 @@ public class IntIndex {
 
     /**
      * Check if row indexed i is less than row indexed j
+     *
      * @param i the first index
      * @param j the second index
      * @return true or false
@@ -626,14 +637,14 @@ public class IntIndex {
     }
 
     protected void doubleCapacity() {
-        keys     = (int[]) ArrayUtil.resizeArray(keys, capacity * 2);
+        keys = (int[]) ArrayUtil.resizeArray(keys, capacity * 2);
         capacity *= 2;
     }
 
     public synchronized void removeRange(int start, int limit) {
 
         ArrayUtil.adjustArray(ArrayUtil.CLASS_CODE_INT, keys, count, start,
-                              start - limit);
+                start - limit);
 
         count -= (limit - start);
     }

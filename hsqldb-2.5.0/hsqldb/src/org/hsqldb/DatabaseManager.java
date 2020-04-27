@@ -45,10 +45,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * (or a classloader within the JVM). Opens the database if it is not open
  * or connects to it if it is already open. This allows the same database to
  * be used by different instances of Server and by direct connections.<p>
- *
+ * <p>
  * Maintains a map of Server instances and notifies each server when its
  * database has shut down.<p>
- *
+ * <p>
  * Maintains a reference to the timer used for file locks and logging.<p>
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
@@ -59,19 +59,29 @@ public class DatabaseManager {
 
     // Database and Server registry
 
-    /** provides unique ID's for the Databases currently in registry */
+    /**
+     * provides unique ID's for the Databases currently in registry
+     */
     private static AtomicInteger dbIDCounter = new AtomicInteger();
 
-    /** name to Database mapping for mem: databases */
+    /**
+     * name to Database mapping for mem: databases
+     */
     static final HashMap memDatabaseMap = new HashMap();
 
-    /** File to Database mapping for file: databases */
+    /**
+     * File to Database mapping for file: databases
+     */
     static final HashMap fileDatabaseMap = new HashMap();
 
-    /** File to Database mapping for res: databases */
+    /**
+     * File to Database mapping for res: databases
+     */
     static final HashMap resDatabaseMap = new HashMap();
 
-    /** id number to Database for Databases currently in registry */
+    /**
+     * id number to Database for Databases currently in registry
+     */
     static final IntKeyHashMap databaseIDMap = new IntKeyHashMap();
 
     /**
@@ -96,7 +106,7 @@ public class DatabaseManager {
 
     /**
      * Closes all the databases using the given mode.<p>
-     *
+     * <p>
      * CLOSEMODE_IMMEDIATELY = 1;
      * CLOSEMODE_NORMAL      = 2;
      * CLOSEMODE_COMPACT     = 3;
@@ -112,7 +122,8 @@ public class DatabaseManager {
 
                 try {
                     db.close(mode);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
     }
@@ -134,7 +145,7 @@ public class DatabaseManager {
         }
 
         Session session = db.connect(user, password, zoneString,
-                                     timeZoneSeconds);
+                timeZoneSeconds);
 
         session.isNetwork = true;
 
@@ -166,7 +177,7 @@ public class DatabaseManager {
         }
 
         return db == null ? null
-                          : db.sessionManager.getSession(sessionId);
+                : db.sessionManager.getSession(sessionId);
     }
 
     /**
@@ -213,16 +224,15 @@ public class DatabaseManager {
     /**
      * This has to be improved once a threading model is in place.
      * Current behaviour:
-     *
+     * <p>
      * Attempts to connect to different databases do not block. Two db's can
      * open simultaneously.
-     *
+     * <p>
      * Attempts to connect to a db while it is opening or closing will block
      * until the db is open or closed. At this point the db state is either
      * DATABASE_ONLINE (after db.open() has returned) which allows a new
      * connection to be made, or the state is DATABASE_SHUTDOWN which means
      * the db can be reopened for the new connection).
-     *
      */
     public static Database getDatabase(String dbtype, String path,
                                        HsqlProperties props) {
@@ -234,15 +244,15 @@ public class DatabaseManager {
         // which means that the switch below will attempt to
         // open the database instance.
         DatabaseType type = DatabaseType.get(dbtype);
-        Database     db   = getDatabaseObject(type, path, props);
+        Database db = getDatabaseObject(type, path, props);
 
         synchronized (db) {
             switch (db.getState()) {
 
-                case Database.DATABASE_ONLINE :
+                case Database.DATABASE_ONLINE:
                     break;
 
-                case Database.DATABASE_SHUTDOWN :
+                case Database.DATABASE_SHUTDOWN:
 
                     // if the database was shutdown while this attempt
                     // was waiting, add the database back to the registry
@@ -259,15 +269,15 @@ public class DatabaseManager {
                 // being shutdown by a thread and in the meantime another thread
                 // attempts to connect to the db. The threads could belong to
                 // different server instances or be in-process.
-                case Database.DATABASE_CLOSING :
+                case Database.DATABASE_CLOSING:
 
-                // this case will not be reached as the state is set and
-                // cleared within the db.open() call above, which is called
-                // from this synchronized block
-                // it is here simply as a placeholder for future development
-                case Database.DATABASE_OPENING :
+                    // this case will not be reached as the state is set and
+                    // cleared within the db.open() call above, which is called
+                    // from this synchronized block
+                    // it is here simply as a placeholder for future development
+                case Database.DATABASE_OPENING:
                     throw Error.error(ErrorCode.LOCK_FILE_ACQUISITION_FAILURE,
-                                      ErrorCode.M_DatabaseManager_getDatabase);
+                            ErrorCode.M_DatabaseManager_getDatabase);
             }
         }
 
@@ -275,17 +285,17 @@ public class DatabaseManager {
     }
 
     private static synchronized Database getDatabaseObject(DatabaseType type,
-            String path, HsqlProperties props) {
+                                                           String path, HsqlProperties props) {
 
         Database db;
-        String   key = path;
-        HashMap  databaseMap;
+        String key = path;
+        HashMap databaseMap;
 
         switch (type) {
 
-            case DB_FILE : {
+            case DB_FILE: {
                 databaseMap = fileDatabaseMap;
-                key         = filePathToKey(path);
+                key = filePathToKey(path);
 
                 synchronized (databaseMap) {
                     db = (Database) databaseMap.get(key);
@@ -309,17 +319,17 @@ public class DatabaseManager {
 
                 break;
             }
-            case DB_RES : {
+            case DB_RES: {
                 databaseMap = resDatabaseMap;
 
                 break;
             }
-            case DB_MEM : {
+            case DB_MEM: {
                 databaseMap = memDatabaseMap;
 
                 break;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DatabaseManager");
         }
 
@@ -328,7 +338,7 @@ public class DatabaseManager {
         }
 
         if (db == null) {
-            db            = new Database(type, path, key, props);
+            db = new Database(type, path, key, props);
             db.databaseID = dbIDCounter.getAndIncrement();
 
             synchronized (databaseIDMap) {
@@ -348,29 +358,29 @@ public class DatabaseManager {
      * null if there is none.
      */
     public static synchronized Database lookupDatabaseObject(DatabaseType type,
-            String path) {
+                                                             String path) {
 
-        Object  key = path;
+        Object key = path;
         HashMap databaseMap;
 
         switch (type) {
 
-            case DB_FILE :
+            case DB_FILE:
                 databaseMap = fileDatabaseMap;
-                key         = filePathToKey(path);
+                key = filePathToKey(path);
                 break;
 
-            case DB_RES :
+            case DB_RES:
                 databaseMap = resDatabaseMap;
                 break;
 
-            case DB_MEM :
+            case DB_MEM:
                 databaseMap = memDatabaseMap;
                 break;
 
-            default :
+            default:
                 throw (Error.runtimeError(ErrorCode.U_S0500,
-                                          "DatabaseManager"));
+                        "DatabaseManager"));
         }
 
         synchronized (databaseMap) {
@@ -382,29 +392,29 @@ public class DatabaseManager {
      * Adds a database to the registry.
      */
     private static synchronized void addDatabaseObject(DatabaseType type,
-            String path, Database db) {
+                                                       String path, Database db) {
 
-        Object  key = path;
+        Object key = path;
         HashMap databaseMap;
 
         switch (type) {
 
-            case DB_FILE :
+            case DB_FILE:
                 databaseMap = fileDatabaseMap;
-                key         = filePathToKey(path);
+                key = filePathToKey(path);
                 break;
 
-            case DB_RES :
+            case DB_RES:
                 databaseMap = resDatabaseMap;
                 break;
 
-            case DB_MEM :
+            case DB_MEM:
                 databaseMap = memDatabaseMap;
                 break;
 
-            default :
+            default:
                 throw (Error.runtimeError(ErrorCode.U_S0500,
-                                          "DatabaseManager"));
+                        "DatabaseManager"));
         }
 
         synchronized (databaseIDMap) {
@@ -421,17 +431,17 @@ public class DatabaseManager {
      */
     static void removeDatabase(Database database) {
 
-        int          dbID = database.databaseID;
+        int dbID = database.databaseID;
         DatabaseType type = database.getType();
-        String       path = database.getPath();
-        Object       key  = path;
-        HashMap      databaseMap;
+        String path = database.getPath();
+        Object key = path;
+        HashMap databaseMap;
 
         notifyServers(database);
 
         if (type == DatabaseType.DB_FILE) {
             databaseMap = fileDatabaseMap;
-            key         = filePathToKey(path);
+            key = filePathToKey(path);
         } else if (type == DatabaseType.DB_RES) {
             databaseMap = resDatabaseMap;
         } else if (type == DatabaseType.DB_MEM) {
@@ -508,8 +518,8 @@ public class DatabaseManager {
 
         for (int i = 0; i < servers.length; i++) {
             Notified server = servers[i];
-            HashSet  databases;
-            boolean  removed = false;
+            HashSet databases;
+            boolean removed = false;
 
             synchronized (serverMap) {
                 databases = (HashSet) serverMap.get(server);
@@ -532,8 +542,8 @@ public class DatabaseManager {
         Iterator it = serverMap.keySet().iterator();
 
         for (; it.hasNext(); ) {
-            Notified server    = (Notified) it.next();
-            HashSet  databases = (HashSet) serverMap.get(server);
+            Notified server = (Notified) it.next();
+            HashSet databases = (HashSet) serverMap.get(server);
 
             if (databases.contains(db)) {
                 return true;

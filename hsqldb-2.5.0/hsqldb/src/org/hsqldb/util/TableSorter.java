@@ -93,10 +93,10 @@ import java.util.*;
  */
 public class TableSorter extends AbstractTableModel {
 
-    protected TableModel           tableModel;
-    public static final int        DESCENDING            = -1;
-    public static final int        NOT_SORTED            = 0;
-    public static final int        ASCENDING             = 1;
+    protected TableModel tableModel;
+    public static final int DESCENDING = -1;
+    public static final int NOT_SORTED = 0;
+    public static final int ASCENDING = 1;
     private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
     public static final Comparator COMPARABLE_COMPARATOR = new Comparator() {
 
@@ -127,16 +127,16 @@ public class TableSorter extends AbstractTableModel {
             return o1.toString().compareTo(o2.toString());
         }
     };
-    private Row[]              viewToModel;
-    private int[]              modelToView;
-    private JTableHeader       tableHeader;
-    private MouseListener      mouseListener;
+    private Row[] viewToModel;
+    private int[] modelToView;
+    private JTableHeader tableHeader;
+    private MouseListener mouseListener;
     private TableModelListener tableModelListener;
-    private Map                columnComparators = new HashMap();
-    private List               sortingColumns    = new ArrayList();
+    private Map columnComparators = new HashMap();
+    private List sortingColumns = new ArrayList();
 
     public TableSorter() {
-        this.mouseListener      = new MouseHandler();
+        this.mouseListener = new MouseHandler();
         this.tableModelListener = new TableModelHandler();
     }
 
@@ -190,12 +190,12 @@ public class TableSorter extends AbstractTableModel {
             this.tableHeader.removeMouseListener(mouseListener);
 
             TableCellRenderer defaultRenderer =
-                this.tableHeader.getDefaultRenderer();
+                    this.tableHeader.getDefaultRenderer();
 
             if (defaultRenderer instanceof SortableHeaderRenderer) {
                 this.tableHeader.setDefaultRenderer(
-                    ((SortableHeaderRenderer) defaultRenderer)
-                        .tableCellRenderer);
+                        ((SortableHeaderRenderer) defaultRenderer)
+                                .tableCellRenderer);
             }
         }
 
@@ -204,8 +204,8 @@ public class TableSorter extends AbstractTableModel {
         if (this.tableHeader != null) {
             this.tableHeader.addMouseListener(mouseListener);
             this.tableHeader.setDefaultRenderer(
-                new SortableHeaderRenderer(
-                    this.tableHeader.getDefaultRenderer()));
+                    new SortableHeaderRenderer(
+                            this.tableHeader.getDefaultRenderer()));
         }
     }
 
@@ -264,7 +264,7 @@ public class TableSorter extends AbstractTableModel {
         }
 
         return new Arrow(directive.direction == DESCENDING, size,
-                         sortingColumns.indexOf(directive));
+                sortingColumns.indexOf(directive));
     }
 
     private void cancelSorting() {
@@ -285,7 +285,7 @@ public class TableSorter extends AbstractTableModel {
 
         Class columnType = tableModel.getColumnClass(column);
         Comparator comparator =
-            (Comparator) columnComparators.get(columnType);
+                (Comparator) columnComparators.get(columnType);
 
         if (comparator != null) {
             return comparator;
@@ -339,12 +339,12 @@ public class TableSorter extends AbstractTableModel {
     // TableModel interface methods
     public int getRowCount() {
         return (tableModel == null) ? 0
-                                    : tableModel.getRowCount();
+                : tableModel.getRowCount();
     }
 
     public int getColumnCount() {
         return (tableModel == null) ? 0
-                                    : tableModel.getColumnCount();
+                : tableModel.getColumnCount();
     }
 
     public String getColumnName(int column) {
@@ -382,11 +382,11 @@ public class TableSorter extends AbstractTableModel {
             int row2 = ((Row) o).modelIndex;
 
             for (Iterator it = sortingColumns.iterator(); it.hasNext(); ) {
-                Directive directive  = (Directive) it.next();
-                int       column     = directive.column;
-                Object    o1         = tableModel.getValueAt(row1, column);
-                Object    o2         = tableModel.getValueAt(row2, column);
-                int       comparison = 0;
+                Directive directive = (Directive) it.next();
+                int column = directive.column;
+                Object o1 = tableModel.getValueAt(row1, column);
+                Object o2 = tableModel.getValueAt(row2, column);
+                int comparison = 0;
 
                 // Define null less than everything, except null.
                 if (o1 == null && o2 == null) {
@@ -401,7 +401,7 @@ public class TableSorter extends AbstractTableModel {
 
                 if (comparison != 0) {
                     return directive.direction == DESCENDING ? -comparison
-                                                             : comparison;
+                            : comparison;
                 }
             }
 
@@ -458,8 +458,8 @@ public class TableSorter extends AbstractTableModel {
                 int viewIndex = getModelToView()[e.getFirstRow()];
 
                 fireTableChanged(new TableModelEvent(TableSorter.this,
-                                                     viewIndex, viewIndex,
-                                                     column, e.getType()));
+                        viewIndex, viewIndex,
+                        column, e.getType()));
 
                 return;
             }
@@ -476,9 +476,9 @@ public class TableSorter extends AbstractTableModel {
 
         public void mouseClicked(MouseEvent e) {
 
-            JTableHeader     h           = (JTableHeader) e.getSource();
+            JTableHeader h = (JTableHeader) e.getSource();
             TableColumnModel columnModel = h.getColumnModel();
-            int              viewColumn  = h.columnAtPoint(e.getPoint());
+            int viewColumn = h.columnAtPoint(e.getPoint());
             int column = columnModel.getColumn(viewColumn).getModelIndex();
 
             if (column != -1) {
@@ -491,7 +491,7 @@ public class TableSorter extends AbstractTableModel {
                 // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING} or
                 // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is pressed.
                 status = status + (e.isShiftDown() ? -1
-                                                   : 1);
+                        : 1);
                 status = (status + 4) % 3 - 1;    // signed mod, returning {-1, 0, 1}
 
                 setSortingStatus(column, status);
@@ -502,33 +502,33 @@ public class TableSorter extends AbstractTableModel {
     private static class Arrow implements Icon {
 
         private boolean descending;
-        private int     size;
-        private int     priority;
+        private int size;
+        private int priority;
 
         public Arrow(boolean descending, int size, int priority) {
 
             this.descending = descending;
-            this.size       = size;
-            this.priority   = priority;
+            this.size = size;
+            this.priority = priority;
         }
 
         public void paintIcon(Component c, Graphics g, int x, int y) {
 
             Color color = c == null ? Color.GRAY
-                                    : c.getBackground();
+                    : c.getBackground();
 
             // In a compound sort, make each succesive triangle 20%
             // smaller than the previous one.
             int dx = (int) ((double) size / 2 * Math.pow(0.8, priority));
             int dy = descending ? dx
-                                : -dx;
+                    : -dx;
 
             // Align icon (roughly) with font baseline.
             y = y + 5 * size / 6 + (descending ? -dy
-                                               : 0);
+                    : 0);
 
             int shift = descending ? 1
-                                   : -1;
+                    : -1;
 
             g.translate(x, y);
 
@@ -572,12 +572,12 @@ public class TableSorter extends AbstractTableModel {
         }
 
         public Component getTableCellRendererComponent(JTable table,
-                Object value, boolean isSelected, boolean hasFocus, int row,
-                int column) {
+                                                       Object value, boolean isSelected, boolean hasFocus, int row,
+                                                       int column) {
 
             Component c =
-                tableCellRenderer.getTableCellRendererComponent(table, value,
-                    isSelected, hasFocus, row, column);
+                    tableCellRenderer.getTableCellRendererComponent(table, value,
+                            isSelected, hasFocus, row, column);
 
             if (c instanceof JLabel) {
                 JLabel l = (JLabel) c;
@@ -587,7 +587,7 @@ public class TableSorter extends AbstractTableModel {
                 int modelColumn = table.convertColumnIndexToModel(column);
 
                 l.setIcon(getHeaderRendererIcon(modelColumn,
-                                                l.getFont().getSize()));
+                        l.getFont().getSize()));
             }
 
             return c;
@@ -600,7 +600,7 @@ public class TableSorter extends AbstractTableModel {
         private int direction;
 
         public Directive(int column, int direction) {
-            this.column    = column;
+            this.column = column;
             this.direction = direction;
         }
     }

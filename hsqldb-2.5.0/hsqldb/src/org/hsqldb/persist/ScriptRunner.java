@@ -48,7 +48,7 @@ import java.io.EOFException;
 
 /**
  * Restores the state of a Database instance from an SQL log file. <p>
- *
+ * <p>
  * If there is an error, processing stops at that line and the message is
  * logged to the application log. If memory runs out, an exception is thrown.
  *
@@ -59,13 +59,13 @@ import java.io.EOFException;
 public class ScriptRunner {
 
     /**
-     *  This is used to read the *.log file and manage any necessary
-     *  transaction rollback.
+     * This is used to read the *.log file and manage any necessary
+     * transaction rollback.
      */
     public static void runScript(Database database, String logFilename,
                                  boolean fullReplay) {
 
-        Crypto           crypto = database.logger.getCrypto();
+        Crypto crypto = database.logger.getCrypto();
         ScriptReaderBase scr;
 
         try {
@@ -73,7 +73,7 @@ public class ScriptRunner {
                 scr = new ScriptReaderText(database, logFilename, false);
             } else {
                 scr = new ScriptReaderDecode(database, logFilename, crypto,
-                                             true);
+                        true);
             }
         } catch (Throwable e) {
 
@@ -97,16 +97,16 @@ public class ScriptRunner {
                                   boolean fullReplay) {
 
         IntKeyHashMap sessionMap = new IntKeyHashMap();
-        Session       current    = null;
-        int           currentId  = 0;
-        String        statement;
-        int           statementType;
+        Session current = null;
+        int currentId = 0;
+        String statement;
+        int statementType;
         Statement dummy = new StatementDML(StatementTypes.UPDATE_CURSOR,
-                                           StatementTypes.X_SQL_DATA_CHANGE,
-                                           null);
+                StatementTypes.X_SQL_DATA_CHANGE,
+                null);
         String databaseFile = database.getCanonicalPath();
-        String action       = fullReplay ? "open aborted"
-                                         : "open continued";
+        String action = fullReplay ? "open aborted"
+                : "open continued";
 
         dummy.setCompileTimestamp(Long.MAX_VALUE);
         database.setReferentialIntegrity(false);
@@ -117,15 +117,15 @@ public class ScriptRunner {
 
                 if (current == null || currentId != sessionId) {
                     currentId = sessionId;
-                    current   = (Session) sessionMap.get(currentId);
+                    current = (Session) sessionMap.get(currentId);
 
                     if (current == null) {
 
                         // note the sessionId does not match the sessionId of
                         // new session
                         current =
-                            database.getSessionManager().newSessionForLog(
-                                database);
+                                database.getSessionManager().newSessionForLog(
+                                        database);
 
                         sessionMap.put(currentId, current);
                     }
@@ -137,11 +137,11 @@ public class ScriptRunner {
 
                 switch (statementType) {
 
-                    case StatementLineTypes.SET_FILES_CHECK_STATEMENT :
+                    case StatementLineTypes.SET_FILES_CHECK_STATEMENT:
                         result = null;
 
-                    // fall through
-                    case StatementLineTypes.ANY_STATEMENT :
+                        // fall through
+                    case StatementLineTypes.ANY_STATEMENT:
                         statement = scr.getLoggedStatement();
 
                         Statement cs;
@@ -155,13 +155,13 @@ public class ScriptRunner {
                                 if (cs.getType()
                                         == StatementTypes.CREATE_TABLE) {
                                     Table table =
-                                        (Table) ((StatementSchema) cs)
-                                            .getArguments()[0];
+                                            (Table) ((StatementSchema) cs)
+                                                    .getArguments()[0];
 
                                     for (int i = 0; i < table.getColumnCount();
-                                            i++) {
+                                         i++) {
                                         ColumnSchema column =
-                                            table.getColumn(i);
+                                                table.getColumn(i);
 
                                         if (column.getDataType().isBitType()) {
                                             column.setType(Type.SQL_BOOLEAN);
@@ -185,11 +185,11 @@ public class ScriptRunner {
                         }
                         break;
 
-                    case StatementLineTypes.COMMIT_STATEMENT :
+                    case StatementLineTypes.COMMIT_STATEMENT:
                         current.commit(false);
                         break;
 
-                    case StatementLineTypes.INSERT_STATEMENT : {
+                    case StatementLineTypes.INSERT_STATEMENT: {
                         current.sessionContext.currentStatement = dummy;
 
                         current.beginAction(dummy);
@@ -202,14 +202,14 @@ public class ScriptRunner {
 
                         break;
                     }
-                    case StatementLineTypes.DELETE_STATEMENT : {
+                    case StatementLineTypes.DELETE_STATEMENT: {
                         current.sessionContext.currentStatement = dummy;
 
                         current.beginAction(dummy);
 
-                        Table           table = scr.getCurrentTable();
+                        Table table = scr.getCurrentTable();
                         PersistentStore store = table.getRowStore(current);
-                        Object[]        data  = scr.getData();
+                        Object[] data = scr.getData();
                         Row row = table.getDeleteRowFromLog(current, data);
 
                         if (row != null) {
@@ -220,19 +220,19 @@ public class ScriptRunner {
 
                         break;
                     }
-                    case StatementLineTypes.SET_SCHEMA_STATEMENT : {
+                    case StatementLineTypes.SET_SCHEMA_STATEMENT: {
                         HsqlName name =
-                            database.schemaManager.findSchemaHsqlName(
-                                scr.getCurrentSchema());
+                                database.schemaManager.findSchemaHsqlName(
+                                        scr.getCurrentSchema());
 
                         current.setCurrentSchemaHsqlName(name);
 
                         break;
                     }
-                    case StatementLineTypes.SESSION_ID : {
+                    case StatementLineTypes.SESSION_ID: {
                         break;
                     }
-                    default :
+                    default:
                         throw Error.error(ErrorCode.ERROR_IN_LOG_FILE);
                 }
 
@@ -249,8 +249,8 @@ public class ScriptRunner {
 
             // stop processing on bad log line
             String error = "statement error processing log - " + action + " "
-                           + scr.getFileNamePath() + " line: "
-                           + scr.getLineNumber();
+                    + scr.getFileNamePath() + " line: "
+                    + scr.getLineNumber();
 
             database.logger.logSevereEvent(error, e);
 
@@ -259,7 +259,7 @@ public class ScriptRunner {
             }
         } catch (OutOfMemoryError e) {
             String error = "out of memory processing log - " + databaseFile
-                           + " line: " + scr.getLineNumber();
+                    + " line: " + scr.getLineNumber();
 
             // catch out-of-memory errors and terminate
             database.logger.logSevereEvent(error, e);
@@ -267,16 +267,16 @@ public class ScriptRunner {
             throw Error.error(ErrorCode.OUT_OF_MEMORY);
         } catch (Throwable t) {
             HsqlException e =
-                Error.error(t, ErrorCode.ERROR_IN_LOG_FILE,
+                    Error.error(t, ErrorCode.ERROR_IN_LOG_FILE,
                             ErrorCode.M_DatabaseScriptReader_read,
-                            new String[] {
-                scr.getLineNumber() + " " + databaseFile, t.getMessage()
-            });
+                            new String[]{
+                                    scr.getLineNumber() + " " + databaseFile, t.getMessage()
+                            });
 
             // stop processing on bad script line
             String error = "statement error processing log - " + action
-                           + scr.getFileNamePath() + " line: "
-                           + scr.getLineNumber();
+                    + scr.getFileNamePath() + " line: "
+                    + scr.getLineNumber();
 
             database.logger.logSevereEvent(error, e);
 

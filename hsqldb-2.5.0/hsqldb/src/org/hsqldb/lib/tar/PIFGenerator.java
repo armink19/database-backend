@@ -45,8 +45,8 @@ import java.util.Date;
 public class PIFGenerator extends ByteArrayOutputStream {
 
     OutputStreamWriter writer;
-    String             name;
-    int                fakePid;    // Only used by constructors
+    String name;
+    int fakePid;    // Only used by constructors
 
     //char               typeFlag;  Serves no purpose.  What was orig. purpose?
     public String getName() {
@@ -66,7 +66,7 @@ public class PIFGenerator extends ByteArrayOutputStream {
     /**
      * Construct a PIFGenerator object for a 'g' record.
      *
-     * @param sequenceNum  Index starts at 1 in each Tar file
+     * @param sequenceNum Index starts at 1 in each Tar file
      */
     public PIFGenerator(int sequenceNum) {
 
@@ -80,7 +80,7 @@ public class PIFGenerator extends ByteArrayOutputStream {
 
         //typeFlag = 'g';
         name = System.getProperty("java.io.tmpdir") + "/GlobalHead." + fakePid
-               + '.' + sequenceNum;
+                + '.' + sequenceNum;
     }
 
     /**
@@ -94,8 +94,8 @@ public class PIFGenerator extends ByteArrayOutputStream {
 
         //typeFlag = 'x';
         String parentPath = (file.getParentFile() == null) ? "."
-                                                           : file.getParentFile()
-                                                               .getPath();
+                : file.getParentFile()
+                .getPath();
 
         name = parentPath + "/PaxHeaders." + fakePid + '/' + file.getName();
     }
@@ -109,7 +109,7 @@ public class PIFGenerator extends ByteArrayOutputStream {
      */
     public void addRecord(String key,
                           boolean b)
-                          throws TarMalformatException, IOException {
+            throws TarMalformatException, IOException {
         addRecord(key, Boolean.toString(b));
     }
 
@@ -139,7 +139,7 @@ public class PIFGenerator extends ByteArrayOutputStream {
      */
     public void addRecord(String key,
                           String value)
-                          throws TarMalformatException, IOException {
+            throws TarMalformatException, IOException {
 
         if (key == null || value == null || key.length() < 1
                 || value.length() < 1) {

@@ -43,14 +43,14 @@ import org.hsqldb.persist.PersistentStore;
  * @since 2.0.0
  */
 public class TransactionManager2PL extends TransactionManagerCommon
-implements TransactionManager {
+        implements TransactionManager {
 
     public TransactionManager2PL(Database db) {
 
         super(db);
 
         lobSession = database.sessionManager.getSysLobSession();
-        txModel    = LOCKS;
+        txModel = LOCKS;
     }
 
     public long getGlobalChangeTimestamp() {
@@ -104,7 +104,7 @@ implements TransactionManager {
             int limit = session.rowActionList.size();
 
             // new actionTimestamp used for commitTimestamp
-            session.actionTimestamp         = getNextGlobalChangeTimestamp();
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.transactionEndTimestamp = session.actionTimestamp;
 
             endTransaction(session);
@@ -135,8 +135,8 @@ implements TransactionManager {
         writeLock.lock();
 
         try {
-            session.abortTransaction        = false;
-            session.actionTimestamp         = getNextGlobalChangeTimestamp();
+            session.abortTransaction = false;
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.transactionEndTimestamp = session.actionTimestamp;
 
             rollbackPartial(session, 0, session.transactionTimestamp);
@@ -155,11 +155,11 @@ implements TransactionManager {
 
         long timestamp = session.sessionContext.savepointTimestamps.get(index);
         Integer oi = (Integer) session.sessionContext.savepoints.get(index);
-        int     start  = oi.intValue();
+        int start = oi.intValue();
 
         while (session.sessionContext.savepoints.size() > index + 1) {
             session.sessionContext.savepoints.remove(
-                session.sessionContext.savepoints.size() - 1);
+                    session.sessionContext.savepoints.size() - 1);
             session.sessionContext.savepointTimestamps.removeLast();
         }
 
@@ -169,7 +169,7 @@ implements TransactionManager {
     public void rollbackAction(Session session) {
 
         rollbackPartial(session, session.actionIndex,
-                        session.actionStartTimestamp);
+                session.actionStartTimestamp);
         endActionTPL(session);
     }
 
@@ -243,7 +243,7 @@ implements TransactionManager {
                                + session.actionTimestamp);
 */
             throw Error.runtimeError(ErrorCode.GENERAL_ERROR,
-                                     "null insert action ");
+                    "null insert action ");
         }
 
         store.indexRow(session, row);
@@ -266,7 +266,7 @@ implements TransactionManager {
 
         if (action == null) {
             throw Error.runtimeError(ErrorCode.GENERAL_ERROR,
-                                     "null insert action ");
+                    "null insert action ");
         }
 
         store.indexRow(session, row);
@@ -329,14 +329,15 @@ implements TransactionManager {
     public void beginActionResume(Session session) {
 
         if (session.isTransaction) {
-            session.actionTimestamp      = getNextGlobalChangeTimestamp();
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.actionStartTimestamp = session.actionTimestamp;
         } else {
             beginTransactionCommon(session);
         }
     }
 
-    public void removeTransactionInfo(long id) {}
+    public void removeTransactionInfo(long id) {
+    }
 
     public void resetSession(Session session, Session targetSession,
                              int mode) {

@@ -63,7 +63,7 @@ public class TestJavaFunctions extends TestBase {
     void prepareDatabase() throws SQLException {
 
         Connection c = newConnection();
-        Statement  s = c.createStatement();
+        Statement s = c.createStatement();
 
         s.executeUpdate("DROP FUNCTION TEST_QUERY IF EXISTS");
         s.executeUpdate("DROP FUNCTION TEST_CUSTOM_RESULT IF EXISTS");
@@ -76,24 +76,24 @@ public class TestJavaFunctions extends TestBase {
         s.executeUpdate("INSERT INTO T VALUES 'Brent', 14");
         s.executeUpdate("INSERT INTO T VALUES 'Westbourne', 16");
         s.executeUpdate(
-            "CREATE FUNCTION TEST_QUERY(INT) RETURNS TABLE(N VARCHAR(20), I INT) "
-            + " READS SQL DATA LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getQueryResult'");
+                "CREATE FUNCTION TEST_QUERY(INT) RETURNS TABLE(N VARCHAR(20), I INT) "
+                        + " READS SQL DATA LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getQueryResult'");
         s.executeUpdate(
-            "CREATE FUNCTION TEST_CUSTOM_RESULT(BIGINT, BIGINT) RETURNS TABLE(I BIGINT, N VARBINARY(1000)) "
-            + " READS SQL DATA LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getCustomResult'");
+                "CREATE FUNCTION TEST_CUSTOM_RESULT(BIGINT, BIGINT) RETURNS TABLE(I BIGINT, N VARBINARY(1000)) "
+                        + " READS SQL DATA LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getCustomResult'");
         s.executeUpdate(
-            "CREATE FUNCTION SORT_BYTE_ARRAY(VARBINARY(20)) RETURNS VARBINARY(20) "
-            + " NO SQL LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getSortedByteArray'");
+                "CREATE FUNCTION SORT_BYTE_ARRAY(VARBINARY(20)) RETURNS VARBINARY(20) "
+                        + " NO SQL LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getSortedByteArray'");
         s.executeUpdate(
-            "CREATE FUNCTION SORT_BINARY_ARRAY(VARBINARY(20) ARRAY) RETURNS VARBINARY(20) ARRAY "
-            + " NO SQL LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getSortedArrayByteArray'");
+                "CREATE FUNCTION SORT_BINARY_ARRAY(VARBINARY(20) ARRAY) RETURNS VARBINARY(20) ARRAY "
+                        + " NO SQL LANGUAGE JAVA EXTERNAL NAME 'CLASSPATH:org.hsqldb.test.TestJavaFunctions.getSortedArrayByteArray'");
         s.executeUpdate("CHECKPOINT");
         c.close();
     }
 
     public void testOne() throws SQLException {
 
-        Connection        c = newConnection();
+        Connection c = newConnection();
         CallableStatement s = c.prepareCall("CALL TEST_QUERY(16)");
 
         s.execute();
@@ -114,9 +114,9 @@ public class TestJavaFunctions extends TestBase {
 
         while (r.next()) {
             String temp =
-                "" + r.getLong(1) + " "
-                + org.hsqldb.lib.StringConverter.byteArrayToSQLHexString(
-                    r.getBytes(2));
+                    "" + r.getLong(1) + " "
+                            + org.hsqldb.lib.StringConverter.byteArrayToSQLHexString(
+                            r.getBytes(2));
 
             System.out.println(temp);
         }
@@ -180,9 +180,9 @@ public class TestJavaFunctions extends TestBase {
         types[0] = Type.SQL_BIGINT;
         types[1] = Type.SQL_VARBINARY_DEFAULT;
 
-        ResultMetaData  meta = ResultMetaData.newSimpleResultMetaData(types);
+        ResultMetaData meta = ResultMetaData.newSimpleResultMetaData(types);
         RowSetNavigator navigator = new RowSetNavigatorClient();
-        Result          result    = Result.newDataResult(meta);
+        Result result = Result.newDataResult(meta);
 
         result.setNavigator(navigator);
 
@@ -190,7 +190,7 @@ public class TestJavaFunctions extends TestBase {
     }
 
     public static ResultSet getCustomResult(Connection connection, long start,
-            long end) throws SQLException {
+                                            long end) throws SQLException {
 
         Result result = newTwoColumnResult();
 
@@ -198,12 +198,12 @@ public class TestJavaFunctions extends TestBase {
             long temp = start;
 
             start = end;
-            end   = temp;
+            end = temp;
         }
 
         if (end > 1000) {
             throw org.hsqldb.jdbc.JDBCUtil.invalidArgument(
-                "value larger than 100");
+                    "value larger than 100");
         }
 
         if (end > start + 100) {
@@ -215,7 +215,7 @@ public class TestJavaFunctions extends TestBase {
 
             row[0] = Long.valueOf(i);
             row[1] = new BinaryData(BigInteger.valueOf(i).toByteArray(),
-                                    false);
+                    false);
 
             result.navigator.add(row);
         }
@@ -223,6 +223,6 @@ public class TestJavaFunctions extends TestBase {
         result.navigator.reset();
 
         return new JDBCResultSet((JDBCConnection) connection, null, result,
-                                 result.metaData);
+                result.metaData);
     }
 }

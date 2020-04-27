@@ -53,18 +53,18 @@ import java.io.IOException;
  * @since 1.9.0
  */
 public class RowSetNavigatorDataChangeMemory
-implements RowSetNavigatorDataChange {
+        implements RowSetNavigatorDataChange {
 
     public static final RowSetNavigatorDataChangeMemory emptyRowSet =
-        new RowSetNavigatorDataChangeMemory(null);
-    int                   size;
-    int                   currentPos = -1;
+            new RowSetNavigatorDataChangeMemory(null);
+    int size;
+    int currentPos = -1;
     OrderedLongKeyHashMap list;
-    Session               session;
+    Session session;
 
     public RowSetNavigatorDataChangeMemory(Session session) {
         this.session = session;
-        list         = new OrderedLongKeyHashMap(64, true);
+        list = new OrderedLongKeyHashMap(64, true);
     }
 
     public void release() {
@@ -117,12 +117,15 @@ implements RowSetNavigatorDataChange {
 
     // reading and writing
     public void write(RowOutputInterface out,
-                      ResultMetaData meta) throws IOException {}
+                      ResultMetaData meta) throws IOException {
+    }
 
     public void read(RowInputInterface in,
-                     ResultMetaData meta) throws IOException {}
+                     ResultMetaData meta) throws IOException {
+    }
 
-    public void endMainDataSet() {}
+    public void endMainDataSet() {
+    }
 
     public boolean addRow(Row row) {
 
@@ -167,8 +170,8 @@ implements RowSetNavigatorDataChange {
     public Object[] addRow(Session session, Row row, Object[] data,
                            Type[] types, int[] columnMap) {
 
-        long rowId  = row.getId();
-        int  lookup = list.getLookup(rowId);
+        long rowId = row.getId();
+        int lookup = list.getLookup(rowId);
 
         if (lookup == -1) {
             list.put(rowId, row, data);
@@ -180,7 +183,7 @@ implements RowSetNavigatorDataChange {
         } else {
             Object[] rowData = ((Row) list.getFirstByLookup(lookup)).getData();
             Object[] currentData =
-                (Object[]) list.getSecondValueByIndex(lookup);
+                    (Object[]) list.getSecondValueByIndex(lookup);
 
             if (currentData == null) {
                 if (session.database.sqlEnforceTDCD) {
@@ -246,8 +249,8 @@ implements RowSetNavigatorDataChange {
                 continue;
             }
 
-            Type[]   types = row.getTable().getColumnTypes();
-            Object[] data  = (Object[]) list.getSecondValueByIndex(i);
+            Type[] types = row.getTable().getColumnTypes();
+            Object[] data = (Object[]) list.getSecondValueByIndex(i);
 
             for (int j = 0; j < keys.length; j++) {
                 int pos = keys[j];
@@ -264,7 +267,8 @@ implements RowSetNavigatorDataChange {
         return false;
     }
 
-    public void removeCurrent() {}
+    public void removeCurrent() {
+    }
 
     public long getRowId() {
         return getCurrentRow().getId();
@@ -282,7 +286,8 @@ implements RowSetNavigatorDataChange {
         return getCurrentRow().getData()[col];
     }
 
-    public void setCurrent(Object[] data) {}
+    public void setCurrent(Object[] data) {
+    }
 
     public void reset() {
         beforeFirst();
@@ -298,9 +303,11 @@ implements RowSetNavigatorDataChange {
 
     class UpdateRowIterator implements RangeIterator {
 
-        public void removeCurrent() {}
+        public void removeCurrent() {
+        }
 
-        public void release() {}
+        public void release() {
+        }
 
         public long getRowId() {
             return 0;
@@ -324,15 +331,16 @@ implements RowSetNavigatorDataChange {
 
         public Object[] getCurrent() {
             return RowSetNavigatorDataChangeMemory.this
-                .getCurrentChangedData();
+                    .getCurrentChangedData();
         }
 
         public Object getField(int col) {
             return RowSetNavigatorDataChangeMemory.this
-                .getCurrentChangedData()[col];
+                    .getCurrentChangedData()[col];
         }
 
-        public void setCurrent(Object[] data) {}
+        public void setCurrent(Object[] data) {
+        }
 
         public void reset() {
             beforeFirst();

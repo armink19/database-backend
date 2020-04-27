@@ -48,11 +48,11 @@ import org.hsqldb.persist.TextFileSettings;
  */
 public class RowInputTextQuoted extends RowInputText {
 
-    private static final int NORMAL_FIELD   = 0;
+    private static final int NORMAL_FIELD = 0;
     private static final int NEED_END_QUOTE = 1;
-    private static final int FOUND_QUOTE    = 2;
-    private final char       quoteChar;
-    int                      charLength = 0;
+    private static final int FOUND_QUOTE = 2;
+    private final char quoteChar;
+    int charLength = 0;
 
     public RowInputTextQuoted(TextFileSettings textFileSettings) {
 
@@ -89,10 +89,10 @@ public class RowInputTextQuoted extends RowInputText {
         try {
             field++;
 
-            StringBuilder sb    = new StringBuilder();
-            boolean       done  = false;
-            int           state = NORMAL_FIELD;
-            int           end   = -1;
+            StringBuilder sb = new StringBuilder();
+            boolean done = false;
+            int state = NORMAL_FIELD;
+            int end = -1;
 
             if (!isEnd) {
                 end = text.indexOf(sep, next);
@@ -101,8 +101,8 @@ public class RowInputTextQuoted extends RowInputText {
             for (; next < charLength; next++) {
                 switch (state) {
 
-                    case NORMAL_FIELD :
-                    default :
+                    case NORMAL_FIELD:
+                    default:
                         if (next == end) {
                             next += sepLen;
                             done = true;
@@ -115,7 +115,7 @@ public class RowInputTextQuoted extends RowInputText {
                         }
                         break;
 
-                    case NEED_END_QUOTE :
+                    case NEED_END_QUOTE:
                         if (text.charAt(next) == quoteChar) {
                             state = FOUND_QUOTE;
                         } else {
@@ -123,7 +123,7 @@ public class RowInputTextQuoted extends RowInputText {
                         }
                         break;
 
-                    case FOUND_QUOTE :
+                    case FOUND_QUOTE:
                         if (text.charAt(next) == quoteChar) {
 
                             //-- Escaped quote
@@ -143,7 +143,7 @@ public class RowInputTextQuoted extends RowInputText {
                                 next = end + sepLen;
                                 done = true;
                             } else {
-                                next  += sepLen - 1;
+                                next += sepLen - 1;
                                 state = NORMAL_FIELD;
                             }
                         }

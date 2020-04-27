@@ -37,8 +37,8 @@ import java.sql.*;
 
 public class TestSchemaParse extends TestCase {
 
-    Connection                  con = null;
-    Statement                   statement;
+    Connection con = null;
+    Statement statement;
     private static final String ipref = "INFORMATION_SCHEMA.";
 
     protected void setUp() throws Exception {
@@ -46,17 +46,17 @@ public class TestSchemaParse extends TestCase {
         Class.forName("org.hsqldb.jdbc.JDBCDriver");
 
         con = DriverManager.getConnection("jdbc:hsqldb:mem:parsetest", "sa",
-                                          "");
+                "");
         statement = con.createStatement();
 
         execSQL("SET AUTOCOMMIT false", 0);
         execSQL("CREATE TABLE tsttbl (i INT, vc VARCHAR(100))", 0);
         execSQL(
-            "CREATE TABLE bigtbl (i INT, vc VARCHAR(100), i101 INT, i102 INT, "
-            + "i103 INT, i104 INT, i105 INT, i106 INT, i107 INT, "
-            + "i108 INT, i109 INT, i110 INT, i111 INT, i112 INT, "
-            + "i113 INT, i114 INT, i115 INT, i116 INT, i117 INT, "
-            + "i118 INT, i119 INT)", 0);
+                "CREATE TABLE bigtbl (i INT, vc VARCHAR(100), i101 INT, i102 INT, "
+                        + "i103 INT, i104 INT, i105 INT, i106 INT, i107 INT, "
+                        + "i108 INT, i109 INT, i110 INT, i111 INT, i112 INT, "
+                        + "i113 INT, i114 INT, i115 INT, i116 INT, i117 INT, "
+                        + "i118 INT, i119 INT)", 0);
         execSQL("INSERT INTO tsttbl VALUES (1, 'one')", 1);
         execSQL("INSERT INTO tsttbl VALUES (2, 'two')", 1);
         execSQL("CREATE TABLE joinedtbl (i2 INT, vc2 VARCHAR(100))", 0);
@@ -81,8 +81,8 @@ public class TestSchemaParse extends TestCase {
         execSQL("CREATE TABLE primarytbl (i8 INT, i18 INT, vc8 VARCHAR(100), "
                 + "UNIQUE(i8), UNIQUE(i18))", 0);
         execSQL(
-            "CREATE TABLE foreigntbl (i7 INT, vc7 VARCHAR(100), "
-            + "CONSTRAINT tstfk FOREIGN KEY (i7) REFERENCES primarytbl (i8))", 0);
+                "CREATE TABLE foreigntbl (i7 INT, vc7 VARCHAR(100), "
+                        + "CONSTRAINT tstfk FOREIGN KEY (i7) REFERENCES primarytbl (i8))", 0);
         execSQL("CREATE TABLE playtbl (i9 INT, vc9 VARCHAR(100))", 0);
         execSQL("CREATE TABLE toindextbl (i10 INT, vc10 VARCHAR(100))", 0);
         execSQL("INSERT INTO toindextbl VALUES (10, 'zehn')", 1);
@@ -117,27 +117,27 @@ public class TestSchemaParse extends TestCase {
 
         // Select commands
         assertEquals(2, queryRowCount("SELECT i FROM " + prefix
-                                      + "tsttbl WHERE i IN (1, 2, 3)"));
+                + "tsttbl WHERE i IN (1, 2, 3)"));
         execSQL("CREATE TABLE " + prefix
                 + "newtbl AS (SELECT * FROM tsttbl) WITH DATA", 0);
         assertEquals(2, queryRowCount("SELECT admin FROM " + ipref
-                                      + "system_users"));
+                + "system_users"));
         assertEquals("Sub-query", 1,
-                     queryRowCount("SELECT vc FROM " + prefix
-                                   + "tsttbl WHERE i = (\n"
-                                   + "    SELECT i2 FROM " + prefix
-                                   + "joinedtbl\n" + ")"));
+                queryRowCount("SELECT vc FROM " + prefix
+                        + "tsttbl WHERE i = (\n"
+                        + "    SELECT i2 FROM " + prefix
+                        + "joinedtbl\n" + ")"));
         assertEquals("Join", 1,
-                     queryRowCount("SELECT vc FROM " + prefix + "tsttbl, "
-                                   + prefix + "joinedtbl\n"
-                                   + "WHERE tsttbl.i = joinedtbl.i2\n"
-                                   + "AND joinedtbl.vc2 = 'zwei'"));
+                queryRowCount("SELECT vc FROM " + prefix + "tsttbl, "
+                        + prefix + "joinedtbl\n"
+                        + "WHERE tsttbl.i = joinedtbl.i2\n"
+                        + "AND joinedtbl.vc2 = 'zwei'"));
 
         // Selects using Labels/Aliases
         assertEquals(
-            2, queryRowCount(
-                "SELECT ali.i FROM " + prefix
-                + "tsttbl ali WHERE ali.i IN (1, 2, 3)"));
+                2, queryRowCount(
+                        "SELECT ali.i FROM " + prefix
+                                + "tsttbl ali WHERE ali.i IN (1, 2, 3)"));
         execSQL("CREATE TABLE " + prefix
                 + "newtbl2 AS (SELECT * FROM tsttbl) WITH DATA", 0);
         execSQL("CREATE TABLE newtbl3 AS (SELECT * FROM " + prefix
@@ -145,18 +145,18 @@ public class TestSchemaParse extends TestCase {
         execSQL("CREATE TABLE " + prefix + "newtbl4 AS (SELECT * FROM "
                 + prefix + "tsttbl ali) WITH DATA", 0);
         assertEquals(2, queryRowCount("SELECT ali.admin FROM " + ipref
-                                      + "system_users ali"));
+                + "system_users ali"));
         assertEquals("Sub-query", 1,
-                     queryRowCount("SELECT ali.vc FROM " + prefix
-                                   + "tsttbl ali WHERE i = (\n"
-                                   + "    SELECT bali.i2 FROM " + prefix
-                                   + "joinedtbl bali\n" + ")"));
+                queryRowCount("SELECT ali.vc FROM " + prefix
+                        + "tsttbl ali WHERE i = (\n"
+                        + "    SELECT bali.i2 FROM " + prefix
+                        + "joinedtbl bali\n" + ")"));
         assertEquals("Join", 1,
-                     queryRowCount("SELECT ali.vc FROM " + prefix
-                                   + "tsttbl ali, " + prefix
-                                   + "joinedtbl bali\n"
-                                   + "WHERE ali.i = bali.i2\n"
-                                   + "AND bali.vc2 = 'zwei'"));
+                queryRowCount("SELECT ali.vc FROM " + prefix
+                        + "tsttbl ali, " + prefix
+                        + "joinedtbl bali\n"
+                        + "WHERE ali.i = bali.i2\n"
+                        + "AND bali.vc2 = 'zwei'"));
         /* Mixed aliases not working yet
         assertEquals("Join", 1, queryRowCount(
           "SELECT ali.vc FROM " + prefix + "tsttbl ali, " + prefix
@@ -203,8 +203,8 @@ public class TestSchemaParse extends TestCase {
         execSQL("CREATE TABLE constrz (i6 INT, vc6 VARCHAR(100), "
                 + "CONSTRAINT uconsz UNIQUE(i6))", 0);
         execSQL(
-            "CREATE TABLE forztbl (i7 INT, vc7 VARCHAR(100), "
-            + "CONSTRAINT tstfkz FOREIGN KEY (i7) REFERENCES primarytbl (i8))", 0);
+                "CREATE TABLE forztbl (i7 INT, vc7 VARCHAR(100), "
+                        + "CONSTRAINT tstfkz FOREIGN KEY (i7) REFERENCES primarytbl (i8))", 0);
 
         // Update command
         execSQL("UPDATE " + prefix + "tsttbl SET vc = 'eleven' WHERE i = 1",
@@ -223,23 +223,23 @@ public class TestSchemaParse extends TestCase {
         String prefix = "public.";
 
         assertEquals(2, queryRowCount("SELECT i FROM " + prefix
-                                      + "tstview WHERE i IN (1, 2, 3)"));
+                + "tstview WHERE i IN (1, 2, 3)"));
         assertEquals(2, queryRowCount("SELECT i FROM tstview"));
         assertEquals(2, queryRowCount("SELECT ali.i FROM tstview ali"));
         assertEquals("Sub-query", 1,
-                     queryRowCount("SELECT vc FROM " + prefix
-                                   + "tstview WHERE i = (\n"
-                                   + "    SELECT i2 FROM " + prefix
-                                   + "joinedtbl\n" + ")"));
+                queryRowCount("SELECT vc FROM " + prefix
+                        + "tstview WHERE i = (\n"
+                        + "    SELECT i2 FROM " + prefix
+                        + "joinedtbl\n" + ")"));
         assertEquals("Join", 1,
-                     queryRowCount("SELECT vc FROM " + prefix + "tstview, "
-                                   + prefix + "joinedtbl\n"
-                                   + "WHERE tstview.i = joinedtbl.i2\n"
-                                   + "AND joinedtbl.vc2 = 'zwei'"));
+                queryRowCount("SELECT vc FROM " + prefix + "tstview, "
+                        + prefix + "joinedtbl\n"
+                        + "WHERE tstview.i = joinedtbl.i2\n"
+                        + "AND joinedtbl.vc2 = 'zwei'"));
         assertEquals(
-            2, queryRowCount(
-                "SELECT i FROM " + prefix
-                + "tstview ali WHERE ali.i IN (1, 2, 3)"));
+                2, queryRowCount(
+                        "SELECT i FROM " + prefix
+                                + "tstview ali WHERE ali.i IN (1, 2, 3)"));
 
         // view
         execSQL("CREATE VIEW " + prefix
@@ -261,7 +261,7 @@ public class TestSchemaParse extends TestCase {
         execSQL("CREATE SEQUENCE " + prefix + "tstseq2", 0);
         execSQL("ALTER SEQUENCE " + prefix + "tstseq RESTART WITH 23", 0);
         assertEquals(1, queryRowCount("SELECT next value FOR " + prefix
-                                      + "tstseq FROM tsttbl WHERE i = 1"));
+                + "tstseq FROM tsttbl WHERE i = 1"));
         execSQL("DROP SEQUENCE " + prefix + "tstseq", 0);
     }
 
@@ -312,15 +312,15 @@ public class TestSchemaParse extends TestCase {
         expect = SQL_ABORT;
 
         execSQL(
-            "CREATE FUNCTION " + prefix + "tstalias(A VARCHAR(100)) "
-            + "RETURNS VARCHAR(100) "
-            + "LANGUAGE JAVA EXTERNAL NAME \'org.hsqldb.test.BlaineTrig.capitalize\'", 0);
+                "CREATE FUNCTION " + prefix + "tstalias(A VARCHAR(100)) "
+                        + "RETURNS VARCHAR(100) "
+                        + "LANGUAGE JAVA EXTERNAL NAME \'org.hsqldb.test.BlaineTrig.capitalize\'", 0);
 
         // Following should not throw an exception:
         assertEquals(
-            1, queryRowCount(
-                "SELECT " + prefix
-                + "tstalias('helo') FROM tsttbl WHERE i = 1"));
+                1, queryRowCount(
+                        "SELECT " + prefix
+                                + "tstalias('helo') FROM tsttbl WHERE i = 1"));
     }
 
     public void test2pTriggers() throws Exception {
@@ -350,7 +350,7 @@ public class TestSchemaParse extends TestCase {
         execSQL("INSERT INTO tsttbl VALUES (11, 'eleven')", 1);
         assertEquals(1, queryRowCount("SELECT i FROM tsttbl WHERE i = 1"));
         assertEquals(
-            2, queryRowCount("SELECT i FROM tsttbl WHERE i IN (1, 2, 3)"));
+                2, queryRowCount("SELECT i FROM tsttbl WHERE i IN (1, 2, 3)"));
         execSQL("ALTER SEQUENCE tstseq RESTART WITH 13", 0);
         execSQL("ALTER TABLE playtbl RENAME TO renamedtbl", 0);
         execSQL("ALTER TABLE renamedtbl RENAME TO playtbl", 0);
@@ -360,8 +360,8 @@ public class TestSchemaParse extends TestCase {
         execSQL("SET FILES LOG SIZE 5", 0);
         execSQL("UPDATE tsttbl SET vc = 'eleven' WHERE i = 1", 1);
         execSQL(
-            "ALTER TABLE constrainedtbl ADD CONSTRAINT con1 CHECK (i6 > 4)",
-            0);
+                "ALTER TABLE constrainedtbl ADD CONSTRAINT con1 CHECK (i6 > 4)",
+                0);
 
         // Can't test text tables in in-memory DB.
         execSQL("COMMIT", 0);
@@ -396,37 +396,37 @@ public class TestSchemaParse extends TestCase {
         execSQL("ALTER TABLE foreigntbl ADD CONSTRAINT tstfk FOREIGN KEY "
                 + "(i7) REFERENCES primarytbl (i8)", 0);
         assertEquals("Sub-query", 1,
-                     queryRowCount("SELECT vc FROM tsttbl WHERE i = (\n"
-                                   + "    SELECT i2 FROM joinedtbl\n" + ")"));
+                queryRowCount("SELECT vc FROM tsttbl WHERE i = (\n"
+                        + "    SELECT i2 FROM joinedtbl\n" + ")"));
         assertEquals(
-            "Join", 1,
-            queryRowCount(
-                "SELECT vc FROM tsttbl, joinedtbl WHERE tsttbl.i = joinedtbl.i2\n"
-                + "AND joinedtbl.vc2 = 'zwei'"));
+                "Join", 1,
+                queryRowCount(
+                        "SELECT vc FROM tsttbl, joinedtbl WHERE tsttbl.i = joinedtbl.i2\n"
+                                + "AND joinedtbl.vc2 = 'zwei'"));
 
         // Over-specified table names
         assertEquals(
-            "Over-specified Query 1", 1,
-            queryRowCount("SELECT tsttbl.i FROM tsttbl WHERE tsttbl.i = 1"));
+                "Over-specified Query 1", 1,
+                queryRowCount("SELECT tsttbl.i FROM tsttbl WHERE tsttbl.i = 1"));
         assertEquals("Over-specified Query 2", 1,
-                     queryRowCount("SELECT tsttbl.i FROM tsttbl WHERE i = 1"));
+                queryRowCount("SELECT tsttbl.i FROM tsttbl WHERE i = 1"));
         assertEquals("Over-specified Query 3", 1,
-                     queryRowCount("SELECT i FROM tsttbl WHERE tsttbl.i = 1"));
+                queryRowCount("SELECT i FROM tsttbl WHERE tsttbl.i = 1"));
 
         // HSQLDB labels, Oracle aliases
         assertEquals("Trivial Label/alias 1", 1,
-                     queryRowCount("SELECT i FROM tsttbl ali WHERE i = 1"));
+                queryRowCount("SELECT i FROM tsttbl ali WHERE i = 1"));
         assertEquals("Trivial Label/alias 2", 1,
-                     queryRowCount("SELECT i FROM tsttbl AS ali WHERE i = 1"));
+                queryRowCount("SELECT i FROM tsttbl AS ali WHERE i = 1"));
         assertEquals(
-            "Trivial Label/alias 3", 1,
-            queryRowCount("SELECT ali.i FROM tsttbl ali WHERE i = 1"));
+                "Trivial Label/alias 3", 1,
+                queryRowCount("SELECT ali.i FROM tsttbl ali WHERE i = 1"));
         assertEquals(
-            "Trivial Label/alias 4", 1,
-            queryRowCount("SELECT i FROM tsttbl ali WHERE ali.i = 1"));
+                "Trivial Label/alias 4", 1,
+                queryRowCount("SELECT i FROM tsttbl ali WHERE ali.i = 1"));
         assertEquals(
-            "Trivial Label/alias 5", 1,
-            queryRowCount("SELECT ali.i FROM tsttbl ali WHERE ali.i = 1"));
+                "Trivial Label/alias 5", 1,
+                queryRowCount("SELECT ali.i FROM tsttbl ali WHERE ali.i = 1"));
 
         /**
          * Uncomment when this mixing of aliases and real names is fixed.
@@ -443,25 +443,25 @@ public class TestSchemaParse extends TestCase {
          *       "SELECT ali.i FROM tsttbl ali WHERE tsttbl.i = 1"));
          */
         assertEquals(
-            "Join w/Labels/aliases 1", 1,
-            queryRowCount(
-                "SELECT vc FROM tsttbl ali1, joinedtbl ali2\n"
-                + "WHERE i = i2 AND vc2 = 'zwei'"));
+                "Join w/Labels/aliases 1", 1,
+                queryRowCount(
+                        "SELECT vc FROM tsttbl ali1, joinedtbl ali2\n"
+                                + "WHERE i = i2 AND vc2 = 'zwei'"));
         assertEquals(
-            "Join w/Labels/aliases 2", 1,
-            queryRowCount(
-                "SELECT vc FROM tsttbl ali1, joinedtbl ali2\n"
-                + "WHERE ali1.i = i2 AND ali2.vc2 = 'zwei'"));
+                "Join w/Labels/aliases 2", 1,
+                queryRowCount(
+                        "SELECT vc FROM tsttbl ali1, joinedtbl ali2\n"
+                                + "WHERE ali1.i = i2 AND ali2.vc2 = 'zwei'"));
         assertEquals(
-            "Join w/Labels/aliases 3", 1,
-            queryRowCount(
-                "SELECT ali1.vc FROM tsttbl ali1, joinedtbl ali2\n"
-                + "WHERE ali1.i = i2 AND ali2.vc2 = 'zwei'"));
+                "Join w/Labels/aliases 3", 1,
+                queryRowCount(
+                        "SELECT ali1.vc FROM tsttbl ali1, joinedtbl ali2\n"
+                                + "WHERE ali1.i = i2 AND ali2.vc2 = 'zwei'"));
         assertEquals(
-            "Join w/Labels/aliases 4", 1,
-            queryRowCount(
-                "SELECT ali1.vc FROM tsttbl ali1, joinedtbl ali2\n"
-                + "WHERE i = i2 AND vc2 = 'zwei'"));
+                "Join w/Labels/aliases 4", 1,
+                queryRowCount(
+                        "SELECT ali1.vc FROM tsttbl ali1, joinedtbl ali2\n"
+                                + "WHERE i = i2 AND vc2 = 'zwei'"));
 
         /**
          * Uncomment when this mixing of aliases and real names is fixed.
@@ -654,16 +654,16 @@ public class TestSchemaParse extends TestCase {
                 expect);
         execSQL("DROP INDEX tstinda IF EXISTS", 0);                           // reset
         execSQL(
-            "CREATE " + pref
-            + "VIEW tstviewx AS SELECT * FROM tsttbl WHERE i < 10", expect);
+                "CREATE " + pref
+                        + "VIEW tstviewx AS SELECT * FROM tsttbl WHERE i < 10", expect);
         execSQL("DROP VIEW tstviewx IF EXISTS", 0);                           // reset
         execSQL(pref + "CREATE USER tstuserd PASSWORD fake", expect);
         execSQL(pref
                 + "CREATE TRIGGER tsttrigd AFTER INSERT ON triggedtbl CALL \""
                 + "org.hsqldb.test.BlaineTrig\"", expect);
         execSQL(
-            pref
-            + "CREATE VIEW tstviewx AS SELECT * FROM tsttbl WHERE i < 10", expect);
+                pref
+                        + "CREATE VIEW tstviewx AS SELECT * FROM tsttbl WHERE i < 10", expect);
         execSQL("DROP VIEW tstviewx IF EXISTS", 0);                           // reset
         execSQL(pref + "CREATE UNIQUE INDEX tstinda ON toindextbl (i10)",
                 expect);
@@ -760,37 +760,37 @@ public class TestSchemaParse extends TestCase {
         execSQL("ALTER TABLE bigtbl ALTER COLUMN i109 RENAME " + pref
                 + "TO j6", expect);
         execSQL(
-            pref
-            + "ALTER TABLE constrainedtbl ADD CONSTRAINT con2 CHECK (i6 > 4)", expect);
+                pref
+                        + "ALTER TABLE constrainedtbl ADD CONSTRAINT con2 CHECK (i6 > 4)", expect);
         execSQL(
-            "ALTER " + pref
-            + "TABLE constrainedtbl ADD CONSTRAINT con3 CHECK (i6 > 4)", expect);
+                "ALTER " + pref
+                        + "TABLE constrainedtbl ADD CONSTRAINT con3 CHECK (i6 > 4)", expect);
         execSQL("ALTER TABLE constrainedtbl " + pref
                 + "ADD CONSTRAINT con4 CHECK (i6 > 4)", expect);
         execSQL(
-            "ALTER TABLE constrainedtbl ADD CONSTRAINT con1 CHECK (i6 > 4)",
-            true);                                                            // setup
+                "ALTER TABLE constrainedtbl ADD CONSTRAINT con1 CHECK (i6 > 4)",
+                true);                                                            // setup
         execSQL(
-            "ALTER TABLE constrainedtbl ADD CONSTRAINT con2 CHECK (i6 > 4)",
-            true);                                                            // setup
+                "ALTER TABLE constrainedtbl ADD CONSTRAINT con2 CHECK (i6 > 4)",
+                true);                                                            // setup
         execSQL(
-            "ALTER TABLE constrainedtbl ADD CONSTRAINT con3 CHECK (i6 > 4)",
-            true);                                                            // setup
+                "ALTER TABLE constrainedtbl ADD CONSTRAINT con3 CHECK (i6 > 4)",
+                true);                                                            // setup
         execSQL(
-            "ALTER TABLE constrainedtbl ADD CONSTRAINT con4 CHECK (i6 > 4)",
-            true);                                                            // setup
+                "ALTER TABLE constrainedtbl ADD CONSTRAINT con4 CHECK (i6 > 4)",
+                true);                                                            // setup
         execSQL("ALTER TABLE constrainedtbl ADD " + pref
                 + "CONSTRAINT con5 CHECK (i6 > 4)", expect);
         execSQL("ALTER TABLE constrainedtbl ADD CONSTRAINT con6 " + pref
                 + "CHECK (i6 > 4)", expect);
         execSQL("ALTER TABLE constrainedtbl DROP CONSTRAINT ucons", true);    // reset
         execSQL(
-            pref
-            + "ALTER TABLE constrainedtbl ADD CONSTRAINT ucons UNIQUE (i6)", expect);
+                pref
+                        + "ALTER TABLE constrainedtbl ADD CONSTRAINT ucons UNIQUE (i6)", expect);
         execSQL("ALTER TABLE constrainedtbl DROP CONSTRAINT ucons", true);    // reset
         execSQL(
-            "ALTER " + pref
-            + "TABLE constrainedtbl ADD CONSTRAINT ucons UNIQUE (i6)", expect);
+                "ALTER " + pref
+                        + "TABLE constrainedtbl ADD CONSTRAINT ucons UNIQUE (i6)", expect);
         execSQL("ALTER TABLE constrainedtbl DROP CONSTRAINT ucons", true);    // reset
         execSQL("ALTER TABLE constrainedtbl " + pref
                 + "ADD CONSTRAINT ucons UNIQUE (i6)", expect);
@@ -877,17 +877,19 @@ public class TestSchemaParse extends TestCase {
 
         assertEquals(2, queryRowCount("SELECT i FROM " + prefix + "tsttbl"));
         assertEquals(1, queryRowCount("SELECT vc FROM " + prefix
-                                      + "tsttbl WHERE i = 1"));
+                + "tsttbl WHERE i = 1"));
         assertEquals(1, queryRowCount("SELECT vc FROM " + prefix
-                                      + "tsttbl WHERE i = (\n"
-                                      + "    SELECT i2 FROM " + prefix
-                                      + "joinedtbl\n" + ")"));
+                + "tsttbl WHERE i = (\n"
+                + "    SELECT i2 FROM " + prefix
+                + "joinedtbl\n" + ")"));
     }
 
-    /** @todo fredt - need to define additional identifiers to use for all cases of expect */
-    private static final int SQL_ABORT   = -1234;
+    /**
+     * @todo fredt - need to define additional identifiers to use for all cases of expect
+     */
+    private static final int SQL_ABORT = -1234;
     private static final int SQL_INITIAL = -1233;
-    private static final int SQL_FAIL    = -1;
+    private static final int SQL_FAIL = -1;
 
     private void execSQL(String s, boolean ignoreError) throws SQLException {
 
@@ -918,7 +920,9 @@ public class TestSchemaParse extends TestCase {
         assertEquals(m, expect, retval);
     }
 
-/** @todo fredt - this method body seems to be incorrect */
+    /**
+     * @todo fredt - this method body seems to be incorrect
+     */
     private void execSQL(String s, int expect) {
         execSQL(s, s, expect);
     }
@@ -989,10 +993,10 @@ public class TestSchemaParse extends TestCase {
 
         junit.textui.TestRunner runner = new junit.textui.TestRunner();
         junit.framework.TestResult result =
-            runner.run(runner.getTest(TestSchemaParse.class.getName()));
+                runner.run(runner.getTest(TestSchemaParse.class.getName()));
 
         System.exit(result.wasSuccessful() ? 0
-                                           : 1);
+                : 1);
     }
 
     public static junit.framework.Test suite() {
@@ -1014,10 +1018,12 @@ public class TestSchemaParse extends TestCase {
 
         return newSuite;
     }
+
     ;
 
     public void fire(int i, String name, String table, Object[] row1,
-                     Object[] row2) {}
+                     Object[] row2) {
+    }
 
     public static String capitalize(String inString) {
         return inString.toUpperCase();

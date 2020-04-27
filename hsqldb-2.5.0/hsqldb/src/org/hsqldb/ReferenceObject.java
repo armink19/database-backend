@@ -48,7 +48,7 @@ public class ReferenceObject implements SchemaObject {
     HsqlName target;
 
     public ReferenceObject(HsqlName name, HsqlName target) {
-        this.name   = name;
+        this.name = name;
         this.target = target;
     }
 
@@ -85,7 +85,8 @@ public class ReferenceObject implements SchemaObject {
         return null;
     }
 
-    public void compile(Session session, SchemaObject parentObject) {}
+    public void compile(Session session, SchemaObject parentObject) {
+    }
 
     public String getSQL() {
 

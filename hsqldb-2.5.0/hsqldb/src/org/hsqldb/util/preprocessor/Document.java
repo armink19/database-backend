@@ -46,7 +46,8 @@ import java.util.Vector;
 class Document {
     Vector lines = new Vector();
 
-    Document() {}
+    Document() {
+    }
 
     Document(Document source) {
         this.appendDocument(source);
@@ -64,9 +65,9 @@ class Document {
 
     Document appendDocument(Document doc) {
         if (doc != null) {
-            int    count = doc.size();
-            Vector src   = doc.lines;
-            Vector dst   = this.lines;
+            int count = doc.size();
+            Vector src = doc.lines;
+            Vector dst = this.lines;
 
             for (int i = 0; i < count; i++) {
                 dst.addElement(src.elementAt(i));
@@ -84,10 +85,10 @@ class Document {
 
     boolean contains(String pattern) {
         Vector lines = this.lines;
-        int    size  = lines.size();
+        int size = lines.size();
 
         for (int i = 0; i < size; i++) {
-            if (((String)lines.elementAt(i)).indexOf(pattern) >= 0) {
+            if (((String) lines.elementAt(i)).indexOf(pattern) >= 0) {
                 return true;
             }
         }
@@ -163,32 +164,32 @@ class Document {
 // ------------------------ I/O convenience methods ----------------------------
 
     Document load(Object source, String encoding) throws IOException,
-            UnsupportedEncodingException{
+            UnsupportedEncodingException {
         BufferedReader reader = null;
-        boolean        close  = false;
+        boolean close = false;
 
         if (source instanceof InputStream) {
-            InputStream       is  = (InputStream) source;
+            InputStream is = (InputStream) source;
             InputStreamReader isr = isEncoding(encoding)
                     ? new InputStreamReader(is, encoding)
                     : new InputStreamReader(is);
 
             reader = new BufferedReader(isr);
         } else if (source instanceof File) {
-            InputStream       is  = new FileInputStream((File) source);
+            InputStream is = new FileInputStream((File) source);
             InputStreamReader isr = isEncoding(encoding)
                     ? new InputStreamReader(is, encoding)
                     : new InputStreamReader(is);
 
-            close  = true;
+            close = true;
             reader = new BufferedReader(isr);
         } else if (source instanceof String) {
-            InputStream       is  = new FileInputStream((String) source);
+            InputStream is = new FileInputStream((String) source);
             InputStreamReader isr = isEncoding(encoding)
                     ? new InputStreamReader(is, encoding)
                     : new InputStreamReader(is);
 
-            close  = true;
+            close = true;
             reader = new BufferedReader(isr);
         } else if (source instanceof BufferedReader) {
             reader = (BufferedReader) source;
@@ -204,14 +205,15 @@ class Document {
         Vector lines = this.lines;
 
         try {
-            while(null != (line = reader.readLine())) {
+            while (null != (line = reader.readLine())) {
                 lines.addElement(line);
             }
         } finally {
             if (close) {
                 try {
                     reader.close();
-                } catch (IOException ex) {}
+                } catch (IOException ex) {
+                }
             }
         }
 
@@ -220,30 +222,30 @@ class Document {
 
     Document save(Object target, String encoding) throws IOException {
         BufferedWriter writer = null;
-        boolean        close  = false;
+        boolean close = false;
 
         if (target instanceof OutputStream) {
-            OutputStream       os  = (OutputStream) target;
+            OutputStream os = (OutputStream) target;
             OutputStreamWriter osr = isEncoding(encoding)
                     ? new OutputStreamWriter(os, encoding)
                     : new OutputStreamWriter(os);
 
             writer = new BufferedWriter(osr);
         } else if (target instanceof File) {
-            OutputStream       os  = new FileOutputStream((File) target);
+            OutputStream os = new FileOutputStream((File) target);
             OutputStreamWriter osr = isEncoding(encoding)
                     ? new OutputStreamWriter(os, encoding)
                     : new OutputStreamWriter(os);
 
-            close  = true;
+            close = true;
             writer = new BufferedWriter(osr);
         } else if (target instanceof String) {
-            OutputStream       os  = new FileOutputStream((String) target);
+            OutputStream os = new FileOutputStream((String) target);
             OutputStreamWriter osr = isEncoding(encoding)
                     ? new OutputStreamWriter(os, encoding)
                     : new OutputStreamWriter(os);
 
-            close  = true;
+            close = true;
             writer = new BufferedWriter(osr);
         } else if (target instanceof BufferedWriter) {
             writer = (BufferedWriter) target;
@@ -254,11 +256,11 @@ class Document {
         }
 
         Vector lines = this.lines;
-        int    count = lines.size();
+        int count = lines.size();
 
         try {
             for (int i = 0; i < count; i++) {
-                writer.write((String)lines.elementAt(i));
+                writer.write((String) lines.elementAt(i));
                 writer.newLine();
             }
 
@@ -267,7 +269,8 @@ class Document {
             if (close) {
                 try {
                     writer.close();
-                } catch (IOException ex) {}
+                } catch (IOException ex) {
+                }
             }
         }
 

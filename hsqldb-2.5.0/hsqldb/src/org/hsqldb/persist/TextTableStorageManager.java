@@ -50,13 +50,14 @@ public class TextTableStorageManager {
     //
     private HashMap textCacheList = new HashMap();
 
-    TextTableStorageManager() {}
+    TextTableStorageManager() {
+    }
 
     /**
-     *  Opens the TextCache object.
+     * Opens the TextCache object.
      */
     public DataFileCache openTextFilePersistence(Table table, String source,
-            boolean readOnlyData, boolean reversed) {
+                                                 boolean readOnlyData, boolean reversed) {
 
         closeTextCache(table);
 
@@ -69,7 +70,7 @@ public class TextTableStorageManager {
     }
 
     /**
-     *  Closes the TextCache object.
+     * Closes the TextCache object.
      */
     public void closeTextCache(Table table) {
 
@@ -78,7 +79,8 @@ public class TextTableStorageManager {
         if (c != null) {
             try {
                 c.close();
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
     }
 

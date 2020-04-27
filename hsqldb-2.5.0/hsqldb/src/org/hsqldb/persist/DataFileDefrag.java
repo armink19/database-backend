@@ -40,33 +40,33 @@ import org.hsqldb.error.ErrorCode;
 import org.hsqldb.lib.*;
 
 /**
- *  Routine to defrag the *.data file.
- *
- *  This method iterates over the primary index of a table to find the
- *  disk position for each row and stores it, together with the new position
- *  in an array.
- *
- *  A second pass over the primary index writes each row to the new disk
- *  image after translating the old pointers to the new.
+ * Routine to defrag the *.data file.
+ * <p>
+ * This method iterates over the primary index of a table to find the
+ * disk position for each row and stores it, together with the new position
+ * in an array.
+ * <p>
+ * A second pass over the primary index writes each row to the new disk
+ * image after translating the old pointers to the new.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version    2.4.1
- * @since      1.7.2
+ * @version 2.4.1
+ * @since 1.7.2
  */
 final class DataFileDefrag {
 
-    DataFileCache  dataFileOut;
-    StopWatch      stopw = new StopWatch();
-    String         dataFileName;
-    long[][]       rootsList;
-    Database       database;
-    DataFileCache  dataCache;
+    DataFileCache dataFileOut;
+    StopWatch stopw = new StopWatch();
+    String dataFileName;
+    long[][] rootsList;
+    Database database;
+    DataFileCache dataCache;
     LongLookup pointerLookup;
 
     DataFileDefrag(Database db, DataFileCache cache) {
 
-        this.database     = db;
-        this.dataCache    = cache;
+        this.database = db;
+        this.dataCache = cache;
         this.dataFileName = cache.getFileName();
     }
 
@@ -87,7 +87,7 @@ final class DataFileDefrag {
 
             if (table.getTableType() == TableBase.CACHED_TABLE) {
                 PersistentStore store =
-                    database.persistentStoreCollection.getStore(table);
+                        database.persistentStoreCollection.getStore(table);
                 long size = store.elementCount();
 
                 if (size > maxSize) {
@@ -124,7 +124,7 @@ final class DataFileDefrag {
                 }
 
                 database.logger.logDetailEvent("table complete "
-                                               + t.getName().name);
+                        + t.getName().name);
             }
 
             dataFileOut.close();
@@ -136,8 +136,8 @@ final class DataFileDefrag {
 
                 if (roots != null) {
                     database.logger.logDetailEvent("roots: "
-                                                   + StringUtil.getList(roots,
-                                                       ",", ""));
+                            + StringUtil.getList(roots,
+                            ",", ""));
                 }
             }
         } catch (OutOfMemoryError e) {
@@ -153,22 +153,23 @@ final class DataFileDefrag {
                 if (dataFileOut != null) {
                     dataFileOut.release();
                 }
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            }
 
             if (error instanceof OutOfMemoryError) {
                 database.logger.logInfoEvent(
-                    "defrag failed - out of memory - required: "
-                    + maxSize * 8);
+                        "defrag failed - out of memory - required: "
+                                + maxSize * 8);
             }
 
             if (error == null) {
                 database.logger.logDetailEvent("Defrag transfer complete: "
-                                               + stopw.elapsedTime());
+                        + stopw.elapsedTime());
             } else {
                 database.logger.logSevereEvent("defrag failed ", error);
                 DataFileCache.deleteFile(database,
-                                         dataFileName
-                                         + Logger.newFileExtension);
+                        dataFileName
+                                + Logger.newFileExtension);
             }
         }
     }
@@ -176,13 +177,13 @@ final class DataFileDefrag {
     long[] writeTableToDataFile(Table table) {
 
         RowStoreAVLDisk store =
-            (RowStoreAVLDisk) table.database.persistentStoreCollection
-                .getStore(table);
+                (RowStoreAVLDisk) table.database.persistentStoreCollection
+                        .getStore(table);
         long[] rootsArray = table.getIndexRootsArray();
 
         pointerLookup.clear();
         database.logger.logDetailEvent("lookup begins " + table.getName().name
-                                       + " " + stopw.elapsedTime());
+                + " " + stopw.elapsedTime());
         store.moveDataToSpace(dataFileOut, pointerLookup);
 
         for (int i = 0; i < table.getIndexCount(); i++) {
@@ -204,13 +205,13 @@ final class DataFileDefrag {
 
         if (count != pointerLookup.size()) {
             database.logger.logSevereEvent("discrepency in row count "
-                                           + table.getName().name + " "
-                                           + count + " "
-                                           + pointerLookup.size(), null);
+                    + table.getName().name + " "
+                    + count + " "
+                    + pointerLookup.size(), null);
         }
 
         database.logger.logDetailEvent("table written "
-                                       + table.getName().name);
+                + table.getName().name);
 
         return rootsArray;
     }

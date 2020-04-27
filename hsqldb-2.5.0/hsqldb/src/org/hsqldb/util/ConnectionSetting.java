@@ -62,17 +62,19 @@ public class ConnectionSetting implements java.io.Serializable {
     }
 
     // Constructors
-    private ConnectionSetting() {}
+    private ConnectionSetting() {
+    }
+
     ;
 
     ConnectionSetting(String name, String driver, String url, String user,
                       String pw) {
 
-        this.name   = name;
+        this.name = name;
         this.driver = driver;
-        this.url    = url;
-        this.user   = user;
-        this.pw     = pw;
+        this.url = url;
+        this.user = user;
+        this.pw = pw;
     }
 
     public boolean equals(Object obj) {
@@ -96,6 +98,6 @@ public class ConnectionSetting implements java.io.Serializable {
 
     public int hashCode() {
         return getName() == null ? 0
-                                 : getName().trim().hashCode();
+                : getName().trim().hashCode();
     }
 }

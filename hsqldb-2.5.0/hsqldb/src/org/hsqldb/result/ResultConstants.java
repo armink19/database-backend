@@ -40,8 +40,8 @@ import org.hsqldb.StatementTypes;
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @since 2.1.1
  * @version 1.7.2
+ * @since 2.1.1
  */
 
 // fredt@users - the constants from the SQL standards are used freely where a
@@ -49,7 +49,9 @@ import org.hsqldb.StatementTypes;
 // the same information as stated in SQL standard for CLI.
 public interface ResultConstants {
 
-    /** The offset at which HSQLDB API Result mode values start. */
+    /**
+     * The offset at which HSQLDB API Result mode values start.
+     */
     int HSQL_API_BASE = 0;
 
     /**
@@ -261,7 +263,7 @@ public interface ResultConstants {
      */
     int MODE_UPPER_LIMIT = HSQL_API_BASE + 48;
 
-//    /** The offset at which the standard SQL API Result mode values start. */
+    //    /** The offset at which the standard SQL API Result mode values start. */
 //    int SQL_API_BASE = 0x00010000;
 //
 //    /**
@@ -661,31 +663,33 @@ public interface ResultConstants {
  ROLLBACK AND CHAIN 7
  Implementation-defined termination type <0
  */
-    int TX_COMMIT                  = 0;
-    int TX_ROLLBACK                = 1;
+    int TX_COMMIT = 0;
+    int TX_ROLLBACK = 1;
     int TX_SAVEPOINT_NAME_ROLLBACK = 2;
-    int TX_SAVEPOINT_NAME_RELEASE  = 4;
-    int TX_COMMIT_AND_CHAIN        = 6;
-    int TX_ROLLBACK_AND_CHAIN      = 7;
+    int TX_SAVEPOINT_NAME_RELEASE = 4;
+    int TX_COMMIT_AND_CHAIN = 6;
+    int TX_ROLLBACK_AND_CHAIN = 7;
 
-/* StatementType codes duplicated for cursor operations */
+    /* StatementType codes duplicated for cursor operations */
     int UPDATE_CURSOR = StatementTypes.UPDATE_CURSOR;
     int DELETE_CURSOR = StatementTypes.DELETE_CURSOR;
     int INSERT_CURSOR = StatementTypes.INSERT;
 
-/* Environment attributes */
+    /* Environment attributes */
 
 //#define SQL_ATTR_OUTPUT_NTS 10001
 
-/* Connection attributes */
+    /* Connection attributes */
 
-//#define SQL_ATTR_AUTO_IPD 10001
+    //#define SQL_ATTR_AUTO_IPD 10001
 //#define SQL_ATTR_SAVEPOINT_NAME 10027
     int SQL_ATTR_SAVEPOINT_NAME = 10027;
 
 // Batched execution constants:
 
-    /** batch item failed */
+    /**
+     * batch item failed
+     */
     int EXECUTE_FAILED = -3;
 
     /**
@@ -693,31 +697,31 @@ public interface ResultConstants {
      * for example a call having no return value
      */
     int SUCCESS_NO_INFO = -2;
-/*
-   SQL standard properties
-   The operational sensitivity property (either SENSITIVE, INSENSITIVE, or ASENSITIVE).
-   The operational scrollability property (either SCROLL or NO SCROLL).
-   The operational holdability property (either WITH HOLD or WITHOUT HOLD).
-   The operational returnability property (either WITH RETURN or WITHOUT RETURN).
-*/
-    int SQL_ASENSITIVE    = 0;
-    int SQL_INSENSITIVE   = 1;
-    int SQL_SENSITIVE     = 2;
+    /*
+       SQL standard properties
+       The operational sensitivity property (either SENSITIVE, INSENSITIVE, or ASENSITIVE).
+       The operational scrollability property (either SCROLL or NO SCROLL).
+       The operational holdability property (either WITH HOLD or WITHOUT HOLD).
+       The operational returnability property (either WITH RETURN or WITHOUT RETURN).
+    */
+    int SQL_ASENSITIVE = 0;
+    int SQL_INSENSITIVE = 1;
+    int SQL_SENSITIVE = 2;
     int SQL_NONSCROLLABLE = 0;
-    int SQL_SCROLLABLE    = 1;
-    int SQL_NONHOLDABLE   = 0;
-    int SQL_HOLDABLE      = 1;
+    int SQL_SCROLLABLE = 1;
+    int SQL_NONHOLDABLE = 0;
+    int SQL_HOLDABLE = 1;
 
-//
+    //
     int SQL_WITHOUT_RETURN = 0;
-    int SQL_WITH_RETURN    = 1;
-    int SQL_NOT_UPDATABLE  = 0;
-    int SQL_UPDATABLE      = 1;
+    int SQL_WITH_RETURN = 1;
+    int SQL_NOT_UPDATABLE = 0;
+    int SQL_UPDATABLE = 1;
 
-// data result properties - matching java.sql.ResultSet constants
-    int TYPE_FORWARD_ONLY       = 1003;
+    // data result properties - matching java.sql.ResultSet constants
+    int TYPE_FORWARD_ONLY = 1003;
     int TYPE_SCROLL_INSENSITIVE = 1004;
-    int TYPE_SCROLL_SENSITIVE   = 1005;
+    int TYPE_SCROLL_SENSITIVE = 1005;
 
     //
     int CONCUR_READ_ONLY = 1007;
@@ -725,11 +729,13 @@ public interface ResultConstants {
 
     //
     int HOLD_CURSORS_OVER_COMMIT = 1;
-    int CLOSE_CURSORS_AT_COMMIT  = 2;
+    int CLOSE_CURSORS_AT_COMMIT = 2;
 
-    /** Constants indicating generated key return behaviour */
-    int RETURN_GENERATED_KEYS             = 1;     // matching java.sql.Statement constant
-    int RETURN_NO_GENERATED_KEYS          = 2;     // matching java.sql.Statement constant
-    int RETURN_GENERATED_KEYS_COL_NAMES   = 11;    // constant in HSQLDB only
+    /**
+     * Constants indicating generated key return behaviour
+     */
+    int RETURN_GENERATED_KEYS = 1;     // matching java.sql.Statement constant
+    int RETURN_NO_GENERATED_KEYS = 2;     // matching java.sql.Statement constant
+    int RETURN_GENERATED_KEYS_COL_NAMES = 11;    // constant in HSQLDB only
     int RETURN_GENERATED_KEYS_COL_INDEXES = 21;    // constant in HSQLDB only
 }

@@ -42,22 +42,22 @@ import java.io.InputStream;
 /**
  * This class is a random access wrapper around a DataInputStream object and
  * enables access to cached tables when a database is included in a jar.
- *
+ * <p>
  * A proof-of-concept prototype was first contributed by winfriedthom@users.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version  2.3.0
- * @since  1.8.0
+ * @version 2.3.0
+ * @since 1.8.0
  */
 final class RAFileInJar implements RandomAccessInterface {
 
-    DataInputStream          file;
-    final String             fileName;
-    long                     fileLength;
-    boolean                  bufferDirty = true;
-    byte[]                   buffer      = new byte[4096];
+    DataInputStream file;
+    final String fileName;
+    long fileLength;
+    boolean bufferDirty = true;
+    byte[] buffer = new byte[4096];
     HsqlByteArrayInputStream ba = new HsqlByteArrayInputStream(buffer);
-    long                     bufferOffset;
+    long bufferOffset;
 
     //
     long seekPosition;
@@ -65,7 +65,7 @@ final class RAFileInJar implements RandomAccessInterface {
 
     RAFileInJar(String name) throws FileNotFoundException, IOException {
 
-        fileName   = name;
+        fileName = name;
         fileLength = getLength();
 
         resetStream();
@@ -94,7 +94,7 @@ final class RAFileInJar implements RandomAccessInterface {
 
         bufferDirty = false;
 
-        long subOffset  = filePos % buffer.length;
+        long subOffset = filePos % buffer.length;
         long readLength = fileLength - (filePos - subOffset);
 
         if (readLength <= 0) {
@@ -184,11 +184,14 @@ final class RAFileInJar implements RandomAccessInterface {
         }
     }
 
-    public void write(byte[] b, int off, int len) throws IOException {}
+    public void write(byte[] b, int off, int len) throws IOException {
+    }
 
-    public void writeInt(int i) throws IOException {}
+    public void writeInt(int i) throws IOException {
+    }
 
-    public void writeLong(long i) throws IOException {}
+    public void writeLong(long i) throws IOException {
+    }
 
     public void close() throws IOException {
         file.close();
@@ -228,7 +231,7 @@ final class RAFileInJar implements RandomAccessInterface {
 
             if (fis == null) {
                 ClassLoader cl =
-                    Thread.currentThread().getContextClassLoader();
+                        Thread.currentThread().getContextClassLoader();
 
                 if (cl != null) {
                     fis = cl.getResourceAsStream(fileName);
@@ -273,5 +276,6 @@ final class RAFileInJar implements RandomAccessInterface {
         return null;
     }
 
-    public void synch() {}
+    public void synch() {
+    }
 }

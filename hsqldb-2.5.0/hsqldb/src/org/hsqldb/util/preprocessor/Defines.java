@@ -45,7 +45,8 @@ import java.util.Hashtable;
 class Defines {
     private Hashtable symbols = new Hashtable();
 
-    public Defines() {}
+    public Defines() {
+    }
 
     public Defines(String csvExpressions) throws PreprocessorException {
         defineCSV(csvExpressions);
@@ -56,15 +57,15 @@ class Defines {
     }
 
     public void defineCSV(String csvExpressions)
-    throws PreprocessorException {
+            throws PreprocessorException {
         if (csvExpressions != null) {
             csvExpressions = csvExpressions + ',';
 
             int start = 0;
-            int len   = csvExpressions.length();
+            int len = csvExpressions.length();
 
             while (start < len) {
-                int    end  = csvExpressions.indexOf(',', start);
+                int end = csvExpressions.indexOf(',', start);
                 String expr = csvExpressions.substring(start, end).trim();
 
                 if (expr.length() > 0) {
@@ -93,36 +94,36 @@ class Defines {
 
         int tokenType = tokenizer.next();
 
-        switch(tokenType) {
-            case Token.EOI : {
+        switch (tokenType) {
+            case Token.EOI: {
                 this.symbols.put(ident, ident);
                 return;
             }
-            case Token.ASSIGN : {
+            case Token.ASSIGN: {
                 tokenType = tokenizer.next();
                 break;
             }
-            default : {
+            default: {
                 break;
             }
         }
 
-        switch(tokenType) {
-            case Token.NUMBER : {
+        switch (tokenType) {
+            case Token.NUMBER: {
                 Number number = tokenizer.getNumber();
 
                 this.symbols.put(ident, number);
 
                 break;
             }
-            case Token.STRING : {
+            case Token.STRING: {
                 String string = tokenizer.getString();
 
                 this.symbols.put(ident, string);
 
                 break;
             }
-            case Token.IDENT : {
+            case Token.IDENT: {
                 String rhsIdent = tokenizer.getIdent();
 
                 if (!isDefined(rhsIdent)) {
@@ -139,10 +140,10 @@ class Defines {
                 symbols.put(ident, value);
                 break;
             }
-            default : {
+            default: {
                 throw new PreprocessorException("Right hand side NUMBER,"
                         + "STRING or IDENT token required at position: " +
-                        + tokenizer.getStartIndex()
+                        +tokenizer.getStartIndex()
                         + " in ["
                         + expression
                         + "]"); // NOI18N

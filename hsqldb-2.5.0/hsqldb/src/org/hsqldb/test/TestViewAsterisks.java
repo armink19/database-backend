@@ -39,26 +39,28 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
- *  is a test which verifies the functionality of replacing asterisks in VIEW statements with column
- *  lists.
- *
- *  During investigating http://www.openoffice.org/issues/show_bug.cgi?id=78296 (an issue raised
- *  in OpenOffice.org, which integrates HSQLDB), it rose that views did not behave to the standard
- *  in that they don't always reflect the table column list at the time of creation of the view.
- *
- *  This was changed so that when you CREATE a VIEW, then any asterisks in the constituting
- *  statement are replaced with their column lists.
- *
- *  This test verifies this functionality in a number of different flavours.
+ * is a test which verifies the functionality of replacing asterisks in VIEW statements with column
+ * lists.
+ * <p>
+ * During investigating http://www.openoffice.org/issues/show_bug.cgi?id=78296 (an issue raised
+ * in OpenOffice.org, which integrates HSQLDB), it rose that views did not behave to the standard
+ * in that they don't always reflect the table column list at the time of creation of the view.
+ * <p>
+ * This was changed so that when you CREATE a VIEW, then any asterisks in the constituting
+ * statement are replaced with their column lists.
+ * <p>
+ * This test verifies this functionality in a number of different flavours.
  *
  * @author frank.schoenheit@sun.com
  */
 public class TestViewAsterisks extends TestBase {
 
-    java.sql.Statement  m_statement;
+    java.sql.Statement m_statement;
     java.sql.Connection m_connection;
 
-    /** Creates a new instance of TestViewAsterisks */
+    /**
+     * Creates a new instance of TestViewAsterisks
+     */
     public TestViewAsterisks(String testName) {
         super(testName, null, false, false);
     }
@@ -70,22 +72,22 @@ public class TestViewAsterisks extends TestBase {
 
         try {
             m_connection = newConnection();
-            m_statement  = m_connection.createStatement();
+            m_statement = m_connection.createStatement();
 
             executeStatement("DROP TABLE ABC IF EXISTS CASCADE");
             executeStatement("DROP TABLE TABLE_A IF EXISTS CASCADE");
             executeStatement("DROP TABLE TABLE_B IF EXISTS CASCADE");
             executeStatement("DROP VIEW V1 IF EXISTS CASCADE"); // V1 is created by a previous test case
             executeStatement(
-                "CREATE TABLE ABC (ID INTEGER NOT NULL PRIMARY KEY, A VARCHAR(50), B VARCHAR(50), C VARCHAR(50))");
+                    "CREATE TABLE ABC (ID INTEGER NOT NULL PRIMARY KEY, A VARCHAR(50), B VARCHAR(50), C VARCHAR(50))");
             executeStatement("INSERT INTO ABC VALUES (1, 'a', 'b', 'c')");
             executeStatement("INSERT INTO ABC VALUES (2, 'd', 'e', 'f')");
             executeStatement(
-                "CREATE TABLE TABLE_A (ID_A INTEGER NOT NULL PRIMARY KEY, NAME_A VARCHAR(50))");
+                    "CREATE TABLE TABLE_A (ID_A INTEGER NOT NULL PRIMARY KEY, NAME_A VARCHAR(50))");
             executeStatement("INSERT INTO TABLE_A VALUES (1, 'first A')");
             executeStatement("INSERT INTO TABLE_A VALUES (2, 'second A')");
             executeStatement(
-                "CREATE TABLE TABLE_B (ID_B INTEGER NOT NULL PRIMARY KEY, NAME_B VARCHAR(50))");
+                    "CREATE TABLE TABLE_B (ID_B INTEGER NOT NULL PRIMARY KEY, NAME_B VARCHAR(50))");
             executeStatement("INSERT INTO TABLE_B VALUES (1, 'first B')");
             executeStatement("INSERT INTO TABLE_B VALUES (2, 'second B')");
         } catch (SQLException ex) {
@@ -106,8 +108,8 @@ public class TestViewAsterisks extends TestBase {
     /**
      * executes a given m_statement
      *
-     *  <p>Basically, this method calls <code>m_statement.execute(sql)</code>,
-     *  but wraps any <code>SQLException</code>s into a JUnit error.
+     * <p>Basically, this method calls <code>m_statement.execute(sql)</code>,
+     * but wraps any <code>SQLException</code>s into a JUnit error.
      */
     private void executeStatement(String sql) {
         executeStatement(sql, 0);
@@ -118,30 +120,27 @@ public class TestViewAsterisks extends TestBase {
         try {
             m_statement.execute(sql);
             assertTrue(
-                "executing\n  " + sql
-                + "\nwas expected to fail, but it didn't", expectedVendorCode
-                    == 0);
+                    "executing\n  " + sql
+                            + "\nwas expected to fail, but it didn't", expectedVendorCode
+                            == 0);
         } catch (SQLException ex) {
             if (expectedVendorCode == 0) {
                 fail(ex.toString());
             }
 
             assertEquals(
-                "executing\n  " + sql
-                + "\ndid not result in the expected error", expectedVendorCode, -ex
-                    .getErrorCode());
+                    "executing\n  " + sql
+                            + "\ndid not result in the expected error", expectedVendorCode, -ex
+                            .getErrorCode());
         }
     }
 
     /**
-     *  creates a view with the given name, the given constituting statement, and an optional column list
+     * creates a view with the given name, the given constituting statement, and an optional column list
      *
-     *  @param viewName
-     *      specifies the name of the view to create
-     *  @param columnList
-     *      list of names of the columns of the view, will be specified in the CREATE VIEW statement. Might be <code>null</code>.
-     *  @param viewStatement
-     *      the statement of the view
+     * @param viewName      specifies the name of the view to create
+     * @param columnList    list of names of the columns of the view, will be specified in the CREATE VIEW statement. Might be <code>null</code>.
+     * @param viewStatement the statement of the view
      */
     private void createView(String viewName, String[] columnList,
                             String viewStatement) throws SQLException {
@@ -163,7 +162,7 @@ public class TestViewAsterisks extends TestBase {
         }
 
         executeStatement("CREATE VIEW " + viewName + colList.toString()
-                         + " AS " + viewStatement);
+                + " AS " + viewStatement);
 
         if (columnList != null) {
             ensureTableColumns(viewName, columnList);
@@ -171,13 +170,13 @@ public class TestViewAsterisks extends TestBase {
     }
 
     /**
-     *  retrieves the statement which defines a given view
+     * retrieves the statement which defines a given view
      */
     private String getViewStatement(String viewName) throws SQLException {
 
         ResultSet res = m_statement.executeQuery(
-            "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
-            + viewName + "'");
+                "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '"
+                        + viewName + "'");
 
         res.next();
 
@@ -187,41 +186,41 @@ public class TestViewAsterisks extends TestBase {
     }
 
     /**
-     *  ensures two tables (or views, that is) have the same content
+     * ensures two tables (or views, that is) have the same content
      */
     private void ensureEqualContent(String tableNameLHS,
                                     String tableNameRHS) throws SQLException {
 
         ResultSet lhs = m_statement.executeQuery("SELECT * FROM \""
-            + tableNameLHS + "\"");
+                + tableNameLHS + "\"");
         ResultSet rhs = m_statement.executeQuery("SELECT * FROM \""
-            + tableNameRHS + "\"");
+                + tableNameRHS + "\"");
         ResultSetMetaData meta = lhs.getMetaData();
 
         while (lhs.next() && rhs.next()) {
             for (int col = 1; col <= meta.getColumnCount(); ++col) {
                 assertEquals("table content does not match: cp. "
-                             + tableNameLHS + "-" + tableNameRHS + ", row "
-                             + lhs.getRow() + ", col "
-                             + col, lhs.getObject(col), rhs.getObject(col));
+                        + tableNameLHS + "-" + tableNameRHS + ", row "
+                        + lhs.getRow() + ", col "
+                        + col, lhs.getObject(col), rhs.getObject(col));
             }
         }
 
         // lhs should be after last, rhs still on last
         assertTrue("row count does not match: " + tableNameLHS + "-"
-                   + tableNameRHS, lhs.isAfterLast() && rhs.isLast());
+                + tableNameRHS, lhs.isAfterLast() && rhs.isLast());
     }
 
     /**
-     *  ensures the content of a given table matches a given object array's content
+     * ensures the content of a given table matches a given object array's content
      */
     private void ensureTableContent(String tableName,
                                     Object[][] tableData) throws SQLException {
 
         ResultSet lhs = m_statement.executeQuery("SELECT * FROM \""
-            + tableName + "\"");
-        ResultSetMetaData meta     = lhs.getMetaData();
-        int               colCount = meta.getColumnCount();
+                + tableName + "\"");
+        ResultSetMetaData meta = lhs.getMetaData();
+        int colCount = meta.getColumnCount();
 
         while (lhs.next()) {
             int row = lhs.getRow();
@@ -230,37 +229,32 @@ public class TestViewAsterisks extends TestBase {
 
             for (int col = 1; col <= colCount; ++col) {
                 assertEquals(
-                    "unexpected table content in " + tableName + " (row "
-                    + row + ", col " + col + ")", tableData[row - 1][col - 1],
-                                                  lhs.getObject(col));
+                        "unexpected table content in " + tableName + " (row "
+                                + row + ", col " + col + ")", tableData[row - 1][col - 1],
+                        lhs.getObject(col));
             }
         }
     }
 
     /**
-     *  creates a view with a given name and statement, ensures that it's statement is translated as expected, and ensures
-     *  that the content of the view is as expected
+     * creates a view with a given name and statement, ensures that it's statement is translated as expected, and ensures
+     * that the content of the view is as expected
      *
-     *  @param viewName
-     *      the name of the to-be-created view
-     *  @param columnNames
-     *      the names of the columns of the view, as to be specified in the CREATE VIEW statement. Might be null,
-     *      in this case the view will be created without an explicit column list
-     *  @param viewStatement
-     *      the statement of the to-be-created view
-     *  @param expectedTranslatedStatement
-     *      the expected statement of the view, after it has been implicitly translated by HSQL. If the actual
-     *      statement after creation does not match this expected statement, this is a failure condition which
-     *      results in a AssertionFailedError being thrown.
-     *  @param expectedContent
-     *      the expected content of the view. If this is <code>null</code>, it is ignored. Else, if it is a
-     *      string, it is interpreted as name of the table which must have the same content as a view. If
-     *      it's no string either, it must be a two-dimensional Object array specifying the expected content.
+     * @param viewName                    the name of the to-be-created view
+     * @param columnNames                 the names of the columns of the view, as to be specified in the CREATE VIEW statement. Might be null,
+     *                                    in this case the view will be created without an explicit column list
+     * @param viewStatement               the statement of the to-be-created view
+     * @param expectedTranslatedStatement the expected statement of the view, after it has been implicitly translated by HSQL. If the actual
+     *                                    statement after creation does not match this expected statement, this is a failure condition which
+     *                                    results in a AssertionFailedError being thrown.
+     * @param expectedContent             the expected content of the view. If this is <code>null</code>, it is ignored. Else, if it is a
+     *                                    string, it is interpreted as name of the table which must have the same content as a view. If
+     *                                    it's no string either, it must be a two-dimensional Object array specifying the expected content.
      */
     private void checkViewTranslationAndContent(String viewName,
-            String[] columnList, String viewStatement,
-            String expectedTranslatedStatement,
-            Object expectedContent) throws SQLException {
+                                                String[] columnList, String viewStatement,
+                                                String expectedTranslatedStatement,
+                                                Object expectedContent) throws SQLException {
 
         createView(viewName, columnList, viewStatement);
 
@@ -270,13 +264,13 @@ public class TestViewAsterisks extends TestBase {
             StringBuilder message = new StringBuilder();
 
             message.append(viewName).append(
-                "'s statement not translated as expected\n");
+                    "'s statement not translated as expected\n");
             message.append("original statement:\n  ").append(
-                viewStatement).append('\n');
+                    viewStatement).append('\n');
             message.append("expected translated statement:\n  ").append(
-                expectedTranslatedStatement).append('\n');
+                    expectedTranslatedStatement).append('\n');
             message.append("actual translated statement:\n  ").append(
-                actualTranslatedStatement).append('\n');
+                    actualTranslatedStatement).append('\n');
 
             throw new AssertionFailedError(message.toString());
         }
@@ -287,47 +281,47 @@ public class TestViewAsterisks extends TestBase {
     }
 
     /**
-     *  ensures that a given table has columns with a given name
+     * ensures that a given table has columns with a given name
      */
     private void ensureTableColumns(String tableName,
                                     String[] columnNames) throws SQLException {
 
         ResultSet res = m_connection.getMetaData().getColumns(null, null,
-            tableName, "%");
+                tableName, "%");
 
         while (res.next()) {
             assertEquals(
-                "unexpected column name in table \"" + tableName
-                + "\" at position "
-                + (res.getRow() - 1), res.getString(
-                    "COLUMN_NAME"), columnNames[res.getRow() - 1]);
+                    "unexpected column name in table \"" + tableName
+                            + "\" at position "
+                            + (res.getRow() - 1), res.getString(
+                            "COLUMN_NAME"), columnNames[res.getRow() - 1]);
         }
 
         res.previous();
         assertEquals("not enough columns in table \"" + tableName + "\"",
-                     columnNames.length, res.getRow());
+                columnNames.length, res.getRow());
     }
 
     /**
-     *  checks views selecting an asterisk from a table, in different flavours
+     * checks views selecting an asterisk from a table, in different flavours
      */
     private void checkSimpleViews() throws SQLException {
 
         // ................................................................
         // SELECT *
         checkViewTranslationAndContent(
-            "S1", null, "SELECT * FROM ABC",
-            "SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
-            "ABC");
+                "S1", null, "SELECT * FROM ABC",
+                "SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
+                "ABC");
 
         // adding a column to "ABC" should succeed, and still leave the view with the columns
         // before the addition
         executeStatement("ALTER TABLE ABC ADD COLUMN D VARCHAR(50)");
-        ensureTableColumns("ABC", new String[] {
-            "ID", "A", "B", "C", "D"
+        ensureTableColumns("ABC", new String[]{
+                "ID", "A", "B", "C", "D"
         });
-        ensureTableColumns("S1", new String[] {
-            "ID", "A", "B", "C"
+        ensureTableColumns("S1", new String[]{
+                "ID", "A", "B", "C"
         });
 
         // dropping the column which is not part of the view should be possible
@@ -342,229 +336,229 @@ public class TestViewAsterisks extends TestBase {
         // ................................................................
         // same as S1, but this time add a LIMIT clause to the statement
         checkViewTranslationAndContent(
-            "S2", null, "SELECT LIMIT 0 2 * FROM ABC ORDER BY ID",
-            "SELECT LIMIT 0 2 PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC ORDER BY ID",
-            "ABC");
+                "S2", null, "SELECT LIMIT 0 2 * FROM ABC ORDER BY ID",
+                "SELECT LIMIT 0 2 PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC ORDER BY ID",
+                "ABC");
 
         // ................................................................
         // same as S1, but this time add a TOP clause to the statement
         checkViewTranslationAndContent(
-            "S3", null, "SELECT TOP 2 * FROM ABC ORDER BY ID",
-            "SELECT TOP 2 PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC ORDER BY ID",
-            "ABC");
+                "S3", null, "SELECT TOP 2 * FROM ABC ORDER BY ID",
+                "SELECT TOP 2 PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC ORDER BY ID",
+                "ABC");
 
         // ................................................................
         // same as S1, but this time add a DISTINCT clause to the statement
         checkViewTranslationAndContent(
-            "S4", null, "SELECT DISTINCT * FROM ABC",
-            "SELECT DISTINCT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
-            "ABC");
+                "S4", null, "SELECT DISTINCT * FROM ABC",
+                "SELECT DISTINCT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
+                "ABC");
 
         // ................................................................
         // same as S1, but this time qualifying the asterisk
         checkViewTranslationAndContent(
-            "S5", null, "SELECT ABC.* FROM ABC",
-            "SELECT  PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C  FROM PUBLIC.ABC",
-            "ABC");
+                "S5", null, "SELECT ABC.* FROM ABC",
+                "SELECT  PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C  FROM PUBLIC.ABC",
+                "ABC");
 
         // ................................................................
         // same as S5, but this time also giving the table an alias
         checkViewTranslationAndContent(
-            "S6", null, "SELECT \"A\".* FROM ABC AS A",
-            "SELECT A.ID,A.A,A.B,A.C FROM PUBLIC.ABC AS A",
-            "ABC");
+                "S6", null, "SELECT \"A\".* FROM ABC AS A",
+                "SELECT A.ID,A.A,A.B,A.C FROM PUBLIC.ABC AS A",
+                "ABC");
 
         // ................................................................
         // same as S1, but bracket the SELECT definition
         checkViewTranslationAndContent(
-            "S7", null, "( SELECT * FROM ABC )",
-            "(SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC)",
-            "ABC");
+                "S7", null, "( SELECT * FROM ABC )",
+                "(SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC)",
+                "ABC");
     }
 
     /**
-     *  checks views selecting an asterisk plus existing columns
+     * checks views selecting an asterisk plus existing columns
      */
     private void checkAsterisksCombined() throws SQLException {
 
         // ................................................................
         checkViewTranslationAndContent(
-            "C1", null, "SELECT * FROM ABC",
-            "SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
-            new Object[][] {
-            new Object[] {
-                Integer.valueOf(1), "a", "b", "c"
-            }, new Object[] {
-                Integer.valueOf(2), "d", "e", "f"
-            }
-        });
+                "C1", null, "SELECT * FROM ABC",
+                "SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
+                new Object[][]{
+                        new Object[]{
+                                Integer.valueOf(1), "a", "b", "c"
+                        }, new Object[]{
+                        Integer.valueOf(2), "d", "e", "f"
+                }
+                });
 
         // ................................................................
         checkViewTranslationAndContent(
-            "C2", null, "SELECT B AS \"b2\", ABC.* FROM ABC",
-            "SELECT B AS \"b2\", PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C  FROM PUBLIC.ABC",
-            new Object[][] {
-            new Object[] {
-                "b", Integer.valueOf(1), "a", "b", "c"
-            }, new Object[] {
-                "e", Integer.valueOf(2), "d", "e", "f"
-            }
-        });
+                "C2", null, "SELECT B AS \"b2\", ABC.* FROM ABC",
+                "SELECT B AS \"b2\", PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C  FROM PUBLIC.ABC",
+                new Object[][]{
+                        new Object[]{
+                                "b", Integer.valueOf(1), "a", "b", "c"
+                        }, new Object[]{
+                        "e", Integer.valueOf(2), "d", "e", "f"
+                }
+                });
     }
 
     /**
-     *  checks views selecting asterisks from multiple tables
+     * checks views selecting asterisks from multiple tables
      */
     private void checkMultipleTables() throws SQLException {
 
         // ................................................................
         checkViewTranslationAndContent(
-            "M1", null, "SELECT * FROM TABLE_A, TABLE_B",
-            "SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A,PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_A,PUBLIC.TABLE_B",
-            new Object[][] {
-            new Object[] {
-                Integer.valueOf(1), "first A", Integer.valueOf(1), "first B"
-            }, new Object[] {
-                Integer.valueOf(1), "first A", Integer.valueOf(2), "second B"
-            }, new Object[] {
-                Integer.valueOf(2), "second A", Integer.valueOf(1), "first B"
-            }, new Object[] {
-                Integer.valueOf(2), "second A", Integer.valueOf(2), "second B"
-            }
-        });
+                "M1", null, "SELECT * FROM TABLE_A, TABLE_B",
+                "SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A,PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_A,PUBLIC.TABLE_B",
+                new Object[][]{
+                        new Object[]{
+                                Integer.valueOf(1), "first A", Integer.valueOf(1), "first B"
+                        }, new Object[]{
+                        Integer.valueOf(1), "first A", Integer.valueOf(2), "second B"
+                }, new Object[]{
+                        Integer.valueOf(2), "second A", Integer.valueOf(1), "first B"
+                }, new Object[]{
+                        Integer.valueOf(2), "second A", Integer.valueOf(2), "second B"
+                }
+                });
 
         // ................................................................
         checkViewTranslationAndContent(
-            "M2", null, "SELECT TABLE_B.*, TABLE_A.* FROM TABLE_A, TABLE_B",
-            "SELECT  PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B , PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A  FROM PUBLIC.TABLE_A,PUBLIC.TABLE_B",
-            new Object[][] {
-            new Object[] {
-                Integer.valueOf(1), "first B", Integer.valueOf(1), "first A"
-            }, new Object[] {
-                Integer.valueOf(2), "second B", Integer.valueOf(1), "first A"
-            }, new Object[] {
-                Integer.valueOf(1), "first B", Integer.valueOf(2), "second A"
-            }, new Object[] {
-                Integer.valueOf(2), "second B", Integer.valueOf(2), "second A"
-            }
-        });
+                "M2", null, "SELECT TABLE_B.*, TABLE_A.* FROM TABLE_A, TABLE_B",
+                "SELECT  PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B , PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A  FROM PUBLIC.TABLE_A,PUBLIC.TABLE_B",
+                new Object[][]{
+                        new Object[]{
+                                Integer.valueOf(1), "first B", Integer.valueOf(1), "first A"
+                        }, new Object[]{
+                        Integer.valueOf(2), "second B", Integer.valueOf(1), "first A"
+                }, new Object[]{
+                        Integer.valueOf(1), "first B", Integer.valueOf(2), "second A"
+                }, new Object[]{
+                        Integer.valueOf(2), "second B", Integer.valueOf(2), "second A"
+                }
+                });
 
         // ................................................................
         checkViewTranslationAndContent(
-            "M3", null, "SELECT \"TABLE_A\".* FROM TABLE_A, TABLE_B",
-            "SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A,PUBLIC.TABLE_B",
-            new Object[][] {
-            new Object[] {
-                Integer.valueOf(1), "first A"
-            }, new Object[] {
-                Integer.valueOf(1), "first A"
-            }, new Object[] {
-                Integer.valueOf(2), "second A"
-            }, new Object[] {
-                Integer.valueOf(2), "second A"
-            }
-        });
+                "M3", null, "SELECT \"TABLE_A\".* FROM TABLE_A, TABLE_B",
+                "SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A,PUBLIC.TABLE_B",
+                new Object[][]{
+                        new Object[]{
+                                Integer.valueOf(1), "first A"
+                        }, new Object[]{
+                        Integer.valueOf(1), "first A"
+                }, new Object[]{
+                        Integer.valueOf(2), "second A"
+                }, new Object[]{
+                        Integer.valueOf(2), "second A"
+                }
+                });
     }
 
     /**
-     *  checks views selecting from sub selects
+     * checks views selecting from sub selects
      */
     private void checkSubSelects() throws SQLException {
 
         // ................................................................
         checkViewTranslationAndContent(
-            "Q1", null, "SELECT * FROM ( SELECT * FROM ABC )",
-            "SELECT ID,A,B,C FROM(SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC)",
-            null);
+                "Q1", null, "SELECT * FROM ( SELECT * FROM ABC )",
+                "SELECT ID,A,B,C FROM(SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC)",
+                null);
 
         // ................................................................
         checkViewTranslationAndContent(
-            "Q2", null,
-            "SELECT * FROM ( SELECT * FROM TABLE_A ), ( SELECT * FROM TABLE_B )",
-            "SELECT ID_A,NAME_A,ID_B,NAME_B FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A),(SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B)",
-            null);
+                "Q2", null,
+                "SELECT * FROM ( SELECT * FROM TABLE_A ), ( SELECT * FROM TABLE_B )",
+                "SELECT ID_A,NAME_A,ID_B,NAME_B FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A),(SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B)",
+                null);
 
         // ................................................................
         checkViewTranslationAndContent(
-            "Q3", null, "SELECT A.* FROM ( SELECT * FROM TABLE_A ) AS A",
-            "SELECT  A.ID_A,A.NAME_A  FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A)AS A",
-            null);
+                "Q3", null, "SELECT A.* FROM ( SELECT * FROM TABLE_A ) AS A",
+                "SELECT  A.ID_A,A.NAME_A  FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A)AS A",
+                null);
 
         // ................................................................
         checkViewTranslationAndContent(
-            "Q4", null,
-            "SELECT A.*, B.* FROM ( SELECT * FROM TABLE_A ) AS A, ( SELECT * FROM TABLE_B ) AS B",
-            "SELECT  A.ID_A,A.NAME_A , B.ID_B,B.NAME_B  FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A)AS A,(SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B)AS B",
-            null);
+                "Q4", null,
+                "SELECT A.*, B.* FROM ( SELECT * FROM TABLE_A ) AS A, ( SELECT * FROM TABLE_B ) AS B",
+                "SELECT  A.ID_A,A.NAME_A , B.ID_B,B.NAME_B  FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A)AS A,(SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B)AS B",
+                null);
     }
 
     /**
-     *  checks views which are defined using a column list
+     * checks views which are defined using a column list
      */
     private void checkColumnLists() throws SQLException {
 
         // just to ensure the column count handling is as expected, else below tests might be useless
         executeStatement("CREATE VIEW IMPOSSIBLE (\"A\") AS SELECT * FROM ABC",
-                         ErrorCode.X_42593);
+                ErrorCode.X_42593);
 
         // ................................................................
         // not that it should make any difference to S1, but who knows
-        checkViewTranslationAndContent("L1", new String[] {
-            "C1", "C2", "C3", "C4"
-        }, "SELECT * FROM ABC", "SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
-           "ABC");
+        checkViewTranslationAndContent("L1", new String[]{
+                        "C1", "C2", "C3", "C4"
+                }, "SELECT * FROM ABC", "SELECT PUBLIC.ABC.ID,PUBLIC.ABC.A,PUBLIC.ABC.B,PUBLIC.ABC.C FROM PUBLIC.ABC",
+                "ABC");
     }
 
     /**
-     *  checks views based on other views
+     * checks views based on other views
      */
     private void checkViewsOnViews() throws SQLException {
 
         // ................................................................
         // not that it should make any difference whether we SELECT FROM a table or view, but who knows
         checkViewTranslationAndContent(
-            "V1", null, "SELECT * FROM S1",
-            "SELECT PUBLIC.S1.ID,PUBLIC.S1.A,PUBLIC.S1.B,PUBLIC.S1.C FROM PUBLIC.S1", "L1");
+                "V1", null, "SELECT * FROM S1",
+                "SELECT PUBLIC.S1.ID,PUBLIC.S1.A,PUBLIC.S1.B,PUBLIC.S1.C FROM PUBLIC.S1", "L1");
     }
 
     /**
-     *  checks views based on a UNION statement
+     * checks views based on a UNION statement
      */
     private void checkUnionViews() throws SQLException {
 
         checkViewTranslationAndContent(
-            "U1", null, "SELECT * FROM TABLE_A UNION SELECT * FROM TABLE_B",
-            "SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A UNION SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B",
-            new Object[][] {
-            new Object[] {
-                Integer.valueOf(1), "first A"
-            }, new Object[] {
-                Integer.valueOf(1), "first B"
-            }, new Object[] {
-                Integer.valueOf(2), "second A"
-            }, new Object[] {
-                Integer.valueOf(2), "second B"
-            }
-        });
+                "U1", null, "SELECT * FROM TABLE_A UNION SELECT * FROM TABLE_B",
+                "SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A UNION SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B",
+                new Object[][]{
+                        new Object[]{
+                                Integer.valueOf(1), "first A"
+                        }, new Object[]{
+                        Integer.valueOf(1), "first B"
+                }, new Object[]{
+                        Integer.valueOf(2), "second A"
+                }, new Object[]{
+                        Integer.valueOf(2), "second B"
+                }
+                });
         checkViewTranslationAndContent(
-            "U2", null,
-            "SELECT * FROM ( SELECT * FROM TABLE_A UNION SELECT * FROM TABLE_B )",
-            "SELECT ID_A,NAME_A FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A UNION SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B)",
-            new Object[][] {
-            new Object[] {
-                Integer.valueOf(1), "first A"
-            }, new Object[] {
-                Integer.valueOf(1), "first B"
-            }, new Object[] {
-                Integer.valueOf(2), "second A"
-            }, new Object[] {
-                Integer.valueOf(2), "second B"
-            }
-        });
+                "U2", null,
+                "SELECT * FROM ( SELECT * FROM TABLE_A UNION SELECT * FROM TABLE_B )",
+                "SELECT ID_A,NAME_A FROM(SELECT PUBLIC.TABLE_A.ID_A,PUBLIC.TABLE_A.NAME_A FROM PUBLIC.TABLE_A UNION SELECT PUBLIC.TABLE_B.ID_B,PUBLIC.TABLE_B.NAME_B FROM PUBLIC.TABLE_B)",
+                new Object[][]{
+                        new Object[]{
+                                Integer.valueOf(1), "first A"
+                        }, new Object[]{
+                        Integer.valueOf(1), "first B"
+                }, new Object[]{
+                        Integer.valueOf(2), "second A"
+                }, new Object[]{
+                        Integer.valueOf(2), "second B"
+                }
+                });
     }
 
     /**
-     *  main test method of this class
+     * main test method of this class
      */
     public void test() {
 
@@ -582,7 +576,7 @@ public class TestViewAsterisks extends TestBase {
     }
 
     /**
-     *  entry point to run the test directly
+     * entry point to run the test directly
      */
     public static void main(String[] argv) {
         runWithResult(TestViewAsterisks.class, "test");

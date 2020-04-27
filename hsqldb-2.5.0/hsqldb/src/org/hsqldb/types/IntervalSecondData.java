@@ -44,11 +44,11 @@ import org.hsqldb.error.ErrorCode;
 public class IntervalSecondData {
 
     public static final IntervalSecondData oneDay = newIntervalDay(1,
-        Type.SQL_INTERVAL_DAY);
+            Type.SQL_INTERVAL_DAY);
 
     //
     final long units;
-    final int  nanos;
+    final int nanos;
 
     public static IntervalSecondData newInterval(double value, int typeCode) {
 
@@ -60,22 +60,22 @@ public class IntervalSecondData {
     }
 
     public static IntervalSecondData newIntervalDay(long days,
-            IntervalType type) {
+                                                    IntervalType type) {
         return new IntervalSecondData(days * 24 * 60 * 60, 0, type);
     }
 
     public static IntervalSecondData newIntervalHour(long hours,
-            IntervalType type) {
+                                                     IntervalType type) {
         return new IntervalSecondData(hours * 60 * 60, 0, type);
     }
 
     public static IntervalSecondData newIntervalMinute(long minutes,
-            IntervalType type) {
+                                                       IntervalType type) {
         return new IntervalSecondData(minutes * 60, 0, type);
     }
 
     public static IntervalSecondData newIntervalSeconds(long seconds,
-            IntervalType type) {
+                                                        IntervalType type) {
         return new IntervalSecondData(seconds, 0, type);
     }
 
@@ -103,12 +103,12 @@ public class IntervalSecondData {
         if (nanos >= DTIType.limitNanoseconds) {
             long carry = nanos / DTIType.limitNanoseconds;
 
-            nanos   = nanos % DTIType.limitNanoseconds;
+            nanos = nanos % DTIType.limitNanoseconds;
             seconds += carry;
         } else if (nanos <= -DTIType.limitNanoseconds) {
             long carry = -nanos / DTIType.limitNanoseconds;
 
-            nanos   = -(-nanos % DTIType.limitNanoseconds);
+            nanos = -(-nanos % DTIType.limitNanoseconds);
             seconds -= carry;
         }
 
@@ -128,8 +128,8 @@ public class IntervalSecondData {
         }
 
         scaleFactor = DTIType.yearToSecondFactors[type.endPartIndex];
-        seconds     /= scaleFactor;
-        seconds     *= scaleFactor;
+        seconds /= scaleFactor;
+        seconds *= scaleFactor;
 
         if (seconds >= type.getIntervalValueLimit()) {
             throw Error.error(ErrorCode.X_22015);
@@ -143,7 +143,7 @@ public class IntervalSecondData {
 
         if (other instanceof IntervalSecondData) {
             return units == ((IntervalSecondData) other).units
-                   && nanos == ((IntervalSecondData) other).nanos;
+                    && nanos == ((IntervalSecondData) other).nanos;
         }
 
         return false;
@@ -180,6 +180,6 @@ public class IntervalSecondData {
 
     public String toString() {
         return Type.SQL_INTERVAL_SECOND_MAX_FRACTION_MAX_PRECISION
-            .convertToString(this);
+                .convertToString(this);
     }
 }

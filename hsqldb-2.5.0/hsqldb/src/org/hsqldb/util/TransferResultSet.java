@@ -43,19 +43,19 @@ import java.util.Vector;
  */
 class TransferResultSet {
 
-    Vector   vRows = null;
-    int      iRowIdx;
-    int      iMaxRowIdx;
-    int      iColumnCount;
+    Vector vRows = null;
+    int iRowIdx;
+    int iMaxRowIdx;
+    int iColumnCount;
     String[] sColumnNames = null;
-    int[]    iColumnTypes = null;
+    int[] iColumnTypes = null;
 
     TransferResultSet(ResultSet r) {
 
-        iRowIdx      = 0;
-        iMaxRowIdx   = 0;
+        iRowIdx = 0;
+        iMaxRowIdx = 0;
         iColumnCount = 0;
-        vRows        = new Vector();
+        vRows = new Vector();
 
         try {
             while (r.next()) {
@@ -66,9 +66,9 @@ class TransferResultSet {
 
                     for (int Idx = 0; Idx < iColumnCount; Idx++) {
                         sColumnNames[Idx + 1] =
-                            r.getMetaData().getColumnName(Idx + 1);
+                                r.getMetaData().getColumnName(Idx + 1);
                         iColumnTypes[Idx + 1] =
-                            r.getMetaData().getColumnType(Idx + 1);
+                                r.getMetaData().getColumnType(Idx + 1);
                     }
 
                     vRows.addElement(null);
@@ -85,19 +85,19 @@ class TransferResultSet {
                 vRows.addElement(Values);
             }
         } catch (SQLException SQLE) {
-            iRowIdx      = 0;
-            iMaxRowIdx   = 0;
+            iRowIdx = 0;
+            iMaxRowIdx = 0;
             iColumnCount = 0;
-            vRows        = new Vector();
+            vRows = new Vector();
         }
     }
 
     TransferResultSet() {
 
-        iRowIdx      = 0;
-        iMaxRowIdx   = 0;
+        iRowIdx = 0;
+        iMaxRowIdx = 0;
         iColumnCount = 0;
-        vRows        = new Vector();
+        vRows = new Vector();
     }
 
     void addRow(String[] Name, int[] type, Object[] Values,
@@ -118,8 +118,8 @@ class TransferResultSet {
 
         if ((iMaxRowIdx > 0) && (this.getColumnCount() != nbColumns)) {
             throw new Exception("Wrong number of columns: "
-                                + this.getColumnCount()
-                                + " column is expected");
+                    + this.getColumnCount()
+                    + " column is expected");
         }
 
         iMaxRowIdx++;

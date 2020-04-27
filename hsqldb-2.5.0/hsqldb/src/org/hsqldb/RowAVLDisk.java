@@ -88,10 +88,10 @@ import java.io.IOException;
 // campbell-burnet@users - 20040411 - doc 1.7.2 - javadoc comments
 
 /**
- *  In-memory representation of a disk-based database row object with  methods
- *  for serialization and de-serialization. <p>
- *
- *  New class derived from Hypersonic SQL code and enhanced in HSQLDB. <p>
+ * In-memory representation of a disk-based database row object with  methods
+ * for serialization and de-serialization. <p>
+ * <p>
+ * New class derived from Hypersonic SQL code and enhanced in HSQLDB. <p>
  *
  * @author Fred Toussi (fredt@users dot sourceforge dot net)
  * @author Thomas Mueller (Hypersonic SQL Group)
@@ -103,25 +103,25 @@ public class RowAVLDisk extends RowAVL {
     public static final int NO_POS = -1;
 
     //
-    int              storageSize;
-    int              keepCount;
+    int storageSize;
+    int keepCount;
     volatile boolean isInMemory;
-    int              accessCount;
-    boolean          isNew;
+    int accessCount;
+    boolean isNew;
 
     /**
-     *  Flag indicating unwritten data.
+     * Flag indicating unwritten data.
      */
     boolean hasDataChanged;
 
     /**
-     *  Flag indicating Node data has changed.
+     * Flag indicating Node data has changed.
      */
     private boolean hasNodesChanged;
 
     /**
-     *  Constructor for new Rows.  Variable hasDataChanged is set to true in
-     *  order to indicate the data needs saving.
+     * Constructor for new Rows.  Variable hasDataChanged is set to true in
+     * order to indicate the data needs saving.
      *
      * @param t table
      * @param o row data
@@ -136,9 +136,9 @@ public class RowAVLDisk extends RowAVL {
     }
 
     /**
-     *  Constructor when read from the disk into the Cache.
+     * Constructor when read from the disk into the Cache.
      *
-     * @param t table
+     * @param t  table
      * @param in data source
      * @throws IOException
      */
@@ -147,7 +147,7 @@ public class RowAVLDisk extends RowAVL {
 
         super(store.getTable(), (Object[]) null);
 
-        position    = in.getFilePosition();
+        position = in.getFilePosition();
         storageSize = in.getSize();
 
         int indexcount = store.getAccessorKeys().length;
@@ -158,7 +158,7 @@ public class RowAVLDisk extends RowAVL {
 
         for (int i = 1; i < indexcount; i++) {
             n.nNext = new NodeAVLDisk(this, in, i);
-            n       = n.nNext;
+            n = n.nNext;
         }
 
         rowData = in.readData(table.getColumnTypes());
@@ -225,8 +225,8 @@ public class RowAVLDisk extends RowAVL {
     public synchronized void setChanged(boolean flag) {
 
         hasNodesChanged = flag;
-        hasDataChanged  = flag;
-        isNew           = flag;
+        hasDataChanged = flag;
+        isNew = flag;
     }
 
     /**
@@ -255,9 +255,11 @@ public class RowAVLDisk extends RowAVL {
     /**
      * No action as references don't need to be removed
      */
-    public void delete(PersistentStore store) {}
+    public void delete(PersistentStore store) {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
     public synchronized boolean keepInMemory(boolean keep) {
 
@@ -272,7 +274,7 @@ public class RowAVLDisk extends RowAVL {
 
             if (keepCount < 0) {
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "RowAVLDisk - keep count");
+                        "RowAVLDisk - keep count");
             }
         }
 
@@ -297,7 +299,7 @@ public class RowAVLDisk extends RowAVL {
 
         for (int i = 1; i < indexcount; i++) {
             n.nNext = new NodeAVLDisk(this, i);
-            n       = n.nNext;
+            n = n.nNext;
         }
     }
 
@@ -339,10 +341,9 @@ public class RowAVLDisk extends RowAVL {
     }
 
     /**
-     *  Writes the Nodes, immediately after the row size.
+     * Writes the Nodes, immediately after the row size.
      *
      * @param out
-     *
      * @throws IOException
      */
     void writeNodes(RowOutputInterface out) {

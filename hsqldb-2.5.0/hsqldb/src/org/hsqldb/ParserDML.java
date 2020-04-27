@@ -58,22 +58,22 @@ public class ParserDML extends ParserDQL {
      */
     StatementDMQL compileInsertStatement(RangeGroup[] rangeGroups) {
 
-        boolean[]     insertColumnCheckList;
-        boolean[]     updateColumnCheckList = null;
-        int[]         insertColumnMap;
-        int[]         updateColumnMap = ValuePool.emptyIntArray;
-        int           colCount;
-        Table         table;
+        boolean[] insertColumnCheckList;
+        boolean[] updateColumnCheckList = null;
+        int[] insertColumnMap;
+        int[] updateColumnMap = ValuePool.emptyIntArray;
+        int colCount;
+        Table table;
         RangeVariable range;
-        boolean       overridingUser               = false;
-        boolean       overridingSystem             = false;
-        boolean       assignsToIdentityOrGenerated = false;
-        Token         tableToken;
-        boolean       hasColumnList = false;
-        int           isSpecial     = StatementInsert.isNone;
-        Expression    insertExpressions;
-        Expression[]  updateExpressions = Expression.emptyArray;
-        Expression[]  targets           = null;
+        boolean overridingUser = false;
+        boolean overridingSystem = false;
+        boolean assignsToIdentityOrGenerated = false;
+        Token tableToken;
+        boolean hasColumnList = false;
+        int isSpecial = StatementInsert.isNone;
+        Expression insertExpressions;
+        Expression[] updateExpressions = Expression.emptyArray;
+        Expression[] targets = null;
 
         if (database.sqlSyntaxMys) {
             if (readIfThis(Tokens.REPLACE)) {
@@ -95,45 +95,45 @@ public class ParserDML extends ParserDQL {
         }
 
         tableToken = getRecordedToken();
-        range      = readRangeVariableForDataChange(StatementTypes.INSERT);
+        range = readRangeVariableForDataChange(StatementTypes.INSERT);
 
         range.resolveRangeTableTypes(session, RangeVariable.emptyArray);
 
-        table                 = range.getTable();
+        table = range.getTable();
         insertColumnCheckList = null;
-        insertColumnMap       = table.getColumnMap();
-        colCount              = table.getColumnCount();
+        insertColumnMap = table.getColumnMap();
+        colCount = table.getColumnCount();
 
-        int   position  = getPosition();
+        int position = getPosition();
         Table baseTable = table.isTriggerInsertable() ? table
-                                                      : table.getBaseTable();
+                : table.getBaseTable();
 
         switch (token.tokenType) {
 
-            case Tokens.DEFAULT : {
+            case Tokens.DEFAULT: {
                 read();
                 readThis(Tokens.VALUES);
 
                 insertExpressions = new Expression(OpTypes.ROW,
-                                                   new Expression[]{});
+                        new Expression[]{});
                 insertExpressions = new Expression(OpTypes.VALUELIST,
-                                                   new Expression[]{
-                                                       insertExpressions });
+                        new Expression[]{
+                                insertExpressions});
                 insertColumnCheckList = table.getNewColumnCheckList();
 
                 StatementDMQL cs = new StatementInsert(session, table,
-                                                       insertColumnMap,
-                                                       insertExpressions,
-                                                       insertColumnCheckList,
-                                                       updateExpressions,
-                                                       updateColumnCheckList,
-                                                       updateColumnMap, null,
-                                                       isSpecial,
-                                                       compileContext);
+                        insertColumnMap,
+                        insertExpressions,
+                        insertColumnCheckList,
+                        updateExpressions,
+                        updateColumnCheckList,
+                        updateColumnMap, null,
+                        isSpecial,
+                        compileContext);
 
                 return cs;
             }
-            case Tokens.OPENBRACKET : {
+            case Tokens.OPENBRACKET: {
                 int brackets = readOpenBrackets();
 
                 if (brackets == 1) {
@@ -141,16 +141,16 @@ public class ParserDML extends ParserDQL {
 
                     switch (token.tokenType) {
 
-                        case Tokens.WITH :
-                        case Tokens.SELECT :
-                        case Tokens.TABLE : {
+                        case Tokens.WITH:
+                        case Tokens.SELECT:
+                        case Tokens.TABLE: {
                             rewind(position);
 
                             isQuery = true;
 
                             break;
                         }
-                        default :
+                        default:
                     }
 
                     if (isQuery) {
@@ -158,21 +158,21 @@ public class ParserDML extends ParserDQL {
                     }
 
                     OrderedHashSet columnNames = new OrderedHashSet();
-                    boolean        withPrefix  = database.sqlSyntaxOra;
+                    boolean withPrefix = database.sqlSyntaxOra;
 
                     readSimpleColumnNames(columnNames, range, withPrefix);
                     readThis(Tokens.CLOSEBRACKET);
 
-                    colCount        = columnNames.size();
+                    colCount = columnNames.size();
                     insertColumnMap = table.getColumnIndexes(columnNames);
-                    hasColumnList   = true;
+                    hasColumnList = true;
                 } else {
                     rewind(position);
                 }
 
                 break;
             }
-            default :
+            default:
         }
 
         if (token.tokenType == Tokens.OVERRIDING) {
@@ -195,23 +195,23 @@ public class ParserDML extends ParserDQL {
 
         switch (token.tokenType) {
 
-            case Tokens.VALUE : {
+            case Tokens.VALUE: {
                 if (!database.sqlSyntaxMys) {
                     throw unexpectedToken();
                 }
             }
 
             // fall through
-            case Tokens.VALUES : {
+            case Tokens.VALUES: {
                 read();
 
                 insertColumnCheckList =
-                    table.getColumnCheckList(insertColumnMap);
+                        table.getColumnCheckList(insertColumnMap);
                 insertExpressions = XreadContextuallyTypedTable(colCount);
 
                 HsqlList unresolved =
-                    insertExpressions.resolveColumnReferences(session,
-                        RangeGroup.emptyGroup, rangeGroups, null);
+                        insertExpressions.resolveColumnReferences(session,
+                                RangeGroup.emptyGroup, rangeGroups, null);
 
                 ExpressionColumn.checkColumnsResolved(unresolved);
                 insertExpressions.resolveTypes(session, null);
@@ -219,10 +219,10 @@ public class ParserDML extends ParserDQL {
 
                 if (table != baseTable) {
                     int[] baseColumnMap = table.getBaseTableColumnMap();
-                    int[] newColumnMap  = new int[insertColumnMap.length];
+                    int[] newColumnMap = new int[insertColumnMap.length];
 
                     ArrayUtil.projectRow(baseColumnMap, insertColumnMap,
-                                         newColumnMap);
+                            newColumnMap);
 
                     insertColumnMap = newColumnMap;
                 }
@@ -235,7 +235,7 @@ public class ParserDML extends ParserDQL {
                     for (int i = 0; i < rowArgs.length; i++) {
                         Expression e = rowArgs[i];
                         ColumnSchema column =
-                            baseTable.getColumn(insertColumnMap[i]);
+                                baseTable.getColumn(insertColumnMap[i]);
 
                         if (column.isIdentity()) {
                             assignsToIdentityOrGenerated = true;
@@ -244,7 +244,7 @@ public class ParserDML extends ParserDQL {
                                 if (baseTable.identitySequence.isAlways()) {
                                     if (overridingUser) {
                                         rowArgs[i] = new ExpressionColumn(
-                                            OpTypes.DEFAULT);
+                                                OpTypes.DEFAULT);
                                     } else {
                                         throw Error.error(ErrorCode.X_42543);
                                     }
@@ -254,13 +254,13 @@ public class ParserDML extends ParserDQL {
 
                             //
                         } else if (column.isGenerated()
-                                   || column.isSystemPeriod()) {
+                                || column.isSystemPeriod()) {
                             assignsToIdentityOrGenerated = true;
 
                             if (e.getType() != OpTypes.DEFAULT) {
                                 if (overridingUser) {
                                     rowArgs[i] =
-                                        new ExpressionColumn(OpTypes.DEFAULT);
+                                            new ExpressionColumn(OpTypes.DEFAULT);
                                 } else {
                                     throw Error.error(ErrorCode.X_42541);
                                 }
@@ -291,18 +291,18 @@ public class ParserDML extends ParserDQL {
                     readThis(Tokens.KEY);
                     readThis(Tokens.UPDATE);
 
-                    OrderedHashSet  targetSet    = new OrderedHashSet();
-                    LongDeque       colIndexList = new LongDeque();
-                    HsqlArrayList   exprList     = new HsqlArrayList();
+                    OrderedHashSet targetSet = new OrderedHashSet();
+                    LongDeque colIndexList = new LongDeque();
+                    HsqlArrayList exprList = new HsqlArrayList();
                     RangeVariable[] rangeVariables;
-                    RangeGroup      rangeGroup;
+                    RangeGroup rangeGroup;
 
-                    rangeVariables = new RangeVariable[]{ range };
+                    rangeVariables = new RangeVariable[]{range};
                     rangeGroup = new RangeGroupSimple(rangeVariables, false);
-                    isSpecial      = StatementInsert.isUpdate;
+                    isSpecial = StatementInsert.isUpdate;
 
                     readSetClauseList(rangeVariables, targetSet, colIndexList,
-                                      exprList);
+                            exprList);
 
                     updateColumnMap = new int[colIndexList.size()];
 
@@ -314,38 +314,38 @@ public class ParserDML extends ParserDQL {
 
                     for (int i = 0; i < targets.length; i++) {
                         resolveReferencesAndTypes(rangeGroup, rangeGroups,
-                                                  targets[i]);
+                                targets[i]);
                     }
 
                     updateColumnCheckList =
-                        table.getColumnCheckList(updateColumnMap);
+                            table.getColumnCheckList(updateColumnMap);
                     updateExpressions = new Expression[exprList.size()];
 
                     exprList.toArray(updateExpressions);
                     resolveUpdateExpressions(table, rangeGroup,
-                                             updateColumnMap,
-                                             updateExpressions, rangeGroups);
+                            updateColumnMap,
+                            updateExpressions, rangeGroups);
                 }
 
                 StatementDMQL cs = new StatementInsert(session, table,
-                                                       insertColumnMap,
-                                                       insertExpressions,
-                                                       insertColumnCheckList,
-                                                       updateExpressions,
-                                                       updateColumnCheckList,
-                                                       updateColumnMap,
-                                                       targets, isSpecial,
-                                                       compileContext);
+                        insertColumnMap,
+                        insertExpressions,
+                        insertColumnCheckList,
+                        updateExpressions,
+                        updateColumnCheckList,
+                        updateColumnMap,
+                        targets, isSpecial,
+                        compileContext);
 
                 return cs;
             }
-            case Tokens.OPENBRACKET :
-            case Tokens.WITH :
-            case Tokens.SELECT :
-            case Tokens.TABLE : {
+            case Tokens.OPENBRACKET:
+            case Tokens.WITH:
+            case Tokens.SELECT:
+            case Tokens.TABLE: {
                 break;
             }
-            default : {
+            default: {
                 throw unexpectedToken();
             }
         }
@@ -354,7 +354,7 @@ public class ParserDML extends ParserDQL {
 
         if (table != baseTable) {
             int[] baseColumnMap = table.getBaseTableColumnMap();
-            int[] newColumnMap  = new int[insertColumnMap.length];
+            int[] newColumnMap = new int[insertColumnMap.length];
 
             ArrayUtil.projectRow(baseColumnMap, insertColumnMap, newColumnMap);
 
@@ -362,11 +362,11 @@ public class ParserDML extends ParserDQL {
         }
 
         int enforcedDefaultIndex = baseTable.getIdentityColumnIndex();
-        int overrideIndex        = -1;
+        int overrideIndex = -1;
 
         if (enforcedDefaultIndex != -1
                 && ArrayUtil.find(insertColumnMap, enforcedDefaultIndex)
-                   > -1) {
+                > -1) {
             if (baseTable.identitySequence.isAlways()) {
                 if (!overridingUser && !overridingSystem) {
                     throw Error.error(ErrorCode.X_42543);
@@ -383,7 +383,7 @@ public class ParserDML extends ParserDQL {
         Type[] types = new Type[insertColumnMap.length];
 
         ArrayUtil.projectRow(baseTable.getColumnTypes(), insertColumnMap,
-                             types);
+                types);
         compileContext.setOuterRanges(rangeGroups);
 
         QueryExpression queryExpression = XreadQueryExpression();
@@ -405,18 +405,18 @@ public class ParserDML extends ParserDQL {
             readThis(Tokens.KEY);
             readThis(Tokens.UPDATE);
 
-            OrderedHashSet  targetSet    = new OrderedHashSet();
-            LongDeque       colIndexList = new LongDeque();
-            HsqlArrayList   exprList     = new HsqlArrayList();
+            OrderedHashSet targetSet = new OrderedHashSet();
+            LongDeque colIndexList = new LongDeque();
+            HsqlArrayList exprList = new HsqlArrayList();
             RangeVariable[] rangeVariables;
-            RangeGroup      rangeGroup;
+            RangeGroup rangeGroup;
 
-            rangeVariables = new RangeVariable[]{ range };
-            rangeGroup     = new RangeGroupSimple(rangeVariables, false);
-            isSpecial      = StatementInsert.isUpdate;
+            rangeVariables = new RangeVariable[]{range};
+            rangeGroup = new RangeGroupSimple(rangeVariables, false);
+            isSpecial = StatementInsert.isUpdate;
 
             readSetClauseList(rangeVariables, targetSet, colIndexList,
-                              exprList);
+                    exprList);
 
             updateColumnMap = new int[colIndexList.size()];
 
@@ -431,22 +431,22 @@ public class ParserDML extends ParserDQL {
             }
 
             updateColumnCheckList = table.getColumnCheckList(updateColumnMap);
-            updateExpressions     = new Expression[exprList.size()];
+            updateExpressions = new Expression[exprList.size()];
 
             exprList.toArray(updateExpressions);
             resolveUpdateExpressions(table, rangeGroup, updateColumnMap,
-                                     updateExpressions, rangeGroups);
+                    updateExpressions, rangeGroups);
         }
 
         StatementDMQL cs = new StatementInsert(session, table,
-                                               insertColumnMap,
-                                               insertColumnCheckList,
-                                               queryExpression,
-                                               updateExpressions,
-                                               updateColumnCheckList,
-                                               updateColumnMap, targets,
-                                               isSpecial, overrideIndex,
-                                               compileContext);
+                insertColumnMap,
+                insertColumnCheckList,
+                queryExpression,
+                updateExpressions,
+                updateColumnCheckList,
+                updateColumnMap, targets,
+                isSpecial, overrideIndex,
+                compileContext);
 
         return cs;
     }
@@ -460,7 +460,7 @@ public class ParserDML extends ParserDQL {
             for (int j = 0; j < list.length; j++) {
                 if (list[j].isUnresolvedParam()) {
                     list[j].setAttributesAsColumn(
-                        table.getColumn(columnMap[j]), true);
+                            table.getColumn(columnMap[j]), true);
                 }
             }
         }
@@ -468,16 +468,16 @@ public class ParserDML extends ParserDQL {
 
     Statement compileTruncateStatement() {
 
-        boolean         isTable         = false;
-        boolean         withCommit      = false;
-        boolean         noCheck         = false;
-        boolean         restartIdentity = false;
-        HsqlName        objectName      = null;
-        RangeVariable[] rangeVariables  = null;
-        Table           table           = null;
-        HsqlName[]      writeTableNames = null;
-        RangeVariable   targetRange     = null;
-        TimestampData   timestamp       = null;
+        boolean isTable = false;
+        boolean withCommit = false;
+        boolean noCheck = false;
+        boolean restartIdentity = false;
+        HsqlName objectName = null;
+        RangeVariable[] rangeVariables = null;
+        Table table = null;
+        HsqlName[] writeTableNames = null;
+        RangeVariable targetRange = null;
+        TimestampData timestamp = null;
 
         readThis(Tokens.TRUNCATE);
 
@@ -485,11 +485,11 @@ public class ParserDML extends ParserDQL {
             readThis(Tokens.TABLE);
 
             targetRange =
-                readRangeVariableForDataChange(StatementTypes.TRUNCATE);
-            rangeVariables = new RangeVariable[]{ targetRange };
-            table          = rangeVariables[0].getTable();
-            objectName     = table.getName();
-            isTable        = true;
+                    readRangeVariableForDataChange(StatementTypes.TRUNCATE);
+            rangeVariables = new RangeVariable[]{targetRange};
+            table = rangeVariables[0].getTable();
+            objectName = table.getName();
+            isTable = true;
         } else {
             readThis(Tokens.SCHEMA);
 
@@ -498,13 +498,13 @@ public class ParserDML extends ParserDQL {
 
         switch (token.tokenType) {
 
-            case Tokens.CONTINUE : {
+            case Tokens.CONTINUE: {
                 read();
                 readThis(Tokens.IDENTITY);
 
                 break;
             }
-            case Tokens.RESTART : {
+            case Tokens.RESTART: {
                 read();
                 readThis(Tokens.IDENTITY);
 
@@ -512,7 +512,7 @@ public class ParserDML extends ParserDQL {
 
                 break;
             }
-            case Tokens.VERSIONING : {
+            case Tokens.VERSIONING: {
                 if (!isTable) {
                     throw unexpectedToken();
                 }
@@ -528,9 +528,9 @@ public class ParserDML extends ParserDQL {
                     String s = readQuotedString();
 
                     timestamp =
-                        (TimestampData) Type.SQL_TIMESTAMP_WITH_TIME_ZONE
-                            .convertToType(session, s,
-                                           Type.SQL_VARCHAR_DEFAULT);
+                            (TimestampData) Type.SQL_TIMESTAMP_WITH_TIME_ZONE
+                                    .convertToType(session, s,
+                                            Type.SQL_VARCHAR_DEFAULT);
                 } else {
                     readThis(Tokens.CURRENT_TIMESTAMP);
 
@@ -539,7 +539,7 @@ public class ParserDML extends ParserDQL {
 
                 break;
             }
-            default :
+            default:
         }
 
         if (!isTable) {
@@ -559,26 +559,26 @@ public class ParserDML extends ParserDQL {
         }
 
         if (isTable) {
-            writeTableNames = new HsqlName[]{ table.getName() };
+            writeTableNames = new HsqlName[]{table.getName()};
         } else {
             writeTableNames =
-                session.database.schemaManager.getCatalogAndBaseTableNames();
+                    session.database.schemaManager.getCatalogAndBaseTableNames();
         }
 
         if (withCommit || timestamp != null) {
-            Object[] args = new Object[] {
-                objectName, Boolean.valueOf(restartIdentity),
-                Boolean.valueOf(noCheck), timestamp
+            Object[] args = new Object[]{
+                    objectName, Boolean.valueOf(restartIdentity),
+                    Boolean.valueOf(noCheck), timestamp
             };
 
             return new StatementCommand(StatementTypes.TRUNCATE, args, null,
-                                        writeTableNames);
+                    writeTableNames);
         }
 
         Statement cs = new StatementDML(session, table, targetRange,
-                                        rangeVariables, compileContext,
-                                        restartIdentity,
-                                        StatementTypes.TRUNCATE, null);
+                rangeVariables, compileContext,
+                restartIdentity,
+                StatementTypes.TRUNCATE, null);
 
         return cs;
     }
@@ -588,12 +588,12 @@ public class ParserDML extends ParserDQL {
      */
     Statement compileDeleteStatement(RangeGroup[] rangeGroups) {
 
-        Expression      condition       = null;
-        boolean         restartIdentity = false;
-        RangeVariable   targetRange;
+        Expression condition = null;
+        boolean restartIdentity = false;
+        RangeVariable targetRange;
         RangeVariable[] rangeVariables;
-        RangeGroup      rangeGroup;
-        Table           table;
+        RangeGroup rangeGroup;
+        Table table;
 
         readThis(Tokens.DELETE);
 
@@ -604,10 +604,10 @@ public class ParserDML extends ParserDQL {
         }
 
         targetRange =
-            readRangeVariableForDataChange(StatementTypes.DELETE_WHERE);
-        rangeVariables = new RangeVariable[]{ targetRange };
-        rangeGroup     = new RangeGroupSimple(rangeVariables, false);
-        table          = rangeVariables[0].getTable();
+                readRangeVariableForDataChange(StatementTypes.DELETE_WHERE);
+        rangeVariables = new RangeVariable[]{targetRange};
+        rangeGroup = new RangeGroupSimple(rangeVariables, false);
+        table = rangeVariables[0].getTable();
 
         compileContext.setOuterRanges(rangeGroups);
 
@@ -625,11 +625,11 @@ public class ParserDML extends ParserDQL {
         }
 
         Table baseTable = table.isTriggerDeletable() ? table
-                                                     : table.getBaseTable();
+                : table.getBaseTable();
 
         if (table != baseTable) {
             QuerySpecification baseSelect =
-                table.getQueryExpression().getMainSelect();
+                    table.getQueryExpression().getMainSelect();
 
             if (condition != null) {
                 condition = condition.replaceColumnReferences(session,
@@ -637,8 +637,8 @@ public class ParserDML extends ParserDQL {
             }
 
             condition =
-                ExpressionLogical.andExpressions(baseSelect.queryCondition,
-                                                 condition);
+                    ExpressionLogical.andExpressions(baseSelect.queryCondition,
+                            condition);
             rangeVariables = baseSelect.rangeVariables;
 
             ArrayUtil.fillArray(rangeVariables[0].usedColumns, true);
@@ -648,7 +648,7 @@ public class ParserDML extends ParserDQL {
             rangeVariables[0].addJoinCondition(condition);
 
             RangeVariableResolver resolver = new RangeVariableResolver(session,
-                rangeVariables, null, compileContext, false);
+                    rangeVariables, null, compileContext, false);
 
             resolver.processConditions();
 
@@ -661,10 +661,10 @@ public class ParserDML extends ParserDQL {
         }
 
         Statement cs = new StatementDML(session, table, targetRange,
-                                        rangeVariables, compileContext,
-                                        restartIdentity,
-                                        StatementTypes.DELETE_WHERE,
-                                        sortAndSlice);
+                rangeVariables, compileContext,
+                restartIdentity,
+                StatementTypes.DELETE_WHERE,
+                sortAndSlice);
 
         return cs;
     }
@@ -676,25 +676,25 @@ public class ParserDML extends ParserDQL {
 
         read();
 
-        Expression[]    updateExpressions;
-        int[]           columnMap;
-        boolean[]       columnCheckList;
-        OrderedHashSet  targetSet    = new OrderedHashSet();
-        LongDeque       colIndexList = new LongDeque();
-        HsqlArrayList   exprList     = new HsqlArrayList();
-        RangeVariable   targetRange;
+        Expression[] updateExpressions;
+        int[] columnMap;
+        boolean[] columnCheckList;
+        OrderedHashSet targetSet = new OrderedHashSet();
+        LongDeque colIndexList = new LongDeque();
+        HsqlArrayList exprList = new HsqlArrayList();
+        RangeVariable targetRange;
         RangeVariable[] rangeVariables;
-        RangeGroup      rangeGroup;
-        Table           table;
-        Table           baseTable;
+        RangeGroup rangeGroup;
+        Table table;
+        Table baseTable;
 
         targetRange =
-            readRangeVariableForDataChange(StatementTypes.UPDATE_WHERE);
-        rangeVariables = new RangeVariable[]{ targetRange };
-        rangeGroup     = new RangeGroupSimple(rangeVariables, false);
-        table          = rangeVariables[0].rangeTable;
-        baseTable      = table.isTriggerUpdatable() ? table
-                                                    : table.getBaseTable();
+                readRangeVariableForDataChange(StatementTypes.UPDATE_WHERE);
+        rangeVariables = new RangeVariable[]{targetRange};
+        rangeGroup = new RangeGroupSimple(rangeVariables, false);
+        table = rangeVariables[0].rangeTable;
+        baseTable = table.isTriggerUpdatable() ? table
+                : table.getBaseTable();
 
         readThis(Tokens.SET);
         readSetClauseList(rangeVariables, targetSet, colIndexList, exprList);
@@ -711,7 +711,7 @@ public class ParserDML extends ParserDQL {
             resolveReferencesAndTypes(rangeGroup, rangeGroups, targets[i]);
         }
 
-        columnCheckList   = table.getColumnCheckList(columnMap);
+        columnCheckList = table.getColumnCheckList(columnMap);
         updateExpressions = new Expression[exprList.size()];
 
         exprList.toArray(updateExpressions);
@@ -732,11 +732,11 @@ public class ParserDML extends ParserDQL {
         }
 
         resolveUpdateExpressions(table, rangeGroup, columnMap,
-                                 updateExpressions, rangeGroups);
+                updateExpressions, rangeGroups);
 
         if (table != baseTable) {
             QuerySpecification baseSelect =
-                table.getQueryExpression().getMainSelect();
+                    table.getQueryExpression().getMainSelect();
 
             if (condition != null) {
                 condition = condition.replaceColumnReferences(session,
@@ -745,13 +745,13 @@ public class ParserDML extends ParserDQL {
 
             for (int i = 0; i < updateExpressions.length; i++) {
                 updateExpressions[i] =
-                    updateExpressions[i].replaceColumnReferences(session,
-                        rangeVariables[0], baseSelect.exprColumns);
+                        updateExpressions[i].replaceColumnReferences(session,
+                                rangeVariables[0], baseSelect.exprColumns);
             }
 
             condition =
-                ExpressionLogical.andExpressions(baseSelect.queryCondition,
-                                                 condition);
+                    ExpressionLogical.andExpressions(baseSelect.queryCondition,
+                            condition);
             rangeVariables = baseSelect.rangeVariables;
 
             ArrayUtil.fillArray(rangeVariables[0].usedColumns, true);
@@ -761,7 +761,7 @@ public class ParserDML extends ParserDQL {
             rangeVariables[0].addJoinCondition(condition);
 
             RangeVariableResolver resolver = new RangeVariableResolver(session,
-                rangeVariables, null, compileContext, false);
+                    rangeVariables, null, compileContext, false);
 
             resolver.processConditions();
 
@@ -775,7 +775,7 @@ public class ParserDML extends ParserDQL {
 
         if (table != baseTable) {
             int[] baseColumnMap = table.getBaseTableColumnMap();
-            int[] newColumnMap  = new int[columnMap.length];
+            int[] newColumnMap = new int[columnMap.length];
 
             ArrayUtil.projectRow(baseColumnMap, columnMap, newColumnMap);
 
@@ -789,20 +789,20 @@ public class ParserDML extends ParserDQL {
         }
 
         StatementDMQL cs = new StatementDML(session, targets, table,
-                                            targetRange, rangeVariables,
-                                            columnMap, updateExpressions,
-                                            columnCheckList, compileContext,
-                                            sortAndSlice);
+                targetRange, rangeVariables,
+                columnMap, updateExpressions,
+                columnCheckList, compileContext,
+                sortAndSlice);
 
         return cs;
     }
 
     Expression XreadAndResolveBooleanValueExpression(RangeGroup[] rangeGroups,
-            RangeGroup rangeGroup) {
+                                                     RangeGroup rangeGroup) {
 
         Expression condition = XreadBooleanValueExpression();
         HsqlList unresolved = condition.resolveColumnReferences(session,
-            rangeGroup, rangeGroups, null);
+                rangeGroup, rangeGroups, null);
 
         ExpressionColumn.checkColumnsResolved(unresolved);
         condition.resolveTypes(session, null);
@@ -823,8 +823,8 @@ public class ParserDML extends ParserDQL {
                                   Expression[] colExpressions,
                                   RangeGroup[] rangeGroups) {
 
-        HsqlList unresolved           = null;
-        int      enforcedDefaultIndex = -1;
+        HsqlList unresolved = null;
+        int enforcedDefaultIndex = -1;
 
         if (targetTable.hasIdentityColumn()
                 && targetTable.identitySequence.isAlways()) {
@@ -854,7 +854,7 @@ public class ParserDML extends ParserDQL {
 
                     if (e.isUnresolvedParam()) {
                         e.setAttributesAsColumn(
-                            targetTable.getColumn(columnMap[i]), true);
+                                targetTable.getColumn(columnMap[i]), true);
                     } else if (e.getType() == OpTypes.DEFAULT) {
 
                         //
@@ -894,7 +894,7 @@ public class ParserDML extends ParserDQL {
 
                 if (e.isUnresolvedParam()) {
                     e.setAttributesAsColumn(
-                        targetTable.getColumn(columnMap[i]), true);
+                            targetTable.getColumn(columnMap[i]), true);
                 } else if (e.getType() == OpTypes.DEFAULT) {
 
                     //
@@ -929,7 +929,7 @@ public class ParserDML extends ParserDQL {
                 readThis(Tokens.CLOSEBRACKET);
             } else {
                 Expression target = XreadTargetSpecification(rangeVars,
-                    colIndexList);
+                        colIndexList);
 
                 if (!targets.add(target)) {
                     ColumnSchema col = target.getColumn();
@@ -988,7 +988,7 @@ public class ParserDML extends ParserDQL {
                 readThis(Tokens.CLOSEBRACKET);
 
                 int rowDegree = e.getType() == OpTypes.ROW ? e.nodes.length
-                                                           : 1;
+                        : 1;
 
                 if (degree != rowDegree) {
                     throw Error.error(ErrorCode.X_42546);
@@ -1016,7 +1016,7 @@ public class ParserDML extends ParserDQL {
 
         while (true) {
             Expression target = XreadTargetSpecification(rangeVars,
-                colIndexList);
+                    colIndexList);
 
             if (!targets.add(target)) {
                 ColumnSchema col = target.getColumn();
@@ -1028,20 +1028,20 @@ public class ParserDML extends ParserDQL {
 
             switch (token.tokenType) {
 
-                case Tokens.ROW_COUNT :
-                case Tokens.MORE :
+                case Tokens.ROW_COUNT:
+                case Tokens.MORE:
                     int columnIndex =
-                        ExpressionColumn.diagnosticsList.getIndex(
-                            token.tokenString);
+                            ExpressionColumn.diagnosticsList.getIndex(
+                                    token.tokenString);
                     Expression e =
-                        new ExpressionColumn(OpTypes.DIAGNOSTICS_VARIABLE,
-                                             columnIndex);
+                            new ExpressionColumn(OpTypes.DIAGNOSTICS_VARIABLE,
+                                    columnIndex);
 
                     expressions.add(e);
                     read();
                     break;
 
-                default :
+                default:
             }
 
             if (token.tokenType == Tokens.COMMA) {
@@ -1059,46 +1059,46 @@ public class ParserDML extends ParserDQL {
      */
     StatementDMQL compileMergeStatement(RangeGroup[] rangeGroups) {
 
-        boolean[]     insertColumnCheckList;
-        int[]         insertColumnMap = null;
-        int[]         updateColumnMap = null;
-        int[]         baseUpdateColumnMap;
-        Table         table;
+        boolean[] insertColumnCheckList;
+        int[] insertColumnMap = null;
+        int[] updateColumnMap = null;
+        int[] baseUpdateColumnMap;
+        Table table;
         RangeVariable targetRange;
         RangeVariable sourceRange;
-        Expression    mergeCondition;
-        Expression[]  targets           = null;
-        HsqlArrayList updateList        = new HsqlArrayList();
-        Expression[]  updateExpressions = Expression.emptyArray;
-        HsqlArrayList insertList        = new HsqlArrayList();
-        Expression    insertExpression  = null;
+        Expression mergeCondition;
+        Expression[] targets = null;
+        HsqlArrayList updateList = new HsqlArrayList();
+        Expression[] updateExpressions = Expression.emptyArray;
+        HsqlArrayList insertList = new HsqlArrayList();
+        Expression insertExpression = null;
 
         read();
         readThis(Tokens.INTO);
 
         targetRange = readRangeVariableForDataChange(StatementTypes.MERGE);
-        table       = targetRange.rangeTable;
+        table = targetRange.rangeTable;
 
         readThis(Tokens.USING);
         compileContext.setOuterRanges(rangeGroups);
 
         sourceRange = readTableOrSubquery();
 
-        RangeVariable[] targetRanges = new RangeVariable[]{ targetRange };
-        RangeGroup      rangeGroup = new RangeGroupSimple(targetRanges, false);
+        RangeVariable[] targetRanges = new RangeVariable[]{targetRange};
+        RangeGroup rangeGroup = new RangeGroupSimple(targetRanges, false);
 
         sourceRange.resolveRangeTable(session, rangeGroup, rangeGroups);
         sourceRange.resolveRangeTableTypes(session, targetRanges);
         compileContext.setOuterRanges(RangeGroup.emptyArray);
 
-        RangeVariable[] fullRangeVars   = new RangeVariable[] {
-            sourceRange, targetRange
+        RangeVariable[] fullRangeVars = new RangeVariable[]{
+                sourceRange, targetRange
         };
-        RangeVariable[] sourceRangeVars = new RangeVariable[]{ sourceRange };
-        RangeVariable[] targetRangeVars = new RangeVariable[]{ targetRange };
+        RangeVariable[] sourceRangeVars = new RangeVariable[]{sourceRange};
+        RangeVariable[] targetRangeVars = new RangeVariable[]{targetRange};
         RangeGroup fullRangeGroup = new RangeGroupSimple(fullRangeVars, false);
         RangeGroup sourceRangeGroup = new RangeGroupSimple(sourceRangeVars,
-            false);
+                false);
 
         // parse ON search conditions
         readThis(Tokens.ON);
@@ -1107,18 +1107,18 @@ public class ParserDML extends ParserDQL {
                 fullRangeGroup);
 
         // parse WHEN clause(s) and convert lists to arrays
-        insertColumnMap       = table.getColumnMap();
+        insertColumnMap = table.getColumnMap();
         insertColumnCheckList = table.getNewColumnCheckList();
 
-        OrderedHashSet updateTargetSet    = new OrderedHashSet();
-        OrderedHashSet insertColNames     = new OrderedHashSet();
-        LongDeque      updateColIndexList = new LongDeque();
-        Expression[]   conditions         = new Expression[3];
-        boolean        deleteFirst        = false;
+        OrderedHashSet updateTargetSet = new OrderedHashSet();
+        OrderedHashSet insertColNames = new OrderedHashSet();
+        LongDeque updateColIndexList = new LongDeque();
+        Expression[] conditions = new Expression[3];
+        boolean deleteFirst = false;
 
         readMergeWhen(rangeGroups, fullRangeGroup, updateColIndexList,
-                      insertColNames, updateTargetSet, insertList, updateList,
-                      targetRangeVars, sourceRange, conditions);
+                insertColNames, updateTargetSet, insertList, updateList,
+                targetRangeVars, sourceRange, conditions);
 
         // conditions[0], [1] and [2] are null (no action) or TRUE if there is no merge condition for the action
         if (conditions[2] != null) {
@@ -1127,9 +1127,9 @@ public class ParserDML extends ParserDQL {
 
         if (token.tokenType == Tokens.WHEN) {
             readMergeWhen(rangeGroups, fullRangeGroup, updateColIndexList,
-                          insertColNames, updateTargetSet, insertList,
-                          updateList, targetRangeVars, sourceRange,
-                          conditions);
+                    insertColNames, updateTargetSet, insertList,
+                    updateList, targetRangeVars, sourceRange,
+                    conditions);
         }
 
         if (conditions[1] == null && conditions[2] != null) {
@@ -1138,9 +1138,9 @@ public class ParserDML extends ParserDQL {
 
         if (token.tokenType == Tokens.WHEN) {
             readMergeWhen(rangeGroups, fullRangeGroup, updateColIndexList,
-                          insertColNames, updateTargetSet, insertList,
-                          updateList, targetRangeVars, sourceRange,
-                          conditions);
+                    insertColNames, updateTargetSet, insertList,
+                    updateList, targetRangeVars, sourceRange,
+                    conditions);
         }
 
         if (conditions[1] == null && conditions[2] != null) {
@@ -1153,7 +1153,7 @@ public class ParserDML extends ParserDQL {
             if (colCount != 0) {
                 insertColumnMap = table.getColumnIndexes(insertColNames);
                 insertColumnCheckList =
-                    table.getColumnCheckList(insertColumnMap);
+                        table.getColumnCheckList(insertColumnMap);
             }
 
             insertExpression = (Expression) insertList.get(0);
@@ -1189,7 +1189,7 @@ public class ParserDML extends ParserDQL {
 
         if (updateExpressions.length != 0) {
             Table baseTable = table.isTriggerUpdatable() ? table
-                                                         : table.getBaseTable();
+                    : table.getBaseTable();
 
             baseUpdateColumnMap = updateColumnMap;
 
@@ -1197,11 +1197,11 @@ public class ParserDML extends ParserDQL {
                 baseUpdateColumnMap = new int[updateColumnMap.length];
 
                 ArrayUtil.projectRow(table.getBaseTableColumnMap(),
-                                     updateColumnMap, baseUpdateColumnMap);
+                        updateColumnMap, baseUpdateColumnMap);
             }
 
             resolveUpdateExpressions(table, fullRangeGroup, updateColumnMap,
-                                     updateExpressions, rangeGroups);
+                    updateExpressions, rangeGroups);
         }
 
         HsqlList unresolved = null;
@@ -1223,7 +1223,7 @@ public class ParserDML extends ParserDQL {
         fullRangeVars[1].addJoinCondition(mergeCondition);
 
         RangeVariableResolver resolver = new RangeVariableResolver(session,
-            fullRangeVars, null, compileContext, false);
+                fullRangeVars, null, compileContext, false);
 
         resolver.processConditions();
 
@@ -1245,13 +1245,13 @@ public class ParserDML extends ParserDQL {
         }
 
         StatementDMQL cs = new StatementDML(session, targets, sourceRange,
-                                            targetRange, fullRangeVars,
-                                            insertColumnMap, updateColumnMap,
-                                            insertColumnCheckList,
-                                            mergeCondition, insertExpression,
-                                            updateExpressions, deleteFirst,
-                                            conditions[0], conditions[1],
-                                            conditions[2], compileContext);
+                targetRange, fullRangeVars,
+                insertColumnMap, updateColumnMap,
+                insertColumnCheckList,
+                mergeCondition, insertExpression,
+                updateExpressions, deleteFirst,
+                conditions[0], conditions[1],
+                conditions[2], compileContext);
 
         return cs;
     }
@@ -1260,7 +1260,7 @@ public class ParserDML extends ParserDQL {
      * Parses a WHEN clause from a MERGE statement. This can be either a
      * WHEN MATCHED or WHEN NOT MATCHED clause, or both, and the appropriate
      * values will be updated.
-     *
+     * <p>
      * If the var that is to hold the data is not null, then we already
      * encountered this type of clause, which is only allowed once, and at least
      * one is required.
@@ -1276,9 +1276,9 @@ public class ParserDML extends ParserDQL {
                                RangeVariable sourceRangeVar,
                                Expression[] conditions) {
 
-        Table      table       = targetRangeVars[0].rangeTable;
-        int        columnCount = table.getColumnCount();
-        Expression condition   = null;
+        Table table = targetRangeVars[0].rangeTable;
+        int columnCount = table.getColumnCount();
+        Expression condition = null;
 
         readThis(Tokens.WHEN);
 
@@ -1301,7 +1301,7 @@ public class ParserDML extends ParserDQL {
 
                 readThis(Tokens.SET);
                 readSetClauseList(targetRangeVars, updateTargetSet,
-                                  updateColIndexList, updateExpressions);
+                        updateColIndexList, updateExpressions);
             } else {
                 if (conditions[2] != null) {
                     throw Error.error(ErrorCode.X_42547);
@@ -1341,7 +1341,7 @@ public class ParserDML extends ParserDQL {
                 boolean withPrefix = database.sqlSyntaxOra;
 
                 readSimpleColumnNames(insertColumnNames, targetRangeVars[0],
-                                      withPrefix);
+                        withPrefix);
 
                 columnCount = insertColumnNames.size();
 
@@ -1376,24 +1376,24 @@ public class ParserDML extends ParserDQL {
 
         if (isIdentifier()) {
             RoutineSchema routineSchema =
-                (RoutineSchema) database.schemaManager.findSchemaObject(
-                    session, token.tokenString, token.namePrefix,
-                    token.namePrePrefix, SchemaObject.PROCEDURE);
+                    (RoutineSchema) database.schemaManager.findSchemaObject(
+                            session, token.tokenString, token.namePrefix,
+                            token.namePrePrefix, SchemaObject.PROCEDURE);
 
             if (routineSchema == null && token.namePrefix == null) {
                 String schema = session.getSchemaName(null);
                 ReferenceObject synonym =
-                    database.schemaManager.findSynonym(token.tokenString,
-                                                       schema,
-                                                       SchemaObject.ROUTINE);
+                        database.schemaManager.findSynonym(token.tokenString,
+                                schema,
+                                SchemaObject.ROUTINE);
 
                 if (synonym != null) {
                     HsqlName name = synonym.getTarget();
 
                     routineSchema =
-                        (RoutineSchema) database.schemaManager
-                            .findSchemaObject(name.name, name.schema.name,
-                                              name.type);
+                            (RoutineSchema) database.schemaManager
+                                    .findSchemaObject(name.name, name.schema.name,
+                                            name.type);
                 }
             }
 
@@ -1410,13 +1410,13 @@ public class ParserDML extends ParserDQL {
 
         Expression expression = XreadValueExpression();
         HsqlList unresolved = expression.resolveColumnReferences(session,
-            RangeGroup.emptyGroup, rangeGroups, null);
+                RangeGroup.emptyGroup, rangeGroups, null);
 
         ExpressionColumn.checkColumnsResolved(unresolved);
         expression.resolveTypes(session, null);
 
         StatementDMQL cs = new StatementProcedure(session, expression,
-            compileContext);
+                compileContext);
 
         return cs;
     }
@@ -1424,8 +1424,8 @@ public class ParserDML extends ParserDQL {
     StatementDMQL compileProcedureCall(RangeGroup[] rangeGroups,
                                        RoutineSchema routineSchema) {
 
-        HsqlArrayList list    = new HsqlArrayList();
-        boolean       bracket = true;
+        HsqlArrayList list = new HsqlArrayList();
+        boolean bracket = true;
 
         if (database.sqlSyntaxOra) {
             bracket = readIfThis(Tokens.OPENBRACKET);
@@ -1468,7 +1468,7 @@ public class ParserDML extends ParserDQL {
 
             if (e.isUnresolvedParam()) {
                 e.setAttributesAsColumn(routine.getParameter(i),
-                                        routine.getParameter(i).isWriteable());
+                        routine.getParameter(i).isWriteable());
             } else {
                 int paramMode = routine.getParameter(i).getParameterMode();
 
@@ -1495,7 +1495,7 @@ public class ParserDML extends ParserDQL {
         }
 
         StatementDMQL cs = new StatementProcedure(session, routine, arguments,
-            compileContext);
+                compileContext);
 
         return cs;
     }
@@ -1504,7 +1504,7 @@ public class ParserDML extends ParserDQL {
                                    RangeGroup[] rangeGroups, Expression e) {
 
         HsqlList unresolved = e.resolveColumnReferences(session, rangeGroup,
-            rangeGroup.getRangeVariables().length, rangeGroups, null, false);
+                rangeGroup.getRangeVariables().length, rangeGroups, null, false);
 
         ExpressionColumn.checkColumnsResolved(unresolved);
         e.resolveTypes(session, null);
@@ -1517,7 +1517,7 @@ public class ParserDML extends ParserDQL {
                                         Expression e) {
 
         HsqlList unresolved = e.resolveColumnReferences(session,
-            RangeGroup.emptyGroup, rangeGroups, null);
+                RangeGroup.emptyGroup, rangeGroups, null);
 
         ExpressionColumn.checkColumnsResolved(unresolved);
         e.resolveTypes(session, null);

@@ -50,16 +50,17 @@ import org.hsqldb.rowio.RowOutputInterface;
  */
 public abstract class RowSetNavigator implements RangeIterator {
 
-    public RowSetNavigator() {}
+    public RowSetNavigator() {
+    }
 
     SessionInterface session;
-    long             id;
-    int              size;
-    int              mode;
-    int              currentPos = -1;
-    int              rangePosition;
-    boolean          hadNext;
-    boolean          isClosed;
+    long id;
+    int size;
+    int mode;
+    int currentPos = -1;
+    int rangePosition;
+    boolean hadNext;
+    boolean isClosed;
 
     /**
      * Sets the id;
@@ -91,7 +92,8 @@ public abstract class RowSetNavigator implements RangeIterator {
         return current[col];
     }
 
-    public void setCurrent(Object[] data) {}
+    public void setCurrent(Object[] data) {
+    }
 
     public abstract Row getCurrentRow();
 

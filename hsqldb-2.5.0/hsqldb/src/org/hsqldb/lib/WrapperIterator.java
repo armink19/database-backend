@@ -34,11 +34,11 @@ package org.hsqldb.lib;
 import java.util.NoSuchElementException;
 
 /**
- *  An Iterator that returns the elements of a specified array, or other
- *  iterators etc. The collection of objects returned depends on the
- *  constructor used.<p>
- *
- *  Based on similar Enumerator code by campbell-burnet@users
+ * An Iterator that returns the elements of a specified array, or other
+ * iterators etc. The collection of objects returned depends on the
+ * constructor used.<p>
+ * <p>
+ * Based on similar Enumerator code by campbell-burnet@users
  *
  * @author fred@users
  * @version 1.9.0
@@ -47,15 +47,17 @@ import java.util.NoSuchElementException;
 public class WrapperIterator implements Iterator {
 
     private static final Object[] emptyelements = new Object[0];
-    private Object[]              elements;
-    private int                   i;
+    private Object[] elements;
+    private int i;
 
     // chained iterators
-    private boolean  chained;
+    private boolean chained;
     private Iterator it1;
     private Iterator it2;
 
-    /** return only not null elements */
+    /**
+     * return only not null elements
+     */
     private boolean notNull;
 
     /**
@@ -81,7 +83,7 @@ public class WrapperIterator implements Iterator {
      */
     public WrapperIterator(Object[] elements, boolean notNull) {
         this.elements = elements;
-        this.notNull  = notNull;
+        this.notNull = notNull;
     }
 
     /**
@@ -90,7 +92,7 @@ public class WrapperIterator implements Iterator {
      * @param element the single object to iterate
      */
     public WrapperIterator(Object element) {
-        this.elements = new Object[]{ element };
+        this.elements = new Object[]{element};
     }
 
     /**
@@ -101,14 +103,14 @@ public class WrapperIterator implements Iterator {
 
         this.it1 = it1;
         this.it2 = it2;
-        chained  = true;
+        chained = true;
     }
 
     /**
      * Tests if this iterator contains more elements. <p>
      *
-     * @return  <code>true</code> if this iterator contains more elements;
-     *          <code>false</code> otherwise.
+     * @return <code>true</code> if this iterator contains more elements;
+     * <code>false</code> otherwise.
      */
     public boolean hasNext() {
 
@@ -142,7 +144,8 @@ public class WrapperIterator implements Iterator {
             return false;
         }
 
-        for (; notNull && i < elements.length && elements[i] == null; i++) {}
+        for (; notNull && i < elements.length && elements[i] == null; i++) {
+        }
 
         if (i < elements.length) {
             return true;

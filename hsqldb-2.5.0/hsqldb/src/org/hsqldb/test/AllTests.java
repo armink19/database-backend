@@ -50,10 +50,10 @@ public class AllTests extends TestCase {
         suite.addTestSuite(org.hsqldb.test.TestDateTime.class);
         suite.addTestSuite(org.hsqldb.test.TestPeriodPredicates.class);
         suite.addTestSuite(org.hsqldb.test
-            .TestINPredicateParameterizationAndCorrelation.class);
+                .TestINPredicateParameterizationAndCorrelation.class);
         suite.addTestSuite(org.hsqldb.test.TestJDBCGeneratedColumns.class);
         suite.addTestSuite(
-            org.hsqldb.test.TestLikePredicateOptimizations.class);
+                org.hsqldb.test.TestLikePredicateOptimizations.class);
         suite.addTestSuite(org.hsqldb.test.TestLobs.class);
         suite.addTestSuite(org.hsqldb.test.TestMerge.class);
         suite.addTestSuite(org.hsqldb.test.TestMultiInsert.class);

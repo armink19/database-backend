@@ -38,8 +38,8 @@ package org.hsqldb;
  */
 public interface RangeGroup {
 
-    RangeGroup   emptyGroup = new RangeGroupEmpty();
-    RangeGroup[] emptyArray = new RangeGroup[]{ emptyGroup };
+    RangeGroup emptyGroup = new RangeGroupEmpty();
+    RangeGroup[] emptyArray = new RangeGroup[]{emptyGroup};
 
     RangeVariable[] getRangeVariables();
 
@@ -50,31 +50,31 @@ public interface RangeGroup {
     class RangeGroupSimple implements RangeGroup {
 
         final RangeVariable[] ranges;
-        final RangeGroup      baseGroup;
-        final TableDerived    table;
-        final boolean         isVariable;
+        final RangeGroup baseGroup;
+        final TableDerived table;
+        final boolean isVariable;
 
         public RangeGroupSimple(TableDerived table) {
 
-            this.ranges     = RangeVariable.emptyArray;
-            this.baseGroup  = null;
-            this.table      = table;
+            this.ranges = RangeVariable.emptyArray;
+            this.baseGroup = null;
+            this.table = table;
             this.isVariable = false;
         }
 
         public RangeGroupSimple(RangeVariable[] ranges, RangeGroup baseGroup) {
 
-            this.ranges     = ranges;
-            this.baseGroup  = baseGroup;
-            this.table      = null;
+            this.ranges = ranges;
+            this.baseGroup = baseGroup;
+            this.table = null;
             this.isVariable = false;
         }
 
         public RangeGroupSimple(RangeVariable[] ranges, boolean isVariable) {
 
-            this.ranges     = ranges;
-            this.baseGroup  = null;
-            this.table      = null;
+            this.ranges = ranges;
+            this.baseGroup = null;
+            this.table = null;
             this.isVariable = isVariable;
         }
 

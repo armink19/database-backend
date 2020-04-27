@@ -51,15 +51,15 @@ import java.util.GregorianCalendar;
  * @since 1.7.3
  */
 public class RowInputTextLog extends RowInputBase
-implements RowInputInterface {
+        implements RowInputInterface {
 
-    Scanner  scanner;
-    String   tableName  = null;
-    String   schemaName = null;
-    int      statementType;
-    Object   value;
-    boolean  version18;
-    boolean  noSeparators;
+    Scanner scanner;
+    String tableName = null;
+    String schemaName = null;
+    int statementType;
+    Object value;
+    boolean version18;
+    boolean noSeparators;
     Calendar tempCalDefault = new GregorianCalendar();
 
     public RowInputTextLog() {
@@ -73,7 +73,7 @@ implements RowInputInterface {
 
         super(new byte[0]);
 
-        scanner        = new Scanner();
+        scanner = new Scanner();
         this.version18 = version18;
     }
 
@@ -89,7 +89,7 @@ implements RowInputInterface {
 
         switch (tokenType) {
 
-            case Tokens.INSERT : {
+            case Tokens.INSERT: {
                 statementType = StatementLineTypes.INSERT_STATEMENT;
 
                 scanner.scanNext();
@@ -103,7 +103,7 @@ implements RowInputInterface {
 
                 break;
             }
-            case Tokens.DELETE : {
+            case Tokens.DELETE: {
                 statementType = StatementLineTypes.DELETE_STATEMENT;
 
                 scanner.scanNext();
@@ -115,12 +115,12 @@ implements RowInputInterface {
 
                 break;
             }
-            case Tokens.COMMIT : {
+            case Tokens.COMMIT: {
                 statementType = StatementLineTypes.COMMIT_STATEMENT;
 
                 break;
             }
-            case Tokens.SET : {
+            case Tokens.SET: {
                 scanner.scanNext();
 
                 tokenType = scanner.getTokenType();
@@ -128,7 +128,7 @@ implements RowInputInterface {
                 if (tokenType == Tokens.SCHEMA) {
                     scanner.scanNext();
 
-                    schemaName    = scanner.getString();
+                    schemaName = scanner.getString();
                     statementType = StatementLineTypes.SET_SCHEMA_STATEMENT;
                 }
 
@@ -173,7 +173,8 @@ implements RowInputInterface {
         if (minus) {
             try {
                 value = scanner.getDataType().negate(value);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
     }
 
@@ -278,7 +279,7 @@ implements RowInputInterface {
             scanner.scanNext();
 
             Object divisor = scanner.getValue();
-            double i       = ((Number) divisor).doubleValue();
+            double i = ((Number) divisor).doubleValue();
 
             if (i == 0) {
                 if (((Number) value).doubleValue() == 1E0) {
@@ -324,8 +325,8 @@ implements RowInputInterface {
         if (version18) {
             java.sql.Time dateTime = java.sql.Time.valueOf((String) value);
             long millis =
-                HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
-                    dateTime.getTime());
+                    HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
+                            dateTime.getTime());
 
             millis = HsqlDateTime.getNormalisedTime(millis);
 
@@ -346,8 +347,8 @@ implements RowInputInterface {
         if (version18) {
             java.sql.Date dateTime = java.sql.Date.valueOf((String) value);
             long millis =
-                HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
-                    dateTime.getTime());
+                    HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
+                            dateTime.getTime());
 
             millis = HsqlDateTime.getNormalisedDate(millis);
 
@@ -367,10 +368,10 @@ implements RowInputInterface {
 
         if (version18) {
             java.sql.Timestamp dateTime =
-                java.sql.Timestamp.valueOf((String) value);
+                    java.sql.Timestamp.valueOf((String) value);
             long millis =
-                HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
-                    dateTime.getTime());
+                    HsqlDateTime.convertMillisFromCalendar(tempCalDefault,
+                            dateTime.getTime());
             int nanos = dateTime.getNanos();
 
             nanos = DateTimeType.normaliseFraction(nanos, type.scale);

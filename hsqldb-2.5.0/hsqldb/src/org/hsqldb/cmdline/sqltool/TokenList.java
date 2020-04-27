@@ -44,9 +44,11 @@ public class TokenList extends ArrayList<Token> implements TokenSource {
     public TokenList() {
         super();
     }
+
     public TokenList(TokenList inList) {
         super(inList);
     }
+
     public Token yylex() {
         if (size() < 1) return null;
         //return remove(0);

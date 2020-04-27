@@ -46,20 +46,19 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Handles all scripting and logging operations. A script consists of two blocks:<p>
- *
+ * <p>
  * DDL: SQL statements for table and user definitions
  * DATA: INSERT statements for memory tables
- *
+ * <p>
  * This happens as part of the CHECKPOINT and SHUTDOWN COMPACT
  * process. In this case, the
  * DATA block contains the CACHED table data as well.<p>
- *
+ * <p>
  * A related use for this class is for saving a current snapshot of the
  * database data to a user-defined file with the SCRIPT command
- *
+ * <p>
  * A log consists of SQL statements of different types. Each statement is
  * encoded as ASCII and saved.
- *
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.5.0
@@ -67,25 +66,27 @@ import java.util.zip.GZIPOutputStream;
  */
 public class ScriptWriterText extends ScriptWriterBase {
 
-    private static byte[] BYTES_COMMIT       = "COMMIT".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_INSERT_INTO  = "INSERT INTO ".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_VALUES       = " VALUES(".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_TERM         = ")".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_DELETE_FROM  = "DELETE FROM ".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_WHERE        = " WHERE ".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_SEQUENCE     = "ALTER SEQUENCE ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_COMMIT = "COMMIT".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_INSERT_INTO = "INSERT INTO ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_VALUES = " VALUES(".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_TERM = ")".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_DELETE_FROM = "DELETE FROM ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_WHERE = " WHERE ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_SEQUENCE = "ALTER SEQUENCE ".getBytes(JavaSystem.CS_ISO_8859_1);
     private static byte[] BYTES_SEQUENCE_MID = " RESTART WITH ".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_C_ID_INIT    = "/*C".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_C_ID_TERM    = "*/".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_SCHEMA       = "SET SCHEMA ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_C_ID_INIT = "/*C".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_C_ID_TERM = "*/".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_SCHEMA = "SET SCHEMA ".getBytes(JavaSystem.CS_ISO_8859_1);
 
-    /** @todo - perhaps move this global into a lib utility class */
+    /**
+     * @todo - perhaps move this global into a lib utility class
+     */
     private static byte[] BYTES_LINE_SEP = System.getProperty("line.separator",
-        "\n").getBytes(JavaSystem.CS_ISO_8859_1);
+            "\n").getBytes(JavaSystem.CS_ISO_8859_1);
 
     static {
         if (BYTES_LINE_SEP[0] != 0x0A && BYTES_LINE_SEP[0] != 0x0D) {
-            BYTES_LINE_SEP = new byte[]{ 0x0A };
+            BYTES_LINE_SEP = new byte[]{0x0A};
         }
     }
 
@@ -115,9 +116,9 @@ public class ScriptWriterText extends ScriptWriterBase {
                 fileStreamOut = new GZIPOutputStream(fileStreamOut);
             } catch (IOException e) {
                 throw Error.error(e, ErrorCode.FILE_IO_ERROR,
-                                  ErrorCode.M_Message_Pair, new Object[] {
-                    e.toString(), outFile
-                });
+                        ErrorCode.M_Message_Pair, new Object[]{
+                                e.toString(), outFile
+                        });
             }
         }
     }
@@ -126,7 +127,8 @@ public class ScriptWriterText extends ScriptWriterBase {
         rowOut = new RowOutputTextLog();
     }
 
-    protected void writeDataTerm() {}
+    protected void writeDataTerm() {
+    }
 
     protected void writeSessionIdAndSchema(Session session) {
 
@@ -239,7 +241,7 @@ public class ScriptWriterText extends ScriptWriterBase {
         rowOut.writeString(table.getName().statementName);
         rowOut.writeBytes(BYTES_WHERE);
         rowOut.writeData(table.getColumnCount(), table.getColumnTypes(), data,
-                         table.columnList, table.getPrimaryKey());
+                table.columnList, table.getPrimaryKey());
         rowOut.writeBytes(BYTES_LINE_SEP);
         writeRowOutToFile();
     }

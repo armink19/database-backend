@@ -81,7 +81,7 @@ import java.util.*;
  *              --noexit              Don't exit JVM
  * }
  * </pre>
- *
+ * <p>
  * Note that the sys-table switch will not work for Oracle, because Oracle
  * does not categorize their system tables correctly in the JDBC Metadata.
  *
@@ -91,7 +91,7 @@ import java.util.*;
  * @since 1.7.0
  */
 public class DatabaseManagerSwing extends JFrame
-implements ActionListener, WindowListener, KeyListener, MouseListener {
+        implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     /*
      * This is down here because it is an  implementation note, not a
@@ -102,22 +102,22 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
      * be reserved for single-letter switches which can be mixed like
      * "-u -r -l" = "-url".  -blaine
      */
-    private static String homedir  = null;
-    private boolean       isOracle = false;    // Need some workarounds for Oracle
+    private static String homedir = null;
+    private boolean isOracle = false;    // Need some workarounds for Oracle
 
     static {
         homedir = System.getProperty("user.home");
     }
 
-    ArrayList<JMenuItem>        localActionList = new ArrayList<JMenuItem>();
-    private JFrame              jframe          = null;
-    private static final String DEFAULT_RCFILE  = homedir + "/dbmanager.rc";
-    private static boolean      TT_AVAILABLE    = false;
+    ArrayList<JMenuItem> localActionList = new ArrayList<JMenuItem>();
+    private JFrame jframe = null;
+    private static final String DEFAULT_RCFILE = homedir + "/dbmanager.rc";
+    private static boolean TT_AVAILABLE = false;
 
     static {
         try {
             Class.forName(DatabaseManagerSwing.class.getPackage().getName()
-                          + ".Transfer");
+                    + ".Transfer");
 
             TT_AVAILABLE = true;
         } catch (Throwable t) {
@@ -130,120 +130,122 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
     }
 
     private static final String HELP_TEXT =
-        "See the HSQLDB Utilities Guide, forums and mailing lists \n"
-        + "at http://hsqldb.org.\n\n"
-        + "Please paste the following version identifier with any\n"
-        + "problem reports or help requests:  $Revision: 5987 $"
-        + (TT_AVAILABLE ? ""
-                        : ("\n\nTransferTool classes are not in CLASSPATH.\n"
-                           + "To enable the Tools menu, add 'transfer.jar' "
-                           + "to your class path."));
+            "See the HSQLDB Utilities Guide, forums and mailing lists \n"
+                    + "at http://hsqldb.org.\n\n"
+                    + "Please paste the following version identifier with any\n"
+                    + "problem reports or help requests:  $Revision: 5987 $"
+                    + (TT_AVAILABLE ? ""
+                    : ("\n\nTransferTool classes are not in CLASSPATH.\n"
+                    + "To enable the Tools menu, add 'transfer.jar' "
+                    + "to your class path."));
     private static final String ABOUT_TEXT =
-        "$Revision: 5987 $ of DatabaseManagerSwing\n\n"
-        + "Copyright (c) 2001-2019, The HSQL Development Group.\n"
-        + "http://hsqldb.org  (Utilities Guide available at this site).\n\n\n"
-        + "You may use and redistribute according to the HSQLDB\n"
-        + "license documented in the source code and at the web\n"
-        + "site above."
-        + (TT_AVAILABLE ? "\n\nTransferTool options are available."
-                        : "");
-    static final String    NL         = System.getProperty("line.separator");
-    static final String    NULL_STR   = "[null]";
-    static int             iMaxRecent = 24;
-    Connection             cConn;
-    Connection             rowConn;    // holds the connetion for getting table row counts
-    DatabaseMetaData       dMeta;
-    Statement              sStatement;
-    JMenu                  mRecent;
-    String[]               sRecent;
-    int                    iRecent;
-    JTextArea              txtCommand;
-    JScrollPane            txtCommandScroll;
-    JButton                butExecute;
-    JTree                  tTree;
-    JScrollPane            tScrollPane;
-    DefaultTreeModel       treeModel;
-    TableModel             tableModel;
+            "$Revision: 5987 $ of DatabaseManagerSwing\n\n"
+                    + "Copyright (c) 2001-2019, The HSQL Development Group.\n"
+                    + "http://hsqldb.org  (Utilities Guide available at this site).\n\n\n"
+                    + "You may use and redistribute according to the HSQLDB\n"
+                    + "license documented in the source code and at the web\n"
+                    + "site above."
+                    + (TT_AVAILABLE ? "\n\nTransferTool options are available."
+                    : "");
+    static final String NL = System.getProperty("line.separator");
+    static final String NULL_STR = "[null]";
+    static int iMaxRecent = 24;
+    Connection cConn;
+    Connection rowConn;    // holds the connetion for getting table row counts
+    DatabaseMetaData dMeta;
+    Statement sStatement;
+    JMenu mRecent;
+    String[] sRecent;
+    int iRecent;
+    JTextArea txtCommand;
+    JScrollPane txtCommandScroll;
+    JButton butExecute;
+    JTree tTree;
+    JScrollPane tScrollPane;
+    DefaultTreeModel treeModel;
+    TableModel tableModel;
     DefaultMutableTreeNode rootNode;
-    JPanel                 pResult;
-    long                   lTime;
-    GridSwing              gResult;
+    JPanel pResult;
+    long lTime;
+    GridSwing gResult;
 
     /**
      * I think this is used to store model info whether we're using Grid
-     *  output or not (this object is queried for data to display for
-     *  text output mode).
-     *  If so, the presentation-independent model part should be moved
-     *  to an appropriately-named class instead of storing pure data in
-     *  a Swing-specific class.
+     * output or not (this object is queried for data to display for
+     * text output mode).
+     * If so, the presentation-independent model part should be moved
+     * to an appropriately-named class instead of storing pure data in
+     * a Swing-specific class.
      */
-    JTable            gResultTable;
-    JScrollPane       gScrollPane;
-    JTextArea         txtResult;
-    JScrollPane       txtResultScroll;
-    JSplitPane        nsSplitPane;     // Contains query over results
-    JSplitPane        ewSplitPane;     // Contains tree beside nsSplitPane
-    boolean           bHelp;
+    JTable gResultTable;
+    JScrollPane gScrollPane;
+    JTextArea txtResult;
+    JScrollPane txtResultScroll;
+    JSplitPane nsSplitPane;     // Contains query over results
+    JSplitPane ewSplitPane;     // Contains tree beside nsSplitPane
+    boolean bHelp;
     RootPaneContainer fMain;
-    static boolean    bMustExit;
+    static boolean bMustExit;
 
-    /** Value of this variable only retained if huge input script read in. */
-    String          sqlScriptBuffer = null;
-    JToolBar        jtoolbar;
-    private boolean showSchemas  = true;
+    /**
+     * Value of this variable only retained if huge input script read in.
+     */
+    String sqlScriptBuffer = null;
+    JToolBar jtoolbar;
+    private boolean showSchemas = true;
     private boolean showTooltips = true;
-    private boolean autoRefresh  = true;
-    private boolean gridFormat   = true;
+    private boolean autoRefresh = true;
+    private boolean gridFormat = true;
 
     // Added: (weconsultants@users)
     static DatabaseManagerSwing refForFontDialogSwing;
-    boolean                     displayRowCounts = false;
-    boolean                     showSys          = false;
-    boolean                     showIndexDetails = true;
-    String                      currentLAF       = null;
-    JPanel                      pStatus;
-    static JButton              iReadyStatus;
-    JRadioButtonMenuItem        rbAllSchemas = new JRadioButtonMenuItem("*");
-    JMenuItem                   mitemAbout   = new JMenuItem("About", 'A');
-    JMenuItem                   mitemHelp    = new JMenuItem("Help", 'H');
-    JMenuItem mitemUpdateSchemas             = new JMenuItem("Update Schemas");
+    boolean displayRowCounts = false;
+    boolean showSys = false;
+    boolean showIndexDetails = true;
+    String currentLAF = null;
+    JPanel pStatus;
+    static JButton iReadyStatus;
+    JRadioButtonMenuItem rbAllSchemas = new JRadioButtonMenuItem("*");
+    JMenuItem mitemAbout = new JMenuItem("About", 'A');
+    JMenuItem mitemHelp = new JMenuItem("Help", 'H');
+    JMenuItem mitemUpdateSchemas = new JMenuItem("Update Schemas");
     JCheckBoxMenuItem boxAutoCommit =
-        new JCheckBoxMenuItem(AUTOCOMMIT_BOX_TEXT);
+            new JCheckBoxMenuItem(AUTOCOMMIT_BOX_TEXT);
     JCheckBoxMenuItem boxLogging = new JCheckBoxMenuItem(LOGGING_BOX_TEXT);
     JCheckBoxMenuItem boxShowSchemas =
-        new JCheckBoxMenuItem(SHOWSCHEMAS_BOX_TEXT);
+            new JCheckBoxMenuItem(SHOWSCHEMAS_BOX_TEXT);
     JCheckBoxMenuItem boxAutoRefresh =
-        new JCheckBoxMenuItem(AUTOREFRESH_BOX_TEXT);
-    JCheckBoxMenuItem boxTooltips  = new JCheckBoxMenuItem(SHOWTIPS_BOX_TEXT);
+            new JCheckBoxMenuItem(AUTOREFRESH_BOX_TEXT);
+    JCheckBoxMenuItem boxTooltips = new JCheckBoxMenuItem(SHOWTIPS_BOX_TEXT);
     JCheckBoxMenuItem boxRowCounts = new JCheckBoxMenuItem(ROWCOUNTS_BOX_TEXT);
-    JCheckBoxMenuItem boxShowGrid  = new JCheckBoxMenuItem(GRID_BOX_TEXT);
-    JCheckBoxMenuItem boxShowSys   = new JCheckBoxMenuItem(SHOWSYS_BOX_TEXT);
+    JCheckBoxMenuItem boxShowGrid = new JCheckBoxMenuItem(GRID_BOX_TEXT);
+    JCheckBoxMenuItem boxShowSys = new JCheckBoxMenuItem(SHOWSYS_BOX_TEXT);
 
     // Consider adding GTK and Plaf L&Fs.
     JRadioButtonMenuItem rbNativeLF =
-        new JRadioButtonMenuItem("Native Look & Feel");
+            new JRadioButtonMenuItem("Native Look & Feel");
     JRadioButtonMenuItem rbJavaLF =
-        new JRadioButtonMenuItem("Java Look & Feel");
+            new JRadioButtonMenuItem("Java Look & Feel");
     JRadioButtonMenuItem rbMotifLF =
-        new JRadioButtonMenuItem("Motif Look & Feel");
-    JLabel                      jStatusLine;
-    static String               READY_STATUS         = "Ready";
-    private static final String AUTOCOMMIT_BOX_TEXT  = "Autocommit mode";
-    private static final String LOGGING_BOX_TEXT     = "Logging mode";
+            new JRadioButtonMenuItem("Motif Look & Feel");
+    JLabel jStatusLine;
+    static String READY_STATUS = "Ready";
+    private static final String AUTOCOMMIT_BOX_TEXT = "Autocommit mode";
+    private static final String LOGGING_BOX_TEXT = "Logging mode";
     private static final String SHOWSCHEMAS_BOX_TEXT = "Show schemas";
     private static final String AUTOREFRESH_BOX_TEXT = "Auto-refresh tree";
-    private static final String SHOWTIPS_BOX_TEXT    = "Show Tooltips";
-    private static final String ROWCOUNTS_BOX_TEXT   = "Show row counts";
-    private static final String SHOWSYS_BOX_TEXT     = "Show system tables";
+    private static final String SHOWTIPS_BOX_TEXT = "Show Tooltips";
+    private static final String ROWCOUNTS_BOX_TEXT = "Show row counts";
+    private static final String SHOWSYS_BOX_TEXT = "Show system tables";
     private static final String GRID_BOX_TEXT =
-        "Show results in Grid (a.o.t. Text)";
+            "Show results in Grid (a.o.t. Text)";
 
     // variables to hold the default cursors for these top level swing objects
     // so we can restore them when we exit our thread
-    Cursor        fMainCursor;
-    Cursor        txtCommandCursor;
-    Cursor        txtResultCursor;
-    HashMap<AbstractButton,String> tipMap = new HashMap<AbstractButton,String>();
+    Cursor fMainCursor;
+    Cursor txtCommandCursor;
+    Cursor txtResultCursor;
+    HashMap<AbstractButton, String> tipMap = new HashMap<AbstractButton, String>();
     private JMenu mnuSchemas = new JMenu("Schemas");
 
     /**
@@ -256,22 +258,22 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
     //getToolkit().createCustomCursor(CommonSwing.getIcon("SystemCursor"),
     //                                new Point(4, 4), "HourGlass cursor");
     // (ulrivo): variables set by arguments from the commandline
-    static String  defDriver   = "org.hsqldb.jdbcDriver";
-    static String  defURL      = "jdbc:hsqldb:mem:.";
-    static String  defUser     = "SA";
-    static String  defPassword = "";
-    static String  defScript;
-    static String  defDirectory;
+    static String defDriver = "org.hsqldb.jdbcDriver";
+    static String defURL = "jdbc:hsqldb:mem:.";
+    static String defUser = "SA";
+    static String defPassword = "";
+    static String defScript;
+    static String defDirectory;
     private String schemaFilter = null;
 
     public DatabaseManagerSwing() {
         jframe = new JFrame("HSQLDB DatabaseManager");
-        fMain  = jframe;
+        fMain = jframe;
     }
 
     public DatabaseManagerSwing(JFrame frameIn) {
         jframe = frameIn;
-        fMain  = jframe;
+        fMain = jframe;
     }
 
     public void init() {
@@ -288,8 +290,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             btn.setEnabled(false);
         }
 
-        Connection c    = null;
-        boolean    auto = false;
+        Connection c = null;
+        boolean auto = false;
 
 
         try {
@@ -298,9 +300,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             //insertTestData();
             //updateAutoCommitBox();
             c = (auto
-                 ? ConnectionDialogSwing.createConnection(defDriver, defURL,
-                     defUser, defPassword)
-                 : ConnectionDialogSwing.createConnection(jframe, "Connect"));
+                    ? ConnectionDialogSwing.createConnection(defDriver, defURL,
+                    defUser, defPassword)
+                    : ConnectionDialogSwing.createConnection(jframe, "Connect"));
         } catch (Exception e) {
 
             //  Added: (weconsultants@users)
@@ -325,18 +327,18 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         System.getProperties().put("sun.java2d.noddraw", "true");
 
         // (ulrivo): read all arguments from the command line
-        String  currentArg;
-        String  lowerArg;
-        String  urlid        = null;
-        String  rcFile       = null;
-        boolean autoConnect  = false;
+        String currentArg;
+        String lowerArg;
+        String urlid = null;
+        String rcFile = null;
+        boolean autoConnect = false;
         boolean urlidConnect = false;
 
         bMustExit = true;
 
         for (int i = 0; i < arg.length; i++) {
             currentArg = arg[i];
-            lowerArg   = arg[i].toLowerCase();
+            lowerArg = arg[i].toLowerCase();
 
             if (lowerArg.startsWith("--")) {
                 lowerArg = lowerArg.substring(1);
@@ -347,28 +349,28 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                 //
             } else if (i == arg.length - 1) {
                 throw new IllegalArgumentException("No value for argument "
-                                                   + currentArg);
+                        + currentArg);
             }
 
             i++;
 
             if (lowerArg.equals("-driver")) {
-                defDriver   = arg[i];
+                defDriver = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-url")) {
-                defURL      = arg[i];
+                defURL = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-user")) {
-                defUser     = arg[i];
+                defUser = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-password")) {
                 defPassword = arg[i];
                 autoConnect = true;
             } else if (lowerArg.equals("-urlid")) {
-                urlid        = arg[i];
+                urlid = arg[i];
                 urlidConnect = true;
             } else if (lowerArg.equals("-rcfile")) {
-                rcFile       = arg[i];
+                rcFile = arg[i];
                 urlidConnect = true;
             } else if (lowerArg.equals("-dir")) {
                 defDirectory = arg[i];
@@ -389,8 +391,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                  * determine that there was an invocation problem).
                  */
                 throw new IllegalArgumentException(
-                    "invalid argrument " + currentArg + " try:  java... "
-                    + DatabaseManagerSwing.class.getName() + " --help");
+                        "invalid argrument " + currentArg + " try:  java... "
+                                + DatabaseManagerSwing.class.getName() + " --help");
 
                 // No reason to localize, since the main syntax message is
                 // not localized.
@@ -398,7 +400,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         }
 
         DatabaseManagerSwing m =
-            new DatabaseManagerSwing(new JFrame("HSQL Database Manager"));
+                new DatabaseManagerSwing(new JFrame("HSQL Database Manager"));
 
         // Added: (weconsultants@users): Need databaseManagerSwing for later Reference
         refForFontDialogSwing = m;
@@ -412,7 +414,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         try {
             if (autoConnect && urlidConnect) {
                 throw new IllegalArgumentException(
-                    "You may not specify both (urlid) AND (url/user/password).");
+                        "You may not specify both (urlid) AND (url/user/password).");
             }
 
             if (autoConnect) {
@@ -421,17 +423,17 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             } else if (urlidConnect) {
                 if (urlid == null) {
                     throw new IllegalArgumentException(
-                        "You must specify an 'urlid' to use an RC file");
+                            "You must specify an 'urlid' to use an RC file");
                 }
 
                 autoConnect = true;
 
                 String rcfilepath = (rcFile == null) ? DEFAULT_RCFILE
-                                                     : rcFile;
-                RCData rcdata     = new RCData(new File(rcfilepath), urlid);
+                        : rcFile;
+                RCData rcdata = new RCData(new File(rcfilepath), urlid);
 
                 c = rcdata.getConnection(
-                    null, System.getProperty("javax.net.ssl.trustStore"));
+                        null, System.getProperty("javax.net.ssl.trustStore"));
             } else {
                 c = ConnectionDialogSwing.createConnection(m.jframe, "Connect");
             }
@@ -481,7 +483,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         rowConn = c;
 
         try {
-            dMeta      = cConn.getMetaData();
+            dMeta = cConn.getMetaData();
             isOracle = (dMeta.getDatabaseProductName().indexOf("Oracle") >= 0);
             sStatement = cConn.createStatement();
 
@@ -492,11 +494,11 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             Driver driver = DriverManager.getDriver(dMeta.getURL());
             ConnectionSetting newSetting = new ConnectionSetting(
-                dMeta.getDatabaseProductName(), driver.getClass().getName(),
-                dMeta.getURL(),
-                dMeta.getUserName().replaceAll("@localhost", ""), "");
+                    dMeta.getDatabaseProductName(), driver.getClass().getName(),
+                    dMeta.getURL(),
+                    dMeta.getUserName().replaceAll("@localhost", ""), "");
             Hashtable settings =
-                ConnectionDialogCommon.loadRecentConnectionSettings();
+                    ConnectionDialogCommon.loadRecentConnectionSettings();
 
             ConnectionDialogCommon.addToRecentConnectionSettings(settings,
                     newSetting);
@@ -519,18 +521,18 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
     private static void showUsage() {
 
         System.out.println(
-            "Usage: java DatabaseManagerSwing [--options]\n"
-            + "where options include:\n"
-            + "    --help                show this message\n"
-            + "    --driver <classname>  jdbc driver class\n"
-            + "    --url <name>          jdbc url\n"
-            + "    --user <name>         username used for connection\n"
-            + "    --password <password> password for this user\n"
-            + "    --urlid <urlid>       use url/user/password/driver in rc file\n"
-            + "    --rcfile <file>       (defaults to 'dbmanager.rc' in home dir)\n"
-            + "    --dir <path>          default directory\n"
-            + "    --script <file>       reads from script file\n"
-            + "    --noexit              do not call system.exit()");
+                "Usage: java DatabaseManagerSwing [--options]\n"
+                        + "where options include:\n"
+                        + "    --help                show this message\n"
+                        + "    --driver <classname>  jdbc driver class\n"
+                        + "    --url <name>          jdbc url\n"
+                        + "    --user <name>         username used for connection\n"
+                        + "    --password <password> password for this user\n"
+                        + "    --urlid <urlid>       use url/user/password/driver in rc file\n"
+                        + "    --rcfile <file>       (defaults to 'dbmanager.rc' in home dir)\n"
+                        + "    --dir <path>          default directory\n"
+                        + "    --script <file>       reads from script file\n"
+                        + "    --noexit              do not call system.exit()");
     }
 
     private void insertTestData() {
@@ -538,10 +540,10 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         try {
             DatabaseManagerCommon.createTestTables(sStatement);
             txtCommand.setText(
-                DatabaseManagerCommon.createTestData(sStatement));
+                    DatabaseManagerCommon.createTestData(sStatement));
 
             for (int i = 0; i < DatabaseManagerCommon.testDataSql.length;
-                    i++) {
+                 i++) {
                 addToRecent(DatabaseManagerCommon.testDataSql[i]);
             }
 
@@ -561,7 +563,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     public void main() {
 
-        JMenu     jmenu;
+        JMenu jmenu;
         JMenuItem mitem;
 
         try {
@@ -576,12 +578,12 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         if (prefs == null) {
             setLF(CommonSwing.Native);
         } else {
-            autoRefresh      = prefs.autoRefresh;
+            autoRefresh = prefs.autoRefresh;
             displayRowCounts = prefs.showRowCounts;
-            showSys          = prefs.showSysTables;
-            showSchemas      = prefs.showSchemas;
-            gridFormat       = prefs.resultGrid;
-            showTooltips     = prefs.showTooltips;
+            showSys = prefs.showSysTables;
+            showSchemas = prefs.showSchemas;
+            gridFormat = prefs.resultGrid;
+            showTooltips = prefs.showTooltips;
 
             setLF(prefs.laf);
         }
@@ -591,7 +593,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         if (fMain instanceof java.awt.Frame) {
             ((java.awt.Frame) fMain).setIconImage(
-                CommonSwing.getIcon("Frame"));
+                    CommonSwing.getIcon("Frame"));
         }
 
         if (fMain instanceof java.awt.Window) {
@@ -602,8 +604,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         // used shortcuts: CERGTSIUDOLM
         String[] fitems = {
-            "-Connect...", "--", "OOpen Script...", "-Save Script...",
-            "-Save Result...", "--", "-Exit"
+                "-Connect...", "--", "OOpen Script...", "-Save Script...",
+                "-Save Result...", "--", "-Exit"
         };
 
         jmenu = addMenu(bar, "File", fitems);
@@ -618,17 +620,17 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         }
 
         Object[] vitems = {
-            "RRefresh Tree", boxAutoRefresh, "--", boxRowCounts, boxShowSys,
-            boxShowSchemas, boxShowGrid
+                "RRefresh Tree", boxAutoRefresh, "--", boxRowCounts, boxShowSys,
+                boxShowSchemas, boxShowGrid
         };
 
         addMenu(bar, "View", vitems);
 
         String[] sitems = {
-            "SSELECT", "IINSERT", "UUPDATE", "DDELETE", "EEXECUTE", "---",
-            "-CREATE TABLE", "-DROP TABLE", "-CREATE INDEX", "-DROP INDEX",
-            "--", "CCOMMIT*", "LROLLBACK*", "-CHECKPOINT*", "-SCRIPT", "-SET",
-            "-SHUTDOWN", "--", "-Test Script"
+                "SSELECT", "IINSERT", "UUPDATE", "DDELETE", "EEXECUTE", "---",
+                "-CREATE TABLE", "-DROP TABLE", "-CREATE INDEX", "-DROP INDEX",
+                "--", "CCOMMIT*", "LROLLBACK*", "-CHECKPOINT*", "-SCRIPT", "-SET",
+                "-SHUTDOWN", "--", "-Test Script"
         };
 
         addMenu(bar, "Command", sitems);
@@ -659,20 +661,20 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         tipMap.put(mitemAbout, "Display product information");
         tipMap.put(mitemHelp, "Display advice for obtaining help");
         tipMap.put(boxAutoRefresh,
-                   "Refresh tree (and schema list) automatically"
-                   + "when YOU modify database objects");
+                "Refresh tree (and schema list) automatically"
+                        + "when YOU modify database objects");
         tipMap.put(boxShowSchemas,
-                   "Display object names in tree-like schemaname.basename");
+                "Display object names in tree-like schemaname.basename");
         tipMap.put(rbNativeLF,
-                   "Set Look and Feel to Native for your platform");
+                "Set Look and Feel to Native for your platform");
         tipMap.put(rbJavaLF, "Set Look and Feel to Java");
         tipMap.put(rbMotifLF, "Set Look and Feel to Motif");
         boxTooltips.setToolTipText("Display tooltips (hover text), like this");
         tipMap.put(boxAutoCommit,
-                   "Shows current Auto-commit mode.  Click to change");
+                "Shows current Auto-commit mode.  Click to change");
         tipMap.put(
-            boxLogging,
-            "Shows current JDBC DriverManager logging mode.  Click to change");
+                boxLogging,
+                "Shows current JDBC DriverManager logging mode.  Click to change");
         tipMap.put(boxShowSys, "Show system tables in table tree to the left");
         tipMap.put(boxShowGrid, "Show query results in grid (in text if off)");
         tipMap.put(boxRowCounts, "Show row counts with table names in tree");
@@ -691,16 +693,16 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         Object[] soptions = {
 
-            // Added: (weconsultants@users) New menu options
-            rbNativeLF, rbJavaLF, rbMotifLF, "--", "-Set Fonts", "--",
-            boxAutoCommit, "--", "-Disable MaxRows", "-Set MaxRows to 100",
-            "--", boxLogging, "--", "-Insert test data"
+                // Added: (weconsultants@users) New menu options
+                rbNativeLF, rbJavaLF, rbMotifLF, "--", "-Set Fonts", "--",
+                boxAutoCommit, "--", "-Disable MaxRows", "-Set MaxRows to 100",
+                "--", boxLogging, "--", "-Insert test data"
         };
 
         addMenu(bar, "Options", soptions);
 
         String[] stools = {
-            "-Dump", "-Restore", "-Transfer"
+                "-Dump", "-Restore", "-Transfer"
         };
 
         jmenu = addMenu(bar, "Tools", stools);
@@ -739,8 +741,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             public void actionPerformed(ActionEvent actionevent) {
 
                 JOptionPane.showMessageDialog(fMain.getContentPane(),
-                                              HELP_TEXT, "HELP",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        HELP_TEXT, "HELP",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
         mitemAbout.addActionListener(new ActionListener() {
@@ -748,8 +750,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             public void actionPerformed(ActionEvent actionevent) {
 
                 JOptionPane.showMessageDialog(fMain.getContentPane(),
-                                              ABOUT_TEXT, "About",
-                                              JOptionPane.INFORMATION_MESSAGE);
+                        ABOUT_TEXT, "About",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
         boxTooltips.addActionListener(new ActionListener() {
@@ -792,12 +794,12 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                 if (eoThirdLine > 0) {
                     eoThirdLine = sqlScriptBuffer.indexOf('\n',
-                                                          eoThirdLine + 1);
+                            eoThirdLine + 1);
                 }
 
                 if (eoThirdLine > 0) {
                     eoThirdLine = sqlScriptBuffer.indexOf('\n',
-                                                          eoThirdLine + 1);
+                            eoThirdLine + 1);
                 }
 
                 if (eoThirdLine < 1) {
@@ -805,15 +807,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                 }
 
                 txtCommand.setText(
-                    "............... Script File loaded: " + defScript
-                    + " ..................... \n"
-                    + "............... Click Execute or Clear "
-                    + "...................\n"
-                    + sqlScriptBuffer.substring(0, eoThirdLine + 1)
-                    + "..........................................."
-                    + "..............................\n"
-                    + "............................................."
-                    + "............................\n");
+                        "............... Script File loaded: " + defScript
+                                + " ..................... \n"
+                                + "............... Click Execute or Clear "
+                                + "...................\n"
+                                + sqlScriptBuffer.substring(0, eoThirdLine + 1)
+                                + "..........................................."
+                                + "..............................\n"
+                                + "............................................."
+                                + "............................\n");
                 txtCommand.setEnabled(false);
             } else {
                 txtCommand.setText(sqlScriptBuffer);
@@ -875,14 +877,14 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                     if (c != '-') {
                         KeyStroke key =
-                            KeyStroke.getKeyStroke(c, InputEvent.CTRL_DOWN_MASK);
+                                KeyStroke.getKeyStroke(c, InputEvent.CTRL_DOWN_MASK);
 
                         item.setAccelerator(key);
                     }
                 } else {
                     throw new RuntimeException(
-                        "Unexpected element for menu item creation: "
-                        + m[i].getClass().getName());
+                            "Unexpected element for menu item creation: "
+                                    + m[i].getClass().getName());
                 }
 
                 item.addActionListener(this);
@@ -891,9 +893,11 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         }
     }
 
-    public void keyPressed(KeyEvent k) {}
+    public void keyPressed(KeyEvent k) {
+    }
 
-    public void keyReleased(KeyEvent k) {}
+    public void keyReleased(KeyEvent k) {
+    }
 
     public void keyTyped(KeyEvent k) {
 
@@ -915,24 +919,24 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             }
         }
 
-        if (s == null) {}
-        else if (s.equals("Exit")) {
+        if (s == null) {
+        } else if (s.equals("Exit")) {
             windowClosing(null);
         } else if (s.equals("Transfer")) {
             Transfer.work(null);
         } else if (s.equals("Dump")) {
-            Transfer.work(new String[]{ "-d" });
+            Transfer.work(new String[]{"-d"});
         } else if (s.equals("Restore")) {
             JOptionPane.showMessageDialog(
-                fMain.getContentPane(),
-                "Use Ctrl-R or the View menu to\n"
-                + "update nav. tree after Restoration", "Suggestion",
+                    fMain.getContentPane(),
+                    "Use Ctrl-R or the View menu to\n"
+                            + "update nav. tree after Restoration", "Suggestion",
                     JOptionPane.INFORMATION_MESSAGE);
 
             // Regardless of whether autoRefresh is on, half of
             // Restore runs asynchronously, so we could only
             // update the tree from within the Transfer class.
-            Transfer.work(new String[]{ "-r" });
+            Transfer.work(new String[]{"-r"});
 
             // Would be better to put the modal suggestion here, after the
             // user selects the import file, but that messes up the z
@@ -983,21 +987,21 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                 if (file != null) {
                     sqlScriptBuffer =
-                        DatabaseManagerCommon.readFile(file.getAbsolutePath());
+                            DatabaseManagerCommon.readFile(file.getAbsolutePath());
 
                     if (4096 <= sqlScriptBuffer.length()) {
                         int eoThirdLine = sqlScriptBuffer.indexOf('\n');
 
                         if (eoThirdLine > 0) {
                             eoThirdLine = sqlScriptBuffer.indexOf('\n',
-                                                                  eoThirdLine
-                                                                  + 1);
+                                    eoThirdLine
+                                            + 1);
                         }
 
                         if (eoThirdLine > 0) {
                             eoThirdLine = sqlScriptBuffer.indexOf('\n',
-                                                                  eoThirdLine
-                                                                  + 1);
+                                    eoThirdLine
+                                            + 1);
                         }
 
                         if (eoThirdLine < 1) {
@@ -1005,15 +1009,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                         }
 
                         txtCommand.setText(
-                            "............... Script File loaded: " + file
-                            + " ..................... \n"
-                            + "............... Click Execute or Clear "
-                            + "...................\n"
-                            + sqlScriptBuffer.substring(0, eoThirdLine + 1)
-                            + "........................................."
-                            + "................................\n"
-                            + "..........................................."
-                            + "..............................\n");
+                                "............... Script File loaded: " + file
+                                        + " ..................... \n"
+                                        + "............... Click Execute or Clear "
+                                        + "...................\n"
+                                        + sqlScriptBuffer.substring(0, eoThirdLine + 1)
+                                        + "........................................."
+                                        + "................................\n"
+                                        + "..........................................."
+                                        + "..............................\n");
                         txtCommand.setEnabled(false);
                     } else {
                         txtCommand.setText(sqlScriptBuffer);
@@ -1041,7 +1045,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                 if (file != null) {
                     DatabaseManagerCommon.writeFile(file.getAbsolutePath(),
-                                                    txtCommand.getText());
+                            txtCommand.getText());
                 }
             }
         } else if (s.equals("Save Result...")) {
@@ -1062,7 +1066,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                 if (file != null) {
                     showResultInText();
                     DatabaseManagerCommon.writeFile(file.getAbsolutePath(),
-                                                    txtResult.getText());
+                            txtResult.getText());
                 }
             }
         } else if (s.equals(SHOWSYS_BOX_TEXT)) {
@@ -1091,8 +1095,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         } else if (s.equals("COMMIT*")) {
             try {
                 cConn.commit();
-                showHelp(new String[] {
-                    "", "COMMIT executed"
+                showHelp(new String[]{
+                        "", "COMMIT executed"
                 });
             } catch (SQLException e) {
 
@@ -1105,8 +1109,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         } else if (s.equals("ROLLBACK*")) {
             try {
                 cConn.rollback();
-                showHelp(new String[] {
-                    "", "ROLLBACK executed"
+                showHelp(new String[]{
+                        "", "ROLLBACK executed"
                 });
             } catch (SQLException e) {
 
@@ -1148,8 +1152,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         } else if (s.equals("CHECKPOINT*")) {
             try {
                 cConn.createStatement().executeUpdate("CHECKPOINT");
-                showHelp(new String[] {
-                    "", "CHECKPOINT executed"
+                showHelp(new String[]{
+                        "", "CHECKPOINT executed"
                 });
             } catch (SQLException e) {
                 CommonSwing.errorMessage(e);
@@ -1213,17 +1217,23 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         txtCommand.setCaretPosition(help[0].length());
     }
 
-    public void windowActivated(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {
+    }
 
-    public void windowDeactivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {
+    }
 
-    public void windowClosed(WindowEvent e) {}
+    public void windowClosed(WindowEvent e) {
+    }
 
-    public void windowDeiconified(WindowEvent e) {}
+    public void windowDeiconified(WindowEvent e) {
+    }
 
-    public void windowIconified(WindowEvent e) {}
+    public void windowIconified(WindowEvent e) {
+    }
 
-    public void windowOpened(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {
+    }
 
     public void windowClosing(WindowEvent ev) {
 
@@ -1235,13 +1245,13 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             }
 
             if (prefs != null) {
-                prefs.autoRefresh   = autoRefresh;
+                prefs.autoRefresh = autoRefresh;
                 prefs.showRowCounts = displayRowCounts;
                 prefs.showSysTables = showSys;
-                prefs.showSchemas   = showSchemas;
-                prefs.resultGrid    = gridFormat;
-                prefs.showTooltips  = showTooltips;
-                prefs.laf           = currentLAF;
+                prefs.showSchemas = showSchemas;
+                prefs.resultGrid = gridFormat;
+                prefs.showTooltips = showTooltips;
+                prefs.laf = currentLAF;
 
                 prefs.store();
             }
@@ -1318,10 +1328,10 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             // save the old cursors
             if (fMainCursor == null) {
                 fMainCursor = ((fMain instanceof java.awt.Frame)
-                               ? (((java.awt.Frame) fMain).getCursor())
-                               : (((Component) fMain).getCursor()));
+                        ? (((java.awt.Frame) fMain).getCursor())
+                        : (((Component) fMain).getCursor()));
                 txtCommandCursor = txtCommand.getCursor();
-                txtResultCursor  = txtResult.getCursor();
+                txtResultCursor = txtResult.getCursor();
             }
 
             // set the cursors to the wait cursor
@@ -1338,7 +1348,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         }
 
         setStatusLine(busyText, ((busyText == null) ? gResult.getRowCount()
-                                                    : 0));
+                : 0));
     }
 
     private Runnable enableButtonRunnable = new Runnable() {
@@ -1355,9 +1365,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             jbuttonExecute.setEnabled(false);
         }
     };
-    private Thread           buttonUpdaterThread = null;
+    private Thread buttonUpdaterThread = null;
     private static final int BUTTON_CHECK_PERIOD = 500;
-    private Runnable         buttonUpdater       = new Runnable() {
+    private Runnable buttonUpdater = new Runnable() {
 
         public void run() {
 
@@ -1366,7 +1376,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             while (true) {
                 try {
                     Thread.sleep(BUTTON_CHECK_PERIOD);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {
+                }
 
                 if (buttonUpdaterThread == null) {    // Pointer to me
                     return;
@@ -1376,7 +1387,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                 if (jbuttonClear.isEnabled() != havesql) {
                     SwingUtilities.invokeLater(havesql ? enableButtonRunnable
-                                                       : disableButtonRunnable);
+                            : disableButtonRunnable);
                 }
             }
         }
@@ -1466,13 +1477,13 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     private void executeSQL() {
 
-        String[] g   = new String[1];
-        String   sql = null;
+        String[] g = new String[1];
+        String sql = null;
 
         try {
             lTime = System.nanoTime();
-            sql   = ((sqlScriptBuffer == null ? txtCommand.getText()
-                                              : sqlScriptBuffer));
+            sql = ((sqlScriptBuffer == null ? txtCommand.getText()
+                    : sqlScriptBuffer));
 
             if (sStatement == null) {
                 g[0] = "no connection";
@@ -1522,14 +1533,14 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             }
         } catch (SQLException e) {
             lTime = System.nanoTime() - lTime;
-            g[0]  = "SQL Error";
+            g[0] = "SQL Error";
 
             gResult.setHead(g);
 
             String s = e.getMessage();
 
-            s    += " / Error Code: " + e.getErrorCode();
-            s    += " / State: " + e.getSQLState();
+            s += " / Error Code: " + e.getErrorCode();
+            s += " / State: " + e.getSQLState();
             g[0] = s;
 
             gResult.addRow(g);
@@ -1608,15 +1619,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         }
 
         try {
-            ResultSetMetaData m         = r.getMetaData();
-            int               col       = m.getColumnCount();
-            Object[]          h         = new Object[col];
-            boolean[]         isVarChar = new boolean[col];
+            ResultSetMetaData m = r.getMetaData();
+            int col = m.getColumnCount();
+            Object[] h = new Object[col];
+            boolean[] isVarChar = new boolean[col];
 
             for (int i = 1; i <= col; i++) {
                 h[i - 1] = m.getColumnLabel(i);
                 isVarChar[i - 1] = (m.getColumnType(i)
-                                    == java.sql.Types.VARCHAR);
+                        == java.sql.Types.VARCHAR);
             }
 
             gResult.setHead(h);
@@ -1628,9 +1639,10 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                         if (r.wasNull()) {
                             h[i - 1] = (isVarChar[i - 1] ? NULL_STR
-                                                         : null);
+                                    : null);
                         }
-                    } catch (SQLException e) {}
+                    } catch (SQLException e) {
+                    }
                 }
 
                 gResult.addRow(h);
@@ -1646,9 +1658,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     private void testPerformance() {
 
-        String        all   = txtCommand.getText();
-        StringBuilder b     = new StringBuilder();
-        long          total = 0;
+        String all = txtCommand.getText();
+        StringBuilder b = new StringBuilder();
+        long total = 0;
 
         lTime = 0;
 
@@ -1676,7 +1688,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         lTime = System.nanoTime() - lTime;
 
         while (!all.equals("")) {
-            int    i = all.indexOf(';');
+            int i = all.indexOf(';');
             String sql;
 
             if (i != -1) {
@@ -1702,9 +1714,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             try {
                 l = DatabaseManagerCommon.testStatement(sStatement, sql, max);
                 total += l;
-                g[0]  = "" + l;
-                g[1]  = "" + max;
-                g[3]  = "";
+                g[0] = "" + l;
+                g[1] = "" + max;
+                g[3] = "";
             } catch (SQLException e) {
                 g[0] = g[1] = "n/a";
                 g[3] = e.toString();
@@ -1728,12 +1740,12 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     private void showResultInText() {
 
-        Object[] col   = gResult.getHead();
-        int      width = col.length;
-        int[]    size  = new int[width];
+        Object[] col = gResult.getHead();
+        int width = col.length;
+        int[] size = new int[width];
         ArrayList<Object[]> data = gResult.getData();
         Object[] row;
-        int      height = data.size();
+        int height = data.size();
 
         for (int i = 0; i < width; i++) {
             size[i] = col[i].toString().length();
@@ -1744,8 +1756,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             for (int j = 0; j < width; j++) {
                 String item = ((row[j] == null) ? ""
-                                                : row[j].toString());
-                int    l    = item.length();
+                        : row[j].toString());
+                int l = item.length();
 
                 if (l > size[j]) {
                     size[j] = l;
@@ -1780,7 +1792,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             for (int j = 0; j < width; j++) {
                 String item = ((row[j] == null) ? ""
-                                                : row[j].toString());
+                        : row[j].toString());
 
                 b.append(item);
 
@@ -1830,11 +1842,14 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     // empty implementations for mouse listener.  We're only using
     // mouseReleased
-    public final void mouseClicked(final MouseEvent mouseEvent) {}
+    public final void mouseClicked(final MouseEvent mouseEvent) {
+    }
 
-    public final void mouseEntered(final MouseEvent mouseEvent) {}
+    public final void mouseEntered(final MouseEvent mouseEvent) {
+    }
 
-    public final void mouseExited(final MouseEvent mouseEvent) {}
+    public final void mouseExited(final MouseEvent mouseEvent) {
+    }
 
     // Check for handlePopup in both mousePressed and mouseReleased.  According to
     // MouseEvent javadocs it's necessary for cross platform compatibility.
@@ -1884,7 +1899,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             return;
         }
 
-        JTree    tree     = (JTree) source;
+        JTree tree = (JTree) source;
         TreePath treePath = tree.getPathForLocation(e.getX(), e.getY());
 
         // if we couldn't find a tree path that corresponds to the
@@ -1895,16 +1910,16 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         // create the popup and menus
         JPopupMenu popup = new JPopupMenu();
-        JMenuItem  menuItem;
-        String[]   menus = new String[] {
-            "Select", "Delete", "Update", "Insert"
+        JMenuItem menuItem;
+        String[] menus = new String[]{
+                "Select", "Delete", "Update", "Insert"
         };
 
         // loop throught the menus we want to create, making a PopupListener
         // for each one
         for (int i = 0; i < menus.length; i++) {
             PopupListener popupListener = new PopupListener(menus[i],
-                treePath);
+                    treePath);
             String title = popupListener.toString();
 
             if (title == null) {
@@ -1930,21 +1945,21 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
     private class PopupListener implements ActionListener {
 
         // used to identify depth while right clicking in tree.
-        public static final int DEPTH_URL    = 1;
-        public static final int DEPTH_TABLE  = 2;
+        public static final int DEPTH_URL = 1;
+        public static final int DEPTH_TABLE = 2;
         public static final int DEPTH_COLUMN = 3;
-        String                  command;
-        TreePath                treePath;
-        TreePath                tablePath;
-        TreePath                columnPath;
-        String                  table  = null;
-        String                  column = null;
+        String command;
+        TreePath treePath;
+        TreePath tablePath;
+        TreePath columnPath;
+        String table = null;
+        String column = null;
 
         PopupListener(String command, TreePath treePath) {
 
             super();
 
-            this.command  = command;
+            this.command = command;
             this.treePath = treePath;
         }
 
@@ -1977,11 +1992,11 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             // if we are at TABLE depth, set columnPath, column, tablePath and
             // table for use later
             if (treeDepth == DEPTH_COLUMN) {
-                tablePath  = treePath.getParentPath();
+                tablePath = treePath.getParentPath();
                 table = treePath.getPathComponent(DEPTH_TABLE - 1).toString();
                 columnPath = treePath;
                 column = treePath.getPathComponent(DEPTH_COLUMN
-                                                   - 1).toString();
+                        - 1).toString();
             }
 
             // handle command "SELECT".  Use table and column if set.
@@ -1990,15 +2005,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                 if (column != null) {
                     DefaultMutableTreeNode childNode =
-                        (DefaultMutableTreeNode) treePath
-                            .getLastPathComponent();
-                    String  childName = null;
+                            (DefaultMutableTreeNode) treePath
+                                    .getLastPathComponent();
+                    String childName = null;
                     boolean isChar;
 
                     if (childNode.getChildCount() > 0) {
                         childName = childNode.getFirstChild().toString();
-                        isChar    = childName.indexOf("CHAR") >= 0;
-                        result    += " WHERE " + quoteObjectName(column);
+                        isChar = childName.indexOf("CHAR") >= 0;
+                        result += " WHERE " + quoteObjectName(column);
 
                         if (isChar) {
                             result += " LIKE \'%%\'";
@@ -2028,15 +2043,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
                 if (column != null) {
                     DefaultMutableTreeNode childNode =
-                        (DefaultMutableTreeNode) treePath
-                            .getLastPathComponent();
-                    String  childName = null;
+                            (DefaultMutableTreeNode) treePath
+                                    .getLastPathComponent();
+                    String childName = null;
                     boolean isChar;
 
                     if (childNode.getChildCount() > 0) {
                         childName = childNode.getFirstChild().toString();
-                        isChar    = childName.indexOf("CHAR") >= 0;
-                        result    += " WHERE " + quoteObjectName(column);
+                        isChar = childName.indexOf("CHAR") >= 0;
+                        result += " WHERE " + quoteObjectName(column);
 
                         if (isChar) {
                             result += " LIKE \'%%\'";
@@ -2051,12 +2066,12 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             // handle command "INSERT".  Use table and column if set.
             else if (command.toUpperCase().equals("INSERT")) {
-                TreeNode    tableNode;
+                TreeNode tableNode;
                 Enumeration enumer;
-                String      columns = "";
-                String      values  = " ";
-                String      comma   = "";
-                String      quote   = "";
+                String columns = "";
+                String values = " ";
+                String comma = "";
+                String quote = "";
 
                 // build a string that includes all the columns that need to
                 // be added, with a parenthesied list of commas, suitable for
@@ -2066,7 +2081,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                 }
 
                 tableNode = (TreeNode) tablePath.getLastPathComponent();
-                enumer    = tableNode.children();
+                enumer = tableNode.children();
 
                 while (enumer.hasMoreElements()) {
                     Object o = enumer.nextElement();
@@ -2076,7 +2091,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     }
 
                     DefaultMutableTreeNode childNode =
-                        (DefaultMutableTreeNode) o;
+                            (DefaultMutableTreeNode) o;
                     String childName = null;
 
                     if (childNode.getChildCount() == 0) {
@@ -2095,15 +2110,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     }
 
                     columns += comma + quoteObjectName(o.toString());
-                    values  += comma + quote;
-                    comma   = ", ";
+                    values += comma + quote;
+                    comma = ", ";
                 }
 
                 return "INSERT INTO " + quoteTableName(table) + "\n( "
-                       + columns + " )\nVALUES (" + values + ")";
+                        + columns + " )\nVALUES (" + values + ")";
             } else {
                 return "Got here in error " + command
-                       + ".  Should never happen";
+                        + ".  Should never happen";
             }
         }
     }
@@ -2128,7 +2143,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         String partOne = name.substring(0, dot);
         String partTwo = name.substring(dot + 1);
-        int    bracket = partTwo.indexOf(" (");
+        int bracket = partTwo.indexOf(" (");
 
         if (bracket >= 0) {
             partTwo = partTwo.substring(0, bracket);
@@ -2156,7 +2171,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         pResult = new JPanel();
         nsSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, pCommand,
-                                     pResult);
+                pResult);
 
         // Added: (weconsultants@users)
         nsSplitPane.setOneTouchExpandable(true);
@@ -2171,7 +2186,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         txtCommand.addKeyListener(this);
 
         txtCommandScroll = new JScrollPane(txtCommand);
-        txtResult        = new JTextArea(25, 40);
+        txtResult = new JTextArea(25, 40);
 
         txtResult.setMargin(new Insets(5, 5, 5, 5));
 
@@ -2185,7 +2200,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         TableSorter sorter = new TableSorter(gResult);
 
-        tableModel   = sorter;
+        tableModel = sorter;
         gResultTable = new JTable(sorter);
 
         sorter.setTableHeader(gResultTable.getTableHeader());
@@ -2199,9 +2214,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         pResult.add(gScrollPane, BorderLayout.CENTER);
 
         // Set up the tree
-        rootNode    = new DefaultMutableTreeNode("Connection");
-        treeModel   = new DefaultTreeModel(rootNode);
-        tTree       = new JTree(treeModel);
+        rootNode = new DefaultMutableTreeNode("Connection");
+        treeModel = new DefaultTreeModel(rootNode);
+        tTree = new JTree(treeModel);
         tScrollPane = new JScrollPane(tTree);
 
         // System.out.println("Adding mouse listener");
@@ -2213,7 +2228,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         gScrollPane.setPreferredSize(new Dimension(460, 300));
 
         ewSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tScrollPane,
-                                     nsSplitPane);
+                nsSplitPane);
 
         // Added: (weconsultants@users)
         ewSplitPane.setOneTouchExpandable(true);
@@ -2222,10 +2237,10 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         // Added: (weconsultants@users)
         jStatusLine = new JLabel();
         iReadyStatus =
-            new JButton(new ImageIcon(CommonSwing.getIcon("StatusReady")));
+                new JButton(new ImageIcon(CommonSwing.getIcon("StatusReady")));
 
         iReadyStatus.setSelectedIcon(
-            new ImageIcon(CommonSwing.getIcon("StatusRunning")));
+                new ImageIcon(CommonSwing.getIcon("StatusRunning")));
 
         pStatus = new JPanel();
 
@@ -2245,7 +2260,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
     /* Simple tree node factory method - set's parent and user object.
      */
     private DefaultMutableTreeNode makeNode(Object userObject,
-            MutableTreeNode parent) {
+                                            MutableTreeNode parent) {
 
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(userObject);
 
@@ -2256,18 +2271,18 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         return node;
     }
 
-    private static final String[] usertables   = {
-        "TABLE", "GLOBAL TEMPORARY", "VIEW", "SYSTEM TABLE"
+    private static final String[] usertables = {
+            "TABLE", "GLOBAL TEMPORARY", "VIEW", "SYSTEM TABLE"
     };
     private static final String[] nonSystables = {
-        "TABLE", "GLOBAL TEMPORARY", "VIEW"
+            "TABLE", "GLOBAL TEMPORARY", "VIEW"
     };
     private static final HashSet<String> oracleSysUsers = new HashSet<String>();
     private static final String[] oracleSysSchemas = {
-        "SYS", "SYSTEM", "OUTLN", "DBSNMP", "OUTLN", "MDSYS", "ORDSYS",
-        "ORDPLUGINS", "CTXSYS", "DSSYS", "PERFSTAT", "WKPROXY", "WKSYS",
-        "WMSYS", "XDB", "ANONYMOUS", "ODM", "ODM_MTR", "OLAPSYS", "TRACESVR",
-        "REPADMIN"
+            "SYS", "SYSTEM", "OUTLN", "DBSNMP", "OUTLN", "MDSYS", "ORDSYS",
+            "ORDPLUGINS", "CTXSYS", "DSSYS", "PERFSTAT", "WKPROXY", "WKSYS",
+            "WMSYS", "XDB", "ANONYMOUS", "ODM", "ODM_MTR", "OLAPSYS", "TRACESVR",
+            "REPADMIN"
     };
 
     static {
@@ -2285,12 +2300,12 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     /**
      * Clear all existing nodes from the tree model and rebuild from scratch.
-     *
+     * <p>
      * This method executes in current thread
      */
     protected void directRefreshTree() {
 
-        int[]                  rowCounts;
+        int[] rowCounts;
         DefaultMutableTreeNode propertiesNode;
 
         // Added: (weconsultants@users) Moved tableNode here for visibiity nd new DECFM
@@ -2301,7 +2316,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         // over the root node's children and removing them one by one.
         while (treeModel.getChildCount(rootNode) > 0) {
             DefaultMutableTreeNode child =
-                (DefaultMutableTreeNode) treeModel.getChild(rootNode, 0);
+                    (DefaultMutableTreeNode) treeModel.getChild(rootNode, 0);
 
             treeModel.removeNodeFromParent(child);
             child.removeAllChildren();
@@ -2322,9 +2337,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             // get metadata about user tables by building a vector of table names
             result = dMeta.getTables(null, null, null, (showSys ? usertables
-                                                                : nonSystables));
+                    : nonSystables));
 
-            ArrayList<String> tables  = new ArrayList<String>();
+            ArrayList<String> tables = new ArrayList<String>();
             ArrayList<String> schemas = new ArrayList<String>();
 
             // sqlbob@users Added remarks.
@@ -2394,13 +2409,13 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     }
 
                     String rowcount = displayRowCounts
-                                      ? (DECFMT.format(rowCounts[i]))
-                                      : "";
+                            ? (DECFMT.format(rowCounts[i]))
+                            : "";
                     String displayedName = schemaname + name + rowcount;
 
                     // weconsul@ptd.net Add rowCounts if needed.
                     tableNode = makeNode(displayedName, rootNode);
-                    col       = dMeta.getColumns(null, schema, name, null);
+                    col = dMeta.getColumns(null, schema, name, null);
 
                     if ((schema != null) && !schema.trim().equals("")) {
                         makeNode(schema, tableNode);
@@ -2418,13 +2433,13 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     while (col.next()) {
                         String c = col.getString(4);
                         DefaultMutableTreeNode columnNode = makeNode(c,
-                            tableNode);
+                                tableNode);
                         String type = col.getString(6);
 
                         makeNode("Type: " + type, columnNode);
 
                         boolean nullable = col.getInt(11)
-                                           != DatabaseMetaData.columnNoNulls;
+                                != DatabaseMetaData.columnNoNulls;
 
                         makeNode("Nullable: " + nullable, columnNode);
                     }
@@ -2432,27 +2447,28 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     if (col != null) {
                         try {
                             col.close();
-                        } catch (SQLException se) {}
+                        } catch (SQLException se) {
+                        }
                     }
                 }
 
                 DefaultMutableTreeNode indexesNode = makeNode("Indices",
-                    tableNode);
+                        tableNode);
 
                 if (showIndexDetails) {
                     ResultSet ind = null;
 
                     try {
                         ind = dMeta.getIndexInfo(null, schema, name, false,
-                                                 false);
+                                false);
 
-                        String                 oldiname  = null;
+                        String oldiname = null;
                         DefaultMutableTreeNode indexNode = null;
 
                         // A child node to contain each index - and its attributes
                         while (ind.next()) {
                             boolean nonunique = ind.getBoolean(4);
-                            String  iname     = ind.getString(6);
+                            String iname = ind.getString(6);
 
                             if ((oldiname == null
                                     || !oldiname.equals(iname))) {
@@ -2472,7 +2488,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                         if (se.getMessage() == null || ((!se.getMessage()
                                 .startsWith("ORA-25191:")) && (!se.getMessage()
                                 .startsWith("ORA-01702:")) && !se.getMessage()
-                                    .startsWith("ORA-01031:"))) {
+                                .startsWith("ORA-01031:"))) {
                             throw se;
                         }
                     } finally {
@@ -2493,9 +2509,9 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             makeNode("AutoCommit: " + cConn.getAutoCommit(), propertiesNode);
             makeNode("Driver: " + dMeta.getDriverName(), propertiesNode);
             makeNode("Product: " + dMeta.getDatabaseProductName(),
-                     propertiesNode);
+                    propertiesNode);
             makeNode("Version: " + dMeta.getDatabaseProductVersion(),
-                     propertiesNode);
+                    propertiesNode);
         } catch (SQLException se) {
             propertiesNode = makeNode("Error getting metadata:", rootNode);
 
@@ -2506,7 +2522,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             if (result != null) {
                 try {
                     result.close();
-                } catch (SQLException se) {}
+                } catch (SQLException se) {
+                }
             }
         }
 
@@ -2528,15 +2545,15 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             if (schemaFilter != null) {
                 additionalMsg = " /  Tree showing objects in schema '"
-                                + schemaFilter + "'";
+                        + schemaFilter + "'";
             }
 
             if (rowCount >= 1) {
-                long millis   = lTime / 1000000;
+                long millis = lTime / 1000000;
                 long fraction = (lTime % 1000000) / 100000;
 
                 additionalMsg += " / " + rowCount + " rows retrieved in "
-                                 + millis + '.' + fraction + " ms";
+                        + millis + '.' + fraction + " ms";
             }
 
             jStatusLine.setText("  " + READY_STATUS + additionalMsg);
@@ -2554,7 +2571,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         }
 
         String rowCountSelect = "SELECT COUNT(*) FROM ";
-        int[]  counts;
+        int[] counts;
         String name;
 
         counts = new int[inTable.size()];
@@ -2567,21 +2584,21 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     String schemaPart = (String) inSchema.get(i);
 
                     schemaPart = schemaPart == null ? ""
-                                                    : ("\"" + schemaPart
-                                                       + "\".\"");
+                            : ("\"" + schemaPart
+                            + "\".\"");
                     name = schemaPart + inTable.get(i) + "\"";
 
                     ResultSet resultSet = select.executeQuery(rowCountSelect
-                        + name);
+                            + name);
 
                     while (resultSet.next()) {
                         counts[i] = resultSet.getInt(1);
                     }
                 } catch (Exception e) {
                     System.err.println("Unable to get row count for table "
-                                       + inSchema.get(i) + '.'
-                                       + inTable.get(i)
-                                       + ".  Using value '0': " + e);
+                            + inSchema.get(i) + '.'
+                            + inTable.get(i)
+                            + ".  Using value '0': " + e);
                 }
             }
         } catch (Exception e) {
@@ -2602,7 +2619,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         // because it may or may not be "one statement", but it is SQL.
         // Build jbuttonClear Buttons - blaine
         jbuttonClear =
-            new JButton("Clear SQL",
+                new JButton("Clear SQL",
                         new ImageIcon(CommonSwing.getIcon("Clear")));
 
         jbuttonClear.putClientProperty("is3DEnabled", Boolean.TRUE);
@@ -2623,7 +2640,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         });
 
         jbuttonExecute =
-            new JButton("Execute SQL",
+                new JButton("Execute SQL",
                         new ImageIcon(CommonSwing.getIcon("Execute")));
 
         tipMap.put(jbuttonExecute, "Execute SQL");
@@ -2687,23 +2704,23 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     void resetTooltips() {
 
-        Iterator   it = tipMap.keySet().iterator();
+        Iterator it = tipMap.keySet().iterator();
         JComponent component;
 
         while (it.hasNext()) {
             component = (JComponent) it.next();
 
             component.setToolTipText(showTooltips
-                                     ? tipMap.get(component)
-                                     : null);
+                    ? tipMap.get(component)
+                    : null);
         }
     }
 
     private void updateSchemaList() {
 
-        ButtonGroup       group  = new ButtonGroup();
-        ArrayList<String> list   = new ArrayList<String>();
-        ResultSet         result = null;
+        ButtonGroup group = new ButtonGroup();
+        ArrayList<String> list = new ArrayList<String>();
+        ResultSet result = null;
 
         try {
             result = dMeta.getSchemas();
@@ -2721,7 +2738,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
             if (result != null) {
                 try {
                     result.close();
-                } catch (SQLException se) {}
+                } catch (SQLException se) {
+                }
             }
         }
 
@@ -2730,17 +2748,17 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
         group.add(rbAllSchemas);
         mnuSchemas.add(rbAllSchemas);
 
-        String               s;
+        String s;
         JRadioButtonMenuItem radioButton;
 
         for (int i = 0; i < list.size(); i++) {
-            s           = list.get(i);
+            s = list.get(i);
             radioButton = new JRadioButtonMenuItem(s);
 
             group.add(radioButton);
             mnuSchemas.add(radioButton);
             radioButton.setSelected(schemaFilter != null
-                                    && schemaFilter.equals(s));
+                    && schemaFilter.equals(s));
             radioButton.addActionListener(schemaListListener);
             radioButton.setEnabled(list.size() > 1);
         }
@@ -2765,7 +2783,7 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
     /**
      * Persisted User Preferences for DatabaseManagerSwing.
-     *
+     * <p>
      * These are settings for items in the View and Options pulldown menus,
      * plus Help/Show Tooltips.
      */
@@ -2775,16 +2793,16 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         /**
          * The constructor guarantees that this will be null for Applet,
-         *  non-null if using a local preferences file
+         * non-null if using a local preferences file
          */
 
         // Set defaults from Data
-        boolean autoRefresh   = true;
+        boolean autoRefresh = true;
         boolean showRowCounts = false;
         boolean showSysTables = false;
-        boolean showSchemas   = true;
-        boolean resultGrid    = true;
-        String  laf           = CommonSwing.Native;
+        boolean showSchemas = true;
+        boolean resultGrid = true;
+        String laf = CommonSwing.Native;
 
         // Somebody with more time can store the font settings.  IMO, that
         // menu item shouldn't even be there if the settings aren't persisted.
@@ -2792,11 +2810,11 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         public DBMPrefs(boolean isApplet) throws IOException {
 
-            if (isApplet) {}
-            else {
+            if (isApplet) {
+            } else {
                 if (homedir == null) {
                     throw new IOException(
-                        "Skipping preferences since do not know home dir");
+                            "Skipping preferences since do not know home dir");
                 }
 
                 prefsFile = new File(homedir, "dbmprefs.properties");
@@ -2827,8 +2845,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                     fis.close();
                 } catch (IOException ioe) {
                     throw new IOException("Failed to read preferences file '"
-                                          + prefsFile + "':  "
-                                          + ioe.getMessage());
+                            + prefsFile + "':  "
+                            + ioe.getMessage());
                 }
 
                 tmpString = props.getProperty("autoRefresh");
@@ -2862,8 +2880,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                 }
 
                 tmpString = props.getProperty("laf");
-                laf       = ((tmpString == null) ? CommonSwing.Native
-                                                 : tmpString);
+                laf = ((tmpString == null) ? CommonSwing.Native
+                        : tmpString);
                 tmpString = props.getProperty("showTooltips");
 
                 if (tmpString != null) {
@@ -2884,18 +2902,18 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
             // Boolean.toString(boolean) was new with Java 1.4, so don't use that.
             props.setProperty("autoRefresh", (autoRefresh ? tString
-                                                          : fString));
+                    : fString));
             props.setProperty("showRowCounts", (showRowCounts ? tString
-                                                              : fString));
+                    : fString));
             props.setProperty("showSysTables", (showSysTables ? tString
-                                                              : fString));
+                    : fString));
             props.setProperty("showSchemas", (showSchemas ? tString
-                                                          : fString));
+                    : fString));
             props.setProperty("resultGrid", (resultGrid ? tString
-                                                        : fString));
+                    : fString));
             props.setProperty("laf", laf);
             props.setProperty("showTooltips", (showTooltips ? tString
-                                                            : fString));
+                    : fString));
 
             try {
                 FileOutputStream fos = new FileOutputStream(prefsFile);
@@ -2905,8 +2923,8 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
                 fos.close();
             } catch (IOException ioe) {
                 throw new RuntimeException(
-                    "Failed to prepare preferences file '" + prefsFile
-                    + "':  " + ioe.getMessage());
+                        "Failed to prepare preferences file '" + prefsFile
+                                + "':  " + ioe.getMessage());
             }
         }
     }
@@ -2915,10 +2933,11 @@ implements ActionListener, WindowListener, KeyListener, MouseListener {
 
         try {
             PrintWriter newPrintWriter = (value) ? new PrintWriter(System.out)
-                                                 : null;
+                    : null;
 
             DriverManager.setLogWriter(newPrintWriter);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     private static final String tString = Boolean.TRUE.toString();

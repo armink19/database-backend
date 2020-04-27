@@ -43,19 +43,19 @@ import java.util.regex.Pattern;
 
 /**
  * Pax Interchange Format object constituted from an Input Stream.
- * <P>
+ * <p>
  * Right now, the only Pax property that we support directly is "size".
- *
  */
 public class PIFData extends HashMap<String, String> {
     static final long serialVersionUID = 3086795680582315773L;
 
     private static Pattern pifRecordPattern =
-        Pattern.compile("\\d+ +([^=]+)=(.*)");
+            Pattern.compile("\\d+ +([^=]+)=(.*)");
 
     /**
      * N.b. this is nothing to do with HashMap.size() or Map.size().
      * This returns the value of the Pax "size" property.
+     *
      * @return Pax size
      */
     public Long getSize() {
@@ -65,14 +65,14 @@ public class PIFData extends HashMap<String, String> {
     private Long sizeObject = null;
 
     public PIFData(InputStream stream)
-    throws TarMalformatException, IOException {
+            throws TarMalformatException, IOException {
 
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(stream, JavaSystem.CS_UTF8));
-            String  s, k, v;
+            String s, k, v;
             Matcher m;
-            int     lineNum = 0;
+            int lineNum = 0;
 
             /*
              * Pax spec does not allow for blank lines, ignored white space,
@@ -85,7 +85,7 @@ public class PIFData extends HashMap<String, String> {
 
                 if (!m.matches()) {
                     throw new TarMalformatException(
-                        RB.pif_malformat.getString(lineNum, s));
+                            RB.pif_malformat.getString(lineNum, s));
                 }
 
                 k = m.group(1);
@@ -112,7 +112,7 @@ public class PIFData extends HashMap<String, String> {
                 sizeObject = Long.valueOf(sizeString);
             } catch (NumberFormatException nfe) {
                 throw new TarMalformatException(
-                    RB.pif_malformat_size.getString(sizeString));
+                        RB.pif_malformat_size.getString(sizeString));
             }
         }
     }

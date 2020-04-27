@@ -40,13 +40,13 @@ package org.hsqldb.util.preprocessor;
  * @version 1.8.1
  * @since 1.8.1
  */
-class Parser  {
+class Parser {
 
-    Defines   defines;
+    Defines defines;
     Tokenizer tokenizer;
 
     Parser(Defines defines, Tokenizer tokenizer) {
-        this.defines   = defines;
+        this.defines = defines;
         this.tokenizer = tokenizer;
     }
 
@@ -54,15 +54,15 @@ class Parser  {
         boolean result = parseTerm();
 
         while (true) {
-            switch(this.tokenizer.getTokenType()) {
-                case Token.OR : {
+            switch (this.tokenizer.getTokenType()) {
+                case Token.OR: {
                     this.tokenizer.next();
 
                     result = result | parseTerm();
 
                     break;
                 }
-                case Token.XOR : {
+                case Token.XOR: {
                     this.tokenizer.next();
 
                     result = result ^ parseTerm();
@@ -70,7 +70,7 @@ class Parser  {
                     break;
                 }
 
-                default : {
+                default: {
                     return result;
                 }
             }
@@ -92,10 +92,10 @@ class Parser  {
     boolean parseFactor() throws PreprocessorException {
         boolean result;
 
-        switch(this.tokenizer.getTokenType()) {
-            case Token.IDENT : {
+        switch (this.tokenizer.getTokenType()) {
+            case Token.IDENT: {
                 String ident = this.tokenizer.getIdent();
-                int    type  = this.tokenizer.next();
+                int type = this.tokenizer.next();
 
                 if ((type == Token.EOI) || (type == Token.RPAREN) ||
                         Token.isLogicalOperator(type)) {
@@ -113,14 +113,14 @@ class Parser  {
 
                 break;
             }
-            case Token.NOT :{
+            case Token.NOT: {
                 this.tokenizer.next();
 
                 result = !parseFactor();
 
                 break;
             }
-            case Token.LPAREN : {
+            case Token.LPAREN: {
                 this.tokenizer.next();
 
                 result = parseExpression();
@@ -138,7 +138,7 @@ class Parser  {
 
                 break;
             }
-            default : {
+            default: {
                 throw new PreprocessorException("IDENT, NOT or LPAREN "
                         + "token required at position "
                         + this.tokenizer.getStartIndex()
@@ -152,13 +152,13 @@ class Parser  {
     }
 
     boolean parseComparison(String ident, int opType)
-    throws PreprocessorException {
+            throws PreprocessorException {
 //        checkIsComparisonOperator(opType);
 
         boolean result;
-        Object  lhs    = this.defines.getDefintion(ident);
-        int     pos    = this.tokenizer.getStartIndex();
-        Object  rhs    = parseValue();
+        Object lhs = this.defines.getDefintion(ident);
+        int pos = this.tokenizer.getStartIndex();
+        Object rhs = parseValue();
 
         if (lhs == null) {
             throw new PreprocessorException("IDENT " + ident
@@ -169,33 +169,33 @@ class Parser  {
                     + "]"); // NOI18N
         }
 
-        switch(opType) {
-            case Token.EQ :{
+        switch (opType) {
+            case Token.EQ: {
                 result = (compare(lhs, rhs) == 0);
 
                 break;
             }
-            case Token.LT : {
+            case Token.LT: {
                 result = (compare(lhs, rhs) < 0);
 
                 break;
             }
-            case Token.LTE : {
+            case Token.LTE: {
                 result = (compare(lhs, rhs) <= 0);
 
                 break;
             }
-            case Token.GT : {
+            case Token.GT: {
                 result = (compare(lhs, rhs) > 0);
 
                 break;
             }
-            case Token.GTE : {
+            case Token.GTE: {
                 result = (compare(lhs, rhs) >= 0);
 
                 break;
             }
-            default : {
+            default: {
                 // Stupid compiler trick.
                 // Can't actually happen because this case will cause an
                 // exception to be thrown in method parseFactor (or in
@@ -225,8 +225,8 @@ class Parser  {
         // we want to throw NPE here if o1 or o2 is null
         if (o1 instanceof Comparable) {
             return (o1.getClass().isAssignableFrom(o2.getClass()))
-            ? ((Comparable)o1).compareTo(o2)
-            : String.valueOf(o1).compareTo(String.valueOf(o2));
+                    ? ((Comparable) o1).compareTo(o2)
+                    : String.valueOf(o1).compareTo(String.valueOf(o2));
         } else {
             return o1.toString().compareTo(o2.toString());
         }
@@ -235,8 +235,8 @@ class Parser  {
     Object parseValue() throws PreprocessorException {
         Object value;
 
-        switch(this.tokenizer.next()) {
-            case Token.IDENT : {
+        switch (this.tokenizer.next()) {
+            case Token.IDENT: {
                 String ident = this.tokenizer.getIdent();
 
                 value = this.defines.getDefintion(ident);
@@ -252,17 +252,17 @@ class Parser  {
 
                 break;
             }
-            case Token.STRING : {
+            case Token.STRING: {
                 value = this.tokenizer.getString();
 
                 break;
             }
-            case Token.NUMBER : {
+            case Token.NUMBER: {
                 value = this.tokenizer.getNumber();
 
                 break;
             }
-            default :{
+            default: {
                 throw new PreprocessorException("IDENT, STRING"
                         + "or NUMBER token required at position "
                         + this.tokenizer.getStartIndex()

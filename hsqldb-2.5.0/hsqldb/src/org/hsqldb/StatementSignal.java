@@ -45,16 +45,16 @@ import org.hsqldb.result.Result;
  */
 public class StatementSignal extends Statement {
 
-    String     sqlState;
+    String sqlState;
     Expression messageExpression;
 
     StatementSignal(int type, String sqlState, Expression message) {
 
         super(type, StatementTypes.X_SQL_CONTROL);
 
-        references             = new OrderedHashSet();
+        references = new OrderedHashSet();
         isTransactionStatement = false;
-        this.sqlState          = sqlState;
+        this.sqlState = sqlState;
         this.messageExpression = message;
     }
 
@@ -64,13 +64,13 @@ public class StatementSignal extends Statement {
 
         switch (type) {
 
-            case StatementTypes.SIGNAL :
+            case StatementTypes.SIGNAL:
                 sb.append(Tokens.T_SIGNAL).append(' ');
                 sb.append(Tokens.T_SQLSTATE);
                 sb.append(' ').append('\'').append(sqlState).append('\'');
                 break;
 
-            case StatementTypes.RESIGNAL :
+            case StatementTypes.RESIGNAL:
                 sb.append(Tokens.T_RESIGNAL).append(' ');
                 sb.append(Tokens.T_SQLSTATE);
                 sb.append(' ').append('\'').append(sqlState).append('\'');
@@ -117,13 +117,13 @@ public class StatementSignal extends Statement {
         switch (type) {
 
             /** @todo - check sqlState against allowed values */
-            case StatementTypes.SIGNAL :
-            case StatementTypes.RESIGNAL :
+            case StatementTypes.SIGNAL:
+            case StatementTypes.RESIGNAL:
                 HsqlException ex = Error.error(getMessage(session), sqlState);
 
                 return Result.newErrorResult(ex);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementSignal");
         }
     }
@@ -147,12 +147,12 @@ public class StatementSignal extends Statement {
 
         switch (type) {
 
-            case StatementTypes.SIGNAL :
-            case StatementTypes.RESIGNAL :
+            case StatementTypes.SIGNAL:
+            case StatementTypes.RESIGNAL:
                 resolved = true;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementSignal");
         }
 

@@ -45,9 +45,9 @@ import java.io.IOException;
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.4
  * @since 2.3.4
-*/
+ */
 public class TextFileReader16 extends TextFileReader8
-implements TextFileReader {
+        implements TextFileReader {
 
     TextFileReader16(RandomAccessInterface dataFile,
                      TextFileSettings textFileSettings,
@@ -55,9 +55,9 @@ implements TextFileReader {
 
         super();
 
-        this.dataFile         = dataFile;
+        this.dataFile = dataFile;
         this.textFileSettings = textFileSettings;
-        this.rowIn            = rowIn;
+        this.rowIn = rowIn;
         this.buffer = StringCreator.getStringCreator(char.class,
                 textFileSettings.charEncoding);
 

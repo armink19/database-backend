@@ -35,7 +35,7 @@ import java.sql.Connection;
 
 public class TestScript extends TestBase {
 
-//    String path = "TestSelf00NewJoins.txt";
+    //    String path = "TestSelf00NewJoins.txt";
 //    String path = "TestSelf01AllNewFeatures.txt";
 //    String path = "TestSelf01Aggregates.txt";
 //    String path = "TestSelf01Cascade.txt";
@@ -62,7 +62,7 @@ public class TestScript extends TestBase {
 //    String path = "TestSelf02Function.txt";
 //    String path = "TestSelf02Merge.txt";
 //    String path = "TestSelf02Sequence.txt";
-      String path = "TestSelf02PeriodPredicates.txt";
+    String path = "TestSelf02PeriodPredicates.txt";
 //    String path = "TestSelf02UpdatableViews.txt";
 //    String path = "TestSelf02UpdatableViews.txt";
 //      String path = "TestSelf03Procedure.txt";
@@ -72,7 +72,7 @@ public class TestScript extends TestBase {
 //    String path = "TestSelf08Collations.txt";
 //    String path = "TestAny.txt";
 
-//    String path = "TestSelf.txt";
+    //    String path = "TestSelf.txt";
 //    String path = "TestSelfArrays.txt";
 //    String path = "TestSelf3PartNames.txt";
 //    String path = "TestSelfArithmetic.txt";
@@ -130,8 +130,8 @@ public class TestScript extends TestBase {
 
         TestUtil.deleteDatabase("test");
 
-        Connection conn     = newConnection();
-        String     fullPath = "testrun/hsqldb/" + path;
+        Connection conn = newConnection();
+        String fullPath = "testrun/hsqldb/" + path;
 
         TestUtil.testScript(conn, fullPath);
 //        conn.createStatement().execute("SHUTDOWN");

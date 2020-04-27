@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
 /**
  * Just like PropertyResourceBundle, except keys mapped to nothing in the
  * properties file will load the final String value from a text file.
- *
+ * <p>
  * The use case is where one wants to use a ResourceBundle for Strings,
  * but some of the Strings are long-- too long to maintain in a Java
  * .properties file.
@@ -58,24 +58,24 @@ import java.util.regex.Pattern;
  * other files <i>referenced</i> values, because the values are not directly
  * in the .properties file, but are "referenced" in the .properties file
  * by virtue of the empty value for the key.
- *
+ * <p>
  * You use this class in the same way as you would traditionally use
  * ResourceBundle:
  * <PRE>
- *  import org.hsqldb.util..RefCapablePropertyResourceBundle;
- *  ...
- *      RefCapablePropertyResourceBundle bundle =
- *              RefCapablePropertyResourceBundle.getBundle("subdir.xyz");
- *      System.out.println("Value for '1' = (" + bundle.getString("1") + ')');
+ * import org.hsqldb.util..RefCapablePropertyResourceBundle;
+ * ...
+ * RefCapablePropertyResourceBundle bundle =
+ * RefCapablePropertyResourceBundle.getBundle("subdir.xyz");
+ * System.out.println("Value for '1' = (" + bundle.getString("1") + ')');
  * </PRE>
- *
+ * <p>
  * Just like PropertyResourceBundle, the .properties file and the
  * <i>referenced</i> files are read in from the classpath by a class loader,
  * according to the normal ResourceBundle rules.
  * To eliminate the need to prohibit the use of any strings in the .properties
  * values, and to enforce consistency, you <b>must</b> use the following rules
  * to when putting your referenced files into place.
- * <P/>
+ * <p/>
  * REFERENCED FILE DIRECTORY is a directory named with the base name of the
  * properties file, and in the same parent directory.  So, the referenced
  * file directory <CODE>/a/b/c/greentea</CODE> is used to hold all reference
@@ -87,15 +87,15 @@ import java.util.regex.Pattern;
  * REFERENCED FILES themselves all have the base name of the property key,
  * with locale appendages exactly as the <i>referring</i> properties files
  * has, plus the suffix <CODE>.text</CODE>.
- * <P/>
+ * <p/>
  * So, if we have the following line in
  * <CODE>/a/b/c/greentea_de.properties</CODE>:
  * <PRE>
- *     1: eins
+ * 1: eins
  * </PRE>
  * then you <b>must</b> have a reference text file
  * <CODE>/a/b/c/greentea/1_de.properties</CODE>:
- * <P/>
+ * <p/>
  * In reference text files,
  * sequences of "\r", "\n" and "\r\n" are all translated to the line
  * delimiter for your platform (System property <CODE>line.separator</CODE>).
@@ -104,18 +104,18 @@ import java.util.regex.Pattern;
  * end your file with two of them).
  * (The file itself is never modified-- I'm talking about the value returned
  * by <CODE>getString(String)</CODE>).
- * <P/>
+ * <p/>
  * To prevent throwing at runtime due to unset variables, use a wrapper class
  * like SqltoolRB (use SqltoolRB.java as a template).
  * To prevent throwing at runtime due to unset System Properties, or
  * insufficient parameters passed to getString(String, String[]), set the
  * behavior values appropriately.
- * <P/>
+ * <p/>
  * Just like all Properties files, referenced files must use ISO-8859-1
  * encoding, with unicode escapes for characters outside of ISO-8859-1
  * character set.  But, unlike Properties files, \ does not need to be
  * escaped for normal usage.
- * <P/>
+ * <p/>
  * The getString() methods with more than one parameter substitute for
  * "positional" parameters of the form "%{1}".
  * The getExpandedString() methods substitute for System Property names
@@ -127,27 +127,27 @@ import java.util.regex.Pattern;
  * In this file, I refer to the y text as the "conditional string".
  * One example of each type:
  * <PRE>
- *     Out val = (${condlSysProp:+Prop condlSysProp is set to $condlSysProp.})
- *     Out val = (%{2:+Pos Var #2 is set to %2.})
+ * Out val = (${condlSysProp:+Prop condlSysProp is set to $condlSysProp.})
+ * Out val = (%{2:+Pos Var #2 is set to %2.})
  * OUTPUT if neither are set:
- *     Out val = ()
- *     Out val = ()
+ * Out val = ()
+ * Out val = ()
  * OUTPUT if condlSysProp=alpha and condlPLvar=beta:
- *     Out val = (Prop condlSysProp is set to alpha.)
- *     Out val = (Pos Var #2 is set to beta.)
+ * Out val = (Prop condlSysProp is set to alpha.)
+ * Out val = (Pos Var #2 is set to beta.)
  * </PRE>
  * This feature has the following limitations.
  * <UL>
- *   <LI>The conditional string may only contain the primary variable.
- *   <LI>Inner instances of the primary variable may not use curly braces,
- *       and therefore the variable name must end at a word boundary.
+ * <LI>The conditional string may only contain the primary variable.
+ * <LI>Inner instances of the primary variable may not use curly braces,
+ * and therefore the variable name must end at a word boundary.
  * </UL>
  * The conditional string may span newlines, and it is often very useful
  * to do so.
  *
+ * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @see java.util.PropertyResourceBundle
  * @see java.util.ResourceBundle
- * @author Blaine Simpson (blaine dot simpson at admc dot com)
  */
 public class RefCapablePropertyResourceBundle {
     private PropertyResourceBundle wrappedBundle;
@@ -172,7 +172,7 @@ public class RefCapablePropertyResourceBundle {
     }
 
     private RefCapablePropertyResourceBundle(String baseName,
-            PropertyResourceBundle wrappedBundle, ClassLoader loader) {
+                                             PropertyResourceBundle wrappedBundle, ClassLoader loader) {
         this.baseName = baseName;
         this.wrappedBundle = wrappedBundle;
         Locale locale = wrappedBundle.getLocale();
@@ -206,14 +206,14 @@ public class RefCapablePropertyResourceBundle {
                 varValue = ((varValue == null)
                         ? ""
                         : condlVal.replaceAll("\\Q$" + varName + "\\E\\b",
-                                Matcher.quoteReplacement(varValue)));
+                        Matcher.quoteReplacement(varValue)));
             }
             if (varValue == null) switch (behavior) {
                 case THROW_BEHAVIOR:
                     throw new RuntimeException(
                             "No Sys Property set for variable '"
-                            + varName + "' in property value ("
-                            + s + ").");
+                                    + varName + "' in property value ("
+                                    + s + ").");
                 case EMPTYSTRING_BEHAVIOR:
                     varValue = "";
                     break;
@@ -224,11 +224,11 @@ public class RefCapablePropertyResourceBundle {
                             "Undefined value for behavior: " + behavior);
             }
             sb.append(s.substring(previousEnd, matcher.start())
-                        + ((varValue == null) ? matcher.group() : varValue));
+                    + ((varValue == null) ? matcher.group() : varValue));
             previousEnd = matcher.end();
         }
         return (previousEnd < 1) ? s
-                                 : (sb.toString() + s.substring(previousEnd));
+                : (sb.toString() + s.substring(previousEnd));
     }
 
     /**
@@ -237,8 +237,8 @@ public class RefCapablePropertyResourceBundle {
      * Note that %{\d} numbers are 1-based, so we lok for subs[x-1].
      */
     public String posSubst(String s, String[] subs, int behavior) {
-        Matcher matcher  = posPattern.matcher(s);
-        int previousEnd  = 0;
+        Matcher matcher = posPattern.matcher(s);
+        int previousEnd = 0;
         StringBuilder sb = new StringBuilder();
         String varValue;
         int varIndex;
@@ -252,16 +252,16 @@ public class RefCapablePropertyResourceBundle {
                 // the post-:+ portion of the expression.
                 varValue = ((varValue == null)
                         ? ""
-                        : condlVal.replaceAll("\\Q%" + (varIndex+1) + "\\E\\b",
-                                Matcher.quoteReplacement(varValue)));
+                        : condlVal.replaceAll("\\Q%" + (varIndex + 1) + "\\E\\b",
+                        Matcher.quoteReplacement(varValue)));
             }
             // System.err.println("Behavior: " + behavior);
             if (varValue == null) switch (behavior) {
                 case THROW_BEHAVIOR:
                     throw new RuntimeException(
                             Integer.toString(subs.length)
-                            + " positional values given, but property string "
-                            + "contains (" + matcher.group() + ").");
+                                    + " positional values given, but property string "
+                                    + "contains (" + matcher.group() + ").");
                 case EMPTYSTRING_BEHAVIOR:
                     varValue = "";
                     break;
@@ -272,18 +272,19 @@ public class RefCapablePropertyResourceBundle {
                             "Undefined value for behavior: " + behavior);
             }
             sb.append(s.substring(previousEnd, matcher.start())
-                        + ((varValue == null) ? matcher.group() : varValue));
+                    + ((varValue == null) ? matcher.group() : varValue));
             previousEnd = matcher.end();
         }
         return (previousEnd < 1) ? s
-                                 : (sb.toString() + s.substring(previousEnd));
+                : (sb.toString() + s.substring(previousEnd));
     }
 
     public String getExpandedString(String key, String[] subs,
-            int missingPropertyBehavior, int missingPosValueBehavior) {
+                                    int missingPropertyBehavior, int missingPosValueBehavior) {
         return posSubst(getExpandedString(key, missingPropertyBehavior), subs,
                 missingPosValueBehavior);
     }
+
     public String getString(String key, String[] subs, int behavior) {
         return posSubst(getString(key), subs, behavior);
     }
@@ -293,7 +294,7 @@ public class RefCapablePropertyResourceBundle {
      */
     public String toString() {
         return baseName + " for " + language + " / " + country + " / "
-            + variant;
+                + variant;
     }
 
     /**
@@ -320,11 +321,11 @@ public class RefCapablePropertyResourceBundle {
     }
 
     /**
-     * @param inString  Input string with \n definitively indicating desired
-     *                  position for line separators.
-     * @return  If platform's line-separator is \n, then just returns inString.
-     *           Otherwise returns a copy of inString, with all \n's
-     *           transformed to the platform's line separators.
+     * @param inString Input string with \n definitively indicating desired
+     *                 position for line separators.
+     * @return If platform's line-separator is \n, then just returns inString.
+     * Otherwise returns a copy of inString, with all \n's
+     * transformed to the platform's line separators.
      */
     public static String toNativeLs(String inString) {
         return LS.equals("\n") ? inString : inString.replaceAll("\\Q\n", LS);
@@ -332,7 +333,7 @@ public class RefCapablePropertyResourceBundle {
 
     /**
      * Use like java.util.ResourceBundle.getBundle(String).
-     *
+     * <p>
      * ClassLoader is required for our getBundles()s, since it is impossible
      * to get the "caller's" ClassLoader without using JNI (i.e., with pure
      * Java).
@@ -340,17 +341,18 @@ public class RefCapablePropertyResourceBundle {
      * @see ResourceBundle#getBundle(String)
      */
     public static RefCapablePropertyResourceBundle getBundle(String baseName,
-            ClassLoader loader) {
+                                                             ClassLoader loader) {
         return getRef(baseName, ResourceBundle.getBundle(baseName,
                 Locale.getDefault(), loader), loader);
     }
+
     /**
      * Use exactly like java.util.ResourceBundle.get(String, Locale, ClassLoader).
      *
      * @see ResourceBundle#getBundle(String, Locale, ClassLoader)
      */
     public static RefCapablePropertyResourceBundle
-            getBundle(String baseName, Locale locale, ClassLoader loader) {
+    getBundle(String baseName, Locale locale, ClassLoader loader) {
         return getRef(baseName,
                 ResourceBundle.getBundle(baseName, locale, loader), loader);
     }
@@ -360,7 +362,7 @@ public class RefCapablePropertyResourceBundle {
      * or throw a MissingResourceException.
      */
     static private RefCapablePropertyResourceBundle getRef(String baseName,
-            ResourceBundle rb, ClassLoader loader) {
+                                                           ResourceBundle rb, ClassLoader loader) {
         if (!(rb instanceof PropertyResourceBundle))
             throw new MissingResourceException(
                     "Found a Resource Bundle, but it is a "
@@ -386,45 +388,45 @@ public class RefCapablePropertyResourceBundle {
                 + ".text";
         // System.err.println("Seeking " + filePath);
         InputStream is = (InputStream) AccessController.doPrivileged(
-            new PrivilegedAction<InputStream>() {
+                new PrivilegedAction<InputStream>() {
 
-            public InputStream run() {
-                return loader.getResourceAsStream(filePath);
-            }
-        });
+                    public InputStream run() {
+                        return loader.getResourceAsStream(filePath);
+                    }
+                });
         // N.b.  If were using Class.getRes... instead of ClassLoader.getRes...
         // we would need to prefix the path with "/".
         return (is == null && l != null)
-            ? getMostSpecificStream(key, ((c == null) ? null : l),
-                    ((v == null) ? null : c), null)
-            : is;
+                ? getMostSpecificStream(key, ((c == null) ? null : l),
+                ((v == null) ? null : c), null)
+                : is;
     }
 
     private String getStringFromFile(String key) {
         byte[] ba = null;
         int bytesread = 0;
         int retval;
-        InputStream  inputStream =
+        InputStream inputStream =
                 getMostSpecificStream(key, language, country, variant);
         if (inputStream == null)
             throw new MissingResourceException(
                     "Key '" + key
-                    + "' is present in .properties file with no value, yet "
-                    + "text file resource is missing",
+                            + "' is present in .properties file with no value, yet "
+                            + "text file resource is missing",
                     RefCapablePropertyResourceBundle.class.getName(), key);
         try {
             try {
                 ba = new byte[inputStream.available()];
             } catch (IOException ioe) {
                 throw new MissingResourceException(
-                    "Failed to read in value for key '" + key + "': " + ioe,
-                    RefCapablePropertyResourceBundle.class.getName(), key);
+                        "Failed to read in value for key '" + key + "': " + ioe,
+                        RefCapablePropertyResourceBundle.class.getName(), key);
             } catch (Throwable re) {
                 throw new MissingResourceException(
-                    "Resource is too big to read in '" + key + "' value in one "
-                    + "gulp.\nPlease run the program with more RAM "
-                    + "(try Java -Xm* switches).: " + re,
-                    RefCapablePropertyResourceBundle.class.getName(), key);
+                        "Resource is too big to read in '" + key + "' value in one "
+                                + "gulp.\nPlease run the program with more RAM "
+                                + "(try Java -Xm* switches).: " + re,
+                        RefCapablePropertyResourceBundle.class.getName(), key);
             }
 
             try {
@@ -435,8 +437,8 @@ public class RefCapablePropertyResourceBundle {
                 }
             } catch (IOException ioe) {
                 throw new MissingResourceException(
-                    "Failed to read in value for '" + key + "': " + ioe,
-                    RefCapablePropertyResourceBundle.class.getName(), key);
+                        "Failed to read in value for '" + key + "': " + ioe,
+                        RefCapablePropertyResourceBundle.class.getName(), key);
             }
         } finally {
             try {
@@ -448,8 +450,8 @@ public class RefCapablePropertyResourceBundle {
         if (bytesread != ba.length) {
             throw new MissingResourceException(
                     "Didn't read all bytes.  Read in "
-                      + bytesread + " bytes out of " + ba.length
-                      + " bytes for key '" + key + "'",
+                            + bytesread + " bytes out of " + ba.length
+                            + " bytes for key '" + key + "'",
                     RefCapablePropertyResourceBundle.class.getName(), key);
         }
 
@@ -457,10 +459,10 @@ public class RefCapablePropertyResourceBundle {
             return new String(ba, JavaSystem.CS_ISO_8859_1);
         } catch (Throwable re) {
             throw new MissingResourceException(
-                "Value for key '" + key + "' too big to convert to String.  "
-                + "Please run the program with more RAM "
-                + "(try Java -Xm* switches).: " + re,
-                RefCapablePropertyResourceBundle.class.getName(), key);
+                    "Value for key '" + key + "' too big to convert to String.  "
+                            + "Please run the program with more RAM "
+                            + "(try Java -Xm* switches).: " + re,
+                    RefCapablePropertyResourceBundle.class.getName(), key);
         }
     }
 }

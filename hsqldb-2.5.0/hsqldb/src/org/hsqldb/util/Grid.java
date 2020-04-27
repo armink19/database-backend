@@ -77,7 +77,6 @@ import java.util.ArrayList;
 // fredt@users - version 2.50 - removed deprecated
 
 /**
- *
  * @author Thomas Mueller (Hypersonic SQL Group)
  * @version 2.5.0
  * @since Hypersonic SQL
@@ -87,13 +86,13 @@ class Grid extends Panel {
     // drawing
     private Dimension dMinimum;
 
-// campbell-burnet@users changed access for databasemanager2
+    // campbell-burnet@users changed access for databasemanager2
     protected Font fFont;
 
-// --------------------------------------------------
+    // --------------------------------------------------
     private FontMetrics fMetrics;
-    private Graphics    gImage;
-    private Image       iImage;
+    private Graphics gImage;
+    private Image iImage;
 
     // height / width
     private int iWidth, iHeight;
@@ -106,23 +105,22 @@ class Grid extends Panel {
     protected String[] sColHead = new String[0];
     protected ArrayList<String[]> vData = new ArrayList<String[]>();
 
-// --------------------------------------------------
+    // --------------------------------------------------
     private int[] iColWidth;
-    private int   iColCount;
+    private int iColCount;
 
-// campbell-burnet@users changed access for databasemanager2
+    // campbell-burnet@users changed access for databasemanager2
     protected int iRowCount;
 
-// --------------------------------------------------
+    // --------------------------------------------------
     // scrolling
     private Scrollbar sbHoriz, sbVert;
-    private int       iSbWidth, iSbHeight;
-    private boolean   bDrag;
-    private int       iXDrag, iColDrag;
+    private int iSbWidth, iSbHeight;
+    private boolean bDrag;
+    private int iXDrag, iColDrag;
 
     /**
      * Constructor declaration
-     *
      */
     public Grid() {
 
@@ -158,7 +156,6 @@ class Grid extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param d
      */
     public void setMinimumSize(Dimension d) {
@@ -167,7 +164,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param x
      * @param y
@@ -180,9 +176,9 @@ class Grid extends Panel {
         super.setBounds(x, y, w, h);
 
         iSbHeight = sbHoriz.getPreferredSize().height;
-        iSbWidth  = sbVert.getPreferredSize().width;
-        iHeight   = h - iSbHeight;
-        iWidth    = w - iSbWidth;
+        iSbWidth = sbVert.getPreferredSize().width;
+        iHeight = h - iSbHeight;
+        iWidth = w - iSbWidth;
 
         sbHoriz.setBounds(0, iHeight, iWidth, iSbHeight);
         sbVert.setBounds(iWidth, 0, iSbWidth, iHeight);
@@ -196,28 +192,26 @@ class Grid extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param head
      */
     public void setHead(String[] head) {
 
         iColCount = head.length;
-        sColHead  = new String[iColCount];
+        sColHead = new String[iColCount];
         iColWidth = new int[iColCount];
 
         for (int i = 0; i < iColCount; i++) {
-            sColHead[i]  = head[i];
+            sColHead[i] = head[i];
             iColWidth[i] = 100;
         }
 
-        iRowCount  = 0;
+        iRowCount = 0;
         iRowHeight = 0;
-        vData      = new ArrayList<String[]>();
+        vData = new ArrayList<String[]>();
     }
 
     /**
      * Method declaration
-     *
      *
      * @param data
      */
@@ -244,7 +238,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      */
     public void update() {
         adjustScroll();
@@ -253,7 +246,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      */
     void adjustScroll() {
 
@@ -267,13 +259,13 @@ class Grid extends Panel {
             w += iColWidth[i];
         }
 
-        iGridWidth  = w;
+        iGridWidth = w;
         iGridHeight = iRowHeight * (iRowCount + 1);
 
         sbHoriz.setValues(iX, iWidth, 0, iGridWidth);
 
         int v = iY / iRowHeight,
-            h = iHeight / iRowHeight;
+                h = iHeight / iRowHeight;
 
         sbVert.setValues(v, h, 0, iRowCount + 1);
 
@@ -283,7 +275,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param e
      */
@@ -297,11 +288,11 @@ class Grid extends Panel {
 
         switch (e.id) {
 
-            case Event.SCROLL_LINE_UP :
-            case Event.SCROLL_LINE_DOWN :
-            case Event.SCROLL_PAGE_UP :
-            case Event.SCROLL_PAGE_DOWN :
-            case Event.SCROLL_ABSOLUTE :
+            case Event.SCROLL_LINE_UP:
+            case Event.SCROLL_LINE_DOWN:
+            case Event.SCROLL_PAGE_UP:
+            case Event.SCROLL_PAGE_DOWN:
+            case Event.SCROLL_ABSOLUTE:
                 iX = sbHoriz.getValue();
                 iY = iRowHeight * sbVert.getValue();
 
@@ -315,7 +306,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param g
      */
@@ -396,25 +386,25 @@ class Grid extends Panel {
         }
 
         iFirstRow = j;
-        y         = iRowHeight + 1;
+        y = iRowHeight + 1;
 
         for (; y < iHeight && j < iRowCount; j++, y += iRowHeight) {
             x = -iX;
 
             for (int i = 0; i < iColCount; i++) {
-                int   w = iColWidth[i];
+                int w = iColWidth[i];
                 Color b = Color.white,
-                      t = Color.black;
+                        t = Color.black;
 
                 gImage.setColor(b);
                 gImage.fillRect(x, y, w - 1, iRowHeight - 1);
                 gImage.setColor(t);
                 gImage.drawString(getDisplay(i, j), x + 2,
-                                  y + iRowHeight - 5);
+                        y + iRowHeight - 5);
                 gImage.setColor(Color.lightGray);
                 gImage.drawLine(x + w - 1, y, x + w - 1, y + iRowHeight - 1);
                 gImage.drawLine(x, y + iRowHeight - 1, x + w - 1,
-                                y + iRowHeight - 1);
+                        y + iRowHeight - 1);
 
                 x += w;
             }
@@ -429,7 +419,6 @@ class Grid extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param g
      */
     public void update(Graphics g) {
@@ -438,7 +427,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param e
      * @param x
@@ -465,8 +453,8 @@ class Grid extends Panel {
                 if (!bDrag) {
                     setCursor(new Cursor(Cursor.E_RESIZE_CURSOR));
 
-                    bDrag    = true;
-                    iXDrag   = xb - iColWidth[i];
+                    bDrag = true;
+                    iXDrag = xb - iColWidth[i];
                     iColDrag = i;
                 }
 
@@ -479,7 +467,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param e
      * @param x
@@ -505,7 +492,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param e
      * @param x
@@ -553,7 +539,6 @@ class Grid extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param i
      */
     private void calcAutoWidth(int i) {
@@ -574,7 +559,6 @@ class Grid extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param x
      * @param y
      */
@@ -585,7 +569,6 @@ class Grid extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param x
      * @param y
      */
@@ -595,7 +578,6 @@ class Grid extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param f
      */

@@ -39,7 +39,8 @@ package org.hsqldb.util;
 // brian.porter@siteforce.de 20020703 - added reference to OracleTransferHelper
 class HelperFactory {
 
-    HelperFactory() {}
+    HelperFactory() {
+    }
 
     // TransferHelper factory
     static TransferHelper getHelper(String productLowerName) {
@@ -59,7 +60,7 @@ class HelperFactory {
 
             f = new OracleTransferHelper();
         } else if (productLowerName.equals("access")
-                   || (productLowerName.indexOf("microsoft") != -1)) {
+                || (productLowerName.indexOf("microsoft") != -1)) {
             f = new SqlServerTransferHelper();
         } else {
             f = new TransferHelper();

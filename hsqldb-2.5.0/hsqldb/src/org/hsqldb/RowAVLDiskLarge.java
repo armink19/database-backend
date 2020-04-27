@@ -40,6 +40,7 @@ import java.io.IOException;
 
 /**
  * Subclass of Row huge databases. <p>
+ *
  * @author Fred Toussi (fredt@users dot sourceforge dot net)
  * @version 2.3.5
  * @since 2.2.9
@@ -47,8 +48,8 @@ import java.io.IOException;
 public class RowAVLDiskLarge extends RowAVLDisk {
 
     /**
-     *  Constructor for new Rows.  Variable hasDataChanged is set to true in
-     *  order to indicate the data needs saving.
+     * Constructor for new Rows.  Variable hasDataChanged is set to true in
+     * order to indicate the data needs saving.
      *
      * @param t table
      * @param o row data
@@ -59,9 +60,9 @@ public class RowAVLDiskLarge extends RowAVLDisk {
     }
 
     /**
-     *  Constructor when read from the disk into the Cache.
+     * Constructor when read from the disk into the Cache.
      *
-     * @param t table
+     * @param t  table
      * @param in data source
      * @throws IOException
      */
@@ -69,7 +70,7 @@ public class RowAVLDiskLarge extends RowAVLDisk {
 
         super(store.getTable());
 
-        position    = in.getFilePosition();
+        position = in.getFilePosition();
         storageSize = in.getSize();
 
         int indexcount = store.getAccessorKeys().length;
@@ -80,7 +81,7 @@ public class RowAVLDiskLarge extends RowAVLDisk {
 
         for (int i = 1; i < indexcount; i++) {
             n.nNext = new NodeAVLDiskLarge(this, in, i);
-            n       = n.nNext;
+            n = n.nNext;
         }
 
         rowData = in.readData(table.getColumnTypes());
@@ -96,7 +97,7 @@ public class RowAVLDiskLarge extends RowAVLDisk {
 
         for (int i = 1; i < indexcount; i++) {
             n.nNext = new NodeAVLDiskLarge(this, i);
-            n       = n.nNext;
+            n = n.nNext;
         }
     }
 }

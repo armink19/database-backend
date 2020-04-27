@@ -35,7 +35,7 @@ import org.hsqldb.SessionInterface;
 
 /**
  * Interface for Large Object implementations.<p>
- *
+ * <p>
  * All positions are 0 based
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)

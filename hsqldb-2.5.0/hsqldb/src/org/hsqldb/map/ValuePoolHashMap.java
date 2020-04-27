@@ -53,7 +53,6 @@ import org.hsqldb.types.TimestampData;
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.4.1
  * @since 1.7.2
- *
  */
 public class ValuePoolHashMap extends BaseHashMap {
 
@@ -63,7 +62,7 @@ public class ValuePoolHashMap extends BaseHashMap {
                             int purgePolicy) throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.objectKeyOrValue,
-              BaseHashMap.noKeyOrValue, true);
+                BaseHashMap.noKeyOrValue, true);
 
         this.maxCapacity = maxCapacity;
         this.purgePolicy = purgePolicy;
@@ -72,13 +71,13 @@ public class ValuePoolHashMap extends BaseHashMap {
     protected Integer getOrAddInteger(int intKey) {
 
         Integer testValue;
-        int     index      = hashIndex.getHashIndex(intKey);
-        int     lookup     = hashIndex.hashTable[index];
-        int     lastLookup = -1;
+        int index = hashIndex.getHashIndex(intKey);
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = (Integer) objectKeyTable[lookup];
 
             int keyValue = testValue.intValue();
@@ -104,8 +103,8 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddInteger(intKey);
         }
 
-        lookup                 = hashIndex.linkNode(index, lastLookup);
-        testValue              = Integer.valueOf(intKey);
+        lookup = hashIndex.linkNode(index, lastLookup);
+        testValue = Integer.valueOf(intKey);
         objectKeyTable[lookup] = testValue;
 
         if (accessCount > ACCESS_MAX) {
@@ -121,12 +120,12 @@ public class ValuePoolHashMap extends BaseHashMap {
 
         Long testValue;
         int index = hashIndex.getHashIndex((int) (longKey ^ (longKey >>> 32)));
-        int  lookup     = hashIndex.hashTable[index];
-        int  lastLookup = -1;
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = (Long) objectKeyTable[lookup];
 
             long keyValue = testValue.longValue();
@@ -150,8 +149,8 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddLong(longKey);
         }
 
-        lookup                 = hashIndex.linkNode(index, lastLookup);
-        testValue              = Long.valueOf(longKey);
+        lookup = hashIndex.linkNode(index, lastLookup);
+        testValue = Long.valueOf(longKey);
         objectKeyTable[lookup] = testValue;
 
         if (accessCount > ACCESS_MAX) {
@@ -168,7 +167,7 @@ public class ValuePoolHashMap extends BaseHashMap {
      * should have an equals(String) method which should return true if the
      * key.toString().equals(String) is true. Also the key.hashCode() method
      * must return the same value as key.toString.hashCode().<p>
-     *
+     * <p>
      * The above is always true when the key is a String. But it means it is
      * possible to submit special keys that fulfill the contract. For example
      * a wrapper around a byte[] can be submitted as key to retrieve either
@@ -177,19 +176,19 @@ public class ValuePoolHashMap extends BaseHashMap {
      * of toString().
      *
      * @param key String or other Object with compatible equals(String)
-     * and hashCode().
+     *            and hashCode().
      * @return String from map or a new String
      */
     protected String getOrAddString(Object key) {
 
         String testValue;
-        int    index      = hashIndex.getHashIndex(key.hashCode());
-        int    lookup     = hashIndex.hashTable[index];
-        int    lastLookup = -1;
+        int index = hashIndex.getHashIndex(key.hashCode());
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = (String) objectKeyTable[lookup];
 
             if (key.equals(testValue)) {
@@ -209,8 +208,8 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddString(key);
         }
 
-        testValue              = key.toString();
-        lookup                 = hashIndex.linkNode(index, lastLookup);
+        testValue = key.toString();
+        lookup = hashIndex.linkNode(index, lastLookup);
         objectKeyTable[lookup] = testValue;
 
         if (accessCount > ACCESS_MAX) {
@@ -228,13 +227,13 @@ public class ValuePoolHashMap extends BaseHashMap {
         key = key.substring(from, limit);
 
         String testValue;
-        int    index      = hashIndex.getHashIndex(key.hashCode());
-        int    lookup     = hashIndex.hashTable[index];
-        int    lastLookup = -1;
+        int index = hashIndex.getHashIndex(key.hashCode());
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = (String) objectKeyTable[lookup];
 
             if (key.equals(testValue)) {
@@ -254,8 +253,8 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddString(key);
         }
 
-        testValue              = new String(key.toCharArray());
-        lookup                 = hashIndex.linkNode(index, lastLookup);
+        testValue = new String(key.toCharArray());
+        lookup = hashIndex.linkNode(index, lastLookup);
         objectKeyTable[lookup] = testValue;
 
         if (accessCount > ACCESS_MAX) {
@@ -270,14 +269,14 @@ public class ValuePoolHashMap extends BaseHashMap {
     protected TimestampData getOrAddDate(long longKey) {
 
         TimestampData testValue;
-        int           hash       = (int) longKey ^ (int) (longKey >>> 32);
-        int           index      = hashIndex.getHashIndex(hash);
-        int           lookup     = hashIndex.hashTable[index];
-        int           lastLookup = -1;
+        int hash = (int) longKey ^ (int) (longKey >>> 32);
+        int index = hashIndex.getHashIndex(hash);
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = (TimestampData) objectKeyTable[lookup];
 
             if (testValue.getSeconds() == longKey) {
@@ -297,8 +296,8 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddDate(longKey);
         }
 
-        lookup                 = hashIndex.linkNode(index, lastLookup);
-        testValue              = new TimestampData(longKey);
+        lookup = hashIndex.linkNode(index, lastLookup);
+        testValue = new TimestampData(longKey);
         objectKeyTable[lookup] = testValue;
 
         if (accessCount > ACCESS_MAX) {
@@ -314,12 +313,12 @@ public class ValuePoolHashMap extends BaseHashMap {
 
         Double testValue;
         int index = hashIndex.getHashIndex((int) (longKey ^ (longKey >>> 32)));
-        int    lookup     = hashIndex.hashTable[index];
-        int    lastLookup = -1;
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = (Double) objectKeyTable[lookup];
 
             if (Double.doubleToLongBits(testValue.doubleValue()) == longKey) {
@@ -339,8 +338,8 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddDouble(longKey);
         }
 
-        lookup                 = hashIndex.linkNode(index, lastLookup);
-        testValue              = Double.valueOf(Double.longBitsToDouble(longKey));
+        lookup = hashIndex.linkNode(index, lastLookup);
+        testValue = Double.valueOf(Double.longBitsToDouble(longKey));
         objectKeyTable[lookup] = testValue;
 
         if (accessCount > ACCESS_MAX) {
@@ -355,13 +354,13 @@ public class ValuePoolHashMap extends BaseHashMap {
     protected Object getOrAddObject(Object key) {
 
         Object testValue;
-        int    index      = hashIndex.getHashIndex(key.hashCode());
-        int    lookup     = hashIndex.hashTable[index];
-        int    lastLookup = -1;
+        int index = hashIndex.getHashIndex(key.hashCode());
+        int lookup = hashIndex.hashTable[index];
+        int lastLookup = -1;
 
         for (; lookup >= 0;
-                lastLookup = lookup,
-                lookup = hashIndex.getNextLookup(lookup)) {
+             lastLookup = lookup,
+                     lookup = hashIndex.getNextLookup(lookup)) {
             testValue = objectKeyTable[lookup];
 
             if (testValue.equals(key)) {
@@ -381,7 +380,7 @@ public class ValuePoolHashMap extends BaseHashMap {
             return getOrAddObject(key);
         }
 
-        lookup                 = hashIndex.linkNode(index, lastLookup);
+        lookup = hashIndex.linkNode(index, lastLookup);
         objectKeyTable[lookup] = key;
 
         if (accessCount > ACCESS_MAX) {

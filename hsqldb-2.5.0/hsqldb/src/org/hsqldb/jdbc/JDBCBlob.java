@@ -83,11 +83,11 @@ import java.sql.SQLFeatureNotSupportedException;
  * <p>
  * All methods on the <code>Blob</code> interface must be fully implemented if the
  * JDBC driver supports the data type.
- *
+ * <p>
  * <!-- start Release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3> <p>
- *
+ * <p>
  * Previous to 2.0, the HSQLDB driver did not implement Blob using an SQL
  * locator(BLOB).  That is, an HSQLDB Blob object did not contain a logical
  * pointer to SQL BLOB data; rather it directly contained a representation of
@@ -97,7 +97,7 @@ import java.sql.SQLFeatureNotSupportedException;
  * on the database. Also, the interface methods for updating a BLOB value
  * were unsupported, with the exception of the truncate method,
  * in that it could be used to truncate the local value. <p>
- *
+ * <p>
  * Starting with 2.0, the HSQLDB driver fully supports both local and remote
  * SQL BLOB data implementations, meaning that an HSQLDB Blob object <em>may</em>
  * contain a logical pointer to remote SQL BLOB data (see {@link JDBCBlobClient
@@ -127,11 +127,12 @@ public class JDBCBlob implements Blob {
     /**
      * Returns the number of bytes in the <code>BLOB</code> value
      * designated by this <code>Blob</code> object.
+     *
      * @return length of the <code>BLOB</code> in bytes
-     * @exception SQLException if there is an error accessing the
-     * length of the <code>BLOB</code>
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error accessing the
+     *                                         length of the <code>BLOB</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public long length() throws SQLException {
@@ -143,11 +144,11 @@ public class JDBCBlob implements Blob {
      * value that this <code>Blob</code> object represents, as an array of
      * bytes.  This <code>byte</code> array contains up to <code>length</code>
      * consecutive bytes starting at position <code>pos</code>.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * The official specification above is ambiguous in that it does not
      * precisely indicate the policy to be observed when
      * {@code pos > this.length() - length}.  One policy would be to retrieve the
@@ -156,27 +157,27 @@ public class JDBCBlob implements Blob {
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param pos the ordinal position of the first byte in the
-     *        <code>BLOB</code> value to be extracted; the first byte is at
-     *        position 1
+     * @param pos    the ordinal position of the first byte in the
+     *               <code>BLOB</code> value to be extracted; the first byte is at
+     *               position 1
      * @param length the number of consecutive bytes to be copied; JDBC 4.1[the value
-     * for length must be 0 or greater]
+     *               for length must be 0 or greater]
      * @return a byte array containing up to <code>length</code>
-     *         consecutive bytes from the <code>BLOB</code> value designated
-     *         by this <code>Blob</code> object, starting with the
-     *         byte at position <code>pos</code>
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value; if pos is less than 1 or length is
-     * less than 0
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * consecutive bytes from the <code>BLOB</code> value designated
+     * by this <code>Blob</code> object, starting with the
+     * byte at position <code>pos</code>
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value; if pos is less than 1 or length is
+     *                                         less than 0
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #setBytes
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public byte[] getBytes(long pos, final int length) throws SQLException {
 
         final byte[] data = getData();
-        final int    dlen = data.length;
+        final int dlen = data.length;
 
         if (pos < MIN_POS || pos - MIN_POS > dlen) {
             throw JDBCUtil.outOfRangeArgument("pos: " + pos);
@@ -200,10 +201,10 @@ public class JDBCBlob implements Blob {
      * <code>Blob</code> instance as a stream.
      *
      * @return a stream containing the <code>BLOB</code> data
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #setBinaryStream
      * @since JDK 1.2, HSQLDB 1.7.2
      */
@@ -219,20 +220,20 @@ public class JDBCBlob implements Blob {
      * <code>start</code>.
      *
      * @param pattern the byte array for which to search
-     * @param start the position at which to begin searching; the
-     *        first position is 1
+     * @param start   the position at which to begin searching; the
+     *                first position is 1
      * @return the position at which the pattern appears, else -1
-     * @exception SQLException if there is an error accessing the
-     * <code>BLOB</code> or if start is less than 1
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> or if start is less than 1
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public long position(final byte[] pattern,
                          final long start) throws SQLException {
 
         final byte[] data = getData();
-        final int    dlen = data.length;
+        final int dlen = data.length;
 
         if (start < MIN_POS) {
             throw JDBCUtil.outOfRangeArgument("start: " + start);
@@ -242,17 +243,17 @@ public class JDBCBlob implements Blob {
 
         // by now, we know start <= Integer.MAX_VALUE;
         final int startIndex = (int) start - 1;
-        final int plen       = pattern.length;
+        final int plen = pattern.length;
 
         if (plen == 0 || startIndex > dlen - plen) {
             return -1L;
         }
 
         final int result = KMPSearchAlgorithm.search(data, pattern,
-            KMPSearchAlgorithm.computeTable(pattern), startIndex);
+                KMPSearchAlgorithm.computeTable(pattern), startIndex);
 
         return (result == -1) ? -1
-                              : result + 1;
+                : result + 1;
     }
 
     /**
@@ -262,20 +263,20 @@ public class JDBCBlob implements Blob {
      * <code>start</code>.
      *
      * @param pattern the <code>Blob</code> object designating
-     * the <code>BLOB</code> value for which to search
-     * @param start the position in the <code>BLOB</code> value
-     *        at which to begin searching; the first position is 1
+     *                the <code>BLOB</code> value for which to search
+     * @param start   the position in the <code>BLOB</code> value
+     *                at which to begin searching; the first position is 1
      * @return the position at which the pattern begins, else -1
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value or if start is less than 1
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value or if start is less than 1
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public long position(final Blob pattern, long start) throws SQLException {
 
         final byte[] data = getData();
-        final int    dlen = data.length;
+        final int dlen = data.length;
 
         if (start < MIN_POS) {
             throw JDBCUtil.outOfRangeArgument("start: " + start);
@@ -284,8 +285,8 @@ public class JDBCBlob implements Blob {
         }
 
         // by now, we know start <= Integer.MAX_VALUE;
-        final int  startIndex = (int) (start - MIN_POS);
-        final long plen       = pattern.length();
+        final int startIndex = (int) (start - MIN_POS);
+        final long plen = pattern.length();
 
         if (plen == 0 || startIndex > ((long) dlen) - plen) {
             return -1L;
@@ -293,7 +294,7 @@ public class JDBCBlob implements Blob {
 
         // by now, we know plen <= Integer.MAX_VALUE
         final int iplen = (int) plen;
-        byte[]    bytePattern;
+        byte[] bytePattern;
 
         if (pattern instanceof JDBCBlob) {
             bytePattern = ((JDBCBlob) pattern).data();
@@ -302,10 +303,10 @@ public class JDBCBlob implements Blob {
         }
 
         final int result = KMPSearchAlgorithm.search(data, bytePattern,
-            KMPSearchAlgorithm.computeTable(bytePattern), startIndex);
+                KMPSearchAlgorithm.computeTable(bytePattern), startIndex);
 
         return (result == -1) ? -1
-                              : result + 1;
+                : result + 1;
     }
 
     // -------------------------- JDBC 3.0 -----------------------------------
@@ -325,13 +326,13 @@ public class JDBCBlob implements Blob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Blob instance is constructed as a
      * result of calling JDBCConnection.createBlob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -343,14 +344,14 @@ public class JDBCBlob implements Blob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * Starting with HSQLDB 2.1, JDBCBlob no longer utilizes volatile fields
      * and is effectively thread safe, but still uses local variable
      * snapshot isolation. <p>
-     *
+     * <p>
      * As such, the synchronization policy still does not strictly enforce
      * serialized read/write access to the underlying data  <p>
-     *
+     * <p>
      * So, if an application may perform concurrent JDBCBlob modifications and
      * the integrity of the application depends on total order Blob modification
      * semantics, then such operations should be synchronized on an appropriate
@@ -359,21 +360,21 @@ public class JDBCBlob implements Blob {
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param pos the position in the <code>BLOB</code> object at which
-     *        to start writing; the first position is 1
+     * @param pos   the position in the <code>BLOB</code> object at which
+     *              to start writing; the first position is 1
      * @param bytes the array of bytes to be written to the <code>BLOB</code>
-     *        value that this <code>Blob</code> object represents
+     *              value that this <code>Blob</code> object represents
      * @return the number of bytes written
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value or if pos is less than 1
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value or if pos is less than 1
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #getBytes
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public int setBytes(long pos, byte[] bytes) throws SQLException {
         return setBytes(pos, bytes, 0, bytes == null ? 0
-                                                     : bytes.length);
+                : bytes.length);
     }
 
     /**
@@ -393,13 +394,13 @@ public class JDBCBlob implements Blob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Blob instance is constructed as a
      * result of calling JDBCConnection.createBlob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -411,20 +412,20 @@ public class JDBCBlob implements Blob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * If the value specified for <code>pos</code>
      * is greater than the length of the <code>BLOB</code> value, then
      * the <code>BLOB</code> value is extended in length to accept the
      * written octets and the undefined region up to <code>pos</code> is
      * filled with (byte)0. <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.1, JDBCBlob no longer utilizes volatile fields
      * and is effectively thread safe, but still uses local variable
      * snapshot isolation. <p>
-     *
+     * <p>
      * As such, the synchronization policy still does not strictly enforce
      * serialized read/write access to the underlying data  <p>
-     *
+     * <p>
      * So, if an application may perform concurrent JDBCBlob modifications and
      * the integrity of the application depends on total order Blob modification
      * semantics, then such operations should be synchronized on an appropriate
@@ -433,19 +434,19 @@ public class JDBCBlob implements Blob {
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param pos the position in the <code>BLOB</code> object at which
-     *        to start writing; the first position is 1
-     * @param bytes the array of bytes to be written to this <code>BLOB</code>
-     *        object
+     * @param pos    the position in the <code>BLOB</code> object at which
+     *               to start writing; the first position is 1
+     * @param bytes  the array of bytes to be written to this <code>BLOB</code>
+     *               object
      * @param offset the offset into the array <code>bytes</code> at which
-     *        to start reading the bytes to be set
-     * @param len the number of bytes to be written to the <code>BLOB</code>
-     *        value from the array of bytes <code>bytes</code>
+     *               to start reading the bytes to be set
+     * @param len    the number of bytes to be written to the <code>BLOB</code>
+     *               value from the array of bytes <code>bytes</code>
      * @return the number of bytes written
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value or if pos is less than 1
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value or if pos is less than 1
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #getBytes
      * @since JDK 1.4, HSQLDB 1.7.2
      */
@@ -471,8 +472,8 @@ public class JDBCBlob implements Blob {
         }
 
         final int index = (int) (pos - MIN_POS);
-        byte[]    data  = getData();
-        final int dlen  = data.length;
+        byte[] data = getData();
+        final int dlen = data.length;
 
         if (index > dlen - len) {
             byte[] temp = new byte[index + len];
@@ -504,13 +505,13 @@ public class JDBCBlob implements Blob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Blob instance is constructed as a
      * result of calling JDBCConnection.createBlob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -522,23 +523,23 @@ public class JDBCBlob implements Blob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * The data written to the stream does not appear in this
      * Blob until the stream is closed <p>
-     *
+     * <p>
      * When the stream is closed, if the value specified for <code>pos</code>
      * is greater than the length of the <code>BLOB</code> value, then
      * the <code>BLOB</code> value is extended in length to accept the
      * written octets and the undefined region up to <code>pos</code> is
      * filled with (byte)0. <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.1, JDBCBlob no longer utilizes volatile fields
      * and is effectively thread safe, but still uses local variable
      * snapshot isolation. <p>
-     *
+     * <p>
      * As such, the synchronization policy still does not strictly enforce
      * serialized read/write access to the underlying data  <p>
-     *
+     * <p>
      * So, if an application may perform concurrent JDBCBlob modifications and
      * the integrity of the application depends on total order Blob modification
      * semantics, then such operations should be synchronized on an appropriate
@@ -548,13 +549,13 @@ public class JDBCBlob implements Blob {
      * <!-- end release-specific documentation -->
      *
      * @param pos the position in the <code>BLOB</code> value at which
-     *        to start writing; the first position is 1
+     *            to start writing; the first position is 1
      * @return a <code>java.io.OutputStream</code> object to which data can
-     *         be written
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value or if pos is less than 1
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * be written
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value or if pos is less than 1
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @see #getBinaryStream
      * @since JDK 1.4, HSQLDB 1.7.2
      */
@@ -580,10 +581,10 @@ public class JDBCBlob implements Blob {
 
                 closed = true;
 
-                byte[] bytes  = super.buf;
-                int    length = super.count;
+                byte[] bytes = super.buf;
+                int length = super.count;
 
-                super.buf   = NO_BYTES;
+                super.buf = NO_BYTES;
                 super.count = 0;
 
                 try {
@@ -606,13 +607,13 @@ public class JDBCBlob implements Blob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is fully supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Blob instance is constructed as a
      * result of calling JDBCConnection.createBlob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -627,11 +628,11 @@ public class JDBCBlob implements Blob {
      * <!-- end release-specific documentation -->
      *
      * @param len the length, in bytes, to which the <code>BLOB</code> value
-     *        that this <code>Blob</code> object represents should be truncated
-     * @exception SQLException if there is an error accessing the
-     *            <code>BLOB</code> value or if len is less than 0
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     *            that this <code>Blob</code> object represents should be truncated
+     * @throws SQLException                    if there is an error accessing the
+     *                                         <code>BLOB</code> value or if len is less than 0
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.4, HSQLDB 1.7.2
      */
     public void truncate(final long len) throws SQLException {
@@ -665,38 +666,37 @@ public class JDBCBlob implements Blob {
      * calls to <code>free</code> are treated as a no-op.
      * <p>
      *
-     * @throws SQLException if an error occurs releasing
-     * the Blob's resources
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if an error occurs releasing
+     *                                         the Blob's resources
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6, HSQLDB 2.0
      */
     public synchronized void free() throws SQLException {
         m_closed = true;
-        m_data   = null;
+        m_data = null;
     }
 
     /**
      * Returns an <code>InputStream</code> object that contains a partial <code>Blob</code> value,
      * starting  with the byte specified by pos, which is length bytes in length.
      *
-     * @param pos the offset to the first byte of the partial value to be retrieved.
-     *  The first byte in the <code>Blob</code> is at position 1
+     * @param pos    the offset to the first byte of the partial value to be retrieved.
+     *               The first byte in the <code>Blob</code> is at position 1
      * @param length the length in bytes of the partial value to be retrieved
      * @return <code>InputStream</code> through which the partial <code>Blob</code> value can be read.
-     * @throws SQLException if pos is less than 1 or if pos is greater than the number of bytes
-     * in the <code>Blob</code> or if pos + length is greater than the number of bytes
-     * in the <code>Blob</code>
-     *
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if pos is less than 1 or if pos is greater than the number of bytes
+     *                                         in the <code>Blob</code> or if pos + length is greater than the number of bytes
+     *                                         in the <code>Blob</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6, HSQLDB 2.0
      */
     public InputStream getBinaryStream(long pos,
                                        long length) throws SQLException {
 
         final byte[] data = getData();
-        final int    dlen = data.length;
+        final int dlen = data.length;
 
         if (pos < MIN_POS || pos > dlen) {
             throw JDBCUtil.outOfRangeArgument("pos: " + pos);
@@ -712,8 +712,8 @@ public class JDBCBlob implements Blob {
             return new ByteArrayInputStream(data);
         }
 
-        final int    ilength = (int) length;
-        final byte[] result  = new byte[ilength];
+        final int ilength = (int) length;
+        final byte[] result = new byte[ilength];
 
         System.arraycopy(data, index, result, 0, ilength);
 
@@ -721,16 +721,16 @@ public class JDBCBlob implements Blob {
     }
 
     // ---------------------- internal implementation --------------------------
-    private static final long   MIN_POS  = 1L;
-    private static final long   MAX_POS  = MIN_POS + (long) Integer.MAX_VALUE;
+    private static final long MIN_POS = 1L;
+    private static final long MAX_POS = MIN_POS + (long) Integer.MAX_VALUE;
     private static final byte[] NO_BYTES = new byte[0];
-    private boolean             m_closed;
-    private byte[]              m_data;
-    private final boolean       m_createdByConnection;
+    private boolean m_closed;
+    private byte[] m_data;
+    private final boolean m_createdByConnection;
 
     /**
      * Constructs a new JDBCBlob instance wrapping the given octet sequence. <p>
-     *
+     * <p>
      * This constructor is used internally to retrieve result set values as
      * Blob objects, yet it must be public to allow access from other packages.
      * As such (in the interest of efficiency) this object maintains a reference
@@ -747,12 +747,12 @@ public class JDBCBlob implements Blob {
             throw JDBCUtil.nullArgument("data");
         }
 
-        m_data                = data;
+        m_data = data;
         m_createdByConnection = false;
     }
 
     protected JDBCBlob() {
-        m_data                = new byte[0];
+        m_data = new byte[0];
         m_createdByConnection = true;
     }
 
@@ -760,7 +760,7 @@ public class JDBCBlob implements Blob {
 
         if (!m_createdByConnection) {
             throw JDBCUtil.sqlException(ErrorCode.X_25006,
-                                        "Blob is read-only");
+                    "Blob is read-only");
         }
     }
 

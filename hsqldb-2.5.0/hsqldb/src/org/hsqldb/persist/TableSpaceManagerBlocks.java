@@ -46,25 +46,25 @@ import org.hsqldb.lib.DoubleIntIndex;
  */
 public class TableSpaceManagerBlocks implements TableSpaceManager {
 
-    DataSpaceManager  spaceManager;
+    DataSpaceManager spaceManager;
     private final int scale;
-    final int         mainBlockSize;
-    final int         spaceID;
-    final int         minReuse;
+    final int mainBlockSize;
+    final int spaceID;
+    final int minReuse;
 
     //
     private DoubleIntIndex lookup;
-    private final int      capacity;
-    private long           requestGetCount;
-    private long           releaseCount;
-    private long           requestCount;
-    private long           requestSize;
-    boolean                isModified;
+    private final int capacity;
+    private long requestGetCount;
+    private long releaseCount;
+    private long requestCount;
+    private long requestSize;
+    boolean isModified;
 
     //
     long freshBlockFreePos = 0;
-    long freshBlockLimit   = 0;
-    int  fileBlockIndex    = -1;
+    long freshBlockLimit = 0;
+    int fileBlockIndex = -1;
 
     /**
      *
@@ -73,12 +73,12 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
                                    int fileBlockSize, int capacity,
                                    int fileScale, int minReuse) {
 
-        this.spaceManager  = spaceManager;
-        this.scale         = fileScale;
-        this.spaceID       = tableId;
+        this.spaceManager = spaceManager;
+        this.scale = fileScale;
+        this.spaceID = tableId;
         this.mainBlockSize = fileBlockSize;
-        this.minReuse      = minReuse;
-        lookup             = new DoubleIntIndex(capacity, true);
+        this.minReuse = minReuse;
+        lookup = new DoubleIntIndex(capacity, true);
 
         lookup.setValuesSearchTarget();
 
@@ -104,7 +104,7 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
                                     long blockFreePos, long blockLimit) {
 
         freshBlockFreePos = blockFreePos;
-        freshBlockLimit   = blockLimit;
+        freshBlockLimit = blockLimit;
 
         if (spaceList != null) {
             spaceList.copyTo(lookup);
@@ -114,7 +114,7 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
     boolean getNewMainBlock(long rowSize) {
 
         long blockCount = (mainBlockSize + rowSize) / mainBlockSize;
-        long blockSize  = blockCount * mainBlockSize;
+        long blockSize = blockCount * mainBlockSize;
         long position = spaceManager.getFileBlocks(spaceID, (int) blockCount);
 
         if (position < 0) {
@@ -129,7 +129,7 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
             }
 
             freshBlockFreePos = position;
-            freshBlockLimit   = position;
+            freshBlockLimit = position;
         }
 
         freshBlockLimit += blockSize;
@@ -211,7 +211,7 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
                     DataSpaceManager.fixedBlockSizeUnit);
         }
 
-        int index    = -1;
+        int index = -1;
         int rowUnits = rowSize / scale;
 
         if (rowSize >= minReuse && lookup.size() > 0) {
@@ -245,8 +245,8 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
 
         requestSize += rowSize;
 
-        int key        = lookup.getKey(index);
-        int units      = lookup.getValue(index);
+        int key = lookup.getKey(index);
+        int units = lookup.getValue(index);
         int difference = units - rowUnits;
 
         lookup.remove(index);
@@ -269,16 +269,16 @@ public class TableSpaceManagerBlocks implements TableSpaceManager {
         }
 
         spaceManager.freeTableSpace(spaceID, lookup, freshBlockFreePos,
-                                    freshBlockLimit, true);
+                freshBlockLimit, true);
 
         freshBlockFreePos = 0;
-        freshBlockLimit   = 0;
+        freshBlockLimit = 0;
     }
 
     public long getLostBlocksSize() {
 
         long total = freshBlockLimit - freshBlockFreePos
-                     + lookup.getTotalValues() * scale;
+                + lookup.getTotalValues() * scale;
 
         return total;
     }

@@ -78,6 +78,7 @@ import java.util.Vector;
 /**
  * Common code in Swing and AWT versions of Tranfer
  * New class based on Hypersonic code
+ *
  * @author Thomas Mueller (Hypersonic SQL Group)
  * @version 1.7.2
  * @since Hypersonic SQL
@@ -91,23 +92,23 @@ class TransferCommon {
         TransferTable t;
 
         try {
-            FileOutputStream   fos = new FileOutputStream(f);
+            FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             for (int i = 0; i < tTable.size(); i++) {
-                t          = (TransferTable) tTable.elementAt(i);
+                t = (TransferTable) tTable.elementAt(i);
                 t.sourceDb = null;
-                t.destDb   = null;
-                t.tracer   = null;
+                t.destDb = null;
+                t.tracer = null;
             }
 
             oos.writeObject(tTable);
 
             for (int i = 0; i < tTable.size(); i++) {
-                t          = (TransferTable) tTable.elementAt(i);
-                t.tracer   = tracer;
+                t = (TransferTable) tTable.elementAt(i);
+                t.tracer = tracer;
                 t.sourceDb = (TransferDb) sourceDb;
-                t.destDb   = targetDb;
+                t.destDb = targetDb;
             }
         } catch (IOException e) {
             System.out.println("pb in SavePrefs : " + e.toString());
@@ -118,42 +119,44 @@ class TransferCommon {
     static Vector loadPrefs(String f, DataAccessPoint sourceDb,
                             DataAccessPoint targetDb, Traceable tracer) {
 
-        TransferTable     t;
-        Vector            tTable = null;
-        ObjectInputStream ois    = null;
+        TransferTable t;
+        Vector tTable = null;
+        ObjectInputStream ois = null;
 
         try {
             FileInputStream fis = new FileInputStream(f);
 
-            ois    = new ObjectInputStream(fis);
+            ois = new ObjectInputStream(fis);
             tTable = (Vector) ois.readObject();
 
             for (int i = 0; i < tTable.size(); i++) {
-                t          = (TransferTable) tTable.elementAt(i);
-                t.tracer   = tracer;
+                t = (TransferTable) tTable.elementAt(i);
+                t.tracer = tracer;
                 t.sourceDb = (TransferDb) sourceDb;
-                t.destDb   = targetDb;
+                t.destDb = targetDb;
             }
         } catch (ClassNotFoundException e) {
             System.out.println("class not found pb in LoadPrefs : "
-                               + e.toString());
+                    + e.toString());
 
             tTable = new Vector();
         } catch (IOException e) {
             System.out.println("IO pb in LoadPrefs : actionPerformed"
-                               + e.toString());
+                    + e.toString());
 
             tTable = new Vector();
         } finally {
             if (ois != null) {
                 try {
                     ois.close();
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {
+                }
             }
         }
 
         return (tTable);
     }
 
-    private TransferCommon() {}
+    private TransferCommon() {
+    }
 }

@@ -57,7 +57,7 @@ public final class OtherType extends Type {
 
     public int displaySize() {
         return precision > Integer.MAX_VALUE ? Integer.MAX_VALUE
-                                             : (int) precision;
+                : (int) precision;
     }
 
     public int getJDBCTypeCode() {
@@ -152,7 +152,7 @@ public final class OtherType extends Type {
         }
 
         return StringConverter.byteArrayToHexString(
-            ((JavaObjectData) a).getBytes());
+                ((JavaObjectData) a).getBytes());
     }
 
     public String convertToSQLString(Object a) {
@@ -162,7 +162,7 @@ public final class OtherType extends Type {
         }
 
         return StringConverter.byteArrayToSQLHexString(
-            ((JavaObjectData) a).getBytes());
+                ((JavaObjectData) a).getBytes());
     }
 
     public Object convertSQLToJava(SessionInterface session, Object a) {

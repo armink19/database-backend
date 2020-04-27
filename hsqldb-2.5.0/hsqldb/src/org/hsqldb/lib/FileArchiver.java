@@ -48,10 +48,10 @@ import java.util.zip.*;
  */
 public class FileArchiver {
 
-    public static final int  COMPRESSION_NONE = 0;
-    public static final int  COMPRESSION_ZIP  = 1;
-    public static final int  COMPRESSION_GZIP = 2;
-    private static final int COPY_BLOCK_SIZE  = 1 << 16;
+    public static final int COMPRESSION_NONE = 0;
+    public static final int COMPRESSION_ZIP = 1;
+    public static final int COMPRESSION_GZIP = 2;
+    private static final int COPY_BLOCK_SIZE = 1 << 16;
 
     /*
     public static void compressFile(String infilename, String outfilename,
@@ -74,18 +74,18 @@ public class FileArchiver {
     public static void copyFile(String infilename, String outfilename,
                                 FileAccess storage) throws IOException {
         FileArchiver.archive(infilename, outfilename, storage,
-                             COMPRESSION_NONE);
+                COMPRESSION_NONE);
     }
 
     public static void archive(String infilename, String outfilename,
                                FileAccess storage,
                                int compressionType) throws IOException {
 
-        InputStream          in        = null;
-        OutputStream         f         = null;
-        OutputStream         fOut      = null;
-        DeflaterOutputStream deflater  = null;
-        boolean              completed = false;
+        InputStream in = null;
+        OutputStream f = null;
+        OutputStream fOut = null;
+        DeflaterOutputStream deflater = null;
+        boolean completed = false;
 
         // if there is no file
         if (!storage.isStreamElement(infilename)) {
@@ -95,27 +95,27 @@ public class FileArchiver {
         try {
             byte[] b = new byte[COPY_BLOCK_SIZE];
 
-            in   = storage.openInputStreamElement(infilename);
-            f    = storage.openOutputStreamElement(outfilename, true);
+            in = storage.openInputStreamElement(infilename);
+            f = storage.openOutputStreamElement(outfilename, true);
             fOut = f;
 
             switch (compressionType) {
 
-                case COMPRESSION_ZIP :
+                case COMPRESSION_ZIP:
                     f = deflater = new DeflaterOutputStream(f,
                             new Deflater(Deflater.BEST_SPEED), b.length);
                     break;
 
-                case COMPRESSION_GZIP :
+                case COMPRESSION_GZIP:
                     f = deflater = new GZIPOutputStream(f, b.length);
                     break;
 
-                case COMPRESSION_NONE :
+                case COMPRESSION_NONE:
                     break;
 
-                default :
+                default:
                     throw new RuntimeException("FileArchiver"
-                                               + compressionType);
+                            + compressionType);
             }
 
             while (true) {
@@ -162,9 +162,9 @@ public class FileArchiver {
                                  FileAccess storage,
                                  int compressionType) throws IOException {
 
-        InputStream  f         = null;
+        InputStream f = null;
         OutputStream outstream = null;
-        boolean      completed = false;
+        boolean completed = false;
 
         try {
             if (!storage.isStreamElement(infilename)) {
@@ -179,20 +179,20 @@ public class FileArchiver {
 
             switch (compressionType) {
 
-                case COMPRESSION_ZIP :
+                case COMPRESSION_ZIP:
                     f = new InflaterInputStream(f, new Inflater());
                     break;
 
-                case COMPRESSION_GZIP :
+                case COMPRESSION_GZIP:
                     f = new GZIPInputStream(f, b.length);
                     break;
 
-                case COMPRESSION_NONE :
+                case COMPRESSION_NONE:
                     break;
 
-                default :
+                default:
                     throw new RuntimeException("FileArchiver: "
-                                               + compressionType);
+                            + compressionType);
             }
 
             outstream = storage.openOutputStreamElement(outfilename, false);

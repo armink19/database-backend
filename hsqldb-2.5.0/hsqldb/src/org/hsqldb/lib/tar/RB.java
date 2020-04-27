@@ -38,18 +38,18 @@ import org.hsqldb.lib.ValidatingResourceBundle;
 
 /**
  * Resource Bundle for Tar classes
- * <P>
+ * <p>
  * Purpose of this class is to wrap a RefCapablePropertyResourceBundle to
- *  reliably detect any possible use of a missing property key as soon as
- *  this class is clinitted.
+ * reliably detect any possible use of a missing property key as soon as
+ * this class is clinitted.
  * The reason for this is to allow us developers to detect all such errors
- *  before end-users ever use this class.
+ * before end-users ever use this class.
  * </P> <P>
  * IMPORTANT:  To add a new ResourceBundle element, add two new lines, one
  * like <PRE>
- *    public static final int NEWKEYID = keyCounter++;
+ * public static final int NEWKEYID = keyCounter++;
  * </PRE> and one line <PRE>
- *      new Integer(KEY2), "key2",
+ * new Integer(KEY2), "key2",
  * </PRE>
  * Both should be inserted right after all of the other lines of the same type.
  * NEWKEYID is obviously a new constant which you will use in calling code
@@ -121,6 +121,7 @@ public enum RB implements RefCapableRBInterface {
     private static ValidatingResourceBundle vrb =
             new ValidatingResourceBundle(
                     RB.class.getPackage().getName() + ".rb", RB.class);
+
     static {
         vrb.setMissingPosValueBehavior(
                 ValidatingResourceBundle.NOOP_BEHAVIOR);
@@ -131,48 +132,63 @@ public enum RB implements RefCapableRBInterface {
     public String getString() {
         return vrb.getString(this);
     }
+
     public String toString() {
         return ValidatingResourceBundle.resourceKeyFor(this);
     }
+
     public String getExpandedString() {
         return vrb.getExpandedString(this);
     }
+
     public String getExpandedString(String... strings) {
         return vrb.getExpandedString(this, strings);
     }
+
     public String getString(String... strings) {
         return vrb.getString(this, strings);
     }
+
     public String getString(int i1) {
         return vrb.getString(this, i1);
     }
+
     public String getString(int i1, int i2) {
         return vrb.getString(this, i1, i2);
     }
+
     public String getString(int i1, int i2, int i3) {
         return vrb.getString(this, i1, i2, i3);
     }
+
     public String getString(int i1, String s2) {
         return vrb.getString(this, i1, s2);
     }
+
     public String getString(String s1, int i2) {
         return vrb.getString(this, s1, i2);
     }
+
     public String getString(int i1, int i2, String s3) {
         return vrb.getString(this, i1, i2, s3);
     }
+
     public String getString(int i1, String s2, int i3) {
         return vrb.getString(this, i1, s2, i3);
     }
+
     public String getString(String s1, int i2, int i3) {
         return vrb.getString(this, s1, i2, i3);
     }
+
     public String getString(int i1, String s2, String s3) {
         return vrb.getString(this, i1, s3, s3);
     }
+
     public String getString(String s1, String s2, int i3) {
         return vrb.getString(this, s1, s2, i3);
     }
+
     public String getString(String s1, int i2, String s3) {
         return vrb.getString(this, s1, i2, s3);
     }

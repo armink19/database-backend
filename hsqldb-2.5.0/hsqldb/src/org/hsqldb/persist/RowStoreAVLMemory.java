@@ -53,13 +53,13 @@ public class RowStoreAVLMemory extends RowStoreAVL {
 
     public RowStoreAVLMemory(Table table) {
 
-        this.database     = table.database;
-        this.table        = table;
-        this.indexList    = table.getIndexList();
+        this.database = table.database;
+        this.table = table;
+        this.indexList = table.getIndexList();
         this.accessorList = new CachedObject[indexList.length];
-        lock              = new ReentrantReadWriteLock();
-        readLock          = lock.readLock();
-        writeLock         = lock.writeLock();
+        lock = new ReentrantReadWriteLock();
+        readLock = lock.readLock();
+        writeLock = lock.writeLock();
     }
 
     public boolean isMemory() {
@@ -70,7 +70,8 @@ public class RowStoreAVLMemory extends RowStoreAVL {
         return 0;
     }
 
-    public void set(CachedObject object) {}
+    public void set(CachedObject object) {
+    }
 
     public CachedObject get(long i) {
         throw Error.runtimeError(ErrorCode.U_S0500, "RowStoreAVMemory");
@@ -84,7 +85,8 @@ public class RowStoreAVLMemory extends RowStoreAVL {
         return object;
     }
 
-    public void add(Session session, CachedObject object, boolean tx) {}
+    public void add(Session session, CachedObject object, boolean tx) {
+    }
 
     public CachedObject get(RowInputInterface in) {
         throw Error.runtimeError(ErrorCode.U_S0500, "RowStoreAVLMemory");
@@ -93,8 +95,8 @@ public class RowStoreAVLMemory extends RowStoreAVL {
     public CachedObject getNewCachedObject(Session session, Object object,
                                            boolean tx) {
 
-        long id  = rowIdSequence.getAndIncrement();
-        Row  row = new RowAVL(table, (Object[]) object, id, this);
+        long id = rowIdSequence.getAndIncrement();
+        Row row = new RowAVL(table, (Object[]) object, id, this);
 
         if (tx) {
             RowAction.addInsertAction(session, table, row);
@@ -111,11 +113,14 @@ public class RowStoreAVLMemory extends RowStoreAVL {
         ArrayUtil.fillArray(accessorList, null);
     }
 
-    public void remove(CachedObject object) {}
+    public void remove(CachedObject object) {
+    }
 
-    public void release(long i) {}
+    public void release(long i) {
+    }
 
-    public void commitPersistence(CachedObject row) {}
+    public void commitPersistence(CachedObject row) {
+    }
 
     public void postCommitAction(Session session, RowAction action) {
 
@@ -140,22 +145,22 @@ public class RowStoreAVLMemory extends RowStoreAVL {
 
         switch (changeAction) {
 
-            case RowAction.ACTION_DELETE :
+            case RowAction.ACTION_DELETE:
                 database.logger.writeDeleteStatement(session, (Table) table,
-                                                     data);
+                        data);
                 break;
 
-            case RowAction.ACTION_INSERT :
+            case RowAction.ACTION_INSERT:
                 database.logger.writeInsertStatement(session, row,
-                                                     (Table) table);
+                        (Table) table);
                 break;
 
-            case RowAction.ACTION_INSERT_DELETE :
+            case RowAction.ACTION_INSERT_DELETE:
 
                 // INSERT + DELETE
                 break;
 
-            case RowAction.ACTION_DELETE_FINAL :
+            case RowAction.ACTION_DELETE_FINAL:
                 throw Error.runtimeError(ErrorCode.U_S0500, "RowStore");
         }
     }
@@ -165,19 +170,19 @@ public class RowStoreAVLMemory extends RowStoreAVL {
 
         switch (changeAction) {
 
-            case RowAction.ACTION_DELETE :
+            case RowAction.ACTION_DELETE:
                 if (txModel == TransactionManager.LOCKS) {
                     ((RowAVL) row).setNewNodes(this);
                     indexRow(session, row);
                 }
                 break;
 
-            case RowAction.ACTION_INSERT :
+            case RowAction.ACTION_INSERT:
                 delete(session, row);
                 remove(row);
                 break;
 
-            case RowAction.ACTION_INSERT_DELETE :
+            case RowAction.ACTION_INSERT_DELETE:
 
                 // INSERT + DELETE
                 if (txModel == TransactionManager.LOCKS) {
@@ -195,7 +200,8 @@ public class RowStoreAVLMemory extends RowStoreAVL {
         return null;
     }
 
-    public void setCache(DataFileCache cache) {}
+    public void setCache(DataFileCache cache) {
+    }
 
     public void release() {
 

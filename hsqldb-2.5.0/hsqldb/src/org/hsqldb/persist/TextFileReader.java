@@ -39,7 +39,7 @@ import org.hsqldb.rowio.RowInputInterface;
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.4
  * @since 2.3.4
-*/
+ */
 public interface TextFileReader {
 
     String getHeaderLine();

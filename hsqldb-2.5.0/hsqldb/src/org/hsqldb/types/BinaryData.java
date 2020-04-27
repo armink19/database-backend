@@ -51,23 +51,23 @@ import java.io.InputStream;
 public class BinaryData implements BlobData {
 
     public static final BinaryData singleBitZero =
-        new BinaryData(new byte[]{ 0 }, 1);
+            new BinaryData(new byte[]{0}, 1);
     public static final BinaryData singleBitOne =
-        new BinaryData(new byte[]{ -0x80 }, 1);
+            new BinaryData(new byte[]{-0x80}, 1);
     public static final byte[] zeroLengthBytes = new byte[0];
     public static final BinaryData zeroLengthBinary =
-        new BinaryData(zeroLengthBytes, false);
-    long             id;
+            new BinaryData(zeroLengthBytes, false);
+    long id;
     protected byte[] data;
-    private boolean  isBits;
-    private long     bitLength;
-    private int      hashCode = 0;
+    private boolean isBits;
+    private long bitLength;
+    private int hashCode = 0;
 
     public static BinaryData getBitData(byte[] data, long bitLength) {
 
         if (bitLength == 1) {
             return data[0] == 0 ? singleBitZero
-                                : singleBitOne;
+                    : singleBitOne;
         }
 
         return new BinaryData(data, bitLength);
@@ -77,7 +77,7 @@ public class BinaryData implements BlobData {
      * This constructor is used inside the engine when an already serialized
      * byte[] is read from a file (.log, .script, .data or text table source).
      * In this case clone is false.
-     *
+     * <p>
      * When a byte[] is submitted as a parameter of PreparedStatement then
      * clone is true.
      */
@@ -87,7 +87,7 @@ public class BinaryData implements BlobData {
             data = (byte[]) ArrayUtil.duplicateArray(data);
         }
 
-        this.data      = data;
+        this.data = data;
         this.bitLength = data.length * 8L;
     }
 
@@ -104,24 +104,24 @@ public class BinaryData implements BlobData {
         data = new byte[(int) length];
 
         System.arraycopy(b1.getBytes(session, 0, (int) b1.length(session)), 0,
-                         data, 0, (int) b1.length(session));
+                data, 0, (int) b1.length(session));
         System.arraycopy(b2.getBytes(session, 0, (int) b2.length(session)), 0,
-                         data, (int) b1.length(session),
-                         (int) b2.length(session));
+                data, (int) b1.length(session),
+                (int) b2.length(session));
 
         this.bitLength = (int) length * 8L;
     }
 
     public BinaryData(byte[] data, long bitLength) {
 
-        this.data      = data;
+        this.data = data;
         this.bitLength = bitLength;
-        this.isBits    = true;
+        this.isBits = true;
     }
 
     public BinaryData(long length, DataInput stream) {
 
-        data      = new byte[(int) length];
+        data = new byte[(int) length];
         bitLength = data.length * 8L;
 
         try {
@@ -219,7 +219,7 @@ public class BinaryData implements BlobData {
     public void truncate(SessionInterface session, long len) {
 
         if (data.length > len) {
-            data      = (byte[]) ArrayUtil.resizeArray(data, (int) len);
+            data = (byte[]) ArrayUtil.resizeArray(data, (int) len);
             bitLength = data.length * 8L;
         }
     }
@@ -250,12 +250,14 @@ public class BinaryData implements BlobData {
         }
 
         byte[] bytes = pattern.getBytes(session, 0,
-                                        (int) pattern.length(session));
+                (int) pattern.length(session));
 
         return position(session, bytes, start);
     }
 
-    /** @todo - implement */
+    /**
+     * @todo - implement
+     */
     public long nonZeroLength(SessionInterface session) {
         return data.length;
     }
@@ -276,9 +278,11 @@ public class BinaryData implements BlobData {
         return false;
     }
 
-    public void free() {}
+    public void free() {
+    }
 
-    public void setSession(SessionInterface session) {}
+    public void setSession(SessionInterface session) {
+    }
 
     //---
     static boolean isInLimits(long fullLength, long pos, long len) {

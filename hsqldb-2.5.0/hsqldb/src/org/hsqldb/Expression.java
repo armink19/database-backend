@@ -54,11 +54,11 @@ import org.hsqldb.types.*;
  */
 public class Expression implements Cloneable {
 
-    public static final int LEFT    = 0;
-    public static final int RIGHT   = 1;
-    public static final int THIRD   = 2;
-    public static final int UNARY   = 1;
-    public static final int BINARY  = 2;
+    public static final int LEFT = 0;
+    public static final int RIGHT = 1;
+    public static final int THIRD = 2;
+    public static final int UNARY = 1;
+    public static final int BINARY = 2;
     public static final int TERNARY = 3;
 
     //
@@ -66,7 +66,7 @@ public class Expression implements Cloneable {
     static final Expression[] emptyArray = new Expression[]{};
 
     //
-    static final Expression EXPR_TRUE  = new ExpressionLogical(true);
+    static final Expression EXPR_TRUE = new ExpressionLogical(true);
     static final Expression EXPR_FALSE = new ExpressionLogical(false);
 
     // type
@@ -80,15 +80,15 @@ public class Expression implements Cloneable {
 
     // aggregate
     private boolean hasAggregate;
-    boolean         isDistinctAggregate;
+    boolean isDistinctAggregate;
 
     // VALUE
     protected Object valueData;
 
     //
     protected Expression[] nodes;
-    Type[]                 nodeDataTypes;
-    TableDerived           table;
+    Type[] nodeDataTypes;
+    TableDerived table;
 
     // for query and value lists, etc
     boolean isCorrelated;
@@ -115,16 +115,16 @@ public class Expression implements Cloneable {
     boolean isSingleColumnEqual;
     boolean isSingleColumnNull;
     boolean isSingleColumnNotNull;
-    byte    nullability = SchemaObject.Nullability.NULLABLE_UNKNOWN;
+    byte nullability = SchemaObject.Nullability.NULLABLE_UNKNOWN;
 
     //
-    Collation    collation;
+    Collation collation;
     RangeGroup[] rangeGroups;
-    RangeGroup   rangeGroup;
+    RangeGroup rangeGroup;
 
     Expression(int type) {
         opType = type;
-        nodes  = emptyArray;
+        nodes = emptyArray;
     }
 
     // IN condition optimisation
@@ -136,28 +136,28 @@ public class Expression implements Cloneable {
 
         switch (type) {
 
-            case OpTypes.ARRAY :
+            case OpTypes.ARRAY:
                 opType = OpTypes.ARRAY;
                 break;
 
-            case OpTypes.ARRAY_SUBQUERY :
+            case OpTypes.ARRAY_SUBQUERY:
                 opType = OpTypes.ARRAY_SUBQUERY;
                 break;
 
-            case OpTypes.TABLE_SUBQUERY :
+            case OpTypes.TABLE_SUBQUERY:
                 opType = OpTypes.TABLE_SUBQUERY;
                 break;
 
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.SCALAR_SUBQUERY :
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.SCALAR_SUBQUERY:
                 opType = OpTypes.ROW_SUBQUERY;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
 
-        nodes      = emptyArray;
+        nodes = emptyArray;
         this.table = table;
     }
 
@@ -181,14 +181,14 @@ public class Expression implements Cloneable {
 
         switch (expression.opType) {
 
-            case OpTypes.VALUE :
-            case OpTypes.COLUMN :
-            case OpTypes.ROW :
-            case OpTypes.FUNCTION :
-            case OpTypes.SQL_FUNCTION :
-            case OpTypes.ALTERNATIVE :
-            case OpTypes.CASEWHEN :
-            case OpTypes.CAST :
+            case OpTypes.VALUE:
+            case OpTypes.COLUMN:
+            case OpTypes.ROW:
+            case OpTypes.FUNCTION:
+            case OpTypes.SQL_FUNCTION:
+            case OpTypes.ALTERNATIVE:
+            case OpTypes.CASEWHEN:
+            case OpTypes.CAST:
                 return ddl;
         }
 
@@ -201,10 +201,10 @@ public class Expression implements Cloneable {
 
     /**
      * For use with CHECK constraints. Under development.
-     *
+     * <p>
      * Currently supports a subset of expressions and is suitable for CHECK
      * search conditions that refer only to the inserted/updated row.
-     *
+     * <p>
      * For full DDL reporting of VIEW select queries and CHECK search
      * conditions, future improvements here are dependent upon improvements to
      * SELECT query parsing, so that it is performed in a number of passes.
@@ -222,14 +222,14 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 if (valueData == null) {
                     return Tokens.T_NULL;
                 }
 
                 return dataType.convertToSQLString(valueData);
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
                 sb.append('(');
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -245,7 +245,7 @@ public class Expression implements Cloneable {
                 return sb.toString();
 
             //
-            case OpTypes.VALUELIST :
+            case OpTypes.VALUELIST:
                 for (int i = 0; i < nodes.length; i++) {
                     if (i > 0) {
                         sb.append(',');
@@ -259,7 +259,7 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.ARRAY :
+            case OpTypes.ARRAY:
                 sb.append(Tokens.T_ARRAY).append('[');
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -273,16 +273,16 @@ public class Expression implements Cloneable {
                 sb.append(']');
                 break;
 
-            case OpTypes.ARRAY_SUBQUERY :
+            case OpTypes.ARRAY_SUBQUERY:
 
-            //
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY :
+                //
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY:
                 sb.append('(');
                 sb.append(')');
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
 
@@ -301,32 +301,32 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 sb.append("VALUE = ").append(
-                    dataType.convertToSQLString(valueData));
+                        dataType.convertToSQLString(valueData));
                 sb.append(", TYPE = ").append(dataType.getNameString());
 
                 return sb.toString();
 
-            case OpTypes.ARRAY :
+            case OpTypes.ARRAY:
                 sb.append("ARRAY ");
 
                 return sb.toString();
 
-            case OpTypes.ARRAY_SUBQUERY :
+            case OpTypes.ARRAY_SUBQUERY:
                 sb.append("ARRAY SUBQUERY");
 
                 return sb.toString();
 
             //
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY :
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY:
                 sb.append("QUERY ");
                 sb.append(table.queryExpression.describe(session, blanks));
 
                 return sb.toString();
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
                 sb.append("ROW = ");
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -335,7 +335,7 @@ public class Expression implements Cloneable {
                 }
                 break;
 
-            case OpTypes.VALUELIST :
+            case OpTypes.VALUELIST:
                 sb.append("VALUELIST ");
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -380,19 +380,19 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 return equals(valueData, other.valueData);
 
-            case OpTypes.ARRAY :
+            case OpTypes.ARRAY:
 
-            //
-            case OpTypes.ARRAY_SUBQUERY :
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY :
+                //
+            case OpTypes.ARRAY_SUBQUERY:
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY:
                 return table.queryExpression.isEquivalent(
-                    other.table.queryExpression);
+                        other.table.queryExpression);
 
-            default :
+            default:
                 return equals(nodes, other.nodes);
         }
     }
@@ -430,7 +430,7 @@ public class Expression implements Cloneable {
         }
 
         return (o1 == null) ? false
-                            : o1.equals(o2);
+                : o1.equals(o2);
     }
 
     static boolean equals(Expression[] row1, Expression[] row2) {
@@ -446,10 +446,10 @@ public class Expression implements Cloneable {
         int len = row1.length;
 
         for (int i = 0; i < len; i++) {
-            Expression e1     = row1[i];
-            Expression e2     = row2[i];
-            boolean    equals = (e1 == null) ? e2 == null
-                                             : e1.equals(e2);
+            Expression e1 = row1[i];
+            Expression e2 = row2[i];
+            boolean equals = (e1 == null) ? e2 == null
+                    : e1.equals(e2);
 
             if (!equals) {
                 return false;
@@ -467,10 +467,10 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
-            case OpTypes.DYNAMIC_PARAM :
-            case OpTypes.PARAMETER :
-            case OpTypes.VARIABLE : {
+            case OpTypes.VALUE:
+            case OpTypes.DYNAMIC_PARAM:
+            case OpTypes.PARAMETER:
+            case OpTypes.VARIABLE: {
                 return true;
             }
         }
@@ -487,24 +487,24 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.COLUMN :
+            case OpTypes.COLUMN:
                 return false;
 
-            case OpTypes.LIKE :
-            case OpTypes.MATCH_SIMPLE :
-            case OpTypes.MATCH_PARTIAL :
-            case OpTypes.MATCH_FULL :
-            case OpTypes.MATCH_UNIQUE_SIMPLE :
-            case OpTypes.MATCH_UNIQUE_PARTIAL :
-            case OpTypes.MATCH_UNIQUE_FULL :
-            case OpTypes.UNIQUE :
-            case OpTypes.EXISTS :
-            case OpTypes.ARRAY :
-            case OpTypes.ARRAY_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY :
+            case OpTypes.LIKE:
+            case OpTypes.MATCH_SIMPLE:
+            case OpTypes.MATCH_PARTIAL:
+            case OpTypes.MATCH_FULL:
+            case OpTypes.MATCH_UNIQUE_SIMPLE:
+            case OpTypes.MATCH_UNIQUE_PARTIAL:
+            case OpTypes.MATCH_UNIQUE_FULL:
+            case OpTypes.UNIQUE:
+            case OpTypes.EXISTS:
+            case OpTypes.ARRAY:
+            case OpTypes.ARRAY_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY:
                 return false;
 
-            case OpTypes.ROW_SUBQUERY : {
+            case OpTypes.ROW_SUBQUERY: {
                 if (table == null) {
                     break;
                 }
@@ -515,7 +515,7 @@ public class Expression implements Cloneable {
                 }
 
                 QuerySpecification qs =
-                    (QuerySpecification) table.getQueryExpression();
+                        (QuerySpecification) table.getQueryExpression();
                 OrderedHashSet set = new OrderedHashSet();
 
                 for (int i = start; i < end; i++) {
@@ -540,8 +540,8 @@ public class Expression implements Cloneable {
 
         for (int i = 0; i < nodes.length; i++) {
             result &= (nodes[i] == null
-                       || nodes[i].isComposedOf(exprList, start, end,
-                                                excludeSet));
+                    || nodes[i].isComposedOf(exprList, start, end,
+                    excludeSet));
         }
 
         return result;
@@ -555,10 +555,10 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
-            case OpTypes.DYNAMIC_PARAM :
-            case OpTypes.PARAMETER :
-            case OpTypes.VARIABLE : {
+            case OpTypes.VALUE:
+            case OpTypes.DYNAMIC_PARAM:
+            case OpTypes.PARAMETER:
+            case OpTypes.VARIABLE: {
                 return true;
             }
         }
@@ -587,8 +587,8 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.FUNCTION :
-            case OpTypes.SQL_FUNCTION :
+            case OpTypes.FUNCTION:
+            case OpTypes.SQL_FUNCTION:
                 if (nodes.length == 0) {
                     return true;
                 }
@@ -622,8 +622,8 @@ public class Expression implements Cloneable {
 
         for (int i = 0; i < nodes.length; i++) {
             result &= (nodes[i] == null
-                       || nodes[i].isComposedOf(expressions, rangeGroups,
-                                                excludeSet));
+                    || nodes[i].isComposedOf(expressions, rangeGroups,
+                    excludeSet));
         }
 
         return result;
@@ -690,8 +690,8 @@ public class Expression implements Cloneable {
 
         if (exp != null) {
             Expression col = new ExpressionColumn(this,
-                                                  exp.resultTableColumnIndex,
-                                                  resultRangePosition);
+                    exp.resultTableColumnIndex,
+                    resultRangePosition);
 
             return col;
         }
@@ -702,7 +702,7 @@ public class Expression implements Cloneable {
             }
 
             nodes[i] = nodes[i].replaceExpressions(expressions,
-                                                   resultRangePosition);
+                    resultRangePosition);
         }
 
         if (table != null) {
@@ -766,7 +766,7 @@ public class Expression implements Cloneable {
      */
     Expression getLeftNode() {
         return nodes.length > 0 ? nodes[LEFT]
-                                : null;
+                : null;
     }
 
     /**
@@ -774,7 +774,7 @@ public class Expression implements Cloneable {
      */
     Expression getRightNode() {
         return nodes.length > 1 ? nodes[RIGHT]
-                                : null;
+                : null;
     }
 
     void setLeftNode(Expression e) {
@@ -921,17 +921,17 @@ public class Expression implements Cloneable {
      * resolve tables and collect unresolved column expressions
      */
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet) {
+                                            RangeGroup rangeGroup, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet) {
 
         return resolveColumnReferences(session, rangeGroup,
-                                       rangeGroup.getRangeVariables().length,
-                                       rangeGroups, unresolvedSet, true);
+                rangeGroup.getRangeVariables().length,
+                rangeGroups, unresolvedSet, true);
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
 
         if (opType == OpTypes.VALUE) {
             return unresolvedSet;
@@ -939,21 +939,21 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.TABLE :
-            case OpTypes.VALUELIST : {
+            case OpTypes.TABLE:
+            case OpTypes.VALUELIST: {
                 if (table != null) {
                     if (rangeGroup.getRangeVariables().length > rangeCount) {
                         RangeVariable[] rangeVars =
-                            (RangeVariable[]) ArrayUtil.resizeArray(
-                                rangeGroup.getRangeVariables(), rangeCount);
+                                (RangeVariable[]) ArrayUtil.resizeArray(
+                                        rangeGroup.getRangeVariables(), rangeCount);
 
                         rangeGroup = new RangeGroupSimple(rangeVars,
-                                                          rangeGroup);
+                                rangeGroup);
                     }
 
                     rangeGroups =
-                        (RangeGroup[]) ArrayUtil.toAdjustedArray(rangeGroups,
-                            rangeGroup, rangeGroups.length, 1);
+                            (RangeGroup[]) ArrayUtil.toAdjustedArray(rangeGroups,
+                                    rangeGroup, rangeGroups.length, 1);
                     rangeGroup = new RangeGroupSimple(table);
                     rangeCount = 0;
                 }
@@ -984,24 +984,24 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.ARRAY :
+            case OpTypes.ARRAY:
                 break;
 
-            case OpTypes.ARRAY_SUBQUERY :
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY : {
+            case OpTypes.ARRAY_SUBQUERY:
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY: {
                 RangeVariable[] rangeVars = rangeGroup.getRangeVariables();
 
                 if (rangeVars.length > rangeCount) {
                     rangeVars =
-                        (RangeVariable[]) ArrayUtil.resizeArray(rangeVars,
-                            rangeCount);
+                            (RangeVariable[]) ArrayUtil.resizeArray(rangeVars,
+                                    rangeCount);
                     rangeGroup = new RangeGroupSimple(rangeVars, rangeGroup);
                 }
 
                 rangeGroups =
-                    (RangeGroup[]) ArrayUtil.toAdjustedArray(rangeGroups,
-                        rangeGroup, rangeGroups.length, 1);
+                        (RangeGroup[]) ArrayUtil.toAdjustedArray(rangeGroups,
+                                rangeGroup, rangeGroups.length, 1);
 
                 QueryExpression queryExpression = table.queryExpression;
 
@@ -1014,7 +1014,7 @@ public class Expression implements Cloneable {
                         }
 
                         unresolvedSet.addAll(
-                            queryExpression.getUnresolvedExpressions());
+                                queryExpression.getUnresolvedExpressions());
                     }
                 }
 
@@ -1022,14 +1022,14 @@ public class Expression implements Cloneable {
 
                 if (dataExpression != null) {
                     unresolvedSet =
-                        dataExpression.resolveColumnReferences(session,
-                            rangeGroup, rangeCount, rangeGroups,
-                            unresolvedSet, acceptsSequences);
+                            dataExpression.resolveColumnReferences(session,
+                                    rangeGroup, rangeCount, rangeGroups,
+                                    unresolvedSet, acceptsSequences);
                 }
 
                 break;
             }
-            default :
+            default:
         }
 
         return unresolvedSet;
@@ -1072,10 +1072,10 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.ARRAY :
-            case OpTypes.ARRAY_SUBQUERY :
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY :
+            case OpTypes.ARRAY:
+            case OpTypes.ARRAY_SUBQUERY:
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY:
                 if (table != null) {
                     if (unresolvedSet == null) {
                         unresolvedSet = new OrderedHashSet();
@@ -1085,7 +1085,7 @@ public class Expression implements Cloneable {
                 }
                 break;
 
-            default :
+            default:
         }
 
         return unresolvedSet;
@@ -1101,15 +1101,15 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 break;
 
-            case OpTypes.VALUELIST :
+            case OpTypes.VALUELIST:
 
                 /** @todo - should it fall through */
                 break;
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
                 nodeDataTypes = new Type[nodes.length];
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -1121,25 +1121,25 @@ public class Expression implements Cloneable {
                 dataType = new RowType(nodeDataTypes);
                 break;
 
-            case OpTypes.ARRAY : {
+            case OpTypes.ARRAY: {
                 Type nodeDataType = null;
 
                 for (int i = 0; i < nodes.length; i++) {
                     nodeDataType = Type.getAggregateType(nodeDataType,
-                                                         nodes[i].dataType);
+                            nodes[i].dataType);
                 }
 
                 if (nodeDataType != null) {
                     for (int i = 0; i < nodes.length; i++) {
                         if (nodes[i].dataType == null) {
                             nodes[i].valueData =
-                                nodeDataType.convertToDefaultType(
-                                    session, nodes[i].valueData);
+                                    nodeDataType.convertToDefaultType(
+                                            session, nodes[i].valueData);
                         } else {
                             nodes[i].valueData =
-                                nodeDataType.convertToType(session,
-                                                           nodes[i].valueData,
-                                                           nodes[i].dataType);
+                                    nodeDataType.convertToType(session,
+                                            nodes[i].valueData,
+                                            nodes[i].dataType);
                         }
                     }
                 }
@@ -1152,14 +1152,14 @@ public class Expression implements Cloneable {
 
                 return;
             }
-            case OpTypes.ARRAY_SUBQUERY : {
+            case OpTypes.ARRAY_SUBQUERY: {
                 QueryExpression queryExpression = table.queryExpression;
 
                 queryExpression.resolveTypes(session);
                 table.prepareTable(session);
 
                 nodeDataTypes = queryExpression.getColumnTypes();
-                dataType      = nodeDataTypes[0];
+                dataType = nodeDataTypes[0];
 
                 if (nodeDataTypes.length > 1) {
                     throw Error.error(ErrorCode.X_42564);
@@ -1169,8 +1169,8 @@ public class Expression implements Cloneable {
 
                 break;
             }
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY : {
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY: {
                 QueryExpression queryExpression = table.queryExpression;
 
                 if (queryExpression != null) {
@@ -1186,11 +1186,11 @@ public class Expression implements Cloneable {
                 table.prepareTable(session);
 
                 nodeDataTypes = table.getColumnTypes();
-                dataType      = nodeDataTypes[0];
+                dataType = nodeDataTypes[0];
 
                 break;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -1198,15 +1198,15 @@ public class Expression implements Cloneable {
     void setAsConstantValue(Session session, Expression parent) {
 
         valueData = getValue(session);
-        opType    = OpTypes.VALUE;
-        nodes     = emptyArray;
+        opType = OpTypes.VALUE;
+        nodes = emptyArray;
     }
 
     void setAsConstantValue(Object value, Expression parent) {
 
         valueData = value;
-        opType    = OpTypes.VALUE;
-        nodes     = emptyArray;
+        opType = OpTypes.VALUE;
+        nodes = emptyArray;
     }
 
     void prepareTable(Session session, Expression row, int degree) {
@@ -1223,8 +1223,8 @@ public class Expression implements Cloneable {
                     throw Error.error(ErrorCode.X_42564);
                 }
             } else if (degree == 1) {
-                nodes[i]       = new Expression(OpTypes.ROW);
-                nodes[i].nodes = new Expression[]{ e };
+                nodes[i] = new Expression(OpTypes.ROW);
+                nodes[i].nodes = new Expression[]{e};
             } else {
                 throw Error.error(ErrorCode.X_42564);
             }
@@ -1233,12 +1233,12 @@ public class Expression implements Cloneable {
         nodeDataTypes = new Type[degree];
 
         for (int j = 0; j < degree; j++) {
-            Type    type                  = row == null ? null
-                                                        : row.nodes[j]
-                                                            .dataType;
+            Type type = row == null ? null
+                    : row.nodes[j]
+                    .dataType;
             boolean hasUresolvedParameter = row == null ? false
-                                                        : row.nodes[j]
-                                                            .isUnresolvedParam();
+                    : row.nodes[j]
+                    .isUnresolvedParam();
 
             for (int i = 0; i < nodes.length; i++) {
                 type = Type.getAggregateType(nodes[i].nodes[j].dataType, type);
@@ -1254,17 +1254,17 @@ public class Expression implements Cloneable {
             if (hasUresolvedParameter && type.isCharacterType()) {
                 if (typeCode == Types.SQL_CHAR
                         || type.precision
-                           < Type.SQL_VARCHAR_DEFAULT.precision) {
+                        < Type.SQL_VARCHAR_DEFAULT.precision) {
                     if (typeCode == Types.SQL_CHAR) {
                         typeCode = Types.SQL_VARCHAR;
                     }
 
                     long precision =
-                        Math.max(Type.SQL_VARCHAR_DEFAULT.precision,
-                                 type.precision);
+                            Math.max(Type.SQL_VARCHAR_DEFAULT.precision,
+                                    type.precision);
 
                     type = CharacterType.getCharacterType(typeCode, precision,
-                                                          type.getCollation());
+                            type.getCollation());
                 }
             }
 
@@ -1293,31 +1293,30 @@ public class Expression implements Cloneable {
     /**
      * Details of IN condition optimisation for 1.9.0
      * Predicates with SELECT are QUERY expressions
-     *
+     * <p>
      * Predicates with IN list
-     *
+     * <p>
      * Parser adds a SubQuery to the list for each predicate
      * At type resolution IN lists that are entirely fixed constant or parameter
      * values are selected for possible optimisation. The flags:
-     *
+     * <p>
      * IN expression right side isCorrelated == true if there are non-constant,
      * non-param expressions in the list (Expressions may have to be resolved
      * against the full set of columns of the query, so must be re-evaluated
      * for each row and evaluated after all the joins have been made)
-     *
+     * <p>
      * VALUELIST expression isFixedConstantValueList == true when all
      * expressions are fixed constant and none is a param. With this flag,
      * a single-column VALUELIST can be accessed as a HashMap.
-     *
+     * <p>
      * Predicates may be optimised as joins if isCorrelated == false
-     *
      */
     void insertValuesIntoSubqueryTable(Session session,
                                        PersistentStore store) {
 
         for (int i = 0; i < nodes.length; i++) {
             Object[] values = nodes[i].getRowValue(session);
-            Object[] data   = store.getTable().getEmptyRowData();
+            Object[] data = store.getTable().getEmptyRowData();
 
             for (int j = 0; j < nodeDataTypes.length; j++) {
                 data[j] = nodeDataTypes[j].convertToType(session, values[j],
@@ -1328,7 +1327,8 @@ public class Expression implements Cloneable {
 
             try {
                 store.indexRow(session, row);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
     }
 
@@ -1379,7 +1379,7 @@ public class Expression implements Cloneable {
     Type[] getNodeDataTypes() {
 
         if (nodeDataTypes == null) {
-            return new Type[]{ dataType };
+            return new Type[]{dataType};
         } else {
             return nodeDataTypes;
         }
@@ -1389,19 +1389,19 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.ROW :
+            case OpTypes.ROW:
                 return nodes.length;
 
-            case OpTypes.TABLE :
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY :
+            case OpTypes.TABLE:
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY:
                 if (table == null) {
                     return nodeDataTypes.length;
                 }
 
                 return table.queryExpression.getColumnCount();
 
-            default :
+            default:
                 return 1;
         }
     }
@@ -1447,7 +1447,7 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.ROW : {
+            case OpTypes.ROW: {
                 Object[] data = new Object[nodes.length];
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -1456,11 +1456,11 @@ public class Expression implements Cloneable {
 
                 return data;
             }
-            case OpTypes.ROW_SUBQUERY :
-            case OpTypes.TABLE_SUBQUERY : {
+            case OpTypes.ROW_SUBQUERY:
+            case OpTypes.TABLE_SUBQUERY: {
                 return table.queryExpression.getValues(session);
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -1469,10 +1469,10 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.VALUE :
+            case OpTypes.VALUE:
                 return valueData;
 
-            case OpTypes.ROW : {
+            case OpTypes.ROW: {
                 if (nodes.length == 1) {
                     return nodes[0].getValue(session);
                 }
@@ -1485,7 +1485,7 @@ public class Expression implements Cloneable {
 
                 return row;
             }
-            case OpTypes.ARRAY : {
+            case OpTypes.ARRAY: {
                 Object[] array = new Object[nodes.length];
 
                 for (int i = 0; i < nodes.length; i++) {
@@ -1494,12 +1494,12 @@ public class Expression implements Cloneable {
 
                 return array;
             }
-            case OpTypes.ARRAY_SUBQUERY : {
+            case OpTypes.ARRAY_SUBQUERY: {
                 table.materialiseCorrelated(session);
 
-                RowSetNavigatorData nav   = table.getNavigator(session);
-                int                 size  = nav.getSize();
-                Object[]            array = new Object[size];
+                RowSetNavigatorData nav = table.getNavigator(session);
+                int size = nav.getSize();
+                Object[] array = new Object[size];
 
                 nav.beforeFirst();
 
@@ -1511,8 +1511,8 @@ public class Expression implements Cloneable {
 
                 return array;
             }
-            case OpTypes.TABLE_SUBQUERY :
-            case OpTypes.ROW_SUBQUERY : {
+            case OpTypes.TABLE_SUBQUERY:
+            case OpTypes.ROW_SUBQUERY: {
                 table.materialiseCorrelated(session);
 
                 Object[] value = table.getValues(session);
@@ -1523,7 +1523,7 @@ public class Expression implements Cloneable {
 
                 return value;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -1532,9 +1532,9 @@ public class Expression implements Cloneable {
 
         switch (opType) {
 
-            case OpTypes.ARRAY : {
+            case OpTypes.ARRAY: {
                 RowSetNavigatorData navigator = table.getNavigator(session);
-                Object[]            array = new Object[navigator.getSize()];
+                Object[] array = new Object[navigator.getSize()];
 
                 navigator.beforeFirst();
 
@@ -1546,17 +1546,17 @@ public class Expression implements Cloneable {
 
                 return Result.newPSMResult(array);
             }
-            case OpTypes.TABLE_SUBQUERY : {
+            case OpTypes.TABLE_SUBQUERY: {
                 table.materialiseCorrelated(session);
 
                 RowSetNavigatorData navigator = table.getNavigator(session);
-                Result              result    = Result.newResult(navigator);
+                Result result = Result.newResult(navigator);
 
                 result.metaData = table.queryExpression.getMetaData();
 
                 return result;
             }
-            default : {
+            default: {
                 Object value = getValue(session);
 
                 return Result.newPSMResult(value);
@@ -1583,12 +1583,12 @@ public class Expression implements Cloneable {
 
     public boolean isTrue() {
         return opType == OpTypes.VALUE && valueData instanceof Boolean
-               && ((Boolean) valueData).booleanValue();
+                && ((Boolean) valueData).booleanValue();
     }
 
     public boolean isFalse() {
         return opType == OpTypes.VALUE && valueData instanceof Boolean
-               && !((Boolean) valueData).booleanValue();
+                && !((Boolean) valueData).booleanValue();
     }
 
     public boolean isIndexable(RangeVariable range) {
@@ -1601,7 +1601,7 @@ public class Expression implements Cloneable {
         for (int i = 0; i < data.length; i++) {
             if (!dataType[i].canConvertFrom(newType[i])) {
                 data[i] = newType[i].convertToType(session, data[i],
-                                                   dataType[i]);
+                        dataType[i]);
             }
         }
     }
@@ -1611,7 +1611,7 @@ public class Expression implements Cloneable {
      * of an existing table against the given CHECK search condition.
      */
     static QuerySpecification getCheckSelect(Session session, Table t,
-            Expression e) {
+                                             Expression e) {
 
         CompileContext compileContext = new CompileContext(session);
 
@@ -1619,9 +1619,9 @@ public class Expression implements Cloneable {
 
         QuerySpecification s = new QuerySpecification(compileContext);
         RangeVariable range = new RangeVariable(t, null, null, null,
-            compileContext);
-        RangeVariable[] ranges     = new RangeVariable[]{ range };
-        RangeGroup      rangeGroup = new RangeGroupSimple(ranges, false);
+                compileContext);
+        RangeVariable[] ranges = new RangeVariable[]{range};
+        RangeGroup rangeGroup = new RangeGroupSimple(ranges, false);
 
         e.resolveCheckOrGenExpression(session, rangeGroup, true);
 
@@ -1640,24 +1640,24 @@ public class Expression implements Cloneable {
     }
 
     public void resolveCheckOrGenExpression(Session session,
-            RangeGroup rangeGroup, boolean isCheck) {
+                                            RangeGroup rangeGroup, boolean isCheck) {
 
-        boolean        nonDeterministic = false;
-        OrderedHashSet set              = new OrderedHashSet();
+        boolean nonDeterministic = false;
+        OrderedHashSet set = new OrderedHashSet();
         HsqlList unresolved = resolveColumnReferences(session, rangeGroup,
-            RangeGroup.emptyArray, null);
+                RangeGroup.emptyArray, null);
 
         ExpressionColumn.checkColumnsResolved(unresolved);
         resolveTypes(session, null);
         collectAllExpressions(set, OpTypes.subqueryAggregateExpressionSet,
-                              OpTypes.emptyExpressionSet);
+                OpTypes.emptyExpressionSet);
 
         if (!set.isEmpty()) {
             throw Error.error(ErrorCode.X_42512);
         }
 
         collectAllExpressions(set, OpTypes.functionExpressionSet,
-                              OpTypes.emptyExpressionSet);
+                OpTypes.emptyExpressionSet);
 
         for (int i = 0; i < set.size(); i++) {
             Expression current = (Expression) set.get(i);
@@ -1700,7 +1700,7 @@ public class Expression implements Cloneable {
                     }
 
                     e1 = e.getRightNode();
-                    e  = e.getLeftNode();
+                    e = e.getLeftNode();
 
                     if (!e.dataType.isDateTimeType()) {
                         nonDeterministic = true;
@@ -1722,8 +1722,8 @@ public class Expression implements Cloneable {
                                     .hasNonDeterministicFunction()) {
                                 e1.swapLeftAndRightNodes();
                             }
-                        } else if (opType == OpTypes.SUBTRACT) {}
-                        else {
+                        } else if (opType == OpTypes.SUBTRACT) {
+                        } else {
                             break;
                         }
 
@@ -1739,13 +1739,13 @@ public class Expression implements Cloneable {
 
                         switch (function.funcType) {
 
-                            case FunctionSQL.FUNC_CURRENT_DATE :
-                            case FunctionSQL.FUNC_CURRENT_TIMESTAMP :
-                            case FunctionSQL.FUNC_LOCALTIMESTAMP :
+                            case FunctionSQL.FUNC_CURRENT_DATE:
+                            case FunctionSQL.FUNC_CURRENT_TIMESTAMP:
+                            case FunctionSQL.FUNC_LOCALTIMESTAMP:
                                 nonDeterministic = false;
 
                                 continue;
-                            default :
+                            default:
                                 break;
                         }
 
@@ -1773,14 +1773,14 @@ public class Expression implements Cloneable {
 
             switch (name.type) {
 
-                case SchemaObject.COLUMN : {
+                case SchemaObject.COLUMN: {
                     if (isCheck) {
                         break;
                     }
 
                     int colIndex = ranges[0].rangeTable.findColumn(name.name);
                     ColumnSchema column =
-                        ranges[0].rangeTable.getColumn(colIndex);
+                            ranges[0].rangeTable.getColumn(colIndex);
 
                     if (column.isGenerated()) {
                         throw Error.error(ErrorCode.X_42512);
@@ -1788,13 +1788,13 @@ public class Expression implements Cloneable {
 
                     break;
                 }
-                case SchemaObject.SEQUENCE : {
+                case SchemaObject.SEQUENCE: {
                     throw Error.error(ErrorCode.X_42512);
                 }
-                case SchemaObject.SPECIFIC_ROUTINE : {
+                case SchemaObject.SPECIFIC_ROUTINE: {
                     Routine routine =
-                        (Routine) session.database.schemaManager
-                            .getSchemaObject(name);
+                            (Routine) session.database.schemaManager
+                                    .getSchemaObject(name);
 
                     if (!routine.isDeterministic()) {
                         throw Error.error(ErrorCode.X_42512);
@@ -1826,7 +1826,7 @@ public class Expression implements Cloneable {
         OrderedHashSet list = null;
 
         list = collectAllExpressions(list, OpTypes.functionExpressionSet,
-                                     OpTypes.emptyExpressionSet);
+                OpTypes.emptyExpressionSet);
 
         if (list == null) {
             return false;
@@ -1853,7 +1853,7 @@ public class Expression implements Cloneable {
 
         Expression temp = nodes[LEFT];
 
-        nodes[LEFT]  = nodes[RIGHT];
+        nodes[LEFT] = nodes[RIGHT];
         nodes[RIGHT] = temp;
     }
 
@@ -1864,7 +1864,7 @@ public class Expression implements Cloneable {
     String getValueClassName() {
 
         Type type = dataType == null ? NullType.getNullType()
-                                     : dataType;
+                : dataType;
 
         return type.getJDBCClassName();
     }
@@ -1884,7 +1884,7 @@ public class Expression implements Cloneable {
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i] != null) {
                 set = nodes[i].collectAllExpressions(set, typeSet,
-                                                     stopAtTypeSet);
+                        stopAtTypeSet);
             }
         }
 
@@ -1927,7 +1927,7 @@ public class Expression implements Cloneable {
 
             if (table.queryExpression != null) {
                 tempSet = table.queryExpression.getSubqueries();
-                set     = OrderedHashSet.addAll(set, tempSet);
+                set = OrderedHashSet.addAll(set, tempSet);
             }
 
             if (set == null) {
@@ -1960,12 +1960,12 @@ public class Expression implements Cloneable {
         OrderedHashSet set = null;
 
         set = collectAllExpressions(set,
-                                    OpTypes.subqueryAggregateExpressionSet,
-                                    OpTypes.emptyExpressionSet);
+                OpTypes.subqueryAggregateExpressionSet,
+                OpTypes.emptyExpressionSet);
 
         if (set != null && !set.isEmpty()) {
             throw Error.error(ErrorCode.X_0A000,
-                              "subquery in check constraint");
+                    "subquery in check constraint");
         }
     }
 
@@ -1974,7 +1974,7 @@ public class Expression implements Cloneable {
                                      RangeGroup[] rangeGroups,
                                      HsqlList sourceSet) {
         return resolveColumnSet(session, rangeVars, rangeVars.length,
-                                rangeGroups, sourceSet, null);
+                rangeGroups, sourceSet, null);
     }
 
     static HsqlList resolveColumnSet(Session session,
@@ -1992,8 +1992,8 @@ public class Expression implements Cloneable {
             Expression e = (Expression) sourceSet.get(i);
 
             targetSet = e.resolveColumnReferences(session, rangeGroup,
-                                                  rangeCount, rangeGroups,
-                                                  targetSet, false);
+                    rangeCount, rangeGroups,
+                    targetSet, false);
         }
 
         return targetSet;
@@ -2003,7 +2003,8 @@ public class Expression implements Cloneable {
         return false;
     }
 
-    void getJoinRangeVariables(RangeVariable[] ranges, HsqlList list) {}
+    void getJoinRangeVariables(RangeVariable[] ranges, HsqlList list) {
+    }
 
     double costFactor(Session session, RangeVariable range, int operation) {
         return Index.minimumSelectivity;
@@ -2018,7 +2019,7 @@ public class Expression implements Cloneable {
         Expression e = null;
 
         try {
-            e       = (Expression) super.clone();
+            e = (Expression) super.clone();
             e.nodes = nodes.clone();
 
             for (int i = 0; i < nodes.length; i++) {
@@ -2038,7 +2039,7 @@ public class Expression implements Cloneable {
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i] == existing) {
                 replacement.alias = nodes[i].alias;
-                nodes[i]          = replacement;
+                nodes[i] = replacement;
 
                 return;
             }
@@ -2048,7 +2049,7 @@ public class Expression implements Cloneable {
     }
 
     public SetFunction updateAggregatingValue(Session session,
-            SetFunction currValue) {
+                                              SetFunction currValue) {
         throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
     }
 

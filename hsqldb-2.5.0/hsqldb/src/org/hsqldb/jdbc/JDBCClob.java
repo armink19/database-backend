@@ -85,11 +85,11 @@ import java.sql.SQLException;
  * <p>
  * All methods on the <code>Clob</code> interface must be fully implemented if the
  * JDBC driver supports the data type.
- *
+ * <p>
  * <!-- start Release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3> <p>
- *
+ * <p>
  * Previous to 2.0, the HSQLDB driver did not implement Clob using an SQL
  * locator(CLOB).  That is, an HSQLDB Clob object did not contain a logical
  * pointer to SQL CLOB data; rather it directly contained a representation of
@@ -99,7 +99,7 @@ import java.sql.SQLException;
  * on the database. Also, the interface methods for updating a CLOB value
  * were unsupported, with the exception of the truncate method,
  * in that it could be used to truncate the local value. <p>
- *
+ * <p>
  * Starting with 2.0, the HSQLDB driver fully supports both local and remote
  * SQL CLOB data implementations, meaning that an HSQLDB Clob object <em>may</em>
  * contain a logical pointer to remote SQL CLOB data (see {@link JDBCClobClient
@@ -120,13 +120,13 @@ import java.sql.SQLException;
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @version 2.5.0
- * @since JDK 1.2, HSQLDB 1.7.2
  * @revised JDK 1.6, HSQLDB 2.0
+ * @since JDK 1.2, HSQLDB 1.7.2
  */
 public class JDBCClob implements Clob {
 
     private static final FrameworkLogger LOG =
-        FrameworkLogger.getLog(JDBCClob.class);
+            FrameworkLogger.getLog(JDBCClob.class);
 
     /**
      * Retrieves the number of characters
@@ -134,10 +134,10 @@ public class JDBCClob implements Clob {
      * designated by this <code>Clob</code> object.
      *
      * @return length of the <code>CLOB</code> in characters
-     * @exception SQLException if there is an error accessing the
-     *            length of the <code>CLOB</code> value
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  length of the <code>CLOB</code> value
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public long length() throws SQLException {
@@ -151,11 +151,11 @@ public class JDBCClob implements Clob {
      * The substring begins at position
      * <code>pos</code> and has up to <code>length</code> consecutive
      * characters.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * The official specification above is ambiguous in that it does not
      * precisely indicate the policy to be observed when
      * {@code pos > this.length() - length}.  One policy would be to retrieve
@@ -163,7 +163,7 @@ public class JDBCClob implements Clob {
      * be to throw an exception. This class observes the second policy. <p>
      *
      * <b>Note</b><p>
-     *
+     * <p>
      * This method uses {@link java.lang.String#substring(int, int)}.
      * <p>
      * Depending on implementation (typically JDK 6 and earlier releases), the
@@ -183,24 +183,24 @@ public class JDBCClob implements Clob {
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param pos the first character of the substring to be extracted.
-     *            The first character is at position 1.
+     * @param pos    the first character of the substring to be extracted.
+     *               The first character is at position 1.
      * @param length the number of consecutive characters to be copied;
-     * JDBC 4.1[ the value for length must be 0 or greater]
+     *               JDBC 4.1[ the value for length must be 0 or greater]
      * @return a <code>String</code> that is the specified substring in
-     *         the <code>CLOB</code> value designated by this <code>Clob</code> object
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value; if pos is less than 1 JDBC 4.1[or length is
-     * less than 0]
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * the <code>CLOB</code> value designated by this <code>Clob</code> object
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value; if pos is less than 1 JDBC 4.1[or length is
+     *                                                  less than 0]
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public String getSubString(final long pos,
                                final int length) throws SQLException {
 
         final String data = getData();
-        final int    dlen = data.length();
+        final int dlen = data.length();
 
         if (pos == MIN_POS && length == dlen) {
             return data;
@@ -225,11 +225,11 @@ public class JDBCClob implements Clob {
      * characters).
      *
      * @return a <code>java.io.Reader</code> object containing the
-     *         <code>CLOB</code> data
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * <code>CLOB</code> data
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @see #setCharacterStream
      * @since JDK 1.2, HSQLDB 1.7.2
      */
@@ -242,11 +242,11 @@ public class JDBCClob implements Clob {
      * object as an ASCII stream.
      *
      * @return a <code>java.io.InputStream</code> object containing the
-     *         <code>CLOB</code> data
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * <code>CLOB</code> data
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @see #setAsciiStream
      * @since JDK 1.2, HSQLDB 1.7.2
      */
@@ -254,7 +254,7 @@ public class JDBCClob implements Clob {
 
         try {
             return new ByteArrayInputStream(
-                getData().getBytes(JavaSystem.CS_US_ASCII));
+                    getData().getBytes(JavaSystem.CS_US_ASCII));
         } catch (Throwable e) {
             throw JDBCUtil.sqlException(e);
         }
@@ -267,14 +267,14 @@ public class JDBCClob implements Clob {
      * begins at position <code>start</code>.
      *
      * @param searchstr the substring for which to search
-     * @param start the position at which to begin searching; the first position
-     *              is 1
+     * @param start     the position at which to begin searching; the first position
+     *                  is 1
      * @return the position at which the substring appears or -1 if it is not
-     *         present; the first position is 1
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if start is less than 1
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * present; the first position is 1
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if start is less than 1
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public long position(final String searchstr,
@@ -293,7 +293,7 @@ public class JDBCClob implements Clob {
         final int position = data.indexOf(searchstr, (int) start - 1);
 
         return (position == -1) ? -1
-                                : position + 1;
+                : position + 1;
     }
 
     /**
@@ -303,14 +303,14 @@ public class JDBCClob implements Clob {
      * <code>start</code>.
      *
      * @param searchstr the <code>Clob</code> object for which to search
-     * @param start the position at which to begin searching; the first
-     *              position is 1
+     * @param start     the position at which to begin searching; the first
+     *                  position is 1
      * @return the position at which the <code>Clob</code> object appears
-     *              or -1 if it is not present; the first position is 1
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if start is less than 1
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * or -1 if it is not present; the first position is 1
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if start is less than 1
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @since JDK 1.2, HSQLDB 1.7.2
      */
     public long position(final Clob searchstr,
@@ -326,8 +326,8 @@ public class JDBCClob implements Clob {
             return -1;
         }
 
-        final long dlen       = data.length();
-        final long sslen      = searchstr.length();
+        final long dlen = data.length();
+        final long sslen = searchstr.length();
         final long startIndex = start - 1;
 
         // This is potentially much less expensive than materializing a large
@@ -350,7 +350,7 @@ public class JDBCClob implements Clob {
         final int index = data.indexOf(pattern, (int) startIndex);
 
         return (index == -1) ? -1
-                             : index + 1;
+                : index + 1;
     }
 
     //---------------------------- jdbc 3.0 -----------------------------------
@@ -369,13 +369,13 @@ public class JDBCClob implements Clob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Clob instance is constructed as a
      * result of calling JDBCConnection.createClob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in the
@@ -387,18 +387,18 @@ public class JDBCClob implements Clob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * No attempt is made to ensure precise thread safety. Instead, volatile
      * member field and local variable snapshot isolation semantics are
      * implemented.  This is expected to eliminate most issues related
      * to race conditions, with the possible exception of concurrent
      * invocation of free(). <p>
-     *
+     * <p>
      * In general, if an application may perform concurrent JDBCClob
      * modifications and the integrity of the application depends on total order
      * Clob modification semantics, then such operations should be synchronized
      * on an appropriate monitor.<p>
-     *
+     * <p>
      * When the value specified for <code>pos</code> is greater then the
      * length+1, then the CLOB value is extended in length to accept the
      * written characters and the undefined region up to @{code pos} is filled
@@ -409,22 +409,21 @@ public class JDBCClob implements Clob {
      * <!-- end release-specific documentation -->
      *
      * @param pos the position at which to start writing to the <code>CLOB</code>
-     *         value that this <code>Clob</code> object represents;
-     * The first position is 1
+     *            value that this <code>Clob</code> object represents;
+     *            The first position is 1
      * @param str the string to be written to the <code>CLOB</code>
-     *        value that this <code>Clob</code> designates
+     *            value that this <code>Clob</code> designates
      * @return the number of characters written
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if pos is less than 1
-     *
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @since JDK 1.4, HSQLDB 1.7.2
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if pos is less than 1
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @revised JDK 1.6, HSQLDB 2.0
+     * @since JDK 1.4, HSQLDB 1.7.2
      */
     public int setString(long pos, String str) throws SQLException {
         return setString(pos, str, 0, str == null ? 0
-                                                  : str.length());
+                : str.length());
     }
 
     /**
@@ -441,13 +440,13 @@ public class JDBCClob implements Clob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Clob instance is constructed as a
      * result of calling JDBCConnection.createClob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -459,19 +458,19 @@ public class JDBCClob implements Clob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * If the value specified for <code>pos</code>
      * is greater than the length of the <code>CLOB</code> value, then
      * the <code>CLOB</code> value is extended in length to accept the
      * written characters and the undefined region up to <code>pos</code> is
      * filled with space (' ') characters.<p>
-     *
+     * <p>
      * No attempt is made to ensure precise thread safety. Instead, volatile
      * member field and local variable snapshot isolation semantics are
      * implemented.  This is expected to eliminate most issues related
      * to race conditions, with the possible exception of concurrent
      * invocation of free(). <p>
-     *
+     * <p>
      * In general, if an application may perform concurrent JDBCClob
      * modifications and the integrity of the application depends on total order
      * Clob modification semantics, then such operations should be synchronized
@@ -480,21 +479,20 @@ public class JDBCClob implements Clob {
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param pos the position at which to start writing to this
-     *        <code>CLOB</code> object; The first position  is 1
-     * @param str the string to be written to the <code>CLOB</code>
-     *        value that this <code>Clob</code> object represents
+     * @param pos    the position at which to start writing to this
+     *               <code>CLOB</code> object; The first position  is 1
+     * @param str    the string to be written to the <code>CLOB</code>
+     *               value that this <code>Clob</code> object represents
      * @param offset the offset into <code>str</code> to start reading
-     *        the characters to be written
-     * @param len the number of characters to be written
+     *               the characters to be written
+     * @param len    the number of characters to be written
      * @return the number of characters written
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if pos is less than 1
-     *
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @since JDK 1.4, HSQLDB 1.7.2
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if pos is less than 1
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @revised JDK 1.6, HSQLDB 2.0
+     * @since JDK 1.4, HSQLDB 1.7.2
      */
     public int setString(final long pos, final String str, final int offset,
                          final int len) throws SQLException {
@@ -508,8 +506,8 @@ public class JDBCClob implements Clob {
         }
 
         final int strlen = str.length();
-        final int dlen   = data.length();
-        final int ipos   = (int) (pos - 1);
+        final int dlen = data.length();
+        final int ipos = (int) (pos - 1);
 
         if (offset == 0 && len == strlen && ipos == 0 && len >= dlen) {
             setData(str);
@@ -530,7 +528,7 @@ public class JDBCClob implements Clob {
         }
 
         final long endPos = (pos + len);
-        char[]     chars;
+        char[] chars;
 
         if (pos > dlen) {
 
@@ -584,13 +582,13 @@ public class JDBCClob implements Clob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Clob instance is constructed as a
      * result of calling JDBCConnection.createClob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -602,22 +600,22 @@ public class JDBCClob implements Clob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * The data written to the stream does not appear in this
      * Clob until the stream is closed. <p>
-     *
+     * <p>
      * When the stream is closed, if the value specified for <code>pos</code>
      * is greater than the length of the <code>CLOB</code> value, then
      * the <code>CLOB</code> value is extended in length to accept the
      * written characters and the undefined region up to <code>pos</code> is
      * filled with space (' ') characters. <p>
-     *
+     * <p>
      * Also, no attempt is made to ensure precise thread safety. Instead,
      * volatile member field and local variable snapshot isolation semantics
      * are implemented.  This is expected to eliminate most issues related
      * to race conditions, with the possible exception of concurrent
      * invocation of free(). <p>
-     *
+     * <p>
      * In general, if an application may perform concurrent JDBCClob
      * modifications and the integrity of the application depends on total order
      * Clob modification semantics, then such operations should be synchronized
@@ -627,19 +625,18 @@ public class JDBCClob implements Clob {
      * <!-- end release-specific documentation -->
      *
      * @param pos the position at which to start writing to this
-     *        <code>CLOB</code> object; The first position is 1
+     *            <code>CLOB</code> object; The first position is 1
      * @return the stream to which ASCII encoded characters can be written
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if pos is less than 1
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @see #getAsciiStream
-     *
-     * @since JDK 1.4, HSQLDB 1.7.2
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if pos is less than 1
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @revised JDK 1.6, HSQLDB 2.0
+     * @see #getAsciiStream
+     * @since JDK 1.4, HSQLDB 1.7.2
      */
     public java.io.OutputStream setAsciiStream(final long pos)
-    throws SQLException {
+            throws SQLException {
 
         checkReadonly();
         checkClosed();
@@ -660,15 +657,15 @@ public class JDBCClob implements Clob {
 
                 closed = true;
 
-                final byte[] bytes  = super.buf;
-                final int    length = super.count;
+                final byte[] bytes = super.buf;
+                final int length = super.count;
 
-                super.buf   = null;
+                super.buf = null;
                 super.count = 0;
 
                 try {
                     final String str = new String(bytes, 0, length,
-                                                  JavaSystem.CS_US_ASCII);
+                            JavaSystem.CS_US_ASCII);
 
                     JDBCClob.this.setString(pos, str);
                 } catch (Throwable e) {
@@ -693,13 +690,13 @@ public class JDBCClob implements Clob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Clob instance is constructed as a
      * result of calling JDBCConnection.createClob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -711,22 +708,22 @@ public class JDBCClob implements Clob {
      * ResultSet. <p>
      *
      * <b>Implementation Notes:</b><p>
-     *
+     * <p>
      * The data written to the stream does not appear in this
      * Clob until the stream is closed. <p>
-     *
+     * <p>
      * When the stream is closed, if the value specified for <code>pos</code>
      * is greater than the length of the <code>CLOB</code> value, then
      * the <code>CLOB</code> value is extended in length to accept the
      * written characters and the undefined region up to <code>pos</code> is
      * filled with space (' ') characters. <p>
-     *
+     * <p>
      * Also, no attempt is made to ensure precise thread safety. Instead,
      * volatile member field and local variable snapshot isolation semantics
      * are implemented.  This is expected to eliminate most issues related
      * to race conditions, with the possible exception of concurrent
      * invocation of free(). <p>
-     *
+     * <p>
      * In general, if an application may perform concurrent JDBCClob
      * modifications and the integrity of the application depends on
      * total order Clob modification semantics, then such operations
@@ -735,21 +732,19 @@ public class JDBCClob implements Clob {
      * </div>
      * <!-- end release-specific documentation -->
      *
-     * @param  pos the position at which to start writing to the
-     *        <code>CLOB</code> value; The first position is 1
-     *
+     * @param pos the position at which to start writing to the
+     *            <code>CLOB</code> value; The first position is 1
      * @return a stream to which Unicode encoded characters can be written
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if {@code pos} is less than 1
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @see #getCharacterStream
-     *
-     * @since JDK 1.4, HSQLDB 1.7.2
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if {@code pos} is less than 1
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @revised JDK 1.6, HSQLDB 2.0
+     * @see #getCharacterStream
+     * @since JDK 1.4, HSQLDB 1.7.2
      */
     public java.io.Writer setCharacterStream(final long pos)
-    throws SQLException {
+            throws SQLException {
 
         checkReadonly();
         checkClosed();
@@ -794,13 +789,13 @@ public class JDBCClob implements Clob {
      * behavior is undefined. Some JDBC drivers may throw a
      * <code>SQLException</code> while other drivers may support this
      * operation.
-     *
+     * <p>
      * <!-- start release-specific documentation -->
      * <div class="ReleaseSpecificDocumentation">
      * <h3>HSQLDB-Specific Information:</h3> <p>
-     *
+     * <p>
      * Starting with HSQLDB 2.0 this feature is fully supported. <p>
-     *
+     * <p>
      * When built under JDK 1.6+ and the Clob instance is constructed as a
      * result of calling JDBCConnection.createClob(), this operation affects
      * only the client-side value; it has no effect upon a value stored in a
@@ -812,7 +807,7 @@ public class JDBCClob implements Clob {
      * updateable ResultSet. <p>
      *
      * <b>Implementation Notes:</b> <p>
-     *
+     * <p>
      * HSQLDB throws an SQLException if the specified <tt>len</tt> is greater
      * than the value returned by {@link #length() length}. <p>
      *
@@ -820,21 +815,20 @@ public class JDBCClob implements Clob {
      * <!-- end release-specific documentation -->
      *
      * @param len the length, in characters, to which the <code>CLOB</code> value
-     *        should be truncated
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if len is less than 0
-     *
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
-     * @since JDK 1.4, HSQLDB 1.7.2
+     *            should be truncated
+     * @throws SQLException                             if there is an error accessing the
+     *                                                  <code>CLOB</code> value or if len is less than 0
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @revised JDK 1.6, HSQLDB 2.0
+     * @since JDK 1.4, HSQLDB 1.7.2
      */
     public void truncate(final long len) throws SQLException {
 
         checkReadonly();
 
         final String data = getData();
-        final long   dlen = data.length();
+        final long dlen = data.length();
 
         if (len == dlen) {
             return;
@@ -859,32 +853,31 @@ public class JDBCClob implements Clob {
      * being thrown.  If <code>free</code> is called multiple times, the subsequent
      * calls to <code>free</code> are treated as a no-op.
      * <p>
-     * @throws SQLException if an error occurs releasing
-     * the Clob's resources
      *
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                             if an error occurs releasing
+     *                                                  the Clob's resources
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @since JDK 1.6, HSQLDB 2.0
      */
     public synchronized void free() throws SQLException {
         m_closed = true;
-        m_data   = null;
+        m_data = null;
     }
 
     /**
      * Returns a <code>Reader</code> object that contains a partial <code>Clob</code> value, starting
      * with the character specified by pos, which is length characters in length.
      *
-     * @param pos the offset to the first character of the partial value to
-     * be retrieved.  The first character in the Clob is at position 1.
+     * @param pos    the offset to the first character of the partial value to
+     *               be retrieved.  The first character in the Clob is at position 1.
      * @param length the length in characters of the partial value to be retrieved.
      * @return <code>Reader</code> through which the partial <code>Clob</code> value can be read.
-     * @throws SQLException if pos is less than 1 or if pos is greater than the number of
-     * characters in the <code>Clob</code> or if pos + length is greater than the number of
-     * characters in the <code>Clob</code>
-     *
-     * @exception java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                             if pos is less than 1 or if pos is greater than the number of
+     *                                                  characters in the <code>Clob</code> or if pos + length is greater than the number of
+     *                                                  characters in the <code>Clob</code>
+     * @throws java.sql.SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                                  this method
      * @since JDK 1.6, HSQLDB 2.0
      */
     public Reader getCharacterStream(long pos,
@@ -895,7 +888,7 @@ public class JDBCClob implements Clob {
         }
 
         final String data = getData();
-        final int    dlen = data.length();
+        final int dlen = data.length();
 
         if (pos == MIN_POS && length == dlen) {
             return new StringReader(data);
@@ -911,8 +904,8 @@ public class JDBCClob implements Clob {
             throw JDBCUtil.outOfRangeArgument("length: " + length);
         }
 
-        final int    endIndex = (int) (startIndex + length);    // exclusive
-        final char[] chars    = new char[(int) length];
+        final int endIndex = (int) (startIndex + length);    // exclusive
+        final char[] chars = new char[(int) length];
 
         data.getChars((int) startIndex, endIndex, chars, 0);
 
@@ -922,14 +915,14 @@ public class JDBCClob implements Clob {
     // ---------------------- internal implementation --------------------------
     private static final long MIN_POS = 1L;
     private static final long MAX_POS = 1L + (long) Integer.MAX_VALUE;
-    private boolean           m_closed;
-    private String            m_data;
-    private final boolean     m_createdByConnection;
+    private boolean m_closed;
+    private String m_data;
+    private final boolean m_createdByConnection;
 
     /**
      * Constructs a new, read-only JDBCClob object wrapping the given character
      * sequence. <p>
-     *
+     * <p>
      * This constructor is used internally to retrieve result set values as
      * Clob objects, yet it must be public to allow access from other packages.
      * As such (in the interest of efficiency) this object maintains a reference
@@ -949,7 +942,7 @@ public class JDBCClob implements Clob {
             throw JDBCUtil.nullArgument();
         }
 
-        m_data                = data;
+        m_data = data;
         m_createdByConnection = false;
     }
 
@@ -957,7 +950,7 @@ public class JDBCClob implements Clob {
      * Constructs a new, empty (zero-length), read/write JDBCClob object.
      */
     protected JDBCClob() {
-        m_data                = "";
+        m_data = "";
         m_createdByConnection = true;
     }
 
@@ -965,7 +958,7 @@ public class JDBCClob implements Clob {
 
         if (!m_createdByConnection) {
             throw JDBCUtil.sqlException(ErrorCode.X_25006,
-                                        "Clob is read-only");
+                    "Clob is read-only");
         }
     }
 
@@ -993,16 +986,16 @@ public class JDBCClob implements Clob {
     /**
      * Behaviour is identical to {@link #setString(long, java.lang.String, int, int)}.
      *
-     * @param pos the position at which to start writing to this
-     *        <code>CLOB</code> object; The first position  is 1
-     * @param sb the buffer to be written to the <code>CLOB</code>
-     *        value that this <code>Clob</code> object represents
+     * @param pos    the position at which to start writing to this
+     *               <code>CLOB</code> object; The first position  is 1
+     * @param sb     the buffer to be written to the <code>CLOB</code>
+     *               value that this <code>Clob</code> object represents
      * @param offset the offset into <code>sb</code> to start reading
-     *        the characters to be written
-     * @param len the number of characters to be written
+     *               the characters to be written
+     * @param len    the number of characters to be written
      * @return the number of characters written
-     * @exception SQLException if there is an error accessing the
-     *            <code>CLOB</code> value or if pos is less than 1
+     * @throws SQLException if there is an error accessing the
+     *                      <code>CLOB</code> value or if pos is less than 1
      */
     public int setStringBuffer(final long pos, final StringBuffer sb,
                                final int offset,
@@ -1017,8 +1010,8 @@ public class JDBCClob implements Clob {
         }
 
         final int strlen = sb.length();
-        final int dlen   = data.length();
-        final int ipos   = (int) (pos - 1);
+        final int dlen = data.length();
+        final int ipos = (int) (pos - 1);
 
         if (offset == 0 && len == strlen && ipos == 0 && len >= dlen) {
             setData(sb.toString());
@@ -1039,7 +1032,7 @@ public class JDBCClob implements Clob {
         }
 
         final long endPos = (pos + len);
-        char[]     chars;
+        char[] chars;
 
         if (pos > dlen) {
 

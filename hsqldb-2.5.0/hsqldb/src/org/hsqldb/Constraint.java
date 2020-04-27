@@ -55,38 +55,39 @@ import org.hsqldb.types.Type;
  */
 public final class Constraint implements SchemaObject {
 
-    ConstraintCore   core;
+    ConstraintCore core;
     private HsqlName name;
-    int              constType;
-    boolean          isForward;
+    int constType;
+    boolean isForward;
 
     //
-    Expression      check;
+    Expression check;
     private boolean isNotNull;
-    int             notNullColumnIndex;
-    RangeVariable   rangeVariable;
+    int notNullColumnIndex;
+    RangeVariable rangeVariable;
 
     // for temp constraints only
     OrderedHashSet mainColSet;
     OrderedHashSet refColSet;
-    boolean        isSimpleIdentityPK;
+    boolean isSimpleIdentityPK;
 
     //
     public static final Constraint[] emptyArray = new Constraint[]{};
 
-    private Constraint() {}
+    private Constraint() {
+    }
 
     /**
-     *  Constructor declaration for PK and UNIQUE
+     * Constructor declaration for PK and UNIQUE
      */
     public Constraint(HsqlName name, Table t, Index index, int type) {
 
-        this.name      = name;
-        constType      = type;
-        core           = new ConstraintCore();
+        this.name = name;
+        constType = type;
+        core = new ConstraintCore();
         core.mainTable = t;
         core.mainIndex = index;
-        core.mainCols  = index.getColumns();
+        core.mainCols = index.getColumns();
 
         for (int i = 0; i < core.mainCols.length; i++) {
             Type dataType = t.getColumn(core.mainCols[i]).getDataType();
@@ -99,80 +100,79 @@ public final class Constraint implements SchemaObject {
 
     public Constraint(HsqlName name, Table table, int[] cols, int type) {
 
-        this.name      = name;
-        constType      = type;
-        core           = new ConstraintCore();
+        this.name = name;
+        constType = type;
+        core = new ConstraintCore();
         core.mainTable = table;
-        core.mainCols  = cols;
+        core.mainCols = cols;
     }
 
     /**
-     *  Constructor for main constraints (foreign key references in PK table)
+     * Constructor for main constraints (foreign key references in PK table)
      */
     public Constraint(HsqlName name, Constraint fkconstraint) {
 
         this.name = name;
         constType = SchemaObject.ConstraintTypes.MAIN;
-        core      = fkconstraint.core;
+        core = fkconstraint.core;
     }
 
     /**
      * General constructor for foreign key constraints.
      *
-     * @param name name of constraint
-     * @param refCols list of referencing columns
+     * @param name          name of constraint
+     * @param refCols       list of referencing columns
      * @param mainTableName referenced table
-     * @param mainCols list of referenced columns
-     * @param type constraint type
-     * @param deleteAction triggered action on delete
-     * @param updateAction triggered action on update
-     *
+     * @param mainCols      list of referenced columns
+     * @param type          constraint type
+     * @param deleteAction  triggered action on delete
+     * @param updateAction  triggered action on update
      */
     public Constraint(HsqlName name, HsqlName refTableName,
                       OrderedHashSet refCols, HsqlName mainTableName,
                       OrderedHashSet mainCols, int type, int deleteAction,
                       int updateAction, int matchType) {
 
-        this.name          = name;
-        constType          = type;
-        mainColSet         = mainCols;
-        refColSet          = refCols;
-        core               = new ConstraintCore();
-        core.refTableName  = refTableName;
+        this.name = name;
+        constType = type;
+        mainColSet = mainCols;
+        refColSet = refCols;
+        core = new ConstraintCore();
+        core.refTableName = refTableName;
         core.mainTableName = mainTableName;
-        core.deleteAction  = deleteAction;
-        core.updateAction  = updateAction;
-        core.matchType     = matchType;
+        core.deleteAction = deleteAction;
+        core.updateAction = updateAction;
+        core.matchType = matchType;
 
         switch (core.deleteAction) {
 
-            case SchemaObject.ReferentialAction.CASCADE :
-            case SchemaObject.ReferentialAction.SET_DEFAULT :
-            case SchemaObject.ReferentialAction.SET_NULL :
+            case SchemaObject.ReferentialAction.CASCADE:
+            case SchemaObject.ReferentialAction.SET_DEFAULT:
+            case SchemaObject.ReferentialAction.SET_NULL:
                 core.hasDeleteAction = true;
                 break;
 
-            default :
+            default:
         }
 
         switch (core.updateAction) {
 
-            case SchemaObject.ReferentialAction.CASCADE :
-            case SchemaObject.ReferentialAction.SET_DEFAULT :
-            case SchemaObject.ReferentialAction.SET_NULL :
+            case SchemaObject.ReferentialAction.CASCADE:
+            case SchemaObject.ReferentialAction.SET_DEFAULT:
+            case SchemaObject.ReferentialAction.SET_NULL:
                 core.hasUpdateAction = true;
                 break;
 
-            default :
+            default:
         }
     }
 
     public Constraint(HsqlName name, OrderedHashSet mainCols, int type) {
 
-        this.name  = name;
-        constType  = type;
+        this.name = name;
+        constType = type;
         mainColSet = mainCols;
-        core       = new ConstraintCore();
+        core = new ConstraintCore();
     }
 
     public Constraint(HsqlName uniqueName, HsqlName mainName,
@@ -180,18 +180,18 @@ public final class Constraint implements SchemaObject {
                       int[] mainCols, int[] refCols, Index mainIndex,
                       Index refIndex, int deleteAction, int updateAction) {
 
-        this.name         = refName;
-        constType         = SchemaObject.ConstraintTypes.FOREIGN_KEY;
-        core              = new ConstraintCore();
-        core.uniqueName   = uniqueName;
-        core.mainName     = mainName;
-        core.refName      = refName;
-        core.mainTable    = mainTable;
-        core.refTable     = refTable;
-        core.mainCols     = mainCols;
-        core.refCols      = refCols;
-        core.mainIndex    = mainIndex;
-        core.refIndex     = refIndex;
+        this.name = refName;
+        constType = SchemaObject.ConstraintTypes.FOREIGN_KEY;
+        core = new ConstraintCore();
+        core.uniqueName = uniqueName;
+        core.mainName = mainName;
+        core.refName = refName;
+        core.mainTable = mainTable;
+        core.refTable = refTable;
+        core.mainCols = mainCols;
+        core.refCols = refCols;
+        core.mainIndex = mainIndex;
+        core.refIndex = refIndex;
         core.deleteAction = deleteAction;
         core.updateAction = updateAction;
     }
@@ -200,16 +200,16 @@ public final class Constraint implements SchemaObject {
 
         Constraint copy = new Constraint();
 
-        copy.core      = core.duplicate();
-        copy.name      = name;
+        copy.core = core.duplicate();
+        copy.name = name;
         copy.constType = constType;
         copy.isForward = isForward;
 
         //
-        copy.check              = check;
-        copy.isNotNull          = isNotNull;
+        copy.check = check;
+        copy.isNotNull = isNotNull;
         copy.notNullColumnIndex = notNullColumnIndex;
-        copy.rangeVariable      = rangeVariable;
+        copy.rangeVariable = rangeVariable;
 
         return copy;
     }
@@ -251,7 +251,7 @@ public final class Constraint implements SchemaObject {
 
             for (int i = 0; i < core.mainCols.length; i++) {
                 Type dataType =
-                    table.getColumn(core.mainCols[i]).getDataType();
+                        table.getColumn(core.mainCols[i]).getDataType();
 
                 if (dataType.isLobType()) {
                     throw Error.error(ErrorCode.X_42534);
@@ -287,7 +287,7 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.CHECK :
+            case SchemaObject.ConstraintTypes.CHECK:
                 OrderedHashSet refs = new OrderedHashSet();
 
                 check.collectObjectNames(refs);
@@ -303,7 +303,7 @@ public final class Constraint implements SchemaObject {
 
                 return refs;
 
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 OrderedHashSet set = new OrderedHashSet();
 
                 set.add(core.uniqueName);
@@ -318,7 +318,8 @@ public final class Constraint implements SchemaObject {
         return null;
     }
 
-    public void compile(Session session, SchemaObject parentObject) {}
+    public void compile(Session session, SchemaObject parentObject) {
+    }
 
     public String getSQL() {
 
@@ -326,24 +327,24 @@ public final class Constraint implements SchemaObject {
 
         switch (getConstraintType()) {
 
-            case SchemaObject.ConstraintTypes.PRIMARY_KEY :
+            case SchemaObject.ConstraintTypes.PRIMARY_KEY:
                 if (getMainColumns().length > 1
                         || (getMainColumns().length == 1
-                            && !getName().isReservedName())) {
+                        && !getName().isReservedName())) {
                     if (!getName().isReservedName()) {
                         sb.append(Tokens.T_CONSTRAINT).append(' ');
                         sb.append(getName().statementName).append(' ');
                     }
 
                     sb.append(Tokens.T_PRIMARY).append(' ').append(
-                        Tokens.T_KEY);
+                            Tokens.T_KEY);
                     sb.append(
-                        getMain().getColumnListSQL(
-                            getMainColumns(), getMainColumns().length));
+                            getMain().getColumnListSQL(
+                                    getMainColumns(), getMainColumns().length));
                 }
                 break;
 
-            case SchemaObject.ConstraintTypes.UNIQUE :
+            case SchemaObject.ConstraintTypes.UNIQUE:
                 if (!getName().isReservedName()) {
                     sb.append(Tokens.T_CONSTRAINT).append(' ');
                     sb.append(getName().statementName);
@@ -357,12 +358,12 @@ public final class Constraint implements SchemaObject {
                 sb.append(getMain().getColumnListSQL(col, col.length));
                 break;
 
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 if (isForward) {
                     sb.append(Tokens.T_ALTER).append(' ').append(
-                        Tokens.T_TABLE).append(' ');
+                            Tokens.T_TABLE).append(' ');
                     sb.append(
-                        getRef().getName().getSchemaQualifiedStatementName());
+                            getRef().getName().getSchemaQualifiedStatementName());
                     sb.append(' ').append(Tokens.T_ADD).append(' ');
                     getFKStatement(sb);
                 } else {
@@ -370,7 +371,7 @@ public final class Constraint implements SchemaObject {
                 }
                 break;
 
-            case SchemaObject.ConstraintTypes.CHECK :
+            case SchemaObject.ConstraintTypes.CHECK:
                 if (isNotNull()) {
                     break;
                 }
@@ -387,7 +388,7 @@ public final class Constraint implements SchemaObject {
                 // should not throw as it is already tested OK
                 break;
 
-            default :
+            default:
         }
 
         return sb.toString();
@@ -422,13 +423,13 @@ public final class Constraint implements SchemaObject {
 
         if (getDeleteAction() != SchemaObject.ReferentialAction.NO_ACTION) {
             sb.append(' ').append(Tokens.T_ON).append(' ').append(
-                Tokens.T_DELETE).append(' ');
+                    Tokens.T_DELETE).append(' ');
             sb.append(getDeleteActionString());
         }
 
         if (getUpdateAction() != SchemaObject.ReferentialAction.NO_ACTION) {
             sb.append(' ').append(Tokens.T_ON).append(' ').append(
-                Tokens.T_UPDATE).append(' ');
+                    Tokens.T_UPDATE).append(' ');
             sb.append(getUpdateActionString());
         }
     }
@@ -450,7 +451,7 @@ public final class Constraint implements SchemaObject {
     }
 
     /**
-     *  Returns the type of constraint
+     * Returns the type of constraint
      */
     public int getConstraintType() {
         return constType;
@@ -458,32 +459,32 @@ public final class Constraint implements SchemaObject {
 
     public boolean isUniqueOrPK() {
         return constType == SchemaObject.ConstraintTypes.UNIQUE
-               || constType == SchemaObject.ConstraintTypes.PRIMARY_KEY;
+                || constType == SchemaObject.ConstraintTypes.PRIMARY_KEY;
     }
 
     /**
-     *  Returns the main table
+     * Returns the main table
      */
     public Table getMain() {
         return core.mainTable;
     }
 
     /**
-     *  Returns the main index
+     * Returns the main index
      */
     public Index getMainIndex() {
         return core.mainIndex;
     }
 
     /**
-     *  Returns the reference table
+     * Returns the reference table
      */
     public Table getRef() {
         return core.refTable;
     }
 
     /**
-     *  Returns the reference index
+     * Returns the reference index
      */
     public Index getRefIndex() {
         return core.refIndex;
@@ -496,25 +497,25 @@ public final class Constraint implements SchemaObject {
 
         switch (action) {
 
-            case SchemaObject.ReferentialAction.RESTRICT :
+            case SchemaObject.ReferentialAction.RESTRICT:
                 return Tokens.T_RESTRICT;
 
-            case SchemaObject.ReferentialAction.CASCADE :
+            case SchemaObject.ReferentialAction.CASCADE:
                 return Tokens.T_CASCADE;
 
-            case SchemaObject.ReferentialAction.SET_DEFAULT :
+            case SchemaObject.ReferentialAction.SET_DEFAULT:
                 return Tokens.T_SET + ' ' + Tokens.T_DEFAULT;
 
-            case SchemaObject.ReferentialAction.SET_NULL :
+            case SchemaObject.ReferentialAction.SET_NULL:
                 return Tokens.T_SET + ' ' + Tokens.T_NULL;
 
-            default :
+            default:
                 return Tokens.T_NO + ' ' + Tokens.T_ACTION;
         }
     }
 
     /**
-     *  The ON DELETE triggered action of (foreign key) constraint
+     * The ON DELETE triggered action of (foreign key) constraint
      */
     public int getDeleteAction() {
         return core.deleteAction;
@@ -525,7 +526,7 @@ public final class Constraint implements SchemaObject {
     }
 
     /**
-     *  The ON UPDATE triggered action of (foreign key) constraint
+     * The ON UPDATE triggered action of (foreign key) constraint
      */
     public int getUpdateAction() {
         return core.updateAction;
@@ -548,17 +549,17 @@ public final class Constraint implements SchemaObject {
 
         switch (core.deleteAction) {
 
-            case SchemaObject.ReferentialAction.CASCADE :
-            case SchemaObject.ReferentialAction.SET_DEFAULT :
-            case SchemaObject.ReferentialAction.SET_NULL :
+            case SchemaObject.ReferentialAction.CASCADE:
+            case SchemaObject.ReferentialAction.SET_DEFAULT:
+            case SchemaObject.ReferentialAction.SET_NULL:
                 return true;
         }
 
         switch (core.updateAction) {
 
-            case SchemaObject.ReferentialAction.CASCADE :
-            case SchemaObject.ReferentialAction.SET_DEFAULT :
-            case SchemaObject.ReferentialAction.SET_NULL :
+            case SchemaObject.ReferentialAction.CASCADE:
+            case SchemaObject.ReferentialAction.SET_DEFAULT:
+            case SchemaObject.ReferentialAction.SET_NULL:
                 return true;
         }
 
@@ -570,14 +571,14 @@ public final class Constraint implements SchemaObject {
     }
 
     /**
-     *  Returns the main table column index array
+     * Returns the main table column index array
      */
     public int[] getMainColumns() {
         return core.mainCols;
     }
 
     /**
-     *  Returns the reference table column index array
+     * Returns the reference table column index array
      */
     public int[] getRefColumns() {
         return core.refCols;
@@ -601,22 +602,22 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.CHECK :
+            case SchemaObject.ConstraintTypes.CHECK:
                 return rangeVariable.usedColumns[colIndex] && ArrayUtil
-                    .countTrueElements(rangeVariable.usedColumns) == 1;
+                        .countTrueElements(rangeVariable.usedColumns) == 1;
 
-            case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-            case SchemaObject.ConstraintTypes.UNIQUE :
+            case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+            case SchemaObject.ConstraintTypes.UNIQUE:
                 return core.mainCols.length == 1
-                       && core.mainCols[0] == colIndex;
+                        && core.mainCols[0] == colIndex;
 
-            case SchemaObject.ConstraintTypes.MAIN :
+            case SchemaObject.ConstraintTypes.MAIN:
                 return false;
 
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 return core.refCols.length == 1 && core.refCols[0] == colIndex;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Constraint");
         }
     }
@@ -625,23 +626,23 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.CHECK :
+            case SchemaObject.ConstraintTypes.CHECK:
                 return rangeVariable.usedColumns[colIndex] && ArrayUtil
-                    .countTrueElements(rangeVariable.usedColumns) > 1;
+                        .countTrueElements(rangeVariable.usedColumns) > 1;
 
-            case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-            case SchemaObject.ConstraintTypes.UNIQUE :
+            case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+            case SchemaObject.ConstraintTypes.UNIQUE:
                 return core.mainCols.length != 1
-                       && ArrayUtil.find(core.mainCols, colIndex) != -1;
+                        && ArrayUtil.find(core.mainCols, colIndex) != -1;
 
-            case SchemaObject.ConstraintTypes.MAIN :
+            case SchemaObject.ConstraintTypes.MAIN:
                 return ArrayUtil.find(core.mainCols, colIndex) != -1;
 
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 return core.refCols.length != 1
-                       && ArrayUtil.find(core.refCols, colIndex) != -1;
+                        && ArrayUtil.find(core.refCols, colIndex) != -1;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Constraint");
         }
     }
@@ -650,18 +651,18 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.CHECK :
+            case SchemaObject.ConstraintTypes.CHECK:
                 return rangeVariable.usedColumns[colIndex];
 
-            case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-            case SchemaObject.ConstraintTypes.UNIQUE :
-            case SchemaObject.ConstraintTypes.MAIN :
+            case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+            case SchemaObject.ConstraintTypes.UNIQUE:
+            case SchemaObject.ConstraintTypes.MAIN:
                 return ArrayUtil.find(core.mainCols, colIndex) != -1;
 
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 return ArrayUtil.find(core.refCols, colIndex) != -1;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Constraint");
         }
     }
@@ -674,11 +675,11 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-            case SchemaObject.ConstraintTypes.UNIQUE :
+            case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+            case SchemaObject.ConstraintTypes.UNIQUE:
                 if (core.mainCols.length == cols.length) {
                     return ArrayUtil.haveEqualSets(core.mainCols, cols,
-                                                   cols.length);
+                            cols.length);
                 }
         }
 
@@ -694,8 +695,8 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.MAIN :
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.MAIN:
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 if (mainTable != core.mainTable || refTable != core.refTable) {
                     return false;
                 }
@@ -703,7 +704,7 @@ public final class Constraint implements SchemaObject {
                 if (core.mainCols.length == mainCols.length
                         && core.refCols.length == refCols.length) {
                     return ArrayUtil.areEqualSets(core.mainCols, mainCols)
-                           && ArrayUtil.areEqualSets(core.refCols, refCols);
+                            && ArrayUtil.areEqualSets(core.refCols, refCols);
                 }
         }
 
@@ -714,11 +715,11 @@ public final class Constraint implements SchemaObject {
      * Used to update constrains to reflect structural changes in a table. Prior
      * checks must ensure that this method does not throw.
      *
-     * @param session Session
+     * @param session  Session
      * @param oldTable reference to the old version of the table
      * @param newTable reference to the new version of the table
      * @param colIndex indexes at which table column is added or removed
-     * @param adjust -1, 0, +1 to indicate if column is added or removed
+     * @param adjust   -1, 0, +1 to indicate if column is added or removed
      */
     void updateTable(Session session, Table oldTable, Table newTable,
                      int[] colIndex, int adjust) {
@@ -728,7 +729,7 @@ public final class Constraint implements SchemaObject {
 
             if (core.mainIndex != null) {
                 core.mainIndex = core.mainTable.getSystemIndex(
-                    core.mainIndex.getName().name);
+                        core.mainIndex.getName().name);
                 core.mainCols = ArrayUtil.toAdjustedColumnArray(core.mainCols,
                         colIndex, adjust);
             }
@@ -739,7 +740,7 @@ public final class Constraint implements SchemaObject {
 
             if (core.refIndex != null) {
                 core.refIndex =
-                    core.refTable.getSystemIndex(core.refIndex.getName().name);
+                        core.refTable.getSystemIndex(core.refIndex.getName().name);
                 core.refCols = ArrayUtil.toAdjustedColumnArray(core.refCols,
                         colIndex, adjust);
             }
@@ -760,14 +761,14 @@ public final class Constraint implements SchemaObject {
 
         switch (constType) {
 
-            case SchemaObject.ConstraintTypes.CHECK :
+            case SchemaObject.ConstraintTypes.CHECK:
                 if (!isNotNull) {
                     checkCheckConstraint(session, table, data);
                 }
 
                 return;
 
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY:
                 PersistentStore store = core.mainTable.getRowStore(session);
 
                 if (ArrayUtil.hasNull(data, core.refCols)) {
@@ -785,7 +786,7 @@ public final class Constraint implements SchemaObject {
 
                     // core.matchType == OpTypes.MATCH_FULL
                 } else if (core.mainIndex.existsParent(session, store, data,
-                                                       core.refCols)) {
+                        core.refCols)) {
                     return;
                 }
 
@@ -799,19 +800,19 @@ public final class Constraint implements SchemaObject {
     void checkCheckConstraint(Session session, Table table, Object[] data) {
 
         RangeIterator it =
-            session.sessionContext.getCheckIterator(rangeVariable);
+                session.sessionContext.getCheckIterator(rangeVariable);
 
         it.setCurrent(data);
 
         boolean nomatch = Boolean.FALSE.equals(check.getValue(session));
 
         if (nomatch) {
-            String[] info = new String[] {
-                name.name, table.getName().name
+            String[] info = new String[]{
+                    name.name, table.getName().name
             };
 
             throw Error.error(null, ErrorCode.X_23513, ErrorCode.CONSTRAINT,
-                              info);
+                    info);
         }
     }
 
@@ -825,16 +826,16 @@ public final class Constraint implements SchemaObject {
         session.sessionData.currentValue = null;
 
         if (nomatch) {
-            String[] info = new String[] {
-                name.statementName,
-                table == null ? ""
-                              : table.getName().statementName,
-                column == null ? ""
-                               : column.getName().statementName,
+            String[] info = new String[]{
+                    name.statementName,
+                    table == null ? ""
+                            : table.getName().statementName,
+                    column == null ? ""
+                            : column.getName().statementName,
             };
 
             throw Error.error(null, ErrorCode.X_23513,
-                              ErrorCode.COLUMN_CONSTRAINT, info);
+                    ErrorCode.COLUMN_CONSTRAINT, info);
         }
     }
 
@@ -842,13 +843,13 @@ public final class Constraint implements SchemaObject {
 
         switch (this.constType) {
 
-            case SchemaObject.ConstraintTypes.CHECK : {
-                String[] info = new String[]{ name.statementName };
+            case SchemaObject.ConstraintTypes.CHECK: {
+                String[] info = new String[]{name.statementName};
 
                 return Error.error(null, ErrorCode.X_23513,
-                                   ErrorCode.CONSTRAINT, info);
+                        ErrorCode.CONSTRAINT, info);
             }
-            case SchemaObject.ConstraintTypes.FOREIGN_KEY : {
+            case SchemaObject.ConstraintTypes.FOREIGN_KEY: {
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < core.refCols.length; i++) {
@@ -859,19 +860,19 @@ public final class Constraint implements SchemaObject {
                     }
 
                     sb.append(core.refTable.getColumnTypes()[core.refCols[i]]
-                        .convertToString(o));
+                            .convertToString(o));
                 }
 
-                String[] info = new String[] {
-                    name.statementName, core.refTable.getName().statementName,
-                    sb.toString()
+                String[] info = new String[]{
+                        name.statementName, core.refTable.getName().statementName,
+                        sb.toString()
                 };
 
                 return Error.error(null, ErrorCode.X_23503,
-                                   ErrorCode.FK_CONSTRAINT, info);
+                        ErrorCode.FK_CONSTRAINT, info);
             }
-            case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-            case SchemaObject.ConstraintTypes.UNIQUE : {
+            case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+            case SchemaObject.ConstraintTypes.UNIQUE: {
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < core.mainCols.length; i++) {
@@ -882,16 +883,16 @@ public final class Constraint implements SchemaObject {
                     }
 
                     sb.append(core.mainTable.colTypes[core.mainCols[i]]
-                        .convertToString(o));
+                            .convertToString(o));
                 }
 
                 return Error.error(null, ErrorCode.X_23505,
-                                   ErrorCode.CONSTRAINT, new String[] {
-                    name.statementName, core.mainTable.getName().statementName,
-                    sb.toString()
-                });
+                        ErrorCode.CONSTRAINT, new String[]{
+                                name.statementName, core.mainTable.getName().statementName,
+                                sb.toString()
+                        });
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Constraint");
         }
     }
@@ -907,7 +908,7 @@ public final class Constraint implements SchemaObject {
      * row is found, null is returned. (fredt@users)
      *
      * @param session Session
-     * @param row array of objects for a database row
+     * @param row     array of objects for a database row
      * @return iterator
      */
     RowIterator findFkRef(Session session, Object[] row) {
@@ -960,7 +961,7 @@ public final class Constraint implements SchemaObject {
         OrderedHashSet set = new OrderedHashSet();
 
         check.collectAllExpressions(set, OpTypes.columnExpressionSet,
-                                    OpTypes.emptyExpressionSet);
+                OpTypes.emptyExpressionSet);
 
         return set;
     }
@@ -971,7 +972,7 @@ public final class Constraint implements SchemaObject {
 
         // this workaround is here to stop LIKE optimisation (for proper scripting)
         QuerySpecification checkSelect = Expression.getCheckSelect(session,
-            newTable, check);
+                newTable, check);
 
         rangeVariable = checkSelect.rangeVariables[0];
 
@@ -980,9 +981,9 @@ public final class Constraint implements SchemaObject {
 
     private Expression getNewCheckExpression(Session session) {
 
-        String    ddl     = check.getSQL();
-        Scanner   scanner = new Scanner(session, ddl);
-        ParserDQL parser  = new ParserDQL(session, scanner, null);
+        String ddl = check.getSQL();
+        Scanner scanner = new Scanner(session, ddl);
+        ParserDQL parser = new ParserDQL(session, scanner, null);
 
         parser.compileContext.setNextRangeVarIndex(0);
         parser.read();
@@ -1000,7 +1001,7 @@ public final class Constraint implements SchemaObject {
         check.checkValidCheckConstraint();
 
         QuerySpecification checkSelect = Expression.getCheckSelect(session,
-            table, check);
+                table, check);
 
         rangeVariable = checkSelect.rangeVariables[0];
 
@@ -1010,9 +1011,9 @@ public final class Constraint implements SchemaObject {
         if (check.getType() == OpTypes.NOT
                 && check.getLeftNode().getType() == OpTypes.IS_NULL
                 && check.getLeftNode().getLeftNode().getType()
-                   == OpTypes.COLUMN) {
+                == OpTypes.COLUMN) {
             notNullColumnIndex =
-                check.getLeftNode().getLeftNode().getColumnIndex();
+                    check.getLeftNode().getLeftNode().getColumnIndex();
             isNotNull = true;
         }
     }
@@ -1023,7 +1024,7 @@ public final class Constraint implements SchemaObject {
         check.checkValidCheckConstraint();
 
         HsqlList list = check.resolveColumnReferences(session,
-            RangeGroup.emptyGroup, 0, RangeGroup.emptyArray, null, false);
+                RangeGroup.emptyGroup, 0, RangeGroup.emptyArray, null, false);
 
         if (list != null) {
             Expression e = ((Expression) list.get(0));
@@ -1039,16 +1040,16 @@ public final class Constraint implements SchemaObject {
         if (table.getRowStore(session).elementCount() > 0) {
             Expression newCheck = getNewCheckExpression(session);
             QuerySpecification checkSelect = Expression.getCheckSelect(session,
-                table, newCheck);
+                    table, newCheck);
             Result r = checkSelect.getResult(session, 1);
 
             if (r.getNavigator().getSize() != 0) {
-                String[] info = new String[] {
-                    name.statementName, table.getName().statementName
+                String[] info = new String[]{
+                        name.statementName, table.getName().statementName
                 };
 
                 throw Error.error(null, ErrorCode.X_23513,
-                                  ErrorCode.CONSTRAINT, info);
+                        ErrorCode.CONSTRAINT, info);
             }
         }
     }

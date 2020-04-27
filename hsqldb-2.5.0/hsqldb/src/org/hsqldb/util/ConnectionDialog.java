@@ -55,17 +55,17 @@ import java.util.Hashtable;
 class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
 
     protected Connection mConnection;
-    protected TextField  mName, mDriver, mURL, mUser, mPassword;
-    protected Label      mError;
-    private String[][]   connTypes;
-    private Hashtable    settings;
-    private Choice       types, recent;
+    protected TextField mName, mDriver, mURL, mUser, mPassword;
+    protected Label mError;
+    private String[][] connTypes;
+    private Hashtable settings;
+    private Choice types, recent;
 
     /**
      * @throws Exception
      */
     public static Connection createConnection(String driver, String url,
-            String user, String password) throws Exception {
+                                              String user, String password) throws Exception {
 
         Class.forName(driver);
 
@@ -74,7 +74,6 @@ class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
 
     /**
      * Constructor declaration
-     *
      *
      * @param owner
      * @param title
@@ -97,14 +96,14 @@ class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
 
         // (ulrivo): full size on screen with less than 640 width
         if (d.width >= 640) {
-            pLabel       = new Panel(new GridLayout(8, 1, 10, 10));
-            pText        = new Panel(new GridLayout(8, 1, 10, 10));
-            pButton      = new Panel(new GridLayout(1, 2, 10, 10));
+            pLabel = new Panel(new GridLayout(8, 1, 10, 10));
+            pText = new Panel(new GridLayout(8, 1, 10, 10));
+            pButton = new Panel(new GridLayout(1, 2, 10, 10));
             pClearButton = new Panel(new GridLayout(8, 1, 10, 10));
         } else {
-            pLabel       = new Panel(new GridLayout(8, 1));
-            pText        = new Panel(new GridLayout(8, 1));
-            pButton      = new Panel(new GridLayout(1, 2));
+            pLabel = new Panel(new GridLayout(8, 1));
+            pText = new Panel(new GridLayout(8, 1));
+            pButton = new Panel(new GridLayout(1, 2));
             pClearButton = new Panel(new GridLayout(8, 1));
         }
 
@@ -141,7 +140,7 @@ class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
 
                 String s = (String) e.getItem();
                 ConnectionSetting setting =
-                    (ConnectionSetting) settings.get(s);
+                        (ConnectionSetting) settings.get(s);
 
                 if (setting != null) {
                     mName.setText(setting.getName());
@@ -180,7 +179,7 @@ class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
         pText.add(mName);
         pLabel.add(createLabel("Type:"));
 
-        types     = new Choice();
+        types = new Choice();
         connTypes = ConnectionDialogCommon.getTypes();
 
         for (int i = 0; i < connTypes.length; i++) {
@@ -243,7 +242,7 @@ class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
         // (ulrivo): full size on screen with less than 640 width
         if (d.width >= 640) {
             setLocation((d.width - size.width) / 2,
-                        (d.height - size.height) / 2);
+                    (d.height - size.height) / 2);
         } else {
             setLocation(0, 0);
             setSize(d);
@@ -297,20 +296,20 @@ class ConnectionDialog extends Dialog implements ActionListener, ItemListener {
                 }
 
                 mConnection = createConnection(mDriver.getText(),
-                                               mURL.getText(),
-                                               mUser.getText(),
-                                               mPassword.getText());
+                        mURL.getText(),
+                        mUser.getText(),
+                        mPassword.getText());
 
                 if (mName.getText() != null
                         && mName.getText().trim().length() != 0) {
                     ConnectionSetting newSetting =
-                        new ConnectionSetting(mName.getText(),
-                                              mDriver.getText(),
-                                              mURL.getText(), mUser.getText(),
-                                              mPassword.getText());
+                            new ConnectionSetting(mName.getText(),
+                                    mDriver.getText(),
+                                    mURL.getText(), mUser.getText(),
+                                    mPassword.getText());
 
                     ConnectionDialogCommon.addToRecentConnectionSettings(
-                        settings, newSetting);
+                            settings, newSetting);
                 }
 
                 dispose();

@@ -49,7 +49,7 @@ public class ScriptLoader {
 
             if (mode == RowInsertInterface.modes.continueOnError) {
                 errorLogger = new RowInsertSimple.InsertErrorHandler(
-                    session.getDatabase(), pathName);
+                        session.getDatabase(), pathName);
             } else {
                 errorLogger = new RowInsertSimple.DefaultErrorHandler();
             }

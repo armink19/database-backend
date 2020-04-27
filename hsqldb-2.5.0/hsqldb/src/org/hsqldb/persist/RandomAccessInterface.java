@@ -34,10 +34,10 @@ package org.hsqldb.persist;
 import java.io.IOException;
 
 /**
-* @author Fred Toussi (fredt@users dot sourceforge.net)
-* @version  2.2.9
-* @since 2.0.0
-*/
+ * @author Fred Toussi (fredt@users dot sourceforge.net)
+ * @version 2.2.9
+ * @since 2.0.0
+ */
 public interface RandomAccessInterface {
 
     long length() throws IOException;

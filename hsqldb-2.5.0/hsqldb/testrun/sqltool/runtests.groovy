@@ -49,8 +49,8 @@ Non-verbose Result Key:
         }
         File javaBinDir = new File(System.properties['java.home'], 'bin')
         assert ([javaBinDir.absolutePath + System.properties['file.separator']
-                + 'java', '-version'].execute().waitFor() == 0) :
-         "Executable Java not found under Java home '$javaBinDir.absolutePath'"
+                         + 'java', '-version'].execute().waitFor() == 0):
+                "Executable Java not found under Java home '$javaBinDir.absolutePath'"
         String sqlToolPath = '../../lib/sqltool.jar'
         File sqlToolFile = new File(sqlToolPath)
         String sqlToolClassName = 'org.hsqldb.cmdline.SqlTool'
@@ -66,13 +66,13 @@ Non-verbose Result Key:
         } else if (!sqlToolFile.isFile())
             throw new IOException("Not a read file: $sqlToolFile.absolutePath")
         def pbParams = [
-            'java',
-            '-ea',
-            // either '-jar path.jar' or 'class.Name' will be inserted here
-            '--noAutoFile',
-            '-Ptestvar=plval',
-            '--inlineRc=user=sa,url=jdbc:hsqldb:mem:utst,password=,transiso=TRANSACTION_READ_COMMITTED',
-            null  // Sometimes we'll specify script, sometimes not
+                'java',
+                '-ea',
+                // either '-jar path.jar' or 'class.Name' will be inserted here
+                '--noAutoFile',
+                '-Ptestvar=plval',
+                '--inlineRc=user=sa,url=jdbc:hsqldb:mem:utst,password=,transiso=TRANSACTION_READ_COMMITTED',
+                null  // Sometimes we'll specify script, sometimes not
         ]
         if (useJar) {
             pbParams.add(2, sqlToolPath)
@@ -92,7 +92,7 @@ Non-verbose Result Key:
         }
         if (scripts.size() < 1)
             throw new IllegalStateException(
-                'No *.sql, *.ndsql, or *.inter scripts in current directory')
+                    'No *.sql, *.ndsql, or *.inter scripts in current directory')
         for (f in scripts) {
             //println f.name
             if (!f.canRead())
@@ -108,11 +108,11 @@ Non-verbose Result Key:
         def failedScriptNames = []
         PrintWriter cPrinter = System.console().writer()
         StringWriter sWriter
-StringWriter eWriter
+        StringWriter eWriter
         for (f in scripts) {
             isInter = f.name.endsWith('.inter')
-            if (!isInter) pbParams[pbParams.size()-1] = f.name
-            runParams = isInter ? pbParams[0..pbParams.size()-2] : pbParams
+            if (!isInter) pbParams[pbParams.size() - 1] = f.name
+            runParams = isInter ? pbParams[0..pbParams.size() - 2] : pbParams
             if (verbose) {
                 logger.info(runParams.join(' '))
             } else {
@@ -120,7 +120,7 @@ StringWriter eWriter
                 cPrinter.flush()
             }
             if (noRun) continue
-            sWriter  = new StringWriter()  // Unfortunately, can't re-use
+            sWriter = new StringWriter()  // Unfortunately, can't re-use
             // To process stderr separately, remove the redirectErrorStream
             // call below, and add a p.consumeProcessErrorStream(eWriter)
             Process p = new ProcessBuilder(runParams)
@@ -156,9 +156,9 @@ ${failedScriptNames.size()} tests failed out of ${scripts.size()}:"""
         println failedScriptNames.join(System.properties['line.separator'])
         if (doJvmExit)
             System.exit((failedScriptNames.size() > 255)
-                        ? 1 : failedScriptNames.size())
+                    ? 1 : failedScriptNames.size())
         assert false:
-            Integer.toString(failedScriptNames.size()) + ' test(s) failed'
+                Integer.toString(failedScriptNames.size()) + ' test(s) failed'
     }
 }
 

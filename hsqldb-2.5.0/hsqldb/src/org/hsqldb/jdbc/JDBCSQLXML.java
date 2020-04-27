@@ -219,31 +219,31 @@ import java.util.zip.GZIPOutputStream;
  * All methods on the <code>SQLXML</code> interface must be fully implemented if the
  * JDBC driver supports the data type.
  * <!-- end generic documentation -->
- *
+ * <p>
  * <!-- start release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3> <p>
- *
+ * <p>
  * Starting with HSQLDB 2.0, a rudimentary client-side SQLXML interface
  * implementation (this class) is supported for local use when the product is
  * built and run under JDK 1.6+ and the SQLXML instance is constructed as the
  * result of calling JDBCConnection.createSQLXML(). <p>
- *
+ * <p>
  * SQLXML instances retrieved in such a fashion are initially write-only, with
  * the lifecycle of read and write availability constrained in accordance with
  * the documentation of the interface methods. <p>
- *
+ * <p>
  * When build and run under JDK 1.6+, it is also possible to retrieve read-only
  * SQLXML instances from JDBCResultSet.getSQLXML(...), given that the underlying
  * data can be converted to an XML Document Object Model (DOM). <p>
- *
+ * <p>
  * However, at the time of this writing (2007-06-12) it is not yet possible to
  * store SQLXML objects directly into an HSQLDB database or to use them directly
  * for HSQLDB statement parameterization purposes.  This is because the SQLXML
  * data type is not yet natively supported by the HSQLDB engine. Instead, a
  * JDBCSQLXML instance must first be read as a string, binary input stream,
  * character input stream and so on, which can then be used for such purposes. <p>
- *
+ * <p>
  * Here is the current read/write availability lifecycle for JDBCSQLXML:
  *
  * <TABLE summary="">
@@ -316,17 +316,17 @@ import java.util.zip.GZIPOutputStream;
 public class JDBCSQLXML implements SQLXML {
 
     private static String domFeatures = "XML 3.0 Traversal +Events 2.0";
-    private static DOMImplementation         domImplementation;
+    private static DOMImplementation domImplementation;
     private static DOMImplementationRegistry domImplementationRegistry;
-    private static ThreadPoolExecutor        executorService;
-    private static Transformer               identityTransformer;
-    private static TransformerFactory        transformerFactory;
+    private static ThreadPoolExecutor executorService;
+    private static Transformer identityTransformer;
+    private static TransformerFactory transformerFactory;
 
     /**
      * Precomputed Charset to reduce octet to character sequence conversion
      * charset lookup overhead.
      */
-    private static final Charset                utf8Charset;
+    private static final Charset utf8Charset;
     private static ArrayBlockingQueue<Runnable> workQueue;
 
     static {
@@ -410,7 +410,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param bytes the octet sequence representing the SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(byte[] bytes) throws SQLException {
         this(bytes, null);
@@ -422,7 +422,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param chars the character sequence representing the SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(char[] chars) throws SQLException {
         this(chars, 0, chars.length, null);
@@ -433,7 +433,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param document the Document representing the SQLXML value
      * @throws java.sql.SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                               valid SQLXML value
      */
     protected JDBCSQLXML(Document document) throws SQLException {
         this(new DOMSource(document));
@@ -442,13 +442,13 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Constructs a new read-only JDBCSQLXML object from the given octet
      * sequence. <p>
-     *
+     * <p>
      * Relative URI references will be resolved against the present working
      * directory reported by the Java virtual machine. <p>
      *
      * @param inputStream an octet stream representing an SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(InputStream inputStream) throws SQLException {
         this(inputStream, null);
@@ -457,7 +457,7 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Constructs a new read-only JDBCSQLXML object from the given character
      * sequence. <p>
-     *
+     * <p>
      * Relative URI references will be resolved against the present working
      * directory reported by the Java virtual machine. <p>
      *
@@ -468,7 +468,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param reader a character stream representing an SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(Reader reader) throws SQLException {
         this(reader, null);
@@ -480,7 +480,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param source a Source representing an SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     public JDBCSQLXML(Source source) throws SQLException {
         init(source);
@@ -489,13 +489,13 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Constructs a new read-only JDBCSQLXML object from the given character
      * sequence. <p>
-     *
+     * <p>
      * Relative URI references will be resolved against the present working
      * directory reported by the Java virtual machine. <p>
      *
      * @param string a character sequence representing an SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(String string) throws SQLException {
         this(new StreamSource(new StringReader(string)));
@@ -505,11 +505,11 @@ public class JDBCSQLXML implements SQLXML {
      * Constructs a new read-only JDBCSQLXML object from the given octet
      * sequence. <p>
      *
-     * @param bytes the octet sequence representing the SQLXML value
+     * @param bytes    the octet sequence representing the SQLXML value
      * @param systemId must be a String that conforms to the URI syntax;
-     *        allows relative URIs to be processed.
+     *                 allows relative URIs to be processed.
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(byte[] bytes, String systemId) throws SQLException {
         this(new StreamSource(new ByteArrayInputStream(bytes), systemId));
@@ -522,15 +522,15 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Constructs a new read-only JDBCSQLXML object from the given octet
      * sequence. <p>
-     *
+     * <p>
      * Relative URI references will be resolved against the given systemId. <p>
      *
      * @param inputStream an octet stream representing an SQLXML value
-     * @param systemId a String that conforms to the URI syntax, indicating
-     *      the URI from which the XML data is being read, so that relative URI
-     *      references can be resolved
+     * @param systemId    a String that conforms to the URI syntax, indicating
+     *                    the URI from which the XML data is being read, so that relative URI
+     *                    references can be resolved
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(InputStream inputStream,
                          String systemId) throws SQLException {
@@ -540,7 +540,7 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Constructs a new read-only JDBCSQLXML object from the given character
      * sequence. <p>
-     *
+     * <p>
      * Relative URI references will be resolved against the given systemId. <p>
      *
      * <b>Note:</b>Normally, a byte stream should be used rather than a reader,
@@ -548,12 +548,12 @@ public class JDBCSQLXML implements SQLXML {
      * XML declaration. However, in many cases the encoding of the input stream
      * is already resolved, as in the case of reading XML from a StringReader.
      *
-     * @param reader a character stream representing an SQLXML value;
+     * @param reader   a character stream representing an SQLXML value;
      * @param systemId a String that conforms to the URI syntax, indicating
-     *      the URI from which the XML data is being read, so that relative URI
-     *      references can be resolved
+     *                 the URI from which the XML data is being read, so that relative URI
+     *                 references can be resolved
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(Reader reader, String systemId) throws SQLException {
         this(new StreamSource(reader, systemId));
@@ -562,15 +562,15 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Constructs a new read-only JDBCSQLXML object from the given character
      * sequence. <p>
-     *
+     * <p>
      * Relative URI references will be resolved against the given systemId. <p>
      *
-     * @param string a character sequence representing an SQLXML value
+     * @param string   a character sequence representing an SQLXML value
      * @param systemId a String that conforms to the URI syntax, indicating
-     *      the URI from which the XML data is being read, so that relative URI
-     *      references can be resolved
+     *                 the URI from which the XML data is being read, so that relative URI
+     *                 references can be resolved
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(String string, String systemId) throws SQLException {
         this(new StreamSource(new StringReader(string), systemId));
@@ -580,18 +580,18 @@ public class JDBCSQLXML implements SQLXML {
      * Constructs a new read-only JDBCSQLXML object from the given gzipped octet
      * sequence. <p>
      *
-     * @param bytes the gzipped octet sequence representing the SQLXML value
-     * @param clone whether to clone the given gzipped octet sequence
+     * @param bytes    the gzipped octet sequence representing the SQLXML value
+     * @param clone    whether to clone the given gzipped octet sequence
      * @param systemId
      * @param publicId
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected JDBCSQLXML(byte[] bytes, boolean clone, String systemId,
                          String publicId) throws SQLException {
 
         this.setGZipData(clone ? bytes.clone()
-                               : bytes);
+                : bytes);
 
         this.systemId = systemId;
         this.publicId = publicId;
@@ -600,21 +600,22 @@ public class JDBCSQLXML implements SQLXML {
     protected JDBCSQLXML(char[] chars, int offset, int length,
                          String systemId) throws SQLException {
         this(new StreamSource(new CharArrayReader(chars, offset, length),
-                              systemId));
+                systemId));
     }
 
     /**
      * This method closes this object and releases the resources that it held.
      * The SQL XML object becomes invalid and neither readable or writable
      * when this method is called.
-     *
+     * <p>
      * After <code>free</code> has been called, any attempt to invoke a
      * method other than <code>free</code> will result in a <code>SQLException</code>
      * being thrown.  If <code>free</code> is called multiple times, the subsequent
      * calls to <code>free</code> are treated as a no-op.
-     * @throws SQLException if there is an error freeing the XML value.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     *
+     * @throws SQLException                    if there is an error freeing the XML value.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6
      */
     public void free() throws SQLException {
@@ -631,10 +632,10 @@ public class JDBCSQLXML implements SQLXML {
      * may also become not writable depending on implementation.
      *
      * @return a stream containing the XML data.
-     * @throws SQLException if there is an error processing the XML value.
-     *   An exception is thrown if the state is not readable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value.
+     *                                         An exception is thrown if the state is not readable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6
      */
     public synchronized InputStream getBinaryStream() throws SQLException {
@@ -661,10 +662,10 @@ public class JDBCSQLXML implements SQLXML {
      * may also become not readable depending on implementation.
      *
      * @return a stream to which data can be written.
-     * @throws SQLException if there is an error processing the XML value.
-     *   An exception is thrown if the state is not writable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value.
+     *                                         An exception is thrown if the state is not writable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6
      */
     public synchronized OutputStream setBinaryStream() throws SQLException {
@@ -694,12 +695,12 @@ public class JDBCSQLXML implements SQLXML {
      * may also become not writable depending on implementation.
      *
      * @return a stream containing the XML data.
-     * @throws SQLException if there is an error processing the XML value.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if the stream does not contain valid characters.
-     *   An exception is thrown if the state is not readable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value.
+     *                                         The getCause() method of the exception may provide a more detailed exception, for example,
+     *                                         if the stream does not contain valid characters.
+     *                                         An exception is thrown if the state is not readable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6
      */
     public synchronized Reader getCharacterStream() throws SQLException {
@@ -729,12 +730,12 @@ public class JDBCSQLXML implements SQLXML {
      * may also become not readable depending on implementation.
      *
      * @return a stream to which data can be written.
-     * @throws SQLException if there is an error processing the XML value.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if the stream does not contain valid characters.
-     *   An exception is thrown if the state is not writable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value.
+     *                                         The getCause() method of the exception may provide a more detailed exception, for example,
+     *                                         if the stream does not contain valid characters.
+     *                                         An exception is thrown if the state is not writable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6 Build 79
      */
     public synchronized Writer setCharacterStream() throws SQLException {
@@ -764,12 +765,12 @@ public class JDBCSQLXML implements SQLXML {
      * may also become not writable depending on implementation.
      *
      * @return a string representation of the XML value designated by this SQLXML instance.
-     * @throws SQLException if there is an error processing the XML value.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if the stream does not contain valid characters.
-     *   An exception is thrown if the state is not readable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value.
+     *                                         The getCause() method of the exception may provide a more detailed exception, for example,
+     *                                         if the stream does not contain valid characters.
+     *                                         An exception is thrown if the state is not readable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6
      */
     public synchronized String getString() throws SQLException {
@@ -799,12 +800,12 @@ public class JDBCSQLXML implements SQLXML {
      * may also become not readable depending on implementation.
      *
      * @param value the XML value
-     * @throws SQLException if there is an error processing the XML value.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if the stream does not contain valid characters.
-     *   An exception is thrown if the state is not writable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value.
+     *                                         The getCause() method of the exception may provide a more detailed exception, for example,
+     *                                         if the stream does not contain valid characters.
+     *                                         An exception is thrown if the state is not writable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6
      */
     public synchronized void setString(String value) throws SQLException {
@@ -840,26 +841,26 @@ public class JDBCSQLXML implements SQLXML {
      * </pre>
      *
      * @param sourceClass The class of the source, or null.
-     * If the class is null, a vendor specific Source implementation will be returned.
-     * The following classes are supported at a minimum:
-     * <pre>
-     *   javax.xml.transform.dom.DOMSource - returns a DOMSource
-     *   javax.xml.transform.sax.SAXSource - returns a SAXSource
-     *   javax.xml.transform.stax.StAXSource - returns a StAXSource
-     *   javax.xml.transform.stream.StreamSource - returns a StreamSource
-     * </pre>
+     *                    If the class is null, a vendor specific Source implementation will be returned.
+     *                    The following classes are supported at a minimum:
+     *                    <pre>
+     *                      javax.xml.transform.dom.DOMSource - returns a DOMSource
+     *                      javax.xml.transform.sax.SAXSource - returns a SAXSource
+     *                      javax.xml.transform.stax.StAXSource - returns a StAXSource
+     *                      javax.xml.transform.stream.StreamSource - returns a StreamSource
+     *                    </pre>
      * @return a Source for reading the XML value.
-     * @throws SQLException if there is an error processing the XML value
-     *   or if this feature is not supported.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if an XML parser exception occurs.
-     *   An exception is thrown if the state is not readable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value
+     *                                         or if this feature is not supported.
+     *                                         The getCause() method of the exception may provide a more detailed exception, for example,
+     *                                         if an XML parser exception occurs.
+     *                                         An exception is thrown if the state is not readable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6 Build 79
      */
     @SuppressWarnings("unchecked")
-    public synchronized <T extends Source>T getSource(
+    public synchronized <T extends Source> T getSource(
             Class<T> sourceClass) throws SQLException {
 
         checkClosed();
@@ -894,25 +895,25 @@ public class JDBCSQLXML implements SQLXML {
      * </pre>
      *
      * @param resultClass The class of the result, or null.
-     * If resultClass is null, a vendor specific Result implementation will be returned.
-     * The following classes are supported at a minimum:
-     * <pre>
-     *   javax.xml.transform.dom.DOMResult - returns a DOMResult
-     *   javax.xml.transform.sax.SAXResult - returns a SAXResult
-     *   javax.xml.transform.stax.StAXResult - returns a StAXResult
-     *   javax.xml.transform.stream.StreamResult - returns a StreamResult
-     * </pre>
+     *                    If resultClass is null, a vendor specific Result implementation will be returned.
+     *                    The following classes are supported at a minimum:
+     *                    <pre>
+     *                      javax.xml.transform.dom.DOMResult - returns a DOMResult
+     *                      javax.xml.transform.sax.SAXResult - returns a SAXResult
+     *                      javax.xml.transform.stax.StAXResult - returns a StAXResult
+     *                      javax.xml.transform.stream.StreamResult - returns a StreamResult
+     *                    </pre>
      * @return Returns a Result for setting the XML value.
-     * @throws SQLException if there is an error processing the XML value
-     *   or if this feature is not supported.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if an XML parser exception occurs.
-     *   An exception is thrown if the state is not writable.
-     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-     * this method
+     * @throws SQLException                    if there is an error processing the XML value
+     *                                         or if this feature is not supported.
+     *                                         The getCause() method of the exception may provide a more detailed exception, for example,
+     *                                         if an XML parser exception occurs.
+     *                                         An exception is thrown if the state is not writable.
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
      * @since JDK 1.6 Build 79
      */
-    public synchronized <T extends Result>T setResult(
+    public synchronized <T extends Result> T setResult(
             Class<T> resultClass) throws SQLException {
 
         checkClosed();
@@ -932,10 +933,10 @@ public class JDBCSQLXML implements SQLXML {
     protected static ExecutorService getExecutorService() {
 
         if (JDBCSQLXML.executorService == null) {
-            int      corePoolSize    = 1;
-            int      maximumPoolSize = 10;
-            long     keepAliveTime   = 1;
-            TimeUnit unit            = TimeUnit.SECONDS;
+            int corePoolSize = 1;
+            int maximumPoolSize = 10;
+            long keepAliveTime = 1;
+            TimeUnit unit = TimeUnit.SECONDS;
 
             JDBCSQLXML.workQueue = new ArrayBlockingQueue<Runnable>(10);
             JDBCSQLXML.executorService = new ThreadPoolExecutor(corePoolSize,
@@ -954,7 +955,7 @@ public class JDBCSQLXML implements SQLXML {
         if (JDBCSQLXML.transformerFactory == null) {
             try {
                 JDBCSQLXML.transformerFactory =
-                    TransformerFactory.newInstance();
+                        TransformerFactory.newInstance();
             } catch (TransformerFactoryConfigurationError ex) {
                 throw Exceptions.transformFailed(ex);
             }
@@ -972,7 +973,7 @@ public class JDBCSQLXML implements SQLXML {
         if (JDBCSQLXML.identityTransformer == null) {
             try {
                 JDBCSQLXML.identityTransformer =
-                    getTransformerFactory().newTransformer();
+                        getTransformerFactory().newTransformer();
             } catch (TransformerConfigurationException ex) {
                 throw Exceptions.transformFailed(ex);
             }
@@ -990,7 +991,7 @@ public class JDBCSQLXML implements SQLXML {
         if (domImplementationRegistry == null) {
             try {
                 domImplementationRegistry =
-                    DOMImplementationRegistry.newInstance();
+                        DOMImplementationRegistry.newInstance();
             } catch (ClassCastException ex) {
                 throw Exceptions.domInstantiation(ex);
             } catch (InstantiationException ex) {
@@ -1008,19 +1009,19 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * @return with which to create document instances.
      * @throws java.sql.SQLException when unable to obtain the DOM
-     *         implementation instance.
+     *                               implementation instance.
      */
     protected static DOMImplementation getDOMImplementation() throws SQLException {
 
         if (domImplementation == null) {
             domImplementation =
-                getDOMImplementationRegistry().getDOMImplementation(
-                    domFeatures);
+                    getDOMImplementationRegistry().getDOMImplementation(
+                            domFeatures);
         }
 
         if (domImplementation == null) {
             Exception ex = new RuntimeException("Not supported: "
-                + domFeatures);
+                    + domFeatures);
 
             throw Exceptions.domInstantiation(ex);
         }
@@ -1029,21 +1030,21 @@ public class JDBCSQLXML implements SQLXML {
     }
 
     /**
-     * @param namespaceURI of the document element to create or <code>null</code>.
+     * @param namespaceURI  of the document element to create or <code>null</code>.
      * @param qualifiedName of the document element to be created or <code>null</code>.
-     * @param docType of document to be created or <code>null</code>.
-     *   When <code>doctype</code> is not <code>null</code>, its
-     *   <code>Node.ownerDocument</code> attribute is set to the document
-     *   being created.
+     * @param docType       of document to be created or <code>null</code>.
+     *                      When <code>doctype</code> is not <code>null</code>, its
+     *                      <code>Node.ownerDocument</code> attribute is set to the document
+     *                      being created.
      * @return with its document element.
-     *   If the <code>NamespaceURI</code>, <code>qualifiedName</code>, and
-     *   <code>doctype</code> are <code>null</code>, the returned
-     *   <code>Document</code> is empty with no document element.
+     * If the <code>NamespaceURI</code>, <code>qualifiedName</code>, and
+     * <code>doctype</code> are <code>null</code>, the returned
+     * <code>Document</code> is empty with no document element.
      * @throws java.sql.SQLException wrapping any internal exception that occurs.
-     * @see org.w3c.dom.DOMImplementation#createDocument(String,String,DocumentType)
+     * @see org.w3c.dom.DOMImplementation#createDocument(String, String, DocumentType)
      */
     protected static Document createDocument(String namespaceURI,
-            String qualifiedName, DocumentType docType) throws SQLException {
+                                             String qualifiedName, DocumentType docType) throws SQLException {
 
         try {
             return getDOMImplementation().createDocument(namespaceURI,
@@ -1067,7 +1068,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param source the Source representing the SQLXML value
      * @throws SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                      valid SQLXML value
      */
     protected void init(Source source) throws SQLException {
 
@@ -1075,11 +1076,11 @@ public class JDBCSQLXML implements SQLXML {
             throw JDBCUtil.nullArgument("source");
         }
 
-        Transformer           transformer =
-            JDBCSQLXML.getIdentityTransformer();
-        StreamResult          result      = new StreamResult();
-        ByteArrayOutputStream baos        = new ByteArrayOutputStream();
-        GZIPOutputStream      gzos;
+        Transformer transformer =
+                JDBCSQLXML.getIdentityTransformer();
+        StreamResult result = new StreamResult();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        GZIPOutputStream gzos;
 
         try {
             gzos = new GZIPOutputStream(baos);
@@ -1113,7 +1114,7 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @param data the SQLXML value
      * @throws java.sql.SQLException if the argument does not represent a
-     *      valid SQLXML value
+     *                               valid SQLXML value
      */
     protected void setGZipData(byte[] data) throws SQLException {
 
@@ -1126,7 +1127,7 @@ public class JDBCSQLXML implements SQLXML {
     /**
      * Directly retrieves this object's present SQLMXL value as a gzipped
      * array of bytes. <p>
-     *
+     * <p>
      * May be null, empty or invalid.
      *
      * @return this object's SQLMXL value as a gzipped byte array
@@ -1140,9 +1141,9 @@ public class JDBCSQLXML implements SQLXML {
      * possibly by terminating any in-progress write operations and converting
      * accumulated intermediate data.
      *
-     * @throws java.sql.SQLException if an underlying I/O or transform
-     *      error occurs
      * @return this object's SQLXML value
+     * @throws java.sql.SQLException if an underlying I/O or transform
+     *                               error occurs
      */
     protected byte[] getGZipData() throws SQLException {
 
@@ -1154,8 +1155,8 @@ public class JDBCSQLXML implements SQLXML {
 
         if (this.domResult != null) {
             DOMSource source = new DOMSource(domResult.getNode(),
-                domResult.getSystemId());
-            OutputStream os     = setBinaryStreamImpl();
+                    domResult.getSystemId());
+            OutputStream os = setBinaryStreamImpl();
             StreamResult result = new StreamResult(os);
 
             try {
@@ -1175,10 +1176,10 @@ public class JDBCSQLXML implements SQLXML {
             throw Exceptions.notReadable("No Data.");
         } else if (!this.outputStream.isClosed()) {
             throw Exceptions.notReadable(
-                "Stream used for writing must be closed but is still open.");
+                    "Stream used for writing must be closed but is still open.");
         } else if (this.outputStream.isFreed()) {
             throw Exceptions.notReadable(
-                "Stream used for writing was freed and is no longer valid.");
+                    "Stream used for writing was freed and is no longer valid.");
         }
 
         try {
@@ -1330,7 +1331,7 @@ public class JDBCSQLXML implements SQLXML {
     protected InputStream getBinaryStreamImpl() throws SQLException {
 
         try {
-            byte[]               data = getGZipData();
+            byte[] data = getGZipData();
             ByteArrayInputStream bais = new ByteArrayInputStream(data);
 
             return new GZIPInputStream(bais);
@@ -1393,9 +1394,9 @@ public class JDBCSQLXML implements SQLXML {
      *
      * @return a writer to which the data can be written.
      * @throws SQLException if there is an error processing the XML value.
-     *   The getCause() method of the exception may provide a more detailed exception, for example,
-     *   if the stream does not contain valid characters.
-     *   An exception is thrown if the state is not writable.
+     *                      The getCause() method of the exception may provide a more detailed exception, for example,
+     *                      if the stream does not contain valid characters.
+     *                      An exception is thrown if the state is not writable.
      * @since JDK 1.6 Build 79
      */
     protected Writer setCharacterStreamImpl() throws SQLException {
@@ -1418,18 +1419,18 @@ public class JDBCSQLXML implements SQLXML {
      * instance. <p>
      *
      * @param sourceClass The class of the source, or null.  If null, then a
-     *      DOMSource is returned.
+     *                    DOMSource is returned.
      * @return a Source for reading the XML value.
      * @throws SQLException if there is an error processing the XML value
-     *   or if the given <tt>sourceClass</tt> is not supported.
+     *                      or if the given <tt>sourceClass</tt> is not supported.
      */
-    protected <T extends Source>T getSourceImpl(
+    protected <T extends Source> T getSourceImpl(
             Class<T> sourceClass) throws SQLException {
 
         if (StreamSource.class.isAssignableFrom(sourceClass)) {
             return createStreamSource(sourceClass);
         } else if ((sourceClass == null)
-                   || DOMSource.class.isAssignableFrom(sourceClass)) {
+                || DOMSource.class.isAssignableFrom(sourceClass)) {
             return createDOMSource(sourceClass);
         } else if (SAXSource.class.isAssignableFrom(sourceClass)) {
             return createSAXSource(sourceClass);
@@ -1445,13 +1446,13 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance. <p>
      *
      * @param sourceClass The class of the source
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *      value or if the given <tt>sourceClass</tt> is not supported.
      * @return a new StreamSource for reading the XML value designated by this
-     *      SQLXML instance
+     * SQLXML instance
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value or if the given <tt>sourceClass</tt> is not supported.
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Source>T createStreamSource(
+    protected <T extends Source> T createStreamSource(
             Class<T> sourceClass) throws SQLException {
 
         StreamSource source;
@@ -1487,13 +1488,13 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance. <p>
      *
      * @param sourceClass The class of the source
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *      value or if the given <tt>sourceClass</tt> is not supported.
      * @return a new DOMSource for reading the XML value designated by this
-     *      SQLXML instance
+     * SQLXML instance
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value or if the given <tt>sourceClass</tt> is not supported.
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Source>T createDOMSource(
+    protected <T extends Source> T createDOMSource(
             Class<T> sourceClass) throws SQLException {
 
         DOMSource source;
@@ -1517,10 +1518,10 @@ public class JDBCSQLXML implements SQLXML {
             throw Exceptions.sourceInstantiation(ex);
         }
 
-        Transformer  transformer  = JDBCSQLXML.getIdentityTransformer();
-        InputStream  stream       = this.getBinaryStreamImpl();
+        Transformer transformer = JDBCSQLXML.getIdentityTransformer();
+        InputStream stream = this.getBinaryStreamImpl();
         StreamSource streamSource = new StreamSource();
-        DOMResult    result       = new DOMResult();
+        DOMResult result = new DOMResult();
 
         streamSource.setInputStream(stream);
 
@@ -1540,13 +1541,13 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance. <p>
      *
      * @param sourceClass The class of the source
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *      value or if the given <tt>sourceClass</tt> is not supported.
      * @return a new SAXSource for reading the XML value designated by this
-     *      SQLXML instance
+     * SQLXML instance
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value or if the given <tt>sourceClass</tt> is not supported.
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Source>T createSAXSource(
+    protected <T extends Source> T createSAXSource(
             Class<T> sourceClass) throws SQLException {
 
         SAXSource source;
@@ -1570,7 +1571,7 @@ public class JDBCSQLXML implements SQLXML {
             throw Exceptions.sourceInstantiation(ex);
         }
 
-        Reader      reader      = getCharacterStreamImpl();
+        Reader reader = getCharacterStreamImpl();
         InputSource inputSource = new InputSource(reader);
 
         source.setInputSource(inputSource);
@@ -1583,20 +1584,20 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance. <p>
      *
      * @param sourceClass The class of the source
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *      value or if the given <tt>sourceClass</tt> is not supported.
      * @return a new StAXSource for reading the XML value designated by this
-     *      SQLXML instance
+     * SQLXML instance
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value or if the given <tt>sourceClass</tt> is not supported.
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Source>T createStAXSource(
+    protected <T extends Source> T createStAXSource(
             Class<T> sourceClass) throws SQLException {
 
-        StAXSource      source      = null;
-        Constructor     sourceCtor  = null;
-        Reader          reader      = null;
-        XMLInputFactory factory     = null;
-        XMLEventReader  eventReader = null;
+        StAXSource source = null;
+        Constructor sourceCtor = null;
+        Reader reader = null;
+        XMLInputFactory factory = null;
+        XMLEventReader eventReader = null;
 
         try {
             factory = XMLInputFactory.newInstance();
@@ -1606,9 +1607,9 @@ public class JDBCSQLXML implements SQLXML {
 
         try {
             sourceCtor =
-                (sourceClass == null)
-                ? StAXSource.class.getConstructor(XMLEventReader.class)
-                : sourceClass.getConstructor(XMLEventReader.class);
+                    (sourceClass == null)
+                            ? StAXSource.class.getConstructor(XMLEventReader.class)
+                            : sourceClass.getConstructor(XMLEventReader.class);
         } catch (SecurityException ex) {
             throw Exceptions.sourceInstantiation(ex);
         } catch (NoSuchMethodException ex) {
@@ -1646,11 +1647,11 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance.
      *
      * @param resultClass The class of the result, or null.
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *         value or the state is not writable
      * @return for setting the XML value designated by this SQLXML instance.
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value or the state is not writable
      */
-    protected <T extends Result>T createResult(
+    protected <T extends Result> T createResult(
             Class<T> resultClass) throws SQLException {
 
         checkWritable();
@@ -1658,7 +1659,7 @@ public class JDBCSQLXML implements SQLXML {
         setReadable(true);
 
         if ((resultClass == null)
-                   || StreamResult.class.isAssignableFrom(resultClass)) {
+                || StreamResult.class.isAssignableFrom(resultClass)) {
             return createStreamResult(resultClass);
         } else if (DOMResult.class.isAssignableFrom(resultClass)) {
             return createDOMResult(resultClass);
@@ -1676,13 +1677,13 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance.
      *
      * @param resultClass The class of the result, or null.
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *         value
      * @return for setting the XML value designated by this SQLXML instance.
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value
      */
 
 //  @SuppressWarnings("unchecked")
-    protected <T extends Result>T createStreamResult(
+    protected <T extends Result> T createStreamResult(
             Class<T> resultClass) throws SQLException {
 
         StreamResult result;
@@ -1718,12 +1719,12 @@ public class JDBCSQLXML implements SQLXML {
      * SQLXML instance.
      *
      * @param resultClass The class of the result, or null.
-     * @throws java.sql.SQLException if there is an error processing the XML
-     *         value
      * @return for setting the XML value designated by this SQLXML instance.
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Result>T createDOMResult(
+    protected <T extends Result> T createDOMResult(
             Class<T> resultClass) throws SQLException {
 
         try {
@@ -1752,16 +1753,16 @@ public class JDBCSQLXML implements SQLXML {
     }
 
     /**
-     *  Retrieves a new SAXResult for setting the XML value designated by this
-     *  SQLXML instance.
+     * Retrieves a new SAXResult for setting the XML value designated by this
+     * SQLXML instance.
      *
-     *  @param resultClass The class of the result, or null.
-     *  @throws java.sql.SQLException if there is an error processing the XML
-     *          value
-     *  @return for setting the XML value designated by this SQLXML instance.
+     * @param resultClass The class of the result, or null.
+     * @return for setting the XML value designated by this SQLXML instance.
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Result>T createSAXResult(
+    protected <T extends Result> T createSAXResult(
             Class<T> resultClass) throws SQLException {
 
         SAXResult result = null;
@@ -1801,33 +1802,33 @@ public class JDBCSQLXML implements SQLXML {
     }
 
     /**
-     *  Retrieves a new DOMResult for setting the XML value designated by this
-     *  SQLXML instance.
+     * Retrieves a new DOMResult for setting the XML value designated by this
+     * SQLXML instance.
      *
-     *  @param resultClass The class of the result, or null.
-     *  @throws java.sql.SQLException if there is an error processing the XML
-     *          value
-     *  @return for setting the XML value designated by this SQLXML instance.
+     * @param resultClass The class of the result, or null.
+     * @return for setting the XML value designated by this SQLXML instance.
+     * @throws java.sql.SQLException if there is an error processing the XML
+     *                               value
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Result>T createStAXResult(
+    protected <T extends Result> T createStAXResult(
             Class<T> resultClass) throws SQLException {
 
         StAXResult result = null;
 
         try {
             this.domResult =
-                new DOMResult((new SAX2DOMBuilder()).getDocument());
+                    new DOMResult((new SAX2DOMBuilder()).getDocument());
 
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
             XMLStreamWriter xmlStreamWriter =
-                factory.createXMLStreamWriter(this.domResult);
+                    factory.createXMLStreamWriter(this.domResult);
 
             if (resultClass == null || resultClass == StAXResult.class) {
                 result = new StAXResult(xmlStreamWriter);
             } else {
                 Constructor ctor =
-                    resultClass.getConstructor(XMLStreamWriter.class);
+                        resultClass.getConstructor(XMLStreamWriter.class);
 
                 result = (StAXResult) ctor.newInstance(xmlStreamWriter);
             }
@@ -1870,7 +1871,7 @@ public class JDBCSQLXML implements SQLXML {
         }
 
         /**
-         *  Retrieves a new SQLXML DOM instantiation exception.
+         * Retrieves a new SQLXML DOM instantiation exception.
          *
          * @param cause of the exception
          */
@@ -1880,8 +1881,8 @@ public class JDBCSQLXML implements SQLXML {
                     : new Exception(cause);
 
             return JDBCUtil.sqlException(ErrorCode.GENERAL_ERROR,
-                                     "SQLXML DOM instantiation failed: "
-                                     + cause, ex);
+                    "SQLXML DOM instantiation failed: "
+                            + cause, ex);
         }
 
         /**
@@ -1896,8 +1897,8 @@ public class JDBCSQLXML implements SQLXML {
                     : new Exception(cause);
 
             return JDBCUtil.sqlException(ErrorCode.GENERAL_ERROR,
-                                     "SQLXML Source instantiation failed: "
-                                     + cause, ex);
+                    "SQLXML Source instantiation failed: "
+                            + cause, ex);
         }
 
         /**
@@ -1912,8 +1913,8 @@ public class JDBCSQLXML implements SQLXML {
                     : new Exception(cause);
 
             return JDBCUtil.sqlException(ErrorCode.GENERAL_ERROR,
-                                     "SQLXML Result instantiation failed: "
-                                     + cause, ex);
+                    "SQLXML Result instantiation failed: "
+                            + cause, ex);
         }
 
         /**
@@ -1928,7 +1929,7 @@ public class JDBCSQLXML implements SQLXML {
                     : new Exception(cause);
 
             return JDBCUtil.sqlException(ErrorCode.GENERAL_ERROR,
-                                     "parse failed: " + cause, ex);
+                    "parse failed: " + cause, ex);
         }
 
         /**
@@ -1943,7 +1944,7 @@ public class JDBCSQLXML implements SQLXML {
                     : new Exception(cause);
 
             return JDBCUtil.sqlException(ErrorCode.GENERAL_ERROR,
-                                     "transform failed: " + cause, ex);
+                    "transform failed: " + cause, ex);
         }
 
         /**
@@ -1953,7 +1954,7 @@ public class JDBCSQLXML implements SQLXML {
          */
         static SQLException notReadable() {
             return JDBCUtil.sqlException(ErrorCode.GENERAL_IO_ERROR,
-                                     "SQLXML in not readable state");
+                    "SQLXML in not readable state");
         }
 
         /**
@@ -1964,8 +1965,8 @@ public class JDBCSQLXML implements SQLXML {
         static SQLException notReadable(String reason) {
 
             return JDBCUtil.sqlException(ErrorCode.GENERAL_IO_ERROR,
-                                     "SQLXML in not readable state: "
-                                     + reason);
+                    "SQLXML in not readable state: "
+                            + reason);
         }
 
         /**
@@ -1975,7 +1976,7 @@ public class JDBCSQLXML implements SQLXML {
          */
         static SQLException notWritable() {
             return JDBCUtil.sqlException(ErrorCode.GENERAL_IO_ERROR,
-                                     "SQLXML in not writable state");
+                    "SQLXML in not writable state");
         }
 
         /**
@@ -1985,7 +1986,7 @@ public class JDBCSQLXML implements SQLXML {
          */
         static SQLException directUpdateByLocatorNotSupported() {
             return JDBCUtil.sqlException(ErrorCode.X_0A000,
-                                     "SQLXML direct update by locator");
+                    "SQLXML direct update by locator");
         }
 
         /**
@@ -1995,7 +1996,7 @@ public class JDBCSQLXML implements SQLXML {
          */
         static SQLException inFreedState() {
             return JDBCUtil.sqlException(ErrorCode.GENERAL_ERROR,
-                                     "SQLXML in freed state");
+                    "SQLXML in freed state");
         }
     }
 
@@ -2038,20 +2039,21 @@ public class JDBCSQLXML implements SQLXML {
          * <p>Creates a new instance of SAX2DOMBuilder, which creates
          * a new document. The document is available via
          * {@link #getDocument()}.</p>
+         *
          * @throws javax.xml.parsers.ParserConfigurationException
          */
         public SAX2DOMBuilder() throws ParserConfigurationException {
 
             DocumentBuilderFactory documentBuilderFactory;
-            DocumentBuilder        documentBuilder;
+            DocumentBuilder documentBuilder;
 
             documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
             documentBuilderFactory.setValidating(false);
             documentBuilderFactory.setNamespaceAware(true);
 
-            documentBuilder  = documentBuilderFactory.newDocumentBuilder();
-            this.document    = documentBuilder.newDocument();
+            documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            this.document = documentBuilder.newDocument();
             this.currentNode = this.document;
         }
 
@@ -2088,6 +2090,7 @@ public class JDBCSQLXML implements SQLXML {
 
         /**
          * Retrieves the Locator. <p>
+         *
          * @return the Locator
          */
         public Locator getDocumentLocator() {
@@ -2102,7 +2105,7 @@ public class JDBCSQLXML implements SQLXML {
          * setDocumentLocator}).</p>
          *
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #endDocument
          */
         public void startDocument() throws SAXException {
@@ -2127,7 +2130,7 @@ public class JDBCSQLXML implements SQLXML {
          * input.</p>
          *
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #startDocument
          */
         public void endDocument() throws SAXException {
@@ -2165,11 +2168,11 @@ public class JDBCSQLXML implements SQLXML {
          * "xml" prefix, since it is predeclared and immutable.</p>
          *
          * @param prefix the Namespace prefix being declared.
-         *      An empty string is used for the default element namespace,
-         *      which has no prefix.
-         * @param uri the Namespace URI the prefix is mapped to
+         *               An empty string is used for the default element namespace,
+         *               which has no prefix.
+         * @param uri    the Namespace URI the prefix is mapped to
          * @throws org.xml.sax.SAXException the client may throw
-         *            an exception during processing
+         *                                  an exception during processing
          * @see #endPrefixMapping
          * @see #startElement
          */
@@ -2188,9 +2191,9 @@ public class JDBCSQLXML implements SQLXML {
          * guaranteed.</p>
          *
          * @param prefix the prefix that was being mapped.
-         *      This is the empty string when a default mapping scope ends.
+         *               This is the empty string when a default mapping scope ends.
          * @throws org.xml.sax.SAXException the client may throw
-         *            an exception during processing
+         *                                  an exception during processing
          * @see #startPrefixMapping
          * @see #endElement
          */
@@ -2244,20 +2247,20 @@ public class JDBCSQLXML implements SQLXML {
          * <p>Like {@link #characters characters()}, attribute values may have
          * characters that need more than one <code>char</code> value.  </p>
          *
-         * @param uri the Namespace URI, or the empty string if the
-         *        element has no Namespace URI or if Namespace
-         *        processing is not being performed
+         * @param uri       the Namespace URI, or the empty string if the
+         *                  element has no Namespace URI or if Namespace
+         *                  processing is not being performed
          * @param localName the local name (without prefix), or the
-         *        empty string if Namespace processing is not being
-         *        performed
-         * @param qName the qualified name (with prefix), or the
-         *        empty string if qualified names are not available
-         * @param atts the attributes attached to the element.  If
-         *        there are no attributes, it shall be an empty
-         *        Attributes object.  The value of this object after
-         *        startElement returns is undefined
+         *                  empty string if Namespace processing is not being
+         *                  performed
+         * @param qName     the qualified name (with prefix), or the
+         *                  empty string if qualified names are not available
+         * @param atts      the attributes attached to the element.  If
+         *                  there are no attributes, it shall be an empty
+         *                  Attributes object.  The value of this object after
+         *                  startElement returns is undefined
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #endElement
          * @see org.xml.sax.Attributes
          * @see org.xml.sax.helpers.AttributesImpl
@@ -2277,7 +2280,7 @@ public class JDBCSQLXML implements SQLXML {
 
             if (atts != null) {
                 for (int i = 0; i < atts.getLength(); i++) {
-                    String attrURI   = atts.getURI(i);
+                    String attrURI = atts.getURI(i);
                     String attrQName = atts.getQName(i);
                     String attrValue = atts.getValue(i);
 
@@ -2306,16 +2309,16 @@ public class JDBCSQLXML implements SQLXML {
          *
          * <p>For information on the names, see startElement.</p>
          *
-         * @param uri the Namespace URI, or the empty string if the
-         *        element has no Namespace URI or if Namespace
-         *        processing is not being performed
+         * @param uri       the Namespace URI, or the empty string if the
+         *                  element has no Namespace URI or if Namespace
+         *                  processing is not being performed
          * @param localName the local name (without prefix), or the
-         *        empty string if Namespace processing is not being
-         *        performed
-         * @param qName the qualified XML name (with prefix), or the
-         *        empty string if qualified names are not available
+         *                  empty string if Namespace processing is not being
+         *                  performed
+         * @param qName     the qualified XML name (with prefix), or the
+         *                  empty string if qualified names are not available
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          */
         public void endElement(String uri, String localName,
                                String qName) throws SAXException {
@@ -2358,11 +2361,11 @@ public class JDBCSQLXML implements SQLXML {
          * method rather than this one (validating parsers <em>must</em>
          * do so).</p>
          *
-         * @param ch the characters from the XML document
-         * @param start the start position in the array
+         * @param ch     the characters from the XML document
+         * @param start  the start position in the array
          * @param length the number of characters to read from the array
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #ignorableWhitespace
          * @see org.xml.sax.Locator
          */
@@ -2371,8 +2374,8 @@ public class JDBCSQLXML implements SQLXML {
 
             checkClosed();
 
-            Node   node = getCurrentNode().getLastChild();
-            String s    = new String(ch, start, length);
+            Node node = getCurrentNode().getLastChild();
+            String s = new String(ch, start, length);
 
             if ((node != null) && (node.getNodeType() == Node.TEXT_NODE)) {
                 ((Text) node).appendData(s);
@@ -2401,11 +2404,11 @@ public class JDBCSQLXML implements SQLXML {
          * <p>The application must not attempt to read from the array
          * outside of the specified range.</p>
          *
-         * @param ch the characters from the XML document
-         * @param start the start position in the array
+         * @param ch     the characters from the XML document
+         * @param start  the start position in the array
          * @param length the number of characters to read from the array
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #characters
          */
         public void ignorableWhitespace(char[] ch, int start,
@@ -2429,21 +2432,21 @@ public class JDBCSQLXML implements SQLXML {
          * value. </p>
          *
          * @param target the processing instruction target
-         * @param data the processing instruction data, or null if
-         *        none was supplied.  The data does not include any
-         *        whitespace separating it from the target
+         * @param data   the processing instruction data, or null if
+         *               none was supplied.  The data does not include any
+         *               whitespace separating it from the target
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          */
         public void processingInstruction(String target,
-                String data) throws SAXException {
+                                          String data) throws SAXException {
 
             checkClosed();
 
             ProcessingInstruction processingInstruction;
 
             processingInstruction =
-                getDocument().createProcessingInstruction(target, data);
+                    getDocument().createProcessingInstruction(target, data);
 
             getCurrentNode().appendChild(processingInstruction);
         }
@@ -2467,18 +2470,18 @@ public class JDBCSQLXML implements SQLXML {
          * properties.</p>
          *
          * @param name the name of the skipped entity.  If it is a
-         *        parameter entity, the name will begin with '%', and if
-         *        it is the external DTD subset, it will be the string
-         *        "[dtd]"
+         *             parameter entity, the name will begin with '%', and if
+         *             it is the external DTD subset, it will be the string
+         *             "[dtd]"
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          */
         public void skippedEntity(String name) throws SAXException {
 
             checkClosed();
 
             EntityReference entityReference =
-                getDocument().createEntityReference(name);
+                    getDocument().createEntityReference(name);
 
             getCurrentNode().appendChild(entityReference);
         }
@@ -2497,10 +2500,10 @@ public class JDBCSQLXML implements SQLXML {
 
             close();
 
-            this.document       = null;
+            this.document = null;
             this.currentElement = null;
-            this.currentNode    = null;
-            this.locator        = null;
+            this.currentNode = null;
+            this.locator = null;
         }
 
         /**
@@ -2542,6 +2545,7 @@ public class JDBCSQLXML implements SQLXML {
 
         /**
          * Assigns the current element.
+         *
          * @param element
          */
         protected void setCurrentElement(Element element) {
@@ -2557,6 +2561,7 @@ public class JDBCSQLXML implements SQLXML {
 
         /**
          * Assigns the current node. <p>
+         *
          * @param node
          */
         protected void setCurrentNode(Node node) {
@@ -2575,7 +2580,7 @@ public class JDBCSQLXML implements SQLXML {
          * Namespace declarations for an upcoming element.
          */
         private List<QualifiedName> namespaces =
-            new ArrayList<QualifiedName>();
+                new ArrayList<QualifiedName>();
 
         /**
          * Whether this object is closed.
@@ -2614,7 +2619,7 @@ public class JDBCSQLXML implements SQLXML {
          * setDocumentLocator}).</p>
          *
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #endDocument
          */
         public void startDocument() throws SAXException {
@@ -2646,7 +2651,7 @@ public class JDBCSQLXML implements SQLXML {
          * input.</p>
          *
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #startDocument
          */
         public void endDocument() throws SAXException {
@@ -2696,11 +2701,11 @@ public class JDBCSQLXML implements SQLXML {
          * method rather than this one (validating parsers <em>must</em>
          * do so).</p>
          *
-         * @param ch the characters from the XML document
-         * @param start the start position in the array
+         * @param ch     the characters from the XML document
+         * @param start  the start position in the array
          * @param length the number of characters to read from the array
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #ignorableWhitespace
          * @see org.xml.sax.Locator
          */
@@ -2763,19 +2768,19 @@ public class JDBCSQLXML implements SQLXML {
          * characters that need more than one <code>char</code> value.  </p>
          *
          * @param namespaceURI the Namespace URI, or the empty string if the
-         *        element has no Namespace URI or if Namespace
-         *        processing is not being performed
-         * @param localName the local name (without prefix), or the
-         *        empty string if Namespace processing is not being
-         *        performed
-         * @param qName the qualified name (with prefix), or the
-         *        empty string if qualified names are not available
-         * @param atts the attributes attached to the element.  If
-         *        there are no attributes, it shall be an empty
-         *        Attributes object.  The value of this object after
-         *        startElement returns is undefined
+         *                     element has no Namespace URI or if Namespace
+         *                     processing is not being performed
+         * @param localName    the local name (without prefix), or the
+         *                     empty string if Namespace processing is not being
+         *                     performed
+         * @param qName        the qualified name (with prefix), or the
+         *                     empty string if qualified names are not available
+         * @param atts         the attributes attached to the element.  If
+         *                     there are no attributes, it shall be an empty
+         *                     Attributes object.  The value of this object after
+         *                     startElement returns is undefined
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #endElement
          * @see org.xml.sax.Attributes
          * @see org.xml.sax.helpers.AttributesImpl
@@ -2787,7 +2792,7 @@ public class JDBCSQLXML implements SQLXML {
             checkClosed();
 
             try {
-                int    qi     = qName.indexOf(':');
+                int qi = qName.indexOf(':');
                 String prefix = (qi > 0) ? qName.substring(0, qi)
                         : "";
 
@@ -2824,15 +2829,15 @@ public class JDBCSQLXML implements SQLXML {
          * <p>For information on the names, see startElement.</p>
          *
          * @param namespaceURI the Namespace URI, or the empty string if the
-         *        element has no Namespace URI or if Namespace
-         *        processing is not being performed
-         * @param localName the local name (without prefix), or the
-         *        empty string if Namespace processing is not being
-         *        performed
-         * @param qName the qualified XML name (with prefix), or the
-         *        empty string if qualified names are not available
+         *                     element has no Namespace URI or if Namespace
+         *                     processing is not being performed
+         * @param localName    the local name (without prefix), or the
+         *                     empty string if Namespace processing is not being
+         *                     performed
+         * @param qName        the qualified XML name (with prefix), or the
+         *                     empty string if qualified names are not available
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          */
         public void endElement(String namespaceURI, String localName,
                                String qName) throws SAXException {
@@ -2876,11 +2881,11 @@ public class JDBCSQLXML implements SQLXML {
          * "xml" prefix, since it is predeclared and immutable.</p>
          *
          * @param prefix the Namespace prefix being declared.
-         *      An empty string is used for the default element namespace,
-         *      which has no prefix.
-         * @param uri the Namespace URI the prefix is mapped to
+         *               An empty string is used for the default element namespace,
+         *               which has no prefix.
+         * @param uri    the Namespace URI the prefix is mapped to
          * @throws org.xml.sax.SAXException the client may throw
-         *            an exception during processing
+         *                                  an exception during processing
          * @see #endPrefixMapping
          * @see #startElement
          */
@@ -2907,9 +2912,9 @@ public class JDBCSQLXML implements SQLXML {
          * guaranteed.</p>
          *
          * @param prefix the prefix that was being mapped.
-         *      This is the empty string when a default mapping scope ends.
+         *               This is the empty string when a default mapping scope ends.
          * @throws org.xml.sax.SAXException the client may throw
-         *            an exception during processing
+         *                                  an exception during processing
          * @see #startPrefixMapping
          * @see #endElement
          */
@@ -2938,11 +2943,11 @@ public class JDBCSQLXML implements SQLXML {
          * <p>The application must not attempt to read from the array
          * outside of the specified range.</p>
          *
-         * @param ch the characters from the XML document
-         * @param start the start position in the array
+         * @param ch     the characters from the XML document
+         * @param start  the start position in the array
          * @param length the number of characters to read from the array
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          * @see #characters
          */
         public void ignorableWhitespace(char[] ch, int start,
@@ -2966,14 +2971,14 @@ public class JDBCSQLXML implements SQLXML {
          * value. </p>
          *
          * @param target the processing instruction target
-         * @param data the processing instruction data, or null if
-         *        none was supplied.  The data does not include any
-         *        whitespace separating it from the target
+         * @param data   the processing instruction data, or null if
+         *               none was supplied.  The data does not include any
+         *               whitespace separating it from the target
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          */
         public void processingInstruction(String target,
-                String data) throws SAXException {
+                                          String data) throws SAXException {
 
             checkClosed();
 
@@ -3017,6 +3022,7 @@ public class JDBCSQLXML implements SQLXML {
 
         /**
          * Retrieves the Locator. <p>
+         *
          * @return the Locator
          */
         public Locator getDocumentLocator() {
@@ -3042,11 +3048,11 @@ public class JDBCSQLXML implements SQLXML {
          * properties.</p>
          *
          * @param name the name of the skipped entity.  If it is a
-         *        parameter entity, the name will begin with '%', and if
-         *        it is the external DTD subset, it will be the string
-         *        "[dtd]"
+         *             parameter entity, the name will begin with '%', and if
+         *             it is the external DTD subset, it will be the string
+         *             "[dtd]"
          * @throws org.xml.sax.SAXException any SAX exception, possibly
-         *            wrapping another exception
+         *                                  wrapping another exception
          */
         public void skippedEntity(String name) throws SAXException {
 
@@ -3088,8 +3094,8 @@ public class JDBCSQLXML implements SQLXML {
                 } catch (XMLStreamException e) {
                     throw new IOException(e);
                 } finally {
-                    this.writer     = null;
-                    this.locator    = null;
+                    this.writer = null;
+                    this.locator = null;
                     this.namespaces = null;
                 }
             }
@@ -3124,7 +3130,7 @@ public class JDBCSQLXML implements SQLXML {
 
             public QualifiedName(final String prefix,
                                  final String namespaceName) {
-                this.prefix        = prefix;
+                this.prefix = prefix;
                 this.namespaceName = namespaceName;
             }
         }

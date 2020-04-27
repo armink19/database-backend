@@ -50,28 +50,28 @@ import java.io.IOException;
  */
 public class RAShadowFile {
 
-    private static final int    headerSize = 12;
-    final EventLogInterface     logger;
-    final String                pathName;
+    private static final int headerSize = 12;
+    final EventLogInterface logger;
+    final String pathName;
     final RandomAccessInterface source;
-    RandomAccessInterface       dest;
-    final int                   pageSize;
-    final long                  maxSize;
-    final BitMap                bitMap;
-    boolean                     zeroPageSet;
-    long                        savedLength;
-    long                        synchLength;
-    byte[]                      buffer;
-    HsqlByteArrayOutputStream   byteArrayOutputStream;
+    RandomAccessInterface dest;
+    final int pageSize;
+    final long maxSize;
+    final BitMap bitMap;
+    boolean zeroPageSet;
+    long savedLength;
+    long synchLength;
+    byte[] buffer;
+    HsqlByteArrayOutputStream byteArrayOutputStream;
 
     RAShadowFile(EventLogInterface logger, RandomAccessInterface source,
                  String pathName, long maxSize, int pageSize) {
 
-        this.logger   = logger;
+        this.logger = logger;
         this.pathName = pathName;
-        this.source   = source;
+        this.source = source;
         this.pageSize = pageSize;
-        this.maxSize  = maxSize;
+        this.maxSize = maxSize;
 
         int bitSize = (int) (maxSize / pageSize);
 
@@ -79,8 +79,8 @@ public class RAShadowFile {
             bitSize++;
         }
 
-        bitMap                = new BitMap(bitSize, false);
-        buffer                = new byte[pageSize + headerSize];
+        bitMap = new BitMap(bitSize, false);
+        buffer = new byte[pageSize + headerSize];
         byteArrayOutputStream = new HsqlByteArrayOutputStream(buffer);
     }
 
@@ -108,7 +108,7 @@ public class RAShadowFile {
         }
 
         int startPageOffset = (int) (fileOffset / pageSize);
-        int endPageOffset   = (int) (endOffset / pageSize);
+        int endPageOffset = (int) (endOffset / pageSize);
 
         if (endOffset % pageSize == 0) {
             endPageOffset--;
@@ -127,9 +127,9 @@ public class RAShadowFile {
             return 0;
         }
 
-        long position  = (long) pageOffset * pageSize;
-        int  readSize  = pageSize;
-        int  writeSize = buffer.length;
+        long position = (long) pageOffset * pageSize;
+        int readSize = pageSize;
+        int writeSize = buffer.length;
 
         if (maxSize - position < pageSize) {
             readSize = (int) (maxSize - position);
@@ -165,7 +165,7 @@ public class RAShadowFile {
             dest.setLength(writePos);
             close();
             logger.logSevereEvent("shadow backup failure pos " + position
-                                  + " " + readSize, t);
+                    + " " + readSize, t);
 
             throw JavaSystem.toIOException(t);
         }
@@ -207,23 +207,25 @@ public class RAShadowFile {
     }
 
     private static RandomAccessInterface getStorage(Database database,
-            String pathName, String openMode) throws IOException {
+                                                    String pathName, String openMode) throws IOException {
         return new RAFileSimple(database.logger, pathName, openMode);
     }
 
-    /** todo - take account of incomplete addition of block due to lack of disk */
+    /**
+     * todo - take account of incomplete addition of block due to lack of disk
+     */
 
     // buggy database files had size == position == 0 at the end
     public static void restoreFile(Database database, String sourceName,
                                    String destName) throws IOException {
 
         RandomAccessInterface source = getStorage(database, sourceName, "r");
-        RandomAccessInterface dest   = getStorage(database, destName, "rw");
+        RandomAccessInterface dest = getStorage(database, destName, "rw");
 
         while (source.getFilePointer() != source.length()) {
-            int    size     = source.readInt();
-            long   position = source.readLong();
-            byte[] buffer   = new byte[size];
+            int size = source.readInt();
+            long position = source.readLong();
+            byte[] buffer = new byte[size];
 
             source.read(buffer, 0, buffer.length);
             dest.seek(position);
@@ -238,9 +240,9 @@ public class RAShadowFile {
     class InputStreamShadow implements InputStreamInterface {
 
         FileInputStream is;
-        long            limitSize   = 0;
-        long            fetchedSize = 0;
-        boolean         initialised = false;
+        long limitSize = 0;
+        long fetchedSize = 0;
+        boolean initialised = false;
 
         public int read() throws IOException {
 
@@ -256,7 +258,7 @@ public class RAShadowFile {
 
             if (byteread < 0) {
                 throw new IOException("backup file not complete "
-                                      + fetchedSize + " " + limitSize);
+                        + fetchedSize + " " + limitSize);
             }
 
             fetchedSize++;
@@ -287,7 +289,7 @@ public class RAShadowFile {
 
             if (count < 0) {
                 throw new IOException("backup file not complete "
-                                      + fetchedSize + " " + limitSize);
+                        + fetchedSize + " " + limitSize);
             }
 
             fetchedSize += count;
@@ -332,7 +334,8 @@ public class RAShadowFile {
             if (limitSize > 0) {
                 try {
                     is = new FileInputStream(pathName);
-                } catch (FileNotFoundException e) {}
+                } catch (FileNotFoundException e) {
+                }
             }
 
             initialised = true;

@@ -65,20 +65,20 @@ import java.util.Vector;
  * @since 1.7.0
  */
 class ConnectionDialogSwing extends JDialog
-implements ActionListener, ItemListener {
+        implements ActionListener, ItemListener {
 
     /**
      * Comment for <code>serialVersionUID</code>
      */
     private static final long serialVersionUID = 1L;
-    private Connection        mConnection;
-    private JTextField        mName, mDriver, mURL, mUser;
-    private JPasswordField    mPassword;
-    private String[][]        connTypes;
-    private Hashtable         settings;
-    private JButton           okCancel, clear;
+    private Connection mConnection;
+    private JTextField mName, mDriver, mURL, mUser;
+    private JPasswordField mPassword;
+    private String[][] connTypes;
+    private Hashtable settings;
+    private JButton okCancel, clear;
     private JComboBox mSettingName =
-        new JComboBox(loadRecentConnectionSettings());
+            new JComboBox(loadRecentConnectionSettings());
     private static ConnectionSetting currentConnectionSetting = null;
 
     public static void setConnectionSetting(
@@ -87,7 +87,7 @@ implements ActionListener, ItemListener {
     }
 
     public static Connection createConnection(String driver, String url,
-            String user, String password) throws Exception {
+                                              String user, String password) throws Exception {
 
         Class.forName(driver);
 
@@ -100,11 +100,11 @@ implements ActionListener, ItemListener {
 
     private void create() {
 
-        Box main     = Box.createHorizontalBox();
-        Box labels   = Box.createVerticalBox();
+        Box main = Box.createHorizontalBox();
+        Box labels = Box.createVerticalBox();
         Box controls = Box.createVerticalBox();
-        Box buttons  = Box.createHorizontalBox();
-        Box whole    = Box.createVerticalBox();
+        Box buttons = Box.createHorizontalBox();
+        Box whole = Box.createVerticalBox();
 
         // (weconsultants@users) New code
         Box extra = Box.createHorizontalBox();
@@ -231,7 +231,7 @@ implements ActionListener, ItemListener {
         doLayout();
         pack();
 
-        Dimension d    = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension size = getSize();
 
         if (currentConnectionSetting != null) {
@@ -245,7 +245,7 @@ implements ActionListener, ItemListener {
         // (ulrivo): full size on screen with less than 640 width
         if (d.width >= 640) {
             setLocation((d.width - size.width) / 2,
-                        (d.height - size.height) / 2);
+                    (d.height - size.height) / 2);
         } else {
             setLocation(0, 0);
             setSize(d);
@@ -314,19 +314,19 @@ implements ActionListener, ItemListener {
                 }
 
                 mConnection =
-                    createConnection(mDriver.getText(), mURL.getText(),
-                                     mUser.getText(),
-                                     new String(mPassword.getPassword()));
+                        createConnection(mDriver.getText(), mURL.getText(),
+                                mUser.getText(),
+                                new String(mPassword.getPassword()));
 
                 // (weconsultants@users) New code
                 if (mName.getText() != null
                         && mName.getText().trim().length() != 0) {
                     ConnectionSetting newSetting = new ConnectionSetting(
-                        mName.getText(), mDriver.getText(), mURL.getText(),
-                        mUser.getText(), new String(mPassword.getPassword()));
+                            mName.getText(), mDriver.getText(), mURL.getText(),
+                            mUser.getText(), new String(mPassword.getPassword()));
 
                     ConnectionDialogCommon.addToRecentConnectionSettings(
-                        settings, newSetting);
+                            settings, newSetting);
                 }
 
                 dispose();
@@ -346,7 +346,7 @@ implements ActionListener, ItemListener {
 
             if (s2 != null) {
                 ConnectionSetting setting =
-                    (ConnectionSetting) settings.get(s2);
+                        (ConnectionSetting) settings.get(s2);
 
                 if (setting != null) {
                     mName.setText(setting.getName());

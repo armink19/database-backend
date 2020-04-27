@@ -42,13 +42,13 @@ import java.io.InputStream;
  */
 public class StringInputStream extends InputStream {
 
-    protected int    strOffset  = 0;
-    protected int    charOffset = 0;
-    protected int    available;
+    protected int strOffset = 0;
+    protected int charOffset = 0;
+    protected int available;
     protected String str;
 
     public StringInputStream(String s) {
-        str       = s;
+        str = s;
         available = s.length() * 2;
     }
 

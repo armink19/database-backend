@@ -80,7 +80,7 @@ import org.hsqldb.persist.PersistentStore;
 /**
  * Base class for a database row object implementing rows for
  * memory resident tables.<p>
- *
+ * <p>
  * Subclass RowAVLDisk implements rows for CACHED and TEXT tables.<p>
  * New class derived from Hypersonic SQL code and enhanced in HSQLDB.<p>
  *
@@ -94,15 +94,15 @@ public class RowAVL extends Row {
     public NodeAVL nPrimaryNode;
 
     /**
-     *  Default constructor used only in subclasses.
+     * Default constructor used only in subclasses.
      */
     protected RowAVL(TableBase table, Object[] data) {
         super(table, data);
     }
 
     /**
-     *  Constructor for MEMORY table Row. The result is a Row with Nodes that
-     *  are not yet linked with other Nodes in the AVL indexes.
+     * Constructor for MEMORY table Row. The result is a Row with Nodes that
+     * are not yet linked with other Nodes in the AVL indexes.
      */
     public RowAVL(TableBase table, Object[] data, long position,
                   PersistentStore store) {
@@ -124,7 +124,7 @@ public class RowAVL extends Row {
 
         for (int i = 1; i < indexCount; i++) {
             n.nNext = new NodeAVL(this);
-            n       = n.nNext;
+            n = n.nNext;
         }
     }
 
@@ -144,8 +144,8 @@ public class RowAVL extends Row {
     }
 
     /**
-     *  Returns the Node for the next Index on this database row, given the
-     *  Node for any Index.
+     * Returns the Node for the next Index on this database row, given the
+     * Node for any Index.
      */
     NodeAVL getNextNode(NodeAVL n) {
 
@@ -161,9 +161,9 @@ public class RowAVL extends Row {
     public NodeAVL insertNode(int index) {
 
         NodeAVL backnode = getNode(index - 1);
-        NodeAVL newnode  = new NodeAVL(this);
+        NodeAVL newnode = new NodeAVL(this);
 
-        newnode.nNext  = backnode.nNext;
+        newnode.nNext = backnode.nNext;
         backnode.nNext = newnode;
 
         return newnode;
@@ -191,7 +191,8 @@ public class RowAVL extends Row {
         }
     }
 
-    public void restore() {}
+    public void restore() {
+    }
 
     /**
      * Helps GC, removing secondary node links. Keeps primary index links to
@@ -206,7 +207,7 @@ public class RowAVL extends Row {
         while (n != null) {
             NodeAVL last = n;
 
-            n          = n.nNext;
+            n = n.nNext;
             last.nNext = null;
         }
     }

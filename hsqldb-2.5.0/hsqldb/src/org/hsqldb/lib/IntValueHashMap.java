@@ -44,7 +44,7 @@ import java.util.NoSuchElementException;
  */
 public class IntValueHashMap extends BaseHashMap {
 
-    Set                keySet;
+    Set keySet;
     private Collection values;
 
     public IntValueHashMap() {
@@ -52,9 +52,9 @@ public class IntValueHashMap extends BaseHashMap {
     }
 
     public IntValueHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.objectKeyOrValue,
-              BaseHashMap.intKeyOrValue, false);
+                BaseHashMap.intKeyOrValue, false);
     }
 
     public int get(Object key) throws NoSuchElementException {
@@ -63,7 +63,7 @@ public class IntValueHashMap extends BaseHashMap {
             throw new NoSuchElementException();
         }
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {
@@ -79,7 +79,7 @@ public class IntValueHashMap extends BaseHashMap {
             throw new NoSuchElementException();
         }
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {
@@ -95,7 +95,7 @@ public class IntValueHashMap extends BaseHashMap {
             throw new NoSuchElementException();
         }
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {

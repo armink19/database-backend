@@ -45,18 +45,18 @@ public class DirectoryBlockCachedObject extends CachedObjectBase {
     static final int fileSizeFactor = 12;
 
     //
-    int[]  tableId;
-    int[]  bitmapAddress;
+    int[] tableId;
+    int[] bitmapAddress;
     char[] freeSpace;
     char[] freeSpaceBlock;
 
     public DirectoryBlockCachedObject(int capacity) {
 
-        tableId        = new int[capacity];
-        bitmapAddress  = new int[capacity];
-        freeSpace      = new char[capacity];
+        tableId = new int[capacity];
+        bitmapAddress = new int[capacity];
+        freeSpace = new char[capacity];
         freeSpaceBlock = new char[capacity];
-        hasChanged     = true;
+        hasChanged = true;
     }
 
     public void read(RowInputInterface in) {
@@ -123,25 +123,26 @@ public class DirectoryBlockCachedObject extends CachedObjectBase {
 
     public void setTableId(int pos, int value) {
         tableId[pos] = value;
-        hasChanged   = true;
+        hasChanged = true;
     }
 
     public void setBitmapAddress(int pos, int value) {
         bitmapAddress[pos] = value;
-        hasChanged         = true;
+        hasChanged = true;
     }
 
     public void setFreeSpace(int pos, char value) {
         freeSpace[pos] = value;
-        hasChanged     = true;
+        hasChanged = true;
     }
 
     public void setFreeBlock(int pos, char value) {
         freeSpaceBlock[pos] = value;
-        hasChanged          = true;
+        hasChanged = true;
     }
 
-    public void setLastUsed(int pos, byte value) {}
+    public void setLastUsed(int pos, byte value) {
+    }
 
     public int getTableId(int pos) {
         return tableId[pos];

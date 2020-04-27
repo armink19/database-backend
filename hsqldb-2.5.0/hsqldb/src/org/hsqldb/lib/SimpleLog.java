@@ -51,39 +51,39 @@ import java.io.PrintWriter;
  */
 public class SimpleLog {
 
-    public static final int LOG_NONE   = 0;
-    public static final int LOG_ERROR  = 1;
+    public static final int LOG_NONE = 0;
+    public static final int LOG_ERROR = 1;
     public static final int LOG_NORMAL = 2;
     public static final int LOG_DETAIL = 3;
     public static final int LOG_RESULT = 4;
 
     //
     public static final String logTypeNameEngine = "ENGINE";
-    static final String[]      appLogTypeNames   = {
-        "", "ERROR ", "NORMAL", "DETAIL"
+    static final String[] appLogTypeNames = {
+            "", "ERROR ", "NORMAL", "DETAIL"
     };
-    static final String[]      sqlLogTypeNames   = {
-        "", "BASIC ", "NORMAL", "DETAIL", "RESULT"
+    static final String[] sqlLogTypeNames = {
+            "", "BASIC ", "NORMAL", "DETAIL", "RESULT"
     };
 
     //
-    private PrintWriter   writer;
-    private int           level;
-    private boolean       isSystem;
-    private boolean       isSQL;
-    String[]              logTypeNames;
-    private String        filePath;
+    private PrintWriter writer;
+    private int level;
+    private boolean isSystem;
+    private boolean isSQL;
+    String[] logTypeNames;
+    private String filePath;
     private StringBuilder sb;
-    SystemTimeString      sysTime = new SystemTimeString();
+    SystemTimeString sysTime = new SystemTimeString();
 
     public SimpleLog(String path, int level, boolean isSQL) {
 
         this.isSystem = path == null;
         this.filePath = path;
-        this.isSQL    = isSQL;
-        logTypeNames  = isSQL ? sqlLogTypeNames
-                              : appLogTypeNames;
-        sb            = new StringBuilder(256);
+        this.isSQL = isSQL;
+        logTypeNames = isSQL ? sqlLogTypeNames
+                : appLogTypeNames;
+        sb = new StringBuilder(256);
 
         setLevel(level);
     }
@@ -115,7 +115,7 @@ public class SimpleLog {
             writer = new PrintWriter(new FileWriter(file, true), true);
         } catch (Exception e) {
             isSystem = true;
-            writer   = new PrintWriter(System.out);
+            writer = new PrintWriter(System.out);
         }
     }
 
@@ -199,7 +199,7 @@ public class SimpleLog {
 
         sb.append(message);
 
-        Throwable           temp     = new Throwable();
+        Throwable temp = new Throwable();
         StackTraceElement[] elements = temp.getStackTrace();
 
         if (elements.length > 1) {

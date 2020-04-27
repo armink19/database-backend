@@ -60,37 +60,57 @@ import org.hsqldb.rights.Right;
 // fredt@users - 1.9.0 - support for multi-row inserts
 public abstract class StatementDMQL extends Statement {
 
-    /** target table for INSERT_XXX, UPDATE and DELETE and MERGE */
+    /**
+     * target table for INSERT_XXX, UPDATE and DELETE and MERGE
+     */
     Table targetTable;
     Table baseTable;
 
-    /** column map of query expression */
-    int[]           baseColumnMap;
+    /**
+     * column map of query expression
+     */
+    int[] baseColumnMap;
     RangeVariable[] targetRangeVariables = RangeVariable.emptyArray;
 
-    /** source table for MERGE */
+    /**
+     * source table for MERGE
+     */
     Table sourceTable;
 
-    /** condition expression for UPDATE, MERGE and DELETE */
+    /**
+     * condition expression for UPDATE, MERGE and DELETE
+     */
     Expression condition;
 
-    /** for TRUNCATE variation of DELETE */
+    /**
+     * for TRUNCATE variation of DELETE
+     */
     boolean restartIdentity;
 
-    /** column map for INSERT operation direct or via MERGE */
+    /**
+     * column map for INSERT operation direct or via MERGE
+     */
     int[] insertColumnMap = ValuePool.emptyIntArray;
 
-    /** column map for UPDATE operation direct or via MERGE */
-    int[] updateColumnMap     = ValuePool.emptyIntArray;
+    /**
+     * column map for UPDATE operation direct or via MERGE
+     */
+    int[] updateColumnMap = ValuePool.emptyIntArray;
     int[] baseUpdateColumnMap = ValuePool.emptyIntArray;
 
-    /** Column value Expressions for UPDATE and MERGE. */
+    /**
+     * Column value Expressions for UPDATE and MERGE.
+     */
     Expression[] updateExpressions = Expression.emptyArray;
 
-    /** Column value Expressions for MERGE */
+    /**
+     * Column value Expressions for MERGE
+     */
     Expression[][] multiColumnValues;
 
-    /** INSERT_VALUES */
+    /**
+     * INSERT_VALUES
+     */
     Expression insertExpression;
 
     /**
@@ -103,7 +123,7 @@ public abstract class StatementDMQL extends Statement {
     /**
      * VIEW check
      */
-    Expression    updatableTableCheck;
+    Expression updatableTableCheck;
     RangeVariable checkRangeVariable;
 
     /**
@@ -131,14 +151,14 @@ public abstract class StatementDMQL extends Statement {
      * Database objects used
      */
     NumberSequence[] sequences;
-    Routine[]        routines;
-    RangeVariable[]  rangeVariables;
+    Routine[] routines;
+    RangeVariable[] rangeVariables;
 
     StatementDMQL(int type, int group, HsqlName schemaName) {
 
         super(type, group);
 
-        this.schemaName             = schemaName;
+        this.schemaName = schemaName;
         this.isTransactionStatement = true;
     }
 
@@ -184,34 +204,34 @@ public abstract class StatementDMQL extends Statement {
     private Result getExplainResult(Session session) {
 
         Result result = Result.newSingleColumnStringResult("OPERATION",
-            describe(session));
+                describe(session));
         OrderedHashSet set = getReferences();
 
-        result.navigator.add(new Object[]{ "Object References" });
+        result.navigator.add(new Object[]{"Object References"});
 
         for (int i = 0; i < set.size(); i++) {
             HsqlName name = (HsqlName) set.get(i);
 
             result.navigator.add(new Object[]{
-                name.getSchemaQualifiedStatementName() });
+                    name.getSchemaQualifiedStatementName()});
         }
 
-        result.navigator.add(new Object[]{ "Read Locks" });
+        result.navigator.add(new Object[]{"Read Locks"});
 
         for (int i = 0; i < readTableNames.length; i++) {
             HsqlName name = readTableNames[i];
 
             result.navigator.add(new Object[]{
-                name.getSchemaQualifiedStatementName() });
+                    name.getSchemaQualifiedStatementName()});
         }
 
-        result.navigator.add(new Object[]{ "WriteLocks" });
+        result.navigator.add(new Object[]{"WriteLocks"});
 
         for (int i = 0; i < writeTableNames.length; i++) {
             HsqlName name = writeTableNames[i];
 
             result.navigator.add(new Object[]{
-                name.getSchemaQualifiedStatementName() });
+                    name.getSchemaQualifiedStatementName()});
         }
 
         return result;
@@ -227,15 +247,15 @@ public abstract class StatementDMQL extends Statement {
 
         switch (type) {
 
-            case StatementTypes.INSERT :
+            case StatementTypes.INSERT:
                 return insertCheckColumns;
 
-            case StatementTypes.UPDATE_WHERE :
+            case StatementTypes.UPDATE_WHERE:
                 return updateCheckColumns;
 
-            case StatementTypes.MERGE :
+            case StatementTypes.MERGE:
                 boolean[] check =
-                    (boolean[]) ArrayUtil.duplicateArray(insertCheckColumns);
+                        (boolean[]) ArrayUtil.duplicateArray(insertCheckColumns);
 
                 ArrayUtil.orBooleanArray(updateCheckColumns, check);
 
@@ -317,11 +337,11 @@ public abstract class StatementDMQL extends Statement {
 
         setParameterMetaData();
 
-        subqueries         = getSubqueries(session);
+        subqueries = getSubqueries(session);
         rangeIteratorCount = compileContext.getRangeVarCount();
-        rangeVariables     = compileContext.getAllRangeVariables();
-        sequences          = compileContext.getSequences();
-        routines           = compileContext.getRoutines();
+        rangeVariables = compileContext.getAllRangeVariables();
+        sequences = compileContext.getSequences();
+        routines = compileContext.getRoutines();
 
         OrderedHashSet set = new OrderedHashSet();
 
@@ -384,7 +404,7 @@ public abstract class StatementDMQL extends Statement {
             if (owner != null && owner.isSystem()) {
                 if (!session.getUser().isSystem()) {
                     throw Error.error(ErrorCode.X_42501,
-                                      targetTable.getName().name);
+                            targetTable.getName().name);
                 }
             }
 
@@ -420,7 +440,7 @@ public abstract class StatementDMQL extends Statement {
             }
 
             Right right = session.getGrantee().checkSelect(range.rangeTable,
-                range.usedColumns);
+                    range.usedColumns);
             ExpressionLogical expr = right.getFilterExpression();
 
             range.setFilterExpression(session, expr);
@@ -428,34 +448,34 @@ public abstract class StatementDMQL extends Statement {
 
         switch (type) {
 
-            case StatementTypes.CALL : {
+            case StatementTypes.CALL: {
                 break;
             }
-            case StatementTypes.INSERT : {
+            case StatementTypes.INSERT: {
                 session.getGrantee().checkInsert(targetTable,
-                                                 insertCheckColumns);
+                        insertCheckColumns);
 
                 break;
             }
-            case StatementTypes.SELECT_CURSOR :
+            case StatementTypes.SELECT_CURSOR:
                 break;
 
-            case StatementTypes.DELETE_WHERE : {
+            case StatementTypes.DELETE_WHERE: {
                 session.getGrantee().checkDelete(targetTable);
 
                 break;
             }
-            case StatementTypes.UPDATE_WHERE : {
+            case StatementTypes.UPDATE_WHERE: {
                 session.getGrantee().checkUpdate(targetTable,
-                                                 updateCheckColumns);
+                        updateCheckColumns);
 
                 break;
             }
-            case StatementTypes.MERGE : {
+            case StatementTypes.MERGE: {
                 session.getGrantee().checkInsert(targetTable,
-                                                 insertCheckColumns);
+                        insertCheckColumns);
                 session.getGrantee().checkUpdate(targetTable,
-                                                 updateCheckColumns);
+                        updateCheckColumns);
 
                 break;
             }
@@ -483,13 +503,13 @@ public abstract class StatementDMQL extends Statement {
 
         switch (type) {
 
-            case StatementTypes.DELETE_WHERE :
-            case StatementTypes.INSERT :
-            case StatementTypes.UPDATE_WHERE :
-            case StatementTypes.MERGE :
+            case StatementTypes.DELETE_WHERE:
+            case StatementTypes.INSERT:
+            case StatementTypes.UPDATE_WHERE:
+            case StatementTypes.MERGE:
                 return ResultMetaData.emptyResultMetaData;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementDMQL");
         }
     }
@@ -522,19 +542,19 @@ public abstract class StatementDMQL extends Statement {
      */
     String describeImpl(Session session) throws Exception {
 
-        StringBuilder sb     = new StringBuilder();
-        int           blanks = 0;
+        StringBuilder sb = new StringBuilder();
+        int blanks = 0;
 
         switch (type) {
 
-            case StatementTypes.SELECT_CURSOR : {
+            case StatementTypes.SELECT_CURSOR: {
                 sb.append(queryExpression.describe(session, 0));
                 appendParams(sb).append('\n');
                 appendSubqueries(session, sb, 2);
 
                 return sb.toString();
             }
-            case StatementTypes.INSERT : {
+            case StatementTypes.INSERT: {
                 if (queryExpression == null) {
                     sb.append("INSERT VALUES");
                     sb.append('[').append('\n');
@@ -550,14 +570,14 @@ public abstract class StatementDMQL extends Statement {
                     appendColumns(sb, insertColumnMap).append('\n');
                     appendTable(sb).append('\n');
                     sb.append(queryExpression.describe(session,
-                                                       blanks)).append('\n');
+                            blanks)).append('\n');
                     appendParams(sb).append('\n');
                     appendSubqueries(session, sb, 2).append(']');
 
                     return sb.toString();
                 }
             }
-            case StatementTypes.UPDATE_WHERE : {
+            case StatementTypes.UPDATE_WHERE: {
                 sb.append("UPDATE");
                 sb.append('[').append('\n');
                 appendColumns(sb, updateColumnMap).append('\n');
@@ -574,7 +594,7 @@ public abstract class StatementDMQL extends Statement {
 
                 return sb.toString();
             }
-            case StatementTypes.DELETE_WHERE : {
+            case StatementTypes.DELETE_WHERE: {
                 sb.append("DELETE");
                 sb.append('[').append('\n');
                 appendTable(sb).append('\n');
@@ -590,13 +610,13 @@ public abstract class StatementDMQL extends Statement {
 
                 return sb.toString();
             }
-            case StatementTypes.CALL : {
+            case StatementTypes.CALL: {
                 sb.append("CALL");
                 sb.append('[').append(']');
 
                 return sb.toString();
             }
-            case StatementTypes.MERGE : {
+            case StatementTypes.MERGE: {
                 sb.append("MERGE");
                 sb.append('[').append('\n');
                 appendMultiColumns(sb, insertColumnMap).append('\n');
@@ -614,7 +634,7 @@ public abstract class StatementDMQL extends Statement {
 
                 return sb.toString();
             }
-            default : {
+            default: {
                 return "UNKNOWN";
             }
         }
@@ -657,7 +677,7 @@ public abstract class StatementDMQL extends Statement {
     private StringBuilder appendSourceTable(StringBuilder sb) {
 
         sb.append("SOURCE TABLE[").append(sourceTable.getName().name).append(
-            ']');
+                ']');
 
         return sb;
     }
@@ -672,8 +692,8 @@ public abstract class StatementDMQL extends Statement {
 
         for (int i = 0; i < columnMap.length; i++) {
             sb.append('\n').append(columnMap[i]).append(':').append(
-                ' ').append(
-                targetTable.getColumn(columnMap[i]).getNameString());
+                    ' ').append(
+                    targetTable.getColumn(columnMap[i]).getNameString());
         }
 
         for (int i = 0; i < updateExpressions.length; i++) {
@@ -686,7 +706,7 @@ public abstract class StatementDMQL extends Statement {
     }
 
     private StringBuilder appendMultiColumns(StringBuilder sb,
-            int[] columnMap) {
+                                             int[] columnMap) {
 
         // todo - multiColVals is always null
         if (columnMap == null || multiColumnValues == null) {
@@ -698,9 +718,9 @@ public abstract class StatementDMQL extends Statement {
         for (int j = 0; j < multiColumnValues.length; j++) {
             for (int i = 0; i < columnMap.length; i++) {
                 sb.append('\n').append(columnMap[i]).append(':').append(
-                    ' ').append(
-                    targetTable.getColumn(columnMap[i]).getName().name).append(
-                    '[').append(multiColumnValues[j][i]).append(']');
+                        ' ').append(
+                        targetTable.getColumn(columnMap[i]).getName().name).append(
+                        '[').append(multiColumnValues[j][i]).append(']');
             }
         }
 
@@ -715,7 +735,7 @@ public abstract class StatementDMQL extends Statement {
 
         for (int i = 0; i < parameters.length; i++) {
             sb.append('\n').append('@').append(i).append('[').append(
-                parameters[i].describe(null, 0)).append(']');
+                    parameters[i].describe(null, 0)).append(']');
         }
 
         sb.append(']');
@@ -726,12 +746,13 @@ public abstract class StatementDMQL extends Statement {
     private StringBuilder appendCondition(Session session, StringBuilder sb) {
 
         return condition == null ? sb.append("CONDITION[]\n")
-                                 : sb.append("CONDITION[").append(
-                                     condition.describe(session, 0)).append(
-                                     "]\n");
+                : sb.append("CONDITION[").append(
+                condition.describe(session, 0)).append(
+                "]\n");
     }
 
-    public void resolve(Session session) {}
+    public void resolve(Session session) {
+    }
 
     public final boolean isCatalogLock(int model) {
         return false;

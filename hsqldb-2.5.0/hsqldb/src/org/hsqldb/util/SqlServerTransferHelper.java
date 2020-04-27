@@ -100,7 +100,7 @@ class SqlServerTransferHelper extends TransferHelper {
 
     void beginTransfer() {
         firstSmallintRow = true;
-        firstTinyintRow  = true;
+        firstTinyintRow = true;
     }
 
     Object convertColumnValue(Object value, int column, int type) {
@@ -111,7 +111,7 @@ class SqlServerTransferHelper extends TransferHelper {
                 firstSmallintRow = false;
 
                 tracer.trace("SMALLINT: Converted column " + column
-                             + " Integer to Short");
+                        + " Integer to Short");
             }
 
             value = Short.valueOf((short) ((Integer) value).intValue());
@@ -120,7 +120,7 @@ class SqlServerTransferHelper extends TransferHelper {
                 firstTinyintRow = false;
 
                 tracer.trace("TINYINT: Converted column " + column
-                             + " Integer to Byte");
+                        + " Integer to Byte");
             }
 
             value = Byte.valueOf((byte) ((Integer) value).intValue());

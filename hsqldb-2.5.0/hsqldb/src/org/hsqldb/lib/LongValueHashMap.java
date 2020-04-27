@@ -51,9 +51,9 @@ public class LongValueHashMap extends BaseHashMap {
     }
 
     public LongValueHashMap(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.objectKeyOrValue,
-              BaseHashMap.longKeyOrValue, false);
+                BaseHashMap.longKeyOrValue, false);
     }
 
     public long get(Object key) throws NoSuchElementException {
@@ -62,7 +62,7 @@ public class LongValueHashMap extends BaseHashMap {
             throw new NoSuchElementException();
         }
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {
@@ -78,7 +78,7 @@ public class LongValueHashMap extends BaseHashMap {
             throw new NoSuchElementException();
         }
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {
@@ -94,7 +94,7 @@ public class LongValueHashMap extends BaseHashMap {
             throw new NoSuchElementException();
         }
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {

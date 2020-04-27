@@ -50,13 +50,13 @@ import org.hsqldb.types.Type;
 public class FunctionSQLInvoked extends Expression {
 
     RoutineSchema routineSchema;
-    Routine       routine;
-    Expression    condition = Expression.EXPR_TRUE;    // needed for equals() method
+    Routine routine;
+    Expression condition = Expression.EXPR_TRUE;    // needed for equals() method
 
     FunctionSQLInvoked(RoutineSchema routineSchema) {
 
         super(routineSchema.isAggregate() ? OpTypes.USER_AGGREGATE
-                                          : OpTypes.FUNCTION);
+                : OpTypes.FUNCTION);
 
         this.routineSchema = routineSchema;
     }
@@ -66,11 +66,11 @@ public class FunctionSQLInvoked extends Expression {
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
 
         HsqlList conditionSet = condition.resolveColumnReferences(session,
-            rangeGroup, rangeCount, rangeGroups, null, false);
+                rangeGroup, rangeCount, rangeGroups, null, false);
 
         if (conditionSet != null) {
             ExpressionColumn.checkColumnsResolved(conditionSet);
@@ -86,9 +86,9 @@ public class FunctionSQLInvoked extends Expression {
             return unresolvedSet;
         } else {
             return super.resolveColumnReferences(session, rangeGroup,
-                                                 rangeCount, rangeGroups,
-                                                 unresolvedSet,
-                                                 acceptsSequences);
+                    rangeCount, rangeGroups,
+                    unresolvedSet,
+                    acceptsSequences);
         }
     }
 
@@ -119,12 +119,12 @@ public class FunctionSQLInvoked extends Expression {
 
     private Object getValueInternal(Session session, Object[] aggregateData) {
 
-        boolean  isValue = false;
-        Result   result;
-        int      extraArg = routine.javaMethodWithConnection ? 1
-                                                             : 0;
-        Object[] data     = ValuePool.emptyObjectArray;
-        boolean  push     = true;
+        boolean isValue = false;
+        Result result;
+        int extraArg = routine.javaMethodWithConnection ? 1
+                : 0;
+        Object[] data = ValuePool.emptyObjectArray;
+        boolean push = true;
 
         if (extraArg + nodes.length > 0) {
             if (opType == OpTypes.USER_AGGREGATE) {
@@ -149,8 +149,8 @@ public class FunctionSQLInvoked extends Expression {
         Type[] dataTypes = routine.getParameterTypes();
 
         for (int i = 0; i < nodes.length; i++) {
-            Expression e     = nodes[i];
-            Object     value = e.getValue(session, dataTypes[i]);
+            Expression e = nodes[i];
+            Object value = e.getValue(session, dataTypes[i]);
 
             if (value == null) {
                 if (routine.isNullInputOutput()) {
@@ -159,7 +159,7 @@ public class FunctionSQLInvoked extends Expression {
 
                 if (!routine.getParameter(i).isNullable()) {
                     return Result.newErrorResult(
-                        Error.error(ErrorCode.X_39004));
+                            Error.error(ErrorCode.X_39004));
                 }
             }
 
@@ -266,15 +266,15 @@ public class FunctionSQLInvoked extends Expression {
             FunctionSQLInvoked o = (FunctionSQLInvoked) other;
 
             return super.equals(other) && opType == other.opType
-                   && routineSchema == o.routineSchema && routine == o.routine
-                   && condition.equals(o.condition);
+                    && routineSchema == o.routineSchema && routine == o.routine
+                    && condition.equals(o.condition);
         }
 
         return false;
     }
 
     public SetFunction updateAggregatingValue(Session session,
-            SetFunction currValue) {
+                                              SetFunction currValue) {
 
         if (!condition.testCondition(session)) {
             return currValue;

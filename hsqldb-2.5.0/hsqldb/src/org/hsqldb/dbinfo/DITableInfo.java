@@ -41,7 +41,7 @@ import java.util.Locale;
 /**
  * Provides extended information about HSQLDB tables and their
  * columns/indices. <p>
- *
+ * <p>
  * Current version has been reduced in scope.<p>
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
@@ -51,23 +51,31 @@ import java.util.Locale;
 final class DITableInfo {
 
     // related to DatabaseMetaData
-    int                bestRowTemporary   = 0;
-    int                bestRowTransaction = 1;
-    int                bestRowSession     = 2;
-    int                bestRowUnknown     = 0;
-    int                bestRowNotPseudo   = 1;
-    static final short tableIndexOther    = 3;
+    int bestRowTemporary = 0;
+    int bestRowTransaction = 1;
+    int bestRowSession = 2;
+    int bestRowUnknown = 0;
+    int bestRowNotPseudo = 1;
+    static final short tableIndexOther = 3;
 
-    /** Used in buffer size and character octet length determinations. */
+    /**
+     * Used in buffer size and character octet length determinations.
+     */
     private static final int HALF_MAX_INT = Integer.MAX_VALUE >>> 1;
 
-    /** BundleHandler id for column remarks resource bundle. */
+    /**
+     * BundleHandler id for column remarks resource bundle.
+     */
     private int hnd_column_remarks = -1;
 
-    /** BundleHandler id for table remarks resource bundle. */
+    /**
+     * BundleHandler id for table remarks resource bundle.
+     */
     private int hnd_table_remarks = -1;
 
-    /** The Table object upon which this object is reporting. */
+    /**
+     * The Table object upon which this object is reporting.
+     */
     private Table table;
 
     /**
@@ -95,11 +103,11 @@ final class DITableInfo {
             ResourceBundleHandler.setLocale(Locale.getDefault());
 
             hnd_column_remarks =
-                ResourceBundleHandler.getBundleHandle("info-column-remarks",
-                    null);
+                    ResourceBundleHandler.getBundleHandle("info-column-remarks",
+                            null);
             hnd_table_remarks =
-                ResourceBundleHandler.getBundleHandle("info-table-remarks",
-                    null);
+                    ResourceBundleHandler.getBundleHandle("info-table-remarks",
+                            null);
 
             ResourceBundleHandler.setLocale(oldLocale);
         }
@@ -108,7 +116,7 @@ final class DITableInfo {
     /**
      * Retrieves whether the best row identifier column is
      * a pseudo column, like an Oracle ROWID. <p>
-     *
+     * <p>
      * Currently, this always returns an Integer whose value is
      * DatabaseMetaData.bestRowNotPseudo, as HSQLDB does not support
      * pseudo columns such as ROWID. <p>
@@ -122,7 +130,7 @@ final class DITableInfo {
 
     /**
      * Retrieves the scope of the best row identifier. <p>
-     *
+     * <p>
      * This implements the rules described in
      * DatabaseInformationMain.SYSTEM_BESTROWIDENTIFIER. <p>
      *
@@ -130,7 +138,7 @@ final class DITableInfo {
      */
     Integer getBRIScope() {
         return (table.isWritable()) ? ValuePool.getInt(bestRowTemporary)
-                                    : ValuePool.getInt(bestRowSession);
+                : ValuePool.getInt(bestRowSession);
     }
 
     /**
@@ -172,20 +180,20 @@ final class DITableInfo {
 
         switch (table.getTableType()) {
 
-            case TableBase.MEMORY_TABLE :
-            case TableBase.TEMP_TABLE :
-            case TableBase.INFO_SCHEMA_TABLE :
+            case TableBase.MEMORY_TABLE:
+            case TableBase.TEMP_TABLE:
+            case TableBase.INFO_SCHEMA_TABLE:
                 return "MEMORY";
 
-            case TableBase.CACHED_TABLE :
+            case TableBase.CACHED_TABLE:
                 return "CACHED";
 
-            case TableBase.TEMP_TEXT_TABLE :
-            case TableBase.TEXT_TABLE :
+            case TableBase.TEMP_TEXT_TABLE:
+            case TableBase.TEXT_TABLE:
                 return "TEXT";
 
-            case TableBase.VIEW_TABLE :
-            default :
+            case TableBase.VIEW_TABLE:
+            default:
                 return null;
         }
     }
@@ -207,13 +215,13 @@ final class DITableInfo {
     String getRemark() {
 
         return (table.getTableType() == TableBase.INFO_SCHEMA_TABLE)
-               ? ResourceBundleHandler.getString(hnd_table_remarks, getName())
-               : table.getName().comment;
+                ? ResourceBundleHandler.getString(hnd_table_remarks, getName())
+                : table.getName().comment;
     }
 
     /**
      * Retrieves the standard JDBC type of the table. <p>
-     *
+     * <p>
      * "TABLE" for user-defined tables, "VIEW" for user-defined views,
      * and so on.
      *
@@ -223,17 +231,17 @@ final class DITableInfo {
 
         switch (table.getTableType()) {
 
-            case TableBase.VIEW_TABLE :
+            case TableBase.VIEW_TABLE:
                 return "VIEW";
 
-            case TableBase.TEMP_TABLE :
-            case TableBase.TEMP_TEXT_TABLE :
+            case TableBase.TEMP_TABLE:
+            case TableBase.TEMP_TEXT_TABLE:
                 return "GLOBAL TEMPORARY";
 
-            case TableBase.INFO_SCHEMA_TABLE :
+            case TableBase.INFO_SCHEMA_TABLE:
                 return "SYSTEM TABLE";
 
-            default :
+            default:
                 if (table.getOwner().isSystem()) {
                     return "SYSTEM TABLE";
                 }
@@ -247,7 +255,7 @@ final class DITableInfo {
      * reporting. <p>
      *
      * @return the Table object on which this object
-     *    is currently reporting
+     * is currently reporting
      */
     Table getTable() {
         return this.table;

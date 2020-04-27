@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  * An atomic transfer packet received from a HyperSQL client.
- *
+ * <p>
  * Since we read and cache all data for the packet upon instantiation, the
  * available method is reliable and may be relied upon.
  *
@@ -48,16 +48,16 @@ import java.util.Map;
  */
 class OdbcPacketInputStream extends DataInputStream {
 
-    char                packetType;
+    char packetType;
     private InputStream bufferStream;
 
     /**
      * Instantiate a packet of the specified type and size.
      */
     static OdbcPacketInputStream newOdbcPacketInputStream(char cType,
-            InputStream streamSource, int sizeInt) throws IOException {
+                                                          InputStream streamSource, int sizeInt) throws IOException {
         return newOdbcPacketInputStream(cType, streamSource,
-                                        Integer.valueOf(sizeInt));
+                Integer.valueOf(sizeInt));
     }
 
     /**
@@ -65,13 +65,13 @@ class OdbcPacketInputStream extends DataInputStream {
      * the first int read from the given stream.
      */
     static OdbcPacketInputStream newOdbcPacketInputStream(char cType,
-            InputStream streamSource) throws IOException {
+                                                          InputStream streamSource) throws IOException {
         return newOdbcPacketInputStream(cType, streamSource, null);
     }
 
     static private OdbcPacketInputStream newOdbcPacketInputStream(char cType,
-            InputStream streamSource,
-            Integer packetSizeObj) throws IOException {
+                                                                  InputStream streamSource,
+                                                                  Integer packetSizeObj) throws IOException {
 
         int bytesRead, i;
         int packetSize = 0;
@@ -83,7 +83,7 @@ class OdbcPacketInputStream extends DataInputStream {
 
             while ((i =
                     streamSource.read(fourBytes, bytesRead, fourBytes.length
-                                      - bytesRead)) > 0) {
+                            - bytesRead)) > 0) {
                 bytesRead += i;
             }
 
@@ -92,9 +92,9 @@ class OdbcPacketInputStream extends DataInputStream {
             }
 
             packetSize = ((fourBytes[0] & 0xff) << 24)
-                         + ((fourBytes[1] & 0xff) << 16)
-                         + ((fourBytes[2] & 0xff) << 8)
-                         + (fourBytes[3] & 0xff) - 4;
+                    + ((fourBytes[1] & 0xff) << 16)
+                    + ((fourBytes[2] & 0xff) << 8)
+                    + (fourBytes[3] & 0xff) - 4;
 
             // Minus 4 because this counts the size int itself.
         } else {
@@ -106,17 +106,17 @@ class OdbcPacketInputStream extends DataInputStream {
         bytesRead = 0;
 
         while ((i = streamSource.read(xferBuffer, bytesRead, xferBuffer.length
-                                      - bytesRead)) > 0) {
+                - bytesRead)) > 0) {
             bytesRead += i;
         }
 
         if (bytesRead != xferBuffer.length) {
             throw new EOFException(
-                "Failed to read packet contents from given stream");
+                    "Failed to read packet contents from given stream");
         }
 
         return new OdbcPacketInputStream(cType,
-                                         new ByteArrayInputStream(xferBuffer));
+                new ByteArrayInputStream(xferBuffer));
     }
 
     private OdbcPacketInputStream(char packetType, InputStream bufferStream) {
@@ -132,12 +132,12 @@ class OdbcPacketInputStream extends DataInputStream {
      *
      * @return the generated Map
      * @throws EOFException if the rest of packet does not contained the
-     *                   required, well-formed null-terminated string pairs.
+     *                      required, well-formed null-terminated string pairs.
      */
     Map readStringPairs() throws IOException {
 
         String key;
-        Map    map = new HashMap();
+        Map map = new HashMap();
 
         while (true) {
             key = readString();
@@ -183,7 +183,7 @@ class OdbcPacketInputStream extends DataInputStream {
         ba[1] = (byte) len;
 
         DataInputStream dis =
-            new DataInputStream(new ByteArrayInputStream(ba));
+                new DataInputStream(new ByteArrayInputStream(ba));
         String s = dis.readUTF();
 
         //String s = DataInputStream.readUTF(dis);
@@ -200,7 +200,7 @@ class OdbcPacketInputStream extends DataInputStream {
 
         try {
             return (len < 0) ? null
-                             : new BinaryData((long) len, this);
+                    : new BinaryData((long) len, this);
         } catch (HsqlException he) {
             throw new IOException(he.getMessage());
         }
@@ -211,7 +211,7 @@ class OdbcPacketInputStream extends DataInputStream {
         int len = readInt();
 
         return (len < 0) ? null
-                         : readString(len);
+                : readString(len);
     }
 
     /**
@@ -224,8 +224,8 @@ class OdbcPacketInputStream extends DataInputStream {
 
         /* Would be MUCH easier to do this with Java6's String
          * encoding/decoding operations */
-        int    bytesRead = 0;
-        int    i;
+        int bytesRead = 0;
+        int i;
         byte[] ba = new byte[len + 2];
 
         ba[0] = (byte) (len >>> 8);
@@ -243,12 +243,12 @@ class OdbcPacketInputStream extends DataInputStream {
         for (i = 2; i < ba.length - 1; i++) {
             if (ba[i] == 0) {
                 throw new RuntimeException("Null internal to String at offset "
-                                           + (i - 2));
+                        + (i - 2));
             }
         }
 
         DataInputStream dis =
-            new DataInputStream(new ByteArrayInputStream(ba));
+                new DataInputStream(new ByteArrayInputStream(ba));
         String s = dis.readUTF();
 
         //String s = DataInputStream.readUTF(dis);

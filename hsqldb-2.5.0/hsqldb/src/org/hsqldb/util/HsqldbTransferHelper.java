@@ -95,14 +95,14 @@ class HsqldbTransferHelper extends TransferHelper {
                               String columnType, ResultSet columnDesc,
                               int columnIndex) throws SQLException {
         return fixupColumnDefRead((TransferTable) null, meta, columnType,
-                                  columnDesc, columnIndex);
+                columnDesc, columnIndex);
     }
 
     String fixupColumnDefWrite(String aTableName, ResultSetMetaData meta,
                                String columnType, ResultSet columnDesc,
                                int columnIndex) throws SQLException {
         return fixupColumnDefWrite((TransferTable) null, meta, columnType,
-                                   columnDesc, columnIndex);
+                columnDesc, columnIndex);
     }
 
     String formatName(String t) {

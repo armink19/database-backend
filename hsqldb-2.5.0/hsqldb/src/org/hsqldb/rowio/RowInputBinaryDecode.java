@@ -54,7 +54,7 @@ public class RowInputBinaryDecode extends RowInputBinary {
 
         if (crypto != null) {
             int start = pos;
-            int size  = readInt();
+            int size = readInt();
 
             crypto.decode(buffer, pos, size, buffer, start);
 

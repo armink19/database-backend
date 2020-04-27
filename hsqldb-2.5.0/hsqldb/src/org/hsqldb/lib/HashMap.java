@@ -42,7 +42,7 @@ import org.hsqldb.map.BaseHashMap;
  */
 public class HashMap extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
 
     public HashMap() {
@@ -51,12 +51,12 @@ public class HashMap extends BaseHashMap {
 
     public HashMap(int initialCapacity) throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.objectKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
     }
 
     public Object get(Object key) {
 
-        int hash   = key.hashCode();
+        int hash = key.hashCode();
         int lookup = getLookup(key, hash);
 
         if (lookup != -1) {
@@ -96,7 +96,7 @@ public class HashMap extends BaseHashMap {
     public void valuesToArray(Object[] array) {
 
         Iterator it = values().iterator();
-        int      i  = 0;
+        int i = 0;
 
         while (it.hasNext()) {
             array[i] = it.next();
@@ -108,7 +108,7 @@ public class HashMap extends BaseHashMap {
     public void keysToArray(Object[] array) {
 
         Iterator it = keySet().iterator();
-        int      i  = 0;
+        int i = 0;
 
         while (it.hasNext()) {
             array[i] = it.next();

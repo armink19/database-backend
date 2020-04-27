@@ -43,12 +43,12 @@ import java.util.UUID;
 
 /**
  * Type implementation for BINARY UUID.<p>
-
+ * <p>
  * A binary UUID is exactly 16 bytes.<p>
- *
+ * <p>
  * Cast from CHARACTER types to BINARY converts a hexadecimal UUID string with
  * or without the dashes.<p>
- *
+ * <p>
  * Cast to CHARACTER types converts to a hexadecimal UUID string.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
@@ -126,7 +126,7 @@ public class BinaryUUIDType extends BinaryType {
         }
 
         return other.typeCode == Types.SQL_BLOB ? 4
-                                                : 2;
+                : 2;
     }
 
     public Type getAggregateType(Type other) {
@@ -149,13 +149,13 @@ public class BinaryUUIDType extends BinaryType {
 
         switch (other.typeCode) {
 
-            case Types.SQL_GUID :
-            case Types.SQL_BINARY :
-            case Types.SQL_VARBINARY :
-            case Types.SQL_BLOB :
+            case Types.SQL_GUID:
+            case Types.SQL_BINARY:
+            case Types.SQL_VARBINARY:
+            case Types.SQL_BLOB:
                 return this;
 
-            default :
+            default:
                 throw Error.error(ErrorCode.X_42562);
         }
     }
@@ -182,10 +182,10 @@ public class BinaryUUIDType extends BinaryType {
         }
 
         if (a instanceof BinaryData && b instanceof BinaryData) {
-            byte[] data1  = ((BinaryData) a).getBytes();
-            byte[] data2  = ((BinaryData) b).getBytes();
-            int    length = data1.length > data2.length ? data2.length
-                                                        : data1.length;
+            byte[] data1 = ((BinaryData) a).getBytes();
+            byte[] data2 = ((BinaryData) b).getBytes();
+            int length = data1.length > data2.length ? data2.length
+                    : data1.length;
 
             for (int i = 0; i < length; i++) {
                 if (data1[i] == data2[i]) {
@@ -193,8 +193,8 @@ public class BinaryUUIDType extends BinaryType {
                 }
 
                 return (((int) data1[i]) & 0xff) > (((int) data2[i]) & 0xff)
-                       ? 1
-                       : -1;
+                        ? 1
+                        : -1;
             }
 
             if (data1.length == data2.length) {
@@ -202,7 +202,7 @@ public class BinaryUUIDType extends BinaryType {
             }
 
             return data1.length > data2.length ? 1
-                                               : -1;
+                    : -1;
         }
 
         throw Error.runtimeError(ErrorCode.U_S0500, "BinaryUUIDType");
@@ -245,7 +245,7 @@ public class BinaryUUIDType extends BinaryType {
             return null;
         }
 
-        return  getJavaUUID((BinaryData) a);
+        return getJavaUUID((BinaryData) a);
     }
 
     Object castOrConvertToType(SessionInterface session, Object a,
@@ -259,25 +259,25 @@ public class BinaryUUIDType extends BinaryType {
 
         switch (otherType.typeCode) {
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 a = Type.SQL_VARCHAR.convertToType(session, a, otherType);
 
-            // fall through
-            case Types.SQL_VARCHAR :
-            case Types.SQL_CHAR : {
+                // fall through
+            case Types.SQL_VARCHAR:
+            case Types.SQL_CHAR: {
                 b = session.getScanner().convertToBinary((String) a, true);
                 otherType = this;
 
                 break;
             }
-            case Types.SQL_GUID :
-            case Types.SQL_BINARY :
-            case Types.SQL_VARBINARY :
-            case Types.SQL_BLOB :
+            case Types.SQL_GUID:
+            case Types.SQL_BINARY:
+            case Types.SQL_VARBINARY:
+            case Types.SQL_BLOB:
                 b = (BlobData) a;
                 break;
 
-            default :
+            default:
                 throw Error.error(ErrorCode.X_22501);
         }
 
@@ -341,7 +341,7 @@ public class BinaryUUIDType extends BinaryType {
 
     public boolean canConvertFrom(Type otherType) {
         return otherType.typeCode == Types.SQL_ALL_TYPES
-               || otherType.isBinaryType() || otherType.isCharacterType();
+                || otherType.isBinaryType() || otherType.isCharacterType();
     }
 
     public int canMoveFrom(Type otherType) {
@@ -356,20 +356,20 @@ public class BinaryUUIDType extends BinaryType {
 
         switch (otherType.typeCode) {
 
-            case Types.SQL_VARBINARY : {
+            case Types.SQL_VARBINARY: {
                 return 1;
             }
-            case Types.SQL_BIT :
-            case Types.SQL_BIT_VARYING :
-            case Types.SQL_BLOB : {
+            case Types.SQL_BIT:
+            case Types.SQL_BIT_VARYING:
+            case Types.SQL_BLOB: {
                 return -1;
             }
-            case Types.SQL_GUID :
-            case Types.SQL_BINARY : {
+            case Types.SQL_GUID:
+            case Types.SQL_BINARY: {
                 return precision == otherType.precision ? 0
-                                                        : -1;
+                        : -1;
             }
-            default :
+            default:
                 return -1;
         }
     }
@@ -400,7 +400,7 @@ public class BinaryUUIDType extends BinaryType {
             end = offset + length;
         } else {
             end = dataLength > offset ? dataLength
-                                      : offset;
+                    : offset;
         }
 
         if (offset > end) {
@@ -411,7 +411,7 @@ public class BinaryUUIDType extends BinaryType {
 
             // return zero length data
             offset = 0;
-            end    = 0;
+            end = 0;
         }
 
         if (offset < 0) {
@@ -432,10 +432,11 @@ public class BinaryUUIDType extends BinaryType {
 
     int getRightTrimSize(BlobData data) {
 
-        byte[] bytes    = data.getBytes();
-        int    endindex = bytes.length;
+        byte[] bytes = data.getBytes();
+        int endindex = bytes.length;
 
-        for (--endindex; endindex >= 0 && bytes[endindex] == 0; endindex--) {}
+        for (--endindex; endindex >= 0 && bytes[endindex] == 0; endindex--) {
+        }
 
         return ++endindex;
     }
@@ -453,12 +454,13 @@ public class BinaryUUIDType extends BinaryType {
             throw Error.error(ErrorCode.X_22027);
         }
 
-        byte[] bytes    = data.getBytes(session, 0, (int) length);
-        int    endindex = bytes.length;
+        byte[] bytes = data.getBytes(session, 0, (int) length);
+        int endindex = bytes.length;
 
         if (trailing) {
             for (--endindex; endindex >= 0 && bytes[endindex] == trim;
-                    endindex--) {}
+                 endindex--) {
+            }
 
             endindex++;
         }
@@ -477,7 +479,7 @@ public class BinaryUUIDType extends BinaryType {
             newBytes = new byte[endindex - startindex];
 
             System.arraycopy(bytes, startindex, newBytes, 0,
-                             endindex - startindex);
+                    endindex - startindex);
         }
 
         return new BinaryData(newBytes, newBytes == bytes);
@@ -495,12 +497,12 @@ public class BinaryUUIDType extends BinaryType {
         }
 
         BinaryData binary =
-            new BinaryData(session, substring(session, data, 0, offset, true),
-                           overlay);
+                new BinaryData(session, substring(session, data, 0, offset, true),
+                        overlay);
 
         binary = new BinaryData(session, binary,
-                                substring(session, data, offset + length, 0,
-                                          false));
+                substring(session, data, offset + length, 0,
+                        false));
 
         return binary;
     }
@@ -512,7 +514,7 @@ public class BinaryUUIDType extends BinaryType {
         }
 
         long length = ((BlobData) a).length(session)
-                      + ((BlobData) b).length(session);
+                + ((BlobData) b).length(session);
 
         if (length > precision) {
             throw Error.error(ErrorCode.X_22001);
@@ -527,7 +529,7 @@ public class BinaryUUIDType extends BinaryType {
 
     public static BinaryData getBinary(UUID uuid) {
         return getBinary(uuid.getMostSignificantBits(),
-                         uuid.getLeastSignificantBits());
+                uuid.getLeastSignificantBits());
     }
 
     public static UUID getJavaUUID(BinaryData data) {
@@ -537,8 +539,8 @@ public class BinaryUUIDType extends BinaryType {
         }
 
         byte[] bytes = data.getBytes();
-        long   msb   = ArrayUtil.byteSequenceToLong(bytes, 0);
-        long   lsb   = ArrayUtil.byteSequenceToLong(bytes, 8);
+        long msb = ArrayUtil.byteSequenceToLong(bytes, 0);
+        long lsb = ArrayUtil.byteSequenceToLong(bytes, 8);
 
         return new UUID(msb, lsb);
     }

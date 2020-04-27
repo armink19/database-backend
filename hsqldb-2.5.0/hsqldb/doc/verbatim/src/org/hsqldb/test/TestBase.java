@@ -44,44 +44,45 @@ import java.sql.SQLException;
 
 /**
  * HSQLDB TestBugBase Junit test case. <p>
- *
+ * <p>
  * By setting the booleans isNetwork, isHTTP, isUseTestServlet below, you can execute all tests that derive from this TestBase class
  * using either the embedded HSQL server mode in both HSQL or HTTP protocol, or target the HSQL-Servlet mode running in for example
  * Tomcat.
- *
+ * <p>
  * When running against the Servlet: This assumes you have a WebApplication called HSQLwebApp running in for example Tomcat, with hsqldb.jar
  * (or better hsqldbtest.jar renamed to hsqldb.jar) in the WEB-INF/lib directory and web.xml containing something like this:<p>
- *      <code>
+ * <code>
  * {@literal
- *    <servlet>
- *      <servlet-name>test</servlet-name>
- *      <servlet-class>org.hsqldb.server.Servlet</servlet-class>
- *      <init-param>
- *            <param-name>hsqldb.server.database</param-name>
- *            <param-value>mem:test</param-value>
- *      </init-param>
- *      <load-on-startup>1</load-on-startup>
- *    </servlet>
- *
- *    <servlet-mapping>
- *      <servlet-name>test</servlet-name>
- *      <url-pattern>/test</url-pattern>
- *    </servlet-mapping>
+ * <servlet>
+ * <servlet-name>test</servlet-name>
+ * <servlet-class>org.hsqldb.server.Servlet</servlet-class>
+ * <init-param>
+ * <param-name>hsqldb.server.database</param-name>
+ * <param-value>mem:test</param-value>
+ * </init-param>
+ * <load-on-startup>1</load-on-startup>
+ * </servlet>
+ * <p>
+ * <servlet-mapping>
+ * <servlet-name>test</servlet-name>
+ * <url-pattern>/test</url-pattern>
+ * </servlet-mapping>
  * }</code>
+ *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @version 1.7.2
  * @since 1.7.2
  */
 public abstract class TestBase extends TestCase {
 
-    String  dbPath = "mem:test;sql.enforce_strict_size=true;sql.restrict_exec=true;hsqldb.tx=mvcc";
-    String  serverProps;
-    String  url;
-    String  user     = "sa";
-    String  password = "";
-    Server  server;
+    String dbPath = "mem:test;sql.enforce_strict_size=true;sql.restrict_exec=true;hsqldb.tx=mvcc";
+    String serverProps;
+    String url;
+    String user = "sa";
+    String password = "";
+    Server server;
     boolean isNetwork = true;
-    boolean isHTTP    = false;    // Set false to test HSQL protocol, true to test HTTP, in which case you can use isUseTestServlet to target either HSQL's webserver, or the Servlet server-mode
+    boolean isHTTP = false;    // Set false to test HSQL protocol, true to test HTTP, in which case you can use isUseTestServlet to target either HSQL's webserver, or the Servlet server-mode
     boolean isServlet = false;
 
     public TestBase(String name) {
@@ -94,7 +95,7 @@ public abstract class TestBase extends TestCase {
         super(name);
 
         this.isNetwork = isNetwork;
-        this.isHTTP    = isHTTP;
+        this.isHTTP = isHTTP;
     }
 
     public TestBase(String name, String url, boolean isNetwork,
@@ -107,7 +108,7 @@ public abstract class TestBase extends TestCase {
         }
 
         this.isNetwork = isNetwork;
-        this.isHTTP    = isHTTP;
+        this.isHTTP = isHTTP;
     }
 
     protected void setUp() throws Exception {
@@ -127,7 +128,7 @@ public abstract class TestBase extends TestCase {
 
             if (!isServlet) {
                 server = isHTTP ? new WebServer()
-                                : new Server();
+                        : new Server();
 
                 if (isHTTP) {
                     server.setPort(8085);
@@ -170,9 +171,9 @@ public abstract class TestBase extends TestCase {
 
         try {
             Constructor ctor = testCaseClass.getConstructor(new Class[]{
-                String.class });
+                    String.class});
             TestBase theTest = (TestBase) ctor.newInstance(new Object[]{
-                testName });
+                    testName});
 
             theTest.runWithResult();
         } catch (Exception ex) {
@@ -183,8 +184,8 @@ public abstract class TestBase extends TestCase {
 
     public void runWithResult() {
 
-        TestResult result   = run();
-        String     testName = this.getClass().getName();
+        TestResult result = run();
+        String testName = this.getClass().getName();
 
         if (testName.startsWith("org.hsqldb.test.")) {
             testName = testName.substring(16);

@@ -42,36 +42,36 @@ package org.hsqldb.util.preprocessor;
  */
 final class Tokenizer {
     private final String command;
-    private final int    commandLength;
-    private int          tokenType;
-    private int          startIndex;
-    private int          currentIndex;
+    private final int commandLength;
+    private int tokenType;
+    private int startIndex;
+    private int currentIndex;
 
     Tokenizer(final String cmd) {
-        this.command       = cmd + " ";
+        this.command = cmd + " ";
         this.commandLength = command.length();
-        this.startIndex    = 0;
-        this.currentIndex  = 0;
-        this.tokenType     = Token.UNKNOWN;
+        this.startIndex = 0;
+        this.currentIndex = 0;
+        this.tokenType = Token.UNKNOWN;
     }
 
     void skipBlanks() {
         final String cmd = this.command;
-        final int    len = this.commandLength;
+        final int len = this.commandLength;
 
         top:
-            while (currentIndex < len) {
+        while (currentIndex < len) {
 
-            switch(cmd.charAt(currentIndex)) {
-                case ' '  :
-                case '\t' : {
+            switch (cmd.charAt(currentIndex)) {
+                case ' ':
+                case '\t': {
                     currentIndex++;
                     continue top;
                 }
             }
 
             break;
-            }
+        }
     }
 
     int next() throws PreprocessorException {
@@ -80,7 +80,7 @@ final class Tokenizer {
         startIndex = currentIndex;
 
         final String cmd = this.command;
-        final int    len = this.commandLength;
+        final int len = this.commandLength;
 
         if (currentIndex >= len) {
             tokenType = Token.EOI;
@@ -106,7 +106,7 @@ final class Tokenizer {
 
             currentIndex++;
 
-            while(currentIndex < len &&
+            while (currentIndex < len &&
                     Character.isDigit(cmd.charAt(currentIndex))) {
                 currentIndex++;
             }
@@ -115,7 +115,7 @@ final class Tokenizer {
                 currentIndex++;
             }
 
-            while(currentIndex < len &&
+            while (currentIndex < len &&
                     Character.isDigit(cmd.charAt(currentIndex))) {
                 currentIndex++;
             }
@@ -139,19 +139,19 @@ final class Tokenizer {
         }
 
 
-        switch(ch) {
-            case Token.LPAREN :
-            case Token.RPAREN :
-            case Token.XOR :
-            case Token.NOT : {
+        switch (ch) {
+            case Token.LPAREN:
+            case Token.RPAREN:
+            case Token.XOR:
+            case Token.NOT: {
                 currentIndex++;
 
                 return (tokenType = ch);
             }
-            case Token.ASSIGN : {
+            case Token.ASSIGN: {
                 currentIndex++;
 
-                if(currentIndex < len &&
+                if (currentIndex < len &&
                         cmd.charAt(currentIndex) == Token.ASSIGN) {
                     currentIndex++;
 
@@ -162,7 +162,7 @@ final class Tokenizer {
 
                 return tokenType;
             }
-            case Token.LT : {
+            case Token.LT: {
                 currentIndex++;
 
                 if (currentIndex < len &&
@@ -176,7 +176,7 @@ final class Tokenizer {
 
                 return tokenType;
             }
-            case Token.GT : {
+            case Token.GT: {
                 currentIndex++;
 
                 if (currentIndex < len &&
@@ -190,8 +190,8 @@ final class Tokenizer {
 
                 return tokenType;
             }
-            case Token.AND :
-            case Token.OR : {
+            case Token.AND:
+            case Token.OR: {
                 currentIndex++;
 
                 if (currentIndex < len && cmd.charAt(currentIndex) == ch) {
@@ -200,7 +200,7 @@ final class Tokenizer {
 
                 return (tokenType = ch);
             }
-            default : {
+            default: {
                 throw new PreprocessorException("Syntax error: " +
                         cmd.substring(currentIndex)); //NOI18N
             }

@@ -46,15 +46,15 @@ import java.util.regex.Pattern;
 /**
  * Provides authentication and authorization (roles and initial schema)
  * according to JAAS modules configured by the runtime JAAS implementation.
- * <P>
+ * <p>
  * <b>JAAS modules used must have both a NameCallback and a PasswordCallback.</b>
  * This is how we pass the JDBC-provided user name and password to the module.
- * <P>
+ * <p>
  * JAAS setup is Java-implementation-specific.
  * For Sun Java, you set up a JAAS configuration file which resides at
  * <code>$HOME/.java.login.config</code> or at the location that you set with
  * Java system property <code>java.security.auth.login.config</code>.
- * <P>
+ * <p>
  * You can use this bean to manage just access, or also to manage roles or
  * initial schemas.
  * To use for roles or initial schemas, you must set the roleSchemaValuePattern
@@ -63,10 +63,10 @@ import java.util.regex.Pattern;
  * If you set property roleSchemaViaCredential to true, then all
  * JAAS-module-provided public Credentials will be candidates instead.
  *
+ * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @see AuthFunctionBean
  * @see NameCallback
  * @see PasswordCallback
- * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @since 2.5.0
  */
 public class JaasAuthBean implements AuthFunctionBean {
@@ -88,7 +88,7 @@ public class JaasAuthBean implements AuthFunctionBean {
      * privileges are used (if any).
      * If roleSchemaViaCredential is set to true and roleSchemaValuePattern is
      * set, then credential values will be used instead.
-     * <P>
+     * <p>
      * Do not set roleSchemaViaCredential to true unless roleSchemaValuePattern
      * is set.
      *
@@ -109,16 +109,16 @@ public class JaasAuthBean implements AuthFunctionBean {
         if (roleSchemaViaCredential && roleSchemaValuePattern == null) {
             throw new IllegalStateException(
                     "Properties 'roleSchemaViaCredential' and "
-                    + "'roleSchemaValuePattern' are mutually exclusive.  "
-                    + "If you want JaasAuthBean to manage roles or schemas, "
-                    + "you must set property 'roleSchemaValuePattern'.");
+                            + "'roleSchemaValuePattern' are mutually exclusive.  "
+                            + "If you want JaasAuthBean to manage roles or schemas, "
+                            + "you must set property 'roleSchemaValuePattern'.");
         }
         initialized = true;
     }
 
     /**
      * Set the key into the JAAS runtime configuration.
-     *
+     * <p>
      * For Sun's JAAS implementation, this is the "application" identifier for
      * a stanza in the JAAS configuration file.
      *
@@ -137,49 +137,48 @@ public class JaasAuthBean implements AuthFunctionBean {
      * pre-existing local HyperSQL accounts).
      * On that case, simple success of the login() method method will allow
      * access as the specified user.
-     * <P>
+     * <p>
      * If every principal name or public credentials holds only the String
      * values precisely as HyperSQL needs them, then set the pattern to ".+".
      * For example, if the JAAS module returns principals (or credentials) with
      * values "one", "two", "three", then if you set this pattern to ".+",
      * HyperSQL will attempt to assign initial schema and roles for the values
      * "one", "two", and "three".
-     * <P>
+     * <p>
      * These are two distinct and important purposes for the specified Pattern.
      * <OL>
-     *   <LI>
-     *      Values that do not successfully match the pattern will be ignored.
-     *      If the pattern does match, then the entire principal or credential
-     *      value will be used to assign initial schema or role (as long as it
-     *      is a valid schema name or role name in the local database).
-     *   <LI>
-     *      Optionally uses parentheses to specify a single capture group
-     *      (if you use parentheses to specify more than one matching group, we
-     *      will only capture for the first).
-     *      What is captured by this group is exactly the role or schema that
-     *      HyperSQL will attempt to assign.
-     *      If no capture parens are given then the Pattern is only used for the
-     *      acceptance decision, and the JAAS-provided value will be returned
-     *      verbatim.
+     * <LI>
+     * Values that do not successfully match the pattern will be ignored.
+     * If the pattern does match, then the entire principal or credential
+     * value will be used to assign initial schema or role (as long as it
+     * is a valid schema name or role name in the local database).
+     * <LI>
+     * Optionally uses parentheses to specify a single capture group
+     * (if you use parentheses to specify more than one matching group, we
+     * will only capture for the first).
+     * What is captured by this group is exactly the role or schema that
+     * HyperSQL will attempt to assign.
+     * If no capture parens are given then the Pattern is only used for the
+     * acceptance decision, and the JAAS-provided value will be returned
+     * verbatim.
      * </OL>
-     * <P>
+     * <p>
      * N.b. this Pattern will be used for the matches() operation, therefore it
      * must match the entire candidate value strings (this is different than
      * the find operation which does not need to satisfy the entire candidate
      * value).
      * <P>Example1 :<PRE><CODE>
-     *     cn=([^,]+),ou=dbRole,dc=admc,dc=com
+     * cn=([^,]+),ou=dbRole,dc=admc,dc=com
      * </CODE></PRE>
-     *     will extract the CN value from matching attribute values.
+     * will extract the CN value from matching attribute values.
      * <P>Example1 :<PRE><CODE>
-     *     cn=[^,]+,ou=dbRole,dc=admc,dc=com
+     * cn=[^,]+,ou=dbRole,dc=admc,dc=com
      * </CODE></PRE>
-     *     will return the entire <CODE>cn...com</CODE> string for matching
-     *     attribute values.
-     *
-     * @see Matcher#matches()
+     * will return the entire <CODE>cn...com</CODE> string for matching
+     * attribute values.
      *
      * @param roleSchemaValuePattern pattern
+     * @see Matcher#matches()
      */
     public void setRoleSchemaValuePattern(Pattern roleSchemaValuePattern) {
         this.roleSchemaValuePattern = roleSchemaValuePattern;
@@ -187,12 +186,12 @@ public class JaasAuthBean implements AuthFunctionBean {
 
     /**
      * String wrapper for method setRoleSchemaValuePattern(Pattern)
-     *
+     * <p>
      * Use the (x?) Pattern constructs to set options.
      *
-     * @see #setRoleSchemaValuePattern(Pattern)
      * @param patternString pattern
      * @throws java.util.regex.PatternSyntaxException exception
+     * @see #setRoleSchemaValuePattern(Pattern)
      */
     public void setRoleSchemaValuePatternString(String patternString) {
         setRoleSchemaValuePattern(Pattern.compile(patternString));
@@ -221,7 +220,7 @@ public class JaasAuthBean implements AuthFunctionBean {
                 } else {
                     throw new UnsupportedCallbackException(cb,
                             "Unsupported Callback type: "
-                            + cb.getClass().getName());
+                                    + cb.getClass().getName());
                 }
             if (!didSetName)
                 throw new IllegalStateException(
@@ -239,13 +238,13 @@ public class JaasAuthBean implements AuthFunctionBean {
             throws DenyException {
         if (!initialized) {
             throw new IllegalStateException(
-                "You must invoke the 'init' method to initialize the "
-                + JaasAuthBean.class.getName() + " instance.");
+                    "You must invoke the 'init' method to initialize the "
+                            + JaasAuthBean.class.getName() + " instance.");
         }
         try {
             LoginContext lc =
-                new LoginContext(applicationKey,
-                        new UPCallbackHandler(userName, password));
+                    new LoginContext(applicationKey,
+                            new UPCallbackHandler(userName, password));
             try {
                 lc.login();
             } catch (LoginException le) {
@@ -273,8 +272,8 @@ public class JaasAuthBean implements AuthFunctionBean {
                     }
                 }
                 logger.finer(Integer.toString(rsCandidates.size())
-                            + " candidate " + (roleSchemaViaCredential
-                            ? "Credentials" : "Principals"));
+                        + " candidate " + (roleSchemaViaCredential
+                        ? "Credentials" : "Principals"));
                 for (String candid : rsCandidates) {
                     m = roleSchemaValuePattern.matcher(candid);
                     if (m.matches()) {

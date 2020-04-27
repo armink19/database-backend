@@ -41,43 +41,43 @@ package org.hsqldb.error;
 public interface ErrorCode {
 
     // neutral placeholder strings
-    int TOKEN_REQUIRED    = 1;                     // $$ required: $$
-    int CONSTRAINT        = 2;                     // $$ table: $$
+    int TOKEN_REQUIRED = 1;                     // $$ required: $$
+    int CONSTRAINT = 2;                     // $$ table: $$
     int COLUMN_CONSTRAINT = 3;                     // $$ table: $$ column: $$
-    int FK_CONSTRAINT     = 4;                     // $$ table: $$ value: $$
+    int FK_CONSTRAINT = 4;                     // $$ table: $$ value: $$
 
     //
     int M_ERROR_IN_BINARY_SCRIPT_1 = 21;           // \u0020table $$ row count error : $$ read, needed $$
     int M_ERROR_IN_BINARY_SCRIPT_2 = 22;           // \u0020 wrong data for insert operation
     int M_DatabaseManager_getDatabase = 23;        // attempt to connect while db opening /closing
-    int M_parse_line                = 24;          // \u0020line:\u0020
+    int M_parse_line = 24;          // \u0020line:\u0020
     int M_DatabaseScriptReader_read = 25;          // \u0020line: $$ $$
-    int M_Message_Pair              = 26;          // \u0020$$ $$
-    int M_LOAD_SAVE_PROPERTIES      = 27;          // \u0020$$.properties $$
-    int M_HsqlProperties_load       = 28;          // properties name is null or empty
+    int M_Message_Pair = 26;          // \u0020$$ $$
+    int M_LOAD_SAVE_PROPERTIES = 27;          // \u0020$$.properties $$
+    int M_HsqlProperties_load = 28;          // properties name is null or empty
 
     //
-    int M_TEXT_SOURCE_FIELD_ERROR      = 41;       // S1000 Error in text source field
+    int M_TEXT_SOURCE_FIELD_ERROR = 41;       // S1000 Error in text source field
     int M_TextCache_opening_file_error = 42;       // openning file: $$ error: $$
     int M_TextCache_closing_file_error = 43;       // closing file: $$ error: $$
     int M_TextCache_purging_file_error = 44;       // purging file: $$ error: $$
 
     //
     int M_DataFileCache_makeRow = 51;              // error $$ reading row - file $$
-    int M_DataFileCache_open    = 52;              // error $$ opening file - file $$
-    int M_DataFileCache_close   = 53;              // error $$ closing file - file $$
+    int M_DataFileCache_open = 52;              // error $$ opening file - file $$
+    int M_DataFileCache_close = 53;              // error $$ closing file - file $$
 
     //
     int M_SERVER_OPEN_SERVER_SOCKET_1 = 61;        // Invalid address : $$\nTry one of: $$
     int M_SERVER_OPEN_SERVER_SOCKET_2 = 62;        // Invalid address : $$
-    int M_SERVER_SECURE_VERIFY_1      = 63;        // Server certificate has no Common Name
-    int M_SERVER_SECURE_VERIFY_2      = 64;        // Server certificate has empty Common Name
+    int M_SERVER_SECURE_VERIFY_1 = 63;        // Server certificate has no Common Name
+    int M_SERVER_SECURE_VERIFY_2 = 64;        // Server certificate has empty Common Name
     int M_SERVER_SECURE_VERIFY_3 = 65;             // Certificate Common Name[$$] does not match host name[$$]
 
     //
-    int M_RS_EMPTY        = 70;                    // ResultSet is empty
+    int M_RS_EMPTY = 70;                    // ResultSet is empty
     int M_RS_BEFORE_FIRST = 71;                    // ResultSet is positioned before first row
-    int M_RS_AFTER_LAST   = 72;                    // ResultSet is positioned after last row
+    int M_RS_AFTER_LAST = 72;                    // ResultSet is positioned after last row
 
     //
     int M_INVALID_LIMIT = 81;                      // ; in LIMIT, OFFSET or FETCH
@@ -101,7 +101,7 @@ public interface ErrorCode {
     int PASSWORD_COMPLEXITY = 391;                 // S1000 password complexity
 
     // HSQLDB Server
-    int SERVER_TRANSFER_CORRUPTED    = 401;        // S1000 Transfer corrupted
+    int SERVER_TRANSFER_CORRUPTED = 401;        // S1000 Transfer corrupted
     int SERVER_DATABASE_DISCONNECTED = 402;        // S0504 database disconnected
     int SERVER_VERSIONS_INCOMPATIBLE = 403;        // S0504 HSQLDB server version is '$$'  \ client version '$$' is not compatible.
     int SERVER_UNKNOWN_CLIENT = 404;               // S0504 Network client is not a HSQLDB JDBC driver
@@ -111,44 +111,44 @@ public interface ErrorCode {
 
     //
     // HSQLDB JDBC
-    int JDBC_COLUMN_NOT_FOUND      = 421;          // S1000 Column not found
-    int JDBC_INPUTSTREAM_ERROR     = 422;          // S1000 InputStream error
-    int JDBC_INVALID_ARGUMENT      = 423;          // S1OO0 Invalid argument in JDBC call
-    int JDBC_PARAMETER_NOT_SET     = 424;          // S1000 Parameter not set
+    int JDBC_COLUMN_NOT_FOUND = 421;          // S1000 Column not found
+    int JDBC_INPUTSTREAM_ERROR = 422;          // S1000 InputStream error
+    int JDBC_INVALID_ARGUMENT = 423;          // S1OO0 Invalid argument in JDBC call
+    int JDBC_PARAMETER_NOT_SET = 424;          // S1000 Parameter not set
     int JDBC_CONNECTION_NATIVE_SQL = 425;          // S1000 Unknown JDBC escape sequence: {
 
     // HSQLDB non-core and file errors
     int LOCK_FILE_ACQUISITION_FAILURE = 451;       // S1000 Database lock acquisition failure
-    int FILE_IO_ERROR               = 452;         // S1000 File input/output error
+    int FILE_IO_ERROR = 452;         // S1000 File input/output error
     int WRONG_DATABASE_FILE_VERSION = 453;         // S1000 unsupported database file version
-    int DATA_FILE_BACKUP_MISMATCH   = 454;         // S1000 Data file modified, no backup
-    int DATABASE_IS_READONLY        = 455;         // S1000 The database is in read only mode
-    int DATA_IS_READONLY            = 456;         // S1000 The table data is read only
-    int ACCESS_IS_DENIED            = 457;         // S1000 Access is denied
-    int GENERAL_ERROR               = 458;         // S1000 General error
-    int DATABASE_IS_MEMORY_ONLY     = 459;         // S1000 Database is memory only
-    int OUT_OF_MEMORY               = 460;         // S1000 Out of Memory
-    int ERROR_IN_SCRIPT_FILE        = 461;         // S1000 error in script file
+    int DATA_FILE_BACKUP_MISMATCH = 454;         // S1000 Data file modified, no backup
+    int DATABASE_IS_READONLY = 455;         // S1000 The database is in read only mode
+    int DATA_IS_READONLY = 456;         // S1000 The table data is read only
+    int ACCESS_IS_DENIED = 457;         // S1000 Access is denied
+    int GENERAL_ERROR = 458;         // S1000 General error
+    int DATABASE_IS_MEMORY_ONLY = 459;         // S1000 Database is memory only
+    int OUT_OF_MEMORY = 460;         // S1000 Out of Memory
+    int ERROR_IN_SCRIPT_FILE = 461;         // S1000 error in script file
     int UNSUPPORTED_FILENAME_SUFFIX = 462;         // S1000 Unsupported suffix in file name '$$'.  (Supported suffixes:  $$)
     int COMPRESSION_SUFFIX_MISMATCH = 463;         // S1000 Mismatch between specified compression mode '$$' and file name '$$'
     int DATABASE_IS_NON_FILE = 464;                // S1000 Database is non-file type
-    int DATABASE_NOT_EXISTS  = 465;                // S1000 Database does not exist
-    int DATA_FILE_ERROR      = 466;                // S1000 Data File input/output error
-    int GENERAL_IO_ERROR     = 467;                // S1000 IO error
-    int DATA_FILE_IS_FULL    = 468;                // S1000 Data file size limit is reached
-    int DATA_FILE_IN_USE     = 469;                // S1000 Data file is in use
-    int BACKUP_ERROR         = 470;                // S1000 Backup error
-    int DATA_CACHE_IS_FULL   = 471;                // S1000 Data cache size limit is reached
-    int ERROR_IN_LOG_FILE    = 472;                // S1000 problem with log file
+    int DATABASE_NOT_EXISTS = 465;                // S1000 Database does not exist
+    int DATA_FILE_ERROR = 466;                // S1000 Data File input/output error
+    int GENERAL_IO_ERROR = 467;                // S1000 IO error
+    int DATA_FILE_IS_FULL = 468;                // S1000 Data file size limit is reached
+    int DATA_FILE_IN_USE = 469;                // S1000 Data file is in use
+    int BACKUP_ERROR = 470;                // S1000 Backup error
+    int DATA_CACHE_IS_FULL = 471;                // S1000 Data cache size limit is reached
+    int ERROR_IN_LOG_FILE = 472;                // S1000 problem with log file
 
     // HSQLDB Text tables
     int TEXT_TABLE_UNKNOWN_DATA_SOURCE = 481;      // S1000 The table's data source for has not been defined
     int TEXT_TABLE_SOURCE = 482;                   // S1000 Invalid TEXT table source string
-    int TEXT_FILE         = 483;                   // S1000 bad TEXT table source file - line number: $$ $$
-    int TEXT_FILE_IO            = 484;             // S1000 TEXT table source file - IO error:
+    int TEXT_FILE = 483;                   // S1000 bad TEXT table source file - line number: $$ $$
+    int TEXT_FILE_IO = 484;             // S1000 TEXT table source file - IO error:
     int TEXT_STRING_HAS_NEWLINE = 485;             // S1000 end-of-line characters not allowed
-    int TEXT_TABLE_HEADER            = 486;        // S1000 Header not allowed or too long
-    int TEXT_SOURCE_EXISTS           = 487;        // S1000 Text source file already exists
+    int TEXT_TABLE_HEADER = 486;        // S1000 Header not allowed or too long
+    int TEXT_SOURCE_EXISTS = 487;        // S1000 Text source file already exists
     int TEXT_SOURCE_NO_END_SEPARATOR = 488;        // S1000 No end sep.
 
     // warning

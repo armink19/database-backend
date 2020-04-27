@@ -45,19 +45,20 @@ import java.io.OutputStreamWriter;
  * for writing the filename header then add data with writeData.
  * at the end close() closes the file.
  *
- *@author jeberle@users
+ * @author jeberle@users
  */
 public class CSVWriter {
 
-    private String             newline = System.getProperty("line.separator");
-    private OutputStreamWriter writer  = null;
-    private int                nbrCols = 0;
-    private int                nbrRows = 0;
+    private String newline = System.getProperty("line.separator");
+    private OutputStreamWriter writer = null;
+    private int nbrCols = 0;
+    private int nbrRows = 0;
 
     /**
      * constructor.
      * creates a csv file for writing data to it
-     * @param file the file to write data to
+     *
+     * @param file     the file to write data to
      * @param encoding encoding to use or null (=defualt)
      */
     public CSVWriter(File file, String encoding) throws IOException {
@@ -74,6 +75,7 @@ public class CSVWriter {
     /**
      * writes the csv header (fieldnames). should be called after
      * construction one time.
+     *
      * @param header String[] with fieldnames
      */
     public void writeHeader(String[] header) throws IOException {
@@ -130,7 +132,7 @@ public class CSVWriter {
 
             switch (c) {
 
-                case '"' :
+                case '"':
                     sb.append('"');
                     break;
             }

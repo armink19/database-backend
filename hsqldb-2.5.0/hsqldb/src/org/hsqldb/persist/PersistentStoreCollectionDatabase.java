@@ -44,10 +44,10 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 1.9.0
  */
 public class PersistentStoreCollectionDatabase
-implements PersistentStoreCollection {
+        implements PersistentStoreCollection {
 
-    private Database             database;
-    private AtomicLong           persistentStoreIdSequence = new AtomicLong();
+    private Database database;
+    private AtomicLong persistentStoreIdSequence = new AtomicLong();
     private final LongKeyHashMap rowStoreMap = new LongKeyHashMap();
 
     public PersistentStoreCollectionDatabase(Database db) {
@@ -58,7 +58,7 @@ implements PersistentStoreCollection {
 
         long persistenceId = table.getPersistenceId();
         PersistentStore store =
-            (PersistentStore) rowStoreMap.get(persistenceId);
+                (PersistentStore) rowStoreMap.get(persistenceId);
 
         if (store == null) {
             store = database.logger.newStore(null, this, table);
@@ -97,7 +97,7 @@ implements PersistentStoreCollection {
     synchronized public void removeStore(TableBase table) {
 
         PersistentStore store =
-            (PersistentStore) rowStoreMap.get(table.getPersistenceId());
+                (PersistentStore) rowStoreMap.get(table.getPersistenceId());
 
         if (store != null) {
             store.removeAll();
@@ -131,7 +131,7 @@ implements PersistentStoreCollection {
 
             if (table.getTableType() == TableBase.CACHED_TABLE) {
                 TableSpaceManager tableSpace =
-                    dataCache.spaceManager.getTableSpace(table.getSpaceID());
+                        dataCache.spaceManager.getTableSpace(table.getSpaceID());
 
                 store.setSpaceManager(tableSpace);
             }

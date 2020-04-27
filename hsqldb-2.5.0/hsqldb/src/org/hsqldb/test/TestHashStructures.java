@@ -50,11 +50,11 @@ public class TestHashStructures extends TestCase {
 
     public void testHashMap() throws Exception {
 
-        boolean                failed   = false;
-        int                    testSize = 33;
-        org.hsqldb.lib.HashMap hMap     = new org.hsqldb.lib.HashMap();
+        boolean failed = false;
+        int testSize = 33;
+        org.hsqldb.lib.HashMap hMap = new org.hsqldb.lib.HashMap();
         org.hsqldb.lib.IntKeyHashMap hIntMap =
-            new org.hsqldb.lib.IntKeyHashMap();
+                new org.hsqldb.lib.IntKeyHashMap();
         java.util.HashMap uMap = new java.util.HashMap();
 
         try {
@@ -90,10 +90,10 @@ public class TestHashStructures extends TestCase {
 
     public void testIntKeyHashMap() throws Exception {
 
-        boolean failed   = false;
-        int     testSize = 33;
+        boolean failed = false;
+        int testSize = 33;
         org.hsqldb.lib.IntKeyHashMap hIntMap =
-            new org.hsqldb.lib.IntKeyHashMap();
+                new org.hsqldb.lib.IntKeyHashMap();
         java.util.HashMap uMap = new java.util.HashMap();
 
         try {
@@ -131,10 +131,10 @@ public class TestHashStructures extends TestCase {
 
     public void testHashMappedList() throws Exception {
 
-        boolean failed   = false;
-        int     testSize = 33;
+        boolean failed = false;
+        int testSize = 33;
         org.hsqldb.lib.HashMappedList hMap =
-            new org.hsqldb.lib.HashMappedList();
+                new org.hsqldb.lib.HashMappedList();
         java.util.HashMap uMap = new java.util.HashMap();
 
         try {
@@ -163,10 +163,10 @@ public class TestHashStructures extends TestCase {
 
     public void testDoubleIntLookup() throws Exception {
 
-        boolean failed   = false;
-        int     testSize = 512;
+        boolean failed = false;
+        int testSize = 512;
         org.hsqldb.lib.IntKeyHashMap hIntMap =
-            new org.hsqldb.lib.IntKeyHashMap();
+                new org.hsqldb.lib.IntKeyHashMap();
         DoubleIntIndex intLookup = new DoubleIntIndex(12, false);
 
         try {
@@ -184,21 +184,21 @@ public class TestHashStructures extends TestCase {
 
     public void testDoubleIntSpeed() throws Exception {
 
-        boolean failed   = false;
-        int     testSize = 500;
+        boolean failed = false;
+        int testSize = 500;
         org.hsqldb.lib.IntKeyHashMap hIntMap =
-            new org.hsqldb.lib.IntKeyHashMap();
+                new org.hsqldb.lib.IntKeyHashMap();
         DoubleIntIndex intLookup = new DoubleIntIndex(testSize, false);
 
         intLookup.setKeysSearchTarget();
         populateByRandomIntKeysInt(intLookup, hIntMap, testSize);
         compareByHIteratorInt(intLookup, hIntMap);
 
-        int[]     sample     = getSampleIntArray(intLookup, 100);
-        int[]     sampleVals = new int[sample.length];
-        int       i          = 0;
-        int       j          = 0;
-        StopWatch sw         = new StopWatch();
+        int[] sample = getSampleIntArray(intLookup, 100);
+        int[] sampleVals = new int[sample.length];
+        int i = 0;
+        int j = 0;
+        StopWatch sw = new StopWatch();
 
         try {
             for (j = 0; j < 10000; j++) {
@@ -216,12 +216,12 @@ public class TestHashStructures extends TestCase {
             }
 
             System.out.println(
-                sw.elapsedTimeToMessage("Double int table times"));
+                    sw.elapsedTimeToMessage("Double int table times"));
             intLookup.findFirstEqualKeyIndex(0);    // sort
             compareByHIteratorInt(intLookup, hIntMap);
         } catch (Exception e) {
             System.out.println(
-                sw.elapsedTimeToMessage("Double int table error: i =" + i));
+                    sw.elapsedTimeToMessage("Double int table error: i =" + i));
 
             failed = true;
         }
@@ -231,7 +231,7 @@ public class TestHashStructures extends TestCase {
 
     int[] getSampleIntArray(org.hsqldb.lib.DoubleIntIndex index, int size) {
 
-        int[]                        array = new int[size];
+        int[] array = new int[size];
         org.hsqldb.lib.IntKeyHashMap map = new org.hsqldb.lib.IntKeyHashMap();
 
         for (; map.size() < size; ) {
@@ -353,7 +353,7 @@ public class TestHashStructures extends TestCase {
                             int testCount) throws Exception {
 
         int removeCount = 0;
-        int size        = uMap.size();
+        int size = uMap.size();
 
         if (testCount > size / 2) {
             testCount = size / 2;
@@ -363,8 +363,8 @@ public class TestHashStructures extends TestCase {
             java.util.Iterator uIt = uMap.keySet().iterator();
 
             for (int i = 0; uIt.hasNext(); i++) {
-                Object uKey     = uIt.next();
-                int    intValue = randomgen.nextInt(size);
+                Object uKey = uIt.next();
+                int intValue = randomgen.nextInt(size);
 
                 if (intValue == i) {
                     uIt.remove();
@@ -389,8 +389,8 @@ public class TestHashStructures extends TestCase {
         System.out.println(uMap.size());
 
         for (int i = 0; hIt.hasNext(); i++) {
-            Object key   = hIt.next();
-            int    check = randomgen.nextInt(2);
+            Object key = hIt.next();
+            int check = randomgen.nextInt(2);
 
             if (check == i % 2) {
                 hIt.remove();
@@ -414,8 +414,8 @@ public class TestHashStructures extends TestCase {
         System.out.println(uMap.size());
 
         for (int i = 0; hIt.hasNext(); i++) {
-            Object key   = Integer.valueOf(hIt.nextInt());
-            int    check = randomgen.nextInt(2);
+            Object key = Integer.valueOf(hIt.nextInt());
+            int check = randomgen.nextInt(2);
 
             if (check == i % 2) {
                 hIt.remove();
@@ -432,7 +432,7 @@ public class TestHashStructures extends TestCase {
 
     void clearByIntIterator(java.util.HashMap uMap,
                             org.hsqldb.lib.IntKeyHashMap hIntMap)
-                            throws Exception {
+            throws Exception {
 
         org.hsqldb.lib.Iterator hIt = hIntMap.keySet().iterator();
 
@@ -459,8 +459,8 @@ public class TestHashStructures extends TestCase {
 
         for (int i = 0; uIt.hasNext(); i++) {
             Object uKey = uIt.next();
-            Object oU   = uMap.get(uKey);
-            Object hU   = hMap.get(uKey);
+            Object oU = uMap.get(uKey);
+            Object hU = hMap.get(uKey);
 
             if (!oU.equals(hU)) {
                 throw new Exception("HashMap value mismatch");
@@ -475,8 +475,8 @@ public class TestHashStructures extends TestCase {
 
         for (int i = 0; hIt.hasNext(); i++) {
             Object hKey = hIt.next();
-            Object oU   = uMap.get(hKey);
-            Object hU   = hMap.get(hKey);
+            Object oU = uMap.get(hKey);
+            Object hU = hMap.get(hKey);
 
             if (!oU.equals(hU)) {
                 throw new Exception("HashMap value mismatch");
@@ -486,14 +486,14 @@ public class TestHashStructures extends TestCase {
 
     void compareByUIteratorInt(java.util.HashMap uMap,
                                org.hsqldb.lib.IntKeyHashMap hMap)
-                               throws Exception {
+            throws Exception {
 
         java.util.Iterator uIt = uMap.keySet().iterator();
 
         for (int i = 0; uIt.hasNext(); i++) {
             Object uKey = uIt.next();
-            Object oU   = uMap.get(uKey);
-            Object hU   = hMap.get(((Integer) uKey).intValue());
+            Object oU = uMap.get(uKey);
+            Object hU = hMap.get(((Integer) uKey).intValue());
 
             if (!oU.equals(hU)) {
                 throw new Exception("HashMap value mismatch");
@@ -503,14 +503,14 @@ public class TestHashStructures extends TestCase {
 
     void compareByHIteratorInt(java.util.HashMap uMap,
                                org.hsqldb.lib.IntKeyHashMap hMap)
-                               throws Exception {
+            throws Exception {
 
         org.hsqldb.lib.Iterator hIt = hMap.keySet().iterator();
 
         for (int i = 0; hIt.hasNext(); i++) {
             Object hKey = Integer.valueOf(hIt.nextInt());
-            Object oU   = uMap.get(hKey);
-            Object hU   = hMap.get(((Integer) hKey).intValue());
+            Object oU = uMap.get(hKey);
+            Object hU = hMap.get(((Integer) hKey).intValue());
 
             if (!oU.equals(hU)) {
                 throw new Exception("HashMap value mismatch");
@@ -520,15 +520,15 @@ public class TestHashStructures extends TestCase {
 
     void compareByHIteratorInt(DoubleIntIndex intLookup,
                                org.hsqldb.lib.IntKeyHashMap hMap)
-                               throws Exception {
+            throws Exception {
 
         org.hsqldb.lib.Iterator hIt = hMap.keySet().iterator();
 
         for (int i = 0; hIt.hasNext(); i++) {
-            int     hK     = hIt.nextInt();
-            int     lookup = intLookup.findFirstEqualKeyIndex(hK);
-            int     lV     = intLookup.getValue(lookup);
-            Integer hV     = (Integer) hMap.get(hK);
+            int hK = hIt.nextInt();
+            int lookup = intLookup.findFirstEqualKeyIndex(hK);
+            int lV = intLookup.getValue(lookup);
+            Integer hV = (Integer) hMap.get(hK);
 
             if (hV.intValue() != lV) {
                 throw new Exception("HashMap value mismatch");

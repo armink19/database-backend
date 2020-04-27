@@ -42,10 +42,10 @@ import java.util.Map;
 class StatementPortal {
 
     public Object[] parameters;
-    public Result   bindResult, ackResult;
-    public String   lcQuery;
-    public String   handle;
-    private Map     containingMap;
+    public Result bindResult, ackResult;
+    public String lcQuery;
+    public String handle;
+    private Map containingMap;
     private Session session;
 
     /**
@@ -68,25 +68,25 @@ class StatementPortal {
                            Object[] paramObjs,
                            Map containingMap) throws RecoverableOdbcFailure {
 
-        this.handle        = handle;
-        lcQuery            = odbcPs.query.toLowerCase();
-        ackResult          = odbcPs.ackResult;
-        session            = odbcPs.session;
+        this.handle = handle;
+        lcQuery = odbcPs.query.toLowerCase();
+        ackResult = odbcPs.ackResult;
+        session = odbcPs.session;
         this.containingMap = containingMap;
 
         Type[] paramTypes = Type.emptyArray;
 
         switch (ackResult.getType()) {
 
-            case ResultConstants.PREPARE_ACK :
+            case ResultConstants.PREPARE_ACK:
                 break;
 
-            case ResultConstants.ERROR :
+            case ResultConstants.ERROR:
                 throw new RecoverableOdbcFailure(ackResult);
-            default :
+            default:
                 throw new RecoverableOdbcFailure(
-                    "Output Result from secondary Statement prep is of "
-                    + "unexpected type: " + ackResult.getType());
+                        "Output Result from secondary Statement prep is of "
+                                + "unexpected type: " + ackResult.getType());
         }
 
         if (paramObjs.length < 1) {
@@ -102,9 +102,9 @@ class StatementPortal {
 
             if (paramTypes.length != paramObjs.length) {
                 throw new RecoverableOdbcFailure(
-                    null,
-                    "Client didn't specify all " + paramTypes.length
-                    + " parameters (" + paramObjs.length + ')', "08P01");
+                        null,
+                        "Client didn't specify all " + paramTypes.length
+                                + " parameters (" + paramObjs.length + ')', "08P01");
             }
 
             parameters = new Object[paramObjs.length];
@@ -112,10 +112,10 @@ class StatementPortal {
             try {
                 for (int i = 0; i < parameters.length; i++) {
                     parameters[i] = (paramObjs[i] instanceof String)
-                                    ? PgType.getPgType(
-                                        paramTypes[i], true).getParameter(
-                                        (String) paramObjs[i], session)
-                                    : paramObjs[i];
+                            ? PgType.getPgType(
+                            paramTypes[i], true).getParameter(
+                            (String) paramObjs[i], session)
+                            : paramObjs[i];
                 }
             } catch (java.sql.SQLException se) {
                 throw new RecoverableOdbcFailure("Typing failure: " + se);

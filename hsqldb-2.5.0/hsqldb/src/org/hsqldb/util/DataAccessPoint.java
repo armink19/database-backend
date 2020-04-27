@@ -36,19 +36,20 @@ import java.util.Vector;
 
 /**
  * Database Transfer Tool
+ *
  * @author Nicolas BAZIN, INGENICO
  * @version 1.7.0
  */
 class DataAccessPoint implements Serializable {
 
-    Traceable      tracer;
+    Traceable tracer;
     TransferHelper helper;
-    String         databaseToConvert;
+    String databaseToConvert;
 
     public DataAccessPoint() {
 
-        tracer            = null;
-        helper            = HelperFactory.getHelper("");
+        tracer = null;
+        helper = HelperFactory.getHelper("");
         databaseToConvert = "";
     }
 
@@ -70,23 +71,27 @@ class DataAccessPoint implements Serializable {
         return false;
     }
 
-    void commit() throws DataAccessPointException {}
+    void commit() throws DataAccessPointException {
+    }
 
-    void rollback() throws DataAccessPointException {}
+    void rollback() throws DataAccessPointException {
+    }
 
-    void setAutoCommit(boolean flag) throws DataAccessPointException {}
+    void setAutoCommit(boolean flag) throws DataAccessPointException {
+    }
 
     boolean execute(String statement) throws DataAccessPointException {
         return false;
     }
 
     TransferResultSet getData(String statement)
-    throws DataAccessPointException {
+            throws DataAccessPointException {
         return null;
     }
 
     void putData(String statement, TransferResultSet r,
-                 int iMaxRows) throws DataAccessPointException {}
+                 int iMaxRows) throws DataAccessPointException {
+    }
 
     Vector getSchemas() throws DataAccessPointException {
         return new Vector();
@@ -96,7 +101,8 @@ class DataAccessPoint implements Serializable {
         return new Vector();
     }
 
-    void setCatalog(String sCatalog) throws DataAccessPointException {}
+    void setCatalog(String sCatalog) throws DataAccessPointException {
+    }
 
     Vector getTables(String sCatalog,
                      String[] sSchemas) throws DataAccessPointException {
@@ -105,11 +111,12 @@ class DataAccessPoint implements Serializable {
 
     void getTableStructure(TransferTable SQLCommands,
                            DataAccessPoint Dest)
-                           throws DataAccessPointException {
+            throws DataAccessPointException {
         throw new DataAccessPointException("Nothing to Parse");
     }
 
-    void close() throws DataAccessPointException {}
+    void close() throws DataAccessPointException {
+    }
 
     void beginDataTransfer() throws DataAccessPointException {
 

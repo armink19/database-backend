@@ -51,13 +51,13 @@ public class TestInstantiation {
     public TestInstantiation() {
 
         try {
-            ServerSocket             serversocket;
-            Socket                   socket;
-            String                   m_DatabaseName;
+            ServerSocket serversocket;
+            Socket socket;
+            String m_DatabaseName;
             HsqlSocketRequestHandler m_hsrh;
 
             m_DatabaseName = "mem:.";
-            serversocket   = new ServerSocket(9999);
+            serversocket = new ServerSocket(9999);
 
             while (true) {
                 socket = serversocket.accept();

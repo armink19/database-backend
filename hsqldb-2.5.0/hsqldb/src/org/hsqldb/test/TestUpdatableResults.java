@@ -44,9 +44,9 @@ public class TestUpdatableResults extends TestBase {
         try {
             Connection c = newConnection();
             Statement st = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                             ResultSet.CONCUR_UPDATABLE);
+                    ResultSet.CONCUR_UPDATABLE);
             String s =
-                "CREATE TABLE T (I INTEGER, C CHARACTER(10) DEFAULT 'def', B BIT(4) DEFAULT B'1010')";
+                    "CREATE TABLE T (I INTEGER, C CHARACTER(10) DEFAULT 'def', B BIT(4) DEFAULT B'1010')";
 
             st.execute(s);
 
@@ -92,8 +92,8 @@ public class TestUpdatableResults extends TestBase {
 
             while (rs.next()) {
                 System.out.println("" + rs.getInt(1) + "      "
-                                   + rs.getString(2) + "      "
-                                   + rs.getString(3));
+                        + rs.getString(2) + "      "
+                        + rs.getString(3));
             }
 
             s = "SELECT I FROM T";
@@ -118,8 +118,8 @@ public class TestUpdatableResults extends TestBase {
 
             while (rs.next()) {
                 System.out.println("" + rs.getInt(1) + "      "
-                                   + rs.getString(2) + "      "
-                                   + rs.getString(3));
+                        + rs.getString(2) + "      "
+                        + rs.getString(3));
             }
 
             st.execute("SHUTDOWN");

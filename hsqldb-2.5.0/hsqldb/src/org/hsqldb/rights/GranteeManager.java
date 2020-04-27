@@ -46,14 +46,12 @@ import java.security.NoSuchAlgorithmException;
  * finding, modifying and deleting Grantee objects for a Database; plus
  * Administrative privileges.
  *
- *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
- *
  * @version 2.5.0
- * @since 1.8.0
  * @see Grantee
+ * @since 1.8.0
  */
 public class GranteeManager {
 
@@ -64,19 +62,19 @@ public class GranteeManager {
 
     static {
         HsqlName name = HsqlNameManager.newSystemObjectName(
-            SqlInvariants.SYSTEM_AUTHORIZATION_NAME, SchemaObject.GRANTEE);
+                SqlInvariants.SYSTEM_AUTHORIZATION_NAME, SchemaObject.GRANTEE);
 
-        systemAuthorisation          = new User(name, null);
+        systemAuthorisation = new User(name, null);
         systemAuthorisation.isSystem = true;
 
         systemAuthorisation.setAdminDirect();
         systemAuthorisation.setInitialSchema(
-            SqlInvariants.SYSTEM_SCHEMA_HSQLNAME);
+                SqlInvariants.SYSTEM_SCHEMA_HSQLNAME);
 
         SqlInvariants.INFORMATION_SCHEMA_HSQLNAME.owner = systemAuthorisation;
-        SqlInvariants.SYSTEM_SCHEMA_HSQLNAME.owner      = systemAuthorisation;
-        SqlInvariants.LOBS_SCHEMA_HSQLNAME.owner        = systemAuthorisation;
-        SqlInvariants.SQLJ_SCHEMA_HSQLNAME.owner        = systemAuthorisation;
+        SqlInvariants.SYSTEM_SCHEMA_HSQLNAME.owner = systemAuthorisation;
+        SqlInvariants.LOBS_SCHEMA_HSQLNAME.owner = systemAuthorisation;
+        SqlInvariants.SQLJ_SCHEMA_HSQLNAME.owner = systemAuthorisation;
     }
 
     /**
@@ -140,31 +138,31 @@ public class GranteeManager {
 //        map.add(systemAuthorisation.getNameString(), systemAuthorisation);
 //        roleMap.add(systemAuthorisation.getNameString(), systemAuthorisation);
         addRole(
-            this.database.nameManager.newHsqlName(
-                SqlInvariants.PUBLIC_ROLE_NAME, false, SchemaObject.GRANTEE));
+                this.database.nameManager.newHsqlName(
+                        SqlInvariants.PUBLIC_ROLE_NAME, false, SchemaObject.GRANTEE));
 
-        publicRole          = getRole(SqlInvariants.PUBLIC_ROLE_NAME);
+        publicRole = getRole(SqlInvariants.PUBLIC_ROLE_NAME);
         publicRole.isPublic = true;
 
         addRole(
-            this.database.nameManager.newHsqlName(
-                SqlInvariants.DBA_ADMIN_ROLE_NAME, false,
-                SchemaObject.GRANTEE));
+                this.database.nameManager.newHsqlName(
+                        SqlInvariants.DBA_ADMIN_ROLE_NAME, false,
+                        SchemaObject.GRANTEE));
 
         dbaRole = getRole(SqlInvariants.DBA_ADMIN_ROLE_NAME);
 
         dbaRole.setAdminDirect();
         addRole(
-            this.database.nameManager.newHsqlName(
-                SqlInvariants.SCHEMA_CREATE_ROLE_NAME, false,
-                SchemaObject.GRANTEE));
+                this.database.nameManager.newHsqlName(
+                        SqlInvariants.SCHEMA_CREATE_ROLE_NAME, false,
+                        SchemaObject.GRANTEE));
 
         schemaRole = getRole(SqlInvariants.SCHEMA_CREATE_ROLE_NAME);
 
         addRole(
-            this.database.nameManager.newHsqlName(
-                SqlInvariants.CHANGE_AUTH_ROLE_NAME, false,
-                SchemaObject.GRANTEE));
+                this.database.nameManager.newHsqlName(
+                        SqlInvariants.CHANGE_AUTH_ROLE_NAME, false,
+                        SchemaObject.GRANTEE));
 
         changeAuthRole = getRole(SqlInvariants.CHANGE_AUTH_ROLE_NAME);
     }
@@ -195,18 +193,18 @@ public class GranteeManager {
      * Grants the rights represented by the rights argument on
      * the database object identified by the dbobject argument
      * to the Grantee object identified by name argument.<p>
-     *
-     *  Note: For the dbobject argument, Java Class objects are identified
-     *  using a String object whose value is the fully qualified name
-     *  of the Class, while Table and other objects are
-     *  identified by an HsqlName object.  A Table
-     *  object identifier must be precisely the one obtained by calling
-     *  table.getName(); if a different HsqlName
-     *  object with an identical name attribute is specified, then
-     *  rights checks and tests will fail, since the HsqlName
-     *  class implements its {@link HsqlName#hashCode hashCode} and
-     *  {@link HsqlName#equals equals} methods based on pure object
-     *  identity, rather than on attribute values. <p>
+     * <p>
+     * Note: For the dbobject argument, Java Class objects are identified
+     * using a String object whose value is the fully qualified name
+     * of the Class, while Table and other objects are
+     * identified by an HsqlName object.  A Table
+     * object identifier must be precisely the one obtained by calling
+     * table.getName(); if a different HsqlName
+     * object with an identical name attribute is specified, then
+     * rights checks and tests will fail, since the HsqlName
+     * class implements its {@link HsqlName#hashCode hashCode} and
+     * {@link HsqlName#equals equals} methods based on pure object
+     * identity, rather than on attribute values. <p>
      */
     public void grant(Session session, OrderedHashSet granteeList,
                       SchemaObject dbObject, Right right, Grantee grantor,
@@ -214,10 +212,10 @@ public class GranteeManager {
 
         if (dbObject instanceof RoutineSchema) {
             SchemaObject[] routines =
-                ((RoutineSchema) dbObject).getSpecificRoutines();
+                    ((RoutineSchema) dbObject).getSpecificRoutines();
 
             grant(session, granteeList, routines, right, grantor,
-                  withGrantOption);
+                    withGrantOption);
 
             return;
         }
@@ -230,12 +228,12 @@ public class GranteeManager {
 
         if (!grantor.isAccessible(dbObject)) {
             throw Error.error(ErrorCode.X_0L000,
-                              grantor.getName().getNameString());
+                    grantor.getName().getNameString());
         }
 
         if (!grantor.isGrantable(dbObject, right)) {
             session.addWarning(Error.error(ErrorCode.W_01007,
-                                           grantor.getName().getNameString()));
+                    grantor.getName().getNameString()));
 
             return;
         }
@@ -269,21 +267,21 @@ public class GranteeManager {
             }
 
             grant(session, granteeList, routines[i], right, grantor,
-                  withGrantOption);
+                    withGrantOption);
 
             granted = true;
         }
 
         if (!granted) {
             throw Error.error(ErrorCode.X_0L000,
-                              grantor.getName().getNameString());
+                    grantor.getName().getNameString());
         }
     }
 
     public void checkGranteeList(OrderedHashSet granteeList) {
 
         for (int i = 0; i < granteeList.size(); i++) {
-            String  name    = (String) granteeList.get(i);
+            String name = (String) granteeList.get(i);
             Grantee grantee = get(name);
 
             if (grantee == null) {
@@ -338,7 +336,7 @@ public class GranteeManager {
 
         if (!grantor.isGrantable(role)) {
             throw Error.error(ErrorCode.X_0L000,
-                              grantor.getName().getNameString());
+                    grantor.getName().getNameString());
         }
 
         grantee.grant(role);
@@ -355,8 +353,8 @@ public class GranteeManager {
         Grantee grantee = get(granteeName);
 
         for (int i = 0; i < roleList.size(); i++) {
-            String  roleName = (String) roleList.get(i);
-            Grantee role     = getRole(roleName);
+            String roleName = (String) roleList.get(i);
+            Grantee role = getRole(roleName);
 
             if (role == null) {
                 throw Error.error(ErrorCode.X_0P000, roleName);
@@ -370,20 +368,20 @@ public class GranteeManager {
             if (grant) {
                 if (grantee.getDirectRoles().contains(role)) {
 
-                    /** @todo  shouldn't throw */
+                    /** @todo shouldn't throw */
                     throw Error.error(ErrorCode.X_0P000, granteeName);
                 }
             } else {
                 if (!grantee.getDirectRoles().contains(role)) {
 
-                    /** @todo  shouldn't throw */
+                    /** @todo shouldn't throw */
                     throw Error.error(ErrorCode.X_0P000, roleName);
                 }
             }
 
             if (!grantor.isAdmin()) {
                 throw Error.error(ErrorCode.X_0L000,
-                                  grantor.getName().getNameString());
+                        grantor.getName().getNameString());
             }
         }
     }
@@ -422,6 +420,7 @@ public class GranteeManager {
      * the database object identified by the dbobject argument
      * from the User object identified by the name
      * argument.<p>
+     *
      * @see #grant
      */
     public void revoke(OrderedHashSet granteeList, SchemaObject dbObject,
@@ -430,10 +429,10 @@ public class GranteeManager {
 
         if (dbObject instanceof RoutineSchema) {
             SchemaObject[] routines =
-                ((RoutineSchema) dbObject).getSpecificRoutines();
+                    ((RoutineSchema) dbObject).getSpecificRoutines();
 
             revoke(granteeList, routines, rights, grantor, grantOption,
-                   cascade);
+                    cascade);
 
             return;
         }
@@ -453,8 +452,8 @@ public class GranteeManager {
         }
 
         for (int i = 0; i < granteeList.size(); i++) {
-            String  granteeName = (String) granteeList.get(i);
-            Grantee g           = get(granteeName);
+            String granteeName = (String) granteeList.get(i);
+            Grantee g = get(granteeName);
 
             if (g == null) {
                 throw Error.error(ErrorCode.X_28501, granteeName);
@@ -466,8 +465,8 @@ public class GranteeManager {
         }
 
         for (int i = 0; i < granteeList.size(); i++) {
-            String  granteeName = (String) granteeList.get(i);
-            Grantee g           = get(granteeName);
+            String granteeName = (String) granteeList.get(i);
+            Grantee g = get(granteeName);
 
             g.revoke(dbObject, rights, grantor, grantOption);
             g.updateAllRights();
@@ -484,7 +483,7 @@ public class GranteeManager {
 
         for (int i = 0; i < routines.length; i++) {
             revoke(granteeList, routines[i], rights, grantor, grantOption,
-                   cascade);
+                    cascade);
         }
     }
 
@@ -600,6 +599,7 @@ public class GranteeManager {
     }
 
     /**
+     *
      */
     public boolean removeGrantee(String name) {
 
@@ -629,18 +629,18 @@ public class GranteeManager {
 
     /**
      * Creates a new Role object under management of this object. <p>
+     * <p>
+     * A set of constraints regarding user creation is imposed: <p>
      *
-     *  A set of constraints regarding user creation is imposed: <p>
+     * <OL>
+     * <LI>Can't create a role with name same as any right.
      *
-     *  <OL>
-     *    <LI>Can't create a role with name same as any right.
-     *
-     *    <LI>If this object's collection already contains an element whose
-     *        name attribute equals the name argument, then
-     *        a GRANTEE_ALREADY_EXISTS or ROLE_ALREADY_EXISTS Trace
-     *        is thrown.
-     *        (This will catch attempts to create Reserved grantee names).
-     *  </OL>
+     * <LI>If this object's collection already contains an element whose
+     * name attribute equals the name argument, then
+     * a GRANTEE_ALREADY_EXISTS or ROLE_ALREADY_EXISTS Trace
+     * is thrown.
+     * (This will catch attempts to create Reserved grantee names).
+     * </OL>
      */
     public Grantee addRole(HsqlName name) {
 
@@ -738,32 +738,31 @@ public class GranteeManager {
     public static boolean isImmutable(String name) {
 
         return name.equals(SqlInvariants.SYSTEM_AUTHORIZATION_NAME)
-               || name.equals(SqlInvariants.DBA_ADMIN_ROLE_NAME)
-               || name.equals(SqlInvariants.SCHEMA_CREATE_ROLE_NAME)
-               || name.equals(SqlInvariants.CHANGE_AUTH_ROLE_NAME);
+                || name.equals(SqlInvariants.DBA_ADMIN_ROLE_NAME)
+                || name.equals(SqlInvariants.SCHEMA_CREATE_ROLE_NAME)
+                || name.equals(SqlInvariants.CHANGE_AUTH_ROLE_NAME);
     }
 
     public static boolean isReserved(String name) {
 
         return name.equals(SqlInvariants.SYSTEM_AUTHORIZATION_NAME)
-               || name.equals(SqlInvariants.DBA_ADMIN_ROLE_NAME)
-               || name.equals(SqlInvariants.SCHEMA_CREATE_ROLE_NAME)
-               || name.equals(SqlInvariants.CHANGE_AUTH_ROLE_NAME)
-               || name.equals(SqlInvariants.PUBLIC_ROLE_NAME);
+                || name.equals(SqlInvariants.DBA_ADMIN_ROLE_NAME)
+                || name.equals(SqlInvariants.SCHEMA_CREATE_ROLE_NAME)
+                || name.equals(SqlInvariants.CHANGE_AUTH_ROLE_NAME)
+                || name.equals(SqlInvariants.PUBLIC_ROLE_NAME);
     }
 
     /**
      * Attempts to drop a Role with the specified name
-     *  from this object's set. <p>
+     * from this object's set. <p>
+     * <p>
+     * A successful drop action consists of: <p>
      *
-     *  A successful drop action consists of: <p>
+     * <UL>
      *
-     *  <UL>
-     *
-     *    <LI>removing the Grantee object with the specified name
-     *        from the set.
-     *  </UL> <p>
-     *
+     * <LI>removing the Grantee object with the specified name
+     * from the set.
+     * </UL> <p>
      */
     public void dropRole(String name) {
 
@@ -849,12 +848,12 @@ public class GranteeManager {
 
     public String[] getRightsSQL() {
 
-        HsqlArrayList list     = new HsqlArrayList();
-        Iterator      grantees = getGrantees().iterator();
+        HsqlArrayList list = new HsqlArrayList();
+        Iterator grantees = getGrantees().iterator();
 
         while (grantees.hasNext()) {
             Grantee grantee = (Grantee) grantees.next();
-            String  name    = grantee.getName().getNameString();
+            String name = grantee.getName().getNameString();
 
             // _SYSTEM user, DBA Role grants not persisted
             if (GranteeManager.isImmutable(name)) {

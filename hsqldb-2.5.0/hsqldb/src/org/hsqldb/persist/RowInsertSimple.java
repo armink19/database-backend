@@ -44,18 +44,19 @@ import org.hsqldb.scriptio.ScriptWriterText;
  */
 public class RowInsertSimple implements RowInsertInterface {
 
-    final Session     session;
+    final Session session;
     final ErrorLogger callback;
-    final int         mode;
+    final int mode;
 
     public RowInsertSimple(Session session, ErrorLogger callback, int mode) {
 
-        this.session  = session;
+        this.session = session;
         this.callback = callback;
-        this.mode     = mode;
+        this.mode = mode;
     }
 
-    public void finishTable() {}
+    public void finishTable() {
+    }
 
     public void close() {
         callback.close();
@@ -69,16 +70,17 @@ public class RowInsertSimple implements RowInsertInterface {
         table.insertFromScript(session, store, rowData);
     }
 
-    public void setStartLineNumber(long number) {}
+    public void setStartLineNumber(long number) {
+    }
 
     public static class InsertErrorHandler implements ErrorLogger {
 
-        Database         database;
-        String           fileNamePath;
+        Database database;
+        String fileNamePath;
         ScriptWriterText scrwriter;
 
         public InsertErrorHandler(Database database, String fileNamePath) {
-            this.database     = database;
+            this.database = database;
             this.fileNamePath = fileNamePath;
         }
 
@@ -90,7 +92,8 @@ public class RowInsertSimple implements RowInsertInterface {
 
                 // todo - write line number etc
                 scrwriter.writeLogStatement(null, s);
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            }
         }
 
         public void writeRow(long lineNumber, Row row) {
@@ -101,8 +104,9 @@ public class RowInsertSimple implements RowInsertInterface {
 
                 // todo - write line number etc
                 scrwriter.writeInsertStatement(null, row,
-                                               (Table) row.getTable());
-            } catch (Throwable t) {}
+                        (Table) row.getTable());
+            } catch (Throwable t) {
+            }
         }
 
         public void close() {
@@ -116,23 +120,27 @@ public class RowInsertSimple implements RowInsertInterface {
 
             if (scrwriter == null) {
                 String timestamp = database.logger.fileDateFormat.format(
-                    new java.util.Date());
+                        new java.util.Date());
                 String name = fileNamePath + "." + timestamp + ".reject";
 
                 scrwriter = new ScriptWriterText(database, name, false, false,
-                                                 true);
+                        true);
             }
         }
     }
 
     public static class DefaultErrorHandler implements ErrorLogger {
 
-        public DefaultErrorHandler() {}
+        public DefaultErrorHandler() {
+        }
 
-        public void writeLogStatement(long lineNumber, String s) {}
+        public void writeLogStatement(long lineNumber, String s) {
+        }
 
-        public void writeRow(long lineNumber, Row row) {}
+        public void writeRow(long lineNumber, Row row) {
+        }
 
-        public void close() {}
+        public void close() {
+        }
     }
 }

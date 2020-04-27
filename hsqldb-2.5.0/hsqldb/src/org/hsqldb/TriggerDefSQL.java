@@ -52,9 +52,9 @@ public class TriggerDefSQL extends TriggerDef {
                          int[] updateColumns, Routine routine) {
 
         super(name, when, operation, forEachRow, table, transitions,
-              rangeVars, condition, conditionSQL, updateColumns);
+                rangeVars, condition, conditionSQL, updateColumns);
 
-        this.routine    = routine;
+        this.routine = routine;
         this.references = routine.getReferences();
     }
 
@@ -90,8 +90,8 @@ public class TriggerDefSQL extends TriggerDef {
         session.sessionContext.push();
 
         if (rangeVars[OLD_ROW] != null || rangeVars[NEW_ROW] != null) {
-            session.sessionContext.triggerArguments = new Object[][] {
-                oldData, newData
+            session.sessionContext.triggerArguments = new Object[][]{
+                    oldData, newData
             };
         }
 
@@ -99,7 +99,7 @@ public class TriggerDefSQL extends TriggerDef {
             int variableCount = routine.getVariableCount();
 
             session.sessionContext.routineVariables =
-                new Object[variableCount];
+                    new Object[variableCount];
             result = routine.statement.execute(session);
         }
 

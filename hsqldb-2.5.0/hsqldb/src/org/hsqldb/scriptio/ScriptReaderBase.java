@@ -47,13 +47,13 @@ import org.hsqldb.persist.RowInsertInterface;
  */
 public abstract class ScriptReaderBase {
 
-    Database           database;
-    String             fileNamePath;
-    long               lineCount;
+    Database database;
+    String fileNamePath;
+    long lineCount;
     RowInsertInterface inserter;
 
     ScriptReaderBase(Database db, String fileName) {
-        this.database     = db;
+        this.database = db;
         this.fileNamePath = fileName;
     }
 
@@ -69,17 +69,17 @@ public abstract class ScriptReaderBase {
 
     public abstract boolean readLoggedStatement(Session session);
 
-    int                            statementType;
-    int                            sessionNumber;
-    boolean                        sessionChanged;
-    Object[]                       rowData;
-    long                           sequenceValue;
-    String                         rawStatement;
-    String                         statement;
-    Table                          currentTable;
-    PersistentStore                currentStore;
-    NumberSequence                 currentSequence;
-    String                         currentSchema;
+    int statementType;
+    int sessionNumber;
+    boolean sessionChanged;
+    Object[] rowData;
+    long sequenceValue;
+    String rawStatement;
+    String statement;
+    Table currentTable;
+    PersistentStore currentStore;
+    NumberSequence currentSequence;
+    String currentSchema;
     RowInsertInterface.ErrorLogger errorLogger;
 
     public String getFileNamePath() {

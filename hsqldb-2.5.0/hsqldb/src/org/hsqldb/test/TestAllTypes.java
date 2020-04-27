@@ -46,39 +46,39 @@ public class TestAllTypes {
 
     protected String url = "jdbc:hsqldb:g:/hsql/testalltypes/test;hsqldb.sqllog=0";
 
-//    protected String url = "jdbc:hsqldb:hsql://localhost/yourtest";
-    boolean    network = false;
-    String     user;
-    String     password;
-    Statement  sStatement;
+    //    protected String url = "jdbc:hsqldb:hsql://localhost/yourtest";
+    boolean network = false;
+    String user;
+    String password;
+    Statement sStatement;
     Connection cConnection;
 
     // prameters
-    boolean reportProgress  = true;
-    boolean cachedTable     = true;
-    int     cacheScale      = 12;
-    int     logType         = 1;
-    int     writeDelay      = 60;
-    boolean indexZip        = true;
-    boolean indexLastName   = false;
-    boolean addForeignKey   = false;
-    boolean refIntegrity    = true;
+    boolean reportProgress = true;
+    boolean cachedTable = true;
+    int cacheScale = 12;
+    int logType = 1;
+    int writeDelay = 60;
+    boolean indexZip = true;
+    boolean indexLastName = false;
+    boolean addForeignKey = false;
+    boolean refIntegrity = true;
     boolean createTempTable = false;
 
     // introduces fragmentation to the .data file
-    boolean deleteWhileInsert         = false;
-    int     deleteWhileInsertInterval = 10000;
+    boolean deleteWhileInsert = false;
+    int deleteWhileInsertInterval = 10000;
 
     //
     int bigrows = 1024 * 1024;
 
     protected void setUp() {
 
-        user     = "sa";
+        user = "sa";
         password = "";
 
         try {
-            sStatement  = null;
+            sStatement = null;
             cConnection = null;
 
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
@@ -87,7 +87,7 @@ public class TestAllTypes {
 
             if (createDatabase) {
                 cConnection = DriverManager.getConnection(url, user, password);
-                sStatement  = cConnection.createStatement();
+                sStatement = cConnection.createStatement();
 
                 sStatement.execute("SET DATABASE EVENT LOG LEVEL 3");
                 sStatement.execute("SET FILES LOG SIZE " + 100);
@@ -99,7 +99,7 @@ public class TestAllTypes {
                 cConnection.close();
 
                 cConnection = DriverManager.getConnection(url, user, password);
-                sStatement  = cConnection.createStatement();
+                sStatement = cConnection.createStatement();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,28 +109,26 @@ public class TestAllTypes {
 
     /**
      * Fill up the cache
-     *
-     *
      */
     public void testFillUp() {
 
-        StopWatch sw        = new StopWatch();
-        int       smallrows = 0xfff;
-        double    value     = 0;
+        StopWatch sw = new StopWatch();
+        int smallrows = 0xfff;
+        double value = 0;
         String ddl1 = "DROP TABLE test IF EXISTS;"
-                      + "DROP TABLE zip IF EXISTS;";
+                + "DROP TABLE zip IF EXISTS;";
         String ddl2 = "CREATE TABLE zip( zip INT IDENTITY );";
         String ddl3 = "CREATE " + (cachedTable ? "CACHED "
-                                               : "") + "TABLE test( id INT IDENTITY,"
-                                                   + " firstname VARCHAR(128), "
-                                                   + " lastname VARCHAR(128), "
-                                                   + " zip SMALLINT, "
-                                                   + " longfield BIGINT, "
-                                                   + " doublefield DOUBLE, "
-                                                   + " bigdecimalfield DECIMAL(19), "
-                                                   + " bigdecimal2field DECIMAL(20,4), "
-                                                   + " datefield DATE, "
-                                                   + " filler VARCHAR(128)); ";
+                : "") + "TABLE test( id INT IDENTITY,"
+                + " firstname VARCHAR(128), "
+                + " lastname VARCHAR(128), "
+                + " zip SMALLINT, "
+                + " longfield BIGINT, "
+                + " doublefield DOUBLE, "
+                + " bigdecimalfield DECIMAL(19), "
+                + " bigdecimal2field DECIMAL(20,4), "
+                + " datefield DATE, "
+                + " filler VARCHAR(128)); ";
 
         // adding extra index will slow down inserts a bit
         String ddl4 = "CREATE INDEX idx1 ON TEST (lastname);";
@@ -148,7 +146,7 @@ public class TestAllTypes {
         String ddl9 = "CREATE INDEX idx6 ON TEST (datefield);";
         // referential integrity checks will slow down inserts a bit
         String ddl26 =
-            "ALTER TABLE test add constraint c1 FOREIGN KEY (zip) REFERENCES zip(zip);";
+                "ALTER TABLE test add constraint c1 FOREIGN KEY (zip) REFERENCES zip(zip);";
         String filler = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         try {
@@ -156,7 +154,7 @@ public class TestAllTypes {
             sw.zero();
 
             cConnection = null;
-            sStatement  = null;
+            sStatement = null;
             cConnection = DriverManager.getConnection(url, user, password);
 
             System.out.println("connected: " + sw.elapsedTime());
@@ -200,7 +198,7 @@ public class TestAllTypes {
             }
 
             PreparedStatement ps = cConnection.prepareStatement(
-                "INSERT INTO test (firstname,lastname,zip,longfield,doublefield,bigdecimalfield,bigdecimal2field,datefield, filler) VALUES (?,?,?,?,?,?,?,?, ?)");
+                    "INSERT INTO test (firstname,lastname,zip,longfield,doublefield,bigdecimalfield,bigdecimal2field,datefield, filler) VALUES (?,?,?,?,?,?,?,?, ?)");
 
             ps.setString(1, "Julia                 ");
             ps.setString(2, "Clancy");
@@ -208,7 +206,7 @@ public class TestAllTypes {
             for (i = 0; i < bigrows; i++) {
                 ps.setInt(3, nextIntRandom(randomgen, smallrows));
 
-                int nextrandom   = nextIntRandom(randomgen, filler.length());
+                int nextrandom = nextIntRandom(randomgen, filler.length());
                 int randomlength = nextIntRandom(randomgen, filler.length());
 
                 ps.setLong(4, randomgen.nextLong());
@@ -217,7 +215,7 @@ public class TestAllTypes {
 
                 ps.setBigDecimal(7, new BigDecimal(randomgen.nextDouble()));
                 ps.setDate(8, new java.sql.Date(nextIntRandom(randomgen, 1000)
-                                                * 24L * 3600 * 1000));
+                        * 24L * 3600 * 1000));
 
                 String varfiller = filler.substring(0, randomlength);
 
@@ -226,7 +224,7 @@ public class TestAllTypes {
 
                 if (reportProgress && (i + 1) % 10000 == 0) {
                     System.out.println("Insert " + (i + 1) + " : "
-                                       + sw.elapsedTime());
+                            + sw.elapsedTime());
                 }
 
                 // delete and add 4000 rows to introduce fragmentation
@@ -241,12 +239,12 @@ public class TestAllTypes {
                     int lastId = rs.getInt(1);
 
                     sStatement.execute(
-                        "SELECT * INTO TEMP tempt FROM test WHERE id > "
-                        + (lastId - 4000) + " ;");
+                            "SELECT * INTO TEMP tempt FROM test WHERE id > "
+                                    + (lastId - 4000) + " ;");
                     sStatement.execute("DELETE FROM test WHERE id > "
-                                       + (lastId - 4000) + " ;");
+                            + (lastId - 4000) + " ;");
                     sStatement.execute(
-                        "INSERT INTO test SELECT * FROM tempt;");
+                            "INSERT INTO test SELECT * FROM tempt;");
                     sStatement.execute("DROP TABLE tempt;");
                 }
             }
@@ -256,7 +254,7 @@ public class TestAllTypes {
 //            sStatement.execute(ddl7);
             System.out.println("Total insert: " + i);
             System.out.println("Insert time: " + sw.elapsedTime() + " rps: "
-                               + (i * 1000 / sw.elapsedTime()));
+                    + (i * 1000 / sw.elapsedTime()));
             sw.zero();
 
             if (!network) {
@@ -270,7 +268,8 @@ public class TestAllTypes {
         }
     }
 
-    protected void tearDown() {}
+    protected void tearDown() {
+    }
 
     protected void checkResults() {
 
@@ -319,16 +318,16 @@ public class TestAllTypes {
 
     private void checkSelects() {
 
-        StopWatch        sw        = new StopWatch();
-        int              smallrows = 0xfff;
+        StopWatch sw = new StopWatch();
+        int smallrows = 0xfff;
         java.util.Random randomgen = new java.util.Random();
-        int              i         = 0;
-        boolean          slow      = false;
+        int i = 0;
+        boolean slow = false;
 
         try {
             for (; i < bigrows / 4; i++) {
                 PreparedStatement ps = cConnection.prepareStatement(
-                    "SELECT TOP 1 firstname,lastname,zip,filler FROM test WHERE zip = ?");
+                        "SELECT TOP 1 firstname,lastname,zip,filler FROM test WHERE zip = ?");
 
                 ps.setInt(1, nextIntRandom(randomgen, smallrows));
                 ps.execute();
@@ -340,21 +339,22 @@ public class TestAllTypes {
                 if (reportProgress && (i + 1) % 10000 == 0
                         || (slow && (i + 1) % 100 == 0)) {
                     System.out.println("Select " + (i + 1) + " : "
-                                       + sw.elapsedTime() + " rps: "
-                                       + (i * 1000 / sw.elapsedTime()));
+                            + sw.elapsedTime() + " rps: "
+                            + (i * 1000 / sw.elapsedTime()));
                 }
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         System.out.println("Select random zip " + i + " rows : "
-                           + sw.elapsedTime() + " rps: "
-                           + (i * 1000 / sw.elapsedTime()));
+                + sw.elapsedTime() + " rps: "
+                + (i * 1000 / sw.elapsedTime()));
         sw.zero();
 
         try {
             for (i = 0; i < bigrows / 4; i++) {
                 PreparedStatement ps = cConnection.prepareStatement(
-                    "SELECT firstname,lastname,zip,filler FROM test WHERE id = ?");
+                        "SELECT firstname,lastname,zip,filler FROM test WHERE id = ?");
 
                 ps.setInt(1, nextIntRandom(randomgen, bigrows - 1));
                 ps.execute();
@@ -362,29 +362,30 @@ public class TestAllTypes {
                 if (reportProgress && (i + 1) % 10000 == 0
                         || (slow && (i + 1) % 100 == 0)) {
                     System.out.println("Select " + (i + 1) + " : "
-                                       + sw.elapsedTime());
+                            + sw.elapsedTime());
                 }
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         System.out.println("Select random id " + i + " rows : "
-                           + sw.elapsedTime() + " rps: "
-                           + (i * 1000 / sw.elapsedTime()));
+                + sw.elapsedTime() + " rps: "
+                + (i * 1000 / sw.elapsedTime()));
     }
 
     private void checkUpdates() {
 
-        StopWatch        sw        = new StopWatch();
-        int              smallrows = 0xfff;
+        StopWatch sw = new StopWatch();
+        int smallrows = 0xfff;
         java.util.Random randomgen = new java.util.Random();
-        int              i         = 0;
-        boolean          slow      = false;
-        int              count     = 0;
+        int i = 0;
+        boolean slow = false;
+        int count = 0;
 
         try {
             for (; i < smallrows; i++) {
                 PreparedStatement ps = cConnection.prepareStatement(
-                    "UPDATE test SET filler = filler || zip WHERE zip = ?");
+                        "UPDATE test SET filler = filler || zip WHERE zip = ?");
                 int random = nextIntRandom(randomgen, smallrows - 1);
 
                 ps.setInt(1, random);
@@ -393,21 +394,22 @@ public class TestAllTypes {
 
                 if (reportProgress && count % 10000 < 20) {
                     System.out.println("Update " + count + " : "
-                                       + sw.elapsedTime());
+                            + sw.elapsedTime());
                 }
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         System.out.println("Update with random zip " + i
-                           + " UPDATE commands, " + count + " rows : "
-                           + sw.elapsedTime() + " rps: "
-                           + (count * 1000 / (sw.elapsedTime() + 1)));
+                + " UPDATE commands, " + count + " rows : "
+                + sw.elapsedTime() + " rps: "
+                + (count * 1000 / (sw.elapsedTime() + 1)));
         sw.zero();
 
         try {
             for (i = 0; i < bigrows / 8; i++) {
                 PreparedStatement ps = cConnection.prepareStatement(
-                    "UPDATE test SET zip = zip + 1 WHERE id = ?");
+                        "UPDATE test SET zip = zip + 1 WHERE id = ?");
                 int random = nextIntRandom(randomgen, bigrows - 1);
 
                 ps.setInt(1, random);
@@ -416,15 +418,16 @@ public class TestAllTypes {
                 if (reportProgress && (i + 1) % 10000 == 0
                         || (slow && (i + 1) % 100 == 0)) {
                     System.out.println("Update " + (i + 1) + " : "
-                                       + sw.elapsedTime() + " rps: "
-                                       + (i * 1000 / sw.elapsedTime()));
+                            + sw.elapsedTime() + " rps: "
+                            + (i * 1000 / sw.elapsedTime()));
                 }
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
 
         System.out.println("Update with random id " + i + " rows : "
-                           + sw.elapsedTime() + " rps: "
-                           + (i * 1000 / (sw.elapsedTime() + 1)));
+                + sw.elapsedTime() + " rps: "
+                + (i * 1000 / (sw.elapsedTime() + 1)));
     }
 
     int nextIntRandom(Random r, int range) {
@@ -442,7 +445,7 @@ public class TestAllTypes {
 
     public static void main(String[] argv) {
 
-        StopWatch    sw   = new StopWatch();
+        StopWatch sw = new StopWatch();
         TestAllTypes test = new TestAllTypes();
 
         test.setUp();

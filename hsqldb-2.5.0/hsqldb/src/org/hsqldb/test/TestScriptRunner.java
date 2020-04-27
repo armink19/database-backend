@@ -47,34 +47,34 @@ class TestScriptRunner {
     protected static final String DEFAULT_RCFILE = "testscriptrunner.rc";
     public static String LS = System.getProperty("line.separator");
     public static String SYNTAX_MSG =
-        "java " + TestScriptRunner.class.getName()
-        + " [--optionalSwitches...] --urlid=URLID1 [script1.tsql [[--urlid=URLIDX] scriptY.tsql...]...]"
-        + LS
-        + "    Specify one input file name as '-' to read from stdin." + LS
-        + "    No scripts specified will read from only stdin." + LS
-        + "    Simple single-threaded example with RC file '" + DEFAULT_RCFILE
-        + "':" + LS
-        + "java " + TestScriptRunner.class.getName()
-        + "--urlid=URLID script1.tsql script2.tsql" + LS + LS
-        + "OPTIONAL SWITCHES:" + LS
-        + "    --verbose        Obviously..." + LS
-        + "    --threads        Each script runs in a parallel thread (dflt. sequential)."
-        + LS
-        + "    --rcfile=/path/to/file.rc   (Defaults to '" + DEFAULT_RCFILE
-        + "')" + LS
-        + "    --populate       Use TestCacheSize class to populate one database" + LS
-        + "    --sqltool=URLID  Invoke an interactive SqlTool session on given URLID" + LS
-        + "(This last is useful for troubleshooting and interactive script dev).";
+            "java " + TestScriptRunner.class.getName()
+                    + " [--optionalSwitches...] --urlid=URLID1 [script1.tsql [[--urlid=URLIDX] scriptY.tsql...]...]"
+                    + LS
+                    + "    Specify one input file name as '-' to read from stdin." + LS
+                    + "    No scripts specified will read from only stdin." + LS
+                    + "    Simple single-threaded example with RC file '" + DEFAULT_RCFILE
+                    + "':" + LS
+                    + "java " + TestScriptRunner.class.getName()
+                    + "--urlid=URLID script1.tsql script2.tsql" + LS + LS
+                    + "OPTIONAL SWITCHES:" + LS
+                    + "    --verbose        Obviously..." + LS
+                    + "    --threads        Each script runs in a parallel thread (dflt. sequential)."
+                    + LS
+                    + "    --rcfile=/path/to/file.rc   (Defaults to '" + DEFAULT_RCFILE
+                    + "')" + LS
+                    + "    --populate       Use TestCacheSize class to populate one database" + LS
+                    + "    --sqltool=URLID  Invoke an interactive SqlTool session on given URLID" + LS
+                    + "(This last is useful for troubleshooting and interactive script dev).";
 
     public boolean verbose = false;
     public boolean threaded = false;
 
     /**
      * Executes specified SQL test scripts.
-     *
+     * <p>
      * Run <CODE>java org.hsqldb.util.TestScriptRunner</CODE> with no
      * args to display syntax help.
-     *
+     * <p>
      * The TestCacheSize database population uses the database details
      * as generated in TestCacheSize.  It would be nice to get these
      * from the RC file, but alas, TestCacheSize does much magical work
@@ -115,7 +115,8 @@ class TestScriptRunner {
                     continue;
                 }
                 if (sa[i].startsWith("--urlid=")) {
-                    currentUrlid = sa[i].substring("--urlid=".length()); continue;
+                    currentUrlid = sa[i].substring("--urlid=".length());
+                    continue;
                 }
                 if (sa[i].startsWith("--sqltool=")) {
                     sqlToolUrlid = sa[i].substring("--sqltool=".length());
@@ -128,8 +129,8 @@ class TestScriptRunner {
                 if (scriptFileMap.containsKey(sa[i]))
                     throw new IllegalArgumentException(
                             TestScriptRunner.class.getName()
-                            + " can't handle the same script name twice.  "
-                            + "(Just copy or sym-link the script).");
+                                    + " can't handle the same script name twice.  "
+                                    + "(Just copy or sym-link the script).");
                 scriptFileMap.put(sa[i], currentUrlid);
             }
             if (currentUrlid == null) throw new IllegalArgumentException();
@@ -153,7 +154,7 @@ class TestScriptRunner {
             }
             try {
                 sqlToolMainMethod = sqlToolClass.
-                        getMethod("objectMain", new Class[] {sa.getClass()} );
+                        getMethod("objectMain", new Class[]{sa.getClass()});
             } catch (Exception e) {
                 System.err.println("SqlTool integration failure: " + e);
                 System.exit(3);
@@ -166,8 +167,8 @@ class TestScriptRunner {
         runner.establishConnections();
         boolean success = runner.runScripts();
         if (sqlToolMainMethod != null) try {
-            sqlToolMainMethod.invoke(null, new Object[] { new String[] {
-                "--rcfile=" + rcFile, sqlToolUrlid }});
+            sqlToolMainMethod.invoke(null, new Object[]{new String[]{
+                    "--rcfile=" + rcFile, sqlToolUrlid}});
         } catch (Exception e) {
             System.err.println("SqlTool failed: " + e);
             e.printStackTrace();
@@ -204,7 +205,7 @@ class TestScriptRunner {
             } catch (Exception e) {
                 throw new RuntimeException(
                         "Failed to connect to get JDBC connection for '"
-                        + getName() + "'", e);
+                                + getName() + "'", e);
             }
             conn.setAutoCommit(false);
             System.out.println("ScriptRun '" + getName() + "' connected with "
@@ -225,18 +226,21 @@ class TestScriptRunner {
                 System.err.println("Aborting thread for script '" + getName()
                         + "' due to: " + se);
                 throw new RuntimeException(se);
-            } finally { try {
-                conn.close();
-            } catch (SQLException se) {
-                System.err.println("Failed to close JDBC connection for '"
-                        + getName() + "': " + se);
-            } }
+            } finally {
+                try {
+                    conn.close();
+                } catch (SQLException se) {
+                    System.err.println("Failed to close JDBC connection for '"
+                            + getName() + "': " + se);
+                }
+            }
         }
     }
 
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
     }
+
     public void setThreaded(boolean threaded) {
         this.threaded = threaded;
     }
@@ -264,7 +268,7 @@ class TestScriptRunner {
             } catch (Exception e) {
                 throw new RuntimeException(
                         "Failed to instantiate RCData with file '"
-                        + rcFile + "' for urlid '" + urlid + "'", e);
+                                + rcFile + "' for urlid '" + urlid + "'", e);
             }
         }
 
@@ -292,7 +296,7 @@ class TestScriptRunner {
         for (int i = 0; i < scriptRuns.size(); i++)
             ((ScriptRun) scriptRuns.get(i)).connect();
         if (verbose) System.out.println(Integer.toString(scriptRuns.size())
-                    + " connection threads connected");
+                + " connection threads connected");
     }
 
     public boolean runScripts() {
@@ -300,7 +304,7 @@ class TestScriptRunner {
         for (int i = 0; i < scriptRuns.size(); i++) {
             scriptRun = (ScriptRun) scriptRuns.get(i);
             if (verbose) System.out.print("Starting " + (++i) + " / "
-                + scriptRuns.size() + "...");
+                    + scriptRuns.size() + "...");
             scriptRun.start();
             if (verbose) System.out.println("  +");
             if (!threaded) try {
@@ -308,19 +312,20 @@ class TestScriptRunner {
             } catch (InterruptedException ie) {
                 throw new RuntimeException(
                         "Interrupted while waiting for script '"
-                        + scriptRun.getName() + "' to execute", ie);
+                                + scriptRun.getName() + "' to execute", ie);
             }
         }
         if (threaded) {
             if (verbose)
                 System.out.println(
                         "All scripts started.  Will now wait for them.");
-            for (int i = 0; i < scriptRuns.size(); i++) try {
-                ((ScriptRun) scriptRuns.get(i)).join();
-            } catch (InterruptedException ie) {
-                throw new RuntimeException(
-                        "Interrupted while waiting for script to execute", ie);
-            }
+            for (int i = 0; i < scriptRuns.size(); i++)
+                try {
+                    ((ScriptRun) scriptRuns.get(i)).join();
+                } catch (InterruptedException ie) {
+                    throw new RuntimeException(
+                            "Interrupted while waiting for script to execute", ie);
+                }
         }
         for (int i = 0; i < scriptRuns.size(); i++) {
             if (!((ScriptRun) scriptRuns.get(i)).getSuccess()) return false;
@@ -330,7 +335,7 @@ class TestScriptRunner {
 
     /**
      * Copied directly from TestCacheSize.main().
-     *
+     * <p>
      * My goal is to configure population of this database by a properties
      * file, not by command line (which would just be too many settings
      * along with the main settings), nor by System Properties (ditto).
@@ -338,7 +343,7 @@ class TestScriptRunner {
      * a properties file, however.
      */
     static protected TestCacheSize populate() {
-        TestCacheSize  test  = new TestCacheSize();
+        TestCacheSize test = new TestCacheSize();
 
         /* Use all defaults
         HsqlProperties props = HsqlProperties.argArrayToProps(argv, "test");
@@ -354,7 +359,7 @@ class TestScriptRunner {
         */
 
         test.filepath = "mem:test";
-        test.filedb   = false;
+        test.filedb = false;
         test.shutdown = false;
 
         test.setUp();

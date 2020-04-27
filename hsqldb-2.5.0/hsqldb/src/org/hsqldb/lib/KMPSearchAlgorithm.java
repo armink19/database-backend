@@ -38,11 +38,11 @@ import java.io.Reader;
 /**
  * Implements the Knuth-Morris-Pratt string search algorithm for searching
  * streams or arrays of octets or characters. <p>
- *
+ * <p>
  * This algorithm is a good choice for searching large, forward-only access
  * streams for repeated search using pre-processed small to medium sized
  * patterns.  <p>
- *
+ * <p>
  * This is because in addition to the facts that it:
  *
  * <ul>
@@ -53,7 +53,7 @@ import java.io.Reader;
  * <li>does not need to perform effectively random access lookups against
  *     the searched data or pattern
  * </ul>
- *
+ * <p>
  * it also has:
  *
  * <ul>
@@ -63,15 +63,15 @@ import java.io.Reader;
  * <li>a worst case performance characteristic of only 2n
  * <li>a typical performance characteristic that is deemed to be
  *     2-3 times better than the naive search algorithm employed by
- *     {@link String#indexOf(java.lang.String,int)}.
+ *     {@link String#indexOf(java.lang.String, int)}.
  * </ul>
- *
+ * <p>
  * Note that the Boyer-Moore algorithm is generally considered to be the better
  * practical, all-round exact sub-string search algorithm, but due to its
  * reverse pattern scan order, performance considerations dictate that it
  * requires more space and that is somewhat more complex to implement
  * efficiently for searching forward-only access streams. <p>
- *
+ * <p>
  * In  particular, its higher average performance is biased toward larger
  * search patterns, due to its ability to skip ahead further and with fewer
  * tests under reverse pattern scan.  But when searching forward-only access
@@ -85,8 +85,8 @@ import java.io.Reader;
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @version 2.1
- * @since 2.1
  * @see <a href="http://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm">Knuth-Morris-Pratt algorithm</a>
+ * @since 2.1
  */
 public class KMPSearchAlgorithm {
 
@@ -94,15 +94,15 @@ public class KMPSearchAlgorithm {
      * Searches the given octet stream for the given octet pattern
      * returning the zero-based offset from the initial stream position
      * at which the first match is detected. <p>
-     *
+     * <p>
      * Note that the signature includes a slot for the table so that
      * searches for a pattern can be performed multiple times without
      * incurring the overhead of computing the table each time.
      *
      * @param inputStream in which to search
-     * @param pattern for which to search
-     * @param table computed from the pattern that optimizes the search.
-     *        If null, automatically computed.
+     * @param pattern     for which to search
+     * @param table       computed from the pattern that optimizes the search.
+     *                    If null, automatically computed.
      * @return zero-based offset of first match; -1 if no match found.
      * @throws IOException when an error occurs accessing the input stream.
      */
@@ -119,7 +119,7 @@ public class KMPSearchAlgorithm {
 
         //
         long streamIndex = -1;
-        int  currentByte;
+        int currentByte;
 
         if (patternLength == 1) {
             final int byteToFind = pattern[0];
@@ -164,15 +164,15 @@ public class KMPSearchAlgorithm {
      * Searches the given character stream for the given character pattern
      * returning the zero-based offset from the initial stream position
      * at which the first match is detected. <p>
-     *
+     * <p>
      * Note that the signature includes a slot for the table so that
      * searches for a pattern can be performed multiple times without
      * incurring the overhead of computing the table each time.
      *
-     * @param reader in which to search
+     * @param reader  in which to search
      * @param pattern for which to search
-     * @param table computed from the pattern that optimizes the search
-     *        If null, automatically computed.
+     * @param table   computed from the pattern that optimizes the search
+     *                If null, automatically computed.
      * @return zero-based offset of first match; -1 if no match found.
      * @throws IOException when an error occurs accessing the input stream.
      */
@@ -188,7 +188,7 @@ public class KMPSearchAlgorithm {
 
         //
         long streamIndex = -1;
-        int  currentCharacter;
+        int currentCharacter;
 
         if (patternLength == 1) {
             final int characterToFind = pattern[0];
@@ -233,16 +233,16 @@ public class KMPSearchAlgorithm {
      * Searches the given octet string for the given octet pattern
      * returning the zero-based offset from given start position
      * at which the first match is detected. <p>
-     *
+     * <p>
      * Note that the signature includes a slot for the table so that
      * searches for a pattern can be performed multiple times without
      * incurring the overhead of computing the table each time.
      *
-     * @param source array in which to search
+     * @param source  array in which to search
      * @param pattern to be matched
-     * @param table computed from the pattern that optimizes the search
-     *        If null, automatically computed.
-     * @param start position in source at which to start the search
+     * @param table   computed from the pattern that optimizes the search
+     *                If null, automatically computed.
+     * @param start   position in source at which to start the search
      */
     public static int search(final byte[] source, final byte[] pattern,
                              int[] table, final int start) {
@@ -252,7 +252,7 @@ public class KMPSearchAlgorithm {
         }
 
         //
-        final int sourceLength  = source.length;
+        final int sourceLength = source.length;
         final int patternLength = pattern.length;
 
         //
@@ -271,7 +271,7 @@ public class KMPSearchAlgorithm {
         }
 
         //
-        int matchStart   = start;
+        int matchStart = start;
         int patternIndex = 0;
 
         //
@@ -311,11 +311,11 @@ public class KMPSearchAlgorithm {
      * returning the zero-based offset from given start position
      * at which the first match is detected.
      *
-     * @param source array in which to search
+     * @param source  array in which to search
      * @param pattern to be matched
-     * @param table computed from the pattern that optimizes the search
-     *        If null, automatically computed.
-     * @param start position in source at which to start the search
+     * @param table   computed from the pattern that optimizes the search
+     *                If null, automatically computed.
+     * @param start   position in source at which to start the search
      */
     public static int search(final char[] source, final char[] pattern,
                              int[] table, final int start) {
@@ -324,9 +324,9 @@ public class KMPSearchAlgorithm {
             return -1;
         }
 
-        final int sourceLength  = source.length;
+        final int sourceLength = source.length;
         final int patternLength = pattern.length;
-        int       sourceIndex   = start;
+        int sourceIndex = start;
 
         if (patternLength == 1) {
             final int characterToFind = pattern[0];
@@ -341,7 +341,7 @@ public class KMPSearchAlgorithm {
         }
 
         //
-        int matchStart   = start;
+        int matchStart = start;
         int patternIndex = 0;
 
         //
@@ -381,10 +381,10 @@ public class KMPSearchAlgorithm {
      * returning the zero-based offset from given start position
      * at which the first match is detected.
      *
-     * @param source array to be searched
+     * @param source  array to be searched
      * @param pattern to be matched
-     * @param table computed from the pattern that optimizes the search
-     * @param start position in source at which to start the search
+     * @param table   computed from the pattern that optimizes the search
+     * @param start   position in source at which to start the search
      */
     public static int search(final String source, final String pattern,
                              int[] table, final int start) {
@@ -404,8 +404,8 @@ public class KMPSearchAlgorithm {
         final int sourceLength = source.length();
 
         //
-        int matchStart   = start;
-        int sourceIndex  = start;
+        int matchStart = start;
+        int sourceIndex = start;
         int patternIndex = 0;
 
         //
@@ -456,8 +456,8 @@ public class KMPSearchAlgorithm {
 
         //
         final int[] table = new int[pattern.length];
-        int         i     = 2;
-        int         j     = 0;
+        int i = 2;
+        int j = 0;
 
         //
         table[0] = -1;
@@ -494,8 +494,8 @@ public class KMPSearchAlgorithm {
         }
 
         int[] table = new int[pattern.length];
-        int   i     = 2;
-        int   j     = 0;
+        int i = 2;
+        int j = 0;
 
         table[0] = -1;
         table[1] = 0;
@@ -532,8 +532,8 @@ public class KMPSearchAlgorithm {
 
         //
         int[] table = new int[patternLength];
-        int   i     = 2;
-        int   j     = 0;
+        int i = 2;
+        int j = 0;
 
         table[0] = -1;
         table[1] = 0;

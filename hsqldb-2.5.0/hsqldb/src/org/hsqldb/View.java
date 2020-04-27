@@ -99,7 +99,7 @@ public class View extends TableDerived {
     public void compile(Session session, SchemaObject parentObject) {
 
         ParserDQL p = new ParserDQL(session, new Scanner(session, statement),
-                                    null);
+                null);
 
         p.isViewDefinition = true;
 
@@ -112,7 +112,7 @@ public class View extends TableDerived {
         if (getColumnCount() == 0) {
             if (columnNames == null) {
                 columnNames =
-                    viewSubQueryTable.queryExpression.getResultColumnNames();
+                        viewSubQueryTable.queryExpression.getResultColumnNames();
             }
 
             if (columnNames.length
@@ -121,13 +121,13 @@ public class View extends TableDerived {
             }
 
             TableUtil.setColumnsInSchemaTable(
-                this, columnNames, queryExpression.getColumnTypes());
+                    this, columnNames, queryExpression.getColumnTypes());
         }
 
         //
         schemaObjectNames = p.compileContext.getSchemaObjectNames();
-        canRecompile      = true;
-        baseTable         = queryExpression.getBaseTable();
+        canRecompile = true;
+        baseTable = queryExpression.getBaseTable();
 
         if (baseTable == null) {
             return;
@@ -135,12 +135,12 @@ public class View extends TableDerived {
 
         switch (checkOption) {
 
-            case SchemaObject.ViewCheckModes.CHECK_NONE :
-            case SchemaObject.ViewCheckModes.CHECK_LOCAL :
-            case SchemaObject.ViewCheckModes.CHECK_CASCADE :
+            case SchemaObject.ViewCheckModes.CHECK_NONE:
+            case SchemaObject.ViewCheckModes.CHECK_LOCAL:
+            case SchemaObject.ViewCheckModes.CHECK_CASCADE:
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "View");
         }
     }
@@ -188,19 +188,19 @@ public class View extends TableDerived {
 
     public boolean isInsertable() {
         return isTriggerInsertable ? false
-                                   : super.isInsertable();
+                : super.isInsertable();
     }
 
     public boolean isUpdatable() {
         return isTriggerUpdatable ? false
-                                  : super.isUpdatable();
+                : super.isUpdatable();
     }
 
     void addTrigger(TriggerDef td, HsqlName otherName) {
 
         switch (td.operationType) {
 
-            case StatementTypes.INSERT :
+            case StatementTypes.INSERT:
                 if (isTriggerInsertable) {
                     throw Error.error(ErrorCode.X_42538);
                 }
@@ -208,7 +208,7 @@ public class View extends TableDerived {
                 isTriggerInsertable = true;
                 break;
 
-            case StatementTypes.DELETE_WHERE :
+            case StatementTypes.DELETE_WHERE:
                 if (isTriggerDeletable) {
                     throw Error.error(ErrorCode.X_42538);
                 }
@@ -216,7 +216,7 @@ public class View extends TableDerived {
                 isTriggerDeletable = true;
                 break;
 
-            case StatementTypes.UPDATE_WHERE :
+            case StatementTypes.UPDATE_WHERE:
                 if (isTriggerUpdatable) {
                     throw Error.error(ErrorCode.X_42538);
                 }
@@ -224,7 +224,7 @@ public class View extends TableDerived {
                 isTriggerUpdatable = true;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "View");
         }
 
@@ -235,19 +235,19 @@ public class View extends TableDerived {
 
         switch (td.operationType) {
 
-            case StatementTypes.INSERT :
+            case StatementTypes.INSERT:
                 isTriggerInsertable = false;
                 break;
 
-            case StatementTypes.DELETE_WHERE :
+            case StatementTypes.DELETE_WHERE:
                 isTriggerDeletable = false;
                 break;
 
-            case StatementTypes.UPDATE_WHERE :
+            case StatementTypes.UPDATE_WHERE:
                 isTriggerUpdatable = false;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "View");
         }
 
@@ -280,7 +280,7 @@ public class View extends TableDerived {
                                         CompileContext baseContext) {
 
         TableDerived td;
-        ParserDQL    p = new ParserDQL(session, new Scanner(), baseContext);
+        ParserDQL p = new ParserDQL(session, new Scanner(), baseContext);
 
         // signals the type of subquery table, if view
         p.compileContext.setCurrentSubquery(tableName);

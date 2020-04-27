@@ -37,7 +37,7 @@ import java.io.InputStream;
 
 /**
  * Interface for Binary Large Object implementations.<p>
- *
+ * <p>
  * All positions are 0 based
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)

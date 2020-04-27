@@ -43,7 +43,7 @@ import java.sql.Statement;
 public class TestTextTables extends TestBase {
 
     static String url = TestDirectorySettings.fileBaseURL
-                        + "testtext/test;sql.enforce_strict_size=true";
+            + "testtext/test;sql.enforce_strict_size=true";
     static String filepath = TestDirectorySettings.fileBase + "testtext/";
 
     public TestTextTables(String name) {
@@ -83,7 +83,7 @@ public class TestTextTables extends TestBase {
     public void testSectionThree() throws Exception {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("SHUTDOWN SCRIPT");
     }
@@ -93,7 +93,7 @@ public class TestTextTables extends TestBase {
         partD();
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("SHUTDOWN");
     }
@@ -102,7 +102,7 @@ public class TestTextTables extends TestBase {
 
         Connection conn = newConnection();
         PreparedStatement ps =
-            conn.prepareStatement("insert into tident (c2) values ?");
+                conn.prepareStatement("insert into tident (c2) values ?");
 
         for (int i = 0; i < 20; i++) {
             ps.setString(1, String.valueOf(i));
@@ -126,7 +126,7 @@ public class TestTextTables extends TestBase {
         partD();
 
         conn = newConnection();
-        st   = conn.createStatement();
+        st = conn.createStatement();
 
         st.execute("insert into tident values default, 'dont know'");
 
@@ -142,7 +142,7 @@ public class TestTextTables extends TestBase {
         st.execute("SHUTDOWN SCRIPT");
 
         conn = newConnection();
-        st   = conn.createStatement();
+        st = conn.createStatement();
 
         st.execute("SHUTDOWN SCRIPT");
     }
@@ -150,13 +150,13 @@ public class TestTextTables extends TestBase {
     public void testSectionSix() throws Exception {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("set table tsingle read write");
         st.execute("SHUTDOWN SCRIPT");
 
         conn = newConnection();
-        st   = conn.createStatement();
+        st = conn.createStatement();
 
         st.execute("create memory table tmsingle (c1 int primary key)");
         st.execute("truncate table tident restart identity");
@@ -170,7 +170,7 @@ public class TestTextTables extends TestBase {
         st.execute("set table tsingle source off");
         st.execute("alter table tsingle add unique(c1)");
         st.execute(
-            "alter table tident add foreign key (c1) references tmsingle(c1)");
+                "alter table tident add foreign key (c1) references tmsingle(c1)");
         st.execute("set table tident source on");
         st.execute("set table tsingle source on");
 
@@ -185,7 +185,7 @@ public class TestTextTables extends TestBase {
         assertEquals(0, rs.getInt(1));
 
         PreparedStatement ps =
-            conn.prepareStatement("insert into tmsingle(c1) values ?");
+                conn.prepareStatement("insert into tmsingle(c1) values ?");
 
         for (int i = 0; i < 20; i++) {
             ps.setInt(1, i);
@@ -217,8 +217,8 @@ public class TestTextTables extends TestBase {
         st.execute("SHUTDOWN SCRIPT");
 
         conn = newConnection();
-        st   = conn.createStatement();
-        rs   = st.executeQuery("select count(*) from tmsingle");
+        st = conn.createStatement();
+        rs = st.executeQuery("select count(*) from tmsingle");
 
         assertTrue(rs.next());
         assertEquals(20, rs.getInt(1));
@@ -229,7 +229,7 @@ public class TestTextTables extends TestBase {
         assertEquals(20, rs.getInt(1));
 
         conn = newConnection();
-        st   = conn.createStatement();
+        st = conn.createStatement();
 
         st.execute("SHUTDOWN");
     }
@@ -242,15 +242,15 @@ public class TestTextTables extends TestBase {
         deleteDatabaseAndSources();
 
         String path = TestDirectorySettings.fileBase
-                      + "testtext/malformed.csv";
+                + "testtext/malformed.csv";
 
         FileUtil.getFileUtil().delete(path);
 
         FileOutputStream fos = new FileOutputStream(path);
         DataOutputStream dos = new DataOutputStream(fos);
 
-        dos.write(new byte[] {
-            (byte) 0xEF, (byte) 0xBB, (byte) 0xBF
+        dos.write(new byte[]{
+                (byte) 0xEF, (byte) 0xBB, (byte) 0xBF
         });
         dos.writeBytes("\"one\",tw1o\",\"three\"\r");
         dos.writeBytes("\"one\",\"tw\n2\"o,\"three\"\r");
@@ -258,13 +258,13 @@ public class TestTextTables extends TestBase {
         dos.close();
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("drop table ttriple if exists");
         st.execute(
-            "create text table ttriple(col1 varchar(20),col2 varchar(20),col3 varchar(20))");
+                "create text table ttriple(col1 varchar(20),col2 varchar(20),col3 varchar(20))");
         st.execute(
-            "set table ttriple source 'malformed.csv;quoted=true;encoding=UTF-8'");
+                "set table ttriple source 'malformed.csv;quoted=true;encoding=UTF-8'");
 
         ResultSet rs = st.executeQuery("select * from ttriple");
 
@@ -279,28 +279,28 @@ public class TestTextTables extends TestBase {
         deleteDatabaseAndSources();
 
         String path = TestDirectorySettings.fileBase
-                      + "testtext/commafield.csv";
+                + "testtext/commafield.csv";
 
         FileUtil.getFileUtil().delete(path);
 
         FileOutputStream fos = new FileOutputStream(path);
         DataOutputStream dos = new DataOutputStream(fos);
 
-        dos.write(new byte[] {
-            (byte) 0xEF, (byte) 0xBB, (byte) 0xBF
+        dos.write(new byte[]{
+                (byte) 0xEF, (byte) 0xBB, (byte) 0xBF
         });
         dos.writeBytes("\",\",\"col 2 line 1\"\r");
         dos.writeBytes("\"col 1 line 2\",\"col 2 line 2\"\r");
         dos.close();
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("drop table tcomma if exists");
         st.execute(
-            "create text table tcomma(col1 varchar(20),col2 varchar(20))");
+                "create text table tcomma(col1 varchar(20),col2 varchar(20))");
         st.execute(
-            "set table tcomma source 'commafield.csv;quoted=true;encoding=UTF-8'");
+                "set table tcomma source 'commafield.csv;quoted=true;encoding=UTF-8'");
 
         ResultSet rs = st.executeQuery("select * from tcomma");
 
@@ -320,7 +320,7 @@ public class TestTextTables extends TestBase {
     void initDatabase() throws Exception {
 
         Connection conn = newConnection();
-        Statement  st   = conn.createStatement();
+        Statement st = conn.createStatement();
 
         st.execute("set files write delay 0");
         st.execute("set database transaction control locks");

@@ -36,12 +36,12 @@ import java.util.NoSuchElementException;
 /**
  * Maintains an ordered  long->long lookup table, consisting of two
  * columns, one for keys, the other for values. Equal keys are allowed.<p>
- *
+ * <p>
  * The table is sorted on key column.<p>
- *
+ * <p>
  * findXXX() methods return the array index into the list
  * pair containing a matching key or value, or  or -1 if not found.<p>
- *
+ * <p>
  * Based on org.hsqldb.lib.DoubleIntIndex
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
@@ -50,20 +50,20 @@ import java.util.NoSuchElementException;
  */
 public final class DoubleLongIndex implements LongLookup {
 
-    private int     count = 0;
-    private int     capacity;
+    private int count = 0;
+    private int capacity;
     private boolean sorted = true;
-    private long[]  keys;
-    private long[]  values;
+    private long[] keys;
+    private long[] values;
 
-//
+    //
     private long targetSearchValue;
 
     public DoubleLongIndex(int capacity) {
 
         this.capacity = capacity;
-        keys          = new long[capacity];
-        values        = new long[capacity];
+        keys = new long[capacity];
+        values = new long[capacity];
     }
 
     public long getLongKey(int i) {
@@ -86,7 +86,8 @@ public final class DoubleLongIndex implements LongLookup {
 
     /**
      * Modifies an existing pair.
-     * @param i the index
+     *
+     * @param i     the index
      * @param value the value
      */
     public void setLongValue(int i, long value) {
@@ -114,7 +115,7 @@ public final class DoubleLongIndex implements LongLookup {
             }
         }
 
-        keys[count]   = key;
+        keys[count] = key;
         values[count] = value;
 
         count++;
@@ -140,7 +141,7 @@ public final class DoubleLongIndex implements LongLookup {
             moveRows(i, i + 1, count - i);
         }
 
-        keys[i]   = key;
+        keys[i] = key;
         values[i] = value;
 
         count++;
@@ -175,7 +176,7 @@ public final class DoubleLongIndex implements LongLookup {
         ArrayUtil.clearArray(ArrayUtil.CLASS_CODE_LONG, keys, 0, count);
         ArrayUtil.clearArray(ArrayUtil.CLASS_CODE_LONG, values, 0, count);
 
-        count  = 0;
+        count = 0;
         sorted = true;
     }
 
@@ -188,7 +189,7 @@ public final class DoubleLongIndex implements LongLookup {
         int index = findFirstGreaterEqualSlotIndex(value);
 
         return index == count ? -1
-                              : index;
+                : index;
     }
 
     /**
@@ -211,6 +212,7 @@ public final class DoubleLongIndex implements LongLookup {
      * returns the index of the empty row past the end of the array if
      * the search value is larger than all the values / keys in the searched
      * column.
+     *
      * @param value the value
      * @return the index
      */
@@ -228,18 +230,19 @@ public final class DoubleLongIndex implements LongLookup {
     /**
      * Returns the index of the lowest element == the given search target,
      * or -1
+     *
      * @return index or -1 if not found
      */
     private int binaryFirstSearch() {
 
-        int low     = 0;
-        int high    = count;
-        int mid     = 0;
+        int low = 0;
+        int high = count;
+        int mid = 0;
         int compare = 0;
-        int found   = count;
+        int found = count;
 
         while (low < high) {
-            mid     = (low + high) >>> 1;
+            mid = (low + high) >>> 1;
             compare = compare(mid);
 
             if (compare < 0) {
@@ -247,29 +250,30 @@ public final class DoubleLongIndex implements LongLookup {
             } else if (compare > 0) {
                 low = mid + 1;
             } else {
-                high  = mid;
+                high = mid;
                 found = mid;
             }
         }
 
         return found == count ? -1
-                              : found;
+                : found;
     }
 
     /**
      * Returns the index of the lowest element >= the given search target,
      * or count
-     *     @return the index
+     *
+     * @return the index
      */
     private int binarySlotSearch(boolean fullCompare) {
 
-        int low     = 0;
-        int high    = count;
-        int mid     = 0;
+        int low = 0;
+        int high = count;
+        int mid = 0;
         int compare = 0;
 
         while (low < high) {
-            mid     = (low + high) >>> 1;
+            mid = (low + high) >>> 1;
             compare = compare(mid);
 
             if (compare <= 0) {
@@ -296,14 +300,14 @@ public final class DoubleLongIndex implements LongLookup {
      */
     private void fastQuickSort() {
 
-        DoubleIntIndex indices   = new DoubleIntIndex(32768);
-        int            threshold = 16;
+        DoubleIntIndex indices = new DoubleIntIndex(32768);
+        int threshold = 16;
 
         indices.push(0, count - 1);
 
         while (indices.size() > 0) {
             int start = indices.peekKey();
-            int end   = indices.peekValue();
+            int end = indices.peekValue();
 
             indices.pop();
 
@@ -338,15 +342,17 @@ public final class DoubleLongIndex implements LongLookup {
         }
 
         long pivotValue = keys[pivot];
-        int  i          = start - 1;
-        int  j          = end;
+        int i = start - 1;
+        int j = end;
 
         swap(pivot, end);
 
-        for (;;) {
-            while (keys[++i] < pivotValue) {}
+        for (; ; ) {
+            while (keys[++i] < pivotValue) {
+            }
 
-            while (pivotValue < keys[--j]) {}
+            while (pivotValue < keys[--j]) {
+            }
 
             if (j < i) {
                 break;
@@ -400,10 +406,12 @@ public final class DoubleLongIndex implements LongLookup {
             i = l;
             v = j;
 
-            for (;;) {
-                while (lessThan(++i, v)) {}
+            for (; ; ) {
+                while (lessThan(++i, v)) {
+                }
 
-                while (lessThan(v, --j)) {}
+                while (lessThan(v, --j)) {
+                }
 
                 if (j < i) {
                     break;
@@ -443,7 +451,7 @@ public final class DoubleLongIndex implements LongLookup {
 
         moveRows(j, j + 1, i - j);
 
-        keys[j]   = col1;
+        keys[j] = col1;
         values[j] = col2;
     }
 
@@ -452,15 +460,16 @@ public final class DoubleLongIndex implements LongLookup {
         long col1 = keys[i1];
         long col2 = values[i1];
 
-        keys[i1]   = keys[i2];
+        keys[i1] = keys[i2];
         values[i1] = values[i2];
-        keys[i2]   = col1;
+        keys[i2] = col1;
         values[i2] = col2;
     }
 
     /**
      * Check if targeted column value in the row indexed i is less than the
      * search target object.
+     *
      * @param i the index
      * @return -1, 0 or +1
      */
@@ -477,6 +486,7 @@ public final class DoubleLongIndex implements LongLookup {
 
     /**
      * Check if row indexed i is less than row indexed j
+     *
      * @param i the first index
      * @param j the second index
      * @return true or false
@@ -497,8 +507,8 @@ public final class DoubleLongIndex implements LongLookup {
 
     private void doubleCapacity() {
 
-        keys     = (long[]) ArrayUtil.resizeArray(keys, capacity * 2);
-        values   = (long[]) ArrayUtil.resizeArray(values, capacity * 2);
+        keys = (long[]) ArrayUtil.resizeArray(keys, capacity * 2);
+        values = (long[]) ArrayUtil.resizeArray(values, capacity * 2);
         capacity *= 2;
     }
 
@@ -511,7 +521,7 @@ public final class DoubleLongIndex implements LongLookup {
         sorted = false;
 
         for (int i = 0; i < other.size(); i++) {
-            long key   = other.getLongKey(i);
+            long key = other.getLongKey(i);
             long value = other.getLongValue(i);
 
             this.addUnsorted(key, value);

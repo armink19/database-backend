@@ -40,7 +40,7 @@ import java.util.Properties;
 /**
  * Works with tar archives containing HSQLDB database instance backups.
  * Viz, creating, examining, or extracting these archives.
- * <P>
+ * <p>
  * This class provides OO Tar backup-creation control.
  * The extraction and listing features are implemented only in static fashion
  * in the Main method, which provides a consistent interface for all three
@@ -52,32 +52,32 @@ import java.util.Properties;
  * See the main(String[]) method for details about command-line usage.
  * </P>
  *
- * @see <a href="../../../../../guide/management-chapt.html#mtc_backup"
- *      target="guide">
- *     The database backup section of the HyperSQL User Guide</a>
- * @see DbBackupMain#main(String[])
- * @see #setOverWrite(boolean)
- * @see #setAbortUponModify(boolean)
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.0
+ * @see <a href="../../../../../guide/management-chapt.html#mtc_backup"
+ * target="guide">
+ * The database backup section of the HyperSQL User Guide</a>
+ * @see DbBackupMain#main(String[])
+ * @see #setOverWrite(boolean)
+ * @see #setAbortUponModify(boolean)
  * @since 2.0.0
  */
 public class DbBackup {
 
-    protected File         dbDir;
-    protected File         archiveFile;
-    protected String       instanceName;
-    protected boolean      overWrite       = false;    // Defaults no NO OVERWRITE
-    protected boolean      abortUponModify = true;     // Defaults to ABORT-UPON-MODIFY
-    File[]                 componentFiles;
+    protected File dbDir;
+    protected File archiveFile;
+    protected String instanceName;
+    protected boolean overWrite = false;    // Defaults no NO OVERWRITE
+    protected boolean abortUponModify = true;     // Defaults to ABORT-UPON-MODIFY
+    File[] componentFiles;
     InputStreamInterface[] componentStreams;
-    boolean[]              existList;
-    boolean[]              ignoreList;
+    boolean[] existList;
+    boolean[] ignoreList;
 
     /**
      * Instantiate a DbBackup instance for creating a Database Instance backup.
-     *
+     * <p>
      * Much validation is deferred until the write() method, to prevent
      * problems with files changing between the constructor and the write call.
      */
@@ -87,19 +87,19 @@ public class DbBackup {
 
         File dbPathFile = new File(dbPath);
 
-        dbDir          = dbPathFile.getAbsoluteFile().getParentFile();
-        instanceName   = dbPathFile.getName();
-        componentFiles = new File[] {
-            new File(dbDir, instanceName + ".properties"),
-            new File(dbDir, instanceName + ".script"),
-            new File(dbDir, instanceName + ".data"),
-            new File(dbDir, instanceName + ".backup"),
-            new File(dbDir, instanceName + ".log"),
-            new File(dbDir, instanceName + ".lobs")
+        dbDir = dbPathFile.getAbsoluteFile().getParentFile();
+        instanceName = dbPathFile.getName();
+        componentFiles = new File[]{
+                new File(dbDir, instanceName + ".properties"),
+                new File(dbDir, instanceName + ".script"),
+                new File(dbDir, instanceName + ".data"),
+                new File(dbDir, instanceName + ".backup"),
+                new File(dbDir, instanceName + ".log"),
+                new File(dbDir, instanceName + ".lobs")
         };
         componentStreams = new InputStreamInterface[componentFiles.length];
-        existList        = new boolean[componentFiles.length];
-        ignoreList       = new boolean[componentFiles.length];
+        existList = new boolean[componentFiles.length];
+        ignoreList = new boolean[componentFiles.length];
     }
 
     /**
@@ -111,14 +111,14 @@ public class DbBackup {
 
         File dbPathFile = new File(dbPath);
 
-        dbDir        = dbPathFile.getAbsoluteFile().getParentFile();
+        dbDir = dbPathFile.getAbsoluteFile().getParentFile();
         instanceName = dbPathFile.getName();
         componentFiles = new File[]{
-            new File(dbDir, instanceName + ".script"), };
+                new File(dbDir, instanceName + ".script"),};
         componentStreams = new InputStreamInterface[componentFiles.length];
-        existList        = new boolean[componentFiles.length];
-        ignoreList       = new boolean[componentFiles.length];
-        abortUponModify  = false;
+        existList = new boolean[componentFiles.length];
+        ignoreList = new boolean[componentFiles.length];
+        abortUponModify = false;
     }
 
     /**
@@ -148,7 +148,7 @@ public class DbBackup {
 
     /**
      * Defaults to false.
-     *
+     * <p>
      * If false, then attempts to write a tar file that already exist will
      * abort.
      */
@@ -158,7 +158,7 @@ public class DbBackup {
 
     /**
      * Defaults to true.
-     *
+     * <p>
      * If true, then the write() method will validate that the database is
      * closed, and it will verify that no DB file changes between when we
      * start writing the tar, and when we finish.
@@ -178,11 +178,11 @@ public class DbBackup {
     /**
      * This method always backs up the .properties and .script files.
      * It will back up all of .backup, .data, and .log which exist.
-     *
+     * <p>
      * If abortUponModify is set, no tar file will be created, and this
      * method will throw.
      *
-     * @throws IOException for any of many possible I/O problems
+     * @throws IOException           for any of many possible I/O problems
      * @throws IllegalStateException only if abortUponModify is set, and
      *                               database is open or is modified.
      */
@@ -193,11 +193,11 @@ public class DbBackup {
         checkEssentialFiles();
 
         TarGenerator generator = new TarGenerator(archiveFile, overWrite,
-            Integer.valueOf(DbBackup.generateBufferBlockValue(componentFiles)));
+                Integer.valueOf(DbBackup.generateBufferBlockValue(componentFiles)));
 
         for (int i = 0; i < componentFiles.length; i++) {
             boolean exists = componentStreams[i] != null
-                             || componentFiles[i].exists();
+                    || componentFiles[i].exists();
 
             if (!exists) {
                 continue;
@@ -212,12 +212,12 @@ public class DbBackup {
 
             if (componentStreams[i] == null) {
                 generator.queueEntry(componentFiles[i].getName(),
-                                     componentFiles[i]);
+                        componentFiles[i]);
 
                 existList[i] = true;
             } else {
                 generator.queueEntry(componentFiles[i].getName(),
-                                     componentStreams[i]);
+                        componentStreams[i]);
             }
         }
 
@@ -228,54 +228,55 @@ public class DbBackup {
     public void writeAsFiles() throws IOException {
 
         int bufferSize = 512
-                         * DbBackup.generateBufferBlockValue(componentFiles);
+                * DbBackup.generateBufferBlockValue(componentFiles);
         byte[] writeBuffer = new byte[bufferSize];
 
         checkEssentialFiles();
         FileOutputStream fileOut = null;
 
-        for (int i = 0; i < componentFiles.length; i++) try {
-            if (ignoreList[i]) {
-                continue;
-            }
-
-            if (!componentFiles[i].exists()) {
-                continue;
-            }
-
-            File outFile = new File(archiveFile, componentFiles[i].getName());
-            fileOut = new FileOutputStream(outFile);
-
-            if (componentStreams[i] == null) {
-                componentStreams[i] = new InputStreamWrapper(
-                    new FileInputStream(componentFiles[i]));
-            }
-
-            InputStreamInterface instream = componentStreams[i];
-
-            while (true) {
-                int count = instream.read(writeBuffer, 0, writeBuffer.length);
-
-                if (count <= 0) {
-                    break;
+        for (int i = 0; i < componentFiles.length; i++)
+            try {
+                if (ignoreList[i]) {
+                    continue;
                 }
 
-                fileOut.write(writeBuffer, 0, count);
-            }
+                if (!componentFiles[i].exists()) {
+                    continue;
+                }
 
-            instream.close();
-            fileOut.flush();
-            fileOut.getFD().sync();
-        } finally {
-            if (fileOut != null) {
-                fileOut.close();
-                fileOut = null;
+                File outFile = new File(archiveFile, componentFiles[i].getName());
+                fileOut = new FileOutputStream(outFile);
+
+                if (componentStreams[i] == null) {
+                    componentStreams[i] = new InputStreamWrapper(
+                            new FileInputStream(componentFiles[i]));
+                }
+
+                InputStreamInterface instream = componentStreams[i];
+
+                while (true) {
+                    int count = instream.read(writeBuffer, 0, writeBuffer.length);
+
+                    if (count <= 0) {
+                        break;
+                    }
+
+                    fileOut.write(writeBuffer, 0, count);
+                }
+
+                instream.close();
+                fileOut.flush();
+                fileOut.getFD().sync();
+            } finally {
+                if (fileOut != null) {
+                    fileOut.close();
+                    fileOut = null;
+                }
             }
-        }
     }
 
     void checkEssentialFiles()
-    throws FileNotFoundException, IllegalStateException {
+            throws FileNotFoundException, IllegalStateException {
 
         if (!componentFiles[0].getName().endsWith(".properties")) {
             return;
@@ -283,14 +284,14 @@ public class DbBackup {
 
         for (int i = 0; i < 2; i++) {
             boolean exists = componentStreams[i] != null
-                             || componentFiles[i].exists();
+                    || componentFiles[i].exists();
 
             if (!exists) {
 
                 // First 2 files are REQUIRED
                 throw new FileNotFoundException(
-                    RB.file_missing.getString(
-                        componentFiles[i].getAbsolutePath()));
+                        RB.file_missing.getString(
+                                componentFiles[i].getAbsolutePath()));
             }
         }
 
@@ -298,7 +299,7 @@ public class DbBackup {
             return;
         }
 
-        Properties      p   = new Properties();
+        Properties p = new Properties();
         FileInputStream fis = null;
 
         try {
@@ -307,14 +308,14 @@ public class DbBackup {
             fis = new FileInputStream(propertiesFile);
 
             p.load(fis);
-        } catch (IOException io) {}
-        finally {
+        } catch (IOException io) {
+        } finally {
             try {
                 if (fis != null) {
                     fis.close();
                 }
-            } catch (IOException io) {}
-            finally {
+            } catch (IOException io) {
+            } finally {
                 fis = null;    // Encourage buffer GC
             }
         }
@@ -323,9 +324,9 @@ public class DbBackup {
 
         if (modifiedString != null
                 && (modifiedString.equalsIgnoreCase("yes")
-                    || modifiedString.equalsIgnoreCase("true"))) {
+                || modifiedString.equalsIgnoreCase("true"))) {
             throw new IllegalStateException(
-                RB.modified_property.getString(modifiedString));
+                    RB.modified_property.getString(modifiedString));
         }
     }
 
@@ -341,26 +342,26 @@ public class DbBackup {
                 if (componentFiles[i].exists()) {
                     if (!existList[i]) {
                         throw new FileNotFoundException(
-                            RB.file_disappeared.getString(
-                                componentFiles[i].getAbsolutePath()));
+                                RB.file_disappeared.getString(
+                                        componentFiles[i].getAbsolutePath()));
                     }
 
                     if (componentFiles[i].lastModified() > startTime) {
                         throw new FileNotFoundException(
-                            RB.file_changed.getString(
-                                componentFiles[i].getAbsolutePath()));
+                                RB.file_changed.getString(
+                                        componentFiles[i].getAbsolutePath()));
                     }
                 } else if (existList[i]) {
                     throw new FileNotFoundException(
-                        RB.file_appeared.getString(
-                            componentFiles[i].getAbsolutePath()));
+                            RB.file_appeared.getString(
+                                    componentFiles[i].getAbsolutePath()));
                 }
             }
         } catch (IllegalStateException ise) {
             if (!archiveFile.delete()) {
                 System.out.println(
-                    RB.cleanup_rmfail.getString(
-                        archiveFile.getAbsolutePath()));
+                        RB.cleanup_rmfail.getString(
+                                archiveFile.getAbsolutePath()));
 
                 // Be-it-known.  This method can write to stderr if
                 // abortUponModify is true.
@@ -380,7 +381,7 @@ public class DbBackup {
     /**
      * Return a 512-block buffer size suggestion, based on the size of what
      * needs to be read or written, and default and typical JVM constraints.
-     * <P>
+     * <p>
      * <B>Algorithm details:</B>
      * </P> <P>
      * Minimum system I want support is a J2SE system with 256M physical
@@ -406,8 +407,8 @@ public class DbBackup {
      * reads than this, but that's the price you pay for smaller file size.
      * </P>
      *
-     * @param files  Null array elements are permitted.  They will just be
-     *               skipped by the algorithm.
+     * @param files Null array elements are permitted.  They will just be
+     *              skipped by the algorithm.
      */
     static protected int generateBufferBlockValue(File[] files) {
 
@@ -444,6 +445,6 @@ public class DbBackup {
      * @see #generateBufferBlockValue(File[])
      */
     static protected int generateBufferBlockValue(File file) {
-        return generateBufferBlockValue(new File[]{ file });
+        return generateBufferBlockValue(new File[]{file});
     }
 }

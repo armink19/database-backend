@@ -76,7 +76,7 @@ public class ParserCommand extends ParserDDL {
     HsqlArrayList compileStatements(String sql, Result cmd) {
 
         HsqlArrayList list = new HsqlArrayList();
-        Statement     cs   = null;
+        Statement cs = null;
 
         reset(session, sql);
 
@@ -87,7 +87,7 @@ public class ParserCommand extends ParserDDL {
 
             try {
                 lastError = null;
-                cs        = compilePart(cmd.getExecuteProperties());
+                cs = compilePart(cmd.getExecuteProperties());
             } catch (HsqlException e) {
                 if (lastError != null && lastError.getLevel() > e.getLevel()) {
                     throw lastError;
@@ -102,7 +102,7 @@ public class ParserCommand extends ParserDDL {
             }
 
             cs.setCompileTimestamp(
-                database.txManager.getGlobalChangeTimestamp());
+                    database.txManager.getGlobalChangeTimestamp());
             list.add(cs);
         }
 
@@ -148,18 +148,18 @@ public class ParserCommand extends ParserDDL {
         switch (token.tokenType) {
 
             // DQL
-            case Tokens.WITH :
-            case Tokens.OPENBRACKET :
-            case Tokens.SELECT :
-            case Tokens.TABLE : {
+            case Tokens.WITH:
+            case Tokens.OPENBRACKET:
+            case Tokens.SELECT:
+            case Tokens.TABLE: {
                 cs = compileCursorSpecification(RangeGroup.emptyArray, props,
-                                                false);
+                        false);
 
                 break;
             }
-            case Tokens.VALUES : {
+            case Tokens.VALUES: {
                 RangeGroup[] ranges =
-                    session.sessionContext.sessionVariableRangeGroups;
+                        session.sessionContext.sessionVariableRangeGroups;
 
                 compileContext.setOuterRanges(ranges);
 
@@ -169,129 +169,129 @@ public class ParserCommand extends ParserDDL {
             }
 
             // DML
-            case Tokens.INSERT : {
+            case Tokens.INSERT: {
                 cs = compileInsertStatement(RangeGroup.emptyArray);
 
                 break;
             }
-            case Tokens.UPDATE : {
+            case Tokens.UPDATE: {
                 cs = compileUpdateStatement(RangeGroup.emptyArray);
 
                 break;
             }
-            case Tokens.MERGE : {
+            case Tokens.MERGE: {
                 cs = compileMergeStatement(RangeGroup.emptyArray);
 
                 break;
             }
-            case Tokens.DELETE : {
+            case Tokens.DELETE: {
                 cs = compileDeleteStatement(RangeGroup.emptyArray);
 
                 break;
             }
-            case Tokens.TRUNCATE : {
+            case Tokens.TRUNCATE: {
                 cs = compileTruncateStatement();
 
                 break;
             }
-            case Tokens.REPLACE : {
+            case Tokens.REPLACE: {
                 cs = compileInsertStatement(RangeGroup.emptyArray);
 
                 break;
             }
 
             // PROCEDURE
-            case Tokens.CALL : {
+            case Tokens.CALL: {
                 cs = compileCallStatement(
-                    session.sessionContext.sessionVariableRangeGroups, false);
+                        session.sessionContext.sessionVariableRangeGroups, false);
 
                 break;
             }
 
             // SQL SESSION
-            case Tokens.SET :
+            case Tokens.SET:
                 cs = compileSet();
                 break;
 
             // diagnostic
-            case Tokens.GET :
+            case Tokens.GET:
                 cs = compileGetStatement(
-                    session.sessionContext.sessionVariableRangeGroups);
+                        session.sessionContext.sessionVariableRangeGroups);
                 break;
 
-            case Tokens.START :
+            case Tokens.START:
                 cs = compileStartTransaction();
                 break;
 
-            case Tokens.COMMIT :
+            case Tokens.COMMIT:
                 cs = compileCommit();
                 break;
 
-            case Tokens.ROLLBACK :
+            case Tokens.ROLLBACK:
                 cs = compileRollback();
                 break;
 
-            case Tokens.SAVEPOINT :
+            case Tokens.SAVEPOINT:
                 cs = compileSavepoint();
                 break;
 
-            case Tokens.RELEASE :
+            case Tokens.RELEASE:
                 cs = compileReleaseSavepoint();
                 break;
 
             // DDL
-            case Tokens.CREATE :
+            case Tokens.CREATE:
                 cs = compileCreate();
                 break;
 
-            case Tokens.ALTER :
+            case Tokens.ALTER:
                 cs = compileAlter();
                 break;
 
-            case Tokens.DROP :
+            case Tokens.DROP:
                 cs = compileDrop();
                 break;
 
-            case Tokens.GRANT :
-            case Tokens.REVOKE :
+            case Tokens.GRANT:
+            case Tokens.REVOKE:
                 cs = compileGrantOrRevoke();
                 break;
 
-            case Tokens.COMMENT :
+            case Tokens.COMMENT:
                 cs = compileComment();
                 break;
 
             // HSQL SESSION
-            case Tokens.LOCK :
+            case Tokens.LOCK:
                 cs = compileLock();
                 break;
 
-            case Tokens.CONNECT :
+            case Tokens.CONNECT:
                 cs = compileConnect();
                 break;
 
-            case Tokens.DISCONNECT :
+            case Tokens.DISCONNECT:
                 cs = compileDisconnect();
                 break;
 
             // HSQL COMMAND
-            case Tokens.SCRIPT :
+            case Tokens.SCRIPT:
                 cs = compileScript(false);
                 break;
 
-            case Tokens.SHUTDOWN :
+            case Tokens.SHUTDOWN:
                 cs = compileShutdown();
                 break;
 
-            case Tokens.BACKUP :
+            case Tokens.BACKUP:
                 cs = compileBackup();
                 break;
 
-            case Tokens.CHECKPOINT :
+            case Tokens.CHECKPOINT:
                 cs = compileCheckpoint();
                 break;
 
-            case Tokens.EXPLAIN : {
+            case Tokens.EXPLAIN: {
                 int position = getPosition();
 
                 read();
@@ -306,15 +306,15 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.DECLARE :
+            case Tokens.DECLARE:
                 cs = compileDeclare();
                 break;
 
-            case Tokens.PERFORM :
+            case Tokens.PERFORM:
                 cs = compilePerform();
                 break;
 
-            default :
+            default:
                 throw unexpectedToken();
         }
 
@@ -322,26 +322,27 @@ public class ParserCommand extends ParserDDL {
         switch (cs.type) {
 
             // these are set at compile time for logging
-            case StatementTypes.COMMIT_WORK :
-            case StatementTypes.ROLLBACK_WORK :
-            case StatementTypes.SET_USER_PASSWORD :
-            case StatementTypes.EXPLAIN_PLAN :
+            case StatementTypes.COMMIT_WORK:
+            case StatementTypes.ROLLBACK_WORK:
+            case StatementTypes.SET_USER_PASSWORD:
+            case StatementTypes.EXPLAIN_PLAN:
                 break;
 
-            default :
+            default:
                 cs.setSQL(getLastPart());
         }
 
         if (token.tokenType == Tokens.SEMICOLON) {
             read();
-        } else if (token.tokenType == Tokens.X_ENDPARSE) {}
+        } else if (token.tokenType == Tokens.X_ENDPARSE) {
+        }
 
         return cs;
     }
 
     private Statement compileDeclare() {
 
-        Statement      cs;
+        Statement cs;
         ColumnSchema[] variables;
 
         cs = compileDeclareLocalTableOrNull();
@@ -353,7 +354,7 @@ public class ParserCommand extends ParserDDL {
         variables = readLocalVariableDeclarationOrNull();
 
         if (variables != null) {
-            Object[] args = new Object[]{ variables };
+            Object[] args = new Object[]{variables};
 
             cs = new StatementSession(StatementTypes.DECLARE_VARIABLE, args);
 
@@ -364,7 +365,7 @@ public class ParserCommand extends ParserDDL {
 
         if (cs == null) {
             throw lastError == null ? unexpectedToken()
-                                    : lastError;
+                    : lastError;
         }
 
         return cs;
@@ -372,10 +373,10 @@ public class ParserCommand extends ParserDDL {
 
     private Statement compileScript(boolean extended) {
 
-        String        name      = null;
-        int           scope     = 0;
-        int           type      = 0;
-        HsqlName      tableName = null;
+        String name = null;
+        int scope = 0;
+        int type = 0;
+        HsqlName tableName = null;
         TimestampData timestamp = null;
 
         readThis(Tokens.SCRIPT);
@@ -386,13 +387,13 @@ public class ParserCommand extends ParserDDL {
             if (readIfThis(Tokens.DATABASE)) {
                 switch (token.tokenType) {
 
-                    case Tokens.STRUCTURE :
+                    case Tokens.STRUCTURE:
                         read();
 
                         type = Tokens.STRUCTURE;
                         break;
 
-                    case Tokens.VERSIONING :
+                    case Tokens.VERSIONING:
                         read();
                         readThis(Tokens.DATA);
 
@@ -402,9 +403,9 @@ public class ParserCommand extends ParserDDL {
                             String s = readQuotedString();
 
                             timestamp =
-                                (TimestampData) Type.SQL_TIMESTAMP
-                                    .convertToType(session, s,
-                                                   Type.SQL_VARCHAR_DEFAULT);
+                                    (TimestampData) Type.SQL_TIMESTAMP
+                                            .convertToType(session, s,
+                                                    Type.SQL_VARCHAR_DEFAULT);
                         } else {
                             timestamp = DateTimeType.epochTimestamp;
                         }
@@ -412,13 +413,13 @@ public class ParserCommand extends ParserDDL {
                         type = Tokens.VERSIONING;
                         break;
 
-                    case Tokens.DATA :
+                    case Tokens.DATA:
                         read();
 
                         type = Tokens.DATA;
                         break;
 
-                    default :
+                    default:
                         type = Tokens.ALL;
                 }
 
@@ -438,7 +439,7 @@ public class ParserCommand extends ParserDDL {
                 readThis(Tokens.TO);
 
                 scope = Tokens.TABLE;
-                type  = Tokens.DATA;
+                type = Tokens.DATA;
             } else {
                 throw unexpectedToken();
             }
@@ -447,26 +448,26 @@ public class ParserCommand extends ParserDDL {
         if (token.tokenType == Tokens.X_VALUE) {
             if (scope == 0) {
                 scope = Tokens.DATABASE;
-                type  = Tokens.ALL;
+                type = Tokens.ALL;
             }
 
             name = readQuotedString();
         } else if (scope == 0) {
             scope = Tokens.DATABASE;
-            type  = Tokens.STRUCTURE;
+            type = Tokens.STRUCTURE;
         } else {
             throw unexpectedTokenRequire(Tokens.T_PATH);
         }
 
         HsqlName[] names =
-            database.schemaManager.getCatalogAndBaseTableNames();
-        Object[] args = new Object[] {
-            name, Integer.valueOf(scope), Integer.valueOf(type), tableName,
-            timestamp
+                database.schemaManager.getCatalogAndBaseTableNames();
+        Object[] args = new Object[]{
+                name, Integer.valueOf(scope), Integer.valueOf(type), tableName,
+                timestamp
         };
 
         return new StatementCommand(StatementTypes.DATABASE_SCRIPT, args,
-                                    null, names);
+                null, names);
     }
 
     private Statement compileConnect() {
@@ -488,14 +489,14 @@ public class ParserCommand extends ParserDDL {
             password = readPassword();
         }
 
-        Expression[] args = new Expression[] {
-            new ExpressionValue(userName, Type.SQL_VARCHAR),
-            new ExpressionValue(password, Type.SQL_VARCHAR)
+        Expression[] args = new Expression[]{
+                new ExpressionValue(userName, Type.SQL_VARCHAR),
+                new ExpressionValue(password, Type.SQL_VARCHAR)
         };
         Statement cs =
-            new StatementSession(session, compileContext,
-                                 StatementTypes.SET_SESSION_AUTHORIZATION,
-                                 args);
+                new StatementSession(session, compileContext,
+                        StatementTypes.SET_SESSION_AUTHORIZATION,
+                        args);
 
         return cs;
     }
@@ -506,32 +507,32 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.INITIAL : {
+            case Tokens.INITIAL: {
                 read();
                 readThis(Tokens.SCHEMA);
 
                 HsqlName schema = database.schemaManager.getSchemaHsqlName(
-                    token.tokenString);
+                        token.tokenString);
 
                 read();
 
-                Object[] args = new Object[]{ schema };
+                Object[] args = new Object[]{schema};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_DEFAULT_INITIAL_SCHEMA, args);
+                        StatementTypes.SET_DATABASE_DEFAULT_INITIAL_SCHEMA, args);
             }
-            case Tokens.RESULT : {
+            case Tokens.RESULT: {
                 read();
                 readThis(Tokens.MEMORY);
                 readThis(Tokens.ROWS);
 
-                Integer  size = readIntegerObject();
-                Object[] args = new Object[]{ size };
+                Integer size = readIntegerObject();
+                Object[] args = new Object[]{size};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_RESULT_MEMORY_ROWS, args);
+                        StatementTypes.SET_DATABASE_RESULT_MEMORY_ROWS, args);
             }
-            case Tokens.TABLE : {
+            case Tokens.TABLE: {
                 read();
                 readThis(Tokens.TYPE);
 
@@ -539,26 +540,26 @@ public class ParserCommand extends ParserDDL {
 
                 switch (token.tokenType) {
 
-                    case Tokens.MEMORY :
+                    case Tokens.MEMORY:
                         type = TableBase.MEMORY_TABLE;
                         break;
 
-                    case Tokens.CACHED :
+                    case Tokens.CACHED:
                         type = TableBase.CACHED_TABLE;
                         break;
 
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
                 read();
 
-                Object[] args = new Object[]{ ValuePool.getInt(type) };
+                Object[] args = new Object[]{ValuePool.getInt(type)};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_DEFAULT_TABLE_TYPE, args);
+                        StatementTypes.SET_DATABASE_DEFAULT_TABLE_TYPE, args);
             }
-            case Tokens.ISOLATION : {
+            case Tokens.ISOLATION: {
                 read();
                 readThis(Tokens.LEVEL);
 
@@ -566,29 +567,29 @@ public class ParserCommand extends ParserDDL {
 
                 switch (token.tokenType) {
 
-                    case Tokens.READ :
+                    case Tokens.READ:
                         read();
                         readThis(Tokens.COMMITTED);
 
                         level = SessionInterface.TX_READ_COMMITTED;
                         break;
 
-                    case Tokens.SERIALIZABLE :
+                    case Tokens.SERIALIZABLE:
                         read();
 
                         level = SessionInterface.TX_SERIALIZABLE;
                         break;
 
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
-                Object[] args = new Object[]{ ValuePool.getInt(level) };
+                Object[] args = new Object[]{ValuePool.getInt(level)};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_DEFAULT_ISOLATION_LEVEL, args);
+                        StatementTypes.SET_DATABASE_DEFAULT_ISOLATION_LEVEL, args);
             }
-            default :
+            default:
                 throw unexpectedToken();
         }
     }
@@ -620,12 +621,12 @@ public class ParserCommand extends ParserDDL {
 
         read();
 
-        Object[] args = new Object[] {
-            property, value
+        Object[] args = new Object[]{
+                property, value
         };
 
         return new StatementCommand(StatementTypes.SET_DATABASE_PROPERTY,
-                                    args);
+                args);
     }
 
     private Statement compileSet() {
@@ -634,17 +635,17 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.CATALOG : {
+            case Tokens.CATALOG: {
                 read();
 
                 Expression e = XreadValueSpecificationOrNull();
 
                 if (e == null) {
                     HsqlName name = readSchemaName();
-                    Object[] args = new Object[]{ name };
+                    Object[] args = new Object[]{name};
 
                     return new StatementSession(StatementTypes.SET_CATALOG,
-                                                args);
+                            args);
                 }
 
                 if (!e.getDataType().isCharacterType()) {
@@ -653,26 +654,26 @@ public class ParserCommand extends ParserDDL {
 
                 if (e.getType() != OpTypes.VALUE
                         && (e.getType() != OpTypes.SQL_FUNCTION
-                            || !((FunctionSQL) e).isValueFunction())) {
+                        || !((FunctionSQL) e).isValueFunction())) {
                     throw Error.error(ErrorCode.X_0P000);
                 }
 
-                Expression[] args = new Expression[]{ e };
+                Expression[] args = new Expression[]{e};
 
                 return new StatementSession(session, compileContext,
-                                            StatementTypes.SET_CATALOG, args);
+                        StatementTypes.SET_CATALOG, args);
             }
-            case Tokens.SCHEMA : {
+            case Tokens.SCHEMA: {
                 read();
 
                 Expression e = XreadValueSpecificationOrNull();
 
                 if (e == null) {
                     HsqlName name = readSchemaName();
-                    Object[] args = new Object[]{ name };
+                    Object[] args = new Object[]{name};
 
                     return new StatementSession(StatementTypes.SET_SCHEMA,
-                                                args);
+                            args);
                 }
 
                 if (e.isUnresolvedParam()) {
@@ -685,27 +686,27 @@ public class ParserCommand extends ParserDDL {
 
                 switch (e.getType()) {
 
-                    case OpTypes.PARAMETER :
-                    case OpTypes.DYNAMIC_PARAM :
-                    case OpTypes.VALUE :
+                    case OpTypes.PARAMETER:
+                    case OpTypes.DYNAMIC_PARAM:
+                    case OpTypes.VALUE:
                         break;
 
-                    case OpTypes.SQL_FUNCTION :
+                    case OpTypes.SQL_FUNCTION:
                         if (((FunctionSQL) e).isValueFunction()) {
                             break;
                         }
 
                         throw Error.error(ErrorCode.X_0P000);
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_0P000);
                 }
 
-                Expression[] args = new Expression[]{ e };
+                Expression[] args = new Expression[]{e};
 
                 return new StatementSession(session, compileContext,
-                                            StatementTypes.SET_SCHEMA, args);
+                        StatementTypes.SET_SCHEMA, args);
             }
-            case Tokens.NO : {
+            case Tokens.NO: {
                 read();
                 readThis(Tokens.COLLATION);
 
@@ -716,7 +717,7 @@ public class ParserCommand extends ParserDDL {
 
                     while (true) {
                         SchemaObject charset =
-                            readSchemaObjectName(SchemaObject.CHARSET);
+                                readSchemaObjectName(SchemaObject.CHARSET);
 
                         charsets.add(charset);
 
@@ -730,14 +731,14 @@ public class ParserCommand extends ParserDDL {
                     }
                 }
 
-                Object[] args = new Object[] {
-                    null, Boolean.FALSE, charsets
+                Object[] args = new Object[]{
+                        null, Boolean.FALSE, charsets
                 };
 
                 return new StatementSession(StatementTypes.SET_COLLATION,
-                                            args);
+                        args);
             }
-            case Tokens.COLLATION : {
+            case Tokens.COLLATION: {
                 read();
 
                 Expression e = XreadValueSpecificationOrNull();
@@ -753,7 +754,7 @@ public class ParserCommand extends ParserDDL {
 
                     while (true) {
                         SchemaObject charset =
-                            readSchemaObjectName(SchemaObject.CHARSET);
+                                readSchemaObjectName(SchemaObject.CHARSET);
 
                         charsets.add(charset);
 
@@ -767,29 +768,29 @@ public class ParserCommand extends ParserDDL {
                     }
                 }
 
-                Object[] args = new Object[] {
-                    e, Boolean.TRUE, charsets
+                Object[] args = new Object[]{
+                        e, Boolean.TRUE, charsets
                 };
 
                 return new StatementSession(StatementTypes.SET_COLLATION,
-                                            args);
+                        args);
             }
-            case Tokens.TIME : {
+            case Tokens.TIME: {
                 read();
 
                 return compileSetTimeZone();
             }
-            case Tokens.ROLE : {
+            case Tokens.ROLE: {
                 read();
 
                 return compileSetRole();
             }
-            case Tokens.SESSION : {
+            case Tokens.SESSION: {
                 read();
 
                 return compileSessionSettings();
             }
-            case Tokens.TRANSACTION : {
+            case Tokens.TRANSACTION: {
                 read();
 
                 Object[] args = processTransactionCharacteristics();
@@ -799,49 +800,49 @@ public class ParserCommand extends ParserDDL {
                 }
 
                 return new StatementSession(StatementTypes.SET_TRANSACTION,
-                                            args);
+                        args);
             }
-            case Tokens.AUTOCOMMIT : {
+            case Tokens.AUTOCOMMIT: {
                 read();
 
-                Boolean  mode = processTrueOrFalseObject();
-                Object[] args = new Object[]{ mode };
+                Boolean mode = processTrueOrFalseObject();
+                Object[] args = new Object[]{mode};
 
                 return new StatementSession(
-                    StatementTypes.SET_SESSION_AUTOCOMMIT, args);
+                        StatementTypes.SET_SESSION_AUTOCOMMIT, args);
             }
 
             // deprecated
-            case Tokens.READONLY : {
+            case Tokens.READONLY: {
                 read();
 
-                Boolean  readonly = processTrueOrFalseObject();
-                Object[] args     = new Object[]{ readonly };
+                Boolean readonly = processTrueOrFalseObject();
+                Object[] args = new Object[]{readonly};
 
                 return new StatementSession(
-                    StatementTypes.SET_SESSION_CHARACTERISTICS, args);
+                        StatementTypes.SET_SESSION_CHARACTERISTICS, args);
             }
-            case Tokens.IGNORECASE : {
+            case Tokens.IGNORECASE: {
                 read();
 
-                Boolean  mode = processTrueOrFalseObject();
-                Object[] args = new Object[]{ mode };
+                Boolean mode = processTrueOrFalseObject();
+                Object[] args = new Object[]{mode};
 
                 return new StatementSession(
-                    StatementTypes.SET_SESSION_SQL_IGNORECASE, args);
+                        StatementTypes.SET_SESSION_SQL_IGNORECASE, args);
             }
-            case Tokens.MAXROWS : {
+            case Tokens.MAXROWS: {
                 read();
 
-                Integer  size = readIntegerObject();
-                Object[] args = new Object[]{ size };
+                Integer size = readIntegerObject();
+                Object[] args = new Object[]{size};
 
                 return new StatementSession(
-                    StatementTypes.SET_SESSION_RESULT_MAX_ROWS, args);
+                        StatementTypes.SET_SESSION_RESULT_MAX_ROWS, args);
             }
 
             // for backward compatibility
-            case Tokens.DEFAULT : {
+            case Tokens.DEFAULT: {
                 read();
                 readThis(Tokens.TABLE);
                 readThis(Tokens.TYPE);
@@ -850,29 +851,29 @@ public class ParserCommand extends ParserDDL {
 
                 switch (token.tokenType) {
 
-                    case Tokens.MEMORY :
+                    case Tokens.MEMORY:
                         type = TableBase.MEMORY_TABLE;
                         break;
 
-                    case Tokens.CACHED :
+                    case Tokens.CACHED:
                         type = TableBase.CACHED_TABLE;
                         break;
 
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
                 read();
 
-                Object[] args = new Object[]{ ValuePool.getInt(type) };
+                Object[] args = new Object[]{ValuePool.getInt(type)};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_DEFAULT_TABLE_TYPE, args);
+                        StatementTypes.SET_DATABASE_DEFAULT_TABLE_TYPE, args);
             }
-            case Tokens.TABLE : {
+            case Tokens.TABLE: {
                 return compileSetTable();
             }
-            case Tokens.WRITE_DELAY : {
+            case Tokens.WRITE_DELAY: {
                 read();
 
                 int delay = 0;
@@ -899,14 +900,14 @@ public class ParserCommand extends ParserDDL {
                     }
                 }
 
-                Object[] args = new Object[]{ Integer.valueOf(delay) };
+                Object[] args = new Object[]{Integer.valueOf(delay)};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_FILES_WRITE_DELAY, args, null,
-                    null);
+                        StatementTypes.SET_DATABASE_FILES_WRITE_DELAY, args, null,
+                        null);
             }
-            case Tokens.PASSWORD : {
-                String  password;
+            case Tokens.PASSWORD: {
+                String password;
                 Boolean isDigest = Boolean.FALSE;
 
                 read();
@@ -917,20 +918,20 @@ public class ParserCommand extends ParserDDL {
 
                 password = readPassword();
 
-                Object[] args = new Object[] {
-                    null, password, isDigest
+                Object[] args = new Object[]{
+                        null, password, isDigest
                 };
                 Statement cs =
-                    new StatementCommand(StatementTypes.SET_USER_PASSWORD,
-                                         args);
+                        new StatementCommand(StatementTypes.SET_USER_PASSWORD,
+                                args);
                 String sql = User.getSetCurrentPasswordDigestSQL(
-                    database.granteeManager, password, isDigest);
+                        database.granteeManager, password, isDigest);
 
                 cs.setSQL(sql);
 
                 return cs;
             }
-            case Tokens.INITIAL : {
+            case Tokens.INITIAL: {
                 read();
                 readThis(Tokens.SCHEMA);
 
@@ -940,31 +941,31 @@ public class ParserCommand extends ParserDDL {
                     schema = null;
                 } else {
                     schema = database.schemaManager.getSchemaHsqlName(
-                        token.tokenString);
+                            token.tokenString);
                 }
 
                 read();
 
-                Object[] args = new Object[] {
-                    null, schema
+                Object[] args = new Object[]{
+                        null, schema
                 };
 
                 return new StatementCommand(
-                    StatementTypes.SET_USER_INITIAL_SCHEMA, args);
+                        StatementTypes.SET_USER_INITIAL_SCHEMA, args);
             }
-            case Tokens.FILES : {
+            case Tokens.FILES: {
                 return compileSetFilesProperty();
             }
-            case Tokens.DATABASE : {
+            case Tokens.DATABASE: {
                 return compileSetDatabaseProperty();
             }
-            case Tokens.PROPERTY : {
+            case Tokens.PROPERTY: {
                 return compileSetProperty();
             }
-            default : {
+            default: {
                 return compileSetStatement(
-                    session.sessionContext.sessionVariableRangeGroups,
-                    session.sessionContext.sessionVariablesRange);
+                        session.sessionContext.sessionVariableRangeGroups,
+                        session.sessionContext.sessionVariablesRange);
             }
         }
     }
@@ -973,22 +974,22 @@ public class ParserCommand extends ParserDDL {
 
         read();
 
-        Table    table = readTableName();
-        Object[] args  = new Object[] {
-            table.getName(), null, null
+        Table table = readTableName();
+        Object[] args = new Object[]{
+                table.getName(), null, null
         };
 
         switch (token.tokenType) {
 
-            default : {
+            default: {
                 throw unexpectedToken();
             }
-            case Tokens.SOURCE :
+            case Tokens.SOURCE:
                 read();
 
                 return compileTableSource(table);
 
-            case Tokens.READ : {
+            case Tokens.READ: {
                 read();
 
                 boolean readonly = false;
@@ -1004,12 +1005,12 @@ public class ParserCommand extends ParserDDL {
                 args[1] = Boolean.valueOf(readonly);
 
                 return new StatementCommand(StatementTypes.SET_TABLE_READONLY,
-                                            args, null,
-                                            new HsqlName[]{ table.getName() });
+                        args, null,
+                        new HsqlName[]{table.getName()});
             }
 
             // deprecated
-            case Tokens.READONLY : {
+            case Tokens.READONLY: {
                 read();
 
                 Boolean readonly = processTrueOrFalseObject();
@@ -1017,10 +1018,10 @@ public class ParserCommand extends ParserDDL {
                 args[1] = readonly;
 
                 return new StatementCommand(StatementTypes.SET_TABLE_READONLY,
-                                            args, null,
-                                            new HsqlName[]{ table.getName() });
+                        args, null,
+                        new HsqlName[]{table.getName()});
             }
-            case Tokens.INDEX : {
+            case Tokens.INDEX: {
                 String value;
 
                 read();
@@ -1034,36 +1035,36 @@ public class ParserCommand extends ParserDDL {
                 args[2] = Integer.valueOf(TableBase.CACHED_TABLE);
 
                 return new StatementCommand(StatementTypes.SET_TABLE_INDEX,
-                                            args, null,
-                                            new HsqlName[]{ table.getName() });
+                        args, null,
+                        new HsqlName[]{table.getName()});
             }
-            case Tokens.TYPE : {
+            case Tokens.TYPE: {
                 read();
 
                 int newType;
 
                 switch (token.tokenType) {
 
-                    case Tokens.MEMORY :
+                    case Tokens.MEMORY:
                         newType = TableBase.MEMORY_TABLE;
                         break;
 
-                    case Tokens.CACHED :
+                    case Tokens.CACHED:
                         newType = TableBase.CACHED_TABLE;
                         break;
 
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
                 switch (table.getTableType()) {
 
-                    case TableBase.MEMORY_TABLE :
-                    case TableBase.CACHED_TABLE :
-                    case TableBase.TEXT_TABLE :
+                    case TableBase.MEMORY_TABLE:
+                    case TableBase.CACHED_TABLE:
+                    case TableBase.TEXT_TABLE:
                         break;
 
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
@@ -1072,10 +1073,10 @@ public class ParserCommand extends ParserDDL {
                 args[1] = Integer.valueOf(newType);
 
                 return new StatementCommand(StatementTypes.SET_TABLE_TYPE,
-                                            args, null,
-                                            new HsqlName[]{ table.getName() });
+                        args, null,
+                        new HsqlName[]{table.getName()});
             }
-            case Tokens.CLUSTERED : {
+            case Tokens.CLUSTERED: {
                 read();
                 readThis(Tokens.ON);
 
@@ -1090,39 +1091,39 @@ public class ParserCommand extends ParserDDL {
                 args[1] = colIndex;
 
                 return new StatementCommand(StatementTypes.SET_TABLE_CLUSTERED,
-                                            args, null,
-                                            new HsqlName[]{ table.getName() });
+                        args, null,
+                        new HsqlName[]{table.getName()});
             }
-            case Tokens.NEW : {
+            case Tokens.NEW: {
                 read();
                 readThis(Tokens.SPACE);
 
-                args = new Object[]{ table.getName() };
+                args = new Object[]{table.getName()};
 
                 HsqlName[] writeLockNames =
-                    database.schemaManager.getCatalogAndBaseTableNames(
-                        table.getName());
+                        database.schemaManager.getCatalogAndBaseTableNames(
+                                table.getName());
 
                 return new StatementCommand(
-                    StatementTypes.SET_TABLE_NEW_TABLESPACE, args, null,
-                    writeLockNames);
+                        StatementTypes.SET_TABLE_NEW_TABLESPACE, args, null,
+                        writeLockNames);
             }
-            case Tokens.SPACE : {
+            case Tokens.SPACE: {
                 read();
 
                 Integer id = readIntegerObject();
 
-                args = new Object[] {
-                    table.getName(), id
+                args = new Object[]{
+                        table.getName(), id
                 };
 
                 HsqlName[] writeLockNames =
-                    database.schemaManager.getCatalogAndBaseTableNames(
-                        table.getName());
+                        database.schemaManager.getCatalogAndBaseTableNames(
+                                table.getName());
 
                 return new StatementCommand(
-                    StatementTypes.SET_TABLE_SET_TABLESPACE, args, null,
-                    writeLockNames);
+                        StatementTypes.SET_TABLE_SET_TABLESPACE, args, null,
+                        writeLockNames);
             }
         }
     }
@@ -1137,18 +1138,18 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.AUTHENTICATION : {
+            case Tokens.AUTHENTICATION: {
                 read();
                 readThis(Tokens.FUNCTION);
 
-                Routine  routine = readCreateDatabaseAuthenticationFunction();
-                Object[] args    = new Object[]{ routine };
+                Routine routine = readCreateDatabaseAuthenticationFunction();
+                Object[] args = new Object[]{routine};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_AUTHENTICATION, args, null,
-                    null);
+                        StatementTypes.SET_DATABASE_AUTHENTICATION, args, null,
+                        null);
             }
-            case Tokens.COLLATION : {
+            case Tokens.COLLATION: {
                 Boolean padSpace = null;
 
                 read();
@@ -1177,18 +1178,18 @@ public class ParserCommand extends ParserDDL {
                     }
                 }
 
-                Object[] args = new Object[] {
-                    name, padSpace
+                Object[] args = new Object[]{
+                        name, padSpace
                 };
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_SQL_COLLATION, args, null,
-                    null);
+                        StatementTypes.SET_DATABASE_SQL_COLLATION, args, null,
+                        null);
             }
-            case Tokens.DEFAULT : {
+            case Tokens.DEFAULT: {
                 return compileSetDefault();
             }
-            case Tokens.EVENT : {
+            case Tokens.EVENT: {
                 read();
                 readThis(Tokens.LOG);
 
@@ -1196,129 +1197,129 @@ public class ParserCommand extends ParserDDL {
 
                 readThis(Tokens.LEVEL);
 
-                Integer  value = readIntegerObject();
-                Object[] args  = new Object[] {
-                    value, Boolean.valueOf(sqlLog)
+                Integer value = readIntegerObject();
+                Object[] args = new Object[]{
+                        value, Boolean.valueOf(sqlLog)
                 };
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_FILES_EVENT_LOG, args, null,
-                    null);
+                        StatementTypes.SET_DATABASE_FILES_EVENT_LOG, args, null,
+                        null);
             }
-            case Tokens.GC : {
+            case Tokens.GC: {
                 read();
 
-                Integer  size = readIntegerObject();
-                Object[] args = new Object[]{ size };
+                Integer size = readIntegerObject();
+                Object[] args = new Object[]{size};
 
                 return new StatementCommand(StatementTypes.SET_DATABASE_GC,
-                                            args, null, null);
+                        args, null, null);
             }
-            case Tokens.PASSWORD : {
+            case Tokens.PASSWORD: {
                 read();
 
                 switch (token.tokenType) {
 
-                    case Tokens.CHECK : {
+                    case Tokens.CHECK: {
                         read();
                         readThis(Tokens.FUNCTION);
 
-                        Routine  routine = readCreatePasswordCheckFunction();
-                        Object[] args    = new Object[]{ routine };
+                        Routine routine = readCreatePasswordCheckFunction();
+                        Object[] args = new Object[]{routine};
 
                         return new StatementCommand(
-                            StatementTypes.SET_DATABASE_PASSWORD_CHECK, args,
-                            null, null);
+                                StatementTypes.SET_DATABASE_PASSWORD_CHECK, args,
+                                null, null);
                     }
-                    case Tokens.DIGEST : {
+                    case Tokens.DIGEST: {
                         read();
 
                         name = readQuotedString();
 
-                        Object[] args = new Object[]{ name };
+                        Object[] args = new Object[]{name};
 
                         return new StatementCommand(
-                            StatementTypes.SET_DATABASE_PASSWORD_DIGEST, args,
-                            null, null);
+                                StatementTypes.SET_DATABASE_PASSWORD_DIGEST, args,
+                                null, null);
                     }
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
             }
-            case Tokens.REFERENTIAL : {
+            case Tokens.REFERENTIAL: {
                 read();
                 readThis(Tokens.INTEGRITY);
 
-                boolean  mode = processTrueOrFalse();
-                Object[] args = new Object[]{ Boolean.valueOf(mode) };
+                boolean mode = processTrueOrFalse();
+                Object[] args = new Object[]{Boolean.valueOf(mode)};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_SQL_REFERENTIAL_INTEGRITY,
-                    args, null, null);
+                        StatementTypes.SET_DATABASE_SQL_REFERENTIAL_INTEGRITY,
+                        args, null, null);
             }
-            case Tokens.SQL : {
+            case Tokens.SQL: {
                 read();
 
-                int     type     = StatementTypes.SET_DATABASE_SQL;
-                Boolean flag     = Boolean.TRUE;
-                Integer value    = Integer.valueOf(0);
-                String  property = null;
+                int type = StatementTypes.SET_DATABASE_SQL;
+                Boolean flag = Boolean.TRUE;
+                Integer value = Integer.valueOf(0);
+                String property = null;
 
                 switch (token.tokenType) {
 
-                    case Tokens.RESTRICT :
+                    case Tokens.RESTRICT:
                         read();
                         readThis(Tokens.EXEC);
 
                         property = HsqlDatabaseProperties.sql_restrict_exec;
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.LIVE :
+                    case Tokens.LIVE:
                         read();
                         readThis(Tokens.OBJECT);
 
                         property = HsqlDatabaseProperties.sql_live_object;
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.NAMES :
+                    case Tokens.NAMES:
                         read();
 
                         property = HsqlDatabaseProperties.sql_enforce_names;
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.REGULAR :
+                    case Tokens.REGULAR:
                         read();
                         readThis(Tokens.NAMES);
 
                         property = HsqlDatabaseProperties.sql_regular_names;
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.REFERENCES :
+                    case Tokens.REFERENCES:
                         read();
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_enforce_refs;
                         break;
 
-                    case Tokens.SIZE :
+                    case Tokens.SIZE:
                         read();
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_enforce_size;
                         break;
 
-                    case Tokens.TYPES :
+                    case Tokens.TYPES:
                         read();
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_enforce_types;
                         break;
 
-                    case Tokens.TDC :
+                    case Tokens.TDC:
                         read();
 
                         if (readIfThis(Tokens.DELETE)) {
@@ -1332,33 +1333,33 @@ public class ParserCommand extends ParserDDL {
                         flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.TRANSLATE :
+                    case Tokens.TRANSLATE:
                         read();
                         readThis(Tokens.TTI);
                         readThis(Tokens.TYPES);
 
                         flag = processTrueOrFalseObject();
                         property =
-                            HsqlDatabaseProperties.jdbc_translate_tti_types;
+                                HsqlDatabaseProperties.jdbc_translate_tti_types;
                         break;
 
-                    case Tokens.CHARACTER :
+                    case Tokens.CHARACTER:
                         read();
                         readThis(Tokens.LITERAL);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_char_literal;
                         break;
 
-                    case Tokens.CONCAT_WORD :
+                    case Tokens.CONCAT_WORD:
                         read();
                         readThis(Tokens.NULLS);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_concat_nulls;
                         break;
 
-                    case Tokens.NULLS :
+                    case Tokens.NULLS:
                         read();
 
                         if (readIfThis(Tokens.FIRST)) {
@@ -1372,55 +1373,55 @@ public class ParserCommand extends ParserDDL {
                         flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.UNIQUE :
+                    case Tokens.UNIQUE:
                         read();
                         readThis(Tokens.NULLS);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_unique_nulls;
                         break;
 
-                    case Tokens.CONVERT :
+                    case Tokens.CONVERT:
                         read();
                         readThis(Tokens.TRUNCATE);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_convert_trunc;
                         break;
 
-                    case Tokens.AVG :
+                    case Tokens.AVG:
                         read();
                         readThis(Tokens.SCALE);
 
-                        value    = readIntegerObject();
+                        value = readIntegerObject();
                         property = HsqlDatabaseProperties.sql_avg_scale;
                         break;
 
-                    case Tokens.DOUBLE :
+                    case Tokens.DOUBLE:
                         read();
                         readThis(Tokens.NAN);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_double_nan;
                         break;
 
-                    case Tokens.LONGVAR :
+                    case Tokens.LONGVAR:
                         read();
                         readThis(Tokens.IS);
                         readThis(Tokens.LOB);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_longvar_is_lob;
                         break;
 
-                    case Tokens.IGNORECASE :
+                    case Tokens.IGNORECASE:
                         read();
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_ignore_case;
                         break;
 
-                    case Tokens.SYNTAX :
+                    case Tokens.SYNTAX:
                         read();
 
                         if (token.tokenString.equals(Tokens.T_DB2)) {
@@ -1450,38 +1451,38 @@ public class ParserCommand extends ParserDDL {
                         flag = processTrueOrFalseObject();
                         break;
 
-                    case Tokens.SYS : {
+                    case Tokens.SYS: {
                         read();
                         readThis(Tokens.INDEX);
                         readThis(Tokens.NAMES);
 
-                        flag     = processTrueOrFalseObject();
+                        flag = processTrueOrFalseObject();
                         property = HsqlDatabaseProperties.sql_sys_index_names;
 
                         break;
                     }
-                    default :
+                    default:
                         throw unexpectedToken();
                 }
 
-                Object[] args = new Object[] {
-                    property, flag, value
+                Object[] args = new Object[]{
+                        property, flag, value
                 };
 
                 return new StatementCommand(type, args, null, null);
             }
-            case Tokens.TEXT : {
+            case Tokens.TEXT: {
                 read();
                 readThis(Tokens.TABLE);
                 readThis(Tokens.DEFAULTS);
 
-                String   source = readQuotedString();
-                Object[] args   = new Object[]{ source };
+                String source = readQuotedString();
+                Object[] args = new Object[]{source};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_TEXT_SOURCE, args, null, null);
+                        StatementTypes.SET_DATABASE_TEXT_SOURCE, args, null, null);
             }
-            case Tokens.TRANSACTION : {
+            case Tokens.TRANSACTION: {
                 read();
 
                 if (readIfThis(Tokens.ROLLBACK)) {
@@ -1490,8 +1491,8 @@ public class ParserCommand extends ParserDDL {
                     if (readIfThis(Tokens.INTERRUPT)) {
                         Boolean mode = processTrueOrFalseObject();
                         StatementCommand cs = new StatementCommand(
-                            StatementTypes.SET_DATABASE_TRANSACTION_INTERRUPT,
-                            new Object[]{ mode }, null, null);
+                                StatementTypes.SET_DATABASE_TRANSACTION_INTERRUPT,
+                                new Object[]{mode}, null, null);
 
                         return cs;
                     } else {
@@ -1499,8 +1500,8 @@ public class ParserCommand extends ParserDDL {
 
                         Boolean mode = processTrueOrFalseObject();
                         StatementCommand cs = new StatementCommand(
-                            StatementTypes.SET_DATABASE_TRANSACTION_CONFLICT,
-                            new Object[]{ mode }, null, null);
+                                StatementTypes.SET_DATABASE_TRANSACTION_CONFLICT,
+                                new Object[]{mode}, null, null);
 
                         return cs;
                     }
@@ -1512,37 +1513,37 @@ public class ParserCommand extends ParserDDL {
 
                 switch (token.tokenType) {
 
-                    case Tokens.MVCC :
+                    case Tokens.MVCC:
                         read();
 
                         mode = TransactionManager.MVCC;
                         break;
 
-                    case Tokens.MVLOCKS :
+                    case Tokens.MVLOCKS:
                         read();
 
                         mode = TransactionManager.MVLOCKS;
                         break;
 
-                    case Tokens.LOCKS :
+                    case Tokens.LOCKS:
                         read();
 
                         mode = TransactionManager.LOCKS;
                         break;
 
-                    default :
+                    default:
                 }
 
                 HsqlName[] names =
-                    database.schemaManager.getCatalogAndBaseTableNames();
-                Object[] args = new Object[]{ ValuePool.getInt(mode) };
+                        database.schemaManager.getCatalogAndBaseTableNames();
+                Object[] args = new Object[]{ValuePool.getInt(mode)};
                 StatementCommand cs = new StatementCommand(
-                    StatementTypes.SET_DATABASE_TRANSACTION_CONTROL, args,
-                    null, names);
+                        StatementTypes.SET_DATABASE_TRANSACTION_CONTROL, args,
+                        null, names);
 
                 return cs;
             }
-            case Tokens.UNIQUE : {
+            case Tokens.UNIQUE: {
                 read();
                 readThis(Tokens.NAME);
 
@@ -1560,16 +1561,16 @@ public class ParserCommand extends ParserDDL {
 
                 if (!Charset.isInSet(name, Charset.unquotedIdentifier)
                         || !Charset.startsWith(name,
-                                               Charset.uppercaseLetters)) {
+                        Charset.uppercaseLetters)) {
                     throw Error.error(ErrorCode.X_42501);
                 }
 
-                Object[] args = new Object[]{ name };
+                Object[] args = new Object[]{name};
 
                 return new StatementCommand(
-                    StatementTypes.SET_DATABASE_UNIQUE_NAME, args, null, null);
+                        StatementTypes.SET_DATABASE_UNIQUE_NAME, args, null, null);
             }
-            default : {
+            default: {
                 throw unexpectedToken();
             }
         }
@@ -1579,23 +1580,23 @@ public class ParserCommand extends ParserDDL {
 
         read();
 
-        int        type  = 0;
-        Boolean    flag  = null;
-        Integer    value = null;
-        Boolean    mode  = null;
+        int type = 0;
+        Boolean flag = null;
+        Integer value = null;
+        Boolean mode = null;
         HsqlName[] names = database.schemaManager.getCatalogNameArray();
 
         checkDatabaseUpdateAuthorisation();
 
         switch (token.tokenType) {
 
-            case Tokens.CHECK : {
+            case Tokens.CHECK: {
                 read();
 
-                long longValue  = readBigint();
+                long longValue = readBigint();
                 long longValue2 = -1;
 
-                type  = StatementTypes.SET_DATABASE_FILES_CHECK;
+                type = StatementTypes.SET_DATABASE_FILES_CHECK;
                 names = database.schemaManager.getCatalogNameArray();
 
                 if (readIfThis(Tokens.COMMA)) {
@@ -1609,17 +1610,17 @@ public class ParserCommand extends ParserDDL {
 
                 return new StatementCommand(type, args, null, names);
             }
-            case Tokens.CACHE : {
+            case Tokens.CACHE: {
                 read();
 
                 if (readIfThis(Tokens.SIZE)) {
                     value = readIntegerObject();
-                    type  = StatementTypes.SET_DATABASE_FILES_CACHE_SIZE;
+                    type = StatementTypes.SET_DATABASE_FILES_CACHE_SIZE;
                 } else {
                     readThis(Tokens.ROWS);
 
                     value = readIntegerObject();
-                    type  = StatementTypes.SET_DATABASE_FILES_CACHE_ROWS;
+                    type = StatementTypes.SET_DATABASE_FILES_CACHE_ROWS;
                 }
 
                 if (readIfThis(Tokens.NO)) {
@@ -1630,16 +1631,16 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.SCALE : {
+            case Tokens.SCALE: {
                 read();
 
                 value = readIntegerObject();
-                type  = StatementTypes.SET_DATABASE_FILES_SCALE;
+                type = StatementTypes.SET_DATABASE_FILES_SCALE;
                 names = database.schemaManager.getCatalogAndBaseTableNames();
 
                 break;
             }
-            case Tokens.SPACE : {
+            case Tokens.SPACE: {
                 read();
 
                 if (token.tokenType == Tokens.TRUE) {
@@ -1654,17 +1655,17 @@ public class ParserCommand extends ParserDDL {
                     value = readIntegerObject();
                 }
 
-                type  = StatementTypes.SET_DATABASE_FILES_SPACE;
+                type = StatementTypes.SET_DATABASE_FILES_SPACE;
                 names = database.schemaManager.getCatalogAndBaseTableNames();
 
                 break;
             }
-            case Tokens.LOB : {
+            case Tokens.LOB: {
                 read();
 
                 if (readIfThis(Tokens.SCALE)) {
                     value = readIntegerObject();
-                    type  = StatementTypes.SET_DATABASE_FILES_LOBS_SCALE;
+                    type = StatementTypes.SET_DATABASE_FILES_LOBS_SCALE;
                 } else {
                     readThis(Tokens.COMPRESSED);
 
@@ -1676,15 +1677,15 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.DEFRAG : {
+            case Tokens.DEFRAG: {
                 read();
 
-                type  = StatementTypes.SET_DATABASE_FILES_DEFRAG;
+                type = StatementTypes.SET_DATABASE_FILES_DEFRAG;
                 value = readIntegerObject();
 
                 break;
             }
-            case Tokens.NIO : {
+            case Tokens.NIO: {
                 read();
 
                 if (readIfThis(Tokens.SIZE)) {
@@ -1697,7 +1698,7 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.BACKUP : {
+            case Tokens.BACKUP: {
                 read();
 
                 type = StatementTypes.SET_DATABASE_FILES_BACKUP_INCREMENT;
@@ -1708,11 +1709,11 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.LOG : {
+            case Tokens.LOG: {
                 read();
 
                 if (readIfThis(Tokens.SIZE)) {
-                    type  = StatementTypes.SET_DATABASE_FILES_LOG_SIZE;
+                    type = StatementTypes.SET_DATABASE_FILES_LOG_SIZE;
                     value = readIntegerObject();
                 } else {
                     type = StatementTypes.SET_DATABASE_FILES_LOG;
@@ -1721,16 +1722,16 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.TEMP : {
+            case Tokens.TEMP: {
                 read();
                 readThis(Tokens.PATH);
 
-                type  = StatementTypes.SET_DATABASE_FILES_TEMP_PATH;
+                type = StatementTypes.SET_DATABASE_FILES_TEMP_PATH;
                 value = readIntegerObject();
 
                 break;
             }
-            case Tokens.WRITE : {
+            case Tokens.WRITE: {
                 read();
                 readThis(Tokens.DELAY);
 
@@ -1764,7 +1765,7 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            case Tokens.SCRIPT : {
+            case Tokens.SCRIPT: {
                 read();
                 readThis(Tokens.FORMAT);
 
@@ -1782,14 +1783,14 @@ public class ParserCommand extends ParserDDL {
 
                 break;
             }
-            default :
+            default:
                 throw unexpectedToken();
         }
 
         Object[] args = new Object[2];
 
         args[0] = flag == null ? value
-                               : flag;
+                : flag;
         args[1] = mode;
 
         return new StatementCommand(type, args, null, names);
@@ -1797,15 +1798,15 @@ public class ParserCommand extends ParserDDL {
 
     Object[] processTransactionCharacteristics() {
 
-        int      level    = 0;
-        boolean  readonly = false;
-        Object[] args     = new Object[2];
+        int level = 0;
+        boolean readonly = false;
+        Object[] args = new Object[2];
 
         outerloop:
         while (true) {
             switch (token.tokenType) {
 
-                case Tokens.READ : {
+                case Tokens.READ: {
                     if (args[0] != null) {
                         throw unexpectedToken();
                     }
@@ -1826,7 +1827,7 @@ public class ParserCommand extends ParserDDL {
 
                     break;
                 }
-                case Tokens.ISOLATION : {
+                case Tokens.ISOLATION: {
                     if (args[1] != null) {
                         throw unexpectedToken();
                     }
@@ -1836,13 +1837,13 @@ public class ParserCommand extends ParserDDL {
 
                     switch (token.tokenType) {
 
-                        case Tokens.SERIALIZABLE :
+                        case Tokens.SERIALIZABLE:
                             read();
 
                             level = SessionInterface.TX_SERIALIZABLE;
                             break;
 
-                        case Tokens.READ :
+                        case Tokens.READ:
                             read();
 
                             if (token.tokenType == Tokens.COMMITTED) {
@@ -1858,14 +1859,14 @@ public class ParserCommand extends ParserDDL {
                             }
                             break;
 
-                        case Tokens.REPEATABLE :
+                        case Tokens.REPEATABLE:
                             read();
                             readThis(Tokens.READ);
 
                             level = SessionInterface.TX_REPEATABLE_READ;
                             break;
 
-                        default :
+                        default:
                             throw unexpectedToken();
                     }
 
@@ -1873,7 +1874,7 @@ public class ParserCommand extends ParserDDL {
 
                     break;
                 }
-                case Tokens.COMMA : {
+                case Tokens.COMMA: {
                     if (args[0] == null && args[1] == null) {
                         throw unexpectedToken();
                     }
@@ -1882,7 +1883,7 @@ public class ParserCommand extends ParserDDL {
 
                     break;
                 }
-                default : {
+                default: {
                     break outerloop;
                 }
             }
@@ -1898,7 +1899,7 @@ public class ParserCommand extends ParserDDL {
     /**
      * Responsible for  handling the execution of COMMIT [WORK]
      *
-     * @throws  HsqlException
+     * @throws HsqlException
      */
     private Statement compileCommit() {
 
@@ -1920,10 +1921,10 @@ public class ParserCommand extends ParserDDL {
         }
 
         String sql = chain ? StatementSession.commitAndChainStatement.sql
-                           : StatementSession.commitNoChainStatement.sql;
+                : StatementSession.commitNoChainStatement.sql;
         Statement st = new StatementSession(StatementTypes.COMMIT_WORK,
-                                            new Object[]{
-                                                Boolean.valueOf(chain) });
+                new Object[]{
+                        Boolean.valueOf(chain)});
 
         st.setSQL(sql);
 
@@ -1937,7 +1938,7 @@ public class ParserCommand extends ParserDDL {
 
         Object[] args = processTransactionCharacteristics();
         Statement cs = new StatementSession(StatementTypes.START_TRANSACTION,
-                                            args);
+                args);
 
         return cs;
     }
@@ -1957,21 +1958,21 @@ public class ParserCommand extends ParserDDL {
 
     private Statement compileLockCatalog() {
 
-        boolean isLock    = processTrueOrFalse();
+        boolean isLock = processTrueOrFalse();
         int statementType = isLock ? StatementTypes.TRANSACTION_LOCK_CATALOG
-                                   : StatementTypes.TRANSACTION_UNLOCK_CATALOG;
+                : StatementTypes.TRANSACTION_UNLOCK_CATALOG;
         HsqlName[] writeTableNames =
-            isLock ? database.schemaManager.getCatalogAndBaseTableNames()
-                   : null;
+                isLock ? database.schemaManager.getCatalogAndBaseTableNames()
+                        : null;
         Statement cs = new StatementSession(statementType, null,
-                                            writeTableNames);
+                writeTableNames);
 
         return cs;
     }
 
     private Statement compileLockTable() {
 
-        OrderedHashSet readSet  = new OrderedHashSet();
+        OrderedHashSet readSet = new OrderedHashSet();
         OrderedHashSet writeSet = new OrderedHashSet();
 
         while (true) {
@@ -1979,17 +1980,17 @@ public class ParserCommand extends ParserDDL {
 
             switch (token.tokenType) {
 
-                case Tokens.READ :
+                case Tokens.READ:
                     read();
                     readSet.add(table.getName());
                     break;
 
-                case Tokens.WRITE :
+                case Tokens.WRITE:
                     read();
                     writeSet.add(table.getName());
                     break;
 
-                default :
+                default:
                     throw unexpectedToken();
             }
 
@@ -2012,16 +2013,16 @@ public class ParserCommand extends ParserDDL {
         readSet.toArray(readTableNames);
 
         Statement cs =
-            new StatementSession(StatementTypes.TRANSACTION_LOCK_TABLE,
-                                 readTableNames, writeTableNames);
+                new StatementSession(StatementTypes.TRANSACTION_LOCK_TABLE,
+                        readTableNames, writeTableNames);
 
         return cs;
     }
 
     private Statement compileRollback() {
 
-        boolean chain     = false;
-        String  savepoint = null;
+        boolean chain = false;
+        String savepoint = null;
 
         read();
 
@@ -2038,9 +2039,9 @@ public class ParserCommand extends ParserDDL {
 
             read();
 
-            Object[] args = new Object[]{ savepoint };
+            Object[] args = new Object[]{savepoint};
             Statement cs =
-                new StatementSession(StatementTypes.ROLLBACK_SAVEPOINT, args);
+                    new StatementSession(StatementTypes.ROLLBACK_SAVEPOINT, args);
 
             return cs;
         } else {
@@ -2058,10 +2059,10 @@ public class ParserCommand extends ParserDDL {
         }
 
         String sql = chain ? StatementSession.rollbackAndChainStatement.sql
-                           : StatementSession.rollbackNoChainStatement.sql;
+                : StatementSession.rollbackNoChainStatement.sql;
         Statement st = new StatementSession(StatementTypes.ROLLBACK_WORK,
-                                            new Object[]{
-                                                Boolean.valueOf(chain) });
+                new Object[]{
+                        Boolean.valueOf(chain)});
 
         st.setSQL(sql);
 
@@ -2079,7 +2080,7 @@ public class ParserCommand extends ParserDDL {
 
         read();
 
-        Object[] args = new Object[]{ name };
+        Object[] args = new Object[]{name};
 
         return new StatementSession(StatementTypes.SAVEPOINT, args);
     }
@@ -2093,7 +2094,7 @@ public class ParserCommand extends ParserDDL {
 
         read();
 
-        Object[] args = new Object[]{ name };
+        Object[] args = new Object[]{name};
 
         return new StatementSession(StatementTypes.RELEASE_SAVEPOINT, args);
     }
@@ -2102,7 +2103,7 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.CHARACTERISTICS : {
+            case Tokens.CHARACTERISTICS: {
                 read();
                 readThis(Tokens.AS);
                 readThis(Tokens.TRANSACTION);
@@ -2110,9 +2111,9 @@ public class ParserCommand extends ParserDDL {
                 Object[] args = processTransactionCharacteristics();
 
                 return new StatementSession(
-                    StatementTypes.SET_SESSION_CHARACTERISTICS, args);
+                        StatementTypes.SET_SESSION_CHARACTERISTICS, args);
             }
-            case Tokens.AUTHORIZATION : {
+            case Tokens.AUTHORIZATION: {
                 read();
 
                 Expression e = XreadValueSpecificationOrNull();
@@ -2131,38 +2132,38 @@ public class ParserCommand extends ParserDDL {
                     throw Error.error(ErrorCode.X_42563);
                 }
 
-                Expression[] args = new Expression[] {
-                    e, null
+                Expression[] args = new Expression[]{
+                        e, null
                 };
 
                 return new StatementSession(
-                    session, compileContext,
-                    StatementTypes.SET_SESSION_AUTHORIZATION, args);
+                        session, compileContext,
+                        StatementTypes.SET_SESSION_AUTHORIZATION, args);
             }
-            case Tokens.RESULT : {
+            case Tokens.RESULT: {
                 read();
                 readThis(Tokens.MEMORY);
                 readThis(Tokens.ROWS);
 
-                Integer  size = readIntegerObject();
-                Object[] args = new Object[]{ size };
+                Integer size = readIntegerObject();
+                Object[] args = new Object[]{size};
 
                 return new StatementSession(
-                    StatementTypes.SET_SESSION_RESULT_MEMORY_ROWS, args);
+                        StatementTypes.SET_SESSION_RESULT_MEMORY_ROWS, args);
             }
-            case Tokens.FEATURE : {
+            case Tokens.FEATURE: {
                 read();
 
-                String   feature = parseSQLFeatureValue();
-                Boolean  value   = processTrueOrFalseObject();
-                Object[] args    = new Object[] {
-                    feature, value
+                String feature = parseSQLFeatureValue();
+                Boolean value = processTrueOrFalseObject();
+                Object[] args = new Object[]{
+                        feature, value
                 };
 
                 return new StatementSession(StatementTypes.SET_SESSION_FEATURE,
-                                            args);
+                        args);
             }
-            default :
+            default:
                 throw unexpectedToken();
         }
     }
@@ -2188,14 +2189,14 @@ public class ParserCommand extends ParserDDL {
 
             if (e.getType() != OpTypes.VALUE
                     && (e.getType() != OpTypes.SQL_FUNCTION
-                        || !((FunctionSQL) e).isValueFunction())) {
+                    || !((FunctionSQL) e).isValueFunction())) {
                 throw Error.error(ErrorCode.X_0P000);
             }
         }
 
         return new StatementSession(session, compileContext,
-                                    StatementTypes.SET_ROLE,
-                                    new Expression[]{ e });
+                StatementTypes.SET_ROLE,
+                new Expression[]{e});
     }
 
     private Statement compileSetTimeZone() {
@@ -2212,7 +2213,7 @@ public class ParserCommand extends ParserDDL {
             e = XreadIntervalValueExpression();
 
             HsqlList unresolved = e.resolveColumnReferences(session,
-                RangeGroup.emptyGroup, RangeGroup.emptyArray, null);
+                    RangeGroup.emptyGroup, RangeGroup.emptyArray, null);
 
             ExpressionColumn.checkColumnsResolved(unresolved);
             e.resolveTypes(session, null);
@@ -2227,8 +2228,8 @@ public class ParserCommand extends ParserDDL {
         }
 
         return new StatementSession(session, compileContext,
-                                    StatementTypes.SET_TIME_ZONE,
-                                    new Expression[]{ e });
+                StatementTypes.SET_TIME_ZONE,
+                new Expression[]{e});
     }
 
     private Statement compileShutdown() {
@@ -2243,25 +2244,25 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.IMMEDIATELY :
+            case Tokens.IMMEDIATELY:
                 closemode = Database.CLOSEMODE_IMMEDIATELY;
 
                 read();
                 break;
 
-            case Tokens.COMPACT :
+            case Tokens.COMPACT:
                 closemode = Database.CLOSEMODE_COMPACT;
 
                 read();
                 break;
 
-            case Tokens.SCRIPT :
+            case Tokens.SCRIPT:
                 closemode = Database.CLOSEMODE_SCRIPT;
 
                 read();
                 break;
 
-            default :
+            default:
         }
 
         // only semicolon is accepted here
@@ -2273,20 +2274,20 @@ public class ParserCommand extends ParserDDL {
             throw unexpectedToken();
         }
 
-        Object[] args = new Object[]{ Integer.valueOf(closemode) };
+        Object[] args = new Object[]{Integer.valueOf(closemode)};
         Statement cs = new StatementCommand(StatementTypes.DATABASE_SHUTDOWN,
-                                            args, null, null);
+                args, null, null);
 
         return cs;
     }
 
     private Statement compileBackup() {
 
-        String  path;
+        String path;
         Boolean blockingMode = null;    // defaults to blocking
-        Boolean scriptMode   = null;    // defaults to non-script
-        Boolean compression  = null;    // defaults to compressed
-        Boolean files        = null;    // defaults to false
+        Boolean scriptMode = null;    // defaults to non-script
+        Boolean compression = null;    // defaults to compressed
+        Boolean files = null;    // defaults to false
 
         read();
         readThis(Tokens.DATABASE);
@@ -2303,7 +2304,7 @@ public class ParserCommand extends ParserDDL {
         while (true) {
             switch (token.tokenType) {
 
-                case Tokens.BLOCKING :
+                case Tokens.BLOCKING:
                     if (blockingMode != null) {
                         throw unexpectedToken();
                     }
@@ -2313,7 +2314,7 @@ public class ParserCommand extends ParserDDL {
                     read();
                     break;
 
-                case Tokens.SCRIPT :
+                case Tokens.SCRIPT:
                     if (scriptMode != null) {
                         throw unexpectedToken();
                     }
@@ -2323,7 +2324,7 @@ public class ParserCommand extends ParserDDL {
                     read();
                     break;
 
-                case Tokens.COMPRESSED :
+                case Tokens.COMPRESSED:
                     if (compression != null) {
                         throw unexpectedToken();
                     }
@@ -2333,7 +2334,7 @@ public class ParserCommand extends ParserDDL {
                     read();
                     break;
 
-                case Tokens.NOT :
+                case Tokens.NOT:
                     read();
 
                     if (token.tokenType == Tokens.COMPRESSED) {
@@ -2357,7 +2358,7 @@ public class ParserCommand extends ParserDDL {
                     }
                     break;
 
-                case Tokens.AS :
+                case Tokens.AS:
                     if (files != null) {
                         throw unexpectedToken();
                     }
@@ -2368,7 +2369,7 @@ public class ParserCommand extends ParserDDL {
                     files = Boolean.TRUE;
                     break;
 
-                default :
+                default:
                     break outerLoop;
             }
         }
@@ -2396,27 +2397,27 @@ public class ParserCommand extends ParserDDL {
         }
 
         HsqlName[] names =
-            blockingMode ? database.schemaManager.getCatalogAndBaseTableNames()
-                         : HsqlName.emptyArray;
-        Object[] args = new Object[] {
-            path, blockingMode, scriptMode, compression, files
+                blockingMode ? database.schemaManager.getCatalogAndBaseTableNames()
+                        : HsqlName.emptyArray;
+        Object[] args = new Object[]{
+                path, blockingMode, scriptMode, compression, files
         };
         Statement cs = new StatementCommand(StatementTypes.DATABASE_BACKUP,
-                                            args, null, names);
+                args, null, names);
 
         return cs;
     }
 
     private Statement compilePerform() {
 
-        Integer type   = Integer.valueOf(1);
+        Integer type = Integer.valueOf(1);
         Integer number = Integer.valueOf(-1);
 
         read();
 
         switch (token.tokenType) {
 
-            case Tokens.CHECK : {
+            case Tokens.CHECK: {
                 read();
 
                 HsqlName tableName = null;
@@ -2430,24 +2431,24 @@ public class ParserCommand extends ParserDDL {
                     type = Integer.valueOf(2);
                 }
 
-                Object[] args = new Object[] {
-                    tableName, type, number
+                Object[] args = new Object[]{
+                        tableName, type, number
                 };
                 HsqlName[] names =
-                    database.schemaManager.getCatalogAndBaseTableNames();
+                        database.schemaManager.getCatalogAndBaseTableNames();
 
                 return new StatementCommand(StatementTypes.CHECK_INDEX, args,
-                                            null, names);
+                        null, names);
             }
-            case Tokens.IMPORT : {
+            case Tokens.IMPORT: {
                 read();
 
                 return compileImportScript();
             }
-            case Tokens.EXPORT : {
+            case Tokens.EXPORT: {
                 return compileExport();
             }
-            default :
+            default:
                 throw unexpectedToken();
         }
     }
@@ -2461,8 +2462,8 @@ public class ParserCommand extends ParserDDL {
 
     private Statement compileImportScript() {
 
-        String  fileName;
-        int     mode         = RowInsertInterface.modes.continueOnError;
+        String fileName;
+        int mode = RowInsertInterface.modes.continueOnError;
         Boolean isVersioning = Boolean.FALSE;
 
         readThis(Tokens.SCRIPT);
@@ -2483,13 +2484,13 @@ public class ParserCommand extends ParserDDL {
         }
 
         HsqlName[] names =
-            database.schemaManager.getCatalogAndBaseTableNames();
-        Object[] args = new Object[] {
-            fileName, Integer.valueOf(mode), isVersioning
+                database.schemaManager.getCatalogAndBaseTableNames();
+        Object[] args = new Object[]{
+                fileName, Integer.valueOf(mode), isVersioning
         };
 
         return new StatementCommand(StatementTypes.LOAD_SCRIPT, args, null,
-                                    names);
+                names);
     }
 
     private int readLoadMode() {
@@ -2498,25 +2499,25 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.CONTINUE :
+            case Tokens.CONTINUE:
                 mode = RowInsertInterface.modes.continueOnError;
 
                 read();
                 break;
 
-            case Tokens.STOP :
+            case Tokens.STOP:
                 mode = RowInsertInterface.modes.stopOnError;
 
                 read();
                 break;
 
-            case Tokens.CHECK :
+            case Tokens.CHECK:
                 mode = RowInsertInterface.modes.checkUntillError;
 
                 read();
                 break;
 
-            default :
+            default:
                 throw unexpectedToken();
         }
 
@@ -2547,10 +2548,10 @@ public class ParserCommand extends ParserDDL {
         }
 
         HsqlName[] names =
-            database.schemaManager.getCatalogAndBaseTableNames();
-        Object[] args = new Object[]{ Boolean.valueOf(defrag) };
+                database.schemaManager.getCatalogAndBaseTableNames();
+        Object[] args = new Object[]{Boolean.valueOf(defrag)};
         Statement cs = new StatementCommand(StatementTypes.DATABASE_CHECKPOINT,
-                                            args, null, names);
+                args, null, names);
 
         return cs;
     }
@@ -2558,10 +2559,10 @@ public class ParserCommand extends ParserDDL {
     public static Statement getAutoCheckpointStatement(Database database) {
 
         HsqlName[] names =
-            database.schemaManager.getCatalogAndBaseTableNames();
-        Object[] args = new Object[]{ Boolean.FALSE };
+                database.schemaManager.getCatalogAndBaseTableNames();
+        Object[] args = new Object[]{Boolean.FALSE};
         Statement cs = new StatementCommand(StatementTypes.DATABASE_CHECKPOINT,
-                                            args, null, names);
+                args, null, names);
 
         cs.setCompileTimestamp(database.txManager.getGlobalChangeTimestamp());
         cs.setSQL(Tokens.T_CHECKPOINT);
@@ -2573,8 +2574,8 @@ public class ParserCommand extends ParserDDL {
 
         read();
 
-        String    sql = Tokens.T_DISCONNECT;
-        Statement cs  = new StatementSession(StatementTypes.DISCONNECT, null);
+        String sql = Tokens.T_DISCONNECT;
+        Statement cs = new StatementSession(StatementTypes.DISCONNECT, null);
 
         return cs;
     }
@@ -2591,13 +2592,13 @@ public class ParserCommand extends ParserDDL {
         cs.setDescribe();
 
         return new StatementCommand(StatementTypes.EXPLAIN_PLAN,
-                                    new Object[]{ cs });
+                new Object[]{cs});
     }
 
     private Statement compileExplainReferences() {
 
         SchemaObject object;
-        boolean      referencesFrom = false;
+        boolean referencesFrom = false;
 
         readThis(Tokens.REFERENCES);
 
@@ -2611,28 +2612,28 @@ public class ParserCommand extends ParserDDL {
 
         switch (token.tokenType) {
 
-            case Tokens.TABLE :
-            case Tokens.VIEW :
+            case Tokens.TABLE:
+            case Tokens.VIEW:
                 read();
 
                 type = SchemaObject.TABLE;
                 break;
 
-            case Tokens.SPECIFIC :
+            case Tokens.SPECIFIC:
                 read();
                 readThis(Tokens.ROUTINE);
 
                 type = SchemaObject.SPECIFIC_ROUTINE;
                 break;
 
-            case Tokens.DOMAIN :
-            case Tokens.TYPE :
+            case Tokens.DOMAIN:
+            case Tokens.TYPE:
                 read();
 
                 type = SchemaObject.DOMAIN;
                 break;
 
-            default :
+            default:
                 throw unexpectedToken();
         }
 
@@ -2645,16 +2646,16 @@ public class ParserCommand extends ParserDDL {
         }
 
         return new StatementCommand(StatementTypes.EXPLAIN_REFERENCES,
-                                    new Object[] {
-            name, Boolean.valueOf(referencesFrom)
-        });
+                new Object[]{
+                        name, Boolean.valueOf(referencesFrom)
+                });
     }
 
     private StatementCommand compileTableSource(Table t) {
 
-        boolean  isSourceHeader = false;
-        boolean  isDesc         = false;
-        String   source;
+        boolean isSourceHeader = false;
+        boolean isDesc = false;
+        String source;
         Object[] args = new Object[5];
 
         args[0] = t.getName();
@@ -2672,7 +2673,7 @@ public class ParserCommand extends ParserDDL {
             args[1] = Boolean.TRUE;
 
             return new StatementCommand(StatementTypes.SET_TABLE_SOURCE, args,
-                                        null, new HsqlName[]{ t.getName() });
+                    null, new HsqlName[]{t.getName()});
         } else if (token.tokenType == Tokens.OFF) {
             read();
 
@@ -2681,7 +2682,7 @@ public class ParserCommand extends ParserDDL {
             args[1] = Boolean.FALSE;
 
             return new StatementCommand(StatementTypes.SET_TABLE_SOURCE, args,
-                                        null, new HsqlName[]{ t.getName() });
+                    null, new HsqlName[]{t.getName()});
         } else if (token.tokenType == Tokens.HEADER) {
             read();
 
@@ -2709,9 +2710,9 @@ public class ParserCommand extends ParserDDL {
         args[4] = Boolean.valueOf(isSourceHeader);
 
         int type = isSourceHeader ? StatementTypes.SET_TABLE_SOURCE_HEADER
-                                  : StatementTypes.SET_TABLE_SOURCE;
+                : StatementTypes.SET_TABLE_SOURCE;
 
         return new StatementCommand(type, args, null,
-                                    new HsqlName[]{ t.getName() });
+                new HsqlName[]{t.getName()});
     }
 }

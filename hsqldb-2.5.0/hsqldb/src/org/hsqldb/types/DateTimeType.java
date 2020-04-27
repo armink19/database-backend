@@ -51,22 +51,22 @@ import java.util.Date;
 public final class DateTimeType extends DTIType {
 
     public final boolean withTimeZone;
-    private String       nameString;
+    private String nameString;
     public static final long epochSeconds =
-        HsqlDateTime.getDateSeconds("1-01-01");
+            HsqlDateTime.getDateSeconds("1-01-01");
     public static final TimestampData epochTimestamp =
-        new TimestampData(epochSeconds);
+            new TimestampData(epochSeconds);
     public static final long epochLimitSeconds =
-        HsqlDateTime.getDateSeconds("10000-01-01");
+            HsqlDateTime.getDateSeconds("10000-01-01");
     public static final TimestampData epochLimitTimestamp =
-        new TimestampData(epochLimitSeconds);
+            new TimestampData(epochLimitSeconds);
 
     public DateTimeType(int typeGroup, int type, int scale) {
 
         super(typeGroup, type, 0, scale);
 
         withTimeZone = type == Types.SQL_TIME_WITH_TIME_ZONE
-                       || type == Types.SQL_TIMESTAMP_WITH_TIME_ZONE;
+                || type == Types.SQL_TIMESTAMP_WITH_TIME_ZONE;
         nameString = getNameStringPrivate();
     }
 
@@ -74,26 +74,26 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return 10;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 return 8 + (scale == 0 ? 0
-                                       : scale + 1);
+                        : scale + 1);
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return 8 + (scale == 0 ? 0
-                                       : scale + 1) + 6;
+                        : scale + 1) + 6;
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return 19 + (scale == 0 ? 0
-                                        : scale + 1);
+                        : scale + 1);
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return 19 + (scale == 0 ? 0
-                                        : scale + 1) + 6;
+                        : scale + 1) + 6;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -102,13 +102,13 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return Types.TIME_WITH_TIMEZONE;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return Types.TIMESTAMP_WITH_TIMEZONE;
 
-            default :
+            default:
 
                 // JDBC numbers happen to be the same as SQL
                 return typeCode;
@@ -119,20 +119,20 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return java.sql.Date.class;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 return java.sql.Time.class;
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return java.sql.Timestamp.class;
 
 //#ifdef JAVA8
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return java.time.OffsetTime.class;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return java.time.OffsetDateTime.class;
 
 //#else
@@ -145,7 +145,7 @@ public final class DateTimeType extends DTIType {
 */
 
 //#endif JAVA8
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -154,20 +154,20 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return "java.sql.Date";
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 return "java.sql.Time";
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return "java.sql.Timestamp";
 
 //#ifdef JAVA8
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return "java.time.OffsetTime";
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return "java.time.OffsetDateTime";
 
 //#else
@@ -180,7 +180,7 @@ public final class DateTimeType extends DTIType {
 */
 
 //#endif JAVA8
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -205,24 +205,24 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return Tokens.T_DATE;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 return Tokens.T_TIME;
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return Tokens.T_TIME + ' ' + Tokens.T_WITH + ' '
-                       + Tokens.T_TIME + ' ' + Tokens.T_ZONE;
+                        + Tokens.T_TIME + ' ' + Tokens.T_ZONE;
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return Tokens.T_TIMESTAMP;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return Tokens.T_TIMESTAMP + ' ' + Tokens.T_WITH + ' '
-                       + Tokens.T_TIME + ' ' + Tokens.T_ZONE;
+                        + Tokens.T_TIME + ' ' + Tokens.T_ZONE;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -233,11 +233,11 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return Tokens.T_DATE;
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME:
                 if (scale == DTIType.defaultTimeFractionPrecision) {
                     return getNameString();
                 }
@@ -245,8 +245,8 @@ public final class DateTimeType extends DTIType {
                 token = Tokens.T_TIME;
                 break;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP:
                 if (scale == DTIType.defaultTimestampFractionPrecision) {
                     return getNameString();
                 }
@@ -254,7 +254,7 @@ public final class DateTimeType extends DTIType {
                 token = Tokens.T_TIMESTAMP;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
 
@@ -267,7 +267,7 @@ public final class DateTimeType extends DTIType {
 
         if (withTimeZone) {
             sb.append(' ' + Tokens.T_WITH + ' ' + Tokens.T_TIME + ' '
-                      + Tokens.T_ZONE);
+                    + Tokens.T_ZONE);
         }
 
         return sb.toString();
@@ -281,16 +281,16 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_DATE:
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return true;
 
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return false;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -299,16 +299,16 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return true;
 
-            case Types.SQL_DATE :
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_DATE:
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return false;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -317,16 +317,16 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_DATE :
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_DATE:
                 return false;
 
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 return true;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -352,7 +352,7 @@ public final class DateTimeType extends DTIType {
         // DATE with DATE returned here
         if (typeCode == other.typeCode) {
             return scale >= other.scale ? this
-                                        : other;
+                    : other;
         }
 
         if (other.typeCode == Types.SQL_ALL_TYPES) {
@@ -375,20 +375,20 @@ public final class DateTimeType extends DTIType {
             throw Error.error(ErrorCode.X_42562);
         }
 
-        int     newType = typeCode;
-        int     scale   = this.scale > otherType.scale ? this.scale
-                                                       : otherType.scale;
-        boolean zone    = withTimeZone || otherType.withTimeZone;
+        int newType = typeCode;
+        int scale = this.scale > otherType.scale ? this.scale
+                : otherType.scale;
+        boolean zone = withTimeZone || otherType.withTimeZone;
         int startType = otherType.startIntervalType > startIntervalType
-                        ? startIntervalType
-                        : otherType.startIntervalType;
+                ? startIntervalType
+                : otherType.startIntervalType;
 
         if (startType == Types.SQL_INTERVAL_HOUR) {
             newType = zone ? Types.SQL_TIME_WITH_TIME_ZONE
-                           : Types.SQL_TIME;
+                    : Types.SQL_TIME;
         } else {
             newType = zone ? Types.SQL_TIMESTAMP_WITH_TIME_ZONE
-                           : Types.SQL_TIMESTAMP;
+                    : Types.SQL_TIMESTAMP;
         }
 
         return getDateTimeType(newType, scale);
@@ -398,12 +398,12 @@ public final class DateTimeType extends DTIType {
 
         switch (operation) {
 
-            case OpTypes.EQUAL :
-            case OpTypes.GREATER :
-            case OpTypes.GREATER_EQUAL :
-            case OpTypes.SMALLER_EQUAL :
-            case OpTypes.SMALLER :
-            case OpTypes.NOT_EQUAL : {
+            case OpTypes.EQUAL:
+            case OpTypes.GREATER:
+            case OpTypes.GREATER_EQUAL:
+            case OpTypes.SMALLER_EQUAL:
+            case OpTypes.SMALLER:
+            case OpTypes.NOT_EQUAL: {
                 if (typeCode == other.typeCode) {
                     return this;
                 }
@@ -424,28 +424,28 @@ public final class DateTimeType extends DTIType {
                     throw Error.error(ErrorCode.X_42562);
                 }
 
-                int     newType = typeCode;
-                int     scale   = this.scale > otherType.scale ? this.scale
-                                                               : otherType
-                                                                   .scale;
-                boolean zone    = withTimeZone || otherType.withTimeZone;
+                int newType = typeCode;
+                int scale = this.scale > otherType.scale ? this.scale
+                        : otherType
+                        .scale;
+                boolean zone = withTimeZone || otherType.withTimeZone;
                 int startType = otherType.startIntervalType
-                                > startIntervalType ? startIntervalType
-                                                    : otherType
-                                                        .startIntervalType;
+                        > startIntervalType ? startIntervalType
+                        : otherType
+                        .startIntervalType;
 
                 if (startType == Types.SQL_INTERVAL_HOUR) {
                     newType = zone ? Types.SQL_TIME_WITH_TIME_ZONE
-                                   : Types.SQL_TIME;
+                            : Types.SQL_TIME;
                 } else {
                     newType = zone ? Types.SQL_TIMESTAMP_WITH_TIME_ZONE
-                                   : Types.SQL_TIMESTAMP;
+                            : Types.SQL_TIMESTAMP;
                 }
 
                 return getDateTimeType(newType, scale);
             }
-            case OpTypes.ADD :
-            case OpTypes.SUBTRACT :
+            case OpTypes.ADD:
+            case OpTypes.SUBTRACT:
                 if (other.isIntervalType()) {
                     if (typeCode != Types.SQL_DATE && other.scale > scale) {
                         return getDateTimeType(typeCode, other.scale);
@@ -459,7 +459,7 @@ public final class DateTimeType extends DTIType {
                                 return Type.SQL_INTERVAL_DAY_MAX_PRECISION;
                             } else {
                                 return Type
-                                    .SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION;
+                                        .SQL_INTERVAL_DAY_TO_SECOND_MAX_PRECISION;
                             }
                         }
                     }
@@ -468,7 +468,7 @@ public final class DateTimeType extends DTIType {
                 }
                 break;
 
-            default :
+            default:
         }
 
         throw Error.error(ErrorCode.X_42562);
@@ -492,36 +492,36 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE : {
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE: {
                 diff = ((TimeData) a).getSeconds()
-                       - ((TimeData) b).getSeconds();
+                        - ((TimeData) b).getSeconds();
 
                 if (diff == 0) {
                     diff = ((TimeData) a).getNanos()
-                           - ((TimeData) b).getNanos();
+                            - ((TimeData) b).getNanos();
                 }
 
                 return diff == 0 ? 0
-                                 : diff > 0 ? 1
-                                            : -1;
+                        : diff > 0 ? 1
+                        : -1;
             }
-            case Types.SQL_DATE :
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
+            case Types.SQL_DATE:
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
                 diff = ((TimestampData) a).getSeconds()
-                       - ((TimestampData) b).getSeconds();
+                        - ((TimestampData) b).getSeconds();
 
                 if (diff == 0) {
                     diff = ((TimestampData) a).getNanos()
-                           - ((TimestampData) b).getNanos();
+                            - ((TimestampData) b).getNanos();
                 }
 
                 return diff == 0 ? 0
-                                 : diff > 0 ? 1
-                                            : -1;
+                        : diff > 0 ? 1
+                        : -1;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -534,14 +534,14 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return a;
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME : {
-                TimeData ti       = (TimeData) a;
-                int      nanos    = ti.getNanos();
-                int      newNanos = scaleNanos(nanos);
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME: {
+                TimeData ti = (TimeData) a;
+                int nanos = ti.getNanos();
+                int newNanos = scaleNanos(nanos);
 
                 if (newNanos == nanos) {
                     return ti;
@@ -549,11 +549,11 @@ public final class DateTimeType extends DTIType {
 
                 return new TimeData(ti.getSeconds(), newNanos, ti.getZone());
             }
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP : {
-                TimestampData ts       = (TimestampData) a;
-                int           nanos    = ts.getNanos();
-                int           newNanos = scaleNanos(nanos);
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP: {
+                TimestampData ts = (TimestampData) a;
+                int nanos = ts.getNanos();
+                int newNanos = scaleNanos(nanos);
 
                 if (ts.getSeconds() > epochLimitSeconds) {
                     throw Error.error(ErrorCode.X_22008);
@@ -564,9 +564,9 @@ public final class DateTimeType extends DTIType {
                 }
 
                 return new TimestampData(ts.getSeconds(), newNanos,
-                                         ts.getZone());
+                        ts.getZone());
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -587,227 +587,227 @@ public final class DateTimeType extends DTIType {
 
         switch (otherType.typeCode) {
 
-            case Types.SQL_CLOB :
+            case Types.SQL_CLOB:
                 a = a.toString();
 
-            //fall through
-            case Types.SQL_CHAR :
-            case Types.SQL_VARCHAR :
+                //fall through
+            case Types.SQL_CHAR:
+            case Types.SQL_VARCHAR:
                 switch (this.typeCode) {
 
-                    case Types.SQL_DATE :
-                    case Types.SQL_TIME_WITH_TIME_ZONE :
-                    case Types.SQL_TIME :
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-                    case Types.SQL_TIMESTAMP : {
+                    case Types.SQL_DATE:
+                    case Types.SQL_TIME_WITH_TIME_ZONE:
+                    case Types.SQL_TIME:
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+                    case Types.SQL_TIMESTAMP: {
                         try {
                             return session.getScanner()
-                                .convertToDatetimeInterval(session,
-                                                           (String) a, this);
+                                    .convertToDatetimeInterval(session,
+                                            (String) a, this);
                         } catch (HsqlException e) {
                             return convertToDatetimeSpecial(session,
-                                                            (String) a, this);
+                                    (String) a, this);
                         }
                     }
                 }
                 break;
 
-            case Types.SQL_DATE :
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_DATE:
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 break;
 
-            default :
+            default:
                 throw Error.error(ErrorCode.X_42561);
         }
 
         switch (this.typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 switch (otherType.typeCode) {
 
-                    case Types.SQL_DATE :
+                    case Types.SQL_DATE:
                         return a;
 
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
                         long seconds = ((TimestampData) a).getSeconds()
-                                       + ((TimestampData) a).getZone();
+                                + ((TimestampData) a).getZone();
                         long millis = HsqlDateTime.getNormalisedDate(
-                            session.getCalendarGMT(), seconds * 1000);
+                                session.getCalendarGMT(), seconds * 1000);
 
                         return new TimestampData(millis / 1000);
                     }
-                    case Types.SQL_TIMESTAMP : {
+                    case Types.SQL_TIMESTAMP: {
                         long l = HsqlDateTime.getNormalisedDate(
-                            session.getCalendarGMT(),
-                            ((TimestampData) a).getSeconds() * 1000);
+                                session.getCalendarGMT(),
+                                ((TimestampData) a).getSeconds() * 1000);
 
                         return new TimestampData(l / 1000);
                     }
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_42561);
                 }
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 switch (otherType.typeCode) {
 
-                    case Types.SQL_TIME_WITH_TIME_ZONE :
+                    case Types.SQL_TIME_WITH_TIME_ZONE:
                         return convertToTypeLimits(session, a);
 
-                    case Types.SQL_TIME : {
+                    case Types.SQL_TIME: {
                         TimeData ti = (TimeData) a;
 
                         return new TimeData(
-                            ti.getSeconds() - session.getZoneSeconds(),
-                            scaleNanos(ti.getNanos()),
-                            session.getZoneSeconds());
+                                ti.getSeconds() - session.getZoneSeconds(),
+                                scaleNanos(ti.getNanos()),
+                                session.getZoneSeconds());
                     }
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
                         TimestampData ts = (TimestampData) a;
                         long seconds =
-                            HsqlDateTime.convertToNormalisedTime(
-                                ts.getSeconds() * 1000) / 1000;
+                                HsqlDateTime.convertToNormalisedTime(
+                                        ts.getSeconds() * 1000) / 1000;
 
                         return new TimeData((int) (seconds),
-                                            scaleNanos(ts.getNanos()),
-                                            ts.getZone());
+                                scaleNanos(ts.getNanos()),
+                                ts.getZone());
                     }
-                    case Types.SQL_TIMESTAMP : {
+                    case Types.SQL_TIMESTAMP: {
                         TimestampData ts = (TimestampData) a;
                         long seconds = ts.getSeconds()
-                                       - session.getZoneSeconds();
+                                - session.getZoneSeconds();
 
                         seconds =
-                            HsqlDateTime.convertToNormalisedTime(
-                                session.getCalendarGMT(),
-                                seconds * 1000) / 1000;
+                                HsqlDateTime.convertToNormalisedTime(
+                                        session.getCalendarGMT(),
+                                        seconds * 1000) / 1000;
 
                         return new TimeData((int) (seconds),
-                                            scaleNanos(ts.getNanos()),
-                                            session.getZoneSeconds());
+                                scaleNanos(ts.getNanos()),
+                                session.getZoneSeconds());
                     }
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_42561);
                 }
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 switch (otherType.typeCode) {
 
-                    case Types.SQL_TIME_WITH_TIME_ZONE : {
+                    case Types.SQL_TIME_WITH_TIME_ZONE: {
                         TimeData ti = (TimeData) a;
 
                         return new TimeData(ti.getSeconds() + ti.getZone(),
-                                            scaleNanos(ti.getNanos()), 0);
+                                scaleNanos(ti.getNanos()), 0);
                     }
-                    case Types.SQL_TIME :
+                    case Types.SQL_TIME:
                         return convertToTypeLimits(session, a);
 
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
-                        TimestampData ts      = (TimestampData) a;
-                        long          seconds = ts.getSeconds() + ts.getZone();
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
+                        TimestampData ts = (TimestampData) a;
+                        long seconds = ts.getSeconds() + ts.getZone();
 
                         seconds =
-                            HsqlDateTime.convertToNormalisedTime(
-                                session.getCalendarGMT(),
-                                seconds * 1000) / 1000;
+                                HsqlDateTime.convertToNormalisedTime(
+                                        session.getCalendarGMT(),
+                                        seconds * 1000) / 1000;
 
                         return new TimeData((int) (seconds),
-                                            scaleNanos(ts.getNanos()), 0);
+                                scaleNanos(ts.getNanos()), 0);
                     }
-                    case Types.SQL_TIMESTAMP :
+                    case Types.SQL_TIMESTAMP:
                         TimestampData ts = (TimestampData) a;
                         long seconds =
-                            HsqlDateTime.convertToNormalisedTime(
-                                session.getCalendarGMT(),
-                                ts.getSeconds() * 1000) / 1000;
+                                HsqlDateTime.convertToNormalisedTime(
+                                        session.getCalendarGMT(),
+                                        ts.getSeconds() * 1000) / 1000;
 
                         return new TimeData((int) (seconds),
-                                            scaleNanos(ts.getNanos()));
+                                scaleNanos(ts.getNanos()));
 
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_42561);
                 }
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 switch (otherType.typeCode) {
 
-                    case Types.SQL_TIME_WITH_TIME_ZONE : {
+                    case Types.SQL_TIME_WITH_TIME_ZONE: {
                         TimeData ti = (TimeData) a;
                         long seconds = session.getCurrentDate().getSeconds()
-                                       + ti.getSeconds();
+                                + ti.getSeconds();
 
                         return new TimestampData(seconds,
-                                                 scaleNanos(ti.getNanos()),
-                                                 ti.getZone());
+                                scaleNanos(ti.getNanos()),
+                                ti.getZone());
                     }
-                    case Types.SQL_TIME : {
+                    case Types.SQL_TIME: {
                         TimeData ti = (TimeData) a;
                         long seconds = session.getCurrentDate().getSeconds()
-                                       + ti.getSeconds()
-                                       - session.getZoneSeconds();
+                                + ti.getSeconds()
+                                - session.getZoneSeconds();
 
                         return new TimestampData(seconds,
-                                                 scaleNanos(ti.getNanos()),
-                                                 session.getZoneSeconds());
+                                scaleNanos(ti.getNanos()),
+                                session.getZoneSeconds());
                     }
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                         return convertToTypeLimits(session, a);
 
-                    case Types.SQL_TIMESTAMP : {
+                    case Types.SQL_TIMESTAMP: {
                         TimestampData ts = (TimestampData) a;
                         long seconds = ts.getSeconds()
-                                       - session.getZoneSeconds();
+                                - session.getZoneSeconds();
 
                         return new TimestampData(seconds,
-                                                 scaleNanos(ts.getNanos()),
-                                                 session.getZoneSeconds());
+                                scaleNanos(ts.getNanos()),
+                                session.getZoneSeconds());
                     }
-                    case Types.SQL_DATE : {
+                    case Types.SQL_DATE: {
                         TimestampData ts = (TimestampData) a;
 
                         return new TimestampData(ts.getSeconds(), 0,
-                                                 session.getZoneSeconds());
+                                session.getZoneSeconds());
                     }
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_42561);
                 }
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 switch (otherType.typeCode) {
 
-                    case Types.SQL_TIME_WITH_TIME_ZONE : {
+                    case Types.SQL_TIME_WITH_TIME_ZONE: {
                         TimeData ti = (TimeData) a;
                         long seconds = session.getCurrentDate().getSeconds()
-                                       + ti.getSeconds()
-                                       - session.getZoneSeconds();
+                                + ti.getSeconds()
+                                - session.getZoneSeconds();
 
                         return new TimestampData(seconds,
-                                                 scaleNanos(ti.getNanos()),
-                                                 session.getZoneSeconds());
+                                scaleNanos(ti.getNanos()),
+                                session.getZoneSeconds());
                     }
-                    case Types.SQL_TIME : {
+                    case Types.SQL_TIME: {
                         TimeData ti = (TimeData) a;
                         long seconds = session.getCurrentDate().getSeconds()
-                                       + ti.getSeconds();
+                                + ti.getSeconds();
 
                         return new TimestampData(seconds,
-                                                 scaleNanos(ti.getNanos()));
+                                scaleNanos(ti.getNanos()));
                     }
-                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
-                        TimestampData ts      = (TimestampData) a;
-                        long          seconds = ts.getSeconds() + ts.getZone();
+                    case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
+                        TimestampData ts = (TimestampData) a;
+                        long seconds = ts.getSeconds() + ts.getZone();
 
                         return new TimestampData(seconds,
-                                                 scaleNanos(ts.getNanos()));
+                                scaleNanos(ts.getNanos()));
                     }
-                    case Types.SQL_TIMESTAMP :
+                    case Types.SQL_TIMESTAMP:
                         return convertToTypeLimits(session, a);
 
-                    case Types.SQL_DATE :
+                    case Types.SQL_DATE:
                         return a;
 
-                    default :
+                    default:
                         throw Error.error(ErrorCode.X_42561);
                 }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -815,12 +815,14 @@ public final class DateTimeType extends DTIType {
     public Object convertToDefaultType(SessionInterface session, Object a) {
 
         Type otherType = a instanceof TimeData ? Type.SQL_TIME
-                                               : Type.SQL_TIMESTAMP;
+                : Type.SQL_TIMESTAMP;
 
         return convertToType(session, a, otherType);
     }
 
-    /** @todo - check the time zone conversion */
+    /**
+     * @todo - check the time zone conversion
+     */
     public Object convertJavaToSQL(SessionInterface session, Object a) {
 
         if (a == null) {
@@ -829,28 +831,28 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 if (a instanceof java.sql.Date) {
                     break;
                 }
 
                 if (a instanceof java.util.Date) {
                     long millis;
-                    int  nanos       = 0;
-                    int  zoneSeconds = 0;
+                    int nanos = 0;
+                    int zoneSeconds = 0;
 
                     if (typeCode == Types.SQL_TIME) {
                         millis = HsqlDateTime.convertMillisFromCalendar(
-                            session.getCalendarGMT(), session.getCalendar(),
-                            ((java.util.Date) a).getTime());
+                                session.getCalendarGMT(), session.getCalendar(),
+                                ((java.util.Date) a).getTime());
                     } else {
-                        millis      = ((java.util.Date) a).getTime();
+                        millis = ((java.util.Date) a).getTime();
                         zoneSeconds = session.getZoneSeconds();
                     }
 
                     millis = HsqlDateTime.getNormalisedTime(
-                        session.getCalendarGMT(), millis);
+                            session.getCalendarGMT(), millis);
 
                     if (a instanceof java.sql.Timestamp) {
                         nanos = ((java.sql.Timestamp) a).getNanos();
@@ -858,7 +860,7 @@ public final class DateTimeType extends DTIType {
                     }
 
                     return new TimeData((int) millis / 1000, nanos,
-                                        zoneSeconds);
+                            zoneSeconds);
                 }
 
                 TimeData time = convertJavaTimeObject(session, a);
@@ -868,7 +870,7 @@ public final class DateTimeType extends DTIType {
                 }
                 break;
 
-            case Types.SQL_DATE : {
+            case Types.SQL_DATE: {
                 if (a instanceof java.sql.Time) {
                     break;
                 }
@@ -878,10 +880,10 @@ public final class DateTimeType extends DTIType {
                     long seconds;
 
                     millis = HsqlDateTime.convertMillisFromCalendar(
-                        session.getCalendarGMT(), session.getCalendar(),
-                        ((java.util.Date) a).getTime());
+                            session.getCalendarGMT(), session.getCalendar(),
+                            ((java.util.Date) a).getTime());
                     millis = HsqlDateTime.getNormalisedDate(
-                        session.getCalendarGMT(), millis);
+                            session.getCalendarGMT(), millis);
                     seconds = millis / 1000;
 
                     if (seconds < epochSeconds
@@ -893,7 +895,7 @@ public final class DateTimeType extends DTIType {
                 }
 
                 TimestampData timestamp = convertJavaTimeObject(session, a,
-                    false);
+                        false);
 
                 if (timestamp != null) {
                     return timestamp;
@@ -901,8 +903,8 @@ public final class DateTimeType extends DTIType {
 
                 break;
             }
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
                 if (a instanceof java.sql.Time) {
                     break;
                 }
@@ -910,18 +912,18 @@ public final class DateTimeType extends DTIType {
                 if (a instanceof java.util.Date) {
                     long millis;
                     long seconds;
-                    int  nanos       = 0;
-                    int  zoneSeconds = 0;
+                    int nanos = 0;
+                    int zoneSeconds = 0;
 
                     if (typeCode == Types.SQL_TIMESTAMP) {
                         millis = HsqlDateTime.convertMillisFromCalendar(
-                            session.getCalendarGMT(), session.getCalendar(),
-                            ((java.util.Date) a).getTime());
+                                session.getCalendarGMT(), session.getCalendar(),
+                                ((java.util.Date) a).getTime());
                     } else {
                         millis = ((java.util.Date) a).getTime();
                         zoneSeconds =
-                            HsqlDateTime.getZoneMillis(
-                                session.getCalendar(), millis) / 1000;
+                                HsqlDateTime.getZoneMillis(
+                                        session.getCalendar(), millis) / 1000;
                     }
 
                     if (a instanceof java.sql.Timestamp) {
@@ -940,7 +942,7 @@ public final class DateTimeType extends DTIType {
                 }
 
                 TimestampData timestamp = convertJavaTimeObject(session, a,
-                    true);
+                        true);
 
                 if (timestamp != null) {
                     return timestamp;
@@ -953,7 +955,7 @@ public final class DateTimeType extends DTIType {
         throw Error.error(ErrorCode.X_42561);
     }
 
-//#ifdef JAVA8
+    //#ifdef JAVA8
     TimestampData convertJavaTimeObject(SessionInterface session, Object a, boolean timestamp) {
         if (a instanceof java.time.OffsetDateTime) {
             java.time.OffsetDateTime odt = (java.time.OffsetDateTime) a;
@@ -961,15 +963,15 @@ public final class DateTimeType extends DTIType {
             int nanos = 0;
             int zoneSeconds = 0;
 
-            if(timestamp) {
+            if (timestamp) {
                 nanos = odt.getNano();
                 nanos = DateTimeType.normaliseFraction(nanos, scale);
 
-                if(withTimeZone) {
+                if (withTimeZone) {
                     zoneSeconds = odt.get(java.time.temporal.ChronoField.OFFSET_SECONDS);
                 }
             } else {
-                seconds = HsqlDateTime.getNormalisedDate(session.getCalendarGMT(),seconds * 1000) / 1000;
+                seconds = HsqlDateTime.getNormalisedDate(session.getCalendarGMT(), seconds * 1000) / 1000;
             }
             return new TimestampData(seconds, nanos, zoneSeconds);
         } else if (a instanceof java.time.LocalDateTime) {
@@ -983,14 +985,14 @@ public final class DateTimeType extends DTIType {
             int nanos = 0;
             int zoneSeconds = 0;
 
-            if(timestamp) {
+            if (timestamp) {
                 hour = odt.getHour();
                 minute = odt.getMinute();
                 second = odt.getSecond();
                 nanos = odt.getNano();
                 nanos = DateTimeType.normaliseFraction(nanos, scale);
 
-                if(withTimeZone) {
+                if (withTimeZone) {
                     zoneSeconds = session.getZoneSeconds();
                 }
             }
@@ -1007,8 +1009,8 @@ public final class DateTimeType extends DTIType {
             int day = odt.getDayOfMonth();
             int zoneSeconds = 0;
 
-            if(timestamp) {
-                if(withTimeZone) {
+            if (timestamp) {
+                if (withTimeZone) {
                     zoneSeconds = session.getZoneSeconds();
                 }
             }
@@ -1045,7 +1047,7 @@ public final class DateTimeType extends DTIType {
 
             if (seconds < 0) {
                 seconds += secondsInDay;
-            } else if (seconds >=secondsInDay) {
+            } else if (seconds >= secondsInDay) {
                 seconds -= secondsInDay;
             }
 
@@ -1054,8 +1056,8 @@ public final class DateTimeType extends DTIType {
         } else if (a instanceof java.time.LocalTime) {
             java.time.LocalTime odt = (java.time.LocalTime) a;
             long nanos = odt.toNanoOfDay();
-            int seconds = (int)(nanos / 1_000_000_000);
-            int fraction = (int)(nanos % 1_000_000_000);
+            int seconds = (int) (nanos / 1_000_000_000);
+            int fraction = (int) (nanos % 1_000_000_000);
             fraction = DateTimeType.normaliseFraction(fraction, scale);
 
             int zoneSeconds = 0;
@@ -1082,27 +1084,27 @@ public final class DateTimeType extends DTIType {
     }
 */
 
-//#endif JAVA8
+    //#endif JAVA8
     public Object convertSQLToJavaGMT(SessionInterface session, Object a) {
 
         long millis;
 
         switch (typeCode) {
 
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 millis = ((TimeData) a).getSeconds() * 1000L;
                 millis += ((TimeData) a).getNanos() / 1000000;
 
                 return new java.sql.Time(millis);
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 millis = ((TimestampData) a).getSeconds() * 1000;
 
                 return new java.sql.Date(millis);
 
-            case Types.SQL_TIMESTAMP :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 millis = ((TimestampData) a).getSeconds() * 1000;
 
                 java.sql.Timestamp value = new java.sql.Timestamp(millis);
@@ -1111,7 +1113,7 @@ public final class DateTimeType extends DTIType {
 
                 return value;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -1124,10 +1126,10 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME : {
+            case Types.SQL_TIME: {
                 Calendar cal = session.getCalendar();
                 long millis = HsqlDateTime.convertMillisToCalendar(cal,
-                    ((TimeData) a).getMillis());
+                        ((TimeData) a).getMillis());
 
                 millis = HsqlDateTime.getNormalisedTime(cal, millis);
 
@@ -1135,40 +1137,40 @@ public final class DateTimeType extends DTIType {
 
                 return value;
             }
-            case Types.SQL_TIME_WITH_TIME_ZONE : {
+            case Types.SQL_TIME_WITH_TIME_ZONE: {
                 long millis = ((TimeData) a).getMillis();
 
                 return new java.sql.Time(millis);
             }
-            case Types.SQL_DATE : {
+            case Types.SQL_DATE: {
                 Calendar cal = session.getCalendar();
                 long millis = HsqlDateTime.convertMillisToCalendar(cal,
-                    ((TimestampData) a).getMillis());
+                        ((TimestampData) a).getMillis());
 
                 // millis = HsqlDateTime.getNormalisedDate(cal, millis);
                 java.sql.Date value = new java.sql.Date(millis);
 
                 return value;
             }
-            case Types.SQL_TIMESTAMP : {
+            case Types.SQL_TIMESTAMP: {
                 Calendar cal = session.getCalendar();
                 long millis = HsqlDateTime.convertMillisToCalendar(cal,
-                    ((TimestampData) a).getMillis());
+                        ((TimestampData) a).getMillis());
                 java.sql.Timestamp value = new java.sql.Timestamp(millis);
 
                 value.setNanos(((TimestampData) a).getNanos());
 
                 return value;
             }
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
-                long               millis = ((TimestampData) a).getMillis();
-                java.sql.Timestamp value  = new java.sql.Timestamp(millis);
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
+                long millis = ((TimestampData) a).getMillis();
+                java.sql.Timestamp value = new java.sql.Timestamp(millis);
 
                 value.setNanos(((TimestampData) a).getNanos());
 
                 return value;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -1188,8 +1190,8 @@ public final class DateTimeType extends DTIType {
 
     public String convertToString(Object a) {
 
-        boolean       zone = false;
-        String        s;
+        boolean zone = false;
+        String s;
         StringBuilder sb;
 
         if (a == null) {
@@ -1198,14 +1200,14 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return HsqlDateTime.getDateString(
-                    ((TimestampData) a).getSeconds());
+                        ((TimestampData) a).getSeconds());
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME : {
-                TimeData t       = (TimeData) a;
-                int      seconds = normaliseTime(t.getSeconds() + t.getZone());
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME: {
+                TimeData t = (TimeData) a;
+                int seconds = normaliseTime(t.getSeconds() + t.getZone());
 
                 s = intervalSecondToString(seconds, t.getNanos(), false);
 
@@ -1215,35 +1217,35 @@ public final class DateTimeType extends DTIType {
 
                 sb = new StringBuilder(s);
                 s = Type.SQL_INTERVAL_HOUR_TO_MINUTE.intervalSecondToString(
-                    ((TimeData) a).getZone(), 0, true);
+                        ((TimeData) a).getZone(), 0, true);
 
                 sb.append(s);
 
                 return sb.toString();
             }
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP : {
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP: {
                 TimestampData ts = (TimestampData) a;
 
                 sb = new StringBuilder();
 
                 HsqlDateTime.getTimestampString(sb,
-                                                ts.getSeconds()
-                                                + ts.getZone(), ts.getNanos(),
-                                                    scale);
+                        ts.getSeconds()
+                                + ts.getZone(), ts.getNanos(),
+                        scale);
 
                 if (!withTimeZone) {
                     return sb.toString();
                 }
 
                 s = Type.SQL_INTERVAL_HOUR_TO_MINUTE.intervalSecondToString(
-                    ((TimestampData) a).getZone(), 0, true);
+                        ((TimestampData) a).getZone(), 0, true);
 
                 sb.append(s);
 
                 return sb.toString();
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -1258,17 +1260,17 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 sb.append(Tokens.T_DATE);
                 break;
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME:
                 sb.append(Tokens.T_TIME);
                 break;
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP:
                 sb.append(Tokens.T_TIMESTAMP);
                 break;
         }
@@ -1310,7 +1312,7 @@ public final class DateTimeType extends DTIType {
 
         if (typeCode == otherType.typeCode) {
             return scale >= otherType.scale ? 0
-                                            : -1;
+                    : -1;
         }
 
         return -1;
@@ -1328,38 +1330,38 @@ public final class DateTimeType extends DTIType {
             }
 
             b = Type.SQL_INTERVAL_SECOND_MAX_PRECISION.multiply(
-                IntervalSecondData.oneDay, b);
+                    IntervalSecondData.oneDay, b);
         }
 
         switch (typeCode) {
 
             /** @todo -  range checks for units added */
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME:
                 if (b instanceof IntervalMonthData) {
                     throw Error.runtimeError(ErrorCode.U_S0500,
-                                             "DateTimeType");
+                            "DateTimeType");
                 } else if (b instanceof IntervalSecondData) {
                     return addSeconds((TimeData) a,
-                                      ((IntervalSecondData) b).units,
-                                      ((IntervalSecondData) b).nanos);
+                            ((IntervalSecondData) b).units,
+                            ((IntervalSecondData) b).nanos);
                 }
                 break;
 
-            case Types.SQL_DATE :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_DATE:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP:
                 if (b instanceof IntervalMonthData) {
                     return addMonths(session, (TimestampData) a,
-                                     ((IntervalMonthData) b).units);
+                            ((IntervalMonthData) b).units);
                 } else if (b instanceof IntervalSecondData) {
                     return addSeconds((TimestampData) a,
-                                      ((IntervalSecondData) b).units,
-                                      ((IntervalSecondData) b).nanos);
+                            ((IntervalSecondData) b).units,
+                            ((IntervalSecondData) b).nanos);
                 }
                 break;
 
-            default :
+            default:
         }
 
         throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
@@ -1378,37 +1380,37 @@ public final class DateTimeType extends DTIType {
             }
 
             b = Type.SQL_INTERVAL_SECOND_MAX_PRECISION.multiply(
-                IntervalSecondData.oneDay, b);
+                    IntervalSecondData.oneDay, b);
         }
 
         switch (typeCode) {
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME:
                 if (b instanceof IntervalMonthData) {
                     throw Error.runtimeError(ErrorCode.U_S0500,
-                                             "DateTimeType");
+                            "DateTimeType");
                 } else if (b instanceof IntervalSecondData) {
                     return addSeconds((TimeData) a,
-                                      -((IntervalSecondData) b).units,
-                                      -((IntervalSecondData) b).nanos);
+                            -((IntervalSecondData) b).units,
+                            -((IntervalSecondData) b).nanos);
                 }
                 break;
 
-            case Types.SQL_DATE :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_DATE:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP:
                 if (b instanceof IntervalMonthData) {
                     return addMonths(session, (TimestampData) a,
-                                     -((IntervalMonthData) b).units);
+                            -((IntervalMonthData) b).units);
                 } else if (b instanceof IntervalSecondData) {
                     return addSeconds((TimestampData) a,
-                                      -((IntervalSecondData) b).units,
-                                      -((IntervalSecondData) b).nanos);
+                            -((IntervalSecondData) b).units,
+                            -((IntervalSecondData) b).nanos);
                 }
                 break;
 
-            default :
+            default:
         }
 
         throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
@@ -1420,10 +1422,10 @@ public final class DateTimeType extends DTIType {
         double fraction;
 
         if (a instanceof TimeData) {
-            seconds  = ((TimeData) a).getSeconds();
+            seconds = ((TimeData) a).getSeconds();
             fraction = ((TimeData) a).getNanos() / 1000000000d;
         } else {
-            seconds  = ((TimestampData) a).getSeconds();
+            seconds = ((TimestampData) a).getSeconds();
             fraction = ((TimestampData) a).getNanos() / 1000000000d;
         }
 
@@ -1433,7 +1435,7 @@ public final class DateTimeType extends DTIType {
     public Object convertFromDouble(Session session, double value) {
 
         long units = (long) value;
-        int  nanos = (int) ((value - units) * limitNanoseconds);
+        int nanos = (int) ((value - units) * limitNanoseconds);
 
         return getValue(session, units, nanos, 0);
     }
@@ -1444,7 +1446,7 @@ public final class DateTimeType extends DTIType {
             return null;
         }
 
-        long     millis   = getMillis(a);
+        long millis = getMillis(a);
         Calendar calendar = session.getCalendarGMT();
 
         millis = HsqlDateTime.getTruncatedPart(calendar, millis, part);
@@ -1452,21 +1454,21 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 millis = HsqlDateTime.getNormalisedTime(calendar, millis);
 
-            //fall through
-            case Types.SQL_TIME : {
+                //fall through
+            case Types.SQL_TIME: {
                 return new TimeData((int) (millis / 1000), 0,
-                                    ((TimeData) a).getZone());
+                        ((TimeData) a).getZone());
             }
-            case Types.SQL_DATE :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP : {
+            case Types.SQL_DATE:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP: {
                 return new TimestampData(millis / 1000, 0,
-                                         ((TimestampData) a).getZone());
+                        ((TimestampData) a).getZone());
             }
-            default :
+            default:
         }
 
         throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
@@ -1478,7 +1480,7 @@ public final class DateTimeType extends DTIType {
             return null;
         }
 
-        long     millis   = getMillis(a);
+        long millis = getMillis(a);
         Calendar calendar = session.getCalendarGMT();
 
         millis = HsqlDateTime.getRoundedPart(calendar, millis, part);
@@ -1486,20 +1488,20 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            case Types.SQL_TIME : {
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            case Types.SQL_TIME: {
                 millis = HsqlDateTime.getNormalisedTime(millis);
 
                 return new TimeData((int) (millis / 1000), 0,
-                                    ((TimeData) a).getZone());
+                        ((TimeData) a).getZone());
             }
-            case Types.SQL_DATE :
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_TIMESTAMP : {
+            case Types.SQL_DATE:
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_TIMESTAMP: {
                 return new TimestampData(millis / 1000, 0,
-                                         ((TimestampData) a).getZone());
+                        ((TimestampData) a).getZone());
             }
-            default :
+            default:
         }
 
         throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
@@ -1513,7 +1515,7 @@ public final class DateTimeType extends DTIType {
 
         if (other instanceof DateTimeType) {
             return super.equals(other)
-                   && ((DateTimeType) other).withTimeZone == withTimeZone;
+                    && ((DateTimeType) other).withTimeZone == withTimeZone;
         }
 
         return false;
@@ -1523,117 +1525,118 @@ public final class DateTimeType extends DTIType {
 
         int calendarPart;
         int increment = 0;
-        int divisor   = 1;
+        int divisor = 1;
 
         switch (part) {
 
-            case Types.SQL_INTERVAL_YEAR :
+            case Types.SQL_INTERVAL_YEAR:
                 calendarPart = Calendar.YEAR;
                 break;
 
-            case Types.SQL_INTERVAL_MONTH :
-                increment    = 1;
+            case Types.SQL_INTERVAL_MONTH:
+                increment = 1;
                 calendarPart = Calendar.MONTH;
                 break;
 
-            case Types.SQL_INTERVAL_DAY :
-            case Types.DTI_DAY_OF_MONTH :
+            case Types.SQL_INTERVAL_DAY:
+            case Types.DTI_DAY_OF_MONTH:
                 calendarPart = Calendar.DAY_OF_MONTH;
                 break;
 
-            case Types.SQL_INTERVAL_HOUR :
+            case Types.SQL_INTERVAL_HOUR:
                 calendarPart = Calendar.HOUR_OF_DAY;
                 break;
 
-            case Types.SQL_INTERVAL_MINUTE :
+            case Types.SQL_INTERVAL_MINUTE:
                 calendarPart = Calendar.MINUTE;
                 break;
 
-            case Types.SQL_INTERVAL_SECOND :
+            case Types.SQL_INTERVAL_SECOND:
                 calendarPart = Calendar.SECOND;
                 break;
 
-            case Types.DTI_DAY_OF_WEEK :
+            case Types.DTI_DAY_OF_WEEK:
                 calendarPart = Calendar.DAY_OF_WEEK;
                 break;
 
-            case Types.DTI_WEEK_OF_YEAR :
+            case Types.DTI_WEEK_OF_YEAR:
                 calendarPart = Calendar.WEEK_OF_YEAR;
                 break;
 
-            case Types.DTI_SECONDS_MIDNIGHT : {
+            case Types.DTI_SECONDS_MIDNIGHT: {
                 if (typeCode == Types.SQL_TIME
-                        || typeCode == Types.SQL_TIME_WITH_TIME_ZONE) {}
-                else {
+                        || typeCode == Types.SQL_TIME_WITH_TIME_ZONE) {
+                } else {
                     try {
                         Type target = withTimeZone
-                                      ? Type.SQL_TIME_WITH_TIME_ZONE
-                                      : Type.SQL_TIME;
+                                ? Type.SQL_TIME_WITH_TIME_ZONE
+                                : Type.SQL_TIME;
 
                         dateTime = target.castToType(session, dateTime, this);
-                    } catch (HsqlException e) {}
+                    } catch (HsqlException e) {
+                    }
                 }
 
                 return ((TimeData) dateTime).getSeconds();
             }
-            case Types.DTI_TIMEZONE_HOUR :
+            case Types.DTI_TIMEZONE_HOUR:
                 if (typeCode == Types.SQL_TIMESTAMP_WITH_TIME_ZONE) {
                     return ((TimestampData) dateTime).getZone() / 3600;
                 } else {
                     return ((TimeData) dateTime).getZone() / 3600;
                 }
-            case Types.DTI_TIMEZONE_MINUTE :
+            case Types.DTI_TIMEZONE_MINUTE:
                 if (typeCode == Types.SQL_TIMESTAMP_WITH_TIME_ZONE) {
                     return ((TimestampData) dateTime).getZone() / 60 % 60;
                 } else {
                     return ((TimeData) dateTime).getZone() / 60 % 60;
                 }
-            case Types.DTI_TIMEZONE :
+            case Types.DTI_TIMEZONE:
                 if (typeCode == Types.SQL_TIMESTAMP_WITH_TIME_ZONE) {
                     return ((TimestampData) dateTime).getZone() / 60;
                 } else {
                     return ((TimeData) dateTime).getZone() / 60;
                 }
-            case Types.DTI_QUARTER :
-                increment    = 1;
-                divisor      = 3;
+            case Types.DTI_QUARTER:
+                increment = 1;
+                divisor = 3;
                 calendarPart = Calendar.MONTH;
                 break;
 
-            case Types.DTI_DAY_OF_YEAR :
+            case Types.DTI_DAY_OF_YEAR:
                 calendarPart = Calendar.DAY_OF_YEAR;
                 break;
 
-            case Types.DTI_MILLISECOND :
+            case Types.DTI_MILLISECOND:
                 if (this.isDateOrTimestampType()) {
                     return ((TimestampData) dateTime).getNanos() / 1000000;
                 } else {
                     return ((TimeData) dateTime).getNanos() / 1000000;
                 }
-            case Types.DTI_NANOSECOND :
+            case Types.DTI_NANOSECOND:
                 if (this.isDateOrTimestampType()) {
                     return ((TimestampData) dateTime).getNanos();
                 } else {
                     return ((TimeData) dateTime).getNanos();
                 }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "DateTimeType - " + part);
+                        "DateTimeType - " + part);
         }
 
         long millis = getMillis(dateTime);
 
         return HsqlDateTime.getDateTimePart(session.getCalendarGMT(), millis, calendarPart)
-               / divisor + increment;
+                / divisor + increment;
     }
 
     public Object addMonthsSpecial(Session session, Object dateTime,
                                    int months) {
 
-        TimestampData ts     = (TimestampData) dateTime;
-        Calendar      cal    = session.getCalendarGMT();
-        long          millis = (ts.getSeconds() + ts.getZone()) * 1000;
-        boolean       lastDay;
+        TimestampData ts = (TimestampData) dateTime;
+        Calendar cal = session.getCalendarGMT();
+        long millis = (ts.getSeconds() + ts.getZone()) * 1000;
+        boolean lastDay;
 
         HsqlDateTime.setTimeInMillis(cal, millis);
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -1658,9 +1661,9 @@ public final class DateTimeType extends DTIType {
 
     public Object getLastDayOfMonth(Session session, Object dateTime) {
 
-        TimestampData ts     = (TimestampData) dateTime;
-        Calendar      cal    = session.getCalendarGMT();
-        long          millis = (ts.getSeconds() + ts.getZone()) * 1000;
+        TimestampData ts = (TimestampData) dateTime;
+        Calendar cal = session.getCalendarGMT();
+        long millis = (ts.getSeconds() + ts.getZone()) * 1000;
 
         HsqlDateTime.setTimeInMillis(cal, millis);
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -1679,12 +1682,12 @@ public final class DateTimeType extends DTIType {
         if (typeCode == Types.SQL_TIME
                 || typeCode == Types.SQL_TIME_WITH_TIME_ZONE) {
             millis =
-                (((TimeData) dateTime).getSeconds() + ((TimeData) dateTime)
-                    .getZone()) * 1000L;
+                    (((TimeData) dateTime).getSeconds() + ((TimeData) dateTime)
+                            .getZone()) * 1000L;
         } else {
             millis =
-                (((TimestampData) dateTime)
-                    .getSeconds() + ((TimestampData) dateTime).getZone()) * 1000;
+                    (((TimestampData) dateTime)
+                            .getSeconds() + ((TimestampData) dateTime).getZone()) * 1000;
         }
 
         return millis;
@@ -1707,13 +1710,13 @@ public final class DateTimeType extends DTIType {
     public BigDecimal getSecondPart(Session session, Object dateTime) {
 
         long seconds = getPart(session, dateTime, Types.SQL_INTERVAL_SECOND);
-        int  nanos   = 0;
+        int nanos = 0;
 
         if (typeCode == Types.SQL_TIMESTAMP
                 || typeCode == Types.SQL_TIMESTAMP_WITH_TIME_ZONE) {
             nanos = ((TimestampData) dateTime).getNanos();
         } else if (typeCode == Types.SQL_TIME
-                   || typeCode == Types.SQL_TIME_WITH_TIME_ZONE) {
+                || typeCode == Types.SQL_TIME_WITH_TIME_ZONE) {
             nanos = ((TimeData) dateTime).getNanos();
         }
 
@@ -1726,11 +1729,11 @@ public final class DateTimeType extends DTIType {
 
         switch (part) {
 
-            case Types.DTI_DAY_NAME :
+            case Types.DTI_DAY_NAME:
                 javaPattern = "EEEE";
                 break;
 
-            case Types.DTI_MONTH_NAME :
+            case Types.DTI_MONTH_NAME:
                 javaPattern = "MMMM";
                 break;
         }
@@ -1739,7 +1742,8 @@ public final class DateTimeType extends DTIType {
 
         try {
             format.applyPattern(javaPattern);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         Date date = (Date) convertSQLToJavaGMT(session, dateTime);
 
@@ -1753,34 +1757,34 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 seconds =
-                    HsqlDateTime.getNormalisedDate(
-                        calendar, (seconds + zoneSeconds) * 1000) / 1000;
+                        HsqlDateTime.getNormalisedDate(
+                                calendar, (seconds + zoneSeconds) * 1000) / 1000;
 
                 return new TimestampData(seconds);
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 seconds =
-                    HsqlDateTime.getNormalisedDate(calendar, seconds * 1000)
-                    / 1000;
+                        HsqlDateTime.getNormalisedDate(calendar, seconds * 1000)
+                                / 1000;
 
                 return new TimeData((int) seconds, nanos, zoneSeconds);
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 seconds =
-                    HsqlDateTime.getNormalisedTime(
-                        calendar, (seconds + zoneSeconds) * 1000) / 1000;
+                        HsqlDateTime.getNormalisedTime(
+                                calendar, (seconds + zoneSeconds) * 1000) / 1000;
 
                 return new TimeData((int) seconds, nanos);
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 return new TimestampData(seconds, nanos, zoneSeconds);
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return new TimestampData(seconds + zoneSeconds, nanos);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -1792,19 +1796,19 @@ public final class DateTimeType extends DTIType {
 
             switch (typeCode) {
 
-                case Types.SQL_TIME_WITH_TIME_ZONE :
+                case Types.SQL_TIME_WITH_TIME_ZONE:
                     type = new DateTimeType(Types.SQL_TIME, Types.SQL_TIME,
-                                            scale);
+                            scale);
                     break;
 
-                case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+                case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                     type = new DateTimeType(Types.SQL_TIMESTAMP,
-                                            Types.SQL_TIMESTAMP, scale);
+                            Types.SQL_TIMESTAMP, scale);
                     break;
 
-                default :
+                default:
                     throw Error.runtimeError(ErrorCode.U_S0500,
-                                             "DateTimeType");
+                            "DateTimeType");
             }
 
             type.nameString = nameString;
@@ -1823,24 +1827,24 @@ public final class DateTimeType extends DTIType {
 
         switch (type) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return SQL_DATE;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 if (scale == DTIType.defaultTimeFractionPrecision) {
                     return SQL_TIME;
                 }
 
                 return new DateTimeType(Types.SQL_TIME, type, scale);
 
-            case Types.SQL_TIME_WITH_TIME_ZONE :
+            case Types.SQL_TIME_WITH_TIME_ZONE:
                 if (scale == DTIType.defaultTimeFractionPrecision) {
                     return SQL_TIME_WITH_TIME_ZONE;
                 }
 
                 return new DateTimeType(Types.SQL_TIME, type, scale);
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 if (scale == DTIType.defaultTimestampFractionPrecision) {
                     return SQL_TIMESTAMP;
                 }
@@ -1851,14 +1855,14 @@ public final class DateTimeType extends DTIType {
 
                 return new DateTimeType(Types.SQL_TIMESTAMP, type, scale);
 
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
                 if (scale == DTIType.defaultTimestampFractionPrecision) {
                     return SQL_TIMESTAMP_WITH_TIME_ZONE;
                 }
 
                 return new DateTimeType(Types.SQL_TIMESTAMP, type, scale);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "DateTimeType");
         }
     }
@@ -1879,29 +1883,29 @@ public final class DateTimeType extends DTIType {
 
         switch (typeCode) {
 
-            case Types.SQL_TIME_WITH_TIME_ZONE : {
+            case Types.SQL_TIME_WITH_TIME_ZONE: {
                 TimeData value = (TimeData) a;
 
                 if (otherType.isDateTimeTypeWithZone()) {
                     if (value.zone != targetZone) {
                         return new TimeData(value.getSeconds(),
-                                            value.getNanos(), targetZone);
+                                value.getNanos(), targetZone);
                     }
                 } else {
                     int seconds = value.getSeconds() - localZone;
 
                     seconds =
-                        (int) (HsqlDateTime.getNormalisedTime(calendar, seconds * 1000L)
-                               / 1000);
+                            (int) (HsqlDateTime.getNormalisedTime(calendar, seconds * 1000L)
+                                    / 1000);
 
                     return new TimeData(seconds, value.getNanos(), targetZone);
                 }
 
                 break;
             }
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE : {
-                TimestampData value   = (TimestampData) a;
-                long          seconds = value.getSeconds();
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE: {
+                TimestampData value = (TimestampData) a;
+                long seconds = value.getSeconds();
 
                 if (!otherType.isDateTimeTypeWithZone()) {
                     seconds -= localZone;
@@ -1910,7 +1914,7 @@ public final class DateTimeType extends DTIType {
                 if (value.getSeconds() != seconds
                         || value.zone != targetZone) {
                     return new TimestampData(seconds, value.getNanos(),
-                                             targetZone);
+                            targetZone);
                 }
 
                 break;
@@ -1922,23 +1926,23 @@ public final class DateTimeType extends DTIType {
 
     public boolean canAdd(IntervalType other) {
         return other.startPartIndex >= startPartIndex
-               && other.endPartIndex <= endPartIndex;
+                && other.endPartIndex <= endPartIndex;
     }
 
     public int getSqlDateTimeSub() {
 
         switch (typeCode) {
 
-            case Types.SQL_DATE :
+            case Types.SQL_DATE:
                 return 1;
 
-            case Types.SQL_TIME :
+            case Types.SQL_TIME:
                 return 2;
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 return 3;
 
-            default :
+            default:
                 return 0;
         }
     }
@@ -1949,15 +1953,13 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return The common data type of the boundaries of the two limits.
-     *         null if any of the two periods is null or if the first limit of
-     *         any period is null.
-     *
+     * null if any of the two periods is null or if the first limit of
+     * any period is null.
      * @since 2.3.4
      */
     public static Type normalizeInput(Session session, Object[] a, Type[] ta,
@@ -2028,19 +2030,17 @@ public final class DateTimeType extends DTIType {
      * have been changed.
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return The common data type of the boundaries of the two limits.
-     *         null if any of the two periods is null or if the first limit of
-     *         any period is null.
-     *
+     * null if any of the two periods is null or if the first limit of
+     * any period is null.
      * @since 2.3.4
      */
     public static Type normalizeInputRelaxed(Session session, Object[] a,
-            Type[] ta, Object[] b, Type[] tb) {
+                                             Type[] ta, Object[] b, Type[] tb) {
 
         if (a == null || b == null) {
             return null;
@@ -2102,13 +2102,12 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if the two periods overlaps,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean overlaps(Session session, Object[] a, Type[] ta,
                                    Object[] b, Type[] tb) {
@@ -2144,13 +2143,12 @@ public final class DateTimeType extends DTIType {
      * have been changed.
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if the two periods overlaps,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean overlapsRelaxed(Session session, Object[] a,
                                           Type[] ta, Object[] b, Type[] tb) {
@@ -2183,13 +2181,12 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if period a precedes period b,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean precedes(Session session, Object[] a, Type[] ta,
                                    Object[] b, Type[] tb) {
@@ -2214,16 +2211,15 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if period a immediately precedes period b,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean immediatelyPrecedes(Session session, Object[] a,
-            Type[] ta, Object[] b, Type[] tb) {
+                                              Type[] ta, Object[] b, Type[] tb) {
 
         Type commonType = normalizeInput(session, a, ta, b, tb, false);
 
@@ -2245,16 +2241,15 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if period a immediately succeeds period b,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean immediatelySucceeds(Session session, Object[] a,
-            Type[] ta, Object[] b, Type[] tb) {
+                                              Type[] ta, Object[] b, Type[] tb) {
 
         Type commonType = normalizeInput(session, a, ta, b, tb, false);
 
@@ -2276,13 +2271,12 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if period a succeeds period b,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean succeeds(Session session, Object[] a, Type[] ta,
                                    Object[] b, Type[] tb) {
@@ -2306,13 +2300,12 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if period a equals period b,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean equals(Session session, Object[] a, Type[] ta,
                                  Object[] b, Type[] tb) {
@@ -2343,13 +2336,12 @@ public final class DateTimeType extends DTIType {
      * <p>
      *
      * @param session
-     * @param a First period to compare
-     * @param ta Types of the first period
-     * @param b Second period to compare
-     * @param tb Type of the second period
-     *
+     * @param a       First period to compare
+     * @param ta      Types of the first period
+     * @param b       Second period to compare
+     * @param tb      Type of the second period
      * @return {@link Boolean#TRUE} if period a contains period b,
-     *          else {@link Boolean#FALSE}
+     * else {@link Boolean#FALSE}
      */
     public static Boolean contains(Session session, Object[] a, Type[] ta,
                                    Object[] b, Type[] tb,
@@ -2362,7 +2354,7 @@ public final class DateTimeType extends DTIType {
         }
 
         int compareStart = commonType.compare(session, a[0], b[0]);
-        int compareEnd   = commonType.compare(session, a[1], b[1]);
+        int compareEnd = commonType.compare(session, a[1], b[1]);
 
         if (compareStart <= 0 && compareEnd >= 0) {
 
@@ -2381,10 +2373,10 @@ public final class DateTimeType extends DTIType {
     }
 
     public static BigDecimal subtractMonthsSpecial(Session session,
-            TimestampData a, TimestampData b) {
+                                                   TimestampData a, TimestampData b) {
 
-        long    s1    = (a.getSeconds() + a.getZone()) * 1000;
-        long    s2    = (b.getSeconds() + b.getZone()) * 1000;
+        long s1 = (a.getSeconds() + a.getZone()) * 1000;
+        long s2 = (b.getSeconds() + b.getZone()) * 1000;
         boolean minus = false;
 
         if (s1 < s2) {
@@ -2405,7 +2397,7 @@ public final class DateTimeType extends DTIType {
 
         int lastDay1;
         int months1 = cal.get(Calendar.MONTH) + cal.get(Calendar.YEAR) * 12;
-        int day1    = cal.get(Calendar.DAY_OF_MONTH);
+        int day1 = cal.get(Calendar.DAY_OF_MONTH);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -2417,14 +2409,14 @@ public final class DateTimeType extends DTIType {
 
         cal.add(Calendar.DAY_OF_MONTH, -1);
 
-        millis   = cal.getTimeInMillis();
+        millis = cal.getTimeInMillis();
         lastDay1 = cal.get(Calendar.DAY_OF_MONTH);
 
         cal.setTimeInMillis(s2);
 
         int lastDay2;
         int months2 = cal.get(Calendar.MONTH) + cal.get(Calendar.YEAR) * 12;
-        int day2    = cal.get(Calendar.DAY_OF_MONTH);
+        int day2 = cal.get(Calendar.DAY_OF_MONTH);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -2436,7 +2428,7 @@ public final class DateTimeType extends DTIType {
 
         cal.add(Calendar.DAY_OF_MONTH, -1);
 
-        millis   = cal.getTimeInMillis();
+        millis = cal.getTimeInMillis();
         lastDay2 = cal.get(Calendar.DAY_OF_MONTH);
 
         double months;
@@ -2452,7 +2444,7 @@ public final class DateTimeType extends DTIType {
             return BigDecimal.valueOf(months);
         } else if (day2 > day1) {
             months = months1 - months2 - 1;
-            days   = lastDay2 - day2 + day1;
+            days = lastDay2 - day2 + day1;
             months += days / 31;
 
             if (minus) {
@@ -2462,7 +2454,7 @@ public final class DateTimeType extends DTIType {
             return BigDecimal.valueOf(months);
         } else {
             months = months1 - months2;
-            days   = day1 - day2;
+            days = day1 - day2;
             months += days / 31;
 
             if (minus) {
@@ -2477,7 +2469,7 @@ public final class DateTimeType extends DTIType {
                                      TimestampData b, boolean isYear) {
 
         Calendar calendar = session.getCalendarGMT();
-        boolean  negate   = false;
+        boolean negate = false;
 
         if (b.getSeconds() > a.getSeconds()) {
             negate = true;
@@ -2491,12 +2483,12 @@ public final class DateTimeType extends DTIType {
         calendar.setTimeInMillis(a.getSeconds() * 1000);
 
         int months = calendar.get(Calendar.MONTH);
-        int years  = calendar.get(Calendar.YEAR);
+        int years = calendar.get(Calendar.YEAR);
 
         calendar.setTimeInMillis(b.getSeconds() * 1000);
 
         months -= calendar.get(Calendar.MONTH);
-        years  -= calendar.get(Calendar.YEAR);
+        years -= calendar.get(Calendar.YEAR);
 
         if (isYear) {
             months = years * 12;
@@ -2520,9 +2512,9 @@ public final class DateTimeType extends DTIType {
     public static TimeData addSeconds(TimeData source, long seconds,
                                       int nanos) {
 
-        nanos   += source.getNanos();
+        nanos += source.getNanos();
         seconds += nanos / limitNanoseconds;
-        nanos   %= limitNanoseconds;
+        nanos %= limitNanoseconds;
 
         if (nanos < 0) {
             nanos += DTIType.limitNanoseconds;
@@ -2538,18 +2530,20 @@ public final class DateTimeType extends DTIType {
         return ti;
     }
 
-    /** @todo - overflow */
+    /**
+     * @todo - overflow
+     */
     public static TimestampData addMonths(Session session,
                                           TimestampData source, int months) {
 
-        int      n   = source.getNanos();
+        int n = source.getNanos();
         Calendar cal = session.getCalendarGMT();
 
         HsqlDateTime.setTimeInMillis(cal, source.getSeconds() * 1000);
         cal.add(Calendar.MONTH, months);
 
         TimestampData ts = new TimestampData(cal.getTimeInMillis() / 1000, n,
-                                             source.getZone());
+                source.getZone());
 
         return ts;
     }
@@ -2557,9 +2551,9 @@ public final class DateTimeType extends DTIType {
     public static TimestampData addSeconds(TimestampData source, long seconds,
                                            int nanos) {
 
-        nanos   += source.getNanos();
+        nanos += source.getNanos();
         seconds += nanos / limitNanoseconds;
-        nanos   %= limitNanoseconds;
+        nanos %= limitNanoseconds;
 
         if (nanos < 0) {
             nanos += limitNanoseconds;
@@ -2569,7 +2563,7 @@ public final class DateTimeType extends DTIType {
 
         long newSeconds = source.getSeconds() + seconds;
         TimestampData ts = new TimestampData(newSeconds, nanos,
-                                             source.getZone());
+                source.getZone());
 
         return ts;
     }
@@ -2579,34 +2573,34 @@ public final class DateTimeType extends DTIType {
 
         switch (type.typeCode) {
 
-            case Types.SQL_TIMESTAMP :
+            case Types.SQL_TIMESTAMP:
                 if (session instanceof Session
                         && ((Session) session).database.sqlSyntaxOra) {
                     String pattern;
 
                     switch (s.length()) {
 
-                        case 8 :
-                        case 9 : {
+                        case 8:
+                        case 9: {
                             pattern = "DD-MON-YY";
 
                             break;
                         }
-                        case 10 :
-                        case 11 : {
+                        case 10:
+                        case 11: {
                             pattern = "DD-MON-YYYY";
 
                             break;
                         }
-                        case 19 :
-                        case 20 : {
+                        case 19:
+                        case 20: {
                             pattern = "DD-MON-YYYY HH24:MI:SS";
 
                             break;
                         }
-                        default :
+                        default:
 
-                        // if (s.length() > 20)
+                            // if (s.length() > 20)
                         {
                             pattern = "DD-MON-YYYY HH24:MI:SS.FF";
 
@@ -2619,19 +2613,19 @@ public final class DateTimeType extends DTIType {
                     return HsqlDateTime.toDate(s, pattern, format, true);
                 }
 
-            // fall through
-            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE :
-            case Types.SQL_DATE :
-            case Types.SQL_TIME :
-            case Types.SQL_TIME_WITH_TIME_ZONE :
-            default :
+                // fall through
+            case Types.SQL_TIMESTAMP_WITH_TIME_ZONE:
+            case Types.SQL_DATE:
+            case Types.SQL_TIME:
+            case Types.SQL_TIME_WITH_TIME_ZONE:
+            default:
         }
 
         throw Error.error(ErrorCode.X_22007);
     }
 
     public static TimestampData nextDayOfWeek(Session session,
-            TimestampData d, int day) {
+                                              TimestampData d, int day) {
 
         Calendar cal = session.getCalendarGMT();
 
@@ -2661,10 +2655,10 @@ public final class DateTimeType extends DTIType {
 
             switch (c) {
 
-                case 'M' :
+                case 'M':
                     return 2;
 
-                case 'T' :
+                case 'T':
                     if (name.length() < 2) {
                         break;
                     }
@@ -2676,13 +2670,13 @@ public final class DateTimeType extends DTIType {
                     }
                     break;
 
-                case 'W' :
+                case 'W':
                     return 4;
 
-                case 'F' :
+                case 'F':
                     return 6;
 
-                case 'S' :
+                case 'S':
                     if (name.length() < 2) {
                         break;
                     }

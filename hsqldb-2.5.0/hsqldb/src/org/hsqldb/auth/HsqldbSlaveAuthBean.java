@@ -42,12 +42,12 @@ import java.util.Set;
  * Delegates authentication decisions, and optionally determination of user
  * roles and schema, to a different HyperSQL catalog, which may be in the same
  * JVM or remote.
- *
+ * <p>
  * For now, at least, this class uses DriverManager to make the ephemeral
  * database connections.
  *
- * @see AuthFunctionBean
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @see AuthFunctionBean
  * @since 2.0.1
  */
 public class HsqldbSlaveAuthBean implements AuthFunctionBean {
@@ -80,7 +80,7 @@ public class HsqldbSlaveAuthBean implements AuthFunctionBean {
 
     /**
      * Defaults to true.
-     *
+     * <p>
      * Whether roles and initial schema for the new session will be determined
      * by what they are for this user in the master database.
      */
@@ -94,9 +94,9 @@ public class HsqldbSlaveAuthBean implements AuthFunctionBean {
 
     /**
      * @throws IllegalStateException if any required setting has not been set.
-     * @throws SQLException if properties 'validationUser' and
-     *    'validationPassword' have been set, but we fail to connect to the
-     *    master database.
+     * @throws SQLException          if properties 'validationUser' and
+     *                               'validationPassword' have been set, but we fail to connect to the
+     *                               master database.
      */
     public void init() throws SQLException {
         if (masterJdbcUrl == null) {
@@ -107,7 +107,7 @@ public class HsqldbSlaveAuthBean implements AuthFunctionBean {
             if (validationUser == null || validationPassword == null) {
                 throw new IllegalStateException(
                         "If you set one property of 'validationUser' or "
-                        + "'validationPassword', then you must set both.");
+                                + "'validationPassword', then you must set both.");
             }
             Connection c = null;
             SQLException problem = null;
@@ -117,9 +117,9 @@ public class HsqldbSlaveAuthBean implements AuthFunctionBean {
             } catch (SQLException se) {
                 logger.error("Master/slave Connection validation failure", se);
                 problem = se;  // Just indicates to let the original exception
-                  // percolate through in the finally block, to prevent an
-                  // exception in the finally block from obscuring the ultimate
-                  // cause of the problem.
+                // percolate through in the finally block, to prevent an
+                // exception in the finally block from obscuring the ultimate
+                // cause of the problem.
             } finally {
                 if (c != null) try {
                     c.close();
@@ -144,8 +144,8 @@ public class HsqldbSlaveAuthBean implements AuthFunctionBean {
             throws DenyException {
         if (!initialized) {
             throw new IllegalStateException(
-                "You must invoke the 'init' method to initialize the "
-                + HsqldbSlaveAuthBean.class.getName() + " instance.");
+                    "You must invoke the 'init' method to initialize the "
+                            + HsqldbSlaveAuthBean.class.getName() + " instance.");
         }
         Connection c = null;
         try {

@@ -45,10 +45,10 @@ public class OrderedIntHashSet extends BaseHashMap {
     }
 
     public OrderedIntHashSet(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
 
         super(initialCapacity, BaseHashMap.intKeyOrValue,
-              BaseHashMap.noKeyOrValue, false);
+                BaseHashMap.noKeyOrValue, false);
 
         isList = true;
     }
@@ -56,7 +56,7 @@ public class OrderedIntHashSet extends BaseHashMap {
     public OrderedIntHashSet(int[] elements) {
 
         super(elements.length, BaseHashMap.intKeyOrValue,
-              BaseHashMap.noKeyOrValue, false);
+                BaseHashMap.noKeyOrValue, false);
 
         isList = true;
 
@@ -66,7 +66,7 @@ public class OrderedIntHashSet extends BaseHashMap {
     public OrderedIntHashSet(int[] elementsA, int[] elementsB) {
 
         super(elementsA.length + elementsB.length, BaseHashMap.intKeyOrValue,
-              BaseHashMap.noKeyOrValue, false);
+                BaseHashMap.noKeyOrValue, false);
 
         isList = true;
 
@@ -147,8 +147,8 @@ public class OrderedIntHashSet extends BaseHashMap {
 
     public boolean addAll(Collection col) {
 
-        int      oldSize = size();
-        Iterator it      = col.iterator();
+        int oldSize = size();
+        Iterator it = col.iterator();
 
         while (it.hasNext()) {
             add(it.nextInt());
@@ -184,8 +184,8 @@ public class OrderedIntHashSet extends BaseHashMap {
 
     public int[] toArray() {
 
-        int   lookup = -1;
-        int[] array  = new int[size()];
+        int lookup = -1;
+        int[] array = new int[size()];
 
         for (int i = 0; i < array.length; i++) {
             lookup = super.nextLookup(lookup);

@@ -59,8 +59,8 @@ import org.hsqldb.types.Types;
 public class StatementDML extends StatementDMQL {
 
     Expression[] targets;
-    boolean      isTruncate;
-    boolean      isMergeDeleteFirst;
+    boolean isTruncate;
+    boolean isMergeDeleteFirst;
 
     //
     Expression mergeInsertCondition;
@@ -68,17 +68,21 @@ public class StatementDML extends StatementDMQL {
     Expression mergeDeleteCondition;
 
     //
-    boolean        isSimpleInsert;
-    int            generatedType;
+    boolean isSimpleInsert;
+    int generatedType;
     ResultMetaData generatedInputMetaData;
 
     //
     SortAndSlice sortAndSlice;
 
-    /** column indexes for generated values */
+    /**
+     * column indexes for generated values
+     */
     int[] generatedIndexes;
 
-    /** ResultMetaData for generated values */
+    /**
+     * ResultMetaData for generated values
+     */
     ResultMetaData generatedResultMetaData;
 
     public StatementDML(int type, int group, HsqlName schemaName) {
@@ -94,15 +98,15 @@ public class StatementDML extends StatementDMQL {
                  int type, SortAndSlice sortAndSlice) {
 
         super(StatementTypes.DELETE_WHERE, StatementTypes.X_SQL_DATA_CHANGE,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
         this.targetTable = targetTable;
-        this.baseTable   = targetTable.isTriggerDeletable() ? targetTable
-                                                            : targetTable
-                                                            .getBaseTable();
+        this.baseTable = targetTable.isTriggerDeletable() ? targetTable
+                : targetTable
+                .getBaseTable();
         this.targetRangeVariables = rangeVars;
-        this.restartIdentity      = restartIdentity;
-        this.sortAndSlice         = sortAndSlice;
+        this.restartIdentity = restartIdentity;
+        this.sortAndSlice = sortAndSlice;
 
         setDatabaseObjects(session, compileContext);
         checkAccessRights(session);
@@ -124,18 +128,18 @@ public class StatementDML extends StatementDMQL {
                  SortAndSlice sortAndSlice) {
 
         super(StatementTypes.UPDATE_WHERE, StatementTypes.X_SQL_DATA_CHANGE,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
-        this.targets     = targets;
+        this.targets = targets;
         this.targetTable = targetTable;
-        this.baseTable   = targetTable.isTriggerUpdatable() ? targetTable
-                                                            : targetTable
-                                                            .getBaseTable();
-        this.updateColumnMap      = updateColumnMap;
-        this.updateExpressions    = colExpressions;
-        this.updateCheckColumns   = checkColumns;
+        this.baseTable = targetTable.isTriggerUpdatable() ? targetTable
+                : targetTable
+                .getBaseTable();
+        this.updateColumnMap = updateColumnMap;
+        this.updateExpressions = colExpressions;
+        this.updateCheckColumns = checkColumns;
         this.targetRangeVariables = rangeVars;
-        this.sortAndSlice         = sortAndSlice;
+        this.sortAndSlice = sortAndSlice;
 
         setupChecks();
         setDatabaseObjects(session, compileContext);
@@ -156,25 +160,25 @@ public class StatementDML extends StatementDMQL {
                  Expression deleteCondition, CompileContext compileContext) {
 
         super(StatementTypes.MERGE, StatementTypes.X_SQL_DATA_CHANGE,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
-        this.targets     = targets;
+        this.targets = targets;
         this.sourceTable = sourceRange.rangeTable;
         this.targetTable = targetRange.rangeTable;
-        this.baseTable   = targetTable.isTriggerUpdatable() ? targetTable
-                                                            : targetTable
-                                                            .getBaseTable();
-        this.insertCheckColumns   = checkColumns;
-        this.insertColumnMap      = insertColMap;
-        this.updateColumnMap      = updateColMap;
-        this.insertExpression     = insertExpr;
-        this.updateExpressions    = updateExpr;
+        this.baseTable = targetTable.isTriggerUpdatable() ? targetTable
+                : targetTable
+                .getBaseTable();
+        this.insertCheckColumns = checkColumns;
+        this.insertColumnMap = insertColMap;
+        this.updateColumnMap = updateColMap;
+        this.insertExpression = insertExpr;
+        this.updateExpressions = updateExpr;
         this.targetRangeVariables = targetRangeVars;
-        this.condition            = mergeCondition;
+        this.condition = mergeCondition;
         this.mergeInsertCondition = insertCondition;
         this.mergeUpdateCondition = updateCondition;
         this.mergeDeleteCondition = deleteCondition;
-        this.isMergeDeleteFirst   = deleteFirst;
+        this.isMergeDeleteFirst = deleteFirst;
 
         setupChecks();
         setDatabaseObjects(session, compileContext);
@@ -186,44 +190,44 @@ public class StatementDML extends StatementDMQL {
      */
     StatementDML() {
         super(StatementTypes.UPDATE_CURSOR, StatementTypes.X_SQL_DATA_CHANGE,
-              null);
+                null);
     }
 
     void setupChecks() {
 
         if (targetTable != baseTable) {
             QuerySpecification select =
-                targetTable.getQueryExpression().getMainSelect();
+                    targetTable.getQueryExpression().getMainSelect();
 
             this.updatableTableCheck = select.checkQueryCondition;
             this.checkRangeVariable =
-                select.rangeVariables[select.rangeVariables.length - 1];
+                    select.rangeVariables[select.rangeVariables.length - 1];
         }
     }
 
     Result getResult(Session session) {
 
         Result result = null;
-        int    limit  = Integer.MAX_VALUE;
+        int limit = Integer.MAX_VALUE;
 
         if (sortAndSlice != null) {
             int[] limits = sortAndSlice.getLimits(session, null,
-                                                  Integer.MAX_VALUE);
+                    Integer.MAX_VALUE);
 
             limit = limits[1];
         }
 
         switch (type) {
 
-            case StatementTypes.UPDATE_WHERE :
+            case StatementTypes.UPDATE_WHERE:
                 result = executeUpdateStatement(session, limit);
                 break;
 
-            case StatementTypes.MERGE :
+            case StatementTypes.MERGE:
                 result = executeMergeStatement(session);
                 break;
 
-            case StatementTypes.DELETE_WHERE :
+            case StatementTypes.DELETE_WHERE:
                 if (isTruncate) {
                     result = executeDeleteTruncateStatement(session);
                 } else {
@@ -231,12 +235,12 @@ public class StatementDML extends StatementDMQL {
                 }
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementDML");
         }
 
         session.sessionContext
-            .diagnosticsVariables[ExpressionColumn.idx_row_count] =
+                .diagnosticsVariables[ExpressionColumn.idx_row_count] =
                 Integer.valueOf(result.getUpdateCount());
 
         return result;
@@ -253,34 +257,34 @@ public class StatementDML extends StatementDMQL {
 
                 switch (type) {
 
-                    case StatementTypes.UPDATE_WHERE : {
+                    case StatementTypes.UPDATE_WHERE: {
                         if (ArrayUtil.haveCommonElement(
                                 constraint.getRefColumns(), updateColumnMap)) {
                             set.add(baseTable.fkConstraints[i].getMain()
-                                .getName());
+                                    .getName());
                         }
 
                         break;
                     }
-                    case StatementTypes.INSERT : {
+                    case StatementTypes.INSERT: {
                         set.add(
-                            baseTable.fkConstraints[i].getMain().getName());
+                                baseTable.fkConstraints[i].getMain().getName());
 
                         break;
                     }
-                    case StatementTypes.MERGE : {
+                    case StatementTypes.MERGE: {
                         if (updateColumnMap != null) {
                             if (ArrayUtil.haveCommonElement(
                                     constraint.getRefColumns(),
                                     updateColumnMap)) {
                                 set.add(baseTable.fkConstraints[i].getMain()
-                                    .getName());
+                                        .getName());
                             }
                         }
 
                         if (insertExpression != null) {
                             set.add(baseTable.fkConstraints[i].getMain()
-                                .getName());
+                                    .getName());
                         }
 
                         break;
@@ -299,8 +303,8 @@ public class StatementDML extends StatementDMQL {
         }
 
         for (int i = 0; i < rangeVariables.length; i++) {
-            Table    rangeTable = rangeVariables[i].rangeTable;
-            HsqlName name       = rangeTable.getName();
+            Table rangeTable = rangeVariables[i].rangeTable;
+            HsqlName name = rangeTable.getName();
 
             if (rangeTable.isDataReadOnly() || rangeTable.isTemp()) {
                 continue;
@@ -360,53 +364,53 @@ public class StatementDML extends StatementDMQL {
 
         int idColIndex = baseTable.getIdentityColumnIndex();
 
-        generatedType          = generate;
+        generatedType = generate;
         generatedInputMetaData = meta;
 
         switch (generate) {
 
-            case ResultConstants.RETURN_NO_GENERATED_KEYS :
+            case ResultConstants.RETURN_NO_GENERATED_KEYS:
                 return;
 
-            case ResultConstants.RETURN_GENERATED_KEYS_COL_INDEXES :
+            case ResultConstants.RETURN_GENERATED_KEYS_COL_INDEXES:
                 generatedIndexes = meta.getGeneratedColumnIndexes();
 
                 for (int i = 0; i < generatedIndexes.length; i++) {
                     if (generatedIndexes[i] < 0
                             || generatedIndexes[i]
-                               >= baseTable.getColumnCount()) {
+                            >= baseTable.getColumnCount()) {
                         throw Error.error(ErrorCode.X_42501);
                     }
                 }
                 break;
 
-            case ResultConstants.RETURN_GENERATED_KEYS :
+            case ResultConstants.RETURN_GENERATED_KEYS:
                 if (baseTable.hasGeneratedColumn()) {
                     if (idColIndex >= 0) {
                         int generatedCount =
-                            ArrayUtil.countTrueElements(baseTable.colGenerated)
-                            + 1;
+                                ArrayUtil.countTrueElements(baseTable.colGenerated)
+                                        + 1;
 
                         generatedIndexes = new int[generatedCount];
 
                         for (int i = 0, j = 0;
-                                i < baseTable.colGenerated.length; i++) {
+                             i < baseTable.colGenerated.length; i++) {
                             if (baseTable.colGenerated[i] || i == idColIndex) {
                                 generatedIndexes[j++] = i;
                             }
                         }
                     } else {
                         generatedIndexes = ArrayUtil.booleanArrayToIntIndexes(
-                            baseTable.colGenerated);
+                                baseTable.colGenerated);
                     }
                 } else if (idColIndex >= 0) {
-                    generatedIndexes = new int[]{ idColIndex };
+                    generatedIndexes = new int[]{idColIndex};
                 } else {
                     return;
                 }
                 break;
 
-            case ResultConstants.RETURN_GENERATED_KEYS_COL_NAMES :
+            case ResultConstants.RETURN_GENERATED_KEYS_COL_NAMES:
                 String[] columnNames = meta.getGeneratedColumnNames();
 
                 generatedIndexes = baseTable.findColumnIndexes(columnNames);
@@ -419,7 +423,7 @@ public class StatementDML extends StatementDMQL {
 
                         if (generatedIndexes[i] < 0) {
                             throw Error.error(ErrorCode.X_42501,
-                                              columnNames[0]);
+                                    columnNames[0]);
                         }
                     }
                 }
@@ -427,7 +431,7 @@ public class StatementDML extends StatementDMQL {
         }
 
         generatedResultMetaData =
-            ResultMetaData.newResultMetaData(generatedIndexes.length);
+                ResultMetaData.newResultMetaData(generatedIndexes.length);
 
         for (int i = 0; i < generatedIndexes.length; i++) {
             ColumnSchema column = baseTable.getColumn(generatedIndexes[i]);
@@ -470,35 +474,35 @@ public class StatementDML extends StatementDMQL {
 
             switch (type) {
 
-                case StatementTypes.INSERT :
+                case StatementTypes.INSERT:
                     if (td.getStatementType() == StatementTypes.INSERT) {
                         break;
                     }
 
                     continue;
-                case StatementTypes.UPDATE_WHERE :
+                case StatementTypes.UPDATE_WHERE:
                     if (td.getStatementType() == StatementTypes.UPDATE_WHERE) {
                         break;
                     }
 
                     continue;
-                case StatementTypes.DELETE_WHERE :
+                case StatementTypes.DELETE_WHERE:
                     if (td.getStatementType() == StatementTypes.DELETE_WHERE) {
                         break;
                     }
 
                     continue;
-                case StatementTypes.MERGE :
+                case StatementTypes.MERGE:
                     if (td.getStatementType() == StatementTypes.INSERT
                             || td.getStatementType()
-                               == StatementTypes.UPDATE_WHERE) {
+                            == StatementTypes.UPDATE_WHERE) {
                         break;
                     }
 
                     continue;
-                default :
+                default:
                     throw Error.runtimeError(ErrorCode.U_S0500,
-                                             "StatementDML");
+                            "StatementDML");
             }
 
             if (td.routine != null) {
@@ -520,11 +524,11 @@ public class StatementDML extends StatementDMQL {
 
         int count = 0;
         RowSetNavigatorDataChange rowset =
-            session.sessionContext.getRowSetDataChange();
+                session.sessionContext.getRowSetDataChange();
         Type[] colTypes = baseTable.getColumnTypes();
         RangeIterator it = RangeVariable.getIterator(session,
-            targetRangeVariables);
-        Result          resultOut          = null;
+                targetRangeVariables);
+        Result resultOut = null;
         RowSetNavigator generatedNavigator = null;
 
         if (generatedIndexes != null) {
@@ -540,11 +544,11 @@ public class StatementDML extends StatementDMQL {
         while (it.next()) {
             session.sessionData.startRowProcessing();
 
-            Row      row     = it.getCurrentRow();
+            Row row = it.getCurrentRow();
             Object[] newData = row.getDataCopy();
 
             getUpdatedData(session, targets, baseTable, updateColumnMap,
-                           updateExpressions, colTypes, newData);
+                    updateExpressions, colTypes, newData);
             rowset.addRow(session, row, newData, colTypes, updateColumnMap);
 
             session.sessionContext.rownum++;
@@ -604,8 +608,8 @@ public class StatementDML extends StatementDMQL {
                 Object[] values = expr.getRowValue(session);
 
                 for (int j = 0; j < values.length; j++, i++) {
-                    int        colIndex = columnMap[i];
-                    Expression e        = expr.nodes[j];
+                    int colIndex = columnMap[i];
+                    Expression e = expr.nodes[j];
 
                     // transitional - still supporting null for identity generation
                     if (targetTable.identityColumn == colIndex) {
@@ -624,8 +628,8 @@ public class StatementDML extends StatementDMQL {
                             data[colIndex] = null;
                         } else {
                             data[colIndex] =
-                                targetTable.colDefaults[colIndex].getValue(
-                                    session);
+                                    targetTable.colDefaults[colIndex].getValue(
+                                            session);
                         }
 
                         continue;
@@ -640,8 +644,8 @@ public class StatementDML extends StatementDMQL {
                 for (int j = 0; j < values.length; j++, i++) {
                     int colIndex = columnMap[i];
                     Type colType =
-                        expr.table.queryExpression.getMetaData()
-                            .columnTypes[j];
+                            expr.table.queryExpression.getMetaData()
+                                    .columnTypes[j];
 
                     data[colIndex] = colTypes[colIndex].convertToType(session,
                             values[j], colType);
@@ -660,8 +664,8 @@ public class StatementDML extends StatementDMQL {
                         data[colIndex] = null;
                     } else {
                         data[colIndex] =
-                            targetTable.colDefaults[colIndex].getValue(
-                                session);
+                                targetTable.colDefaults[colIndex].getValue(
+                                        session);
                     }
 
                     i++;
@@ -673,8 +677,8 @@ public class StatementDML extends StatementDMQL {
 
                 if (targets[i].getType() == OpTypes.ARRAY_ACCESS) {
                     data[colIndex] =
-                        ((ExpressionAccessor) targets[i]).getUpdatedArray(
-                            session, (Object[]) data[colIndex], value, true);
+                            ((ExpressionAccessor) targets[i]).getUpdatedArray(
+                                    session, (Object[]) data[colIndex], value, true);
                 } else {
                     data[colIndex] = colTypes[colIndex].convertToType(session,
                             value, expr.dataType);
@@ -692,11 +696,11 @@ public class StatementDML extends StatementDMQL {
      */
     Result executeMergeStatement(Session session) {
 
-        Type[]          colTypes           = baseTable.getColumnTypes();
-        Result          resultOut          = null;
+        Type[] colTypes = baseTable.getColumnTypes();
+        Result resultOut = null;
         RowSetNavigator generatedNavigator = null;
         boolean hasWhenMatched = mergeDeleteCondition != null
-                                 || updateExpressions.length != 0;
+                || updateExpressions.length != 0;
 
         if (generatedIndexes != null) {
             resultOut = Result.newUpdateCountResult(generatedResultMetaData,
@@ -711,20 +715,20 @@ public class StatementDML extends StatementDMQL {
 
         // rowset for update operation
         RowSetNavigatorDataChange updateRowSet =
-            session.sessionContext.getRowSetDataChange();
+                session.sessionContext.getRowSetDataChange();
         RangeVariable[] joinRangeIterators = targetRangeVariables;
 
         // populate insert and update lists
         RangeIterator[] rangeIterators =
-            new RangeIterator[joinRangeIterators.length];
+                new RangeIterator[joinRangeIterators.length];
 
         for (int i = 0; i < joinRangeIterators.length; i++) {
             rangeIterators[i] = joinRangeIterators[i].getIterator(session);
         }
 
         for (int currentIndex = 0; currentIndex >= 0; ) {
-            RangeIterator it          = rangeIterators[currentIndex];
-            boolean       beforeFirst = it.isBeforeFirst();
+            RangeIterator it = rangeIterators[currentIndex];
+            boolean beforeFirst = it.isBeforeFirst();
 
             if (it.next()) {
                 if (currentIndex < joinRangeIterators.length - 1) {
@@ -736,8 +740,8 @@ public class StatementDML extends StatementDMQL {
                 if (currentIndex == 1 && beforeFirst
                         && insertExpression != null) {
                     Object[] data =
-                        getInsertData(session, colTypes,
-                                      insertExpression.nodes[0].nodes);
+                            getInsertData(session, colTypes,
+                                    insertExpression.nodes[0].nodes);
 
                     if (data != null) {
                         if (mergeInsertCondition.testCondition(session)) {
@@ -779,10 +783,10 @@ public class StatementDML extends StatementDMQL {
                             Object[] data = row.getDataCopy();
 
                             getUpdatedData(session, targets, baseTable,
-                                           updateColumnMap, updateExpressions,
-                                           colTypes, data);
+                                    updateColumnMap, updateExpressions,
+                                    colTypes, data);
                             updateRowSet.addRow(session, row, data, colTypes,
-                                                updateColumnMap);
+                                    updateColumnMap);
                         }
                     }
 
@@ -814,7 +818,7 @@ public class StatementDML extends StatementDMQL {
         // update any matched rows
         if (hasWhenMatched) {
             count = update(session, baseTable, updateRowSet,
-                           generatedNavigator);
+                    generatedNavigator);
         }
 
         // insert any non-matched rows
@@ -855,12 +859,12 @@ public class StatementDML extends StatementDMQL {
     void insertRowSet(Session session, RowSetNavigator generatedNavigator,
                       RowSetNavigator newData) {
 
-        PersistentStore store         = baseTable.getRowStore(session);
-        RangeIterator   checkIterator = null;
+        PersistentStore store = baseTable.getRowStore(session);
+        RangeIterator checkIterator = null;
 
         if (updatableTableCheck != null) {
             checkIterator =
-                session.sessionContext.getCheckIterator(checkRangeVariable);
+                    session.sessionContext.getCheckIterator(checkRangeVariable);
         }
 
         newData.beforeFirst();
@@ -882,7 +886,7 @@ public class StatementDML extends StatementDMQL {
 
                 session.sessionData.startRowProcessing();
                 baseTable.fireTriggers(session, Trigger.INSERT_BEFORE_ROW,
-                                       null, data, null);
+                        null, data, null);
             }
 
             newData.beforeFirst();
@@ -927,7 +931,7 @@ public class StatementDML extends StatementDMQL {
                 Object[] data = newData.getCurrent();
 
                 baseTable.fireTriggers(session, Trigger.INSERT_AFTER_ROW,
-                                       null, data, null);
+                        null, data, null);
             }
 
             newData.beforeFirst();
@@ -942,7 +946,7 @@ public class StatementDML extends StatementDMQL {
 
         if (baseTable.triggerLists[Trigger.INSERT_BEFORE_ROW].length > 0) {
             baseTable.fireTriggers(session, Trigger.INSERT_BEFORE_ROW, null,
-                                   data, null);
+                    data, null);
         }
 
         baseTable.insertSingleRow(session, store, data, null);
@@ -950,16 +954,16 @@ public class StatementDML extends StatementDMQL {
 
         if (baseTable.triggerLists[Trigger.INSERT_AFTER_ROW].length > 0) {
             baseTable.fireTriggers(session, Trigger.INSERT_AFTER_ROW, null,
-                                   data, null);
+                    data, null);
         }
 
         if (baseTable.triggerLists[Trigger.INSERT_AFTER].length > 0) {
             baseTable.fireTriggers(session, Trigger.INSERT_AFTER,
-                                   (RowSetNavigator) null);
+                    (RowSetNavigator) null);
         }
 
         session.sessionContext
-            .diagnosticsVariables[ExpressionColumn.idx_row_count] =
+                .diagnosticsVariables[ExpressionColumn.idx_row_count] =
                 Integer.valueOf(1);
 
         return Result.updateOneResult;
@@ -973,8 +977,8 @@ public class StatementDML extends StatementDMQL {
         session.sessionData.startRowProcessing();
 
         for (int i = 0; i < rowArgs.length; i++) {
-            Expression e        = rowArgs[i];
-            int        colIndex = insertColumnMap[i];
+            Expression e = rowArgs[i];
+            int colIndex = insertColumnMap[i];
 
             if (e.opType == OpTypes.DEFAULT) {
                 if (baseTable.identityColumn == colIndex) {
@@ -983,14 +987,14 @@ public class StatementDML extends StatementDMQL {
 
                 if (baseTable.colDefaults[colIndex] != null) {
                     data[colIndex] =
-                        baseTable.colDefaults[colIndex].getValue(session);
+                            baseTable.colDefaults[colIndex].getValue(session);
                 }
 
                 continue;
             }
 
             Object value = e.getValue(session);
-            Type   type  = colTypes[colIndex];
+            Type type = colTypes[colIndex];
 
             if (session.database.sqlSyntaxMys
                     || session.database.sqlSyntaxPgs) {
@@ -1001,12 +1005,12 @@ public class StatementDML extends StatementDMQL {
                         value = Type.SQL_TIMESTAMP.convertToType(session,
                                 value, e.dataType);
                         value = type.convertToType(session, value,
-                                                   Type.SQL_TIMESTAMP);
+                                Type.SQL_TIMESTAMP);
                     } else if (type.typeCode == Types.SQL_TIMESTAMP) {
                         value = Type.SQL_DATE.convertToType(session, value,
-                                                            e.dataType);
+                                e.dataType);
                         value = type.convertToType(session, value,
-                                                   Type.SQL_DATE);
+                                Type.SQL_DATE);
                     } else {
                         throw ex;
                     }
@@ -1029,7 +1033,7 @@ public class StatementDML extends StatementDMQL {
 
     /**
      * Highest level multiple row update method.<p>
-     *
+     * <p>
      * Following clauses from SQL Standard section 11.8 are enforced 9) Let ISS
      * be the innermost SQL-statement being executed. 10) If evaluation of these
      * General Rules during the execution of ISS would cause an update of some
@@ -1042,19 +1046,19 @@ public class StatementDML extends StatementDMQL {
      * violation.
      *
      * @param session Session
-     * @param table Table
+     * @param table   Table
      * @return int
      */
     int update(Session session, Table table,
                RowSetNavigatorDataChange navigator,
                RowSetNavigator generatedNavigator) {
 
-        int           rowCount      = navigator.getSize();
+        int rowCount = navigator.getSize();
         RangeIterator checkIterator = null;
 
         if (updatableTableCheck != null) {
             checkIterator =
-                session.sessionContext.getCheckIterator(checkRangeVariable);
+                    session.sessionContext.getCheckIterator(checkRangeVariable);
         }
 
         // set identity column where null and check columns
@@ -1084,11 +1088,11 @@ public class StatementDML extends StatementDMQL {
             for (int i = 0; i < rowCount; i++) {
                 navigator.next();
 
-                Row      row  = navigator.getCurrentRow();
+                Row row = navigator.getCurrentRow();
                 Object[] data = navigator.getCurrentChangedData();
 
                 performReferentialActions(session, navigator, row, data,
-                                          this.updateColumnMap, path, false);
+                        this.updateColumnMap, path, false);
                 path.clear();
             }
 
@@ -1096,10 +1100,10 @@ public class StatementDML extends StatementDMQL {
         }
 
         while (navigator.next()) {
-            Row      row            = navigator.getCurrentRow();
-            Object[] data           = navigator.getCurrentChangedData();
-            int[]    changedColumns = navigator.getCurrentChangedColumns();
-            Table    currentTable   = ((Table) row.getTable());
+            Row row = navigator.getCurrentRow();
+            Object[] data = navigator.getCurrentChangedData();
+            int[] changedColumns = navigator.getCurrentChangedColumns();
+            Table currentTable = ((Table) row.getTable());
 
             if (currentTable instanceof TableDerived) {
                 currentTable = ((TableDerived) currentTable).view;
@@ -1109,7 +1113,7 @@ public class StatementDML extends StatementDMQL {
                     > 0) {
                 session.sessionData.startRowProcessing();
                 currentTable.fireTriggers(session, Trigger.UPDATE_BEFORE_ROW,
-                                          row.getData(), data, changedColumns);
+                        row.getData(), data, changedColumns);
                 currentTable.enforceRowConstraints(session, data);
             }
 
@@ -1132,10 +1136,10 @@ public class StatementDML extends StatementDMQL {
         navigator.beforeFirst();
 
         while (navigator.next()) {
-            Row             row          = navigator.getCurrentRow();
-            Table           currentTable = ((Table) row.getTable());
+            Row row = navigator.getCurrentRow();
+            Table currentTable = ((Table) row.getTable());
             int[] changedColumns = navigator.getCurrentChangedColumns();
-            PersistentStore store        = currentTable.getRowStore(session);
+            PersistentStore store = currentTable.getRowStore(session);
 
             session.addDeleteAction(currentTable, store, row, changedColumns);
         }
@@ -1143,17 +1147,17 @@ public class StatementDML extends StatementDMQL {
         navigator.beforeFirst();
 
         while (navigator.next()) {
-            Row             row          = navigator.getCurrentRow();
-            Object[]        data         = navigator.getCurrentChangedData();
-            Table           currentTable = ((Table) row.getTable());
+            Row row = navigator.getCurrentRow();
+            Object[] data = navigator.getCurrentChangedData();
+            Table currentTable = ((Table) row.getTable());
             int[] changedColumns = navigator.getCurrentChangedColumns();
-            PersistentStore store        = currentTable.getRowStore(session);
+            PersistentStore store = currentTable.getRowStore(session);
 
             if (currentTable.isSystemVersioned()) {
                 Object[] history = row.getData();
                 Row newRow =
-                    currentTable.insertSystemVersionHistoryRow(session, store,
-                        history);
+                        currentTable.insertSystemVersionHistoryRow(session, store,
+                                history);
             }
 
             if (data == null) {
@@ -1161,7 +1165,7 @@ public class StatementDML extends StatementDMQL {
             }
 
             Row newRow = currentTable.insertSingleRow(session, store, data,
-                changedColumns);
+                    changedColumns);
 
             if (generatedNavigator != null) {
                 Object[] generatedValues = getGeneratedColumns(data);
@@ -1176,16 +1180,16 @@ public class StatementDML extends StatementDMQL {
 
         OrderedHashSet extraUpdateTables = null;
         boolean hasAfterRowTriggers =
-            table.triggerLists[Trigger.UPDATE_AFTER_ROW].length > 0;
+                table.triggerLists[Trigger.UPDATE_AFTER_ROW].length > 0;
 
         while (navigator.next()) {
-            Row      row            = navigator.getCurrentRow();
-            Table    currentTable   = ((Table) row.getTable());
-            Object[] changedData    = navigator.getCurrentChangedData();
-            int[]    changedColumns = navigator.getCurrentChangedColumns();
+            Row row = navigator.getCurrentRow();
+            Table currentTable = ((Table) row.getTable());
+            Object[] changedData = navigator.getCurrentChangedData();
+            int[] changedColumns = navigator.getCurrentChangedColumns();
 
             performIntegrityChecks(session, currentTable, row.getData(),
-                                   changedData, changedColumns);
+                    changedData, changedColumns);
 
             if (currentTable != table) {
                 if (extraUpdateTables == null) {
@@ -1205,14 +1209,14 @@ public class StatementDML extends StatementDMQL {
 
         if (hasAfterRowTriggers) {
             while (navigator.next()) {
-                Row      row            = navigator.getCurrentRow();
-                Object[] changedData    = navigator.getCurrentChangedData();
-                int[]    changedColumns = navigator.getCurrentChangedColumns();
-                Table    currentTable   = ((Table) row.getTable());
+                Row row = navigator.getCurrentRow();
+                Object[] changedData = navigator.getCurrentChangedData();
+                int[] changedColumns = navigator.getCurrentChangedColumns();
+                Table currentTable = ((Table) row.getTable());
 
                 currentTable.fireTriggers(session, Trigger.UPDATE_AFTER_ROW,
-                                          row.getData(), changedData,
-                                          changedColumns);
+                        row.getData(), changedData,
+                        changedColumns);
             }
 
             navigator.beforeFirst();
@@ -1225,7 +1229,7 @@ public class StatementDML extends StatementDMQL {
                 Table currentTable = (Table) extraUpdateTables.get(i);
 
                 currentTable.fireTriggers(session, Trigger.UPDATE_AFTER,
-                                          navigator);
+                        navigator);
             }
         }
 
@@ -1241,9 +1245,9 @@ public class StatementDML extends StatementDMQL {
 
         int count = 0;
         RangeIterator it = RangeVariable.getIterator(session,
-            targetRangeVariables);
+                targetRangeVariables);
         RowSetNavigatorDataChange rowset =
-            session.sessionContext.getRowSetDataChange();
+                session.sessionContext.getRowSetDataChange();
 
         session.sessionContext.rownum = 1;
 
@@ -1282,20 +1286,20 @@ public class StatementDML extends StatementDMQL {
 
     Result executeDeleteTruncateStatement(Session session) {
 
-        PersistentStore store   = targetTable.getRowStore(session);
-        RowIterator     it = targetTable.getPrimaryIndex().firstRow(store);
-        boolean         hasData = false;
+        PersistentStore store = targetTable.getRowStore(session);
+        RowIterator it = targetTable.getPrimaryIndex().firstRow(store);
+        boolean hasData = false;
 
         for (int i = 0; i < targetTable.fkMainConstraints.length; i++) {
             if (targetTable.fkMainConstraints[i].getRef() != targetTable) {
                 HsqlName tableName =
-                    targetTable.fkMainConstraints[i].getRef().getName();
+                        targetTable.fkMainConstraints[i].getRef().getName();
                 Table refTable =
-                    session.database.schemaManager.getUserTable(tableName);
+                        session.database.schemaManager.getUserTable(tableName);
 
                 if (!refTable.isEmpty(session)) {
                     throw Error.error(ErrorCode.X_23504,
-                                      refTable.getName().name);
+                            refTable.getName().name);
                 }
             }
         }
@@ -1305,7 +1309,7 @@ public class StatementDML extends StatementDMQL {
                 Row row = it.getCurrentRow();
 
                 session.addDeleteAction((Table) row.getTable(), store, row,
-                                        null);
+                        null);
 
                 hasData = true;
             }
@@ -1325,8 +1329,8 @@ public class StatementDML extends StatementDMQL {
     }
 
     /**
-     *  Highest level multiple row delete method. Corresponds to an SQL
-     *  DELETE.
+     * Highest level multiple row delete method. Corresponds to an SQL
+     * DELETE.
      */
     int delete(Session session, Table table,
                RowSetNavigatorDataChange navigator) {
@@ -1345,7 +1349,7 @@ public class StatementDML extends StatementDMQL {
                     Row row = navigator.getCurrentRow();
 
                     performReferentialActions(session, navigator, row, null,
-                                              null, path, true);
+                            null, path, true);
                     path.clear();
                 }
 
@@ -1360,7 +1364,7 @@ public class StatementDML extends StatementDMQL {
                 Row row = navigator.getCurrentRow();
 
                 performReferentialActions(session, navigator, row, null, null,
-                                          path, false);
+                        path, false);
                 path.clear();
             }
 
@@ -1368,10 +1372,10 @@ public class StatementDML extends StatementDMQL {
         }
 
         while (navigator.next()) {
-            Row      row            = navigator.getCurrentRow();
-            Object[] changedData    = navigator.getCurrentChangedData();
-            int[]    changedColumns = navigator.getCurrentChangedColumns();
-            Table    currentTable   = ((Table) row.getTable());
+            Row row = navigator.getCurrentRow();
+            Object[] changedData = navigator.getCurrentChangedData();
+            int[] changedColumns = navigator.getCurrentChangedColumns();
+            Table currentTable = ((Table) row.getTable());
 
             if (currentTable instanceof TableDerived) {
                 currentTable = ((TableDerived) currentTable).view;
@@ -1379,11 +1383,11 @@ public class StatementDML extends StatementDMQL {
 
             if (changedData == null) {
                 currentTable.fireTriggers(session, Trigger.DELETE_BEFORE_ROW,
-                                          row.getData(), null, null);
+                        row.getData(), null, null);
             } else {
                 currentTable.fireTriggers(session, Trigger.UPDATE_BEFORE_ROW,
-                                          row.getData(), changedData,
-                                          changedColumns);
+                        row.getData(), changedData,
+                        changedColumns);
             }
         }
 
@@ -1397,10 +1401,10 @@ public class StatementDML extends StatementDMQL {
         boolean hasPeriod = false;
 
         while (navigator.next()) {
-            Row             row          = navigator.getCurrentRow();
-            Object[]        data         = navigator.getCurrentChangedData();
-            Table           currentTable = ((Table) row.getTable());
-            PersistentStore store        = currentTable.getRowStore(session);
+            Row row = navigator.getCurrentRow();
+            Object[] data = navigator.getCurrentChangedData();
+            Table currentTable = ((Table) row.getTable());
+            PersistentStore store = currentTable.getRowStore(session);
 
             session.addDeleteAction(currentTable, store, row, null);
 
@@ -1417,17 +1421,17 @@ public class StatementDML extends StatementDMQL {
 
         if (hasUpdate || hasPeriod) {
             while (navigator.next()) {
-                Row             row          = navigator.getCurrentRow();
-                Object[]        data = navigator.getCurrentChangedData();
-                Table           currentTable = ((Table) row.getTable());
+                Row row = navigator.getCurrentRow();
+                Object[] data = navigator.getCurrentChangedData();
+                Table currentTable = ((Table) row.getTable());
                 int[] changedColumns = navigator.getCurrentChangedColumns();
                 PersistentStore store = currentTable.getRowStore(session);
 
                 if (currentTable.isSystemVersioned()) {
                     Object[] history = row.getData();
                     Row newRow =
-                        currentTable.insertSystemVersionHistoryRow(session,
-                            store, history);
+                            currentTable.insertSystemVersionHistoryRow(session,
+                                    store, history);
                 }
 
                 if (data == null) {
@@ -1435,7 +1439,7 @@ public class StatementDML extends StatementDMQL {
                 }
 
                 Row newRow = currentTable.insertSingleRow(session, store,
-                    data, changedColumns);
+                        data, changedColumns);
 
 //                newRow.rowAction.updatedAction = row.rowAction;
             }
@@ -1446,19 +1450,19 @@ public class StatementDML extends StatementDMQL {
         OrderedHashSet extraUpdateTables = null;
         OrderedHashSet extraDeleteTables = null;
         boolean hasAfterRowTriggers =
-            table.triggerLists[Trigger.DELETE_AFTER_ROW].length > 0;
+                table.triggerLists[Trigger.DELETE_AFTER_ROW].length > 0;
 
         if (rowCount != navigator.getSize()) {
             while (navigator.next()) {
-                Row      row            = navigator.getCurrentRow();
-                Object[] changedData    = navigator.getCurrentChangedData();
-                int[]    changedColumns = navigator.getCurrentChangedColumns();
-                Table    currentTable   = ((Table) row.getTable());
+                Row row = navigator.getCurrentRow();
+                Object[] changedData = navigator.getCurrentChangedData();
+                int[] changedColumns = navigator.getCurrentChangedColumns();
+                Table currentTable = ((Table) row.getTable());
 
                 if (changedData != null) {
                     performIntegrityChecks(session, currentTable,
-                                           row.getData(), changedData,
-                                           changedColumns);
+                            row.getData(), changedData,
+                            changedColumns);
                 }
 
                 if (currentTable != table) {
@@ -1493,19 +1497,19 @@ public class StatementDML extends StatementDMQL {
 
         if (hasAfterRowTriggers) {
             while (navigator.next()) {
-                Row      row          = navigator.getCurrentRow();
-                Object[] changedData  = navigator.getCurrentChangedData();
-                Table    currentTable = ((Table) row.getTable());
+                Row row = navigator.getCurrentRow();
+                Object[] changedData = navigator.getCurrentChangedData();
+                Table currentTable = ((Table) row.getTable());
 
                 if (changedData == null) {
                     currentTable.fireTriggers(session,
-                                              Trigger.DELETE_AFTER_ROW,
-                                              row.getData(), null, null);
+                            Trigger.DELETE_AFTER_ROW,
+                            row.getData(), null, null);
                 } else {
                     currentTable.fireTriggers(session,
-                                              Trigger.UPDATE_AFTER_ROW,
-                                              row.getData(), changedData,
-                                              null);
+                            Trigger.UPDATE_AFTER_ROW,
+                            row.getData(), changedData,
+                            null);
                 }
             }
 
@@ -1519,7 +1523,7 @@ public class StatementDML extends StatementDMQL {
                 Table currentTable = (Table) extraUpdateTables.get(i);
 
                 currentTable.fireTriggers(session, Trigger.UPDATE_AFTER,
-                                          navigator);
+                        navigator);
             }
         }
 
@@ -1528,7 +1532,7 @@ public class StatementDML extends StatementDMQL {
                 Table currentTable = (Table) extraDeleteTables.get(i);
 
                 currentTable.fireTriggers(session, Trigger.DELETE_AFTER,
-                                          navigator);
+                        navigator);
             }
         }
 
@@ -1545,7 +1549,7 @@ public class StatementDML extends StatementDMQL {
 
         for (int i = 0, size = table.checkConstraints.length; i < size; i++) {
             table.checkConstraints[i].checkInsert(session, table, newData,
-                                                  oldData == null);
+                    oldData == null);
         }
 
         if (!session.database.isReferentialIntegrity()) {
@@ -1553,12 +1557,12 @@ public class StatementDML extends StatementDMQL {
         }
 
         for (int i = 0, size = table.fkConstraints.length; i < size; i++) {
-            boolean    check = oldData == null;
-            Constraint c     = table.fkConstraints[i];
+            boolean check = oldData == null;
+            Constraint c = table.fkConstraints[i];
 
             if (!check) {
                 check = ArrayUtil.haveCommonElement(c.getRefColumns(),
-                                                    updatedColumns);
+                        updatedColumns);
             }
 
             if (check) {
@@ -1578,22 +1582,22 @@ public class StatementDML extends StatementDMQL {
         }
 
         boolean delete = data == null;
-        Table   table  = (Table) row.getTable();
+        Table table = (Table) row.getTable();
 
         for (int i = 0, size = table.fkMainConstraints.length; i < size; i++) {
-            Constraint c      = table.fkMainConstraints[i];
-            int        action = delete ? c.getDeleteAction()
-                                       : c.getUpdateAction();
+            Constraint c = table.fkMainConstraints[i];
+            int action = delete ? c.getDeleteAction()
+                    : c.getUpdateAction();
 
             if (deleteCascade
                     ^ (delete
-                       && action == SchemaObject.ReferentialAction.CASCADE)) {
+                    && action == SchemaObject.ReferentialAction.CASCADE)) {
                 continue;
             }
 
             if (!delete) {
                 if (!ArrayUtil.haveCommonElement(changedCols,
-                                                 c.core.mainCols)) {
+                        c.core.mainCols)) {
                     continue;
                 }
 
@@ -1606,7 +1610,7 @@ public class StatementDML extends StatementDMQL {
             RowIterator refiterator = c.findFkRef(session, row.getData());
 
             while (refiterator.next()) {
-                Row      refRow  = refiterator.getCurrentRow();
+                Row refRow = refiterator.getCurrentRow();
                 Object[] refData = null;
 
                 /** @todo use MATCH */
@@ -1626,7 +1630,7 @@ public class StatementDML extends StatementDMQL {
 
                 switch (action) {
 
-                    case SchemaObject.ReferentialAction.CASCADE : {
+                    case SchemaObject.ReferentialAction.CASCADE: {
                         if (delete) {
                             boolean result;
 
@@ -1638,13 +1642,13 @@ public class StatementDML extends StatementDMQL {
                                 refiterator.release();
 
                                 throw Error.error(null, ErrorCode.X_27000,
-                                                  ErrorCode.CONSTRAINT, info);
+                                        ErrorCode.CONSTRAINT, info);
                             }
 
                             if (result) {
                                 performReferentialActions(session, navigator,
-                                                          refRow, null, null,
-                                                          path, deleteCascade);
+                                        refRow, null, null,
+                                        path, deleteCascade);
                             }
 
                             continue;
@@ -1653,20 +1657,20 @@ public class StatementDML extends StatementDMQL {
                         refData = c.core.refTable.getEmptyRowData();
 
                         System.arraycopy(refRow.getData(), 0, refData, 0,
-                                         refData.length);
+                                refData.length);
 
                         for (int j = 0; j < c.core.refCols.length; j++) {
                             refData[c.core.refCols[j]] =
-                                data[c.core.mainCols[j]];
+                                    data[c.core.mainCols[j]];
                         }
 
                         break;
                     }
-                    case SchemaObject.ReferentialAction.SET_NULL : {
+                    case SchemaObject.ReferentialAction.SET_NULL: {
                         refData = c.core.refTable.getEmptyRowData();
 
                         System.arraycopy(refRow.getData(), 0, refData, 0,
-                                         refData.length);
+                                refData.length);
 
                         for (int j = 0; j < c.core.refCols.length; j++) {
                             refData[c.core.refCols[j]] = null;
@@ -1674,23 +1678,23 @@ public class StatementDML extends StatementDMQL {
 
                         break;
                     }
-                    case SchemaObject.ReferentialAction.SET_DEFAULT : {
+                    case SchemaObject.ReferentialAction.SET_DEFAULT: {
                         refData = c.core.refTable.getEmptyRowData();
 
                         System.arraycopy(refRow.getData(), 0, refData, 0,
-                                         refData.length);
+                                refData.length);
 
                         for (int j = 0; j < c.core.refCols.length; j++) {
                             ColumnSchema col =
-                                c.core.refTable.getColumn(c.core.refCols[j]);
+                                    c.core.refTable.getColumn(c.core.refCols[j]);
 
                             refData[c.core.refCols[j]] =
-                                col.getDefaultValue(session);
+                                    col.getDefaultValue(session);
                         }
 
                         break;
                     }
-                    case SchemaObject.ReferentialAction.NO_ACTION :
+                    case SchemaObject.ReferentialAction.NO_ACTION:
                         if (delete) {
                             if (navigator.containsDeletedRow(refRow)) {
                                 continue;
@@ -1702,35 +1706,35 @@ public class StatementDML extends StatementDMQL {
                             }
                         }
 
-                    // fall through
-                    case SchemaObject.ReferentialAction.RESTRICT : {
+                        // fall through
+                    case SchemaObject.ReferentialAction.RESTRICT: {
                         int errorCode = c.getDeleteAction()
-                                        == SchemaObject.ReferentialAction
-                                            .NO_ACTION ? ErrorCode.X_23504
-                                                       : ErrorCode.X_23001;
+                                == SchemaObject.ReferentialAction
+                                .NO_ACTION ? ErrorCode.X_23504
+                                : ErrorCode.X_23001;
                         String[] info = getConstraintInfo(c);
 
                         refiterator.release();
 
                         throw Error.error(null, errorCode,
-                                          ErrorCode.CONSTRAINT, info);
+                                ErrorCode.CONSTRAINT, info);
                     }
-                    default :
+                    default:
                         continue;
                 }
 
                 try {
                     refData =
-                        navigator.addRow(session, refRow, refData,
-                                         c.core.refTable.getColumnTypes(),
-                                         c.core.refCols);
+                            navigator.addRow(session, refRow, refData,
+                                    c.core.refTable.getColumnTypes(),
+                                    c.core.refCols);
                 } catch (HsqlException e) {
                     String[] info = getConstraintInfo(c);
 
                     refiterator.release();
 
                     throw Error.error(null, ErrorCode.X_27000,
-                                      ErrorCode.CONSTRAINT, info);
+                            ErrorCode.CONSTRAINT, info);
                 }
 
                 if (refData == null) {
@@ -1744,7 +1748,7 @@ public class StatementDML extends StatementDMQL {
                 }
 
                 performReferentialActions(session, navigator, refRow, refData,
-                                          c.core.refCols, path, deleteCascade);
+                        c.core.refCols, path, deleteCascade);
                 path.remove(c);
             }
 
@@ -1754,8 +1758,8 @@ public class StatementDML extends StatementDMQL {
 
     static String[] getConstraintInfo(Constraint c) {
 
-        return new String[] {
-            c.core.refName.name, c.core.refTable.getName().name
+        return new String[]{
+                c.core.refName.name, c.core.refTable.getName().name
         };
     }
 

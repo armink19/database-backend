@@ -41,7 +41,7 @@ import java.util.Hashtable;
 
 /**
  * Common code in the Swing and AWT versions of ConnectionDialog
- *
+ * <p>
  * New class based on Hypersonic original
  *
  * @author Thomas Mueller (Hypersonic SQL Group)
@@ -50,61 +50,61 @@ import java.util.Hashtable;
  */
 class ConnectionDialogCommon {
 
-    private static String[][]       connTypes;
+    private static String[][] connTypes;
     private static final String[][] sJDBCTypes = {
-        {
-            "HSQL Database Engine In-Memory", "org.hsqldb.jdbcDriver",
-            "jdbc:hsqldb:mem:."
-        }, {
+            {
+                    "HSQL Database Engine In-Memory", "org.hsqldb.jdbcDriver",
+                    "jdbc:hsqldb:mem:."
+            }, {
             "HSQL Database Engine Standalone", "org.hsqldb.jdbcDriver",
             "jdbc:hsqldb:file:\u00ABdatabase/path?\u00BB"
-        }, {
+    }, {
             "HSQL Database Engine Server", "org.hsqldb.jdbcDriver",
             "jdbc:hsqldb:hsql://localhost/"
-        }, {
+    }, {
             "HSQL Database Engine WebServer", "org.hsqldb.jdbcDriver",
             "jdbc:hsqldb:http://\u00ABhostname/?\u00BB"
-        }, {
+    }, {
             "JDBC-ODBC Bridge from Sun", "sun.jdbc.odbc.JdbcOdbcDriver",
             "jdbc:odbc:\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "Cloudscape RMI", "RmiJdbc.RJDriver",
             "jdbc:rmi://\u00ABhost?\u00BB:1099/jdbc:cloudscape:"
-            + "\u00ABdatabase?\u00BB;create=true"
-        }, {
+                    + "\u00ABdatabase?\u00BB;create=true"
+    }, {
             "IBM DB2", "COM.ibm.db2.jdbc.app.DB2Driver",
             "jdbc:db2:\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "IBM DB2 (thin)", "COM.ibm.db2.jdbc.net.DB2Driver",
             "jdbc:db2://\u00ABhost?\u00BB:6789/\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "Informix", "com.informix.jdbc.IfxDriver",
             "jdbc:informix-sqli://\u00ABhost?\u00BB:1533/\u00ABdatabase?\u00BB:"
-            + "INFORMIXSERVER=\u00ABserver?\u00BB"
-        }, {
+                    + "INFORMIXSERVER=\u00ABserver?\u00BB"
+    }, {
             "InstantDb", "jdbc.idbDriver", "jdbc:idb:\u00ABdatabase?\u00BB.prp"
-        }, {
+    }, {
             "MySQL Connector/J", "com.mysql.jdbc.Driver",
             "jdbc:mysql://\u00ABhost?\u00BB/\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "MM.MySQL", "org.gjt.mm.mysql.Driver",
             "jdbc:mysql://\u00ABhost?\u00BB/\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "Oracle", "oracle.jdbc.driver.OracleDriver",
             "jdbc:oracle:oci8:@\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "Oracle (thin)", "oracle.jdbc.driver.OracleDriver",
             "jdbc:oracle:thin:@\u00ABhost?\u00BB:1521:\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "PointBase", "com.pointbase.jdbc.jdbcUniversalDriver",
             "jdbc:pointbase://\u00ABhost?\u00BB/\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "PostgreSQL", "org.postgresql.Driver",
             "jdbc:postgresql://\u00ABhost?\u00BB/\u00ABdatabase?\u00BB"
-        }, {
+    }, {
             "PostgreSQL v6.5", "postgresql.Driver",
             "jdbc:postgresql://\u00ABhost?\u00BB/\u00ABdatabase?\u00BB"
-        }
+    }
     };
 
     static String[][] getTypes() {
@@ -150,11 +150,11 @@ class ConnectionDialogCommon {
  */
     }
 
-    private static final String fileName       = "hsqlprefs.dat";
-    private static File         recentSettings = null;
+    private static final String fileName = "hsqlprefs.dat";
+    private static File recentSettings = null;
 
     static synchronized Hashtable loadRecentConnectionSettings()
-    throws IOException {
+            throws IOException {
 
         Hashtable list = new Hashtable();
 
@@ -178,18 +178,18 @@ class ConnectionDialogCommon {
             return list;
         }
 
-        FileInputStream   in        = null;
+        FileInputStream in = null;
         ObjectInputStream objStream = null;
 
         try {
-            in        = new FileInputStream(recentSettings);
+            in = new FileInputStream(recentSettings);
             objStream = new ObjectInputStream(in);
 
             list.clear();
 
             while (true) {
                 ConnectionSetting setting =
-                    (ConnectionSetting) objStream.readObject();
+                        (ConnectionSetting) objStream.readObject();
 
                 if (!emptySettingName.equals(setting.getName())) {
 /*
@@ -204,12 +204,12 @@ class ConnectionDialogCommon {
             // reached end of file -- this is not clean but it works
         } catch (ClassNotFoundException cnfe) {
             throw (IOException) new IOException("Unrecognized class type "
-                                                + cnfe.getMessage());
+                    + cnfe.getMessage());
         } catch (ClassCastException cce) {
             throw (IOException) new IOException("Unrecognized class type "
-                                                + cce.getMessage());
-        } catch (Throwable t) {}
-        finally {
+                    + cce.getMessage());
+        } catch (Throwable t) {
+        } finally {
             if (objStream != null) {
                 objStream.close();
             }
@@ -228,7 +228,7 @@ class ConnectionDialogCommon {
      * Adds the new settings name if it does not nexist, or overwrites the old one.
      */
     static void addToRecentConnectionSettings(Hashtable settings,
-            ConnectionSetting newSetting) throws IOException {
+                                              ConnectionSetting newSetting) throws IOException {
         settings.put(newSetting.getName(), newSetting);
         ConnectionDialogCommon.storeRecentConnectionSettings(settings);
     }
@@ -262,9 +262,9 @@ class ConnectionDialogCommon {
             }
 
             // setup a stream to a physical file on the filesystem
-            FileOutputStream   out = new FileOutputStream(recentSettings);
+            FileOutputStream out = new FileOutputStream(recentSettings);
             ObjectOutputStream objStream = new ObjectOutputStream(out);
-            Enumeration        en        = settings.elements();
+            Enumeration en = settings.elements();
 
             while (en.hasMoreElements()) {
                 objStream.writeObject(en.nextElement());
@@ -273,7 +273,8 @@ class ConnectionDialogCommon {
             objStream.flush();
             objStream.close();
             out.close();
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+        }
     }
 
     /**
@@ -301,7 +302,8 @@ class ConnectionDialogCommon {
             recentSettings.delete();
 
             recentSettings = null;
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+        }
     }
 
     private static String homedir = null;

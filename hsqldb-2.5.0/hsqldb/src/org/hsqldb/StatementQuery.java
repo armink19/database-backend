@@ -55,10 +55,10 @@ public class StatementQuery extends StatementDMQL {
                    CompileContext compileContext) {
 
         super(StatementTypes.SELECT_CURSOR, StatementTypes.X_SQL_DATA,
-              session.getCurrentSchemaHsqlName());
+                session.getCurrentSchemaHsqlName());
 
         this.statementReturnType = StatementTypes.RETURN_RESULT;
-        this.queryExpression     = queryExpression;
+        this.queryExpression = queryExpression;
 
         setDatabaseObjects(session, compileContext);
         checkAccessRights(session);
@@ -67,7 +67,7 @@ public class StatementQuery extends StatementDMQL {
     Result getResult(Session session) {
 
         Result result = queryExpression.getResult(session,
-            session.getMaxRows());
+                session.getMaxRows());
 
         result.setStatement(this);
 
@@ -78,15 +78,15 @@ public class StatementQuery extends StatementDMQL {
 
         switch (type) {
 
-            case StatementTypes.SELECT_CURSOR :
+            case StatementTypes.SELECT_CURSOR:
                 return queryExpression.getMetaData();
 
-            case StatementTypes.SELECT_SINGLE :
+            case StatementTypes.SELECT_SINGLE:
                 return queryExpression.getMetaData();
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "StatementQuery.getResultMetaData()");
+                        "StatementQuery.getResultMetaData()");
         }
     }
 
@@ -115,8 +115,8 @@ public class StatementQuery extends StatementDMQL {
     public int getResultProperties() {
 
         return queryExpression.isUpdatable
-               ? ResultProperties.updatablePropsValue
-               : ResultProperties.defaultPropsValue;
+                ? ResultProperties.updatablePropsValue
+                : ResultProperties.defaultPropsValue;
     }
 
     public void setCursorName(HsqlName name) {

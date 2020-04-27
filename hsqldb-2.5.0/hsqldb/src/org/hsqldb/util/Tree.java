@@ -74,7 +74,6 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- *
  * @author Thomas Mueller (Hypersonic SQL Group)
  * @version 1.7.0
  * @since Hypersonic SQL
@@ -82,16 +81,16 @@ import java.util.Vector;
 class Tree extends Panel {
 
     // static
-    private static Font        fFont;
+    private static Font fFont;
     private static FontMetrics fMetrics;
-    private static int         iRowHeight;
-    private static int         iIndentWidth;
-    private int                iMaxTextLength;
+    private static int iRowHeight;
+    private static int iIndentWidth;
+    private int iMaxTextLength;
 
     // drawing
     private Dimension dMinimum;
-    private Graphics  gImage;
-    private Image     iImage;
+    private Graphics gImage;
+    private Image iImage;
 
     // height / width
     private int iWidth, iHeight;
@@ -101,22 +100,21 @@ class Tree extends Panel {
 
     // data
     private Vector vData;
-    private int    iRowCount;
+    private int iRowCount;
 
     // scrolling
     private Scrollbar sbHoriz, sbVert;
-    private int       iSbWidth, iSbHeight;
+    private int iSbWidth, iSbHeight;
 
     static {
-        fFont        = new Font("Dialog", Font.PLAIN, 12);
-        fMetrics     = Toolkit.getDefaultToolkit().getFontMetrics(fFont);
-        iRowHeight   = getMaxHeight(fMetrics);
+        fFont = new Font("Dialog", Font.PLAIN, 12);
+        fMetrics = Toolkit.getDefaultToolkit().getFontMetrics(fFont);
+        iRowHeight = getMaxHeight(fMetrics);
         iIndentWidth = 12;
     }
 
     /**
      * Constructor declaration
-     *
      */
     Tree() {
 
@@ -138,7 +136,6 @@ class Tree extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param d
      */
     public void setMinimumSize(Dimension d) {
@@ -147,7 +144,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param x
      * @param y
@@ -162,9 +158,9 @@ class Tree extends Panel {
         super.setBounds(x, y, w, h);
 
         iSbHeight = sbHoriz.getPreferredSize().height;
-        iSbWidth  = sbVert.getPreferredSize().width;
-        iHeight   = h - iSbHeight;
-        iWidth    = w - iSbWidth;
+        iSbWidth = sbVert.getPreferredSize().width;
+        iHeight = h - iSbHeight;
+        iWidth = w - iSbWidth;
 
         sbHoriz.setBounds(0, iHeight, iWidth, iSbHeight);
         sbVert.setBounds(iWidth, 0, iSbWidth, iHeight);
@@ -177,11 +173,10 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      */
     public void removeAll() {
 
-        vData     = new Vector();
+        vData = new Vector();
         iRowCount = 0;
 
         adjustScroll();
@@ -193,7 +188,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param key
      * @param value
@@ -227,7 +221,6 @@ class Tree extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param key
      * @param value
      */
@@ -237,7 +230,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      */
     public void update() {
         adjustScroll();
@@ -246,7 +238,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      */
     void adjustScroll() {
 
@@ -258,7 +249,7 @@ class Tree extends Panel {
         sbHoriz.setValues(iX, iWidth, 0, iTreeWidth);
 
         int v = iY / iRowHeight,
-            h = iHeight / iRowHeight;
+                h = iHeight / iRowHeight;
 
         sbVert.setValues(v, h, 0, iRowCount + 1);
 
@@ -268,7 +259,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param e
      */
@@ -280,11 +270,11 @@ class Tree extends Panel {
 
         switch (e.id) {
 
-            case Event.SCROLL_LINE_UP :
-            case Event.SCROLL_LINE_DOWN :
-            case Event.SCROLL_PAGE_UP :
-            case Event.SCROLL_PAGE_DOWN :
-            case Event.SCROLL_ABSOLUTE :
+            case Event.SCROLL_LINE_UP:
+            case Event.SCROLL_LINE_DOWN:
+            case Event.SCROLL_PAGE_UP:
+            case Event.SCROLL_PAGE_DOWN:
+            case Event.SCROLL_ABSOLUTE:
                 iX = sbHoriz.getValue();
                 iY = iRowHeight * sbVert.getValue();
 
@@ -298,7 +288,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param g
      */
@@ -321,24 +310,24 @@ class Tree extends Panel {
         gImage.setColor(Color.white);
         gImage.fillRect(0, 0, iWidth, iHeight);
 
-        int[]    lasty = new int[100];
-        String[] root  = new String[100];
+        int[] lasty = new int[100];
+        String[] root = new String[100];
 
         root[0] = "";
 
         int currentindent = 0;
-        int y             = iRowHeight;
+        int y = iRowHeight;
 
         y -= iY;
 
         boolean closed = false;
 
         for (int i = 0; i < iRowCount; i++) {
-            String[] s      = (String[]) vData.elementAt(i);
-            String   key    = s[0];
-            String   data   = s[1];
-            String   folder = s[2];
-            int      ci     = currentindent;
+            String[] s = (String[]) vData.elementAt(i);
+            String key = s[0];
+            String data = s[1];
+            String folder = s[2];
+            int ci = currentindent;
 
             for (; ci > 0; ci--) {
                 if (key.startsWith(root[ci])) {
@@ -354,7 +343,7 @@ class Tree extends Panel {
                 continue;
             }
 
-            closed   = folder != null && folder.equals("+");
+            closed = folder != null && folder.equals("+");
             root[ci] = key;
 
             int x = iIndentWidth * ci - iX;
@@ -374,16 +363,16 @@ class Tree extends Panel {
                 int rgb = Integer.parseInt(s[3]);
 
                 gImage.setColor(rgb == 0 ? Color.white
-                                         : new Color(rgb));
+                        : new Color(rgb));
                 gImage.fillRect(x + iIndentWidth - 3, y - 3, 7, 7);
                 gImage.setColor(Color.black);
                 gImage.drawRect(x + iIndentWidth - 4, y - 4, 8, 8);
                 gImage.drawLine(x + iIndentWidth - 2, y,
-                                x + iIndentWidth + 2, y);
+                        x + iIndentWidth + 2, y);
 
                 if (folder.equals("+")) {
                     gImage.drawLine(x + iIndentWidth, y - 2,
-                                    x + iIndentWidth, y + 2);
+                            x + iIndentWidth, y + 2);
                 }
             } else {
                 px -= iIndentWidth;
@@ -393,7 +382,7 @@ class Tree extends Panel {
             gImage.drawString(data, px, py);
 
             currentindent = ci;
-            y             += iRowHeight;
+            y += iRowHeight;
         }
 
         g.drawImage(iImage, 0, 0, this);
@@ -401,7 +390,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param g
      */
@@ -440,7 +428,6 @@ class Tree extends Panel {
     /**
      * Method declaration
      *
-     *
      * @param e
      * @param x
      * @param y
@@ -457,18 +444,18 @@ class Tree extends Panel {
 
         root[0] = "";
 
-        int     currentindent = 0;
-        int     cy            = iRowHeight;
-        boolean closed        = false;
-        int     i             = 0;
+        int currentindent = 0;
+        int cy = iRowHeight;
+        boolean closed = false;
+        int i = 0;
 
         y += iY;
 
         for (; i < iRowCount; i++) {
-            String[] s      = (String[]) vData.elementAt(i);
-            String   key    = s[0];
-            String   folder = s[2];
-            int      ci     = currentindent;
+            String[] s = (String[]) vData.elementAt(i);
+            String key = s[0];
+            String folder = s[2];
+            int ci = currentindent;
 
             for (; ci > 0; ci--) {
                 if (key.startsWith(root[ci])) {
@@ -488,15 +475,15 @@ class Tree extends Panel {
                 break;
             }
 
-            root[ci]      = key;
-            closed        = folder != null && folder.equals("+");
+            root[ci] = key;
+            closed = folder != null && folder.equals("+");
             currentindent = ci;
-            cy            += iRowHeight;
+            cy += iRowHeight;
         }
 
         if (i >= 0 && i < iRowCount) {
-            String[] s      = (String[]) vData.elementAt(i);
-            String   folder = s[2];
+            String[] s = (String[]) vData.elementAt(i);
+            String folder = s[2];
 
             if (folder != null && folder.equals("+")) {
                 folder = "-";
@@ -515,7 +502,6 @@ class Tree extends Panel {
 
     /**
      * Method declaration
-     *
      *
      * @param f
      */

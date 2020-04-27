@@ -63,32 +63,32 @@ class ConstraintCore {
     Index mainIndex;
 
     // Ref is the table that has a reference to the main table
-    Table   refTable;
-    int[]   refCols;
-    Index   refIndex;
-    int     deleteAction;
-    int     updateAction;
+    Table refTable;
+    int[] refCols;
+    Index refIndex;
+    int deleteAction;
+    int updateAction;
     boolean hasUpdateAction;
     boolean hasDeleteAction;
-    int     matchType;
+    int matchType;
 
     //
     ConstraintCore duplicate() {
 
         ConstraintCore copy = new ConstraintCore();
 
-        copy.refName      = refName;
-        copy.mainName     = mainName;
-        copy.uniqueName   = uniqueName;
-        copy.mainTable    = mainTable;
-        copy.mainCols     = mainCols;
-        copy.mainIndex    = mainIndex;
-        copy.refTable     = refTable;
-        copy.refCols      = refCols;
-        copy.refIndex     = refIndex;
+        copy.refName = refName;
+        copy.mainName = mainName;
+        copy.uniqueName = uniqueName;
+        copy.mainTable = mainTable;
+        copy.mainCols = mainCols;
+        copy.mainIndex = mainIndex;
+        copy.refTable = refTable;
+        copy.refCols = refCols;
+        copy.refIndex = refIndex;
         copy.deleteAction = deleteAction;
         copy.updateAction = updateAction;
-        copy.matchType    = matchType;
+        copy.matchType = matchType;
 
         return copy;
     }

@@ -85,15 +85,15 @@ import java.io.IOException;
 // fredt@users 20021205 - path 1.7.2 - enhancements
 
 /**
- *  Cached table Node implementation.<p>
- *  Only integral references to left, right and parent nodes in the AVL tree
- *  are held and used as pointers data.<p>
- *
- *  iId is a reference to the Index object that contains this node.<br>
- *  This fields can be eliminated in the future, by changing the
- *  method signatures to take a Index parameter from Index.java (fredt@users)
- *
- *  New class derived from Hypersonic SQL code and enhanced in HSQLDB. <p>
+ * Cached table Node implementation.<p>
+ * Only integral references to left, right and parent nodes in the AVL tree
+ * are held and used as pointers data.<p>
+ * <p>
+ * iId is a reference to the Index object that contains this node.<br>
+ * This fields can be eliminated in the future, by changing the
+ * method signatures to take a Index parameter from Index.java (fredt@users)
+ * <p>
+ * New class derived from Hypersonic SQL code and enhanced in HSQLDB. <p>
  *
  * @author Fred Toussi (fredt@users dot sourceforge dot net)
  * @author Thomas Mueller (Hypersonic SQL Group)
@@ -102,10 +102,10 @@ import java.io.IOException;
  */
 public class NodeAVLDisk extends NodeAVL {
 
-    private int             iLeft   = NO_POS;
-    private int             iRight  = NO_POS;
-    private int             iParent = NO_POS;
-    private int             iId;    // id of Index object for this Node
+    private int iLeft = NO_POS;
+    private int iRight = NO_POS;
+    private int iParent = NO_POS;
+    private int iId;    // id of Index object for this Node
     public static final int SIZE_IN_BYTE = 4 * 4;
 
     public NodeAVLDisk(RowAVLDisk r, RowInputInterface in,
@@ -113,11 +113,11 @@ public class NodeAVLDisk extends NodeAVL {
 
         super(r);
 
-        iId      = id;
+        iId = id;
         iBalance = in.readInt();
-        iLeft    = in.readInt();
-        iRight   = in.readInt();
-        iParent  = in.readInt();
+        iLeft = in.readInt();
+        iRight = in.readInt();
+        iParent = in.readInt();
 
         if (iLeft <= 0) {
             iLeft = NO_POS;
@@ -141,12 +141,12 @@ public class NodeAVLDisk extends NodeAVL {
 
     public void delete() {
 
-        iLeft    = NO_POS;
-        iRight   = NO_POS;
-        iParent  = NO_POS;
-        nLeft    = null;
-        nRight   = null;
-        nParent  = null;
+        iLeft = NO_POS;
+        iRight = NO_POS;
+        iParent = NO_POS;
+        nLeft = null;
+        nRight = null;
+        nParent = null;
         iBalance = 0;
 
         ((RowAVLDisk) row).setNodesChanged();
@@ -188,7 +188,7 @@ public class NodeAVLDisk extends NodeAVL {
             }
 
             store.getCache().logSevereEvent(tableName + " NodeAVLDisk "
-                                            + row.getPos(), null);
+                    + row.getPos(), null);
 
             return this;
         }
@@ -199,7 +199,7 @@ public class NodeAVLDisk extends NodeAVL {
     private NodeAVLDisk findNode(PersistentStore store, long pos) {
 
         NodeAVLDisk ret = null;
-        RowAVLDisk  r   = (RowAVLDisk) store.get(pos, false);
+        RowAVLDisk r = (RowAVLDisk) store.get(pos, false);
 
         if (r != null) {
             ret = (NodeAVLDisk) r.getNode(iId);
@@ -292,18 +292,18 @@ public class NodeAVLDisk extends NodeAVL {
 
     public NodeAVL child(PersistentStore store, boolean isleft) {
         return isleft ? getLeft(store)
-                      : getRight(store);
+                : getRight(store);
     }
 
     NodeAVL setParent(PersistentStore store, NodeAVL n) {
 
-        RowAVLDisk  row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDisk node = (NodeAVLDisk) row.getNode(iId);
 
         row.setNodesChanged();
 
         node.iParent = n == null ? NO_POS
-                                 : (int) n.getPos();
+                : (int) n.getPos();
 
         row.keepInMemory(false);
 
@@ -312,7 +312,7 @@ public class NodeAVLDisk extends NodeAVL {
 
     public NodeAVL setBalance(PersistentStore store, int b) {
 
-        RowAVLDisk  row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDisk node = (NodeAVLDisk) row.getNode(iId);
 
         row.setNodesChanged();
@@ -326,11 +326,11 @@ public class NodeAVLDisk extends NodeAVL {
 
     NodeAVL setLeft(PersistentStore store, NodeAVL n) {
 
-        RowAVLDisk  row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDisk node = (NodeAVLDisk) row.getNode(iId);
 
         node.iLeft = n == null ? NO_POS
-                               : (int) n.getPos();
+                : (int) n.getPos();
 
         row.setNodesChanged();
 
@@ -341,11 +341,11 @@ public class NodeAVLDisk extends NodeAVL {
 
     NodeAVL setRight(PersistentStore store, NodeAVL n) {
 
-        RowAVLDisk  row  = (RowAVLDisk) store.get(this.row, true);
+        RowAVLDisk row = (RowAVLDisk) store.get(this.row, true);
         NodeAVLDisk node = (NodeAVLDisk) row.getNode(iId);
 
         node.iRight = n == null ? NO_POS
-                                : (int) n.getPos();
+                : (int) n.getPos();
 
         row.setNodesChanged();
 
@@ -401,17 +401,18 @@ public class NodeAVLDisk extends NodeAVL {
         return NodeAVLDisk.SIZE_IN_BYTE;
     }
 
-    public void setInMemory(boolean in) {}
+    public void setInMemory(boolean in) {
+    }
 
     public void write(RowOutputInterface out) {
 
         out.writeInt(iBalance);
         out.writeInt((iLeft == NO_POS) ? 0
-                                       : iLeft);
+                : iLeft);
         out.writeInt((iRight == NO_POS) ? 0
-                                        : iRight);
+                : iRight);
         out.writeInt((iParent == NO_POS) ? 0
-                                         : iParent);
+                : iParent);
     }
 
     public void write(RowOutputInterface out, LongLookup lookup) {
@@ -437,23 +438,28 @@ public class NodeAVLDisk extends NodeAVL {
         return newPointer;
     }
 
-    public void restore() {}
+    public void restore() {
+    }
 
-    public void destroy() {}
+    public void destroy() {
+    }
 
-    public void updateAccessCount(int count) {}
+    public void updateAccessCount(int count) {
+    }
 
     public int getAccessCount() {
         return 0;
     }
 
-    public void setStorageSize(int size) {}
+    public void setStorageSize(int size) {
+    }
 
     public int getStorageSize() {
         return 0;
     }
 
-    public void setPos(long pos) {}
+    public void setPos(long pos) {
+    }
 
     public boolean isNew() {
         return false;
@@ -463,7 +469,8 @@ public class NodeAVLDisk extends NodeAVL {
         return false;
     }
 
-    public void setChanged(boolean flag) {}
+    public void setChanged(boolean flag) {
+    }
 
     public boolean isKeepInMemory() {
         return false;

@@ -52,25 +52,25 @@ import java.io.IOException;
  */
 public final class ResultMetaData {
 
-    public static final int RESULT_METADATA          = 1;
-    public static final int SIMPLE_RESULT_METADATA   = 2;
-    public static final int UPDATE_RESULT_METADATA   = 3;
-    public static final int PARAM_METADATA           = 4;
+    public static final int RESULT_METADATA = 1;
+    public static final int SIMPLE_RESULT_METADATA = 2;
+    public static final int UPDATE_RESULT_METADATA = 3;
+    public static final int PARAM_METADATA = 4;
     public static final int GENERATED_INDEX_METADATA = 5;
-    public static final int GENERATED_NAME_METADATA  = 6;
+    public static final int GENERATED_NAME_METADATA = 6;
 
     //
     private int type;
 
     // values overriding table column
     public String[] columnLabels;
-    public Type[]   columnTypes;
-    private int     columnCount;
-    private int     extendedColumnCount;
+    public Type[] columnTypes;
+    private int columnCount;
+    private int extendedColumnCount;
     public static final ResultMetaData emptyResultMetaData =
-        newResultMetaData(0);
+            newResultMetaData(0);
     public static final ResultMetaData emptyParamMetaData =
-        newParameterMetaData(0);
+            newParameterMetaData(0);
 
     // column indexes for mapping or for generated columns
     public int[] colIndexes;
@@ -91,8 +91,8 @@ public final class ResultMetaData {
 
         ResultMetaData md = new ResultMetaData(UPDATE_RESULT_METADATA);
 
-        md.columnTypes         = new Type[types.length];
-        md.columnCount         = types.length;
+        md.columnTypes = new Type[types.length];
+        md.columnCount = types.length;
         md.extendedColumnCount = types.length;
 
         ArrayUtil.copyArray(types, md.columnTypes, types.length);
@@ -104,8 +104,8 @@ public final class ResultMetaData {
 
         ResultMetaData md = new ResultMetaData(SIMPLE_RESULT_METADATA);
 
-        md.columnTypes         = types;
-        md.columnCount         = types.length;
+        md.columnTypes = types;
+        md.columnCount = types.length;
         md.extendedColumnCount = types.length;
 
         return md;
@@ -131,7 +131,7 @@ public final class ResultMetaData {
     }
 
     public static ResultMetaData newDoubleColumnMetaData(String colNameA,
-            String colNameB) {
+                                                         String colNameB) {
 
         ResultMetaData md = ResultMetaData.newResultMetaData(2);
 
@@ -148,15 +148,15 @@ public final class ResultMetaData {
     }
 
     public static ResultMetaData newResultMetaData(Type[] types,
-            int[] baseColumnIndexes, int colCount, int extColCount) {
+                                                   int[] baseColumnIndexes, int colCount, int extColCount) {
 
         ResultMetaData md = new ResultMetaData(RESULT_METADATA);
 
-        md.columnLabels        = new String[colCount];
-        md.columns             = new ColumnBase[colCount];
-        md.columnTypes         = types;
-        md.colIndexes          = baseColumnIndexes;
-        md.columnCount         = colCount;
+        md.columnLabels = new String[colCount];
+        md.columns = new ColumnBase[colCount];
+        md.columnTypes = types;
+        md.colIndexes = baseColumnIndexes;
+        md.columnCount = colCount;
         md.extendedColumnCount = extColCount;
 
         return md;
@@ -166,11 +166,11 @@ public final class ResultMetaData {
 
         ResultMetaData md = new ResultMetaData(PARAM_METADATA);
 
-        md.columnTypes         = new Type[colCount];
-        md.columnLabels        = new String[colCount];
-        md.paramModes          = new byte[colCount];
-        md.paramNullable       = new byte[colCount];
-        md.columnCount         = colCount;
+        md.columnTypes = new Type[colCount];
+        md.columnLabels = new String[colCount];
+        md.paramModes = new byte[colCount];
+        md.paramNullable = new byte[colCount];
+        md.columnCount = colCount;
         md.extendedColumnCount = colCount;
 
         return md;
@@ -182,9 +182,9 @@ public final class ResultMetaData {
         if (columnIndexes != null) {
             ResultMetaData md = new ResultMetaData(GENERATED_INDEX_METADATA);
 
-            md.columnCount         = columnIndexes.length;
+            md.columnCount = columnIndexes.length;
             md.extendedColumnCount = columnIndexes.length;
-            md.colIndexes          = new int[columnIndexes.length];
+            md.colIndexes = new int[columnIndexes.length];
 
             for (int i = 0; i < columnIndexes.length; i++) {
                 md.colIndexes[i] = columnIndexes[i] - 1;
@@ -194,10 +194,10 @@ public final class ResultMetaData {
         } else if (columnNames != null) {
             ResultMetaData md = new ResultMetaData(GENERATED_NAME_METADATA);
 
-            md.columnLabels        = new String[columnNames.length];
-            md.columnCount         = columnNames.length;
+            md.columnLabels = new String[columnNames.length];
+            md.columnCount = columnNames.length;
             md.extendedColumnCount = columnNames.length;
-            md.columnLabels        = columnNames;
+            md.columnLabels = columnNames;
 
             return md;
         } else {
@@ -242,11 +242,11 @@ public final class ResultMetaData {
 
     public boolean isTableColumn(int i) {
 
-        String colName   = columns[i].getNameString();
+        String colName = columns[i].getNameString();
         String tableName = columns[i].getTableNameString();
 
         return tableName != null && tableName.length() > 0 && colName != null
-               && colName.length() > 0;
+                && colName.length() > 0;
     }
 
     private static void decodeTableColumnAttrs(int in, ColumnBase column) {
@@ -278,7 +278,7 @@ public final class ResultMetaData {
 
     private void decodeParamColumnAttrs(int in, int columnIndex) {
         paramNullable[columnIndex] = (byte) (in & 0x00000003);
-        paramModes[columnIndex]    = (byte) ((in >> 4) & 0x0000000f);
+        paramModes[columnIndex] = (byte) ((in >> 4) & 0x0000000f);
     }
 
     private int encodeParamColumnAttrs(int columnIndex) {
@@ -292,13 +292,13 @@ public final class ResultMetaData {
 
     ResultMetaData(RowInputInterface in) throws IOException {
 
-        type        = in.readInt();
+        type = in.readInt();
         columnCount = in.readInt();
 
         switch (type) {
 
-            case UPDATE_RESULT_METADATA :
-            case SIMPLE_RESULT_METADATA : {
+            case UPDATE_RESULT_METADATA:
+            case SIMPLE_RESULT_METADATA: {
                 columnTypes = new Type[columnCount];
 
                 for (int i = 0; i < columnCount; i++) {
@@ -307,7 +307,7 @@ public final class ResultMetaData {
 
                 return;
             }
-            case GENERATED_INDEX_METADATA : {
+            case GENERATED_INDEX_METADATA: {
                 colIndexes = new int[columnCount];
 
                 for (int i = 0; i < columnCount; i++) {
@@ -316,7 +316,7 @@ public final class ResultMetaData {
 
                 return;
             }
-            case GENERATED_NAME_METADATA : {
+            case GENERATED_NAME_METADATA: {
                 columnLabels = new String[columnCount];
 
                 for (int i = 0; i < columnCount; i++) {
@@ -325,14 +325,14 @@ public final class ResultMetaData {
 
                 return;
             }
-            case PARAM_METADATA : {
-                columnTypes   = new Type[columnCount];
-                columnLabels  = new String[columnCount];
-                paramModes    = new byte[columnCount];
+            case PARAM_METADATA: {
+                columnTypes = new Type[columnCount];
+                columnLabels = new String[columnCount];
+                paramModes = new byte[columnCount];
                 paramNullable = new byte[columnCount];
 
                 for (int i = 0; i < columnCount; i++) {
-                    columnTypes[i]  = readDataType(in);
+                    columnTypes[i] = readDataType(in);
                     columnLabels[i] = in.readString();
 
                     decodeParamColumnAttrs(in.readByte(), i);
@@ -340,11 +340,11 @@ public final class ResultMetaData {
 
                 return;
             }
-            case RESULT_METADATA : {
+            case RESULT_METADATA: {
                 extendedColumnCount = in.readInt();
-                columnTypes         = new Type[extendedColumnCount];
-                columnLabels        = new String[columnCount];
-                columns             = new ColumnBase[columnCount];
+                columnTypes = new Type[extendedColumnCount];
+                columnLabels = new String[columnCount];
+                columns = new ColumnBase[columnCount];
 
                 if (columnCount != extendedColumnCount) {
                     colIndexes = new int[columnCount];
@@ -360,11 +360,11 @@ public final class ResultMetaData {
                     columnLabels[i] = in.readString();
 
                     String catalog = in.readString();
-                    String schema  = in.readString();
-                    String table   = in.readString();
-                    String name    = in.readString();
+                    String schema = in.readString();
+                    String table = in.readString();
+                    String name = in.readString();
                     ColumnBase column = new ColumnBase(catalog, schema, table,
-                                                       name);
+                            name);
 
                     column.setType(columnTypes[i]);
                     decodeTableColumnAttrs(in.readByte(), column);
@@ -380,7 +380,7 @@ public final class ResultMetaData {
 
                 return;
             }
-            default : {
+            default: {
                 throw Error.runtimeError(ErrorCode.U_S0500, "ResultMetaData");
             }
         }
@@ -388,8 +388,8 @@ public final class ResultMetaData {
 
     Type readDataTypeSimple(RowInputInterface in) throws IOException {
 
-        int     typeCode = in.readType();
-        boolean isArray  = typeCode == Types.SQL_ARRAY;
+        int typeCode = in.readType();
+        boolean isArray = typeCode == Types.SQL_ARRAY;
 
         if (isArray) {
             typeCode = in.readType();
@@ -402,17 +402,17 @@ public final class ResultMetaData {
 
     Type readDataType(RowInputInterface in) throws IOException {
 
-        int     typeCode = in.readType();
-        boolean isArray  = typeCode == Types.SQL_ARRAY;
+        int typeCode = in.readType();
+        boolean isArray = typeCode == Types.SQL_ARRAY;
 
         if (isArray) {
             typeCode = in.readType();
         }
 
-        long size  = in.readLong();
-        int  scale = in.readInt();
+        long size = in.readLong();
+        int scale = in.readInt();
         Type type = Type.getType(typeCode, Type.SQL_VARCHAR.getCharacterSet(),
-                                 Type.SQL_VARCHAR.getCollation(), size, scale);
+                Type.SQL_VARCHAR.getCollation(), size, scale);
 
         if (isArray) {
             type = new ArrayType(type, ArrayType.defaultArrayCardinality);
@@ -449,29 +449,29 @@ public final class ResultMetaData {
 
         switch (type) {
 
-            case UPDATE_RESULT_METADATA :
-            case SIMPLE_RESULT_METADATA : {
+            case UPDATE_RESULT_METADATA:
+            case SIMPLE_RESULT_METADATA: {
                 for (int i = 0; i < columnCount; i++) {
                     writeDataTypeCodes(out, columnTypes[i]);
                 }
 
                 return;
             }
-            case GENERATED_INDEX_METADATA : {
+            case GENERATED_INDEX_METADATA: {
                 for (int i = 0; i < columnCount; i++) {
                     out.writeInt(colIndexes[i]);
                 }
 
                 return;
             }
-            case GENERATED_NAME_METADATA : {
+            case GENERATED_NAME_METADATA: {
                 for (int i = 0; i < columnCount; i++) {
                     out.writeString(columnLabels[i]);
                 }
 
                 return;
             }
-            case PARAM_METADATA :
+            case PARAM_METADATA:
                 for (int i = 0; i < columnCount; i++) {
                     writeDataType(out, columnTypes[i]);
                     out.writeString(columnLabels[i]);
@@ -480,7 +480,7 @@ public final class ResultMetaData {
 
                 return;
 
-            case RESULT_METADATA : {
+            case RESULT_METADATA: {
                 out.writeInt(extendedColumnCount);
 
                 for (int i = 0; i < extendedColumnCount; i++) {
@@ -512,7 +512,7 @@ public final class ResultMetaData {
 
                 return;
             }
-            default : {
+            default: {
                 throw Error.runtimeError(ErrorCode.U_S0500, "ResultMetaData");
             }
         }

@@ -122,7 +122,7 @@ import java.io.PrintWriter;
  * </pre>
  * should be set "true" in the web.xml file of the servlet container.
  * In this case, the database path should begin with a "/".
- *
+ * <p>
  * JDBC connections via the HTTP protocol are persistent
  * in the JDBC sense. The JDBC Connection that is established can support
  * transactions spanning several Statement calls and real PreparedStatement
@@ -135,9 +135,9 @@ import java.io.PrintWriter;
 public class Servlet extends HttpServlet {
 
     private static final int BUFFER_SIZE = 256;
-    private String           dbType;
-    private String           dbPath;
-    private String           initError;
+    private String dbType;
+    private String dbPath;
+    private String initError;
 
     public void init(ServletConfig config) {
 
@@ -155,7 +155,7 @@ public class Servlet extends HttpServlet {
 
 // begin WEB-INF patch */
         String useWebInfStr =
-            getInitParameter("hsqldb.server.use_web-inf_path");
+                getInitParameter("hsqldb.server.use_web-inf_path");
 
         if (!dbStr.equals(".") && "true".equalsIgnoreCase(useWebInfStr)) {
             dbStr = getServletContext().getRealPath("/") + "WEB-INF/" + dbStr;
@@ -198,7 +198,7 @@ public class Servlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
-                      throws IOException, ServletException {
+            throws IOException, ServletException {
 
         String query = request.getQueryString();
 
@@ -212,7 +212,7 @@ public class Servlet extends HttpServlet {
             PrintWriter out = response.getWriter();
 
             out.println(
-                "<html><head><title>HSQL Database Engine Servlet</title>");
+                    "<html><head><title>HSQL Database Engine Servlet</title>");
             out.println("</head><body><h1>HSQL Database Engine Servlet</h1>");
             out.println("The servlet is running.<p>");
 
@@ -231,44 +231,44 @@ public class Servlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response)
-                       throws IOException, ServletException {
+            throws IOException, ServletException {
 
-        DataInputStream  inStream = null;
-        DataOutputStream dataOut  = null;
+        DataInputStream inStream = null;
+        DataOutputStream dataOut = null;
 
         try {
             inStream = new DataInputStream(request.getInputStream());
 
-            int            databaseID = inStream.readInt();
-            long           sessionID  = inStream.readLong();
-            int            mode       = inStream.readByte();
-            RowInputBinary rowIn      = new RowInputBinary(BUFFER_SIZE);
+            int databaseID = inStream.readInt();
+            long sessionID = inStream.readLong();
+            int mode = inStream.readByte();
+            RowInputBinary rowIn = new RowInputBinary(BUFFER_SIZE);
             Session session = DatabaseManager.getSession(databaseID,
-                sessionID);
+                    sessionID);
             Result resultIn = Result.newResult(session, mode, inStream, rowIn);
 
             resultIn.setDatabaseId(databaseID);
             resultIn.setSessionId(sessionID);
 
             Result resultOut;
-            int    type = resultIn.getType();
+            int type = resultIn.getType();
 
             if (type == ResultConstants.CONNECT) {
                 try {
                     session =
-                        DatabaseManager.newSession(dbType, dbPath,
-                                                   resultIn.getMainString(),
-                                                   resultIn.getSubString(),
-                                                   new HsqlProperties(),
-                                                   resultIn.getZoneString(),
-                                                   resultIn.getUpdateCount());
+                            DatabaseManager.newSession(dbType, dbPath,
+                                    resultIn.getMainString(),
+                                    resultIn.getSubString(),
+                                    new HsqlProperties(),
+                                    resultIn.getZoneString(),
+                                    resultIn.getUpdateCount());
                     resultOut =
-                        Result.newConnectionAcknowledgeResponse(session);
+                            Result.newConnectionAcknowledgeResponse(session);
                 } catch (HsqlException e) {
                     resultOut = Result.newErrorResult(e);
                 }
             } else if (type == ResultConstants.DISCONNECT
-                       || type == ResultConstants.RESETSESSION) {
+                    || type == ResultConstants.RESETSESSION) {
 
                 // Upon DISCONNECT 6 bytes are read by the ClientConnectionHTTP": mode (1 byte), a length (int), and an 'additional results (1 byte)
                 response.setHeader("Cache-Control", "no-cache");    // DB-traffic should not be cached by proxies
@@ -285,13 +285,13 @@ public class Servlet extends HttpServlet {
 
                 return;
             } else if (type == ResultConstants.SQLCANCEL) {
-                int  dbId      = resultIn.getDatabaseId();
+                int dbId = resultIn.getDatabaseId();
                 long sessionId = resultIn.getSessionId();
 
-                session   = DatabaseManager.getSession(dbId, sessionId);
+                session = DatabaseManager.getSession(dbId, sessionId);
                 resultOut = session.cancel(resultIn);
             } else {
-                int  dbId      = resultIn.getDatabaseId();
+                int dbId = resultIn.getDatabaseId();
                 long sessionId = resultIn.getSessionId();
 
                 session = DatabaseManager.getSession(dbId, sessionId);
@@ -302,9 +302,9 @@ public class Servlet extends HttpServlet {
             }
 
             HsqlByteArrayOutputStream memStream =
-                new HsqlByteArrayOutputStream();
+                    new HsqlByteArrayOutputStream();
             DataOutputStream tempOutput = new DataOutputStream(memStream);
-            RowOutputBinary  rowOut     = new RowOutputBinary(BUFFER_SIZE, 1);
+            RowOutputBinary rowOut = new RowOutputBinary(BUFFER_SIZE, 1);
 
             resultOut.write(session, tempOutput, rowOut);
             response.setHeader("Cache-Control", "no-cache");        // DB-traffic should not be cached by proxies
@@ -315,8 +315,8 @@ public class Servlet extends HttpServlet {
             dataOut = new DataOutputStream(response.getOutputStream());
 
             memStream.writeTo(dataOut);
-        } catch (HsqlException e) {}
-        finally {
+        } catch (HsqlException e) {
+        } finally {
             if (dataOut != null) {
                 dataOut.close();
             }

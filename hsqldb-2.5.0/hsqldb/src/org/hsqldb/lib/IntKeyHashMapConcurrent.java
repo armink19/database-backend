@@ -37,19 +37,18 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 1.9.0
  * @since 1.9.0
  */
 public class IntKeyHashMapConcurrent extends BaseHashMap {
 
-    Set        keySet;
+    Set keySet;
     Collection values;
 
     //
-    ReentrantReadWriteLock           lock = new ReentrantReadWriteLock(true);
-    ReentrantReadWriteLock.ReadLock  readLock  = lock.readLock();
+    ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+    ReentrantReadWriteLock.ReadLock readLock = lock.readLock();
     ReentrantReadWriteLock.WriteLock writeLock = lock.writeLock();
 
     public IntKeyHashMapConcurrent() {
@@ -57,9 +56,9 @@ public class IntKeyHashMapConcurrent extends BaseHashMap {
     }
 
     public IntKeyHashMapConcurrent(int initialCapacity)
-    throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(initialCapacity, BaseHashMap.intKeyOrValue,
-              BaseHashMap.objectKeyOrValue, false);
+                BaseHashMap.objectKeyOrValue, false);
     }
 
     public Lock getWriteLock() {

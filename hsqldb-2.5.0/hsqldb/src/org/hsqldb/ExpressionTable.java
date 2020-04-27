@@ -61,7 +61,7 @@ public class ExpressionTable extends Expression {
 
         super(OpTypes.TABLE);
 
-        nodes           = e;
+        nodes = e;
         this.ordinality = ordinality;
     }
 
@@ -110,13 +110,13 @@ public class ExpressionTable extends Expression {
                 }
 
                 nodeDataTypes =
-                    ((RowType) nodes[LEFT].dataType).getTypesArray();
+                        ((RowType) nodes[LEFT].dataType).getTypesArray();
 
                 table.prepareTable(session);
 
                 table.columnList =
-                    ((FunctionSQLInvoked) nodes[LEFT]).routine.getTable()
-                        .columnList;
+                        ((FunctionSQLInvoked) nodes[LEFT]).routine.getTable()
+                                .columnList;
                 isTable = true;
 
                 return;
@@ -130,7 +130,7 @@ public class ExpressionTable extends Expression {
         }
 
         int columnCount = ordinality ? nodes.length + 1
-                                     : nodes.length;
+                : nodes.length;
 
         nodeDataTypes = new Type[columnCount];
 
@@ -154,15 +154,15 @@ public class ExpressionTable extends Expression {
 
         switch (opType) {
 
-            case OpTypes.TABLE : {
+            case OpTypes.TABLE: {
                 RowSetNavigatorData navigator = table.getNavigator(session);
-                Result              result    = Result.newResult(navigator);
+                Result result = Result.newResult(navigator);
 
                 result.metaData = table.queryExpression.getMetaData();
 
                 return result;
             }
-            default : {
+            default: {
                 throw Error.runtimeError(ErrorCode.U_S0500, "ExpressionTable");
             }
         }
@@ -172,10 +172,10 @@ public class ExpressionTable extends Expression {
 
         switch (opType) {
 
-            case OpTypes.TABLE : {
+            case OpTypes.TABLE: {
                 return table.queryExpression.getValues(session);
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -184,7 +184,7 @@ public class ExpressionTable extends Expression {
 
         switch (opType) {
 
-            case OpTypes.TABLE : {
+            case OpTypes.TABLE: {
                 materialise(session);
 
                 Object[] value = table.getValues(session);
@@ -195,7 +195,7 @@ public class ExpressionTable extends Expression {
 
                 return value;
             }
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "Expression");
         }
     }
@@ -216,17 +216,18 @@ public class ExpressionTable extends Expression {
 
     private void insertTableValues(Session session, PersistentStore store) {
 
-        Result          result = nodes[LEFT].getResult(session);
-        RowSetNavigator nav    = result.navigator;
+        Result result = nodes[LEFT].getResult(session);
+        RowSetNavigator nav = result.navigator;
 
         while (nav.next()) {
-            Object[] data    = nav.getCurrent();
+            Object[] data = nav.getCurrent();
             Object[] newdata = (Object[]) ArrayUtil.duplicateArray(data);
             Row row = (Row) store.getNewCachedObject(session, newdata, false);
 
             try {
                 store.indexRow(session, row);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
     }
 
@@ -245,13 +246,13 @@ public class ExpressionTable extends Expression {
         }
 
         for (int i = 0; ; i++) {
-            boolean  isRow = false;
-            Object[] data  = new Object[nodeDataTypes.length];
+            boolean isRow = false;
+            Object[] data = new Object[nodeDataTypes.length];
 
             for (int arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
                 if (i < array[arrayIndex].length) {
                     data[arrayIndex] = array[arrayIndex][i];
-                    isRow            = true;
+                    isRow = true;
                 }
             }
 
@@ -267,7 +268,8 @@ public class ExpressionTable extends Expression {
 
             try {
                 store.indexRow(session, row);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
     }
 }

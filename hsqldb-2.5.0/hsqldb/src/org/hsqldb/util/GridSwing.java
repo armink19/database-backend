@@ -44,7 +44,8 @@ import java.util.ArrayList;
 // deccles@users 20040412 - patch 933671 - various bug fixes
 // fredt@users - version 2.50 - removed deprecated
 
-/** Simple table model to represent a grid of tuples.
+/**
+ * Simple table model to represent a grid of tuples.
  *
  * @author dmarshall@users
  * @version 2.5.0
@@ -52,8 +53,8 @@ import java.util.ArrayList;
  */
 class GridSwing extends AbstractTableModel {
 
-    JTable              jtable = null;
-    Object[]            headers;
+    JTable jtable = null;
+    Object[] headers;
     ArrayList<Object[]> rows;
 
     /**
@@ -64,7 +65,7 @@ class GridSwing extends AbstractTableModel {
         super();
 
         headers = new Object[0];              // initially empty
-        rows    = new ArrayList<Object[]>();  // initially empty
+        rows = new ArrayList<Object[]>();  // initially empty
     }
 
     /**
@@ -81,7 +82,7 @@ class GridSwing extends AbstractTableModel {
 
             if (o != null) {
                 if ((o instanceof java.sql.Timestamp)
-                    || (o instanceof java.sql.Time)) {
+                        || (o instanceof java.sql.Time)) {
                     // This is a workaround for JTable's lack of a default
                     // renderer that displays times.
                     // Without this workaround, Timestamps (and similar
@@ -120,10 +121,10 @@ class GridSwing extends AbstractTableModel {
 
     /**
      * Get the current table data.
-     *  Each row is represented as a <code>String[]</code>
-     *  with a single non-null value in the 0-relative
-     *  column position.
-     *  <p>The first row is at offset 0, the nth row at offset n etc.
+     * Each row is represented as a <code>String[]</code>
+     * with a single non-null value in the 0-relative
+     * column position.
+     * <p>The first row is at offset 0, the nth row at offset n etc.
      */
     public ArrayList<Object[]> getData() {
         return rows;
@@ -182,7 +183,7 @@ class GridSwing extends AbstractTableModel {
 
     /**
      * Remove data from all cells in the table (without
-     *  affecting the current headings).
+     * affecting the current headings).
      */
     public void clear() {
         rows.clear();
@@ -199,28 +200,28 @@ class GridSwing extends AbstractTableModel {
 
     public static void autoSizeTableColumns(JTable table) {
 
-        TableModel  model        = table.getModel();
-        TableColumn column       = null;
-        Component   comp         = null;
-        int         headerWidth  = 0;
-        int         maxCellWidth = Integer.MIN_VALUE;
-        int         cellWidth    = 0;
+        TableModel model = table.getModel();
+        TableColumn column = null;
+        Component comp = null;
+        int headerWidth = 0;
+        int maxCellWidth = Integer.MIN_VALUE;
+        int cellWidth = 0;
         TableCellRenderer headerRenderer =
-            table.getTableHeader().getDefaultRenderer();
+                table.getTableHeader().getDefaultRenderer();
 
         for (int i = 0; i < table.getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
             comp = headerRenderer.getTableCellRendererComponent(table,
                     column.getHeaderValue(), false, false, 0, 0);
-            headerWidth  = comp.getPreferredSize().width + 10;
+            headerWidth = comp.getPreferredSize().width + 10;
             maxCellWidth = Integer.MIN_VALUE;
 
             for (int j = 0; j < Math.min(model.getRowCount(), 30); j++) {
                 TableCellRenderer r = table.getCellRenderer(j, i);
 
                 comp = r.getTableCellRendererComponent(table,
-                                                       model.getValueAt(j, i),
-                                                       false, false, j, i);
+                        model.getValueAt(j, i),
+                        false, false, j, i);
                 cellWidth = comp.getPreferredSize().width;
 
                 if (cellWidth >= maxCellWidth) {
@@ -229,7 +230,7 @@ class GridSwing extends AbstractTableModel {
             }
 
             column.setPreferredWidth(Math.max(headerWidth, maxCellWidth)
-                                     + 10);
+                    + 10);
         }
     }
 }

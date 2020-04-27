@@ -37,15 +37,19 @@ class RecoverableOdbcFailure extends Exception {
     private String clientMessage = null;
     private String sqlStateCode = null;
     private Result errorResult = null;
+
     public String getSqlStateCode() {
         return sqlStateCode;
     }
+
     public Result getErrorResult() {
         return errorResult;
     }
+
     public RecoverableOdbcFailure(Result errorResult) {
         this.errorResult = errorResult;
     }
+
     /**
      * This constructor purposefully means that both server-side and
      * client-side message will be set to the specified message.
@@ -54,6 +58,7 @@ class RecoverableOdbcFailure extends Exception {
         super(m);
         clientMessage = m;
     }
+
     /**
      * This constructor purposefully means that both server-side and
      * client-side message will be set to the specified message.
@@ -68,15 +73,17 @@ class RecoverableOdbcFailure extends Exception {
         this(m);
         this.sqlStateCode = sqlStateCode;
     }
+
     /**
      * Set any parameter to null to skip the specified reporting.
      */
     public RecoverableOdbcFailure(
-    String ourMessage, String clientMessage, String sqlStateCode) {
+            String ourMessage, String clientMessage, String sqlStateCode) {
         super(ourMessage);
         this.clientMessage = clientMessage;
         this.sqlStateCode = sqlStateCode;
     }
+
     public String getClientMessage() {
         return clientMessage;
     }

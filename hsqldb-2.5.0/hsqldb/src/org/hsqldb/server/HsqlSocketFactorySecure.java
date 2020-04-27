@@ -49,19 +49,22 @@ import java.security.cert.X509Certificate;
  *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
- *
  * @version 2.5.0
  * @since 1.7.2
  */
 public final class HsqlSocketFactorySecure extends HsqlSocketFactory
-implements HandshakeCompletedListener {
+        implements HandshakeCompletedListener {
 
 // --------------------------------- members -----------------------------------
 
-    /** The underlying socket factory implementation. */
+    /**
+     * The underlying socket factory implementation.
+     */
     protected Object socketFactory;
 
-    /** The underlying server socket factory implementation. */
+    /**
+     * The underlying server socket factory implementation.
+     */
     protected Object serverSocketFactory;
 
     /**
@@ -86,7 +89,7 @@ implements HandshakeCompletedListener {
         super();
     }
 
-// ----------------------------- subclass overrides ----------------------------
+    // ----------------------------- subclass overrides ----------------------------
     public void configureSocket(Socket socket) {
 
         SSLSocket s;
@@ -103,8 +106,8 @@ implements HandshakeCompletedListener {
      * The socket is configured with the socket options
      * given to this factory.
      *
-     * @return the secure ServerSocket
      * @param port the port to which to bind the secure ServerSocket
+     * @return the secure ServerSocket
      * @throws Exception if a network or security provider error occurs
      */
     public ServerSocket createServerSocket(int port) throws Exception {
@@ -112,7 +115,7 @@ implements HandshakeCompletedListener {
         SSLServerSocket ss;
 
         ss = (SSLServerSocket) getServerSocketFactoryImpl().createServerSocket(
-            port);
+                port);
 
         if (Error.TRACESYSTEMOUT) {
             Error.printSystemOut("[" + this + "]: createServerSocket()");
@@ -130,19 +133,19 @@ implements HandshakeCompletedListener {
      * The socket is configured with the socket options
      * given to this factory.
      *
-     * @return the secure ServerSocket
      * @param port the port to which to bind the secure ServerSocket
+     * @return the secure ServerSocket
      * @throws Exception if a network or security provider error occurs
      */
     public ServerSocket createServerSocket(int port,
                                            String address) throws Exception {
 
         SSLServerSocket ss;
-        InetAddress     addr;
+        InetAddress addr;
 
         addr = InetAddress.getByName(address);
         ss = (SSLServerSocket) getServerSocketFactoryImpl().createServerSocket(
-            port, 128, addr);
+                port, 128, addr);
 
         if (Error.TRACESYSTEMOUT) {
             Error.printSystemOut("[" + this + "]: createServerSocket()");
@@ -173,10 +176,10 @@ implements HandshakeCompletedListener {
      * socket. The secure socket is configured using the
      * socket options established for this factory.
      *
-     * @return the socket
      * @param socket the existing socket
-     * @param host the server host
-     * @param port the server port
+     * @param host   the server host
+     * @param port   the server port
+     * @return the socket
      * @throws Exception if a network or security provider error occurs
      */
     public Socket createSocket(Socket socket, String host,
@@ -203,9 +206,9 @@ implements HandshakeCompletedListener {
      * at the specified remote port. This socket is configured using the
      * socket options established for this factory.
      *
-     * @return the socket
      * @param host the server host
      * @param port the server port
+     * @return the socket
      * @throws Exception if a network or security provider error occurs
      */
     public Socket createSocket(String host, int port) throws Exception {
@@ -271,12 +274,12 @@ implements HandshakeCompletedListener {
     /**
      * Retrieves the underlying javax.net.ssl.SSLServerSocketFactory.
      *
-     * @throws Exception if there is a problem retrieving the
-     *      underlying factory
      * @return the underlying javax.net.ssl.SSLServerSocketFactory
+     * @throws Exception if there is a problem retrieving the
+     *                   underlying factory
      */
     protected SSLServerSocketFactory getServerSocketFactoryImpl()
-    throws Exception {
+            throws Exception {
 
         Object factory;
 
@@ -284,7 +287,7 @@ implements HandshakeCompletedListener {
             factory = serverSocketFactory;
 
             if (factory == null) {
-                factory             = SSLServerSocketFactory.getDefault();
+                factory = SSLServerSocketFactory.getDefault();
                 serverSocketFactory = factory;
             }
         }
@@ -295,9 +298,9 @@ implements HandshakeCompletedListener {
     /**
      * Retrieves the underlying javax.net.ssl.SSLSocketFactory.
      *
-     * @throws Exception if there is a problem retrieving the
-     *      underlying factory
      * @return the underlying javax.net.ssl.SSLSocketFactory
+     * @throws Exception if there is a problem retrieving the
+     *                   underlying factory
      */
     protected SSLSocketFactory getSocketFactoryImpl() throws Exception {
 
@@ -307,7 +310,7 @@ implements HandshakeCompletedListener {
             factory = socketFactory;
 
             if (factory == null) {
-                factory       = SSLSocketFactory.getDefault();
+                factory = SSLSocketFactory.getDefault();
                 socketFactory = factory;
             }
         }
@@ -321,75 +324,75 @@ implements HandshakeCompletedListener {
      * name is checked against the Common Name of the server certificate;
      * additional checks may or may not be performed.
      *
-     * @param host the requested host name
+     * @param host    the requested host name
      * @param session SSLSession used on the connection to host
      * @throws Exception if the certificate chain cannot be verified
      */
     protected void verify(String host, SSLSession session) throws Exception {
 
-        Certificate[]   chain;
+        Certificate[] chain;
         X509Certificate certificate;
-        Principal       principal;
-        String          DN;
-        String          CN;
-        int             start;
-        int             end;
+        Principal principal;
+        String DN;
+        String CN;
+        int start;
+        int end;
 
         chain = session.getPeerCertificates();
         if (chain == null || chain.length == 0) {
             throw new UnknownHostException(
-                Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_1));
+                    Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_1));
         }
 
         if (!(chain[0] instanceof X509Certificate)) {
             throw new UnknownHostException(
-                Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_1));
+                    Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_1));
         }
 
         certificate = (X509Certificate) chain[0];
-        principal   = certificate.getSubjectDN();
-        DN          = String.valueOf(principal);
-        start       = DN.indexOf("CN=");
+        principal = certificate.getSubjectDN();
+        DN = String.valueOf(principal);
+        start = DN.indexOf("CN=");
 
         if (start < 0) {
             throw new UnknownHostException(
-                Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_1));
+                    Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_1));
         }
 
         start += 3;
-        end   = DN.indexOf(',', start);
-        CN    = DN.substring(start, (end > -1) ? end
-                                               : DN.length());
+        end = DN.indexOf(',', start);
+        CN = DN.substring(start, (end > -1) ? end
+                : DN.length());
 
         if (CN.length() < 1) {
             throw new UnknownHostException(
-                Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_2));
+                    Error.getMessage(ErrorCode.M_SERVER_SECURE_VERIFY_2));
         }
 
         if (!CN.equalsIgnoreCase(host)) {
 
             // TLS_HOSTNAME_MISMATCH
             throw new UnknownHostException(
-                Error.getMessage(
-                    ErrorCode.M_SERVER_SECURE_VERIFY_3, 0, new Object[] {
-                CN, host
-            }));
+                    Error.getMessage(
+                            ErrorCode.M_SERVER_SECURE_VERIFY_3, 0, new Object[]{
+                                    CN, host
+                            }));
         }
     }
 
     public void handshakeCompleted(HandshakeCompletedEvent evt) {
 
         SSLSession session;
-        String     sessionId;
-        SSLSocket  socket;
+        String sessionId;
+        SSLSocket socket;
 
         if (Error.TRACESYSTEMOUT) {
-            socket  = evt.getSocket();
+            socket = evt.getSocket();
             session = evt.getSession();
 
             Error.printSystemOut("SSL handshake completed:");
             Error.printSystemOut(
-                "------------------------------------------------");
+                    "------------------------------------------------");
             Error.printSystemOut("socket:      : " + socket);
             Error.printSystemOut("cipher suite : " + session.getCipherSuite());
 
@@ -397,7 +400,7 @@ implements HandshakeCompletedListener {
 
             Error.printSystemOut("session id   : " + sessionId);
             Error.printSystemOut(
-                "------------------------------------------------");
+                    "------------------------------------------------");
         }
     }
 }

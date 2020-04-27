@@ -43,7 +43,7 @@ import org.hsqldb.lib.DoubleIntIndex;
 public class TableSpaceManagerSimple implements TableSpaceManager {
 
     DataFileCache cache;
-    final int     scale;
+    final int scale;
 
     public TableSpaceManagerSimple(DataFileCache cache) {
         this.cache = cache;
@@ -54,7 +54,8 @@ public class TableSpaceManagerSimple implements TableSpaceManager {
         return DataSpaceManager.tableIdDefault;
     }
 
-    public void release(long pos, int rowSize) {}
+    public void release(long pos, int rowSize) {
+    }
 
     /**
      * Returns the position of a free block or 0.
@@ -67,12 +68,12 @@ public class TableSpaceManagerSimple implements TableSpaceManager {
             long position;
             long newFreePosition;
 
-            position        = cache.getFileFreePos() / scale;
+            position = cache.getFileFreePos() / scale;
             newFreePosition = cache.getFileFreePos() + rowSize;
 
             if (newFreePosition > cache.maxDataFileSize) {
                 cache.logSevereEvent("data file reached maximum size "
-                                     + cache.dataFileName, null);
+                        + cache.dataFileName, null);
 
                 throw Error.error(ErrorCode.DATA_FILE_IS_FULL);
             }
@@ -89,12 +90,15 @@ public class TableSpaceManagerSimple implements TableSpaceManager {
         return true;
     }
 
-    public void addFileBlock(long blockFreePos, long blockLimit) {}
+    public void addFileBlock(long blockFreePos, long blockLimit) {
+    }
 
     public void initialiseFileBlock(DoubleIntIndex lookup, long blockFreePos,
-                                    long blockLimit) {}
+                                    long blockLimit) {
+    }
 
-    public void reset() {}
+    public void reset() {
+    }
 
     public long getLostBlocksSize() {
         return 0;

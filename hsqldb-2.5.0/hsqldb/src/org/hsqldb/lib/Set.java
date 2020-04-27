@@ -32,7 +32,6 @@
 package org.hsqldb.lib;
 
 /**
- *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 1.7.2
  * @since 1.7.2
@@ -47,11 +46,11 @@ public interface Set extends Collection {
 
     Iterator iterator();
 
-/*
-    Object[] toArray();
+    /*
+        Object[] toArray();
 
-    void toArray(Object a[]);
-*/
+        void toArray(Object a[]);
+    */
     boolean add(Object o);
 
     /**
@@ -62,12 +61,12 @@ public interface Set extends Collection {
 
     boolean remove(Object o);
 
-/*
-    boolean containsAll(Collection c);
-    boolean addAll(Collection c);
-    boolean retainAll(Collection c);
-    boolean removeAll(Collection c);
-*/
+    /*
+        boolean containsAll(Collection c);
+        boolean addAll(Collection c);
+        boolean retainAll(Collection c);
+        boolean removeAll(Collection c);
+    */
     void clear();
 
     boolean equals(Object o);

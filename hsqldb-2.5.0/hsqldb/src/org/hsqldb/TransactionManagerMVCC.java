@@ -45,10 +45,10 @@ import org.hsqldb.persist.PersistentStore;
  * @since 2.0.0
  */
 public class TransactionManagerMVCC extends TransactionManagerCommon
-implements TransactionManager {
+        implements TransactionManager {
 
     // functional unit - merged committed transactions
-    HsqlDeque committedTransactions          = new HsqlDeque();
+    HsqlDeque committedTransactions = new HsqlDeque();
     LongDeque committedTransactionTimestamps = new LongDeque();
 
     // locks
@@ -70,7 +70,7 @@ implements TransactionManager {
         super(db);
 
         lobSession = database.sessionManager.getSysLobSession();
-        txModel    = MVCC;
+        txModel = MVCC;
     }
 
     public long getGlobalChangeTimestamp() {
@@ -101,7 +101,8 @@ implements TransactionManager {
         super.setTransactionControl(session, mode);
     }
 
-    public void completeActions(Session session) {}
+    public void completeActions(Session session) {
+    }
 
     public boolean prepareCommitActions(Session session) {
 
@@ -136,7 +137,7 @@ implements TransactionManager {
 
             for (int i = 0; i < session.actionSet.size(); i++) {
                 Session current =
-                    ((RowActionBase) session.actionSet.get(i)).session;
+                        ((RowActionBase) session.actionSet.get(i)).session;
 
                 current.abortTransaction = true;
             }
@@ -170,7 +171,7 @@ implements TransactionManager {
             }
 
             // new actionTimestamp used for commitTimestamp
-            session.actionTimestamp         = getNextGlobalChangeTimestamp();
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.transactionEndTimestamp = session.actionTimestamp;
 
             endTransaction(session);
@@ -183,7 +184,7 @@ implements TransactionManager {
 
             for (int i = 0; i < session.actionSet.size(); i++) {
                 Session current =
-                    ((RowActionBase) session.actionSet.get(i)).session;
+                        ((RowActionBase) session.actionSet.get(i)).session;
 
                 current.abortTransaction = true;
             }
@@ -197,7 +198,7 @@ implements TransactionManager {
                 Object[] list = session.rowActionList.getArray();
 
                 mergeTransaction(list, limit, newLimit,
-                                 session.actionTimestamp);
+                        session.actionTimestamp);
                 finaliseRows(session, list, limit, newLimit);
                 session.rowActionList.setSize(limit);
             }
@@ -205,7 +206,7 @@ implements TransactionManager {
             // session.actionTimestamp is the committed tx timestamp
             if (session == lobSession
                     || getFirstLiveTransactionTimestamp()
-                       > session.actionTimestamp) {
+                    > session.actionTimestamp) {
                 Object[] list = session.rowActionList.getArray();
 
                 mergeTransaction(list, 0, limit, session.actionTimestamp);
@@ -237,8 +238,8 @@ implements TransactionManager {
         writeLock.lock();
 
         try {
-            session.abortTransaction        = false;
-            session.actionTimestamp         = getNextGlobalChangeTimestamp();
+            session.abortTransaction = false;
+            session.actionTimestamp = getNextGlobalChangeTimestamp();
             session.transactionEndTimestamp = session.actionTimestamp;
 
             rollbackPartial(session, 0, session.transactionTimestamp);
@@ -258,11 +259,11 @@ implements TransactionManager {
 
         long timestamp = session.sessionContext.savepointTimestamps.get(index);
         Integer oi = (Integer) session.sessionContext.savepoints.get(index);
-        int     start  = oi.intValue();
+        int start = oi.intValue();
 
         while (session.sessionContext.savepoints.size() > index + 1) {
             session.sessionContext.savepoints.remove(
-                session.sessionContext.savepoints.size() - 1);
+                    session.sessionContext.savepoints.size() - 1);
             session.sessionContext.savepointTimestamps.removeLast();
         }
 
@@ -271,7 +272,7 @@ implements TransactionManager {
 
     public void rollbackAction(Session session) {
         rollbackPartial(session, session.actionIndex,
-                        session.actionStartTimestamp);
+                session.actionStartTimestamp);
     }
 
     /**
@@ -333,9 +334,9 @@ implements TransactionManager {
                                      int[] colMap) {
 
         RowAction action = addDeleteActionToRow(session, table, store, row,
-            colMap);
+                colMap);
         Session actionSession = null;
-        boolean redoAction    = true;
+        boolean redoAction = true;
 
         if (action == null) {
             writeLock.lock();
@@ -348,7 +349,7 @@ implements TransactionManager {
                         .isolationLevel == SessionInterface.TX_SERIALIZABLE) {
                     session.actionSet.clear();
 
-                    session.redoAction       = false;
+                    session.redoAction = false;
                     session.abortTransaction = session.txConflictRollback;
 
                     throw Error.error(ErrorCode.X_40501);
@@ -369,7 +370,7 @@ implements TransactionManager {
 
                 if (redoAction) {
                     actionSession =
-                        ((RowActionBase) session.actionSet.get(0)).session;
+                            ((RowActionBase) session.actionSet.get(0)).session;
 
                     session.actionSet.clear();
 
@@ -389,7 +390,7 @@ implements TransactionManager {
 
                     redoCount++;
                 } else {
-                    session.redoAction       = false;
+                    session.redoAction = false;
                     session.abortTransaction = session.txConflictRollback;
                 }
 
@@ -408,15 +409,15 @@ implements TransactionManager {
                                 PersistentStore store, Row row,
                                 int[] changedColumns) {
 
-        RowAction     action        = row.rowAction;
-        Session       actionSession = null;
-        boolean       redoAction    = false;
-        boolean       redoWait      = true;
-        HsqlException cause         = null;
+        RowAction action = row.rowAction;
+        Session actionSession = null;
+        boolean redoAction = false;
+        boolean redoWait = true;
+        HsqlException cause = null;
 
         if (action == null) {
             throw Error.runtimeError(ErrorCode.GENERAL_ERROR,
-                                     "TXManager - null insert action ");
+                    "TXManager - null insert action ");
         }
 
         try {
@@ -427,7 +428,7 @@ implements TransactionManager {
             }
 
             redoAction = true;
-            cause      = e;
+            cause = e;
         }
 
         if (!redoAction) {
@@ -448,7 +449,7 @@ implements TransactionManager {
             rollbackAction(session);
 
             RowActionBase otherAction =
-                (RowActionBase) session.actionSet.get(0);
+                    (RowActionBase) session.actionSet.get(0);
 
             actionSession = otherAction.session;
 
@@ -460,12 +461,12 @@ implements TransactionManager {
 
             switch (session.isolationLevel) {
 
-                case SessionInterface.TX_REPEATABLE_READ :
-                case SessionInterface.TX_SERIALIZABLE :
+                case SessionInterface.TX_REPEATABLE_READ:
+                case SessionInterface.TX_SERIALIZABLE:
                     redoAction = false;
                     break;
 
-                default :
+                default:
                     redoAction = checkDeadlock(session, actionSession);
             }
 
@@ -481,7 +482,7 @@ implements TransactionManager {
                 redoCount++;
             } else {
                 session.abortTransaction = session.txConflictRollback;
-                session.redoAction       = false;
+                session.redoAction = false;
             }
 
             throw Error.error(cause, ErrorCode.X_40501, null);
@@ -497,14 +498,14 @@ implements TransactionManager {
 
         if (action == null) {
             throw Error.runtimeError(ErrorCode.GENERAL_ERROR,
-                                     "null insert action ");
+                    "null insert action ");
         }
 
         store.indexRow(session, row);
         session.rowActionList.add(action);
     }
 
-// functional unit - accessibility of rows
+    // functional unit - accessibility of rows
     public boolean canRead(Session session, PersistentStore store, Row row,
                            int mode, int[] colMap) {
 
@@ -609,7 +610,7 @@ implements TransactionManager {
         long timestamp = getFirstLiveTransactionTimestamp();
 
         while (true) {
-            long     commitTimestamp;
+            long commitTimestamp;
             Object[] actions;
 
             synchronized (committedTransactionTimestamps) {
@@ -641,7 +642,7 @@ implements TransactionManager {
             if (!session.isTransaction) {
                 beginTransactionCommon(session);
                 liveTransactionTimestamps.addLast(
-                    session.transactionTimestamp);
+                        session.transactionTimestamp);
             }
         } finally {
             writeLock.unlock();
@@ -701,12 +702,12 @@ implements TransactionManager {
 
         try {
             if (session.isTransaction) {
-                session.actionTimestamp      = getNextGlobalChangeTimestamp();
+                session.actionTimestamp = getNextGlobalChangeTimestamp();
                 session.actionStartTimestamp = session.actionTimestamp;
             } else {
                 beginTransactionCommon(session);
                 liveTransactionTimestamps.addLast(
-                    session.transactionTimestamp);
+                        session.transactionTimestamp);
             }
         } finally {
             writeLock.unlock();
@@ -718,7 +719,7 @@ implements TransactionManager {
                                    int[] colMap) {
 
         RowAction action = store.addDeleteActionToRow(session, row, colMap,
-            true);
+                true);
 
         if (table.tableType == TableBase.TEMP_TABLE) {
             store.delete(session, row);
@@ -738,7 +739,7 @@ implements TransactionManager {
     void endTransaction(Session session) {
 
         long timestamp = session.transactionTimestamp;
-        int  index     = liveTransactionTimestamps.indexOf(timestamp);
+        int index = liveTransactionTimestamps.indexOf(timestamp);
 
         if (index >= 0) {
             transactionCount.decrementAndGet();
@@ -772,8 +773,8 @@ implements TransactionManager {
         Session nextSession = null;
 
         for (int i = 0; i < session.waitingSessions.size(); i++) {
-            Session   current = (Session) session.waitingSessions.get(i);
-            Statement st      = current.sessionContext.currentStatement;
+            Session current = (Session) session.waitingSessions.get(i);
+            Statement st = current.sessionContext.currentStatement;
 
             if (st != null && st.isCatalogLock(txModel)) {
                 nextSession = current;
@@ -784,7 +785,7 @@ implements TransactionManager {
 
         if (nextSession == null) {
             catalogWriteSession = null;
-            isLockedMode        = false;
+            isLockedMode = false;
         } else {
             for (int i = 0; i < session.waitingSessions.size(); i++) {
                 Session current = (Session) session.waitingSessions.get(i);
@@ -799,7 +800,7 @@ implements TransactionManager {
             catalogWriteSession = nextSession;
         }
 
-        unlockTxTs      = session.actionTimestamp;
+        unlockTxTs = session.actionTimestamp;
         unlockSessionId = session.getId();
     }
 
@@ -814,9 +815,9 @@ implements TransactionManager {
         if (cs.isCatalogLock(txModel)) {
             if (catalogWriteSession == null) {
                 catalogWriteSession = session;
-                isLockedMode        = true;
-                lockTxTs            = session.actionTimestamp;
-                lockSessionId       = session.getId();
+                isLockedMode = true;
+                lockTxTs = session.actionTimestamp;
+                lockSessionId = session.getId();
 
                 getTransactionAndPreSessions(session);
 

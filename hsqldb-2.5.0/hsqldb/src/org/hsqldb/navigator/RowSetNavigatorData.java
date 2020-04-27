@@ -53,7 +53,7 @@ import java.util.TreeMap;
  * @since 1.9.0
  */
 public class RowSetNavigatorData extends RowSetNavigator
-implements Comparator<Object[]> {
+        implements Comparator<Object[]> {
 
     public static final Object[][] emptyTable = new Object[0][];
 
@@ -61,9 +61,9 @@ implements Comparator<Object[]> {
     private Object[][] dataTable = emptyTable;
 
     //
-    int      visibleColumnCount;
-    boolean  isAggregate;
-    boolean  isSimpleAggregate;
+    int visibleColumnCount;
+    boolean isAggregate;
+    boolean isSimpleAggregate;
     Object[] simpleAggregateData;
 
     //
@@ -77,7 +77,7 @@ implements Comparator<Object[]> {
     Index idIndex;
 
     //
-    TreeMap<Object[], Object[]>        rowMap;
+    TreeMap<Object[], Object[]> rowMap;
     LongKeyHashMap idMap;
 
     RowSetNavigatorData(Session session) {
@@ -86,17 +86,17 @@ implements Comparator<Object[]> {
 
     public RowSetNavigatorData(Session session, QuerySpecification select) {
 
-        this.session       = session;
+        this.session = session;
         this.rangePosition = select.resultRangePosition;
         visibleColumnCount = select.getColumnCount();
-        isSimpleAggregate  = select.isAggregated && !select.isGrouped;
-        mainIndex          = select.mainIndex;
-        fullIndex          = select.fullIndex;
-        orderIndex         = select.orderIndex;
+        isSimpleAggregate = select.isAggregated && !select.isGrouped;
+        mainIndex = select.mainIndex;
+        fullIndex = select.fullIndex;
+        orderIndex = select.orderIndex;
 
         if (select.isGrouped) {
             mainIndex = select.groupIndex;
-            rowMap    = new TreeMap<Object[], Object[]>(this);
+            rowMap = new TreeMap<Object[], Object[]>(this);
         }
 
         if (select.idIndex != null) {
@@ -107,10 +107,10 @@ implements Comparator<Object[]> {
     public RowSetNavigatorData(Session session,
                                QueryExpression queryExpression) {
 
-        this.session       = session;
-        mainIndex          = queryExpression.mainIndex;
-        fullIndex          = queryExpression.fullIndex;
-        orderIndex         = queryExpression.orderIndex;
+        this.session = session;
+        mainIndex = queryExpression.mainIndex;
+        fullIndex = queryExpression.fullIndex;
+        orderIndex = queryExpression.orderIndex;
         visibleColumnCount = queryExpression.getColumnCount();
     }
 
@@ -217,7 +217,7 @@ implements Comparator<Object[]> {
 
         ensureCapacity();
         System.arraycopy(dataTable, currentPos, dataTable, currentPos + 1,
-                         size - currentPos);
+                size - currentPos);
 
         dataTable[currentPos] = data;
 
@@ -227,7 +227,7 @@ implements Comparator<Object[]> {
     public void release() {
 
         this.dataTable = emptyTable;
-        this.size      = 0;
+        this.size = 0;
 
         reset();
 
@@ -237,7 +237,7 @@ implements Comparator<Object[]> {
     public void clear() {
 
         this.dataTable = emptyTable;
-        this.size      = 0;
+        this.size = 0;
 
         reset();
     }
@@ -261,7 +261,7 @@ implements Comparator<Object[]> {
 
     public Object[] getNextRowData() {
         return next() ? getCurrent()
-                      : null;
+                : null;
     }
 
     public boolean next() {
@@ -271,7 +271,7 @@ implements Comparator<Object[]> {
     public void removeCurrent() {
 
         System.arraycopy(dataTable, currentPos + 1, dataTable, currentPos,
-                         size - currentPos - 1);
+                size - currentPos - 1);
 
         dataTable[size - 1] = null;
 
@@ -287,7 +287,8 @@ implements Comparator<Object[]> {
         return true;
     }
 
-    public void read(RowInputInterface in, ResultMetaData meta) {}
+    public void read(RowInputInterface in, ResultMetaData meta) {
+    }
 
     public void write(RowOutputInterface out, ResultMetaData meta) {
 
@@ -301,7 +302,7 @@ implements Comparator<Object[]> {
             Object[] data = getCurrent();
 
             out.writeData(meta.getExtendedColumnCount(), meta.columnTypes,
-                          data, null, null);
+                    data, null, null);
         }
 
         reset();
@@ -333,10 +334,10 @@ implements Comparator<Object[]> {
             currentData = other.getCurrent();
 
             int position = ArraySort.searchFirst(dataTable, 0, size,
-                                                 currentData, this);
+                    currentData, this);
 
             if (position < 0) {
-                position   = -position - 1;
+                position = -position - 1;
                 currentPos = position;
 
                 insert(currentData);
@@ -368,7 +369,7 @@ implements Comparator<Object[]> {
 
         while (next()) {
             Object[] currentData = getCurrent();
-            boolean  hasRow      = other.containsRow(currentData);
+            boolean hasRow = other.containsRow(currentData);
 
             if (!hasRow) {
                 removeCurrent();
@@ -380,9 +381,9 @@ implements Comparator<Object[]> {
 
     public void intersectAll(Session session, RowSetNavigatorData other) {
 
-        Object[]    compareData = null;
+        Object[] compareData = null;
         RowIterator it;
-        Object[]    otherData = null;
+        Object[] otherData = null;
 
         sortFull(session);
         other.sortFull(session);
@@ -392,14 +393,14 @@ implements Comparator<Object[]> {
         while (next()) {
             Object[] currentData = getCurrent();
             boolean newGroup =
-                compareData == null
-                || fullIndex.compareRowNonUnique(
-                    session, currentData, compareData,
-                    visibleColumnCount) != 0;
+                    compareData == null
+                            || fullIndex.compareRowNonUnique(
+                            session, currentData, compareData,
+                            visibleColumnCount) != 0;
 
             if (newGroup) {
                 compareData = currentData;
-                it          = other.findFirstRow(currentData);
+                it = other.findFirstRow(currentData);
             }
 
             if (it.next()) {
@@ -425,7 +426,7 @@ implements Comparator<Object[]> {
 
         while (next()) {
             Object[] currentData = getCurrent();
-            boolean  hasRow      = other.containsRow(currentData);
+            boolean hasRow = other.containsRow(currentData);
 
             if (hasRow) {
                 removeCurrent();
@@ -437,9 +438,9 @@ implements Comparator<Object[]> {
 
     public void exceptAll(Session session, RowSetNavigatorData other) {
 
-        Object[]    compareData = null;
+        Object[] compareData = null;
         RowIterator it;
-        Object[]    otherData = null;
+        Object[] otherData = null;
 
         sortFull(session);
         other.sortFull(session);
@@ -449,14 +450,14 @@ implements Comparator<Object[]> {
         while (next()) {
             Object[] currentData = getCurrent();
             boolean newGroup =
-                compareData == null
-                || fullIndex.compareRowNonUnique(
-                    session, currentData, compareData,
-                    fullIndex.getColumnCount()) != 0;
+                    compareData == null
+                            || fullIndex.compareRowNonUnique(
+                            session, currentData, compareData,
+                            fullIndex.getColumnCount()) != 0;
 
             if (newGroup) {
                 compareData = currentData;
-                it          = other.findFirstRow(currentData);
+                it = other.findFirstRow(currentData);
             }
 
             if (it.next()) {
@@ -489,7 +490,7 @@ implements Comparator<Object[]> {
 
             if (lastRowData != null
                     && fullIndex.compareRow(session, lastRowData, currentData)
-                       == 0) {
+                    == 0) {
                 return false;
             } else {
                 lastRowData = currentData;
@@ -504,14 +505,14 @@ implements Comparator<Object[]> {
         sortFull(session);
         reset();
 
-        int      lastRowPos  = -1;
+        int lastRowPos = -1;
         Object[] lastRowData = null;
 
         while (next()) {
             Object[] currentData = getCurrent();
 
             if (lastRowData == null) {
-                lastRowPos  = currentPos;
+                lastRowPos = currentPos;
                 lastRowData = currentData;
 
                 continue;
@@ -520,7 +521,7 @@ implements Comparator<Object[]> {
             if (fullIndex.compareRow(session, lastRowData, currentData) != 0) {
                 lastRowPos++;
 
-                lastRowData           = currentData;
+                lastRowData = currentData;
                 dataTable[lastRowPos] = currentData;
             }
         }
@@ -639,8 +640,8 @@ implements Comparator<Object[]> {
     private void ensureCapacity() {
 
         if (size == dataTable.length) {
-            int        newSize  = size == 0 ? 4
-                                            : size * 2;
+            int newSize = size == 0 ? 4
+                    : size * 2;
             Object[][] newTable = new Object[newSize][];
 
             System.arraycopy(dataTable, 0, newTable, 0, size);
@@ -695,9 +696,11 @@ implements Comparator<Object[]> {
             }
         }
 
-        public void removeCurrent() {}
+        public void removeCurrent() {
+        }
 
-        public void release() {}
+        public void release() {
+        }
 
         public long getRowId() {
             return 0L;

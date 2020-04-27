@@ -50,29 +50,29 @@ import java.util.Properties;
  * the <code>DataSource</code> interface will typically be
  * registered with a naming service based on the
  * Java&trade; Naming and Directory (JNDI) API.
- * <P>
+ * <p>
  * The <code>DataSource</code> interface is implemented by a driver vendor.
  * There are three types of implementations:
  * <OL>
- *   <LI>Basic implementation -- produces a standard <code>Connection</code>
- *       object
- *   <LI>Connection pooling implementation -- produces a <code>Connection</code>
- *       object that will automatically participate in connection pooling.  This
- *       implementation works with a middle-tier connection pooling manager.
- *   <LI>Distributed transaction implementation -- produces a
- *       <code>Connection</code> object that may be used for distributed
- *       transactions and almost always participates in connection pooling.
- *       This implementation works with a middle-tier
- *       transaction manager and almost always with a connection
- *       pooling manager.
+ * <LI>Basic implementation -- produces a standard <code>Connection</code>
+ * object
+ * <LI>Connection pooling implementation -- produces a <code>Connection</code>
+ * object that will automatically participate in connection pooling.  This
+ * implementation works with a middle-tier connection pooling manager.
+ * <LI>Distributed transaction implementation -- produces a
+ * <code>Connection</code> object that may be used for distributed
+ * transactions and almost always participates in connection pooling.
+ * This implementation works with a middle-tier
+ * transaction manager and almost always with a connection
+ * pooling manager.
  * </OL>
- * <P>
+ * <p>
  * A <code>DataSource</code> object has properties that can be modified
  * when necessary.  For example, if the data source is moved to a different
  * server, the property for the server can be changed.  The benefit is that
  * because the data source's properties can be changed, any code accessing
  * that data source does not need to be changed.
- * <P>
+ * <p>
  * A driver that is accessed via a <code>DataSource</code> object does not
  * register itself with the <code>DriverManager</code>.  Rather, a
  * <code>DataSource</code> object is retrieved though a lookup operation
@@ -80,22 +80,23 @@ import java.util.Properties;
  * implementation, the connection obtained through a <code>DataSource</code>
  * object is identical to a connection obtained through the
  * <code>DriverManager</code> facility.
- *
+ * <p>
  * <!-- start Release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3> <p>
- *
+ * <p>
  * This implementation of data source is a basic implementation and does not
  * perform connection pooling.<p>
- *
+ * <p>
  * The getter and setter methods of the parent class, {@link JDBCCommonDataSource},
  * can be used.<p>
  * </div>
  * <!-- end Release-specific documentation -->
- * @since JDK 1.4
+ *
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.2
+ * @since JDK 1.4
  * @since 1.7.2
  */
 
@@ -107,8 +108,8 @@ public class JDBCDataSource extends JDBCCommonDataSource implements DataSource,
      * Retrieves a new connection using the properties that have already been
      * set.
      *
-     * @return  a connection to the data source
-     * @exception SQLException if a database access error occurs
+     * @return a connection to the data source
+     * @throws SQLException if a database access error occurs
      */
     public Connection getConnection() throws SQLException {
 
@@ -137,10 +138,10 @@ public class JDBCDataSource extends JDBCCommonDataSource implements DataSource,
      * used for the connection
      *
      * @param username the database user on whose behalf the connection is
-     *  being made
+     *                 being made
      * @param password the user's password
-     * @return  a connection to the data source
-     * @exception SQLException if a database access error occurs
+     * @return a connection to the data source
+     * @throws SQLException if a database access error occurs
      */
     public Connection getConnection(String username,
                                     String password) throws SQLException {
@@ -178,7 +179,7 @@ public class JDBCDataSource extends JDBCCommonDataSource implements DataSource,
     /**
      * Returns an object that implements the given interface to allow access to
      * non-standard methods, or standard methods not exposed by the proxy.
-     *
+     * <p>
      * If the receiver implements the interface then the result is the receiver
      * or a proxy for the receiver. If the receiver is a wrapper
      * and the wrapped object implements the interface then the result is the
@@ -193,7 +194,7 @@ public class JDBCDataSource extends JDBCCommonDataSource implements DataSource,
      * @since JDK 1.6, HSQLDB 2.0
      */
     @SuppressWarnings("unchecked")
-    public <T>T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
+    public <T> T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
 
         if (isWrapperFor(iface)) {
             return (T) this;
@@ -213,8 +214,8 @@ public class JDBCDataSource extends JDBCCommonDataSource implements DataSource,
      *
      * @param iface a Class defining an interface.
      * @return true if this implements the interface or directly or indirectly wraps an object that does.
-     * @throws java.sql.SQLException  if an error occurs while determining whether this is a wrapper
-     * for an object with the given interface.
+     * @throws java.sql.SQLException if an error occurs while determining whether this is a wrapper
+     *                               for an object with the given interface.
      * @since JDK 1.6, HSQLDB 2.0
      */
     public boolean isWrapperFor(
@@ -226,19 +227,19 @@ public class JDBCDataSource extends JDBCCommonDataSource implements DataSource,
      * Retrieves the Reference of this object.
      *
      * @return The non-null Reference of this object.
-     * @exception NamingException If a naming exception was encountered
-     *          while retrieving the reference.
+     * @throws NamingException If a naming exception was encountered
+     *                         while retrieving the reference.
      */
     public Reference getReference() throws NamingException {
 
-        String    cname = "org.hsqldb.jdbc.JDBCDataSourceFactory";
-        Reference ref   = new Reference(getClass().getName(), cname, null);
+        String cname = "org.hsqldb.jdbc.JDBCDataSourceFactory";
+        Reference ref = new Reference(getClass().getName(), cname, null);
 
         ref.add(new StringRefAddr("database", getDatabase()));
         ref.add(new StringRefAddr("user", getUser()));
         ref.add(new StringRefAddr("password", password));
         ref.add(new StringRefAddr("loginTimeout",
-                                  Integer.toString(loginTimeout)));
+                Integer.toString(loginTimeout)));
 
         return ref;
     }

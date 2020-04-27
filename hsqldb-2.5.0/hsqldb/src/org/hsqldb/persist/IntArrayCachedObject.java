@@ -49,7 +49,7 @@ public class IntArrayCachedObject extends CachedObjectBase {
 
     public IntArrayCachedObject(int capacity) {
         this.values = new int[capacity];
-        hasChanged  = true;
+        hasChanged = true;
     }
 
     public void read(RowInputInterface in) {
@@ -108,11 +108,11 @@ public class IntArrayCachedObject extends CachedObjectBase {
 
     public void setValue(int position, int value) {
         values[position] = value;
-        hasChanged       = true;
+        hasChanged = true;
     }
 
     public void setIntArray(int[] array) {
-        values     = array;
+        values = array;
         hasChanged = true;
     }
 

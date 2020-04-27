@@ -40,13 +40,13 @@ import java.util.Stack;
 
 /**
  * Simple text document preprocessor. <p>
- *
+ * <p>
  * Aims specifically at transforming the HSQLDB codebase to one of a small
  * number of specific build targets, while keeping complexity and external
  * dependencies to a minimum, yet providing an environment that is
  * sufficiently powerful to solve most easily imaginable preprocessing
  * scenarios.
- *
+ * <p>
  * Supports the following (case-sensitive) directives: <p>
  *
  * <ul>
@@ -63,7 +63,7 @@ import java.util.Stack;
  *  <li>//#include FILEPATH
  *  <li>//#undef[ine] IDENT
  * </ul>
- *
+ * <p>
  * where BOOLEXPR is:
  *
  * <pre>
@@ -72,8 +72,8 @@ import java.util.Stack;
  * | BOOLEXPR { OR | XOR | AND } BOOLEXPR
  * | NOT BOOLEXPR
  * | LPAREN BOOLEXPR RPAREN )
- *</pre>
- *
+ * </pre>
+ * <p>
  * and VALUE is :
  *
  * <pre>
@@ -81,7 +81,7 @@ import java.util.Stack;
  * | NUMBER
  * | IDENT )
  * </pre>
- *
+ * <p>
  * and lexographic elements are :
  *
  * <pre>
@@ -111,7 +111,7 @@ import java.util.Stack;
  * IDENT      : JAVA_IDENT_START JAVA_IDENT_PART*              -- see java.lang.Character
  * FILEPATH   : NON_SPACE (ANY_UNICODE_CHARACTER* NON_WS)?     -- i.e. trailing SPACE elements are ignored
  * </pre>
- *
+ * <p>
  * The lexographic definitions above use the BNF conventions :
  *
  * <pre>
@@ -119,36 +119,36 @@ import java.util.Stack;
  * '*' -> zero or more
  * '+' -> one or more
  * </pre>
- *
+ * <p>
  * Directives may be arbitrarily indented; there is an option (INDENT) to set
  * or unset directive indentation on output. There is also an option (FILTER)
  * to remove directive lines from output.  See {@link Option Option} for other
  * preprocessor options. <p>
- *
+ * <p>
  * '//#ifxxx' directives may be nested to arbitrary depth,
  * may be chained with an arbitrary number of '//#elifxxx' directives,
  * may be optionally followed by a single '//#else' directive, and
  * must be terminated by a single '//#endif' directive. <p>
- *
+ * <p>
  * Each '//#include' directive must be terminated by an '//#endinclude'
  * directive; lines between '//#include' and '//#endinclude' are replaced
  * by the content retrieved from the specified FILEPATH. <p>
- *
+ * <p>
  * Included files are preprocessed in a nested scope that inherits the
  * defined symbols of the including scope. Directive lines in included files
  * are always excluded from output. <p>
  *
  * <b>Design Notes</b><p>
- *
+ * <p>
  * There are many better/more sophisticated preprocessors/templating
  * engines out there.  FreeMaker and Velocity come to mind immediately.
  * Another--the NetBeans MIDP preprocessor--was the direct inspiration for
  * this class. <p>
- *
+ * <p>
  * Other options were rejected because the work of creating this class appeared
  * to be less than dealing with the complexity and dependency issues of hooking
  * up to external libraries.
- *
+ * <p>
  * The NetBeans preprocessor, in particular, was rejected because it was
  * not immediately evident how to invoke it independently from the IDE,
  * how to make it available to non-MIDP projects from within the IDE or how to
@@ -170,18 +170,18 @@ public class Preprocessor {
      * @param sourceDir under which input files are located
      * @param targetDir under which output files are to be written
      * @param fileNames to be preprocessed
-     * @param altExt to use for output file names
-     * @param encoding with which to write output files
-     * @param options used to control preprocessing
-     * @param defines CSV list of symbol definition expressions
-     * @param resolver with which to perform property and path expansions
+     * @param altExt    to use for output file names
+     * @param encoding  with which to write output files
+     * @param options   used to control preprocessing
+     * @param defines   CSV list of symbol definition expressions
+     * @param resolver  with which to perform property and path expansions
      * @throws PreprocessorException if an error occurs while loading,
-     *      preprocessing or saving the result of preprocessing one of the
-     *      specified input files
+     *                               preprocessing or saving the result of preprocessing one of the
+     *                               specified input files
      */
     public static void preprocessBatch(File sourceDir, File targetDir,
-            String[] fileNames, String altExt, String encoding, int options,
-            String defines, IResolver resolver) throws PreprocessorException {
+                                       String[] fileNames, String altExt, String encoding, int options,
+                                       String defines, IResolver resolver) throws PreprocessorException {
 
         for (int i = 0; i < fileNames.length; i++) {
             String fileName = fileNames[i];
@@ -205,29 +205,29 @@ public class Preprocessor {
      *
      * @param sourceDir under which the input file is located
      * @param targetDir under which the output file is to be written
-     * @param fileName to be preprocessed
-     * @param altExt to use for output file name
-     * @param encoding with which to write output file
-     * @param options used to control preprocessing
-     * @param defines CSV list of symbol definition expressions
-     * @param resolver with which to perform property and path expansions
+     * @param fileName  to be preprocessed
+     * @param altExt    to use for output file name
+     * @param encoding  with which to write output file
+     * @param options   used to control preprocessing
+     * @param defines   CSV list of symbol definition expressions
+     * @param resolver  with which to perform property and path expansions
      * @throws PreprocessorException if an error occurs while loading,
-     *      preprocessing or saving the result of preprocessing the
-     *      specified input file
+     *                               preprocessing or saving the result of preprocessing the
+     *                               specified input file
      */
     public static void preprocessFile(File sourceDir, File targetDir,
-            String fileName, String altExt, String encoding, int options,
-            String defines, IResolver resolver) throws PreprocessorException {
+                                      String fileName, String altExt, String encoding, int options,
+                                      String defines, IResolver resolver) throws PreprocessorException {
 
-        String       sourcePath   = translatePath(sourceDir, fileName, null);
-        String       targetPath   = translatePath(targetDir, fileName, altExt);
-        File         targetFile   = new File(targetPath);
-        File         backupFile   = new File(targetPath + "~");
-        boolean      sameDir      = sourceDir.equals(targetDir);
-        boolean      sameExt      = (altExt ==  null);
-        boolean      verbose      = Option.isVerbose(options);
-        boolean      testOnly     = Option.isTestOnly(options);
-        boolean      backup       = Option.isBackup(options);
+        String sourcePath = translatePath(sourceDir, fileName, null);
+        String targetPath = translatePath(targetDir, fileName, altExt);
+        File targetFile = new File(targetPath);
+        File backupFile = new File(targetPath + "~");
+        boolean sameDir = sourceDir.equals(targetDir);
+        boolean sameExt = (altExt == null);
+        boolean verbose = Option.isVerbose(options);
+        boolean testOnly = Option.isTestOnly(options);
+        boolean backup = Option.isBackup(options);
         Preprocessor preprocessor = new Preprocessor(sourcePath,
                 encoding, options, resolver, defines);
 
@@ -238,7 +238,7 @@ public class Preprocessor {
         preprocessor.loadDocument();
 
         boolean modified = preprocessor.preprocess();
-        boolean rewrite  = modified || !sameDir || !sameExt;
+        boolean rewrite = modified || !sameDir || !sameExt;
 
         if (!rewrite) {
             if (verbose) {
@@ -268,7 +268,7 @@ public class Preprocessor {
                     + targetFile
                     + "\" => \""
                     + backupFile
-                    +"\"" ); // NOI18N
+                    + "\""); // NOI18N
         }
 
         if (verbose) {
@@ -289,34 +289,34 @@ public class Preprocessor {
     // Fields
 
     // static
-    static final int CONDITION_NONE      = 0;
-    static final int CONDITION_ARMED     = 1;
-    static final int CONDITION_IN_TRUE   = 2;
+    static final int CONDITION_NONE = 0;
+    static final int CONDITION_ARMED = 1;
+    static final int CONDITION_IN_TRUE = 2;
     static final int CONDITION_TRIGGERED = 3;
 
     // optimization - zero new object burn rate for statePush()
-    static final Integer[] STATES = new Integer[] {
-        new Integer(CONDITION_NONE),
-        new Integer(CONDITION_ARMED),
-        new Integer(CONDITION_IN_TRUE),
-        new Integer(CONDITION_TRIGGERED)
+    static final Integer[] STATES = new Integer[]{
+            new Integer(CONDITION_NONE),
+            new Integer(CONDITION_ARMED),
+            new Integer(CONDITION_IN_TRUE),
+            new Integer(CONDITION_TRIGGERED)
     };
 
     // instance
-    private String    documentPath;
-    private String    encoding;
-    private int       options;
+    private String documentPath;
+    private String encoding;
+    private int options;
     private IResolver resolver;
-    private Document  document;
-    private Defines   defines;
-    private Stack     stack;
-    private int       state;
+    private Document document;
+    private Defines defines;
+    private Stack stack;
+    private int state;
 
     // Constructors
 
     private Preprocessor(String documentPath,
-            String encoding, int options, IResolver resolver,
-            String predefined) throws PreprocessorException {
+                         String encoding, int options, IResolver resolver,
+                         String predefined) throws PreprocessorException {
 
         if (resolver == null) {
             File parentDir = new File(documentPath).getParentFile();
@@ -329,27 +329,27 @@ public class Preprocessor {
         if (predefined == null || predefined.trim().length() == 0) {
             this.defines = new Defines();
         } else {
-            predefined   = this.resolver.resolveProperties(predefined);
+            predefined = this.resolver.resolveProperties(predefined);
             this.defines = new Defines(predefined);
         }
 
         this.documentPath = documentPath;
-        this.encoding     = encoding;
-        this.options      = options;
-        this.document     = new Document();
-        this.stack        = new Stack();
-        this.state        = CONDITION_NONE;
+        this.encoding = encoding;
+        this.options = options;
+        this.document = new Document();
+        this.stack = new Stack();
+        this.state = CONDITION_NONE;
     }
 
     private Preprocessor(Preprocessor other, Document include) {
-        this.document     = include;
-        this.encoding     = other.encoding;
-        this.stack        = new Stack();
-        this.state        = CONDITION_NONE;
-        this.options      = other.options;
+        this.document = include;
+        this.encoding = other.encoding;
+        this.stack = new Stack();
+        this.state = CONDITION_NONE;
+        this.options = other.options;
         this.documentPath = other.documentPath;
-        this.resolver     = other.resolver;
-        this.defines      = other.defines;
+        this.resolver = other.resolver;
+        this.defines = other.defines;
     }
 
     // Main entry point
@@ -390,35 +390,35 @@ public class Preprocessor {
     }
 
     private void preprocessImpl() throws PreprocessorException {
-        int     includeCount = 0;
-        int     lineCount    = 0;
+        int includeCount = 0;
+        int lineCount = 0;
 
         while (lineCount < this.document.size()) {
 
             try {
                 Line line = resolveLine(this.document.getSourceLine(lineCount));
 
-                switch(line.getType()) {
-                    case LineType.INCLUDE : {
+                switch (line.getType()) {
+                    case LineType.INCLUDE: {
                         lineCount = processInclude(lineCount, line);
 
                         break;
                     }
-                    case LineType.VISIBLE :
-                    case LineType.HIDDEN : {
+                    case LineType.VISIBLE:
+                    case LineType.HIDDEN: {
                         this.document.setSourceLine(lineCount,
                                 toSourceLine(line));
 
                         if (Option.isVerbose(options)) {
-                                log((isHidingLines() ? "Commented: "
-                                                     : "Uncommented: ") + line);
+                            log((isHidingLines() ? "Commented: "
+                                    : "Uncommented: ") + line);
                         }
 
                         lineCount++;
 
                         break;
                     }
-                    default : {
+                    default: {
                         processDirective(line);
 
                         lineCount++;
@@ -440,23 +440,23 @@ public class Preprocessor {
         statePush();
 
         this.state = isHidingLines() ? CONDITION_TRIGGERED
-                                     : (condition) ? CONDITION_IN_TRUE
-                                                   : CONDITION_ARMED;
+                : (condition) ? CONDITION_IN_TRUE
+                : CONDITION_ARMED;
     }
 
     private void processElseIf(boolean condition) throws PreprocessorException {
-        switch(state) {
-            case CONDITION_NONE : {
+        switch (state) {
+            case CONDITION_NONE: {
                 throw new PreprocessorException("Unexpected #elif"); // NOI18N
             }
-            case CONDITION_ARMED : {
+            case CONDITION_ARMED: {
                 if (condition) {
                     this.state = CONDITION_IN_TRUE;
                 }
 
                 break;
             }
-            case CONDITION_IN_TRUE : {
+            case CONDITION_IN_TRUE: {
                 this.state = CONDITION_TRIGGERED;
 
                 break;
@@ -465,16 +465,16 @@ public class Preprocessor {
     }
 
     private void processElse() throws PreprocessorException {
-        switch(state) {
-            case CONDITION_NONE : {
+        switch (state) {
+            case CONDITION_NONE: {
                 throw new PreprocessorException("Unexpected #else"); // NOI18N
             }
-            case CONDITION_ARMED : {
+            case CONDITION_ARMED: {
                 this.state = CONDITION_IN_TRUE;
 
                 break;
             }
-            case CONDITION_IN_TRUE : {
+            case CONDITION_IN_TRUE: {
                 this.state = CONDITION_TRIGGERED;
 
                 break;
@@ -491,62 +491,62 @@ public class Preprocessor {
     }
 
     private void processDirective(Line line) throws PreprocessorException {
-        switch(line.getType()) {
-            case LineType.DEFINE : {
+        switch (line.getType()) {
+            case LineType.DEFINE: {
                 if (!isHidingLines()) {
                     this.defines.defineSingle(line.getArguments());
                 }
 
                 break;
             }
-            case LineType.UNDEFINE : {
+            case LineType.UNDEFINE: {
                 if (!isHidingLines()) {
                     this.defines.undefine(line.getArguments());
                 }
 
                 break;
             }
-            case LineType.IF : {
+            case LineType.IF: {
                 processIf(this.defines.evaluate(line.getArguments()));
 
                 break;
             }
-            case LineType.IFDEF : {
+            case LineType.IFDEF: {
                 processIf(this.defines.isDefined(line.getArguments()));
 
                 break;
             }
-            case LineType.IFNDEF : {
+            case LineType.IFNDEF: {
                 processIf(!this.defines.isDefined(line.getArguments()));
 
                 break;
             }
-            case LineType.ELIF : {
+            case LineType.ELIF: {
                 processElseIf(this.defines.evaluate(line.getArguments()));
 
                 break;
             }
-            case LineType.ELIFDEF : {
+            case LineType.ELIFDEF: {
                 processElseIf(this.defines.isDefined(line.getArguments()));
 
                 break;
             }
-            case LineType.ELIFNDEF : {
+            case LineType.ELIFNDEF: {
                 processElseIf(!this.defines.isDefined(line.getArguments()));
 
                 break;
             }
-            case LineType.ELSE : {
+            case LineType.ELSE: {
                 processElse();
 
                 break;
             }
-            case LineType.ENDIF : {
+            case LineType.ENDIF: {
                 processEndIf();
 
                 break;
             }
-            default : {
+            default: {
                 throw new PreprocessorException("Unhandled line type: "
                         + line); // NOI18N
             }
@@ -554,9 +554,9 @@ public class Preprocessor {
     }
 
     private int processInclude(int lineCount, Line line)
-    throws PreprocessorException {
-        String    path   = resolvePath(line.getArguments());
-        boolean   hidden = isHidingLines();
+            throws PreprocessorException {
+        String path = resolvePath(line.getArguments());
+        boolean hidden = isHidingLines();
 
         lineCount++;
 
@@ -575,7 +575,7 @@ public class Preprocessor {
         }
 
         if (!hidden) {
-            Document     include      = loadInclude(path);
+            Document include = loadInclude(path);
             Preprocessor preprocessor = new Preprocessor(this, include);
 
             preprocessor.preprocess();
@@ -599,12 +599,12 @@ public class Preprocessor {
     // -------------------------- Preprocessor State ---------------------------
 
     private boolean isHidingLines() {
-        switch(state) {
-            case CONDITION_ARMED :
+        switch (state) {
+            case CONDITION_ARMED:
             case CONDITION_TRIGGERED: {
                 return true;
             }
-            default : {
+            default: {
                 return false;
             }
         }
@@ -630,7 +630,7 @@ public class Preprocessor {
         }
 
         String value = this.resolver.resolveProperties(path);
-        File   file  = this.resolver.resolveFile(value);
+        File file = this.resolver.resolveFile(value);
 
         try {
             return file.getCanonicalPath();
@@ -643,10 +643,10 @@ public class Preprocessor {
 
     private String toSourceLine(Line line) {
         return (isHidingLines())
-            ? Option.isIndent(this.options)
+                ? Option.isIndent(this.options)
                 ? line.indent + Line.HIDE_DIRECTIVE + line.text
                 : Line.HIDE_DIRECTIVE + line.indent + line.text
-            : line.indent + line.text;
+                : line.indent + line.text;
     }
 
     private File toCanonicalOrAbsoluteFile(String path) {
@@ -671,7 +671,7 @@ public class Preprocessor {
 
     private static String translatePath(File dir, String fileName, String ext) {
         return new StringBuffer(dir.getPath()).append(File.separatorChar).
-                append(translateFileExtension(fileName,ext)).toString();
+                append(translateFileExtension(fileName, ext)).toString();
     }
 
     private static String translateFileExtension(String fileName, String ext) {
@@ -680,7 +680,7 @@ public class Preprocessor {
             int pos = fileName.lastIndexOf('.');
 
             fileName = (pos < 0) ? fileName + ext
-                                 : fileName.substring(0, pos) + ext;
+                    : fileName.substring(0, pos) + ext;
         }
 
         return fileName;
@@ -690,7 +690,7 @@ public class Preprocessor {
 
     private Document loadInclude(String path) throws PreprocessorException {
         Document include = new Document();
-        File     file    = toCanonicalOrAbsoluteFile(path);
+        File file = toCanonicalOrAbsoluteFile(path);
 
         try {
             return include.load(file, this.encoding);

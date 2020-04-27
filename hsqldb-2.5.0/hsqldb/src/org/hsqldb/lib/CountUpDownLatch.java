@@ -98,7 +98,7 @@ public class CountUpDownLatch {
      * interrupted status is cleared.
      *
      * @throws InterruptedException if the current thread is interrupted
-     *         while waiting
+     *                              while waiting
      */
     public void await() throws InterruptedException {
         sync.acquireSharedInterruptibly(1);
@@ -143,7 +143,7 @@ public class CountUpDownLatch {
      * @param timeout the maximum time to wait
      * @param unit    the time unit of the {@code timeout} argument
      * @return {@code true} if the count reached zero and {@code false} if the
-     *         waiting time elapsed before the count reached zero
+     * waiting time elapsed before the count reached zero
      * @throws InterruptedException if the current thread is interrupted while
      *                              waiting
      */
@@ -155,8 +155,9 @@ public class CountUpDownLatch {
     /**
      * Increments the count of the latch.
      * <p>
+     *
      * @return {@code true} if {@code count} transitioned from zero to a new
-     *         value
+     * value
      * @throws ArithmeticException when the operation would otherwise cause a
      *                             silent numeric overflow, resulting in a
      *                             negative {@code count}.
@@ -168,9 +169,10 @@ public class CountUpDownLatch {
     /**
      * Increments the count of the latch by the given {@code amount}.
      * <p>
+     *
      * @param amount by which to increment {@code count}
      * @return {@code true} if {@code count} transitioned from zero to a new
-     *         value
+     * value
      * @throws ArithmeticException      when the operation would otherwise cause
      *                                  a silent numeric overflow, resulting in
      *                                  a negative {@code count}.
@@ -248,11 +250,11 @@ public class CountUpDownLatch {
      * <p>
      *
      * @return a string identifying this latch, as well as its current
-     *         {@code count}.
+     * {@code count}.
      */
     public String toString() {
         return String.format("%s[count=%d]", super.toString(),
-                             sync.getCount());
+                sync.getCount());
     }
 
     /**
@@ -260,7 +262,7 @@ public class CountUpDownLatch {
      * distinct objects.
      *
      * @return a hash code value for this latch. This method is supported for
-     *         the benefit of hash tables
+     * the benefit of hash tables
      */
 
     //@Override
@@ -326,12 +328,12 @@ public class CountUpDownLatch {
          *
          * @param ignored
          * @return -1 on failure; 1 if acquisition in shared mode succeeded and
-         *         subsequent shared-mode acquires might also succeed, in which
-         *         case a subsequent waiting thread must check availability.
+         * subsequent shared-mode acquires might also succeed, in which
+         * case a subsequent waiting thread must check availability.
          */
         protected int tryAcquireShared(int ignored) {
             return getState() == 0 ? 1
-                                   : -1;
+                    : -1;
         }
 
         /**
@@ -350,13 +352,13 @@ public class CountUpDownLatch {
 
             if (newCount < 0) {
                 throw new IllegalArgumentException(
-                    String.format(
-                        "amount must be non-negative: %d", newCount));
+                        String.format(
+                                "amount must be non-negative: %d", newCount));
             }
 
             boolean requestedZero = newCount == 0;
 
-            for (;;) {
+            for (; ; ) {
                 int c = getState();
 
                 if (requestedZero && c == 0) {
@@ -366,7 +368,7 @@ public class CountUpDownLatch {
                 // assert newCount >= 0;
                 if (compareAndSetState(c, newCount)) {
                     return requestedZero ? releaseShared(0)
-                                         : false;
+                            : false;
                 }
             }
         }
@@ -378,7 +380,7 @@ public class CountUpDownLatch {
          */
         boolean countDown() {
 
-            for (;;) {
+            for (; ; ) {
                 int c = getState();
 
                 if (c == 0) {
@@ -409,10 +411,10 @@ public class CountUpDownLatch {
 
             if (amount < 1) {
                 throw new IllegalArgumentException(
-                    String.format("Amount must be positive: %d", amount));
+                        String.format("Amount must be positive: %d", amount));
             }
 
-            for (;;) {
+            for (; ; ) {
                 int c = getState();
 
                 if (c == 0) {
@@ -420,12 +422,12 @@ public class CountUpDownLatch {
                 }
 
                 int nextc = amount >= c ? 0
-                                        : c - amount;
+                        : c - amount;
 
                 // assert nextc >= 0;
                 if (super.compareAndSetState(c, nextc)) {
                     return nextc == 0 ? releaseShared(0)
-                                      : false;
+                            : false;
                 }
             }
         }
@@ -440,12 +442,12 @@ public class CountUpDownLatch {
          */
         boolean countUp() {
 
-            for (;;) {
+            for (; ; ) {
                 int c = getState();
 
                 if (c == Integer.MAX_VALUE) {
                     throw new ArithmeticException(
-                        String.format("integer overflow: %d + 1", c));
+                            String.format("integer overflow: %d + 1", c));
                 }
 
                 int nextc = c + 1;
@@ -467,21 +469,20 @@ public class CountUpDownLatch {
          *                                  resulting in a negative
          *                                  {@code count}.
          * @throws IllegalArgumentException if {@code amount is less than one)
-         *
          */
         boolean countUp(int amount) {
 
             if (amount < 1) {
                 throw new IllegalArgumentException(
-                    String.format("amount must be positive: %d", amount));
+                        String.format("amount must be positive: %d", amount));
             }
 
-            for (;;) {
+            for (; ; ) {
                 int c = getState();
 
                 if (amount > Integer.MAX_VALUE - c) {
                     throw new ArithmeticException(
-                        String.format("integer overflow: %d", amount));
+                            String.format("integer overflow: %d", amount));
                 }
 
                 int nextc = c + amount;

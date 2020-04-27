@@ -45,12 +45,12 @@ import java.io.Reader;
 public class ReaderInputStream extends InputStream {
 
     protected Reader reader;
-    protected long    pos;
-    int              lastChar = -1;
+    protected long pos;
+    int lastChar = -1;
 
     public ReaderInputStream(Reader reader) {
         this.reader = reader;
-        this.pos    = 0;
+        this.pos = 0;
     }
 
     public int read() throws IOException {

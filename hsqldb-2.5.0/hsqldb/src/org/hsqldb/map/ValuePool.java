@@ -34,18 +34,18 @@ package org.hsqldb.map;
 import java.math.BigDecimal;
 
 /**
-  * Supports pooling of Integer, Long, Double, BigDecimal, String and Date
-  * Java Objects. Leads to reduction in memory use when an Object is used more
-  * then twice in the database.
-  *
-  * getXXX methods are used for retrieval of values. If a value is not in
-  * the pool, it is added to the pool and returned. When the pool gets
-  * full, half the contents that have been accessed less recently are purged.
-  *
-  * @author Fred Toussi (fredt@users dot sourceforge.net)
-  * @version 2.4.1
-  * @since 1.7.2
-  */
+ * Supports pooling of Integer, Long, Double, BigDecimal, String and Date
+ * Java Objects. Leads to reduction in memory use when an Object is used more
+ * then twice in the database.
+ * <p>
+ * getXXX methods are used for retrieval of values. If a value is not in
+ * the pool, it is added to the pool and returned. When the pool gets
+ * full, half the contents that have been accessed less recently are purged.
+ *
+ * @author Fred Toussi (fredt@users dot sourceforge.net)
+ * @version 2.4.1
+ * @since 1.7.2
+ */
 public class ValuePool {
 
     //
@@ -54,15 +54,15 @@ public class ValuePool {
     static ValuePoolHashMap doublePool;
     static ValuePoolHashMap bigdecimalPool;
     static ValuePoolHashMap stringPool;
-    static final int        SPACE_STRING_SIZE       = 64;
-    static final int        DEFAULT_VALUE_POOL_SIZE = 4096;
-    static final int[]      defaultPoolLookupSize   = new int[] {
-        DEFAULT_VALUE_POOL_SIZE, DEFAULT_VALUE_POOL_SIZE,
-        DEFAULT_VALUE_POOL_SIZE, DEFAULT_VALUE_POOL_SIZE,
-        DEFAULT_VALUE_POOL_SIZE
+    static final int SPACE_STRING_SIZE = 64;
+    static final int DEFAULT_VALUE_POOL_SIZE = 4096;
+    static final int[] defaultPoolLookupSize = new int[]{
+            DEFAULT_VALUE_POOL_SIZE, DEFAULT_VALUE_POOL_SIZE,
+            DEFAULT_VALUE_POOL_SIZE, DEFAULT_VALUE_POOL_SIZE,
+            DEFAULT_VALUE_POOL_SIZE
     };
-    static final int POOLS_COUNT            = defaultPoolLookupSize.length;
-    static final int defaultSizeFactor      = 2;
+    static final int POOLS_COUNT = defaultPoolLookupSize.length;
+    static final int defaultSizeFactor = 2;
     static final int defaultMaxStringLength = 16;
 
     //
@@ -91,39 +91,39 @@ public class ValuePool {
     public static final Integer INTEGER_1 = ValuePool.getInt(1);
     public static final Integer INTEGER_2 = ValuePool.getInt(2);
     public static final Integer INTEGER_MAX =
-        ValuePool.getInt(Integer.MAX_VALUE);
+            ValuePool.getInt(Integer.MAX_VALUE);
     public static final BigDecimal BIG_DECIMAL_0 =
-        ValuePool.getBigDecimal(BigDecimal.valueOf(0));
+            ValuePool.getBigDecimal(BigDecimal.valueOf(0));
     public static final BigDecimal BIG_DECIMAL_1 =
-        ValuePool.getBigDecimal(new BigDecimal(1));
+            ValuePool.getBigDecimal(new BigDecimal(1));
 
     //
     public static final String[] emptyStringArray = new String[]{};
     public static final Object[] emptyObjectArray = new Object[]{};
-    public static final int[]    emptyIntArray    = new int[]{};
+    public static final int[] emptyIntArray = new int[]{};
 
     //
     private static void initPool() {
 
-        int[] sizeArray  = defaultPoolLookupSize;
-        int   sizeFactor = defaultSizeFactor;
+        int[] sizeArray = defaultPoolLookupSize;
+        int sizeFactor = defaultSizeFactor;
 
         synchronized (ValuePool.class) {
             maxStringLength = defaultMaxStringLength;
-            poolList        = new ValuePoolHashMap[POOLS_COUNT];
+            poolList = new ValuePoolHashMap[POOLS_COUNT];
 
             for (int i = 0; i < POOLS_COUNT; i++) {
                 int size = sizeArray[i];
 
                 poolList[i] = new ValuePoolHashMap(size, size * sizeFactor,
-                                                   BaseHashMap.PURGE_HALF);
+                        BaseHashMap.PURGE_HALF);
             }
 
-            intPool        = poolList[0];
-            longPool       = poolList[1];
-            doublePool     = poolList[2];
+            intPool = poolList[0];
+            longPool = poolList[1];
+            doublePool = poolList[2];
             bigdecimalPool = poolList[3];
-            stringPool     = poolList[4];
+            stringPool = poolList[4];
         }
     }
 
@@ -201,6 +201,6 @@ public class ValuePool {
 
     public static Boolean getBoolean(boolean b) {
         return b ? Boolean.TRUE
-                 : Boolean.FALSE;
+                : Boolean.FALSE;
     }
 }

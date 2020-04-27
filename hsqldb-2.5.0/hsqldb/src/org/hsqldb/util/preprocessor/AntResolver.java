@@ -48,7 +48,9 @@ class AntResolver implements IResolver {
 
     private Project project;
 
-    /** Creates a new instance of AntResolver */
+    /**
+     * Creates a new instance of AntResolver
+     */
     public AntResolver(Project project) {
         this.project = project;
     }

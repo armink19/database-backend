@@ -50,9 +50,9 @@ public class ExpressionOrderBy extends Expression {
 
         super(OpTypes.ORDER_BY);
 
-        nodes       = new Expression[UNARY];
+        nodes = new Expression[UNARY];
         nodes[LEFT] = e;
-        collation   = e.collation;
+        collation = e.collation;
         e.collation = null;
     }
 
@@ -100,7 +100,7 @@ public class ExpressionOrderBy extends Expression {
 
         if (collation != null && !dataType.isCharacterType()) {
             throw Error.error(ErrorCode.X_2H000,
-                              collation.getName().statementName);
+                    collation.getName().statementName);
         }
     }
 
@@ -118,7 +118,7 @@ public class ExpressionOrderBy extends Expression {
 
         if (collation != null) {
             sb.append(' ').append(
-                collation.getName().getSchemaQualifiedStatementName());
+                    collation.getName().getSchemaQualifiedStatementName());
         }
 
         if (isDescending) {

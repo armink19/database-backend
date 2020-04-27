@@ -54,40 +54,40 @@ public final class ResultLob extends Result {
 
     public interface LobResultTypes {
 
-        int REQUEST_GET_BYTES                 = 1;
-        int REQUEST_SET_BYTES                 = 2;
-        int REQUEST_GET_CHARS                 = 3;
-        int REQUEST_SET_CHARS                 = 4;
+        int REQUEST_GET_BYTES = 1;
+        int REQUEST_SET_BYTES = 2;
+        int REQUEST_GET_CHARS = 3;
+        int REQUEST_SET_CHARS = 4;
         int REQUEST_GET_BYTE_PATTERN_POSITION = 5;
         int REQUEST_GET_CHAR_PATTERN_POSITION = 6;
-        int REQUEST_CREATE_BYTES              = 7;
-        int REQUEST_CREATE_CHARS              = 8;
-        int REQUEST_TRUNCATE                  = 9;
-        int REQUEST_GET_LENGTH                = 10;
-        int REQUEST_GET_LOB                   = 11;
-        int REQUEST_DUPLICATE_LOB             = 12;
+        int REQUEST_CREATE_BYTES = 7;
+        int REQUEST_CREATE_CHARS = 8;
+        int REQUEST_TRUNCATE = 9;
+        int REQUEST_GET_LENGTH = 10;
+        int REQUEST_GET_LOB = 11;
+        int REQUEST_DUPLICATE_LOB = 12;
 
         // non-network
         int REQUEST_GET_TRUNCATE_LENGTH = 13;
 
         //
-        int RESPONSE_GET_BYTES                 = 21;
-        int RESPONSE_SET                       = 22;
-        int RESPONSE_GET_CHARS                 = 23;
+        int RESPONSE_GET_BYTES = 21;
+        int RESPONSE_SET = 22;
+        int RESPONSE_GET_CHARS = 23;
         int RESPONSE_GET_BYTE_PATTERN_POSITION = 25;
         int RESPONSE_GET_CHAR_PATTERN_POSITION = 26;
-        int RESPONSE_CREATE_BYTES              = 27;
-        int RESPONSE_CREATE_CHARS              = 28;
-        int RESPONSE_TRUNCATE                  = 29;
+        int RESPONSE_CREATE_BYTES = 27;
+        int RESPONSE_CREATE_CHARS = 28;
+        int RESPONSE_TRUNCATE = 29;
     }
 
-    long        lobID;
-    int         subType;
-    long        blockOffset;
-    long        blockLength;
-    byte[]      byteBlock;
-    char[]      charBlock;
-    Reader      reader;
+    long lobID;
+    int subType;
+    long blockOffset;
+    long blockLength;
+    byte[] byteBlock;
+    char[] charBlock;
+    Reader reader;
     InputStream stream;
 
     private ResultLob() {
@@ -99,18 +99,18 @@ public final class ResultLob extends Result {
         ResultLob result = new ResultLob();
 
         result.subType = LobResultTypes.REQUEST_GET_LENGTH;
-        result.lobID   = id;
+        result.lobID = id;
 
         return result;
     }
 
     public static ResultLob newLobGetBytesRequest(long id, long offset,
-            int length) {
+                                                  int length) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_BYTES;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_BYTES;
+        result.lobID = id;
         result.blockOffset = offset;
         result.blockLength = length;
 
@@ -118,12 +118,12 @@ public final class ResultLob extends Result {
     }
 
     public static ResultLob newLobGetCharsRequest(long id, long offset,
-            int length) {
+                                                  int length) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_CHARS;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_CHARS;
+        result.lobID = id;
         result.blockOffset = offset;
         result.blockLength = length;
 
@@ -131,28 +131,28 @@ public final class ResultLob extends Result {
     }
 
     public static ResultLob newLobSetBytesRequest(long id, long offset,
-            byte[] block) {
+                                                  byte[] block) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_SET_BYTES;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_SET_BYTES;
+        result.lobID = id;
         result.blockOffset = offset;
-        result.byteBlock   = block;
+        result.byteBlock = block;
         result.blockLength = block.length;
 
         return result;
     }
 
     public static ResultLob newLobSetCharsRequest(long id, long offset,
-            char[] chars) {
+                                                  char[] chars) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_SET_CHARS;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_SET_CHARS;
+        result.lobID = id;
         result.blockOffset = offset;
-        result.charBlock   = chars;
+        result.charBlock = chars;
         result.blockLength = chars.length;
 
         return result;
@@ -162,36 +162,36 @@ public final class ResultLob extends Result {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_TRUNCATE;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_TRUNCATE;
+        result.lobID = id;
         result.blockOffset = offset;
 
         return result;
     }
 
     public static ResultLob newLobGetBytesResponse(long id, long offset,
-            byte[] block) {
+                                                   byte[] block) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.RESPONSE_GET_BYTES;
-        result.lobID       = id;
+        result.subType = LobResultTypes.RESPONSE_GET_BYTES;
+        result.lobID = id;
         result.blockOffset = offset;
-        result.byteBlock   = block;
+        result.byteBlock = block;
         result.blockLength = block.length;
 
         return result;
     }
 
     public static ResultLob newLobGetCharsResponse(long id, long offset,
-            char[] chars) {
+                                                   char[] chars) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.RESPONSE_GET_CHARS;
-        result.lobID       = id;
+        result.subType = LobResultTypes.RESPONSE_GET_CHARS;
+        result.lobID = id;
         result.blockOffset = offset;
-        result.charBlock   = chars;
+        result.charBlock = chars;
         result.blockLength = chars.length;
 
         return result;
@@ -201,60 +201,60 @@ public final class ResultLob extends Result {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.RESPONSE_SET;
-        result.lobID       = id;
+        result.subType = LobResultTypes.RESPONSE_SET;
+        result.lobID = id;
         result.blockLength = length;
 
         return result;
     }
 
     public static ResultLob newLobGetBytePatternPositionRequest(long id,
-            byte[] pattern, long offset) {
+                                                                byte[] pattern, long offset) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION;
+        result.lobID = id;
         result.blockOffset = offset;
-        result.byteBlock   = pattern;
+        result.byteBlock = pattern;
         result.blockLength = pattern.length;
 
         return result;
     }
 
     public static ResultLob newLobGetBytePatternPositionRequest(long id,
-            long otherId, long offset) {
+                                                                long otherId, long offset) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION;
+        result.lobID = id;
         result.blockOffset = offset;
 
         return result;
     }
 
     public static ResultLob newLobGetCharPatternPositionRequest(long id,
-            char[] pattern, long offset) {
+                                                                char[] pattern, long offset) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION;
+        result.lobID = id;
         result.blockOffset = offset;
-        result.charBlock   = pattern;
+        result.charBlock = pattern;
         result.blockLength = pattern.length;
 
         return result;
     }
 
     public static ResultLob newLobGetCharPatternPositionRequest(long id,
-            long otherId, long offset) {
+                                                                long otherId, long offset) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION;
+        result.lobID = id;
         result.blockOffset = offset;
         result.blockLength = otherId;
 
@@ -262,27 +262,27 @@ public final class ResultLob extends Result {
     }
 
     public static ResultLob newLobCreateBlobRequest(long sessionID,
-            long lobID, InputStream stream, long length) {
+                                                    long lobID, InputStream stream, long length) {
 
         ResultLob result = new ResultLob();
 
-        result.lobID       = lobID;
-        result.subType     = LobResultTypes.REQUEST_CREATE_BYTES;
+        result.lobID = lobID;
+        result.subType = LobResultTypes.REQUEST_CREATE_BYTES;
         result.blockLength = length;
-        result.stream      = stream;
+        result.stream = stream;
 
         return result;
     }
 
     public static ResultLob newLobCreateClobRequest(long sessionID,
-            long lobID, Reader reader, long length) {
+                                                    long lobID, Reader reader, long length) {
 
         ResultLob result = new ResultLob();
 
-        result.lobID       = lobID;
-        result.subType     = LobResultTypes.REQUEST_CREATE_CHARS;
+        result.lobID = lobID;
+        result.subType = LobResultTypes.REQUEST_CREATE_CHARS;
         result.blockLength = length;
-        result.reader      = reader;
+        result.reader = reader;
 
         return result;
     }
@@ -292,7 +292,7 @@ public final class ResultLob extends Result {
         ResultLob result = new ResultLob();
 
         result.subType = LobResultTypes.REQUEST_GET_TRUNCATE_LENGTH;
-        result.lobID   = id;
+        result.lobID = id;
 
         return result;
     }
@@ -302,7 +302,7 @@ public final class ResultLob extends Result {
         ResultLob result = new ResultLob();
 
         result.subType = LobResultTypes.RESPONSE_CREATE_BYTES;
-        result.lobID   = id;
+        result.lobID = id;
 
         return result;
     }
@@ -312,7 +312,7 @@ public final class ResultLob extends Result {
         ResultLob result = new ResultLob();
 
         result.subType = LobResultTypes.RESPONSE_CREATE_CHARS;
-        result.lobID   = id;
+        result.lobID = id;
 
         return result;
     }
@@ -321,20 +321,20 @@ public final class ResultLob extends Result {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.RESPONSE_TRUNCATE;
-        result.lobID       = id;
+        result.subType = LobResultTypes.RESPONSE_TRUNCATE;
+        result.lobID = id;
         result.blockLength = length;
 
         return result;
     }
 
     public static ResultLob newLobGetRequest(long id, long offset,
-            long length) {
+                                             long length) {
 
         ResultLob result = new ResultLob();
 
-        result.subType     = LobResultTypes.REQUEST_GET_LOB;
-        result.lobID       = id;
+        result.subType = LobResultTypes.REQUEST_GET_LOB;
+        result.lobID = id;
         result.blockOffset = offset;
         result.blockLength = length;
 
@@ -346,7 +346,7 @@ public final class ResultLob extends Result {
         ResultLob result = new ResultLob();
 
         result.subType = LobResultTypes.REQUEST_DUPLICATE_LOB;
-        result.lobID   = id;
+        result.lobID = id;
 
         return result;
     }
@@ -357,84 +357,84 @@ public final class ResultLob extends Result {
         ResultLob result = new ResultLob();
 
         result.databaseID = dataInput.readInt();
-        result.sessionID  = dataInput.readLong();
-        result.lobID      = dataInput.readLong();
-        result.subType    = dataInput.readInt();
+        result.sessionID = dataInput.readLong();
+        result.lobID = dataInput.readLong();
+        result.subType = dataInput.readInt();
 
         switch (result.subType) {
 
-            case LobResultTypes.REQUEST_CREATE_BYTES :
-            case LobResultTypes.REQUEST_CREATE_CHARS :
+            case LobResultTypes.REQUEST_CREATE_BYTES:
+            case LobResultTypes.REQUEST_CREATE_CHARS:
                 result.blockOffset = dataInput.readLong();
                 result.blockLength = dataInput.readLong();
                 break;
 
-            case LobResultTypes.REQUEST_GET_LOB :
-            case LobResultTypes.REQUEST_DUPLICATE_LOB :
+            case LobResultTypes.REQUEST_GET_LOB:
+            case LobResultTypes.REQUEST_DUPLICATE_LOB:
 
-            //
-            case LobResultTypes.REQUEST_GET_BYTES :
-            case LobResultTypes.REQUEST_GET_CHARS :
+                //
+            case LobResultTypes.REQUEST_GET_BYTES:
+            case LobResultTypes.REQUEST_GET_CHARS:
                 result.blockOffset = dataInput.readLong();
                 result.blockLength = dataInput.readLong();
                 break;
 
-            case LobResultTypes.REQUEST_SET_BYTES :
-            case LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION :
+            case LobResultTypes.REQUEST_SET_BYTES:
+            case LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION:
                 result.blockOffset = dataInput.readLong();
                 result.blockLength = dataInput.readLong();
-                result.byteBlock   = new byte[(int) result.blockLength];
+                result.byteBlock = new byte[(int) result.blockLength];
 
                 dataInput.readFully(result.byteBlock);
                 break;
 
-            case LobResultTypes.REQUEST_SET_CHARS :
-            case LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION :
+            case LobResultTypes.REQUEST_SET_CHARS:
+            case LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION:
                 result.blockOffset = dataInput.readLong();
                 result.blockLength = dataInput.readLong();
-                result.charBlock   = new char[(int) result.blockLength];
+                result.charBlock = new char[(int) result.blockLength];
 
                 for (int i = 0; i < result.charBlock.length; i++) {
                     result.charBlock[i] = dataInput.readChar();
                 }
                 break;
 
-            case LobResultTypes.REQUEST_GET_LENGTH :
-            case LobResultTypes.REQUEST_TRUNCATE :
+            case LobResultTypes.REQUEST_GET_LENGTH:
+            case LobResultTypes.REQUEST_TRUNCATE:
                 result.blockOffset = dataInput.readLong();
                 break;
 
-            case LobResultTypes.RESPONSE_GET_BYTES :
+            case LobResultTypes.RESPONSE_GET_BYTES:
                 result.blockOffset = dataInput.readLong();
                 result.blockLength = dataInput.readLong();
-                result.byteBlock   = new byte[(int) result.blockLength];
+                result.byteBlock = new byte[(int) result.blockLength];
 
                 dataInput.readFully(result.byteBlock);
                 break;
 
-            case LobResultTypes.RESPONSE_GET_CHARS :
+            case LobResultTypes.RESPONSE_GET_CHARS:
                 result.blockOffset = dataInput.readLong();
                 result.blockLength = dataInput.readLong();
-                result.charBlock   = new char[(int) result.blockLength];
+                result.charBlock = new char[(int) result.blockLength];
 
                 for (int i = 0; i < result.charBlock.length; i++) {
                     result.charBlock[i] = dataInput.readChar();
                 }
                 break;
 
-            case LobResultTypes.RESPONSE_SET :
-            case LobResultTypes.RESPONSE_CREATE_BYTES :
-            case LobResultTypes.RESPONSE_CREATE_CHARS :
-            case LobResultTypes.RESPONSE_TRUNCATE :
+            case LobResultTypes.RESPONSE_SET:
+            case LobResultTypes.RESPONSE_CREATE_BYTES:
+            case LobResultTypes.RESPONSE_CREATE_CHARS:
+            case LobResultTypes.RESPONSE_TRUNCATE:
                 result.blockLength = dataInput.readLong();
                 break;
 
-            case LobResultTypes.RESPONSE_GET_BYTE_PATTERN_POSITION :
-            case LobResultTypes.RESPONSE_GET_CHAR_PATTERN_POSITION :
+            case LobResultTypes.RESPONSE_GET_BYTE_PATTERN_POSITION:
+            case LobResultTypes.RESPONSE_GET_CHAR_PATTERN_POSITION:
                 result.blockOffset = dataInput.readLong();
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "ResultLob");
         }
 
@@ -458,7 +458,7 @@ public final class ResultLob extends Result {
 
         switch (subType) {
 
-            case LobResultTypes.REQUEST_CREATE_BYTES :
+            case LobResultTypes.REQUEST_CREATE_BYTES:
                 if (blockLength >= 0) {
                     writeCreate(session, dataOut);
 
@@ -469,7 +469,7 @@ public final class ResultLob extends Result {
 
                 return;
 
-            case LobResultTypes.REQUEST_CREATE_CHARS : {
+            case LobResultTypes.REQUEST_CREATE_CHARS: {
                 if (blockLength >= 0) {
                     writeCreate(session, dataOut);
 
@@ -490,60 +490,60 @@ public final class ResultLob extends Result {
 
         switch (subType) {
 
-            case LobResultTypes.REQUEST_SET_BYTES :
-            case LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION :
+            case LobResultTypes.REQUEST_SET_BYTES:
+            case LobResultTypes.REQUEST_GET_BYTE_PATTERN_POSITION:
                 dataOut.writeLong(blockOffset);
                 dataOut.writeLong(blockLength);
                 dataOut.write(byteBlock);
                 break;
 
-            case LobResultTypes.REQUEST_SET_CHARS :
-            case LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION :
+            case LobResultTypes.REQUEST_SET_CHARS:
+            case LobResultTypes.REQUEST_GET_CHAR_PATTERN_POSITION:
                 dataOut.writeLong(blockOffset);
                 dataOut.writeLong(blockLength);
                 dataOut.writeChars(charBlock);
                 break;
 
-            case LobResultTypes.REQUEST_GET_LOB :
-            case LobResultTypes.REQUEST_DUPLICATE_LOB :
+            case LobResultTypes.REQUEST_GET_LOB:
+            case LobResultTypes.REQUEST_DUPLICATE_LOB:
 
-            //
-            case LobResultTypes.REQUEST_GET_BYTES :
-            case LobResultTypes.REQUEST_GET_CHARS :
+                //
+            case LobResultTypes.REQUEST_GET_BYTES:
+            case LobResultTypes.REQUEST_GET_CHARS:
                 dataOut.writeLong(blockOffset);
                 dataOut.writeLong(blockLength);
                 break;
 
-            case LobResultTypes.REQUEST_GET_LENGTH :
-            case LobResultTypes.REQUEST_TRUNCATE :
+            case LobResultTypes.REQUEST_GET_LENGTH:
+            case LobResultTypes.REQUEST_TRUNCATE:
                 dataOut.writeLong(blockOffset);
                 break;
 
-            case LobResultTypes.RESPONSE_GET_BYTES :
+            case LobResultTypes.RESPONSE_GET_BYTES:
                 dataOut.writeLong(blockOffset);
                 dataOut.writeLong(blockLength);
                 dataOut.write(byteBlock);
                 break;
 
-            case LobResultTypes.RESPONSE_GET_CHARS :
+            case LobResultTypes.RESPONSE_GET_CHARS:
                 dataOut.writeLong(blockOffset);
                 dataOut.writeLong(blockLength);
                 dataOut.writeChars(charBlock);
                 break;
 
-            case LobResultTypes.RESPONSE_SET :
-            case LobResultTypes.RESPONSE_CREATE_BYTES :
-            case LobResultTypes.RESPONSE_CREATE_CHARS :
-            case LobResultTypes.RESPONSE_TRUNCATE :
+            case LobResultTypes.RESPONSE_SET:
+            case LobResultTypes.RESPONSE_CREATE_BYTES:
+            case LobResultTypes.RESPONSE_CREATE_CHARS:
+            case LobResultTypes.RESPONSE_TRUNCATE:
                 dataOut.writeLong(blockLength);
                 break;
 
-            case LobResultTypes.RESPONSE_GET_BYTE_PATTERN_POSITION :
-            case LobResultTypes.RESPONSE_GET_CHAR_PATTERN_POSITION :
+            case LobResultTypes.RESPONSE_GET_BYTE_PATTERN_POSITION:
+            case LobResultTypes.RESPONSE_GET_CHAR_PATTERN_POSITION:
                 dataOut.writeLong(blockOffset);
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "ResultLob");
         }
     }
@@ -561,11 +561,11 @@ public final class ResultLob extends Result {
 
         switch (subType) {
 
-            case LobResultTypes.REQUEST_CREATE_BYTES :
+            case LobResultTypes.REQUEST_CREATE_BYTES:
                 dataOut.write(stream, blockLength);
                 break;
 
-            case LobResultTypes.REQUEST_CREATE_CHARS :
+            case LobResultTypes.REQUEST_CREATE_CHARS:
                 dataOut.write(reader, blockLength);
                 break;
         }
@@ -573,10 +573,10 @@ public final class ResultLob extends Result {
 
     private void writeCreateByteSegments(SessionInterface session,
                                          DataOutputStream dataOut)
-                                         throws IOException {
+            throws IOException {
 
         //
-        int  bufferLength  = session.getStreamBlockSize();
+        int bufferLength = session.getStreamBlockSize();
         long currentOffset = blockOffset;
 
         dataOut.writeByte(mode);
@@ -586,7 +586,7 @@ public final class ResultLob extends Result {
         dataOut.writeInt(subType);
 
         HsqlByteArrayOutputStream byteArrayOS =
-            new HsqlByteArrayOutputStream(bufferLength);
+                new HsqlByteArrayOutputStream(bufferLength);
 
         byteArrayOS.reset();
         byteArrayOS.write(stream, bufferLength);
@@ -629,10 +629,10 @@ public final class ResultLob extends Result {
 
     private void writeCreateCharSegments(SessionInterface session,
                                          DataOutputStream dataOut)
-                                         throws IOException {
+            throws IOException {
 
         //
-        int  bufferLength  = session.getStreamBlockSize();
+        int bufferLength = session.getStreamBlockSize();
         long currentOffset = blockOffset;
 
         dataOut.writeByte(mode);
@@ -642,7 +642,7 @@ public final class ResultLob extends Result {
         dataOut.writeInt(subType);
 
         HsqlByteArrayOutputStream byteArrayOS =
-            new HsqlByteArrayOutputStream(bufferLength);
+                new HsqlByteArrayOutputStream(bufferLength);
 
         byteArrayOS.reset();
         byteArrayOS.write(reader, bufferLength / 2);

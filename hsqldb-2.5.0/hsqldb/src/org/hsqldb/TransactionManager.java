@@ -43,22 +43,22 @@ import org.hsqldb.persist.PersistentStore;
 public interface TransactionManager {
 
     //
-    int LOCKS   = 0;
+    int LOCKS = 0;
     int MVLOCKS = 1;
-    int MVCC    = 2;
+    int MVCC = 2;
 
     //
     int ACTION_READ = 0;
-    int ACTION_DUP  = 1;
-    int ACTION_REF  = 2;
+    int ACTION_DUP = 1;
+    int ACTION_REF = 2;
 
     //
-    int resetSessionResults   = 1;
-    int resetSessionTables    = 2;
-    int resetSessionResetAll  = 3;
-    int resetSessionRollback  = 4;
+    int resetSessionResults = 1;
+    int resetSessionTables = 2;
+    int resetSessionResetAll = 3;
+    int resetSessionRollback = 4;
     int resetSessionStatement = 5;
-    int resetSessionClose     = 6;
+    int resetSessionClose = 6;
 
     long getGlobalChangeTimestamp();
 

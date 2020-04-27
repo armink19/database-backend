@@ -36,37 +36,36 @@ import java.io.IOException;
 
 public class DbBackupMain {
 
-/**
- * Command line invocation to create, examine, or extract HSQLDB database
- * backup tar archives.
- * <P>
- * This class stores tar entries as relative files without specifying
- * parent directories, in what is commonly referred to as <I>tar bomb</I>
- * format.
- * The set of files is small, with known extensions, and the potential
- * inconvenience of messing up the user's current directory is more than
- * compensated by making it easier for the user to restore to a new
- * database URL location at a peer level to the original.
- * <P>
- * Automatically calculates buffer sizes based on the largest component
- * file (for "save" mode) or tar file size (for other modes).
- * <P>
- * Run<PRE><CODE>
- *     java -cp path/to/hsqldb.jar org.hsqldb.lib.tar.DbBackupMain
- * </CODE></PRE> for syntax help.
- *
- * @param sa The arguments
- * @throws IOException on read-write error
- * @throws TarMalformatException on tar file problems
- *
- */
+    /**
+     * Command line invocation to create, examine, or extract HSQLDB database
+     * backup tar archives.
+     * <p>
+     * This class stores tar entries as relative files without specifying
+     * parent directories, in what is commonly referred to as <I>tar bomb</I>
+     * format.
+     * The set of files is small, with known extensions, and the potential
+     * inconvenience of messing up the user's current directory is more than
+     * compensated by making it easier for the user to restore to a new
+     * database URL location at a peer level to the original.
+     * <p>
+     * Automatically calculates buffer sizes based on the largest component
+     * file (for "save" mode) or tar file size (for other modes).
+     * <p>
+     * Run<PRE><CODE>
+     * java -cp path/to/hsqldb.jar org.hsqldb.lib.tar.DbBackupMain
+     * </CODE></PRE> for syntax help.
+     *
+     * @param sa The arguments
+     * @throws IOException           on read-write error
+     * @throws TarMalformatException on tar file problems
+     */
     public static void main(String[] sa)
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         try {
             if (sa.length < 1) {
                 System.out.println(
-                    RB.DbBackup_syntax.getString(DbBackup.class.getName()));
+                        RB.DbBackup_syntax.getString(DbBackup.class.getName()));
                 System.out.println();
                 System.out.println(RB.listing_format.getString());
                 System.exit(0);
@@ -74,15 +73,15 @@ public class DbBackupMain {
 
             if (sa[0].equals("--save")) {
                 boolean overWrite = sa.length > 1
-                                    && sa[1].equals("--overwrite");
+                        && sa[1].equals("--overwrite");
 
                 if (sa.length != (overWrite ? 4
-                                            : 3)) {
+                        : 3)) {
                     throw new IllegalArgumentException();
                 }
 
                 DbBackup backup = new DbBackup(new File(sa[sa.length - 2]),
-                                               sa[sa.length - 1]);
+                        sa[sa.length - 1]);
 
                 backup.setOverWrite(overWrite);
                 backup.write();
@@ -102,14 +101,14 @@ public class DbBackupMain {
                 }
 
                 new TarReader(new File(sa[1]), TarReader
-                    .LIST_MODE, patternStrings, Integer.valueOf(DbBackup
+                        .LIST_MODE, patternStrings, Integer.valueOf(DbBackup
                         .generateBufferBlockValue(new File(sa[1]))), null)
-                            .read();
+                        .read();
             } else if (sa[0].equals("--extract")) {
                 boolean overWrite = sa.length > 1
-                                    && sa[1].equals("--overwrite");
+                        && sa[1].equals("--overwrite");
                 int firstPatInd = overWrite ? 4
-                                            : 3;
+                        : 3;
 
                 if (sa.length < firstPatInd) {
                     throw new IllegalArgumentException();
@@ -125,21 +124,21 @@ public class DbBackupMain {
                     }
                 }
 
-                File tarFile       = new File(sa[overWrite ? 2
-                                                           : 1]);
-                int  tarReaderMode = overWrite ? TarReader.OVERWRITE_MODE
-                                               : TarReader.EXTRACT_MODE;
+                File tarFile = new File(sa[overWrite ? 2
+                        : 1]);
+                int tarReaderMode = overWrite ? TarReader.OVERWRITE_MODE
+                        : TarReader.EXTRACT_MODE;
 
                 new TarReader(
-                    tarFile, tarReaderMode, patternStrings,
-                    Integer.valueOf(DbBackup.generateBufferBlockValue(tarFile)),
-                    new File(sa[firstPatInd - 1])).read();
+                        tarFile, tarReaderMode, patternStrings,
+                        Integer.valueOf(DbBackup.generateBufferBlockValue(tarFile)),
+                        new File(sa[firstPatInd - 1])).read();
             } else {
                 throw new IllegalArgumentException();
             }
         } catch (IllegalArgumentException iae) {
             System.out.println(
-                RB.DbBackup_syntaxerr.getString(DbBackup.class.getName()));
+                    RB.DbBackup_syntaxerr.getString(DbBackup.class.getName()));
             System.exit(2);
         }
     }

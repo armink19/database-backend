@@ -20,27 +20,27 @@ import java.util.Vector;
 class JDBCBench {
 
     /* tpc bm b scaling rules */
-    public static int tps       = 1;         /* the tps scaling factor: here it is 1 */
+    public static int tps = 1;         /* the tps scaling factor: here it is 1 */
     public static int nbranches = 1;         /* number of branches in 1 tps db       */
-    public static int ntellers  = 10;        /* number of tellers in  1 tps db       */
+    public static int ntellers = 10;        /* number of tellers in  1 tps db       */
     public static int naccounts = 100000;    /* number of accounts in 1 tps db       */
     public static int nhistory = 864000;     /* number of history recs in 1 tps db   */
-    public static final int TELLER              = 0;
-    public static final int BRANCH              = 1;
-    public static final int ACCOUNT             = 2;
-    int                     failed_transactions = 0;
-    int                     transaction_count   = 0;
-    static int              n_clients           = 10;
-    static int              n_txn_per_client    = 10;
-    long                    start_time          = 0;
-    static boolean          transactions        = true;
-    static boolean          prepared_stmt       = false;
-    static String           tableExtension      = "";
-    static String           createExtension     = "";
-    static String           ShutdownCommand     = "";
-    static PrintStream      TabFile             = null;
-    static boolean          verbose             = false;
-    MemoryWatcherThread     MemoryWatcher;
+    public static final int TELLER = 0;
+    public static final int BRANCH = 1;
+    public static final int ACCOUNT = 2;
+    int failed_transactions = 0;
+    int transaction_count = 0;
+    static int n_clients = 10;
+    static int n_txn_per_client = 10;
+    long start_time = 0;
+    static boolean transactions = true;
+    static boolean prepared_stmt = false;
+    static String tableExtension = "";
+    static String createExtension = "";
+    static String ShutdownCommand = "";
+    static PrintStream TabFile = null;
+    static boolean verbose = false;
+    MemoryWatcherThread MemoryWatcher;
 
     /* main program,    creates a 1-tps database:  i.e. 1 branch, 10 tellers,...
      *                    runs one TPC BM B transaction
@@ -49,10 +49,10 @@ class JDBCBench {
      */
     public static void main(String[] Args) {
 
-        String  DriverName         = "";
-        String  DBUrl              = "";
-        String  DBUser             = "";
-        String  DBPassword         = "";
+        String DriverName = "";
+        String DBUrl = "";
+        String DBUser = "";
+        String DBPassword = "";
         boolean initialize_dataset = false;
 
         for (int i = 0; i < Args.length; i++) {
@@ -140,7 +140,7 @@ class JDBCBench {
 
         if (DriverName.length() == 0 || DBUrl.length() == 0) {
             System.out.println(
-                "usage: java JDBCBench -driver [driver_class_name] -url [url_to_db] -user [username] -password [password] [-v] [-init] [-tpc n] [-clients n]");
+                    "usage: java JDBCBench -driver [driver_class_name] -url [url_to_db] -user [username] -password [password] [-v] [-init] [-tpc n] [-clients n]");
             System.out.println();
             System.out.println("-v          verbose error messages");
             System.out.println("-init       initialize the tables");
@@ -150,11 +150,11 @@ class JDBCBench {
         }
 
         System.out.println(
-            "*********************************************************");
+                "*********************************************************");
         System.out.println(
-            "* JDBCBench v1.1                                        *");
+                "* JDBCBench v1.1                                        *");
         System.out.println(
-            "*********************************************************");
+                "*********************************************************");
         System.out.println();
         System.out.println("Driver: " + DriverName);
         System.out.println("URL:" + DBUrl);
@@ -162,14 +162,14 @@ class JDBCBench {
         System.out.println("Scale factor value: " + tps);
         System.out.println("Number of clients: " + n_clients);
         System.out.println("Number of transactions per client: "
-                           + n_txn_per_client);
+                + n_txn_per_client);
         System.out.println();
 
         try {
             Class.forName(DriverName);
 
             JDBCBench Me = new JDBCBench(DBUrl, DBUser, DBPassword,
-                                         initialize_dataset);
+                    initialize_dataset);
         } catch (Exception E) {
             System.out.println(E.toString());
             E.printStackTrace();
@@ -178,10 +178,10 @@ class JDBCBench {
 
     public JDBCBench(String url, String user, String password, boolean init) {
 
-        Vector      vClient  = new Vector();
-        Thread      Client   = null;
-        Enumeration e        = null;
-        Connection  guardian = null;
+        Vector vClient = new Vector();
+        Thread Client = null;
+        Enumeration e = null;
+        Connection guardian = null;
 
         try {
             java.util.Date start = new java.util.Date();
@@ -192,11 +192,11 @@ class JDBCBench {
                 createDatabase(url, user, password);
 
                 double seconds = (System.currentTimeMillis() - start.getTime())
-                                 / 1000D;
+                        / 1000D;
 
                 System.out.println("done. in " + seconds + " seconds\n");
                 System.out.println("Complete: "
-                                   + (new java.util.Date()).toString());
+                        + (new java.util.Date()).toString());
             }
 
             System.out.println("* Starting Benchmark Run *");
@@ -241,7 +241,8 @@ class JDBCBench {
                 if (TabFile != null) {
                     TabFile.close();
                 }
-            } catch (Exception E1) {}
+            } catch (Exception E1) {
+            }
 
 //            System.exit(0);
         }
@@ -251,19 +252,19 @@ class JDBCBench {
                   boolean transactions,
                   boolean prepared) throws InterruptedException, SQLException {
 
-        Vector      vClient  = new Vector();
-        Thread      Client   = null;
-        Enumeration e        = null;
-        Connection  guardian = null;
+        Vector vClient = new Vector();
+        Thread Client = null;
+        Enumeration e = null;
+        Connection guardian = null;
 
         //
-        this.transactions  = transactions;
+        this.transactions = transactions;
         this.prepared_stmt = prepared;
-        start_time         = System.currentTimeMillis();
+        start_time = System.currentTimeMillis();
 
         for (int i = 0; i < n_clients; i++) {
             Client = new ClientThread(n_txn_per_client, url, user, password,
-                                      Connection.TRANSACTION_READ_COMMITTED);
+                    Connection.TRANSACTION_READ_COMMITTED);
 
             Client.start();
             vClient.addElement(Client);
@@ -293,11 +294,11 @@ class JDBCBench {
 
         long end_time = System.currentTimeMillis();
         double completion_time = ((double) end_time - (double) start_time)
-                                 / 1000;
+                / 1000;
 
         if (TabFile != null) {
             TabFile.print(tps + ";" + n_clients + ";" + n_txn_per_client
-                          + ";");
+                    + ";");
         }
 
         System.out.println("\n* Benchmark Report *");
@@ -333,26 +334,26 @@ class JDBCBench {
 
         System.out.println("\n--------------------");
         System.out.println("Time to execute " + transaction_count
-                           + " transactions: " + completion_time
-                           + " seconds.");
+                + " transactions: " + completion_time
+                + " seconds.");
         System.out.println("Max/Min memory usage: "
-                           + (MemoryWatcher.max / 1024) + " / "
-                           + (MemoryWatcher.min / 1024) + " kb");
+                + (MemoryWatcher.max / 1024) + " / "
+                + (MemoryWatcher.min / 1024) + " kb");
         System.out.println(failed_transactions + " / " + transaction_count
-                           + " failed to complete.");
+                + " failed to complete.");
 
         double rate = (transaction_count - failed_transactions)
-                      / completion_time;
+                / completion_time;
 
         System.out.println("Transaction rate: " + rate + " txn/sec.");
 
         if (TabFile != null) {
             TabFile.print((MemoryWatcher.max / 1024) + ";"
-                          + (MemoryWatcher.min / 1024) + ";"
-                          + failed_transactions + ";" + rate + "\n");
+                    + (MemoryWatcher.min / 1024) + ";"
+                    + failed_transactions + ";" + rate + "\n");
         }
 
-        transaction_count   = 0;
+        transaction_count = 0;
         failed_transactions = 0;
 
         MemoryWatcher.reset();
@@ -370,7 +371,7 @@ class JDBCBench {
                         String password) throws Exception {
 
         Connection Conn = connect(url, user, password);
-        String     s    = Conn.getMetaData().getDatabaseProductName();
+        String s = Conn.getMetaData().getDatabaseProductName();
 
         System.out.println("DBMS: " + s);
 
@@ -386,9 +387,9 @@ class JDBCBench {
         }
 
         try {
-            int       accountsnb = 0;
-            Statement Stmt       = Conn.createStatement();
-            String    Query;
+            int accountsnb = 0;
+            Statement Stmt = Conn.createStatement();
+            String Query;
 
 //
             Stmt.execute("SET WRITE_DELAY 10000 MILLIS;");
@@ -418,13 +419,14 @@ class JDBCBench {
 
                 return;
             }
-        } catch (Exception E) {}
+        } catch (Exception E) {
+        }
 
         System.out.println("Drop old tables if they exist");
 
         try {
             Statement Stmt = Conn.createStatement();
-            String    Query;
+            String Query;
 
             Query = "DROP TABLE history";
 
@@ -451,13 +453,14 @@ class JDBCBench {
             }
 
             Stmt.close();
-        } catch (Exception E) {}
+        } catch (Exception E) {
+        }
 
         System.out.println("Creates tables");
 
         try {
             Statement Stmt = Conn.createStatement();
-            String    Query;
+            String Query;
 
             if (tableExtension.length() > 0) {
                 Query = tableExtension + " branches (";
@@ -545,15 +548,15 @@ class JDBCBench {
             Stmt.close();
         } catch (Exception E) {
             System.out.println(
-                "Delete elements in table in case Drop didn't work");
+                    "Delete elements in table in case Drop didn't work");
         }
 
         System.out.println(
-            "Delete elements in table in case Drop didn't work");
+                "Delete elements in table in case Drop didn't work");
 
         try {
             Statement Stmt = Conn.createStatement();
-            String    Query;
+            String Query;
 
             Query = "DELETE FROM history";
 
@@ -595,7 +598,7 @@ class JDBCBench {
 
                     System.out.println("Using prepared statements");
                 } catch (SQLException Epstmt) {
-                    pstmt         = null;
+                    pstmt = null;
                     prepared_stmt = false;
                 }
             }
@@ -662,7 +665,7 @@ class JDBCBench {
 
             if (prepared_stmt) {
                 Query =
-                    "INSERT INTO accounts(Aid,Bid,Abalance) VALUES (?,?,0)";
+                        "INSERT INTO accounts(Aid,Bid,Abalance) VALUES (?,?,0)";
                 pstmt = Conn.prepareStatement(Query);
             }
 
@@ -699,7 +702,7 @@ class JDBCBench {
             }
 
             System.out.println("\t" + (naccounts * tps)
-                               + "\t records inserted");
+                    + "\t records inserted");
 
             // for tests
             if (ShutdownCommand.length() > 0) {
@@ -728,19 +731,19 @@ class JDBCBench {
     public static int getRandomID(int type) {
 
         int min = 0,
-            max = 0;
+                max = 0;
 
         switch (type) {
 
-            case TELLER :
+            case TELLER:
                 max = ntellers * tps - 1;
                 break;
 
-            case BRANCH :
+            case BRANCH:
                 max = nbranches * tps - 1;
                 break;
 
-            case ACCOUNT :
+            case ACCOUNT:
                 max = naccounts * tps - 1;
                 break;
         }
@@ -753,7 +756,7 @@ class JDBCBench {
 
         try {
             Connection conn = DriverManager.getConnection(DBUrl, DBUser,
-                DBPassword);
+                    DBPassword);
 
             return conn;
         } catch (Exception E) {
@@ -781,15 +784,15 @@ class JDBCBench {
     void checkSums(Connection conn) throws SQLException {
 
         Statement st1 = null;
-        ResultSet rs  = null;
-        int       bbalancesum;
-        int       tbalancesum;
-        int       abalancesum;
-        int       deltasum;
+        ResultSet rs = null;
+        int bbalancesum;
+        int tbalancesum;
+        int abalancesum;
+        int deltasum;
 
         try {
             st1 = conn.createStatement();
-            rs  = st1.executeQuery("select sum(bbalance) from branches");
+            rs = st1.executeQuery("select sum(bbalance) from branches");
 
             rs.next();
 
@@ -835,7 +838,7 @@ class JDBCBench {
             }
 
             System.out.println("A " + abalancesum + " B " + bbalancesum
-                               + " T " + tbalancesum + " H " + deltasum);
+                    + " T " + tbalancesum + " H " + deltasum);
         } finally {
             if (st1 != null) {
                 st1.close();
@@ -845,8 +848,8 @@ class JDBCBench {
 
     class ClientThread extends Thread {
 
-        int               ntrans = 0;
-        Connection        Conn;
+        int ntrans = 0;
+        Connection Conn;
         PreparedStatement pstmt1 = null;
         PreparedStatement pstmt2 = null;
         PreparedStatement pstmt3 = null;
@@ -859,7 +862,7 @@ class JDBCBench {
             System.out.println(number_of_txns);
 
             ntrans = number_of_txns;
-            Conn   = connect(url, user, password);
+            Conn = connect(url, user, password);
 
             if (Conn == null) {
                 return;
@@ -875,24 +878,24 @@ class JDBCBench {
                 if (prepared_stmt) {
                     String Query;
 
-                    Query  = "UPDATE accounts ";
-                    Query  += "SET     Abalance = Abalance + ? ";
-                    Query  += "WHERE   Aid = ?";
+                    Query = "UPDATE accounts ";
+                    Query += "SET     Abalance = Abalance + ? ";
+                    Query += "WHERE   Aid = ?";
                     pstmt1 = Conn.prepareStatement(Query);
-                    Query  = "SELECT Abalance ";
-                    Query  += "FROM   accounts ";
-                    Query  += "WHERE  Aid = ?";
+                    Query = "SELECT Abalance ";
+                    Query += "FROM   accounts ";
+                    Query += "WHERE  Aid = ?";
                     pstmt2 = Conn.prepareStatement(Query);
-                    Query  = "UPDATE tellers ";
-                    Query  += "SET    Tbalance = Tbalance + ? ";
-                    Query  += "WHERE  Tid = ?";
+                    Query = "UPDATE tellers ";
+                    Query += "SET    Tbalance = Tbalance + ? ";
+                    Query += "WHERE  Tid = ?";
                     pstmt3 = Conn.prepareStatement(Query);
-                    Query  = "UPDATE branches ";
-                    Query  += "SET    Bbalance = Bbalance + ? ";
-                    Query  += "WHERE  Bid = ?";
+                    Query = "UPDATE branches ";
+                    Query += "SET    Bbalance = Bbalance + ? ";
+                    Query += "WHERE  Bid = ?";
                     pstmt4 = Conn.prepareStatement(Query);
-                    Query  = "INSERT INTO history(Tid, Bid, Aid, delta) ";
-                    Query  += "VALUES (?,?,?,?)";
+                    Query = "INSERT INTO history(Tid, Bid, Aid, delta) ";
+                    Query += "VALUES (?,?,?,?)";
                     pstmt5 = Conn.prepareStatement(Query);
                 }
             } catch (Exception E) {
@@ -905,9 +908,9 @@ class JDBCBench {
 
             while (ntrans-- > 0) {
                 int account = JDBCBench.getRandomID(ACCOUNT);
-                int branch  = JDBCBench.getRandomID(BRANCH);
-                int teller  = JDBCBench.getRandomID(TELLER);
-                int delta   = JDBCBench.getRandomInt(0, 1000);
+                int branch = JDBCBench.getRandomID(BRANCH);
+                int teller = JDBCBench.getRandomID(TELLER);
+                int delta = JDBCBench.getRandomInt(0, 1000);
 
                 doOne(branch, teller, account, delta);
                 incrementTransactionCount();
@@ -989,8 +992,8 @@ class JDBCBench {
                     pstmt5.executeUpdate();
                     pstmt5.clearWarnings();
                 } else {
-                    Statement Stmt  = Conn.createStatement();
-                    String    Query = "UPDATE accounts ";
+                    Statement Stmt = Conn.createStatement();
+                    String Query = "UPDATE accounts ";
 
                     Query += "SET     Abalance = Abalance + " + delta + " ";
                     Query += "WHERE   Aid = " + aid;
@@ -1045,7 +1048,7 @@ class JDBCBench {
             } catch (Exception E) {
                 if (verbose) {
                     System.out.println("Transaction failed: "
-                                       + E.toString());
+                            + E.toString());
                     E.printStackTrace();
                 }
 
@@ -1054,7 +1057,8 @@ class JDBCBench {
                 if (transactions) {
                     try {
                         Conn.rollback();
-                    } catch (SQLException E1) {}
+                    } catch (SQLException E1) {
+                    }
                 }
             }
 
@@ -1064,8 +1068,8 @@ class JDBCBench {
 
     class MemoryWatcherThread extends Thread {
 
-        long    min          = 0;
-        long    max          = 0;
+        long min = 0;
+        long max = 0;
         boolean keep_running = true;
 
         public MemoryWatcherThread() {
@@ -1077,7 +1081,7 @@ class JDBCBench {
 
         public void reset() {
 
-            long currentFree  = Runtime.getRuntime().freeMemory();
+            long currentFree = Runtime.getRuntime().freeMemory();
             long currentAlloc = Runtime.getRuntime().totalMemory();
 
             min = max = (currentAlloc - currentFree);
@@ -1090,9 +1094,9 @@ class JDBCBench {
         public void run() {
 
             while (keep_running) {
-                long currentFree  = Runtime.getRuntime().freeMemory();
+                long currentFree = Runtime.getRuntime().freeMemory();
                 long currentAlloc = Runtime.getRuntime().totalMemory();
-                long used         = currentAlloc - currentFree;
+                long used = currentAlloc - currentFree;
 
                 if (used < min) {
                     min = used;
@@ -1104,7 +1108,8 @@ class JDBCBench {
 
                 try {
                     sleep(100);
-                } catch (InterruptedException E) {}
+                } catch (InterruptedException E) {
+                }
             }
         }
     }    /* end of class MemoryWatcherThread */

@@ -39,11 +39,11 @@ import java.io.InputStream;
 /**
  * Counts down from a specified value the number of bytes actually read
  * from the wrapped InputStream. <p>
- *
+ * <p>
  * Returns minus one (-1) early from readXXX methods if the count
  * down reaches zero (0) before the end of the wrapped InputStream
  * is encountered. <p>
- *
+ * <p>
  * This class is especially useful when a fixed number of bytes is to be read
  * from an InputStream that is in turn to be used as the source for an
  * {@link java.io.InputStreamReader InputStreamReader}.
@@ -54,7 +54,7 @@ import java.io.InputStream;
  */
 public final class CountdownInputStream extends InputStream {
 
-    private long        m_count;
+    private long m_count;
     private InputStream m_input;
 
     public CountdownInputStream(final InputStream is) {
@@ -131,12 +131,12 @@ public final class CountdownInputStream extends InputStream {
 
     public int available() throws IOException {
         return Math.min(m_input.available(),
-                        (int) Math.min(Integer.MAX_VALUE, m_count));
+                (int) Math.min(Integer.MAX_VALUE, m_count));
     }
 
     public long skip(long count) throws IOException {
         return (count <= 0) ? 0
-                            : m_input.skip(Math.min(m_count, count));
+                : m_input.skip(Math.min(m_count, count));
     }
 
     public long getCount() {

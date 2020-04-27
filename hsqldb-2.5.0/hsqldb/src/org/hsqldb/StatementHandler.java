@@ -46,28 +46,28 @@ import org.hsqldb.result.Result;
  */
 public class StatementHandler extends Statement {
 
-    public static final int NONE          = 0;
+    public static final int NONE = 0;
     public static final int SQL_EXCEPTION = 1;
-    public static final int SQL_WARNING   = 2;
+    public static final int SQL_WARNING = 2;
     public static final int SQL_NOT_FOUND = 3;
-    public static final int SQL_STATE     = 4;
+    public static final int SQL_STATE = 4;
 
     //
     public static final int CONTINUE = 5;
-    public static final int EXIT     = 6;
-    public static final int UNDO     = 7;
+    public static final int EXIT = 6;
+    public static final int UNDO = 7;
 
     //
     public final int handlerType;
 
     //
     private OrderedIntHashSet conditionGroups = new OrderedIntHashSet();
-    private OrderedHashSet    conditionStates = new OrderedHashSet();
-    private Statement         statement;
+    private OrderedHashSet conditionStates = new OrderedHashSet();
+    private Statement statement;
 
     //
     public static final StatementHandler[] emptyExceptionHandlerArray =
-        new StatementHandler[]{};
+            new StatementHandler[]{};
 
     StatementHandler(int handlerType) {
 
@@ -147,7 +147,7 @@ public class StatementHandler extends Statement {
         if (statement != null) {
             statement.resolve(session);
 
-            readTableNames  = statement.getTableNamesForRead();
+            readTableNames = statement.getTableNamesForRead();
             writeTableNames = statement.getTableNamesForWrite();
         }
     }
@@ -177,11 +177,11 @@ public class StatementHandler extends Statement {
     public String getSQL() {
 
         StringBuilder sb = new StringBuilder(64);
-        String        s;
+        String s;
 
         s = handlerType == CONTINUE ? Tokens.T_CONTINUE
-                                    : handlerType == EXIT ? Tokens.T_EXIT
-                                                          : Tokens.T_UNDO;
+                : handlerType == EXIT ? Tokens.T_EXIT
+                : Tokens.T_UNDO;
 
         sb.append(Tokens.T_DECLARE).append(' ').append(s).append(' ');
         sb.append(Tokens.T_HANDLER).append(' ').append(Tokens.T_FOR);
@@ -203,15 +203,15 @@ public class StatementHandler extends Statement {
 
             switch (conditionGroups.get(i)) {
 
-                case SQL_EXCEPTION :
+                case SQL_EXCEPTION:
                     sb.append(Tokens.T_SQLEXCEPTION);
                     break;
 
-                case SQL_WARNING :
+                case SQL_WARNING:
                     sb.append(Tokens.T_SQLWARNING);
                     break;
 
-                case SQL_NOT_FOUND :
+                case SQL_NOT_FOUND:
                     sb.append(Tokens.T_NOT).append(' ').append(Tokens.FOUND);
                     break;
             }

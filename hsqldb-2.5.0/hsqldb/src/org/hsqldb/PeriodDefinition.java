@@ -45,16 +45,16 @@ import org.hsqldb.rights.Grantee;
 public class PeriodDefinition implements SchemaObject {
 
     final HsqlName periodName;
-    final int      periodType;
-    ColumnSchema   startColumn;
-    ColumnSchema   endColumn;
+    final int periodType;
+    ColumnSchema startColumn;
+    ColumnSchema endColumn;
     OrderedHashSet columnNames;
 
     PeriodDefinition(HsqlName periodName, int periodType,
                      OrderedHashSet columnNames) {
 
-        this.periodName  = periodName;
-        this.periodType  = periodType;
+        this.periodName = periodName;
+        this.periodType = periodType;
         this.columnNames = columnNames;
     }
 
@@ -98,7 +98,8 @@ public class PeriodDefinition implements SchemaObject {
         return null;
     }
 
-    public void compile(Session session, SchemaObject parentObject) {}
+    public void compile(Session session, SchemaObject parentObject) {
+    }
 
     public String getSQL() {
         return "";

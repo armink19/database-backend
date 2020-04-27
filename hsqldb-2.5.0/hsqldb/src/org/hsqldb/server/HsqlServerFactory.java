@@ -51,13 +51,14 @@ import java.sql.SQLException;
  */
 public class HsqlServerFactory {
 
-    private HsqlServerFactory() {}
+    private HsqlServerFactory() {
+    }
 
     public static HsqlSocketRequestHandler createHsqlServer(String dbFilePath,
-            boolean debugMessages, boolean silentMode) throws SQLException {
+                                                            boolean debugMessages, boolean silentMode) throws SQLException {
 
         ServerProperties props =
-            new ServerProperties(ServerConstants.SC_PROTOCOL_HSQL);
+                new ServerProperties(ServerConstants.SC_PROTOCOL_HSQL);
 
         props.setProperty("server.dbname.0", "");
         props.setProperty("server.database.0", dbFilePath);
@@ -79,7 +80,7 @@ public class HsqlServerFactory {
                 throw JDBCUtil.sqlException((HsqlException) t);
             } else {
                 throw JDBCUtil.sqlException(
-                    Error.error(ErrorCode.GENERAL_ERROR));
+                        Error.error(ErrorCode.GENERAL_ERROR));
             }
         }
 

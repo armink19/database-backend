@@ -67,9 +67,9 @@ import java.security.PrivilegedAction;
 /**
  * Provides definitions for most of the SQL Standard Schemata views that are
  * supported by HSQLDB.<p>
- *
+ * <p>
  * Provides definitions for some of HSQLDB's additional system vies.
- *
+ * <p>
  * The definitions for the rest of system vies are provided by
  * DatabaseInformationMain, which this class extends. <p>
  *
@@ -79,24 +79,24 @@ import java.security.PrivilegedAction;
  * @since 1.7.2
  */
 final class DatabaseInformationFull
-extends org.hsqldb.dbinfo.DatabaseInformationMain {
+        extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     static final HashMappedList statementMap;
 
     static {
         synchronized (DatabaseInformationFull.class) {
             final String path = "/org/hsqldb/resources/information-schema.sql";
-            final String[] starters = new String[]{ "/*" };
+            final String[] starters = new String[]{"/*"};
             InputStream fis = AccessController.doPrivileged(
-                new PrivilegedAction<InputStream>() {
+                    new PrivilegedAction<InputStream>() {
 
-                public InputStream run() {
-                    return getClass().getResourceAsStream(path);
-                }
-            });
-            InputStreamReader reader     = new InputStreamReader(fis, JavaSystem.CS_ISO_8859_1);
-            LineNumberReader  lineReader = new LineNumberReader(reader);
-            LineGroupReader   lg = new LineGroupReader(lineReader, starters);
+                        public InputStream run() {
+                            return getClass().getResourceAsStream(path);
+                        }
+                    });
+            InputStreamReader reader = new InputStreamReader(fis, JavaSystem.CS_ISO_8859_1);
+            LineNumberReader lineReader = new LineNumberReader(reader);
+            LineGroupReader lg = new LineGroupReader(lineReader, starters);
 
             statementMap = lg.getAsMap();
 
@@ -125,275 +125,275 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         switch (tableIndex) {
 
             // HSQLDB-specific
-            case SYSTEM_CACHEINFO :
+            case SYSTEM_CACHEINFO:
                 return SYSTEM_CACHEINFO(session, store);
 
-            case SYSTEM_COLUMN_SEQUENCE_USAGE :
+            case SYSTEM_COLUMN_SEQUENCE_USAGE:
                 return SYSTEM_COLUMN_SEQUENCE_USAGE(session, store);
 
-            case SYSTEM_COMMENTS :
+            case SYSTEM_COMMENTS:
                 return SYSTEM_COMMENTS(session, store);
 
-            case SYSTEM_INDEXSTATS :
+            case SYSTEM_INDEXSTATS:
                 return SYSTEM_INDEXSTATS(session, store);
 
-            case SYSTEM_KEY_INDEX_USAGE :
+            case SYSTEM_KEY_INDEX_USAGE:
                 return SYSTEM_KEY_INDEX_USAGE(session, store);
 
-            case SYSTEM_SESSIONS :
+            case SYSTEM_SESSIONS:
                 return SYSTEM_SESSIONS(session, store);
 
-            case SYSTEM_SESSIONINFO :
+            case SYSTEM_SESSIONINFO:
                 return SYSTEM_SESSIONINFO(session, store);
 
-            case SYSTEM_PROPERTIES :
+            case SYSTEM_PROPERTIES:
                 return SYSTEM_PROPERTIES(session, store);
 
-            case SYSTEM_SYNONYMS :
+            case SYSTEM_SYNONYMS:
                 return SYSTEM_SYNONYMS(session, store);
 
-            case SYSTEM_TABLESTATS :
+            case SYSTEM_TABLESTATS:
                 return SYSTEM_TABLESTATS(session, store);
 
-            case SYSTEM_TEXTTABLES :
+            case SYSTEM_TEXTTABLES:
                 return SYSTEM_TEXTTABLES(session, store);
 
             // SQL views
-            case ADMINISTRABLE_ROLE_AUTHORIZATIONS :
+            case ADMINISTRABLE_ROLE_AUTHORIZATIONS:
                 return ADMINISTRABLE_ROLE_AUTHORIZATIONS(session, store);
 
-            case APPLICABLE_ROLES :
+            case APPLICABLE_ROLES:
                 return APPLICABLE_ROLES(session, store);
 
-            case ASSERTIONS :
+            case ASSERTIONS:
                 return ASSERTIONS(session, store);
 
-            case AUTHORIZATIONS :
+            case AUTHORIZATIONS:
                 return AUTHORIZATIONS(session, store);
 
-            case CHARACTER_SETS :
+            case CHARACTER_SETS:
                 return CHARACTER_SETS(session, store);
 
-            case CHECK_CONSTRAINT_ROUTINE_USAGE :
+            case CHECK_CONSTRAINT_ROUTINE_USAGE:
                 return CHECK_CONSTRAINT_ROUTINE_USAGE(session, store);
 
-            case CHECK_CONSTRAINTS :
+            case CHECK_CONSTRAINTS:
                 return CHECK_CONSTRAINTS(session, store);
 
-            case COLLATIONS :
+            case COLLATIONS:
                 return COLLATIONS(session, store);
 
-            case COLUMN_COLUMN_USAGE :
+            case COLUMN_COLUMN_USAGE:
                 return COLUMN_COLUMN_USAGE(session, store);
 
-            case COLUMN_DOMAIN_USAGE :
+            case COLUMN_DOMAIN_USAGE:
                 return COLUMN_DOMAIN_USAGE(session, store);
 
-            case COLUMN_UDT_USAGE :
+            case COLUMN_UDT_USAGE:
                 return COLUMN_UDT_USAGE(session, store);
 
-            case CONSTRAINT_COLUMN_USAGE :
+            case CONSTRAINT_COLUMN_USAGE:
                 return CONSTRAINT_COLUMN_USAGE(session, store);
 
-            case CONSTRAINT_PERIOD_USAGE :
+            case CONSTRAINT_PERIOD_USAGE:
                 return CONSTRAINT_PERIOD_USAGE(session, store);
 
-            case CONSTRAINT_TABLE_USAGE :
+            case CONSTRAINT_TABLE_USAGE:
                 return CONSTRAINT_TABLE_USAGE(session, store);
 
-            case COLUMNS :
+            case COLUMNS:
                 return COLUMNS(session, store);
 
-            case DATA_TYPE_PRIVILEGES :
+            case DATA_TYPE_PRIVILEGES:
                 return DATA_TYPE_PRIVILEGES(session, store);
 
-            case DOMAIN_CONSTRAINTS :
+            case DOMAIN_CONSTRAINTS:
                 return DOMAIN_CONSTRAINTS(session, store);
 
-            case DOMAINS :
+            case DOMAINS:
                 return DOMAINS(session, store);
 
-            case ELEMENT_TYPES :
+            case ELEMENT_TYPES:
                 return ELEMENT_TYPES(session, store);
 
-            case ENABLED_ROLES :
+            case ENABLED_ROLES:
                 return ENABLED_ROLES(session, store);
 
-            case JAR_JAR_USAGE :
+            case JAR_JAR_USAGE:
                 return JAR_JAR_USAGE(session, store);
 
-            case JARS :
+            case JARS:
                 return JARS(session, store);
 
-            case KEY_COLUMN_USAGE :
+            case KEY_COLUMN_USAGE:
                 return KEY_COLUMN_USAGE(session, store);
 
-            case KEY_PERIOD_USAGE :
+            case KEY_PERIOD_USAGE:
                 return KEY_PERIOD_USAGE(session, store);
 
-            case METHOD_SPECIFICATIONS :
+            case METHOD_SPECIFICATIONS:
                 return METHOD_SPECIFICATIONS(session, store);
 
-            case MODULE_COLUMN_USAGE :
+            case MODULE_COLUMN_USAGE:
                 return MODULE_COLUMN_USAGE(session, store);
 
-            case MODULE_PRIVILEGES :
+            case MODULE_PRIVILEGES:
                 return MODULE_PRIVILEGES(session, store);
 
-            case MODULE_TABLE_USAGE :
+            case MODULE_TABLE_USAGE:
                 return MODULE_TABLE_USAGE(session, store);
 
-            case MODULES :
+            case MODULES:
                 return MODULES(session, store);
 
-            case PARAMETERS :
+            case PARAMETERS:
                 return PARAMETERS(session, store);
 
-            case PERIODS :
+            case PERIODS:
                 return PERIODS(session, store);
 
-            case REFERENTIAL_CONSTRAINTS :
+            case REFERENTIAL_CONSTRAINTS:
                 return REFERENTIAL_CONSTRAINTS(session, store);
 
-            case ROLE_AUTHORIZATION_DESCRIPTORS :
+            case ROLE_AUTHORIZATION_DESCRIPTORS:
                 return ROLE_AUTHORIZATION_DESCRIPTORS(session, store);
 
-            case ROLE_COLUMN_GRANTS :
+            case ROLE_COLUMN_GRANTS:
                 return ROLE_COLUMN_GRANTS(session, store);
 
-            case ROLE_ROUTINE_GRANTS :
+            case ROLE_ROUTINE_GRANTS:
                 return ROLE_ROUTINE_GRANTS(session, store);
 
-            case ROLE_TABLE_GRANTS :
+            case ROLE_TABLE_GRANTS:
                 return ROLE_TABLE_GRANTS(session, store);
 
-            case ROLE_USAGE_GRANTS :
+            case ROLE_USAGE_GRANTS:
                 return ROLE_USAGE_GRANTS(session, store);
 
-            case ROLE_UDT_GRANTS :
+            case ROLE_UDT_GRANTS:
                 return ROLE_UDT_GRANTS(session, store);
 
-            case ROUTINE_COLUMN_USAGE :
+            case ROUTINE_COLUMN_USAGE:
                 return ROUTINE_COLUMN_USAGE(session, store);
 
-            case ROUTINE_JAR_USAGE :
+            case ROUTINE_JAR_USAGE:
                 return ROUTINE_JAR_USAGE(session, store);
 
-            case ROUTINE_PERIOD_USAGE :
+            case ROUTINE_PERIOD_USAGE:
                 return ROUTINE_PERIOD_USAGE(session, store);
 
-            case ROUTINE_PRIVILEGES :
+            case ROUTINE_PRIVILEGES:
                 return ROUTINE_PRIVILEGES(session, store);
 
-            case ROUTINE_ROUTINE_USAGE :
+            case ROUTINE_ROUTINE_USAGE:
                 return ROUTINE_ROUTINE_USAGE(session, store);
 
-            case ROUTINE_SEQUENCE_USAGE :
+            case ROUTINE_SEQUENCE_USAGE:
                 return ROUTINE_SEQUENCE_USAGE(session, store);
 
-            case ROUTINE_TABLE_USAGE :
+            case ROUTINE_TABLE_USAGE:
                 return ROUTINE_TABLE_USAGE(session, store);
 
-            case ROUTINES :
+            case ROUTINES:
                 return ROUTINES(session, store);
 
-            case SCHEMATA :
+            case SCHEMATA:
                 return SCHEMATA(session, store);
 
-            case SEQUENCES :
+            case SEQUENCES:
                 return SEQUENCES(session, store);
 
-            case SQL_FEATURES :
+            case SQL_FEATURES:
                 return SQL_FEATURES(session, store);
 
-            case SQL_IMPLEMENTATION_INFO :
+            case SQL_IMPLEMENTATION_INFO:
                 return SQL_IMPLEMENTATION_INFO(session, store);
 
-            case SQL_PACKAGES :
+            case SQL_PACKAGES:
                 return SQL_PACKAGES(session, store);
 
-            case SQL_PARTS :
+            case SQL_PARTS:
                 return SQL_PARTS(session, store);
 
-            case SQL_SIZING :
+            case SQL_SIZING:
                 return SQL_SIZING(session, store);
 
-            case SQL_SIZING_PROFILES :
+            case SQL_SIZING_PROFILES:
                 return SQL_SIZING_PROFILES(session, store);
 
-            case TABLE_CONSTRAINTS :
+            case TABLE_CONSTRAINTS:
                 return TABLE_CONSTRAINTS(session, store);
 
-            case TABLES :
+            case TABLES:
                 return TABLES(session, store);
 
-            case TRANSLATIONS :
+            case TRANSLATIONS:
                 return TRANSLATIONS(session, store);
 
-            case TRIGGERED_UPDATE_COLUMNS :
+            case TRIGGERED_UPDATE_COLUMNS:
                 return TRIGGERED_UPDATE_COLUMNS(session, store);
 
-            case TRIGGER_COLUMN_USAGE :
+            case TRIGGER_COLUMN_USAGE:
                 return TRIGGER_COLUMN_USAGE(session, store);
 
-            case TRIGGER_PERIOD_USAGE :
+            case TRIGGER_PERIOD_USAGE:
                 return TRIGGER_PERIOD_USAGE(session, store);
 
-            case TRIGGER_ROUTINE_USAGE :
+            case TRIGGER_ROUTINE_USAGE:
                 return TRIGGER_ROUTINE_USAGE(session, store);
 
-            case TRIGGER_SEQUENCE_USAGE :
+            case TRIGGER_SEQUENCE_USAGE:
                 return TRIGGER_SEQUENCE_USAGE(session, store);
 
-            case TRIGGER_TABLE_USAGE :
+            case TRIGGER_TABLE_USAGE:
                 return TRIGGER_TABLE_USAGE(session, store);
 
-            case TRIGGERS :
+            case TRIGGERS:
                 return TRIGGERS(session, store);
 
-            case UDT_PRIVILEGES :
+            case UDT_PRIVILEGES:
                 return UDT_PRIVILEGES(session, store);
 
-            case USAGE_PRIVILEGES :
+            case USAGE_PRIVILEGES:
                 return USAGE_PRIVILEGES(session, store);
 
-            case USER_DEFINED_TYPES :
+            case USER_DEFINED_TYPES:
                 return USER_DEFINED_TYPES(session, store);
 
-            case VIEW_COLUMN_USAGE :
+            case VIEW_COLUMN_USAGE:
                 return VIEW_COLUMN_USAGE(session, store);
 
-            case VIEW_PERIOD_USAGE :
+            case VIEW_PERIOD_USAGE:
                 return VIEW_PERIOD_USAGE(session, store);
 
-            case VIEW_ROUTINE_USAGE :
+            case VIEW_ROUTINE_USAGE:
                 return VIEW_ROUTINE_USAGE(session, store);
 
-            case VIEW_TABLE_USAGE :
+            case VIEW_TABLE_USAGE:
                 return VIEW_TABLE_USAGE(session, store);
 
-            case VIEWS :
+            case VIEWS:
                 return VIEWS(session, store);
 
-            default :
+            default:
                 return super.generateTable(session, store, tableIndex);
         }
     }
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * Retrieves a <code>Table</code> object describing the current
      * state of all row caching objects for the accessible
      * tables defined within this database. <p>
-     *
+     * <p>
      * Currently, the row caching objects for which state is reported are: <p>
      *
      * <OL>
      * <LI> the system-wide <code>Cache</code> object used by CACHED tables.
      * <LI> any <code>TextCache</code> objects in use by [TEMP] TEXT tables.
      * </OL> <p>
-     *
+     * <p>
      * Each row is a cache object state description with the following
      * columns: <p>
      *
@@ -415,7 +415,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * columns FREE_BYTES, SMALLEST_FREE_ITEM, LARGEST_FREE_ITEM, and
      * FREE_COUNT are always reported as zero for rows reporting on
      * <code>TextCache</code> objects. <p>
-     *
+     * <p>
      * Currently, CACHE_SIZE, FREE_BYTES, SMALLEST_FREE_ITEM, LARGEST_FREE_ITEM,
      * FREE_COUNT and FREE_POS are the only dynamically changing values.
      * All others are constant for the life of a cache object. In a future
@@ -424,7 +424,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * modification of certain cache properties. <p>
      *
      * @return a description of the current state of all row caching
-     *      objects associated with the accessible tables of the database
+     * objects associated with the accessible tables of the database
      */
     Table SYSTEM_CACHEINFO(Session session, PersistentStore store) {
 
@@ -442,30 +442,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "FILE_FREE_POS", CARDINAL_NUMBER);      // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_CACHEINFO].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_CACHEINFO].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, true);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, true);
 
             return t;
         }
 
         // column number mappings
-        final int icache_file      = 0;
-        final int imax_cache_sz    = 1;
+        final int icache_file = 0;
+        final int imax_cache_sz = 1;
         final int imax_cache_bytes = 2;
-        final int icache_size      = 3;
-        final int icache_length    = 4;
-        final int ilost_bytes      = 5;
-        final int ifree_pos        = 6;
+        final int icache_size = 3;
+        final int icache_length = 4;
+        final int ilost_bytes = 5;
+        final int ifree_pos = 6;
 
         //
         DataFileCache cache = null;
-        Object[]      row;
-        HashSet       cacheSet;
-        Iterator      caches;
-        Iterator      tables;
-        Table         table;
+        Object[] row;
+        HashSet cacheSet;
+        Iterator caches;
+        Iterator tables;
+        Table table;
 
         if (!session.isAdmin()) {
             return t;
@@ -476,7 +476,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // dynamic system tables are never cached
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
             table = (Table) tables.next();
@@ -509,16 +509,16 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         // Do it.
         while (caches.hasNext()) {
             cache = (DataFileCache) caches.next();
-            row   = t.getEmptyRowData();
+            row = t.getEmptyRowData();
             row[icache_file] = FileUtil.getFileUtil().canonicalOrAbsolutePath(
-                cache.getFileName());
-            row[imax_cache_sz]    = ValuePool.getLong(cache.capacity());
+                    cache.getFileName());
+            row[imax_cache_sz] = ValuePool.getLong(cache.capacity());
             row[imax_cache_bytes] = ValuePool.getLong(cache.bytesCapacity());
             row[icache_size] = ValuePool.getLong(cache.getCachedObjectCount());
             row[icache_length] =
-                ValuePool.getLong(cache.getTotalCachedBlockSize());
+                    ValuePool.getLong(cache.getTotalCachedBlockSize());
             row[ilost_bytes] = ValuePool.getLong(cache.getLostBlockSize());
-            row[ifree_pos]   = ValuePool.getLong(cache.getFileFreePos());
+            row[ifree_pos] = ValuePool.getLong(cache.getFileFreePos());
 
             t.insertSys(session, store, row);
         }
@@ -533,7 +533,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         if (t == null) {
             t = createBlankTable(
-                sysTableHsqlNames[SYSTEM_COLUMN_SEQUENCE_USAGE]);
+                    sysTableHsqlNames[SYSTEM_COLUMN_SEQUENCE_USAGE]);
 
             addColumn(t, "TABLE_CATALOG", SQL_IDENTIFIER);    //0
             addColumn(t, "TABLE_SCHEMA", SQL_IDENTIFIER);
@@ -544,30 +544,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "SEQUENCE_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_COLUMN_SEQUENCE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_COLUMN_SEQUENCE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4
             }, false);
 
             return t;
         }
 
-        final int table_cat        = 0;
-        final int table_schem      = 1;
-        final int table_name       = 2;
-        final int column_name      = 3;
+        final int table_cat = 0;
+        final int table_schem = 1;
+        final int table_name = 2;
+        final int column_name = 3;
         final int sequence_catalog = 4;
-        final int sequence_schema  = 5;
-        final int sequence_name    = 6;
+        final int sequence_schema = 5;
+        final int sequence_name = 6;
 
         //
         // intermediate holders
-        int            columnCount;
-        Iterator       tables;
-        Table          table;
-        Object[]       row;
+        int columnCount;
+        Iterator tables;
+        Table table;
+        Object[] row;
         OrderedHashSet columnList;
         NumberSequence sequence;
 
@@ -582,7 +582,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             columnList =
-                session.getGrantee().getColumnsForAllPrivileges(table);
+                    session.getGrantee().getColumnsForAllPrivileges(table);
 
             if (columnList.isEmpty()) {
                 continue;
@@ -607,14 +607,14 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
-                row[table_cat]        = database.getCatalogName().name;
-                row[table_schem]      = table.getSchemaName().name;
-                row[table_name]       = table.getName().name;
-                row[column_name]      = column.getName().name;
+                row = t.getEmptyRowData();
+                row[table_cat] = database.getCatalogName().name;
+                row[table_schem] = table.getSchemaName().name;
+                row[table_name] = table.getName().name;
+                row[column_name] = column.getName().name;
                 row[sequence_catalog] = database.getCatalogName().name;
-                row[sequence_schema]  = sequence.getSchemaName().name;
-                row[sequence_name]    = sequence.getName().name;
+                row[sequence_schema] = sequence.getSchemaName().name;
+                row[sequence_name] = sequence.getName().name;
 
                 t.insertSys(session, store, row);
             }
@@ -638,23 +638,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENT", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_COMMENTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_COMMENTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int catalog     = 0;
-        final int schema      = 1;
-        final int name        = 2;
-        final int type        = 3;
+        final int catalog = 0;
+        final int schema = 1;
+        final int name = 2;
+        final int type = 3;
         final int column_name = 4;
-        final int remark      = 5;
+        final int remark = 5;
 
         //
         Iterator it;
@@ -683,13 +683,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row              = t.getEmptyRowData();
-                row[catalog]     = database.getCatalogName().name;
-                row[schema]      = table.getSchemaName().name;
-                row[name]        = table.getName().name;
-                row[type]        = "COLUMN";
+                row = t.getEmptyRowData();
+                row[catalog] = database.getCatalogName().name;
+                row[schema] = table.getSchemaName().name;
+                row[name] = table.getName().name;
+                row[type] = "COLUMN";
                 row[column_name] = column.getName().name;
-                row[remark]      = column.getName().comment;
+                row[remark] = column.getName().comment;
 
                 t.insertSys(session, store, row);
             }
@@ -699,22 +699,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row          = t.getEmptyRowData();
+            row = t.getEmptyRowData();
             row[catalog] = database.getCatalogName().name;
-            row[schema]  = table.getSchemaName().name;
-            row[name]    = table.getName().name;
+            row[schema] = table.getSchemaName().name;
+            row[name] = table.getName().name;
             row[type] =
-                table.isView()
-                || table.getTableType() == Table.INFO_SCHEMA_TABLE ? "VIEW"
-                                                                   : "TABLE";
+                    table.isView()
+                            || table.getTableType() == Table.INFO_SCHEMA_TABLE ? "VIEW"
+                            : "TABLE";
             row[column_name] = null;
-            row[remark]      = ti.getRemark();
+            row[remark] = ti.getRemark();
 
             t.insertSys(session, store, row);
         }
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.ROUTINE);
+                SchemaObject.ROUTINE);
 
         while (it.hasNext()) {
             SchemaObject object = (SchemaObject) it.next();
@@ -727,13 +727,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row              = t.getEmptyRowData();
-            row[catalog]     = database.getCatalogName().name;
-            row[schema]      = object.getSchemaName().name;
-            row[name]        = object.getName().name;
-            row[type]        = "ROUTINE";
+            row = t.getEmptyRowData();
+            row[catalog] = database.getCatalogName().name;
+            row[schema] = object.getSchemaName().name;
+            row[name] = object.getName().name;
+            row[type] = "ROUTINE";
             row[column_name] = null;
-            row[remark]      = object.getName().comment;
+            row[remark] = object.getName().comment;
 
             t.insertSys(session, store, row);
         }
@@ -746,51 +746,51 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * and operating parameter properties for the engine hosting this
      * database, as well as their applicability in terms of scope and
      * name space. <p>
-     *
+     * <p>
      * Reported properties include certain predefined <code>Database</code>
      * properties file values as well as certain database scope
      * attributes. <p>
-     *
+     * <p>
      * It is intended that all <code>Database</code> attributes and
      * properties that can be set via the database properties file,
      * JDBC connection properties or SQL SET/ALTER statements will
      * eventually be reported here or, where more applicable, in an
      * ANSI/ISO conforming feature info base table in the definition
      * schema. <p>
-     *
+     * <p>
      * Currently, the database properties reported are: <p>
      *
      * <OL>
-     *     <LI>hsqldb.cache_file_scale - the scaling factor used to translate data and index structure file pointers
-     *     <LI>hsqldb.cache_scale - base-2 exponent scaling allowable cache row count
-     *     <LI>hsqldb.cache_size_scale - base-2 exponent scaling allowable cache byte count
-     *     <LI>hsqldb.cache_version -
-     *     <LI>hsqldb.catalogs - whether to report the database catalog (database uri)
-     *     <LI>hsqldb.compatible_version -
-     *     <LI>hsqldb.files_readonly - whether the database is in files_readonly mode
-     *     <LI>hsqldb.gc_interval - # new records forcing gc ({0|NULL}=>never)
-     *     <LI>hsqldb.max_nio_scale - scale factor for cache nio mapped buffers
-     *     <LI>hsqldb.nio_data_file - whether cache uses nio mapped buffers
-     *     <LI>hsqldb.original_version -
-     *     <LI>sql.enforce_strict_size - column length specifications enforced strictly (raise exception on overflow)?
-     *     <LI>textdb.all_quoted - default policy regarding whether to quote all character field values
-     *     <LI>textdb.cache_scale - base-2 exponent scaling allowable cache row count
-     *     <LI>textdb.cache_size_scale - base-2 exponent scaling allowable cache byte count
-     *     <LI>textdb.encoding - default TEXT table file encoding
-     *     <LI>textdb.fs - default field separator
-     *     <LI>textdb.vs - default varchar field separator
-     *     <LI>textdb.lvs - default long varchar field separator
-     *     <LI>textdb.ignore_first - default policy regarding whether to ignore the first line
-     *     <LI>textdb.quoted - default policy regarding treatment character field values that _may_ require quoting
-     *     <LI>IGNORECASE - create table VARCHAR_IGNORECASE?
-     *     <LI>LOGSIZSE - # bytes to which REDO log grows before auto-checkpoint
-     *     <LI>REFERENTIAL_INTEGITY - currently enforcing referential integrity?
-     *     <LI>SCRIPTFORMAT - 0 : TEXT, 1 : BINARY, ...
-     *     <LI>WRITEDELAY - does REDO log currently use buffered write strategy?
+     * <LI>hsqldb.cache_file_scale - the scaling factor used to translate data and index structure file pointers
+     * <LI>hsqldb.cache_scale - base-2 exponent scaling allowable cache row count
+     * <LI>hsqldb.cache_size_scale - base-2 exponent scaling allowable cache byte count
+     * <LI>hsqldb.cache_version -
+     * <LI>hsqldb.catalogs - whether to report the database catalog (database uri)
+     * <LI>hsqldb.compatible_version -
+     * <LI>hsqldb.files_readonly - whether the database is in files_readonly mode
+     * <LI>hsqldb.gc_interval - # new records forcing gc ({0|NULL}=>never)
+     * <LI>hsqldb.max_nio_scale - scale factor for cache nio mapped buffers
+     * <LI>hsqldb.nio_data_file - whether cache uses nio mapped buffers
+     * <LI>hsqldb.original_version -
+     * <LI>sql.enforce_strict_size - column length specifications enforced strictly (raise exception on overflow)?
+     * <LI>textdb.all_quoted - default policy regarding whether to quote all character field values
+     * <LI>textdb.cache_scale - base-2 exponent scaling allowable cache row count
+     * <LI>textdb.cache_size_scale - base-2 exponent scaling allowable cache byte count
+     * <LI>textdb.encoding - default TEXT table file encoding
+     * <LI>textdb.fs - default field separator
+     * <LI>textdb.vs - default varchar field separator
+     * <LI>textdb.lvs - default long varchar field separator
+     * <LI>textdb.ignore_first - default policy regarding whether to ignore the first line
+     * <LI>textdb.quoted - default policy regarding treatment character field values that _may_ require quoting
+     * <LI>IGNORECASE - create table VARCHAR_IGNORECASE?
+     * <LI>LOGSIZSE - # bytes to which REDO log grows before auto-checkpoint
+     * <LI>REFERENTIAL_INTEGITY - currently enforcing referential integrity?
+     * <LI>SCRIPTFORMAT - 0 : TEXT, 1 : BINARY, ...
+     * <LI>WRITEDELAY - does REDO log currently use buffered write strategy?
      * </OL> <p>
      *
      * @return table describing database and session operating parameters
-     *      and capabilities
+     * and capabilities
      */
     Table SYSTEM_PROPERTIES(Session session, PersistentStore store) {
 
@@ -808,11 +808,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // order PROPERTY_SCOPE, PROPERTY_NAMESPACE, PROPERTY_NAME
             // true PK
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_PROPERTIES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_PROPERTIES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, true);
 
             return t;
@@ -820,8 +820,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int iscope = 0;
-        final int ins    = 1;
-        final int iname  = 2;
+        final int ins = 1;
+        final int iname = 2;
         final int ivalue = 3;
         final int iclass = 4;
 
@@ -831,13 +831,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         String nameSpace;
 
         // intermediate holders
-        Object[]               row;
+        Object[] row;
         HsqlDatabaseProperties props;
 
         // First, we want the names and values for
         // all JDBC capabilities constants
-        scope     = "SESSION";
-        props     = database.getProperties();
+        scope = "SESSION";
+        props = database.getProperties();
         nameSpace = "database.properties";
 
         // boolean properties
@@ -846,12 +846,12 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         while (it.hasNext()) {
             Object[] metaData = (Object[]) it.next();
 
-            row         = t.getEmptyRowData();
+            row = t.getEmptyRowData();
             row[iscope] = scope;
-            row[ins]    = nameSpace;
-            row[iname]  = metaData[HsqlProperties.indexName];
+            row[ins] = nameSpace;
+            row[iname] = metaData[HsqlProperties.indexName];
             row[ivalue] =
-                database.logger.getValueStringForProperty((String) row[iname]);
+                    database.logger.getValueStringForProperty((String) row[iname]);
 
             if (row[ivalue] == null) {
                 row[ivalue] = props.getPropertyString((String) row[iname]);
@@ -868,7 +868,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
     /**
      * Retrieves a <code>Table</code> object describing attributes
      * for the calling session context.<p>
-     *
+     * <p>
      * The rows report the following {key,value} pairs:<p>
      *
      * <pre class="SqlCodeExample">
@@ -893,8 +893,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * tables. <p>
      *
      * @return a <code>Table</code> object describing the
-     *        attributes of the connection associated
-     *        with the current execution context
+     * attributes of the connection associated
+     * with the current execution context
      */
     Table SYSTEM_SESSIONINFO(Session session, PersistentStore store) {
 
@@ -907,47 +907,47 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "VALUE", CHARACTER_DATA);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_SESSIONINFO].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_SESSIONINFO].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, true);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, true);
 
             return t;
         }
 
         Object[] row;
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "SESSION ID";
         row[1] = String.valueOf(session.getId());
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "AUTOCOMMIT";
         row[1] = session.isAutoCommit() ? Tokens.T_TRUE
-                                        : Tokens.T_FALSE;
+                : Tokens.T_FALSE;
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "USER";
         row[1] = session.getUsername();
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "ROLE";
 
         Grantee r = session.getRole();
-        String  s = r == null ? ""
-                              : r.getName().getNameString();
+        String s = r == null ? ""
+                : r.getName().getNameString();
 
         row[1] = s;
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "RESULT MEMORY ROWS";
 
         int mr = session.getResultMemoryRowCount();
@@ -956,52 +956,52 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "SESSION READONLY";
         row[1] = session.isReadOnlyDefault() ? Tokens.T_TRUE
-                                             : Tokens.T_FALSE;
+                : Tokens.T_FALSE;
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "DATABASE READONLY";
         row[1] = database.isReadOnly() ? Tokens.T_TRUE
-                                       : Tokens.T_FALSE;
+                : Tokens.T_FALSE;
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "DATABASE";
         row[1] = database.getURI();
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "IDENTITY";
         row[1] = String.valueOf(session.getLastIdentity());
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "CURRENT SCHEMA";
         row[1] = String.valueOf(session.getSchemaName(null));
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "ISOLATION LEVEL";
         row[1] = String.valueOf(session.getIsolation());
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "IGNORECASE";
         row[1] = session.isIgnorecase() ? Tokens.T_TRUE
-                                        : Tokens.T_FALSE;
+                : Tokens.T_FALSE;
 
         t.insertSys(session, store, row);
 
-        row    = t.getEmptyRowData();
+        row = t.getEmptyRowData();
         row[0] = "CURRENT STATEMENT";
         row[1] = "";
 
@@ -1020,7 +1020,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * Retrieves a <code>Table</code> object describing all visible
      * sessions. ADMIN users see *all* sessions
      * while non-admin users see only their own session.<p>
-     *
+     * <p>
      * Each row is a session state description with the following columns: <p>
      *
      * <pre class="SqlCodeExample">
@@ -1041,7 +1041,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * </pre> <p>
      *
      * @return a <code>Table</code> object describing all visible
-     *      sessions
+     * sessions
      */
     Table SYSTEM_SESSIONS(Session session, PersistentStore store) {
 
@@ -1070,35 +1070,35 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // order:  SESSION_ID
             // true primary key
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_SESSIONS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_SESSIONS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, true);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, true);
 
             return t;
         }
 
         // column number mappings
-        final int isid           = 0;
-        final int ict            = 1;
-        final int iuname         = 2;
-        final int iis_admin      = 3;
-        final int iautocmt       = 4;
-        final int ireadonly      = 5;
-        final int ilast_id       = 6;
-        final int it_schema      = 7;
-        final int it_tx          = 8;
-        final int it_size        = 9;
-        final int it_waiting     = 10;
-        final int it_waited      = 11;
-        final int it_statement   = 12;
+        final int isid = 0;
+        final int ict = 1;
+        final int iuname = 2;
+        final int iis_admin = 3;
+        final int iautocmt = 4;
+        final int ireadonly = 5;
+        final int ilast_id = 6;
+        final int it_schema = 7;
+        final int it_tx = 8;
+        final int it_size = 9;
+        final int it_waiting = 10;
+        final int it_waited = 11;
+        final int it_statement = 12;
         final int it_latch_count = 13;
 
         //
         // intermediate holders
         Session[] sessions;
-        Session   s;
-        Object[]  row;
+        Session s;
+        Object[] row;
 
         // Initialisation
         sessions = database.sessionManager.getVisibleSessions(session);
@@ -1109,14 +1109,14 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            s              = sessions[i];
-            row            = t.getEmptyRowData();
-            row[isid]      = ValuePool.getLong(s.getId());
-            row[ict]       = new TimestampData(s.getConnectTime() / 1000);
-            row[iuname]    = s.getUsername();
+            s = sessions[i];
+            row = t.getEmptyRowData();
+            row[isid] = ValuePool.getLong(s.getId());
+            row[ict] = new TimestampData(s.getConnectTime() / 1000);
+            row[iuname] = s.getUsername();
             row[iis_admin] = s.isAdmin() ? Boolean.TRUE
-                                         : Boolean.FALSE;
-            row[iautocmt]  = s.sessionContext.isAutoCommit;
+                    : Boolean.FALSE;
+            row[iautocmt] = s.sessionContext.isAutoCommit;
             row[ireadonly] = Boolean.valueOf(s.isReadOnlyDefault);
 
             Number lastId = s.getLastIdentity();
@@ -1125,8 +1125,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 row[ilast_id] = ValuePool.getLong(lastId.longValue());
             }
 
-            row[it_tx]   = s.isInMidTransaction() ? Boolean.TRUE
-                                                  : Boolean.FALSE;
+            row[it_tx] = s.isInMidTransaction() ? Boolean.TRUE
+                    : Boolean.FALSE;
             row[it_size] = ValuePool.getLong(s.getTransactionSize());
 
             HsqlName name = s.getCurrentSchemaHsqlName();
@@ -1136,11 +1136,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             row[it_waiting] = "";
-            row[it_waited]  = "";
+            row[it_waited] = "";
 
             if (s.waitingSessions.size() > 0) {
-                StringBuilder sb    = new StringBuilder();
-                Session[]     array = new Session[s.waitingSessions.size()];
+                StringBuilder sb = new StringBuilder();
+                Session[] array = new Session[s.waitingSessions.size()];
 
                 s.waitingSessions.toArray(array);
 
@@ -1156,8 +1156,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             if (s.waitedSessions.size() > 0) {
-                StringBuilder sb    = new StringBuilder();
-                Session[]     array = new Session[s.waitedSessions.size()];
+                StringBuilder sb = new StringBuilder();
+                Session[] array = new Session[s.waitedSessions.size()];
 
                 s.waitedSessions.toArray(array);
 
@@ -1174,8 +1174,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             Statement st = s.sessionContext.currentStatement;
 
-            row[it_statement]   = st == null ? ""
-                                             : st.getSQL();
+            row[it_statement] = st == null ? ""
+                    : st.getSQL();
             row[it_latch_count] = Long.valueOf(s.latch.getCount());
 
             t.insertSys(session, store, row);
@@ -1201,30 +1201,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             // ------------------------------------------------------------
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_SYNONYMS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_SYNONYMS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2,
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2,
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int isynonym_cat   = 0;
+        final int isynonym_cat = 0;
         final int isynonym_schem = 1;
-        final int isynonym_name  = 2;
+        final int isynonym_name = 2;
         final int object_catalog = 3;
-        final int object_schema  = 4;
-        final int object_name    = 5;
-        final int object_type    = 6;
+        final int object_schema = 4;
+        final int object_name = 5;
+        final int object_type = 6;
 
         //
         // intermediate holders
-        Iterator        objects;
+        Iterator objects;
         ReferenceObject synonym;
-        Object[]        row;
+        Object[] row;
 
         if (!session.isAdmin()) {
             return t;
@@ -1232,42 +1232,42 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Initialization
         objects = database.schemaManager.databaseObjectIterator(
-            SchemaObject.REFERENCE);
+                SchemaObject.REFERENCE);
 
         // Do it.
         while (objects.hasNext()) {
-            synonym             = (ReferenceObject) objects.next();
-            row                 = t.getEmptyRowData();
-            row[isynonym_cat]   = database.getCatalogName().name;
+            synonym = (ReferenceObject) objects.next();
+            row = t.getEmptyRowData();
+            row[isynonym_cat] = database.getCatalogName().name;
             row[isynonym_schem] = synonym.getSchemaName().name;
-            row[isynonym_name]  = synonym.getName().name;
+            row[isynonym_name] = synonym.getName().name;
             row[object_catalog] = database.getCatalogName().name;
-            row[object_schema]  = synonym.getTarget().schema.name;
-            row[object_name]    = synonym.getTarget().name;
+            row[object_schema] = synonym.getTarget().schema.name;
+            row[object_name] = synonym.getTarget().name;
 
             switch (synonym.getTarget().type) {
 
-                case SchemaObject.TABLE :
+                case SchemaObject.TABLE:
                     row[object_type] = "TABLE";
                     break;
 
-                case SchemaObject.VIEW :
+                case SchemaObject.VIEW:
                     row[object_type] = "VIEW";
                     break;
 
-                case SchemaObject.SEQUENCE :
+                case SchemaObject.SEQUENCE:
                     row[object_type] = "SEQUENCE";
                     break;
 
-                case SchemaObject.ROUTINE :
+                case SchemaObject.ROUTINE:
                     row[object_type] = "ROUTINE";
                     break;
 
-                case SchemaObject.FUNCTION :
+                case SchemaObject.FUNCTION:
                     row[object_type] = "FUNCTION";
                     break;
 
-                case SchemaObject.PROCEDURE :
+                case SchemaObject.PROCEDURE:
                     row[object_type] = "PROCEDURE";
                     break;
             }
@@ -1282,7 +1282,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * Retrieves a <code>Table</code> object describing the TEXT TABLE objects
      * defined within this database. The table contains one row for each row
      * in the SYSTEM_TABLES table with a HSQLDB_TYPE of  TEXT . <p>
-     *
+     * <p>
      * Each row is a description of the attributes that defines its TEXT TABLE,
      * with the following columns:
      *
@@ -1305,7 +1305,6 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *
      * @return a <code>Table</code> object describing the text attributes
      * of the accessible text tables defined within this database
-     *
      */
     Table SYSTEM_TEXTTABLES(Session session, PersistentStore store) {
 
@@ -1330,35 +1329,35 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             // ------------------------------------------------------------
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_TEXTTABLES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_TEXTTABLES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2,
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2,
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int itable_cat   = 0;
+        final int itable_cat = 0;
         final int itable_schem = 1;
-        final int itable_name  = 2;
-        final int idsd         = 3;
-        final int ifile_path   = 4;
-        final int ifile_enc    = 5;
-        final int ifs          = 6;
-        final int ivfs         = 7;
-        final int ilvfs        = 8;
-        final int iif          = 9;
-        final int iiq          = 10;
-        final int iiaq         = 11;
-        final int iid          = 12;
+        final int itable_name = 2;
+        final int idsd = 3;
+        final int ifile_path = 4;
+        final int ifile_enc = 5;
+        final int ifs = 6;
+        final int ivfs = 7;
+        final int ilvfs = 8;
+        final int iif = 9;
+        final int iiq = 10;
+        final int iiaq = 11;
+        final int iid = 12;
 
         //
         // intermediate holders
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
 
         if (!session.isAdmin()) {
@@ -1367,7 +1366,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -1379,34 +1378,34 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             PersistentStore currentStore = table.getRowStore(session);
 
-            row               = t.getEmptyRowData();
-            row[itable_cat]   = database.getCatalogName().name;
+            row = t.getEmptyRowData();
+            row[itable_cat] = database.getCatalogName().name;
             row[itable_schem] = table.getSchemaName().name;
-            row[itable_name]  = table.getName().name;
-            row[idsd]         = ((TextTable) table).getDataSource();
+            row[itable_name] = table.getName().name;
+            row[idsd] = ((TextTable) table).getDataSource();
 
             TextCache cache = (TextCache) currentStore.getCache();
 
             if (cache != null) {
                 TextFileSettings textFileSettings =
-                    cache.getTextFileSettings();
+                        cache.getTextFileSettings();
 
                 row[ifile_path] =
-                    FileUtil.getFileUtil().canonicalOrAbsolutePath(
-                        cache.getFileName());
+                        FileUtil.getFileUtil().canonicalOrAbsolutePath(
+                                cache.getFileName());
                 row[ifile_enc] = textFileSettings.stringEncoding;
-                row[ifs]       = textFileSettings.fs;
-                row[ivfs]      = textFileSettings.vs;
-                row[ilvfs]     = textFileSettings.lvs;
-                row[iif]       = textFileSettings.ignoreFirst ? Boolean.TRUE
-                                                              : Boolean.FALSE;
-                row[iiq]       = textFileSettings.isQuoted ? Boolean.TRUE
-                                                           : Boolean.FALSE;
-                row[iiaq]      = textFileSettings.isAllQuoted ? Boolean.TRUE
-                                                              : Boolean.FALSE;
+                row[ifs] = textFileSettings.fs;
+                row[ivfs] = textFileSettings.vs;
+                row[ilvfs] = textFileSettings.lvs;
+                row[iif] = textFileSettings.ignoreFirst ? Boolean.TRUE
+                        : Boolean.FALSE;
+                row[iiq] = textFileSettings.isQuoted ? Boolean.TRUE
+                        : Boolean.FALSE;
+                row[iiaq] = textFileSettings.isAllQuoted ? Boolean.TRUE
+                        : Boolean.FALSE;
                 row[iid] = ((TextTable) table).isDescDataSource()
-                           ? Boolean.TRUE
-                           : Boolean.FALSE;
+                        ? Boolean.TRUE
+                        : Boolean.FALSE;
             }
 
             t.insertSys(session, store, row);
@@ -1434,29 +1433,29 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             //
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_TABLESTATS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_TABLESTATS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2,
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2,
             }, false);
 
             return t;
         }
 
         // intermediate holders
-        Iterator  tables;
-        Table     table;
-        Object[]  row;
+        Iterator tables;
+        Table table;
+        Object[] row;
         final int table_catalog = 0;
-        final int table_schema  = 1;
-        final int table_name    = 2;
-        final int table_type    = 3;
-        final int cardinality   = 4;
-        final int space_id      = 5;
-        final int used_space    = 6;
-        final int alloc_space   = 7;
-        final int used_memory   = 8;
+        final int table_schema = 1;
+        final int table_name = 2;
+        final int table_type = 3;
+        final int cardinality = 4;
+        final int space_id = 5;
+        final int used_space = 6;
+        final int alloc_space = 7;
+        final int used_memory = 8;
 
         if (!session.isAdmin()) {
             return t;
@@ -1464,17 +1463,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         DataSpaceManager spaceManager = null;
         DirectoryBlockCachedObject[] directoryList =
-            new DirectoryBlockCachedObject[0];
-        int     cacheScale    = 0;
-        int     fileBlockSize = 0;
-        boolean hasCache      = database.logger.hasCache();
+                new DirectoryBlockCachedObject[0];
+        int cacheScale = 0;
+        int fileBlockSize = 0;
+        boolean hasCache = database.logger.hasCache();
 
         if (hasCache) {
             DataFileCache cache = database.logger.getCache();
 
-            spaceManager  = cache.spaceManager;
+            spaceManager = cache.spaceManager;
             directoryList = cache.spaceManager.getDirectoryList();
-            cacheScale    = cache.getDataFileScale();
+            cacheScale = cache.getDataFileScale();
             fileBlockSize = spaceManager.getFileBlockSize();
         }
 
@@ -1483,21 +1482,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Do it.
         while (tables.hasNext()) {
-            table              = (Table) tables.next();
-            row                = t.getEmptyRowData();
+            table = (Table) tables.next();
+            row = t.getEmptyRowData();
             row[table_catalog] = database.getCatalogName().name;
-            row[table_schema]  = table.getSchemaName().name;
-            row[table_name]    = table.getName().name;
-            row[table_type]    = table.getTableTypeString();
+            row[table_schema] = table.getSchemaName().name;
+            row[table_name] = table.getName().name;
+            row[table_type] = table.getTableTypeString();
 
             switch (table.getTableType()) {
 
-                case TableBase.MEMORY_TABLE :
-                case TableBase.CACHED_TABLE :
-                case TableBase.TEXT_TABLE :
+                case TableBase.MEMORY_TABLE:
+                case TableBase.CACHED_TABLE:
+                case TableBase.TEXT_TABLE:
                     break;
 
-                default :
+                default:
                     continue;
             }
 
@@ -1508,20 +1507,20 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             if (table.isCached()) {
                 int spaceId = table.getSpaceID();
 
-                row[space_id]    = Long.valueOf(spaceId);
+                row[space_id] = Long.valueOf(spaceId);
                 row[alloc_space] = null;
-                row[used_space]  = null;
+                row[used_space] = null;
                 row[used_memory] = null;
 
                 if (hasCache && spaceManager.isMultiSpace()
                         && spaceId != DataSpaceManager.tableIdDefault) {
                     long allocated = 0;
-                    long used      = 0;
+                    long used = 0;
 
                     for (int i = 0; i < directoryList.length; i++) {
                         int[] tableIdList = directoryList[i].getTableIdArray();
                         char[] freeSpaceList =
-                            directoryList[i].getFreeSpaceArray();
+                                directoryList[i].getFreeSpaceArray();
 
                         for (int j = 0; j < tableIdList.length; j++) {
                             if (tableIdList[j] == spaceId) {
@@ -1534,13 +1533,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                     if (allocated > 0) {
                         TableSpaceManager tableSpace =
-                            tableStore.getSpaceManager();
+                                tableStore.getSpaceManager();
 
                         used -= tableSpace.getLostBlocksSize();
                     }
 
                     row[alloc_space] = Long.valueOf(allocated);
-                    row[used_space]  = Long.valueOf(used);
+                    row[used_space] = Long.valueOf(used);
                 }
             }
 
@@ -1548,65 +1547,65 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         }
 
         long allocated = 0;
-        long used      = 0;
-        long empty     = 0;
-        long system    = 0;
-        long setaside  = 0;
+        long used = 0;
+        long empty = 0;
+        long system = 0;
+        long setaside = 0;
 
         for (int i = 0; i < directoryList.length; i++) {
-            int[]  tableIdList   = directoryList[i].getTableIdArray();
+            int[] tableIdList = directoryList[i].getTableIdArray();
             char[] freeSpaceList = directoryList[i].getFreeSpaceArray();
-            int[]  bitMapList    = directoryList[i].getBitmapAddressArray();
+            int[] bitMapList = directoryList[i].getBitmapAddressArray();
 
             for (int j = 0; j < tableIdList.length; j++) {
                 if (tableIdList[j] == DataSpaceManager.tableIdDefault) {
                     allocated += fileBlockSize;
-                    used      += fileBlockSize - freeSpaceList[j] * cacheScale;
+                    used += fileBlockSize - freeSpaceList[j] * cacheScale;
                 } else if (tableIdList[j] == DataSpaceManager.tableIdEmpty
-                           && bitMapList[j] != 0) {
+                        && bitMapList[j] != 0) {
                     empty += fileBlockSize;
                 } else if (tableIdList[j]
-                           == DataSpaceManager.tableIdDirectory) {
+                        == DataSpaceManager.tableIdDirectory) {
                     system += fileBlockSize;
                 } else if (tableIdList[j]
-                           == DataSpaceManager.tableIdSetAside) {
+                        == DataSpaceManager.tableIdSetAside) {
                     setaside += fileBlockSize;
                 }
             }
         }
 
         if (hasCache) {
-            row              = t.getEmptyRowData();
-            row[table_name]  = "UNUSED_SPACE";
+            row = t.getEmptyRowData();
+            row[table_name] = "UNUSED_SPACE";
             row[alloc_space] = Long.valueOf(empty);
-            row[used_space]  = Long.valueOf(0);
-            row[space_id]    = Long.valueOf(DataSpaceManager.tableIdEmpty);
+            row[used_space] = Long.valueOf(0);
+            row[space_id] = Long.valueOf(DataSpaceManager.tableIdEmpty);
 
             t.insertSys(session, store, row);
 
-            row              = t.getEmptyRowData();
-            row[table_name]  = "COMMON_SPACE";
+            row = t.getEmptyRowData();
+            row[table_name] = "COMMON_SPACE";
             row[alloc_space] = Long.valueOf(allocated);
-            row[used_space]  = Long.valueOf(used);
-            row[space_id]    = Long.valueOf(DataSpaceManager.tableIdDefault);
+            row[used_space] = Long.valueOf(used);
+            row[space_id] = Long.valueOf(DataSpaceManager.tableIdDefault);
 
             t.insertSys(session, store, row);
 
-            row              = t.getEmptyRowData();
-            row[table_name]  = "SYSTEM_SPACE";
+            row = t.getEmptyRowData();
+            row[table_name] = "SYSTEM_SPACE";
             row[alloc_space] = Long.valueOf(system);
-            row[used_space]  = Long.valueOf(system);
-            row[space_id]    = Long.valueOf(DataSpaceManager.tableIdDirectory);
+            row[used_space] = Long.valueOf(system);
+            row[space_id] = Long.valueOf(DataSpaceManager.tableIdDirectory);
 
             t.insertSys(session, store, row);
 
             if (setaside != 0) {
-                row              = t.getEmptyRowData();
-                row[table_name]  = "SET_ASIDE_SPACE";
+                row = t.getEmptyRowData();
+                row[table_name] = "SET_ASIDE_SPACE";
                 row[alloc_space] = Long.valueOf(setaside);
-                row[used_space]  = Long.valueOf(setaside);
+                row[used_space] = Long.valueOf(setaside);
                 row[space_id] =
-                    Long.valueOf(DataSpaceManager.tableIdDirectory);
+                        Long.valueOf(DataSpaceManager.tableIdDirectory);
 
                 t.insertSys(session, store, row);
             }
@@ -1619,7 +1618,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * Retrieves a <code>Table</code> object describing the visible
      * <code>Index</code> objects for each accessible table defined
      * within this database.<p>
-     *
+     * <p>
      * Each row is an index column description with the following
      * columns: <p>
      *
@@ -1635,8 +1634,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * </pre> <p>
      *
      * @return a <code>Table</code> object describing the visible
-     *        <code>Index</code> objects for each accessible
-     *        table defined within this database.
+     * <code>Index</code> objects for each accessible
+     * table defined within this database.
      */
     final Table SYSTEM_INDEXSTATS(Session session, PersistentStore store) {
 
@@ -1663,11 +1662,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // added for unique: INDEX_QUALIFIER, TABLE_NAME
             // false PK, as INDEX_QUALIFIER may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_INDEXSTATS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_INDEXSTATS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 4
             }, false);
 
             return t;
@@ -1682,21 +1681,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Intermediate holders
         Iterator tables;
-        Table    table;
-        int      indexCount;
+        Table table;
+        int indexCount;
         Object[] row;
 
         // column number mappings
-        final int itable_cat   = 0;
+        final int itable_cat = 0;
         final int itable_schem = 1;
-        final int itable_name  = 2;
-        final int itable_type  = 3;
-        final int iindex_name  = 4;
+        final int itable_name = 2;
+        final int itable_type = 3;
+        final int iindex_name = 4;
         final int iordinal_pos = 5;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -1707,22 +1706,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             tableCatalog = table.getCatalogName().name;
-            tableSchema  = table.getSchemaName().name;
-            tableName    = table.getName().name;
-            tableType    = table.getTableTypeString();
-            indexCount   = table.getIndexCount();
+            tableSchema = table.getSchemaName().name;
+            tableName = table.getName().name;
+            tableType = table.getTableTypeString();
+            indexCount = table.getIndexCount();
 
             // process all of the visible indices for this table
             for (int i = 0; i < indexCount; i++) {
                 Index index = table.getIndex(i);
 
-                indexName         = index.getName().name;
-                row               = t.getEmptyRowData();
-                row[itable_cat]   = tableCatalog;
+                indexName = index.getName().name;
+                row = t.getEmptyRowData();
+                row[itable_cat] = tableCatalog;
                 row[itable_schem] = tableSchema;
-                row[itable_name]  = tableName;
-                row[itable_type]  = tableType;
-                row[iindex_name]  = indexName;
+                row[itable_name] = tableName;
+                row[itable_type] = tableType;
+                row[iindex_name] = indexName;
                 row[iordinal_pos] = Long.valueOf(index.getPosition() + 1);
 
                 t.insertSys(session, store, row);
@@ -1770,11 +1769,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // true PK, as each primary, unique, or foreign key constraint
             // is back by at most one index.
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SYSTEM_KEY_INDEX_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SYSTEM_KEY_INDEX_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, true);
 
             return t;
@@ -1782,15 +1781,15 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int index_catalog      = 3;
-        final int index_schema       = 4;
-        final int index_name         = 5;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int index_catalog = 3;
+        final int index_schema = 4;
+        final int index_name = 5;
 
         // Initialization
         Iterator tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
             Table table = (Table) tables.next();
@@ -1803,30 +1802,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            String       catalogName = table.getCatalogName().name;
-            String       schemaName  = table.getName().schema.name;
+            String catalogName = table.getCatalogName().name;
+            String schemaName = table.getName().schema.name;
             Constraint[] constraints = table.getConstraints();
 
             for (int i = 0; i < constraints.length; i++) {
-                Constraint constraint        = constraints[i];
-                boolean    includeConstraint = false;
-                int        contraintType     = constraint.getConstraintType();
-                int[]      cols              = null;
-                Index      backingIndex      = null;
+                Constraint constraint = constraints[i];
+                boolean includeConstraint = false;
+                int contraintType = constraint.getConstraintType();
+                int[] cols = null;
+                Index backingIndex = null;
 
                 switch (contraintType) {
 
-                    case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-                    case SchemaObject.ConstraintTypes.UNIQUE : {
-                        cols              = constraint.getMainColumns();
-                        backingIndex      = constraint.getMainIndex();
+                    case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+                    case SchemaObject.ConstraintTypes.UNIQUE: {
+                        cols = constraint.getMainColumns();
+                        backingIndex = constraint.getMainIndex();
                         includeConstraint = true;
 
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.FOREIGN_KEY : {
-                        cols              = constraint.getRefColumns();
-                        backingIndex      = constraint.getRefIndex();
+                    case SchemaObject.ConstraintTypes.FOREIGN_KEY: {
+                        cols = constraint.getRefColumns();
+                        backingIndex = constraint.getRefIndex();
                         includeConstraint = true;
 
                         break;
@@ -1844,11 +1843,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 Object[] row = t.getEmptyRowData();
 
                 row[constraint_catalog] = catalogName;
-                row[constraint_schema]  = schemaName;
-                row[constraint_name]    = constraint.getName().name;
-                row[index_catalog]      = catalogName;
-                row[index_schema]       = backingIndex.getName().schema.name;
-                row[index_name]         = backingIndex.getName().name;
+                row[constraint_schema] = schemaName;
+                row[constraint_name] = constraint.getName().name;
+                row[index_catalog] = catalogName;
+                row[index_schema] = backingIndex.getName().schema.name;
+                row[index_name] = backingIndex.getName().name;
 
                 t.insertSys(session, store, row);
             }
@@ -1862,33 +1861,33 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * ADMINISTRABLE_ROLE_AUTHORIZATIONS<p>
-     *
+     * <p>
      * Returns roles that are grantable by an admin user, which means all the
      * roles.
      *
      * @return Table
      */
     Table ADMINISTRABLE_ROLE_AUTHORIZATIONS(Session session,
-            PersistentStore store) {
+                                            PersistentStore store) {
 
         Table t = sysTables[ADMINISTRABLE_ROLE_AUTHORIZATIONS];
 
         if (t == null) {
             t = createBlankTable(
-                sysTableHsqlNames[ADMINISTRABLE_ROLE_AUTHORIZATIONS]);
+                    sysTableHsqlNames[ADMINISTRABLE_ROLE_AUTHORIZATIONS]);
 
             addColumn(t, "GRANTEE", SQL_IDENTIFIER);
             addColumn(t, "ROLE_NAME", SQL_IDENTIFIER);
             addColumn(t, "IS_GRANTABLE", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ADMINISTRABLE_ROLE_AUTHORIZATIONS].name,
-                false, SchemaObject.INDEX);
+                    sysTableHsqlNames[ADMINISTRABLE_ROLE_AUTHORIZATIONS].name,
+                    false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
@@ -1903,9 +1902,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * APPLICABLE_ROLES<p>
-     *
+     * <p>
      * Identifies the applicable roles for the current user.<p>
      *
      * <b>Definition</b><p>
@@ -1939,11 +1938,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "IS_GRANTABLE", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[APPLICABLE_ROLES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[APPLICABLE_ROLES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
@@ -1957,21 +1956,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
     private void insertRoles(Session session, Table t, Grantee role,
                              boolean isGrantable) {
 
-        final int       grantee      = 0;
-        final int       role_name    = 1;
-        final int       is_grantable = 2;
-        PersistentStore store        = t.getRowStore(session);
+        final int grantee = 0;
+        final int role_name = 1;
+        final int is_grantable = 2;
+        PersistentStore store = t.getRowStore(session);
 
         if (isGrantable) {
-            Set      roles = database.getGranteeManager().getRoleNames();
-            Iterator it    = roles.iterator();
+            Set roles = database.getGranteeManager().getRoleNames();
+            Iterator it = roles.iterator();
 
             while (it.hasNext()) {
-                String   roleName = (String) it.next();
-                Object[] row      = t.getEmptyRowData();
+                String roleName = (String) it.next();
+                Object[] row = t.getEmptyRowData();
 
-                row[grantee]      = role.getName().getNameString();
-                row[role_name]    = roleName;
+                row[grantee] = role.getName().getNameString();
+                row[role_name] = roleName;
                 row[is_grantable] = Tokens.T_YES;
 
                 t.insertSys(session, store, row);
@@ -1980,12 +1979,12 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             OrderedHashSet roles = role.getDirectRoles();
 
             for (int i = 0; i < roles.size(); i++) {
-                Grantee  currentRole = (Grantee) roles.get(i);
-                String   roleName    = currentRole.getName().getNameString();
-                Object[] row         = t.getEmptyRowData();
+                Grantee currentRole = (Grantee) roles.get(i);
+                String roleName = currentRole.getName().getNameString();
+                Object[] row = t.getEmptyRowData();
 
-                row[grantee]      = role.getName().getNameString();
-                row[role_name]    = roleName;
+                row[grantee] = role.getName().getNameString();
+                row[role_name] = roleName;
                 row[is_grantable] = Tokens.T_NO;
 
                 t.insertSys(session, store, row);
@@ -1999,9 +1998,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ASSERTIONS view is empty.<p>
-     *
      */
     Table ASSERTIONS(Session session, PersistentStore store) {
 
@@ -2017,19 +2015,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "INITIALLY_DEFERRED", YES_OR_NO);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ASSERTIONS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[ASSERTIONS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
         }
 
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int is_deferrable      = 3;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int is_deferrable = 3;
         final int initially_deferred = 4;
 
         return t;
@@ -2037,19 +2035,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
+     * <p>
+     * SYSTEM_AUTHORIZATIONS<p>
+     * <p>
+     * The AUTHORIZATIONS table has one row for each &lt;role name&gt; and
+     * one row for each &lt;authorization identifier &gt; referenced in the
+     * Information Schema. These are the &lt;role name&gt;s and
+     * &lt;authorization identifier&gt;s that may grant privileges as well as
+     * those that may create a schema, or currently own a schema created
+     * through a &lt;schema definition&gt;. <p>
      *
-     *  SYSTEM_AUTHORIZATIONS<p>
+     * <b>Definition</b><p>
      *
-     *  The AUTHORIZATIONS table has one row for each &lt;role name&gt; and
-     *  one row for each &lt;authorization identifier &gt; referenced in the
-     *  Information Schema. These are the &lt;role name&gt;s and
-     *  &lt;authorization identifier&gt;s that may grant privileges as well as
-     *  those that may create a schema, or currently own a schema created
-     *  through a &lt;schema definition&gt;. <p>
-     *
-     *  <b>Definition</b><p>
-     *
-     *  <pre class="SqlCodeExample">
+     * <pre class="SqlCodeExample">
      *  CREATE TABLE AUTHORIZATIONS (
      *       AUTHORIZATION_NAME INFORMATION_SCHEMA.SQL_IDENTIFIER,
      *       AUTHORIZATION_TYPE INFORMATION_SCHEMA.CHARACTER_DATA
@@ -2058,28 +2056,28 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *           CONSTRAINT AUTHORIZATIONS_AUTHORIZATION_TYPE_CHECK
      *               CHECK ( AUTHORIZATION_TYPE IN ( 'USER', 'ROLE' ) ),
      *           CONSTRAINT AUTHORIZATIONS_PRIMARY_KEY
-     *               PRIMARY KEY (AUTHORIZATION_NAME)
-     *       )
-     *  </pre>
+     *              PRIMARY KEY (AUTHORIZATION_NAME)
+     *      )
+     * </pre>
+     * <p>
+     * b>Description</b><p>
      *
-     *  <b>Description</b><p>
-     *
-     *  <ol>
-     *  <li> The values of AUTHORIZATION_TYPE have the following meanings:<p>
-     *
-     *  <table border cellpadding="3">
-     *       <tr>
-     *           <td nowrap>USER</td>
-     *           <td nowrap>The value of AUTHORIZATION_NAME is a known
-     *                      &lt;user identifier&gt;.</td>
-     *       <tr>
-     *       <tr>
-     *           <td nowrap>NO</td>
-     *           <td nowrap>The value of AUTHORIZATION_NAME is a &lt;role
-     *                      name&gt; defined by a &lt;role definition&gt;.</td>
-     *       <tr>
-     *  </table> <p>
-     *  </ol>
+     * <ol>
+     * <li> The values of AUTHORIZATION_TYPE have the following meanings:<p>
+     * <p>
+     * <table border cellpadding="3">
+     *      <tr>
+     *          <td nowrap>USER</td>
+     *          <td nowrap>The value of AUTHORIZATION_NAME is a known
+     *                     &lt;user identifier&gt;.</td>
+     *      <tr>
+     *      <tr>
+     *          <td nowrap>NO</td>
+     *          <td nowrap>The value of AUTHORIZATION_NAME is a &lt;role
+     *                     name&gt; defined by a &lt;role definition&gt;.</td>
+     *      <tr>
+     * </table> <p>
+     * </ol>
      *
      * @return Table
      */
@@ -2095,17 +2093,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             // true PK
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[AUTHORIZATIONS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[AUTHORIZATIONS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, true);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, true);
 
             return t;
         }
 
         // Intermediate holders
         Iterator grantees;
-        Grantee  grantee;
+        Grantee grantee;
         Object[] row;
 
         // initialization
@@ -2114,10 +2112,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         // Do it.
         while (grantees.hasNext()) {
             grantee = (Grantee) grantees.next();
-            row     = t.getEmptyRowData();
-            row[0]  = grantee.getName().getNameString();
-            row[1]  = grantee.isRole() ? "ROLE"
-                                       : "USER";
+            row = t.getEmptyRowData();
+            row[0] = grantee.getName().getNameString();
+            row[1] = grantee.isRole() ? "ROLE"
+                    : "USER";
 
             t.insertSys(session, store, row);
         }
@@ -2142,28 +2140,28 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DEFAULT_COLLATE_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[CHARACTER_SETS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[CHARACTER_SETS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
         }
 
-        final int character_set_catalog   = 0;
-        final int character_set_schema    = 1;
-        final int character_set_name      = 2;
-        final int character_repertoire    = 3;
-        final int form_of_use             = 4;
+        final int character_set_catalog = 0;
+        final int character_set_schema = 1;
+        final int character_set_name = 2;
+        final int character_repertoire = 3;
+        final int form_of_use = 4;
         final int default_collate_catalog = 5;
-        final int default_collate_schema  = 6;
-        final int default_collate_name    = 7;
+        final int default_collate_schema = 6;
+        final int default_collate_name = 7;
 
         //
         Iterator it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.CHARSET);
+                SchemaObject.CHARSET);
 
         while (it.hasNext()) {
             Charset charset = (Charset) it.next();
@@ -2174,19 +2172,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             Object[] data = t.getEmptyRowData();
 
-            data[character_set_catalog]   = database.getCatalogName().name;
-            data[character_set_schema]    = charset.getSchemaName().name;
-            data[character_set_name]      = charset.getName().name;
-            data[character_repertoire]    = "UCS";
-            data[form_of_use]             = "UTF16";
+            data[character_set_catalog] = database.getCatalogName().name;
+            data[character_set_schema] = charset.getSchemaName().name;
+            data[character_set_name] = charset.getName().name;
+            data[character_repertoire] = "UCS";
+            data[form_of_use] = "UTF16";
             data[default_collate_catalog] = data[character_set_catalog];
 
             if (charset.base == null) {
                 data[default_collate_schema] = data[character_set_schema];
-                data[default_collate_name]   = data[character_set_name];
+                data[default_collate_name] = data[character_set_name];
             } else {
                 data[default_collate_schema] = charset.base.schema.name;
-                data[default_collate_name]   = charset.base.name;
+                data[default_collate_name] = charset.base.name;
             }
 
             t.insertSys(session, store, data);
@@ -2197,7 +2195,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The CHECK_CONSTRAINT_ROUTINE_USAGE view has one row for each
      * SQL-invoked routine identified as the subject routine of either a
      * &lt;routine invocation&gt;, a &lt;method reference&gt;, a
@@ -2254,7 +2252,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         if (t == null) {
             t = createBlankTable(
-                sysTableHsqlNames[CHECK_CONSTRAINT_ROUTINE_USAGE]);
+                    sysTableHsqlNames[CHECK_CONSTRAINT_ROUTINE_USAGE]);
 
             addColumn(t, "CONSTRAINT_CATALOG", SQL_IDENTIFIER);
             addColumn(t, "CONSTRAINT_SCHEMA", SQL_IDENTIFIER);
@@ -2264,11 +2262,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "SPECIFIC_NAME", SQL_IDENTIFIER);      // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[CHECK_CONSTRAINT_ROUTINE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[CHECK_CONSTRAINT_ROUTINE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -2276,21 +2274,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int specific_catalog   = 3;
-        final int specific_schema    = 4;
-        final int specific_name      = 5;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int specific_catalog = 3;
+        final int specific_schema = 4;
+        final int specific_name = 5;
 
         //
         // Intermediate holders
-        Iterator       constraints;
-        Constraint     constraint;
+        Iterator constraints;
+        Constraint constraint;
         OrderedHashSet references;
-        Object[]       row;
+        Object[] row;
 
         constraints = database.schemaManager.databaseObjectIterator(
-            SchemaObject.CONSTRAINT);
+                SchemaObject.CONSTRAINT);
 
         while (constraints.hasNext()) {
             HsqlName constraintName = (HsqlName) constraints.next();
@@ -2301,12 +2299,12 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             switch (constraintName.parent.type) {
 
-                case SchemaObject.TABLE : {
+                case SchemaObject.TABLE: {
                     Table table =
-                        (Table) database.schemaManager.findSchemaObject(
-                            constraintName.parent.name,
-                            constraintName.parent.schema.name,
-                            SchemaObject.TABLE);
+                            (Table) database.schemaManager.findSchemaObject(
+                                    constraintName.parent.name,
+                                    constraintName.parent.schema.name,
+                                    SchemaObject.TABLE);
 
                     if (table == null) {
                         continue;
@@ -2321,23 +2319,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                     break;
                 }
-                case SchemaObject.DOMAIN : {
+                case SchemaObject.DOMAIN: {
                     Type domain =
-                        (Type) database.schemaManager.findSchemaObject(
-                            constraintName.parent.name,
-                            constraintName.parent.schema.name,
-                            SchemaObject.DOMAIN);
+                            (Type) database.schemaManager.findSchemaObject(
+                                    constraintName.parent.name,
+                                    constraintName.parent.schema.name,
+                                    SchemaObject.DOMAIN);
 
                     if (domain == null) {
                         continue;
                     }
 
                     constraint = domain.userTypeModifier.getConstraint(
-                        constraintName.name);
+                            constraintName.name);
 
                     break;
                 }
-                default :
+                default:
                     continue;
             }
 
@@ -2354,13 +2352,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                     = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[constraint_catalog] = database.getCatalogName().name;
-                row[constraint_schema]  = constraint.getSchemaName().name;
-                row[constraint_name]    = constraint.getName().name;
-                row[specific_catalog]   = database.getCatalogName().name;
-                row[specific_schema]    = name.schema.name;
-                row[specific_name]      = name.name;
+                row[constraint_schema] = constraint.getSchemaName().name;
+                row[constraint_name] = constraint.getName().name;
+                row[specific_catalog] = database.getCatalogName().name;
+                row[specific_schema] = name.schema.name;
+                row[specific_name] = name.name;
 
                 t.insertSys(session, store, row);
             }
@@ -2371,7 +2369,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The CHECK_CONSTRAINTS view has one row for each domain
      * constraint, table check constraint, and assertion. <p>
      *
@@ -2418,11 +2416,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "CHECK_CLAUSE", CHARACTER_DATA);       // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[CHECK_CONSTRAINTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[CHECK_CONSTRAINTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                2, 1, 0
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    2, 1, 0
             }, false);
 
             return t;
@@ -2430,35 +2428,35 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int check_clause       = 3;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int check_clause = 3;
 
         //
         // calculated column values
         // Intermediate holders
-        Iterator     tables;
-        Table        table;
+        Iterator tables;
+        Table table;
         Constraint[] tableConstraints;
-        int          constraintCount;
-        Constraint   constraint;
-        Object[]     row;
+        int constraintCount;
+        Constraint constraint;
+        Object[] row;
 
         //
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
             table = (Table) tables.next();
 
             if (table.isView()
                     || !session.getGrantee().isFullyAccessibleByRole(
-                        table.getName())) {
+                    table.getName())) {
                 continue;
             }
 
             tableConstraints = table.getConstraints();
-            constraintCount  = tableConstraints.length;
+            constraintCount = tableConstraints.length;
 
             for (int i = 0; i < constraintCount; i++) {
                 constraint = tableConstraints[i];
@@ -2468,21 +2466,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                     = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[constraint_catalog] = database.getCatalogName().name;
-                row[constraint_schema]  = table.getSchemaName().name;
-                row[constraint_name]    = constraint.getName().name;
+                row[constraint_schema] = table.getSchemaName().name;
+                row[constraint_name] = constraint.getName().name;
 
                 try {
                     row[check_clause] = constraint.getCheckSQL();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
 
                 t.insertSys(session, store, row);
             }
         }
 
         Iterator it =
-            database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
+                database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
 
         while (it.hasNext()) {
             Type domain = (Type) it.next();
@@ -2497,18 +2496,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             tableConstraints = domain.userTypeModifier.getConstraints();
-            constraintCount  = tableConstraints.length;
+            constraintCount = tableConstraints.length;
 
             for (int i = 0; i < constraintCount; i++) {
-                constraint              = tableConstraints[i];
-                row                     = t.getEmptyRowData();
+                constraint = tableConstraints[i];
+                row = t.getEmptyRowData();
                 row[constraint_catalog] = database.getCatalogName().name;
-                row[constraint_schema]  = domain.getSchemaName().name;
-                row[constraint_name]    = constraint.getName().name;
+                row[constraint_schema] = domain.getSchemaName().name;
+                row[constraint_name] = constraint.getName().name;
 
                 try {
                     row[check_clause] = constraint.getCheckSQL();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
 
                 t.insertSys(session, store, row);
             }
@@ -2519,9 +2519,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * COLLATIONS<p>
-     *
+     * <p>
      * The COLLATIONS view has one row for each character collation
      * descriptor. <p>
      *
@@ -2548,7 +2548,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *          described.<p>
      *
      *      <li>The values of PAD_ATTRIBUTE have the following meanings:<p>
-     *
+     * <p>
      *      <table border cellpadding="3">
      *          <tr>
      *              <td nowrap>NO PAD</td>
@@ -2579,10 +2579,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             // false PK, as rows may have NULL COLLATION_CATALOG
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[COLLATIONS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[COLLATIONS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
@@ -2590,32 +2590,32 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Column number mappings
         final int collation_catalog = 0;
-        final int collation_schema  = 1;
-        final int collation_name    = 2;
-        final int pad_attribute     = 3;
+        final int collation_schema = 1;
+        final int collation_name = 2;
+        final int pad_attribute = 3;
 
         //
         // Intermediate holders
-        Iterator  collations;
+        Iterator collations;
         Collation collation;
-        String    collationName;
-        String    collationSchema;
-        String    padAttribute = "PAD SPACE";
-        Object[]  row;
+        String collationName;
+        String collationSchema;
+        String padAttribute = "PAD SPACE";
+        Object[] row;
 
         collations = database.schemaManager.databaseObjectIterator(
-            SchemaObject.COLLATION);
+                SchemaObject.COLLATION);
 
         while (collations.hasNext()) {
-            row                    = t.getEmptyRowData();
-            collation              = (Collation) collations.next();
-            collationSchema        = collation.getSchemaName().name;
-            collationName          = collation.getName().name;
+            row = t.getEmptyRowData();
+            collation = (Collation) collations.next();
+            collationSchema = collation.getSchemaName().name;
+            collationName = collation.getName().name;
             row[collation_catalog] = database.getCatalogName().name;
-            row[collation_schema]  = collationSchema;
-            row[collation_name]    = collationName;
-            row[pad_attribute]     = collation.isPadSpace() ? "PAD SPACE"
-                                                            : "NO PAD";
+            row[collation_schema] = collationSchema;
+            row[collation_name] = collationName;
+            row[pad_attribute] = collation.isPadSpace() ? "PAD SPACE"
+                    : "NO PAD";
 
             t.insertSys(session, store, row);
         }
@@ -2625,13 +2625,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Do it.
         while (collations.hasNext()) {
-            row                    = t.getEmptyRowData();
-            collationSchema        = "INFORMATION_SCHEMA";
-            collationName          = (String) collations.next();
+            row = t.getEmptyRowData();
+            collationSchema = "INFORMATION_SCHEMA";
+            collationName = (String) collations.next();
             row[collation_catalog] = database.getCatalogName().name;
-            row[collation_schema]  = collationSchema;
-            row[collation_name]    = collationName;
-            row[pad_attribute]     = padAttribute;
+            row[collation_schema] = collationSchema;
+            row[collation_name] = collationName;
+            row[pad_attribute] = padAttribute;
 
             t.insertSys(session, store, row);
         }
@@ -2645,12 +2645,12 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * a GENERATED column.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TABLE_CATALOG       VARCHAR
-     *      TABLE_SCHEMA        VARCHAR
-     *      TABLE_NAME          VARCHAR
-     *      COLUMN_NAME         VARCHAR
-     *      DEPENDENT_COLUMN    VARCHAR
+     * <p>
+     * TABLE_CATALOG       VARCHAR
+     * TABLE_SCHEMA        VARCHAR
+     * TABLE_NAME          VARCHAR
+     * COLUMN_NAME         VARCHAR
+     * DEPENDENT_COLUMN    VARCHAR
      *
      * </pre>
      *
@@ -2687,36 +2687,36 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DEPENDENT_COLUMN", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[COLUMN_COLUMN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[COLUMN_COLUMN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4
             }, false);
 
             return t;
         }
 
-        final int table_catalog    = 0;
-        final int table_schema     = 1;
-        final int table_name       = 2;
-        final int column_name      = 3;
+        final int table_catalog = 0;
+        final int table_schema = 1;
+        final int table_name = 2;
+        final int column_name = 3;
         final int dependent_column = 4;
 
         //
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
 
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
             table = (Table) tables.next();
 
             if (table.isView()
                     || !session.getGrantee().isFullyAccessibleByRole(
-                        table.getName())) {
+                    table.getName())) {
                 continue;
             }
 
@@ -2737,11 +2737,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 if (set != null) {
                     for (int j = 0; j < set.size(); j++) {
-                        row                   = t.getEmptyRowData();
-                        row[table_catalog]    = database.getCatalogName().name;
-                        row[table_schema]     = name.schema.name;
-                        row[table_name]       = name.name;
-                        row[column_name]      = ((HsqlName) set.get(j)).name;
+                        row = t.getEmptyRowData();
+                        row[table_catalog] = database.getCatalogName().name;
+                        row[table_schema] = name.schema.name;
+                        row[table_name] = name.name;
+                        row[column_name] = ((HsqlName) set.get(j)).name;
                         row[dependent_column] = column.getName().name;
 
                         t.insertSys(session, store, row);
@@ -2759,14 +2759,14 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * a DOMAIN data type.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      DOMAIN_CATALOG      VARCHAR
-     *      DOMAIN_SCHEMA       VARCHAR
-     *      DOMAIN_NAME         VARCHAR
-     *      TABLE_CATALOG       VARCHAR
-     *      TABLE_SCHEMA        VARCHAR
-     *      TABLE_NAME          VARCHAR
-     *      COLUMN_NAME         VARCHAR
+     * <p>
+     * DOMAIN_CATALOG      VARCHAR
+     * DOMAIN_SCHEMA       VARCHAR
+     * DOMAIN_NAME         VARCHAR
+     * TABLE_CATALOG       VARCHAR
+     * TABLE_SCHEMA        VARCHAR
+     * TABLE_NAME          VARCHAR
+     * COLUMN_NAME         VARCHAR
      *
      * </pre>
      *
@@ -2805,11 +2805,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COLUMN_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[COLUMN_DOMAIN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[COLUMN_DOMAIN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
@@ -2817,19 +2817,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int domain_catalog = 0;
-        final int domain_schema  = 1;
-        final int domain_name    = 2;
-        final int table_catalog  = 3;
-        final int table_schema   = 4;
-        final int table_name     = 5;
-        final int column_name    = 6;
+        final int domain_schema = 1;
+        final int domain_name = 2;
+        final int table_catalog = 3;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int column_name = 6;
 
         // intermediate holders
-        int      columnCount;
+        int columnCount;
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
-        Type     type;
+        Type type;
         HsqlName tableName;
 
         // Initialization
@@ -2838,9 +2838,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         Grantee grantee = session.getGrantee();
 
         while (tables.hasNext()) {
-            table       = (Table) tables.next();
+            table = (Table) tables.next();
             columnCount = table.getColumnCount();
-            tableName   = table.getName();
+            tableName = table.getName();
 
             for (int i = 0; i < columnCount; i++) {
                 ColumnSchema column = table.getColumn(i);
@@ -2855,14 +2855,14 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                 = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[domain_catalog] = database.getCatalogName().name;
-                row[domain_schema]  = type.getSchemaName().name;
-                row[domain_name]    = type.getName().name;
-                row[table_catalog]  = database.getCatalogName().name;
-                row[table_schema]   = tableName.schema.name;
-                row[table_name]     = tableName.name;
-                row[column_name]    = column.getNameString();
+                row[domain_schema] = type.getSchemaName().name;
+                row[domain_name] = type.getName().name;
+                row[table_catalog] = database.getCatalogName().name;
+                row[table_schema] = tableName.schema.name;
+                row[table_name] = tableName.name;
+                row[column_name] = column.getNameString();
 
                 t.insertSys(session, store, row);
             }
@@ -2877,14 +2877,14 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * a DOMAIN data type.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      UDT_CATALOG      VARCHAR
-     *      UDT_SCHEMA       VARCHAR
-     *      UDT_NAME         VARCHAR
-     *      TABLE_CATALOG    VARCHAR
-     *      TABLE_SCHEMA     VARCHAR
-     *      TABLE_NAME       VARCHAR
-     *      COLUMN_NAME      VARCHAR
+     * <p>
+     * UDT_CATALOG      VARCHAR
+     * UDT_SCHEMA       VARCHAR
+     * UDT_NAME         VARCHAR
+     * TABLE_CATALOG    VARCHAR
+     * TABLE_SCHEMA     VARCHAR
+     * TABLE_NAME       VARCHAR
+     * COLUMN_NAME      VARCHAR
      *
      * </pre>
      *
@@ -2923,31 +2923,31 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COLUMN_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[COLUMN_UDT_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[COLUMN_UDT_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int udt_catalog   = 0;
-        final int udt_schema    = 1;
-        final int udt_name      = 2;
+        final int udt_catalog = 0;
+        final int udt_schema = 1;
+        final int udt_name = 2;
         final int table_catalog = 3;
-        final int table_schema  = 4;
-        final int table_name    = 5;
-        final int column_name   = 6;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int column_name = 6;
 
         // intermediate holders
-        int      columnCount;
+        int columnCount;
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
-        Type     type;
+        Type type;
         HsqlName tableName;
 
         // Initialization
@@ -2956,9 +2956,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         Grantee grantee = session.getGrantee();
 
         while (tables.hasNext()) {
-            table       = (Table) tables.next();
+            table = (Table) tables.next();
             columnCount = table.getColumnCount();
-            tableName   = table.getName();
+            tableName = table.getName();
 
             for (int i = 0; i < columnCount; i++) {
                 ColumnSchema column = table.getColumn(i);
@@ -2973,14 +2973,14 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                = t.getEmptyRowData();
-                row[udt_catalog]   = database.getCatalogName().name;
-                row[udt_schema]    = type.getSchemaName().name;
-                row[udt_name]      = type.getName().name;
+                row = t.getEmptyRowData();
+                row[udt_catalog] = database.getCatalogName().name;
+                row[udt_schema] = type.getSchemaName().name;
+                row[udt_name] = type.getName().name;
                 row[table_catalog] = database.getCatalogName().name;
-                row[table_schema]  = tableName.schema.name;
-                row[table_name]    = tableName.name;
-                row[column_name]   = column.getNameString();
+                row[table_schema] = tableName.schema.name;
+                row[table_name] = tableName.name;
+                row[column_name] = column.getNameString();
 
                 t.insertSys(session, store, row);
             }
@@ -3000,7 +3000,6 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *      on the table or the column.
      *
      * </ol>
-     *
      */
     Table COLUMNS(Session session, PersistentStore store) {
 
@@ -3055,7 +3054,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "IS_SYSTEM_TIME_PERIOD_START", YES_OR_NO);
             addColumn(t, "IS_SYSTEM_TIME_PERIOD_END", YES_OR_NO);
             addColumn(t, "SYSTEM_TIME_PERIOD_TIMESTAMP_GENERATION",
-                      CHARACTER_DATA);
+                    CHARACTER_DATA);
             addColumn(t, "IS_UPDATABLE", YES_OR_NO);
             addColumn(t, "DECLARED_DATA_TYPE", CHARACTER_DATA);
             addColumn(t, "DECLARED_NUMERIC_PRECISION", CARDINAL_NUMBER);
@@ -3065,75 +3064,75 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // added for unique: TABLE_CAT
             // false PK, as TABLE_SCHEM and/or TABLE_CAT may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[COLUMNS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[COLUMNS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                3, 2, 1, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    3, 2, 1, 4
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int table_cat                  = 0;
-        final int table_schem                = 1;
-        final int table_name                 = 2;
-        final int column_name                = 3;
-        final int ordinal_position           = 4;
-        final int column_default             = 5;
-        final int is_nullable                = 6;
-        final int data_type                  = 7;
-        final int character_maximum_length   = 8;
-        final int character_octet_length     = 9;
-        final int numeric_precision          = 10;
-        final int numeric_precision_radix    = 11;
-        final int numeric_scale              = 12;
-        final int datetime_precision         = 13;
-        final int interval_type              = 14;
-        final int interval_precision         = 15;
-        final int character_set_catalog      = 16;
-        final int character_set_schema       = 17;
-        final int character_set_name         = 18;
-        final int collation_catalog          = 19;
-        final int collation_schema           = 20;
-        final int collation_name             = 21;
-        final int domain_catalog             = 22;
-        final int domain_schema              = 23;
-        final int domain_name                = 24;
-        final int udt_catalog                = 25;
-        final int udt_schema                 = 26;
-        final int udt_name                   = 27;
-        final int scope_catalog              = 28;
-        final int scope_schema               = 29;
-        final int scope_name                 = 30;
-        final int maximum_cardinality        = 31;
-        final int dtd_identifier             = 32;
-        final int is_self_referencing        = 33;
-        final int is_identity                = 34;
-        final int identity_generation        = 35;
-        final int identity_start             = 36;
-        final int identity_increment         = 37;
-        final int identity_maximum           = 38;
-        final int identity_minimum           = 39;
-        final int identity_cycle             = 40;
-        final int is_generated               = 41;
-        final int generation_expression      = 42;
-        final int is_system_period_start     = 43;
-        final int is_system_period_end       = 44;
-        final int system_time_generation     = 45;
-        final int is_updatable               = 46;
-        final int declared_data_type         = 47;
+        final int table_cat = 0;
+        final int table_schem = 1;
+        final int table_name = 2;
+        final int column_name = 3;
+        final int ordinal_position = 4;
+        final int column_default = 5;
+        final int is_nullable = 6;
+        final int data_type = 7;
+        final int character_maximum_length = 8;
+        final int character_octet_length = 9;
+        final int numeric_precision = 10;
+        final int numeric_precision_radix = 11;
+        final int numeric_scale = 12;
+        final int datetime_precision = 13;
+        final int interval_type = 14;
+        final int interval_precision = 15;
+        final int character_set_catalog = 16;
+        final int character_set_schema = 17;
+        final int character_set_name = 18;
+        final int collation_catalog = 19;
+        final int collation_schema = 20;
+        final int collation_name = 21;
+        final int domain_catalog = 22;
+        final int domain_schema = 23;
+        final int domain_name = 24;
+        final int udt_catalog = 25;
+        final int udt_schema = 26;
+        final int udt_name = 27;
+        final int scope_catalog = 28;
+        final int scope_schema = 29;
+        final int scope_name = 30;
+        final int maximum_cardinality = 31;
+        final int dtd_identifier = 32;
+        final int is_self_referencing = 33;
+        final int is_identity = 34;
+        final int identity_generation = 35;
+        final int identity_start = 36;
+        final int identity_increment = 37;
+        final int identity_maximum = 38;
+        final int identity_minimum = 39;
+        final int identity_cycle = 40;
+        final int is_generated = 41;
+        final int generation_expression = 42;
+        final int is_system_period_start = 43;
+        final int is_system_period_end = 44;
+        final int system_time_generation = 45;
+        final int is_updatable = 46;
+        final int declared_data_type = 47;
         final int declared_numeric_precision = 48;
-        final int declared_numeric_scale     = 49;
+        final int declared_numeric_scale = 49;
 
         //
         // intermediate holders
-        int            columnCount;
-        Iterator       tables;
-        Table          table;
-        Object[]       row;
+        int columnCount;
+        Iterator tables;
+        Table table;
+        Object[] row;
         OrderedHashSet columnList;
-        Type           type;
+        Type type;
 
         // Initialization
         tables = allTables();
@@ -3141,7 +3140,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         while (tables.hasNext()) {
             table = (Table) tables.next();
             columnList =
-                session.getGrantee().getColumnsForAllPrivileges(table);
+                    session.getGrantee().getColumnsForAllPrivileges(table);
 
             if (columnList.isEmpty()) {
                 continue;
@@ -3158,46 +3157,46 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
-                row[table_cat]        = database.getCatalogName().name;
-                row[table_schem]      = table.getSchemaName().name;
-                row[table_name]       = table.getName().name;
-                row[column_name]      = column.getName().name;
+                row = t.getEmptyRowData();
+                row[table_cat] = database.getCatalogName().name;
+                row[table_schem] = table.getSchemaName().name;
+                row[table_name] = table.getName().name;
+                row[column_name] = column.getName().name;
                 row[ordinal_position] = ValuePool.getLong(i + 1);
-                row[column_default]   = column.getDefaultSQL();
-                row[is_nullable]      = column.isNullable() ? "YES"
-                                                            : "NO";
-                row[data_type]        = type.getFullNameString();
+                row[column_default] = column.getDefaultSQL();
+                row[is_nullable] = column.isNullable() ? "YES"
+                        : "NO";
+                row[data_type] = type.getFullNameString();
 
                 // common type block
                 if (type.isCharacterType()) {
                     row[character_maximum_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[character_octet_length] =
-                        ValuePool.getLong(type.precision * 2);
+                            ValuePool.getLong(type.precision * 2);
                     row[character_set_catalog] =
-                        database.getCatalogName().name;
+                            database.getCatalogName().name;
                     row[character_set_schema] =
-                        type.getCharacterSet().getSchemaName().name;
+                            type.getCharacterSet().getSchemaName().name;
                     row[character_set_name] =
-                        type.getCharacterSet().getName().name;
+                            type.getCharacterSet().getName().name;
                     row[collation_catalog] = database.getCatalogName().name;
                     row[collation_schema] =
-                        type.getCollation().getSchemaName().name;
+                            type.getCollation().getSchemaName().name;
                     row[collation_name] = type.getCollation().getName().name;
                 } else if (type.isNumberType()) {
                     row[numeric_precision] = ValuePool.getLong(
-                        ((NumberType) type).getNumericPrecisionInRadix());
+                            ((NumberType) type).getNumericPrecisionInRadix());
                     row[declared_numeric_precision] = ValuePool.getLong(
-                        ((NumberType) type).getNumericPrecisionInRadix());
+                            ((NumberType) type).getNumericPrecisionInRadix());
 
                     if (type.isExactNumberType()) {
                         row[numeric_scale] = row[declared_numeric_scale] =
-                            ValuePool.getLong(type.scale);
+                                ValuePool.getLong(type.scale);
                     }
 
                     row[numeric_precision_radix] =
-                        ValuePool.getLong(type.getPrecisionRadix());
+                            ValuePool.getLong(type.getPrecisionRadix());
                 } else if (type.isBooleanType()) {
 
                     //
@@ -3206,96 +3205,96 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 } else if (type.isIntervalType()) {
                     row[data_type] = "INTERVAL";
                     row[interval_type] =
-                        IntervalType.getQualifier(type.typeCode);
+                            IntervalType.getQualifier(type.typeCode);
                     row[interval_precision] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[datetime_precision] = ValuePool.getLong(type.scale);
                 } else if (type.isBinaryType()) {
                     row[character_maximum_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[character_octet_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                 } else if (type.isBitType()) {
                     row[character_maximum_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[character_octet_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                 } else if (type.isArrayType()) {
                     row[maximum_cardinality] =
-                        ValuePool.getLong(type.arrayLimitCardinality());
+                            ValuePool.getLong(type.arrayLimitCardinality());
                     row[data_type] = "ARRAY";
                 }
 
                 if (type.isDomainType()) {
                     row[domain_catalog] = database.getCatalogName().name;
-                    row[domain_schema]  = type.getSchemaName().name;
-                    row[domain_name]    = type.getName().name;
+                    row[domain_schema] = type.getSchemaName().name;
+                    row[domain_name] = type.getName().name;
                 }
 
                 if (type.isDistinctType()) {
                     row[udt_catalog] = database.getCatalogName().name;
-                    row[udt_schema]  = type.getSchemaName().name;
-                    row[udt_name]    = type.getName().name;
+                    row[udt_schema] = type.getSchemaName().name;
+                    row[udt_name] = type.getName().name;
                 }
 
-                row[scope_catalog]       = null;
-                row[scope_schema]        = null;
-                row[scope_name]          = null;
-                row[dtd_identifier]      = type.getDefinition();
+                row[scope_catalog] = null;
+                row[scope_schema] = null;
+                row[scope_name] = null;
+                row[dtd_identifier] = type.getDefinition();
                 row[is_self_referencing] = null;
-                row[is_identity]         = column.isIdentity() ? "YES"
-                                                               : "NO";
+                row[is_identity] = column.isIdentity() ? "YES"
+                        : "NO";
 
                 if (column.isIdentity()) {
                     NumberSequence sequence = column.getIdentitySequence();
 
                     row[identity_generation] = sequence.isAlways() ? "ALWAYS"
-                                                                   : "BY DEFAULT";
+                            : "BY DEFAULT";
                     row[identity_start] =
-                        Long.toString(sequence.getStartValue());
+                            Long.toString(sequence.getStartValue());
                     row[identity_increment] =
-                        Long.toString(sequence.getIncrement());
+                            Long.toString(sequence.getIncrement());
                     row[identity_maximum] =
-                        Long.toString(sequence.getMaxValue());
+                            Long.toString(sequence.getMaxValue());
                     row[identity_minimum] =
-                        Long.toString(sequence.getMinValue());
+                            Long.toString(sequence.getMinValue());
                     row[identity_cycle] = sequence.isCycle() ? "YES"
-                                                             : "NO";
+                            : "NO";
                 }
 
                 if (column.isGenerated()) {
                     row[is_generated] = "ALWAYS";
                     row[generation_expression] =
-                        column.getGeneratingExpression().getSQL();
+                            column.getGeneratingExpression().getSQL();
                 } else {
                     row[is_generated] = "NEVER";
                 }
 
                 switch (column.getSystemPeriodType()) {
 
-                    case SchemaObject.PeriodSystemColumnType.PERIOD_ROW_START :
+                    case SchemaObject.PeriodSystemColumnType.PERIOD_ROW_START:
                         row[is_system_period_start] = "YES";
                         row[system_time_generation] = "ALWAYS";
                         break;
 
-                    case SchemaObject.PeriodSystemColumnType.PERIOD_ROW_END :
-                        row[is_system_period_end]   = "YES";
+                    case SchemaObject.PeriodSystemColumnType.PERIOD_ROW_END:
+                        row[is_system_period_end] = "YES";
                         row[system_time_generation] = "ALWAYS";
                         break;
 
-                    case SchemaObject.PeriodSystemColumnType.PERIOD_ROW_NONE :
+                    case SchemaObject.PeriodSystemColumnType.PERIOD_ROW_NONE:
                         row[is_system_period_start] = "NO";
-                        row[is_system_period_end]   = "NO";
+                        row[is_system_period_end] = "NO";
                         break;
                 }
 
-                row[is_updatable]       = table.isWritable() ? "YES"
-                                                             : "NO";
+                row[is_updatable] = table.isWritable() ? "YES"
+                        : "NO";
                 row[declared_data_type] = row[data_type];
 
                 if (type.isNumberType()) {
                     row[declared_numeric_precision] = row[numeric_precision];
-                    row[declared_numeric_scale]     = row[numeric_scale];
+                    row[declared_numeric_scale] = row[numeric_scale];
                 }
 
                 t.insertSys(session, store, row);
@@ -3307,19 +3306,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The CONSTRAINT_COLUMN_USAGE view has one row for each column identified by
      * a table constraint or assertion.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TABLE_CATALOG       VARCHAR
-     *      TABLE_SCHEMA        VARCHAR
-     *      TABLE_NAME          VARCHAR
-     *      COLUMN_NAME         VARCHAR
-     *      CONSTRAINT_CATALOG  VARCHAR
-     *      CONSTRAINT_SCHEMA   VARCHAR
-     *      CONSTRAINT_NAME     VARCHAR
+     * <p>
+     * TABLE_CATALOG       VARCHAR
+     * TABLE_SCHEMA        VARCHAR
+     * TABLE_NAME          VARCHAR
+     * COLUMN_NAME         VARCHAR
+     * CONSTRAINT_CATALOG  VARCHAR
+     * CONSTRAINT_SCHEMA   VARCHAR
+     * CONSTRAINT_NAME     VARCHAR
      *
      * </pre>
      *
@@ -3364,24 +3363,24 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "CONSTRAINT_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[CONSTRAINT_COLUMN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[CONSTRAINT_COLUMN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int table_catalog      = 0;
-        final int table_schema       = 1;
-        final int table_name         = 2;
-        final int column_name        = 3;
+        final int table_catalog = 0;
+        final int table_schema = 1;
+        final int table_name = 2;
+        final int column_name = 3;
         final int constraint_catalog = 4;
-        final int constraint_schema  = 5;
-        final int constraint_name    = 6;
+        final int constraint_schema = 5;
+        final int constraint_name = 6;
 
         //
         // calculated column values
@@ -3390,17 +3389,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         String constraintName;
 
         // Intermediate holders
-        Iterator     tables;
-        Table        table;
+        Iterator tables;
+        Table table;
         Constraint[] constraints;
-        int          constraintCount;
-        Constraint   constraint;
-        Iterator     iterator;
-        Object[]     row;
+        int constraintCount;
+        Constraint constraint;
+        Iterator iterator;
+        Object[] row;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -3408,25 +3407,25 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             if (table.isView()
                     || !session.getGrantee().isFullyAccessibleByRole(
-                        table.getName())) {
+                    table.getName())) {
                 continue;
             }
 
-            constraints       = table.getConstraints();
-            constraintCount   = constraints.length;
+            constraints = table.getConstraints();
+            constraintCount = constraints.length;
             constraintCatalog = database.getCatalogName().name;
-            constraintSchema  = table.getSchemaName().name;
+            constraintSchema = table.getSchemaName().name;
 
             // process constraints
             for (int i = 0; i < constraintCount; i++) {
-                constraint     = constraints[i];
+                constraint = constraints[i];
                 constraintName = constraint.getName().name;
 
                 switch (constraint.getConstraintType()) {
 
-                    case SchemaObject.ConstraintTypes.CHECK : {
+                    case SchemaObject.ConstraintTypes.CHECK: {
                         OrderedHashSet expressions =
-                            constraint.getCheckColumnExpressions();
+                                constraint.getCheckColumnExpressions();
 
                         if (expressions == null) {
                             break;
@@ -3437,7 +3436,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                         // calculate distinct column references
                         while (iterator.hasNext()) {
                             ExpressionColumn expr =
-                                (ExpressionColumn) iterator.next();
+                                    (ExpressionColumn) iterator.next();
                             HsqlName name = expr.getColumn().getName();
 
                             if (name.type != SchemaObject.COLUMN) {
@@ -3446,26 +3445,27 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                             row = t.getEmptyRowData();
                             row[table_catalog] =
-                                database.getCatalogName().name;
-                            row[table_schema]       = name.schema.name;
-                            row[table_name]         = name.parent.name;
-                            row[column_name]        = name.name;
+                                    database.getCatalogName().name;
+                            row[table_schema] = name.schema.name;
+                            row[table_name] = name.parent.name;
+                            row[column_name] = name.name;
                             row[constraint_catalog] = constraintCatalog;
-                            row[constraint_schema]  = constraintSchema;
-                            row[constraint_name]    = constraintName;
+                            row[constraint_schema] = constraintSchema;
+                            row[constraint_name] = constraintName;
 
                             try {
                                 t.insertSys(session, store, row);
-                            } catch (HsqlException e) {}
+                            } catch (HsqlException e) {
+                            }
                         }
 
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.UNIQUE :
-                    case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-                    case SchemaObject.ConstraintTypes.FOREIGN_KEY : {
+                    case SchemaObject.ConstraintTypes.UNIQUE:
+                    case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+                    case SchemaObject.ConstraintTypes.FOREIGN_KEY: {
                         Table target = table;
-                        int[] cols   = constraint.getMainColumns();
+                        int[] cols = constraint.getMainColumns();
 
                         if (constraint.getConstraintType()
                                 == SchemaObject.ConstraintTypes.FOREIGN_KEY) {
@@ -3475,18 +3475,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                         for (int j = 0; j < cols.length; j++) {
                             row = t.getEmptyRowData();
                             row[table_catalog] =
-                                database.getCatalogName().name;
+                                    database.getCatalogName().name;
                             row[table_schema] = constraintSchema;
-                            row[table_name]   = target.getName().name;
+                            row[table_name] = target.getName().name;
                             row[column_name] =
-                                target.getColumn(cols[j]).getName().name;
+                                    target.getColumn(cols[j]).getName().name;
                             row[constraint_catalog] = constraintCatalog;
-                            row[constraint_schema]  = constraintSchema;
-                            row[constraint_name]    = constraintName;
+                            row[constraint_schema] = constraintSchema;
+                            row[constraint_name] = constraintName;
 
                             try {
                                 t.insertSys(session, store, row);
-                            } catch (HsqlException e) {}
+                            } catch (HsqlException e) {
+                            }
                         }
                     }
                 }
@@ -3498,19 +3499,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2011 VIEW<p>
-     *
+     * <p>
      * The CONSTRAINT_PERIOD_USAGE view has one row for each PERIOD referenced
      * by a table constraint or assertion.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TABLE_CATALOG       VARCHAR
-     *      TABLE_SCHEMA        VARCHAR
-     *      TABLE_NAME          VARCHAR
-     *      PERIOD_NAME         VARCHAR
-     *      CONSTRAINT_CATALOG  VARCHAR
-     *      CONSTRAINT_SCHEMA   VARCHAR
-     *      CONSTRAINT_NAME     VARCHAR
+     * <p>
+     * TABLE_CATALOG       VARCHAR
+     * TABLE_SCHEMA        VARCHAR
+     * TABLE_NAME          VARCHAR
+     * PERIOD_NAME         VARCHAR
+     * CONSTRAINT_CATALOG  VARCHAR
+     * CONSTRAINT_SCHEMA   VARCHAR
+     * CONSTRAINT_NAME     VARCHAR
      *
      * </pre>
      *
@@ -3550,24 +3551,24 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "CONSTRAINT_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[CONSTRAINT_PERIOD_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[CONSTRAINT_PERIOD_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int table_catalog      = 0;
-        final int table_schema       = 1;
-        final int table_name         = 2;
-        final int period_name        = 3;
+        final int table_catalog = 0;
+        final int table_schema = 1;
+        final int table_name = 2;
+        final int period_name = 3;
         final int constraint_catalog = 4;
-        final int constraint_schema  = 5;
-        final int constraint_name    = 6;
+        final int constraint_schema = 5;
+        final int constraint_name = 6;
 
         //
         // calculated column values
@@ -3576,17 +3577,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         String constraintName;
 
         // Intermediate holders
-        Iterator     tables;
-        Table        table;
+        Iterator tables;
+        Table table;
         Constraint[] constraints;
-        int          constraintCount;
-        Constraint   constraint;
-        Iterator     iterator;
-        Object[]     row;
+        int constraintCount;
+        Constraint constraint;
+        Iterator iterator;
+        Object[] row;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -3594,31 +3595,31 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             if (table.isView()
                     || !session.getGrantee().isFullyAccessibleByRole(
-                        table.getName())) {
+                    table.getName())) {
                 continue;
             }
 
-            constraints       = table.getConstraints();
-            constraintCount   = constraints.length;
+            constraints = table.getConstraints();
+            constraintCount = constraints.length;
             constraintCatalog = database.getCatalogName().name;
-            constraintSchema  = table.getSchemaName().name;
+            constraintSchema = table.getSchemaName().name;
 
             // process constraints
             for (int i = 0; i < constraintCount; i++) {
-                constraint     = constraints[i];
+                constraint = constraints[i];
                 constraintName = constraint.getName().name;
 
                 switch (constraint.getConstraintType()) {
 
-                    case SchemaObject.ConstraintTypes.CHECK : {
+                    case SchemaObject.ConstraintTypes.CHECK: {
 
                         // reports references to either SYSTEM_TIME or application
                         // period constraint name in a CHECK condition
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.UNIQUE :
-                    case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-                    case SchemaObject.ConstraintTypes.FOREIGN_KEY : {
+                    case SchemaObject.ConstraintTypes.UNIQUE:
+                    case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+                    case SchemaObject.ConstraintTypes.FOREIGN_KEY: {
 
                         // reports constraints defined with WITHOUT OVERLAP
                         break;
@@ -3632,7 +3633,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The CONSTRAINT_TABLE_USAGE view has one row for each table identified by a
      * &lt;table name&gt; simply contained in a &lt;table reference&gt;
      * contained in the &lt;search condition&gt; of a check constraint,
@@ -3687,11 +3688,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "CONSTRAINT_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[CONSTRAINT_TABLE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[CONSTRAINT_TABLE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -3699,11 +3700,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         //
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         Result rs = sys.executeDirectStatement(
-            "select DISTINCT TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, "
-            + "CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA, CONSTRAINT_NAME "
-            + "from INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE");
+                "select DISTINCT TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, "
+                        + "CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA, CONSTRAINT_NAME "
+                        + "from INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE");
 
         t.insertSys(session, store, rs);
         sys.close();
@@ -3713,7 +3714,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The DATA_TYPE_PRIVILEGES view has one row for each use of a data type.
      * Currently this view does not report the DTD_IDENTIFIER column.
      * <b>Definition:</b> <p>
@@ -3756,11 +3757,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DTD_IDENTIFIER", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[DATA_TYPE_PRIVILEGES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[DATA_TYPE_PRIVILEGES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4
             }, false);
 
             return t;
@@ -3768,9 +3769,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         //
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         String sql = (String) statementMap.get("/*data_type_privileges*/");
-        Result rs  = sys.executeDirectStatement(sql);
+        Result rs = sys.executeDirectStatement(sql);
 
         t.insertSys(session, store, rs);
         sys.close();
@@ -3863,7 +3864,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The DOMAIN_CONSTRAINTS view has one row for each domain
      * constraint. <p>
      *
@@ -3915,29 +3916,29 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "INITIALLY_DEFERRED", YES_OR_NO);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[DOMAIN_CONSTRAINTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[DOMAIN_CONSTRAINTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 4, 5, 6
             }, false);
 
             return t;
         }
 
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int domain_catalog     = 3;
-        final int domain_schema      = 4;
-        final int domain_name        = 5;
-        final int is_deferrable      = 6;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int domain_catalog = 3;
+        final int domain_schema = 4;
+        final int domain_name = 5;
+        final int is_deferrable = 6;
         final int initially_deferred = 7;
 
         //
         //
         Iterator it =
-            database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
+                database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
 
         while (it.hasNext()) {
             Type domain = (Type) it.next();
@@ -3952,18 +3953,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             Constraint[] constraints =
-                domain.userTypeModifier.getConstraints();
+                    domain.userTypeModifier.getConstraints();
 
             for (int i = 0; i < constraints.length; i++) {
                 Object[] data = t.getEmptyRowData();
 
                 data[constraint_catalog] = data[domain_catalog] =
-                    database.getCatalogName().name;
+                        database.getCatalogName().name;
                 data[constraint_schema] = data[domain_schema] =
-                    domain.getSchemaName().name;
-                data[constraint_name]    = constraints[i].getName().name;
-                data[domain_name]        = domain.getName().name;
-                data[is_deferrable]      = Tokens.T_NO;
+                        domain.getSchemaName().name;
+                data[constraint_name] = constraints[i].getName().name;
+                data[domain_name] = domain.getName().name;
+                data[is_deferrable] = Tokens.T_NO;
                 data[initially_deferred] = Tokens.T_NO;
 
                 t.insertSys(session, store, data);
@@ -3975,7 +3976,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The DOMAINS view has one row for each domain. <p>
      *
      * @return Table
@@ -4013,44 +4014,44 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DECLARED_NUMERIC_SCALE", CARDINAL_NUMBER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[DOMAINS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[DOMAINS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 4, 5, 6
             }, false);
 
             return t;
         }
 
-        final int domain_catalog             = 0;
-        final int domain_schema              = 1;
-        final int domain_name                = 2;
-        final int data_type                  = 3;
-        final int character_maximum_length   = 4;
-        final int character_octet_length     = 5;
-        final int character_set_catalog      = 6;
-        final int character_set_schema       = 7;
-        final int character_set_name         = 8;
-        final int collation_catalog          = 9;
-        final int collation_schema           = 10;
-        final int collation_name             = 11;
-        final int numeric_precision          = 12;
-        final int numeric_precision_radix    = 13;
-        final int numeric_scale              = 14;
-        final int datetime_precision         = 15;
-        final int interval_type              = 16;
-        final int interval_precision         = 17;
-        final int domain_default             = 18;
-        final int maximum_cardinality        = 19;
-        final int dtd_identifier             = 20;
-        final int declared_data_type         = 21;
+        final int domain_catalog = 0;
+        final int domain_schema = 1;
+        final int domain_name = 2;
+        final int data_type = 3;
+        final int character_maximum_length = 4;
+        final int character_octet_length = 5;
+        final int character_set_catalog = 6;
+        final int character_set_schema = 7;
+        final int character_set_name = 8;
+        final int collation_catalog = 9;
+        final int collation_schema = 10;
+        final int collation_name = 11;
+        final int numeric_precision = 12;
+        final int numeric_precision_radix = 13;
+        final int numeric_scale = 14;
+        final int datetime_precision = 15;
+        final int interval_type = 16;
+        final int interval_precision = 17;
+        final int domain_default = 18;
+        final int maximum_cardinality = 19;
+        final int dtd_identifier = 20;
+        final int declared_data_type = 21;
         final int declared_numeric_precision = 22;
-        final int declared_numeric_scale     = 23;
+        final int declared_numeric_scale = 23;
 
         //
         //
         Iterator it =
-            database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
+                database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
 
         while (it.hasNext()) {
             Type type = (Type) it.next();
@@ -4066,70 +4067,70 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             Object[] row = t.getEmptyRowData();
 
             row[domain_catalog] = database.getCatalogName().name;
-            row[domain_schema]  = type.getSchemaName().name;
-            row[domain_name]    = type.getName().name;
-            row[data_type]      = type.getFullNameString();
+            row[domain_schema] = type.getSchemaName().name;
+            row[domain_name] = type.getName().name;
+            row[data_type] = type.getFullNameString();
 
             // common type block
             if (type.isCharacterType()) {
                 row[character_maximum_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
                 row[character_octet_length] = ValuePool.getLong(type.precision
                         * 2);
                 row[character_set_catalog] = database.getCatalogName().name;
                 row[character_set_schema] =
-                    type.getCharacterSet().getSchemaName().name;
+                        type.getCharacterSet().getSchemaName().name;
                 row[character_set_name] =
-                    type.getCharacterSet().getName().name;
+                        type.getCharacterSet().getName().name;
                 row[collation_catalog] = database.getCatalogName().name;
                 row[collation_schema] =
-                    type.getCollation().getSchemaName().name;
+                        type.getCollation().getSchemaName().name;
                 row[collation_name] = type.getCollation().getName().name;
             } else if (type.isNumberType()) {
                 row[numeric_precision] = ValuePool.getLong(
-                    ((NumberType) type).getNumericPrecisionInRadix());
+                        ((NumberType) type).getNumericPrecisionInRadix());
                 row[declared_numeric_precision] = ValuePool.getLong(
-                    ((NumberType) type).getNumericPrecisionInRadix());
+                        ((NumberType) type).getNumericPrecisionInRadix());
 
                 if (type.isExactNumberType()) {
                     row[numeric_scale] = row[declared_numeric_scale] =
-                        ValuePool.getLong(type.scale);
+                            ValuePool.getLong(type.scale);
                 }
 
                 row[numeric_precision_radix] =
-                    ValuePool.getLong(type.getPrecisionRadix());
+                        ValuePool.getLong(type.getPrecisionRadix());
             } else if (type.isBooleanType()) {
 
                 //
             } else if (type.isDateTimeType()) {
                 row[datetime_precision] = ValuePool.getLong(type.scale);
             } else if (type.isIntervalType()) {
-                row[data_type]          = "INTERVAL";
+                row[data_type] = "INTERVAL";
                 row[interval_type] = IntervalType.getQualifier(type.typeCode);
                 row[interval_precision] = ValuePool.getLong(type.precision);
                 row[datetime_precision] = ValuePool.getLong(type.scale);
             } else if (type.isBinaryType()) {
                 row[character_maximum_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
                 row[character_octet_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
             } else if (type.isBitType()) {
                 row[character_maximum_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
                 row[character_octet_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
             } else if (type.isArrayType()) {
                 row[maximum_cardinality] =
-                    ValuePool.getLong(type.arrayLimitCardinality());
+                        ValuePool.getLong(type.arrayLimitCardinality());
                 row[data_type] = "ARRAY";
             }
 
-            row[dtd_identifier]     = type.getDefinition();
+            row[dtd_identifier] = type.getDefinition();
             row[declared_data_type] = row[data_type];
 
             // end common block
             Expression defaultExpression =
-                type.userTypeModifier.getDefaultClause();
+                    type.userTypeModifier.getDefaultClause();
 
             if (defaultExpression != null) {
                 row[domain_default] = defaultExpression.getSQL();
@@ -4143,9 +4144,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The type attributes of elements of array. <p>
-     *
+     * <p>
      * The ELEMENT_TYPES view is empty.<p>
      *
      * @return Table
@@ -4190,38 +4191,38 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DECLARED_NUMERIC_SCALE", CARDINAL_NUMBER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ELEMENT_TYPES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ELEMENT_TYPES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 4, 5, 27
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 4, 5, 27
             }, true);
 
             return t;
         }
 
-        final int object_catalog             = 0;
-        final int object_schema              = 1;
-        final int object_name                = 2;
-        final int object_type                = 3;
+        final int object_catalog = 0;
+        final int object_schema = 1;
+        final int object_name = 2;
+        final int object_type = 3;
         final int collection_type_identifier = 4;
 
         //
-        final int udt_catalog   = 20;
-        final int udt_schema    = 21;
-        final int udt_name      = 22;
+        final int udt_catalog = 20;
+        final int udt_schema = 21;
+        final int udt_name = 22;
         final int scope_catalog = 23;
-        final int scope_schema  = 24;
-        final int scope_name    = 25;
+        final int scope_schema = 24;
+        final int scope_name = 25;
 
         //
         // intermediate holders
-        int            columnCount;
-        Iterator       tables;
-        Table          table;
-        Object[]       row;
+        int columnCount;
+        Iterator tables;
+        Table table;
+        Object[] row;
         OrderedHashSet columnList;
-        Type           type;
+        Type type;
 
         // Initialization
         tables = allTables();
@@ -4229,7 +4230,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         while (tables.hasNext()) {
             table = (Table) tables.next();
             columnList =
-                session.getGrantee().getColumnsForAllPrivileges(table);
+                    session.getGrantee().getColumnsForAllPrivileges(table);
 
             if (columnList.isEmpty()) {
                 continue;
@@ -4251,23 +4252,24 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                             = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[object_catalog] = database.getCatalogName().name;
-                row[object_schema]              = table.getSchemaName().name;
-                row[object_name]                = table.getName().name;
-                row[object_type]                = "TABLE";
+                row[object_schema] = table.getSchemaName().name;
+                row[object_name] = table.getName().name;
+                row[object_type] = "TABLE";
                 row[collection_type_identifier] = type.getDefinition();
 
                 addTypeInfo(row, type.collectionBaseType());
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
         Iterator it =
-            database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
+                database.schemaManager.databaseObjectIterator(SchemaObject.DOMAIN);
 
         while (it.hasNext()) {
             type = (Type) it.next();
@@ -4280,11 +4282,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row                             = t.getEmptyRowData();
-            row[object_catalog]             = database.getCatalogName().name;
-            row[object_schema]              = type.getSchemaName().name;
-            row[object_name]                = type.getName().name;
-            row[object_type]                = "DOMAIN";
+            row = t.getEmptyRowData();
+            row[object_catalog] = database.getCatalogName().name;
+            row[object_schema] = type.getSchemaName().name;
+            row[object_name] = type.getName().name;
+            row[object_type] = "DOMAIN";
             row[collection_type_identifier] = type.getDefinition();
 
             addTypeInfo(row, type.collectionBaseType());
@@ -4304,22 +4306,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row                             = t.getEmptyRowData();
-            row[object_catalog]             = database.getCatalogName().name;
-            row[object_schema]              = type.getSchemaName().name;
-            row[object_name]                = type.getName().name;
-            row[object_type]                = "USER-DEFINED TYPE";
+            row = t.getEmptyRowData();
+            row[object_catalog] = database.getCatalogName().name;
+            row[object_schema] = type.getSchemaName().name;
+            row[object_name] = type.getName().name;
+            row[object_type] = "USER-DEFINED TYPE";
             row[collection_type_identifier] = type.getDefinition();
 
             addTypeInfo(row, type.collectionBaseType());
 
             try {
                 t.insertSys(session, store, row);
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
         }
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
             Routine routine = (Routine) it.next();
@@ -4329,29 +4332,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             type = routine.isProcedure() ? null
-                                         : routine.getReturnType();
+                    : routine.getReturnType();
 
             if (type == null || type.isDistinctType() || type.isDomainType()
                     || !type.isArrayType()) {
 
                 //
             } else {
-                row                             = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[object_catalog] = database.getCatalogName().name;
-                row[object_schema]              = routine.getSchemaName().name;
-                row[object_name]                = routine.getName().name;
-                row[object_type]                = "ROUTINE";
+                row[object_schema] = routine.getSchemaName().name;
+                row[object_name] = routine.getName().name;
+                row[object_type] = "ROUTINE";
                 row[collection_type_identifier] = type.getDefinition();
 
                 addTypeInfo(row, type.collectionBaseType());
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
 
             Type returnType = type;
-            int  paramCount = routine.getParameterCount();
+            int paramCount = routine.getParameterCount();
 
             for (int i = 0; i < paramCount; i++) {
                 ColumnSchema param = routine.getParameter(i);
@@ -4367,18 +4371,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                             = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[object_catalog] = database.getCatalogName().name;
-                row[object_schema]              = routine.getSchemaName().name;
-                row[object_name]                = routine.getName().name;
-                row[object_type]                = "ROUTINE";
+                row[object_schema] = routine.getSchemaName().name;
+                row[object_name] = routine.getName().name;
+                row[object_type] = "ROUTINE";
                 row[collection_type_identifier] = type.getDefinition();
 
                 addTypeInfo(row, type.collectionBaseType());
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -4387,28 +4392,28 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     void addTypeInfo(Object[] row, Type type) {
 
-        final int data_type                = 5;
+        final int data_type = 5;
         final int character_maximum_length = 6;
-        final int character_octet_length   = 7;
-        final int character_set_catalog    = 8;
-        final int character_set_schema     = 9;
-        final int character_set_name       = 10;
-        final int collation_catalog        = 11;
-        final int collation_schema         = 12;
-        final int collation_name           = 13;
-        final int numeric_precision        = 14;
-        final int numeric_precision_radix  = 15;
-        final int numeric_scale            = 16;
-        final int datetime_precision       = 17;
-        final int interval_type            = 18;
-        final int interval_precision       = 19;
+        final int character_octet_length = 7;
+        final int character_set_catalog = 8;
+        final int character_set_schema = 9;
+        final int character_set_name = 10;
+        final int collation_catalog = 11;
+        final int collation_schema = 12;
+        final int collation_name = 13;
+        final int numeric_precision = 14;
+        final int numeric_precision_radix = 15;
+        final int numeric_scale = 16;
+        final int datetime_precision = 17;
+        final int interval_type = 18;
+        final int interval_precision = 19;
 
         //
-        final int maximum_cardinality        = 26;
-        final int dtd_identifier             = 27;
-        final int declared_data_type         = 28;
+        final int maximum_cardinality = 26;
+        final int dtd_identifier = 27;
+        final int declared_data_type = 28;
         final int declared_numeric_precision = 29;
-        final int declared_numeric_scale     = 30;
+        final int declared_numeric_scale = 30;
 
         row[data_type] = type.getFullNameString();
 
@@ -4418,56 +4423,56 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     * 2);
             row[character_set_catalog] = database.getCatalogName().name;
             row[character_set_schema] =
-                type.getCharacterSet().getSchemaName().name;
+                    type.getCharacterSet().getSchemaName().name;
             row[character_set_name] = type.getCharacterSet().getName().name;
-            row[collation_catalog]  = database.getCatalogName().name;
-            row[collation_schema]   = type.getCollation().getSchemaName().name;
-            row[collation_name]     = type.getCollation().getName().name;
+            row[collation_catalog] = database.getCatalogName().name;
+            row[collation_schema] = type.getCollation().getSchemaName().name;
+            row[collation_name] = type.getCollation().getName().name;
         } else if (type.isNumberType()) {
             row[numeric_precision] = ValuePool.getLong(
-                ((NumberType) type).getNumericPrecisionInRadix());
+                    ((NumberType) type).getNumericPrecisionInRadix());
             row[declared_numeric_precision] = ValuePool.getLong(
-                ((NumberType) type).getNumericPrecisionInRadix());
+                    ((NumberType) type).getNumericPrecisionInRadix());
 
             if (type.isExactNumberType()) {
                 row[numeric_scale] = row[declared_numeric_scale] =
-                    ValuePool.getLong(type.scale);
+                        ValuePool.getLong(type.scale);
             }
 
             row[numeric_precision_radix] =
-                ValuePool.getLong(type.getPrecisionRadix());
+                    ValuePool.getLong(type.getPrecisionRadix());
         } else if (type.isBooleanType()) {
 
             //
         } else if (type.isDateTimeType()) {
             row[datetime_precision] = ValuePool.getLong(type.scale);
         } else if (type.isIntervalType()) {
-            row[data_type]          = "INTERVAL";
-            row[interval_type]      = IntervalType.getQualifier(type.typeCode);
+            row[data_type] = "INTERVAL";
+            row[interval_type] = IntervalType.getQualifier(type.typeCode);
             row[interval_precision] = ValuePool.getLong(type.precision);
             row[datetime_precision] = ValuePool.getLong(type.scale);
         } else if (type.isBinaryType()) {
             row[character_maximum_length] = ValuePool.getLong(type.precision);
-            row[character_octet_length]   = ValuePool.getLong(type.precision);
+            row[character_octet_length] = ValuePool.getLong(type.precision);
         } else if (type.isBitType()) {
             row[character_maximum_length] = ValuePool.getLong(type.precision);
-            row[character_octet_length]   = ValuePool.getLong(type.precision);
+            row[character_octet_length] = ValuePool.getLong(type.precision);
         } else if (type.isArrayType()) {
             row[maximum_cardinality] =
-                ValuePool.getLong(type.arrayLimitCardinality());
+                    ValuePool.getLong(type.arrayLimitCardinality());
         }
 
-        row[dtd_identifier]     = type.getDefinition();
+        row[dtd_identifier] = type.getDefinition();
         row[declared_data_type] = row[data_type];
     }
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * ENABLED_ROLES<p>
-     *
+     * <p>
      * Identify the enabled roles for the current SQL-session.<p>
-     *
+     * <p>
      * Definition<p>
      *
      * <pre class="SqlCodeExample">
@@ -4494,17 +4499,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             // true PK
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ENABLED_ROLES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ENABLED_ROLES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, true);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, true);
 
             return t;
         }
 
         // Intermediate holders
         Iterator grantees;
-        Grantee  grantee;
+        Grantee grantee;
         Object[] row;
 
         // initialization
@@ -4512,8 +4517,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         while (grantees.hasNext()) {
             grantee = (Grantee) grantees.next();
-            row     = t.getEmptyRowData();
-            row[0]  = grantee.getName().getNameString();
+            row = t.getEmptyRowData();
+            row[0] = grantee.getName().getNameString();
 
             t.insertSys(session, store, row);
         }
@@ -4523,9 +4528,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The JAR_JAR_USAGE view is empty.<p>
-     *
      */
     Table JAR_JAR_USAGE(Session session, PersistentStore store) {
 
@@ -4542,11 +4546,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "JAR_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[JAR_JAR_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[JAR_JAR_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -4554,11 +4558,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int path_jar_catalog = 0;
-        final int path_jar_schema  = 1;
-        final int path_jar_name    = 2;
-        final int jar_catalog      = 3;
-        final int jar_schema       = 4;
-        final int jar_name         = 5;
+        final int path_jar_schema = 1;
+        final int path_jar_name = 2;
+        final int jar_catalog = 3;
+        final int jar_schema = 4;
+        final int jar_name = 5;
 
         //
         Iterator it;
@@ -4569,9 +4573,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The JARS view is empty.<p>
-     *
      */
     Table JARS(Session session, PersistentStore store) {
 
@@ -4586,10 +4589,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "JAR_PATH", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[JARS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[JARS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3
             }, false);
 
             return t;
@@ -4597,9 +4600,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int jar_catalog = 0;
-        final int jar_schema  = 1;
-        final int jar_name    = 2;
-        final int jar_path    = 3;
+        final int jar_schema = 1;
+        final int jar_name = 2;
+        final int jar_path = 3;
 
         //
         Iterator it;
@@ -4610,11 +4613,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The KEY_COLUMN_USAGE view describes the columns of
      * PRIMARY KEY, UNIQUE, FOREIGN KEY, and CHECK  constraint of each accessible table
      * defined within this database. <p>
-     *
+     * <p>
      * Each row is a PRIMARY KEY or UNIQUE column description with the following
      * columns: <p>
      *
@@ -4629,7 +4632,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * ORDINAL_POSITION                BIGINT
      * POSITION_IN_UNIQUE_CONSTRAINT   BIGINT
      * </pre> <p>
-     *
+     * <p>
      * The ORDINAL_POSITION column refers to the position of the column in the
      * definition of the UNIQUE or FOREIGN KEY constraints.<p>
      * The POSITION_IN_UNIQUE_CONSTRAINT column is defined for FOREIGN KEY constraints
@@ -4639,8 +4642,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * the columns of the constraint.<p>
      *
      * @return a <code>Table</code> object describing the visible
-     *        primary key and unique columns of each accessible table
-     *        defined within this database.
+     * primary key and unique columns of each accessible table
+     * defined within this database.
      */
     Table KEY_COLUMN_USAGE(Session session, PersistentStore store) {
 
@@ -4660,11 +4663,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "POSITION_IN_UNIQUE_CONSTRAINT", CARDINAL_NUMBER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[KEY_COLUMN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[KEY_COLUMN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                2, 1, 0, 6, 7
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    2, 1, 0, 6, 7
             }, false);
 
             return t;
@@ -4675,24 +4678,24 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         Object[] row;
 
         // column number mappings
-        final int constraint_catalog            = 0;
-        final int constraint_schema             = 1;
-        final int constraint_name               = 2;
-        final int table_catalog                 = 3;
-        final int table_schema                  = 4;
-        final int table_name                    = 5;
-        final int column_name                   = 6;
-        final int ordinal_position              = 7;
+        final int constraint_catalog = 0;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int table_catalog = 3;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int column_name = 6;
+        final int ordinal_position = 7;
         final int position_in_unique_constraint = 8;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
-            Table    table        = (Table) tables.next();
-            String   tableCatalog = database.getCatalogName().name;
-            HsqlName tableName    = table.getName();
+            Table table = (Table) tables.next();
+            String tableCatalog = database.getCatalogName().name;
+            HsqlName tableName = table.getName();
 
             if (table.isView()) {
                 continue;
@@ -4714,23 +4717,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                         .getConstraintType() == SchemaObject.ConstraintTypes
                         .FOREIGN_KEY) {
                     String constraintName = constraint.getName().name;
-                    int[]  cols           = constraint.getMainColumns();
-                    int[]  uniqueColMap   = null;
+                    int[] cols = constraint.getMainColumns();
+                    int[] uniqueColMap = null;
 
                     if (constraint.getConstraintType()
                             == SchemaObject.ConstraintTypes.FOREIGN_KEY) {
                         Table uniqueConstTable = constraint.getMain();
                         Constraint uniqueConstraint =
-                            uniqueConstTable.getConstraint(
-                                constraint.getUniqueName().name);
+                                uniqueConstTable.getConstraint(
+                                        constraint.getUniqueName().name);
                         int[] uniqueConstIndexes =
-                            uniqueConstraint.getMainColumns();
+                                uniqueConstraint.getMainColumns();
 
                         uniqueColMap = new int[cols.length];
 
                         for (int j = 0; j < cols.length; j++) {
                             uniqueColMap[j] =
-                                ArrayUtil.find(uniqueConstIndexes, cols[j]);
+                                    ArrayUtil.find(uniqueConstIndexes, cols[j]);
                         }
 
                         cols = constraint.getRefColumns();
@@ -4741,21 +4744,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     }
 
                     for (int j = 0; j < cols.length; j++) {
-                        row                     = t.getEmptyRowData();
+                        row = t.getEmptyRowData();
                         row[constraint_catalog] = tableCatalog;
-                        row[constraint_schema]  = tableName.schema.name;
-                        row[constraint_name]    = constraintName;
-                        row[table_catalog]      = tableCatalog;
-                        row[table_schema]       = tableName.schema.name;
-                        row[table_name]         = tableName.name;
+                        row[constraint_schema] = tableName.schema.name;
+                        row[constraint_name] = constraintName;
+                        row[table_catalog] = tableCatalog;
+                        row[table_schema] = tableName.schema.name;
+                        row[table_name] = tableName.name;
                         row[column_name] =
-                            table.getColumn(cols[j]).getName().name;
+                                table.getColumn(cols[j]).getName().name;
                         row[ordinal_position] = ValuePool.getLong(j + 1);
 
                         if (constraint.getConstraintType()
                                 == SchemaObject.ConstraintTypes.FOREIGN_KEY) {
                             row[position_in_unique_constraint] =
-                                ValuePool.getInt(uniqueColMap[j] + 1);
+                                    ValuePool.getInt(uniqueColMap[j] + 1);
                         }
 
                         t.insertSys(session, store, row);
@@ -4769,11 +4772,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2011 VIEW<p>
-     *
+     * <p>
      * The KEY_PERIOD_USAGE view has one row for each PERIOD referenced in
      * PRIMARY KEY, UNIQUE and FOREIGN KEY constraint of each accessible table
      * defined within this database. <p>
-     *
+     * <p>
      * Each row is a PRIMARY KEY, UNIQUE OR FOREIGN KEY description with the
      * following columns: <p>
      *
@@ -4786,13 +4789,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * TABLE_NAME                      VARCHAR   table name
      * PERIOD_NAME                     VARCHAR   period name
      * </pre> <p>
-     *
+     * <p>
      * A period is included in this view if the user has privileges on the table.
      * <p>
      *
      * @return a <code>Table</code> object describing the visible periods
-     *        referenced in primary key and unique constraints in accessible
-     *        tables defined within this database.
+     * referenced in primary key and unique constraints in accessible
+     * tables defined within this database.
      */
     Table KEY_PERIOD_USAGE(Session session, PersistentStore store) {
 
@@ -4810,11 +4813,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "PERIOD_NAME", SQL_IDENTIFIER);        // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[KEY_PERIOD_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[KEY_PERIOD_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                2, 1, 0, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    2, 1, 0, 6
             }, false);
 
             return t;
@@ -4826,21 +4829,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int table_catalog      = 3;
-        final int table_schema       = 4;
-        final int table_name         = 5;
-        final int period_name        = 6;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int table_catalog = 3;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int period_name = 6;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
-            Table    table        = (Table) tables.next();
-            String   tableCatalog = database.getCatalogName().name;
-            HsqlName tableName    = table.getName();
+            Table table = (Table) tables.next();
+            String tableCatalog = database.getCatalogName().name;
+            HsqlName tableName = table.getName();
 
             if (table.isView()) {
                 continue;
@@ -4857,11 +4860,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 switch (constraint.getConstraintType()) {
 
-                    case SchemaObject.ConstraintTypes.PRIMARY_KEY :
-                    case SchemaObject.ConstraintTypes.UNIQUE :
-                    case SchemaObject.ConstraintTypes.FOREIGN_KEY :
+                    case SchemaObject.ConstraintTypes.PRIMARY_KEY:
+                    case SchemaObject.ConstraintTypes.UNIQUE:
+                    case SchemaObject.ConstraintTypes.FOREIGN_KEY:
 
-                    // include usage constraint use of period
+                        // include usage constraint use of period
                 }
             }
         }
@@ -4871,9 +4874,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The METHOD_SPECIFICATION_PARAMETERS view is not implemented.<p>
-     *
      */
     Table METHOD_SPECIFICATION_PARAMETERS(Session session,
                                           PersistentStore store) {
@@ -4882,9 +4884,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The METHOD_SPECIFICATIONS view is not implemented.<p>
-     *
      */
     Table METHOD_SPECIFICATIONS(Session session, PersistentStore store) {
         return null;
@@ -4892,9 +4893,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The MODULE_COLUMN_USAGE view is not implemented.<p>
-     *
      */
     Table MODULE_COLUMN_USAGE(Session session, PersistentStore store) {
         return null;
@@ -4902,9 +4902,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The MODULE_PRIVILEGES view is not implemented.<p>
-     *
      */
     Table MODULE_PRIVILEGES(Session session, PersistentStore store) {
         return null;
@@ -4912,9 +4911,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The MODULE_TABLE_USAGE view is not implemented.<p>
-     *
      */
     Table MODULE_TABLE_USAGE(Session session, PersistentStore store) {
         return null;
@@ -4922,9 +4920,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The MODULES view is not implemented.<p>
-     *
      */
     Table MODULES(Session session, PersistentStore store) {
         return null;
@@ -4932,7 +4929,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The PARAMETERS view has one row for each parameter of a user defined
      * routine.<p>
      *
@@ -5015,65 +5012,65 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DECLARED_NUMERIC_SCALE", CARDINAL_NUMBER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[PARAMETERS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[PARAMETERS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int specific_cat             = 0;
-        final int specific_schem           = 1;
-        final int specific_name            = 2;
-        final int ordinal_position         = 3;
-        final int parameter_mode           = 4;
-        final int is_result                = 5;
-        final int as_locator               = 6;
-        final int parameter_name           = 7;
-        final int from_specific_catalog    = 8;
-        final int from_specific_schema     = 9;
-        final int from_specific_name       = 10;
-        final int to_specific_catalog      = 11;
-        final int to_specific_schema       = 12;
-        final int to_specific_name         = 13;
-        final int data_type                = 14;
+        final int specific_cat = 0;
+        final int specific_schem = 1;
+        final int specific_name = 2;
+        final int ordinal_position = 3;
+        final int parameter_mode = 4;
+        final int is_result = 5;
+        final int as_locator = 6;
+        final int parameter_name = 7;
+        final int from_specific_catalog = 8;
+        final int from_specific_schema = 9;
+        final int from_specific_name = 10;
+        final int to_specific_catalog = 11;
+        final int to_specific_schema = 12;
+        final int to_specific_name = 13;
+        final int data_type = 14;
         final int character_maximum_length = 15;
-        final int character_octet_length   = 16;
-        final int character_set_catalog    = 17;
-        final int character_set_schema     = 18;
-        final int character_set_name       = 19;
-        final int collation_catalog        = 20;
-        final int collation_schema         = 21;
-        final int collation_name           = 22;
-        final int numeric_precision        = 23;
-        final int numeric_precision_radix  = 24;
-        final int numeric_scale            = 25;
-        final int datetime_precision       = 26;
-        final int interval_type            = 27;
-        final int interval_precision       = 28;
-        final int udt_catalog              = 29;
-        final int udt_schema               = 30;
-        final int udt_name                 = 31;
-        final int scope_catalog            = 32;
-        final int scope_schema             = 33;
-        final int scope_name               = 34;
-        final int maximum_cardinality      = 35;
-        final int dtd_identifier           = 36;
+        final int character_octet_length = 16;
+        final int character_set_catalog = 17;
+        final int character_set_schema = 18;
+        final int character_set_name = 19;
+        final int collation_catalog = 20;
+        final int collation_schema = 21;
+        final int collation_name = 22;
+        final int numeric_precision = 23;
+        final int numeric_precision_radix = 24;
+        final int numeric_scale = 25;
+        final int datetime_precision = 26;
+        final int interval_type = 27;
+        final int interval_precision = 28;
+        final int udt_catalog = 29;
+        final int udt_schema = 30;
+        final int udt_name = 31;
+        final int scope_catalog = 32;
+        final int scope_schema = 33;
+        final int scope_name = 34;
+        final int maximum_cardinality = 35;
+        final int dtd_identifier = 36;
 
         // intermediate holders
-        int           columnCount;
-        Iterator      routines;
+        int columnCount;
+        Iterator routines;
         RoutineSchema routineSchema;
-        Routine       routine;
-        Object[]      row;
-        Type          type;
+        Routine routine;
+        Object[] row;
+        Type type;
 
         // Initialization
         routines = database.schemaManager.databaseObjectIterator(
-            SchemaObject.ROUTINE);
+                SchemaObject.ROUTINE);
 
         while (routines.hasNext()) {
             routineSchema = (RoutineSchema) routines.next();
@@ -5085,96 +5082,96 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             Routine[] specifics = routineSchema.getSpecificRoutines();
 
             for (int i = 0; i < specifics.length; i++) {
-                routine     = specifics[i];
+                routine = specifics[i];
                 columnCount = routine.getParameterCount();
 
                 for (int j = 0; j < columnCount; j++) {
                     ColumnSchema column = routine.getParameter(j);
 
-                    type                  = column.getDataType();
-                    row                   = t.getEmptyRowData();
-                    row[specific_cat]     = database.getCatalogName().name;
-                    row[specific_schem]   = routine.getSchemaName().name;
-                    row[specific_name]    = routine.getSpecificName().name;
-                    row[parameter_name]   = column.getName().name;
+                    type = column.getDataType();
+                    row = t.getEmptyRowData();
+                    row[specific_cat] = database.getCatalogName().name;
+                    row[specific_schem] = routine.getSchemaName().name;
+                    row[specific_name] = routine.getSpecificName().name;
+                    row[parameter_name] = column.getName().name;
                     row[ordinal_position] = ValuePool.getLong(j + 1);
 
                     switch (column.getParameterMode()) {
 
-                        case SchemaObject.ParameterModes.PARAM_IN :
+                        case SchemaObject.ParameterModes.PARAM_IN:
                             row[parameter_mode] = "IN";
                             break;
 
-                        case SchemaObject.ParameterModes.PARAM_OUT :
+                        case SchemaObject.ParameterModes.PARAM_OUT:
                             row[parameter_mode] = "OUT";
                             break;
 
-                        case SchemaObject.ParameterModes.PARAM_INOUT :
+                        case SchemaObject.ParameterModes.PARAM_INOUT:
                             row[parameter_mode] = "INOUT";
                             break;
                     }
 
-                    row[is_result]  = "NO";
+                    row[is_result] = "NO";
                     row[as_locator] = "NO";
-                    row[data_type]  = type.getFullNameString();
+                    row[data_type] = type.getFullNameString();
 
                     // common type block
                     if (type.isCharacterType()) {
                         row[character_maximum_length] =
-                            ValuePool.getLong(type.precision);
+                                ValuePool.getLong(type.precision);
                         row[character_octet_length] =
-                            ValuePool.getLong(type.precision * 2);
+                                ValuePool.getLong(type.precision * 2);
                         row[character_set_catalog] =
-                            database.getCatalogName().name;
+                                database.getCatalogName().name;
                         row[character_set_schema] =
-                            type.getCharacterSet().getSchemaName().name;
+                                type.getCharacterSet().getSchemaName().name;
                         row[character_set_name] =
-                            type.getCharacterSet().getName().name;
+                                type.getCharacterSet().getName().name;
                         row[collation_catalog] =
-                            database.getCatalogName().name;
+                                database.getCatalogName().name;
                         row[collation_schema] =
-                            type.getCollation().getSchemaName().name;
+                                type.getCollation().getSchemaName().name;
                         row[collation_name] =
-                            type.getCollation().getName().name;
+                                type.getCollation().getName().name;
                     } else if (type.isNumberType()) {
                         row[numeric_precision] = ValuePool.getLong(
-                            ((NumberType) type).getNumericPrecisionInRadix());
+                                ((NumberType) type).getNumericPrecisionInRadix());
                         row[numeric_precision_radix] =
-                            ValuePool.getLong(type.getPrecisionRadix());
+                                ValuePool.getLong(type.getPrecisionRadix());
                     } else if (type.isBooleanType()) {
 
                         //
                     } else if (type.isDateTimeType()) {
                         row[datetime_precision] =
-                            ValuePool.getLong(type.scale);
+                                ValuePool.getLong(type.scale);
                     } else if (type.isIntervalType()) {
                         row[data_type] = "INTERVAL";
                         row[interval_type] =
-                            IntervalType.getQualifier(type.typeCode);
+                                IntervalType.getQualifier(type.typeCode);
                         row[interval_precision] =
-                            ValuePool.getLong(type.precision);
+                                ValuePool.getLong(type.precision);
                         row[datetime_precision] =
-                            ValuePool.getLong(type.scale);
+                                ValuePool.getLong(type.scale);
                     } else if (type.isBinaryType()) {
                         row[character_maximum_length] =
-                            ValuePool.getLong(type.precision);
+                                ValuePool.getLong(type.precision);
                         row[character_octet_length] =
-                            ValuePool.getLong(type.precision);
+                                ValuePool.getLong(type.precision);
                     } else if (type.isBitType()) {
                         row[character_maximum_length] =
-                            ValuePool.getLong(type.precision);
+                                ValuePool.getLong(type.precision);
                         row[character_octet_length] =
-                            ValuePool.getLong(type.precision);
+                                ValuePool.getLong(type.precision);
                     } else if (type.isArrayType()) {
                         row[maximum_cardinality] =
-                            ValuePool.getLong(type.arrayLimitCardinality());
+                                ValuePool.getLong(type.arrayLimitCardinality());
                         row[data_type] = "ARRAY";
                     }
 
                     if (type.isDistinctType()) {
                         row[udt_catalog] = database.getCatalogName().name;
-                        row[udt_schema]  = type.getSchemaName().name;
-                        row[udt_name]    = type.getName().name;
+                        row[udt_schema] = type.getSchemaName().name;
+                        row[udt_name] = type.getName().name;
                     }
 
                     row[dtd_identifier] = type.getDefinition();
@@ -5190,7 +5187,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2011 VIEW<p>
-     *
+     * <p>
      * The PERIODS view has one row for each period defined in a table.<p>
      *
      * <pre class="SqlCodeExample">
@@ -5239,31 +5236,31 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "END_COLUMN_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[PERIODS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[PERIODS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3
             }, false);
 
             return t;
         }
 
         final int table_catalog = 0;
-        final int table_schema  = 1;
-        final int table_name    = 2;
-        final int period_name   = 3;
-        final int start_column  = 4;
-        final int end_column    = 5;
+        final int table_schema = 1;
+        final int table_name = 2;
+        final int period_name = 3;
+        final int start_column = 4;
+        final int end_column = 5;
 
         //
-        Iterator         tables;
-        Table            table;
+        Iterator tables;
+        Table table;
         PeriodDefinition systemPeriod;
         PeriodDefinition applicationPeriod;
-        Object[]         row;
+        Object[] row;
 
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
             table = (Table) tables.next();
@@ -5272,7 +5269,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            systemPeriod      = table.getSystemPeriod();
+            systemPeriod = table.getSystemPeriod();
             applicationPeriod = table.getApplicationPeriod();
 
             if (systemPeriod == null && applicationPeriod == null) {
@@ -5283,20 +5280,20 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             for (int j = 0; j < 2; j++) {
                 PeriodDefinition period = j == 0 ? systemPeriod
-                                                 : applicationPeriod;
+                        : applicationPeriod;
 
                 if (period != null) {
-                    row                = t.getEmptyRowData();
+                    row = t.getEmptyRowData();
                     row[table_catalog] = database.getCatalogName().name;
-                    row[table_schema]  = name.schema.name;
-                    row[table_name]    = name.name;
-                    row[period_name]   = period.getName().name;
+                    row[table_schema] = name.schema.name;
+                    row[table_name] = name.name;
+                    row[period_name] = period.getName().name;
 
                     if (session.getGrantee().isFullyAccessibleByRole(name)) {
                         row[start_column] =
-                            period.getStartColumn().getNameString();
+                                period.getStartColumn().getNameString();
                         row[end_column] =
-                            period.getEndColumn().getNameString();
+                                period.getEndColumn().getNameString();
                     }
 
                     t.insertSys(session, store, row);
@@ -5309,7 +5306,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The REFERENTIAL_CONSTRAINTS view has one row for each FOREIGN KEY
      * constraint. <p>
      *
@@ -5364,36 +5361,36 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DELETE_RULE", CHARACTER_DATA);                  // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[REFERENTIAL_CONSTRAINTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[REFERENTIAL_CONSTRAINTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2,
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2,
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int constraint_catalog        = 0;
-        final int constraint_schema         = 1;
-        final int constraint_name           = 2;
+        final int constraint_catalog = 0;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
         final int unique_constraint_catalog = 3;
-        final int unique_constraint_schema  = 4;
-        final int unique_constraint_name    = 5;
-        final int match_option              = 6;
-        final int update_rule               = 7;
-        final int delete_rule               = 8;
+        final int unique_constraint_schema = 4;
+        final int unique_constraint_name = 5;
+        final int match_option = 6;
+        final int update_rule = 7;
+        final int delete_rule = 8;
 
         //
-        Iterator     tables;
-        Table        table;
+        Iterator tables;
+        Table table;
         Constraint[] constraints;
-        Constraint   constraint;
-        Object[]     row;
+        Constraint constraint;
+        Object[] row;
 
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         while (tables.hasNext()) {
             table = (Table) tables.next();
@@ -5415,21 +5412,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 HsqlName uniqueName = constraint.getUniqueName();
 
-                row                     = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[constraint_catalog] = database.getCatalogName().name;
-                row[constraint_schema]  = constraint.getSchemaName().name;
-                row[constraint_name]    = constraint.getName().name;
+                row[constraint_schema] = constraint.getSchemaName().name;
+                row[constraint_name] = constraint.getName().name;
 
                 if (isAccessibleTable(session, constraint.getMain())) {
                     row[unique_constraint_catalog] =
-                        database.getCatalogName().name;
+                            database.getCatalogName().name;
                     row[unique_constraint_schema] = uniqueName.schema.name;
-                    row[unique_constraint_name]   = uniqueName.name;
+                    row[unique_constraint_name] = uniqueName.name;
                 }
 
                 row[match_option] = Tokens.T_NONE;
-                row[update_rule]  = constraint.getUpdateActionString();
-                row[delete_rule]  = constraint.getDeleteActionString();
+                row[update_rule] = constraint.getUpdateActionString();
+                row[delete_rule] = constraint.getDeleteActionString();
 
                 t.insertSys(session, store, row);
             }
@@ -5440,7 +5437,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROLE_COLUMN_GRANTS view has one row for each privilege granted to each
      * ROLE on each column. <p>
      *
@@ -5495,22 +5492,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // for unique: GRANTEE, GRANTOR, TABLE_NAME, TABLE_SCHEMA, TABLE_CAT
             // false PK, as TABLE_SCHEMA and/or TABLE_CAT may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROLE_COLUMN_GRANTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROLE_COLUMN_GRANTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                5, 6, 1, 0, 4, 3, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    5, 6, 1, 0, 4, 3, 2
             }, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         Result rs = sys.executeDirectStatement(
-            "SELECT C.GRANTOR, C.GRANTEE, C.TABLE_CATALOG, C.TABLE_SCHEMA, C.TABLE_NAME, C.COLUMN_NAME, C.PRIVILEGE_TYPE, C.IS_GRANTABLE "
-            + "FROM INFORMATION_SCHEMA.COLUMN_PRIVILEGES C "
-            + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON C.GRANTEE = ROLE_NAME;");
+                "SELECT C.GRANTOR, C.GRANTEE, C.TABLE_CATALOG, C.TABLE_SCHEMA, C.TABLE_NAME, C.COLUMN_NAME, C.PRIVILEGE_TYPE, C.IS_GRANTABLE "
+                        + "FROM INFORMATION_SCHEMA.COLUMN_PRIVILEGES C "
+                        + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON C.GRANTEE = ROLE_NAME;");
 
         t.insertSys(session, store, rs);
         sys.close();
@@ -5520,7 +5517,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROLE_ROUTINE_GRANTS view has one row for each privilege granted to each
      * ROLE on each specific routine. <p>
      *
@@ -5576,40 +5573,40 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "IS_GRANTABLE", YES_OR_NO);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROLE_ROUTINE_GRANTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROLE_ROUTINE_GRANTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9
             }, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         Result rs = sys.executeDirectStatement(
-            "SELECT R.GRANTOR, R.GRANTEE, R.SPECIFIC_CATALOG, R.SPECIFIC_SCHEMA, "
-            + "R.SPECIFIC_NAME, R.ROUTINE_CATALOG, R.ROUTINE_SCHEMA, R.ROUTINE_NAME, "
-            + "R.PRIVILEGE_TYPE, R.IS_GRANTABLE "
-            + "FROM INFORMATION_SCHEMA.ROUTINE_PRIVILEGES R "
-            + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON R.GRANTEE = ROLE_NAME;");
+                "SELECT R.GRANTOR, R.GRANTEE, R.SPECIFIC_CATALOG, R.SPECIFIC_SCHEMA, "
+                        + "R.SPECIFIC_NAME, R.ROUTINE_CATALOG, R.ROUTINE_SCHEMA, R.ROUTINE_NAME, "
+                        + "R.PRIVILEGE_TYPE, R.IS_GRANTABLE "
+                        + "FROM INFORMATION_SCHEMA.ROUTINE_PRIVILEGES R "
+                        + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON R.GRANTEE = ROLE_NAME;");
 
         t.insertSys(session, store, rs);
         sys.close();
 
         // Column number mappings
-        final int grantor          = 0;
-        final int grantee          = 1;
-        final int table_name       = 2;
+        final int grantor = 0;
+        final int grantee = 1;
+        final int table_name = 2;
         final int specific_catalog = 3;
-        final int specific_schema  = 4;
-        final int specific_name    = 5;
-        final int routine_catalog  = 6;
-        final int routine_schema   = 7;
-        final int routine_name     = 8;
-        final int privilege_type   = 9;
-        final int is_grantable     = 10;
+        final int specific_schema = 4;
+        final int specific_name = 5;
+        final int routine_catalog = 6;
+        final int routine_schema = 7;
+        final int routine_name = 8;
+        final int privilege_type = 9;
+        final int is_grantable = 10;
 
         //
         return t;
@@ -5617,7 +5614,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROLE_ROUTINE_GRANTS view has one row for each privilege granted to each
      * ROLE on each table. <p>
      *
@@ -5672,23 +5669,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // added for unique:  GRANTEE, GRANTOR,
             // false PK, as TABLE_SCHEM and/or TABLE_CAT may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROLE_TABLE_GRANTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROLE_TABLE_GRANTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                3, 4, 5, 0, 1
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    3, 4, 5, 0, 1
             }, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         Result rs = sys.executeDirectStatement(
-            "SELECT T.GRANTOR, T.GRANTEE, T.TABLE_CATALOG, T.TABLE_SCHEMA, T.TABLE_NAME, "
-            + "T.PRIVILEGE_TYPE, T.IS_GRANTABLE, 'NO' "
-            + "FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES T "
-            + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON T.GRANTEE = ROLE_NAME;");
+                "SELECT T.GRANTOR, T.GRANTEE, T.TABLE_CATALOG, T.TABLE_SCHEMA, T.TABLE_NAME, "
+                        + "T.PRIVILEGE_TYPE, T.IS_GRANTABLE, 'NO' "
+                        + "FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES T "
+                        + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON T.GRANTEE = ROLE_NAME;");
 
         t.insertSys(session, store, rs);
         sys.close();
@@ -5698,7 +5695,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROLE_UDT_GRANT view has one row for each privilege granted to each
      * user defined type. <p>
      *
@@ -5748,8 +5745,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "IS_GRANTABLE", YES_OR_NO);     // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROLE_UDT_GRANTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROLE_UDT_GRANTS].name, false,
+                    SchemaObject.INDEX);
 
             t.createPrimaryKeyConstraint(name, null, false);
 
@@ -5757,12 +5754,12 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         Result rs = sys.executeDirectStatement(
-            "SELECT U.GRANTOR, U.GRANTEE, U.UDT_CATALOG, U.UDT_SCHEMA, U.UDT_NAME, "
-            + "U.PRIVILEGE_TYPE, U.IS_GRANTABLE "
-            + "FROM INFORMATION_SCHEMA.UDT_PRIVILEGES U "
-            + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON U.GRANTEE = ROLE_NAME;");
+                "SELECT U.GRANTOR, U.GRANTEE, U.UDT_CATALOG, U.UDT_SCHEMA, U.UDT_NAME, "
+                        + "U.PRIVILEGE_TYPE, U.IS_GRANTABLE "
+                        + "FROM INFORMATION_SCHEMA.UDT_PRIVILEGES U "
+                        + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES ON U.GRANTEE = ROLE_NAME;");
 
         t.insertSys(session, store, rs);
         sys.close();
@@ -5772,7 +5769,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROLE_USAGE_GRANTS view has one row for each privilege granted to each
      * ROLE on each table. <p>
      *
@@ -5825,23 +5822,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "IS_GRANTABLE", YES_OR_NO);        // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROLE_USAGE_GRANTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROLE_USAGE_GRANTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6, 7
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6, 7
             }, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         Result rs = sys.executeDirectStatement(
-            "SELECT U.GRANTOR, U.GRANTEE, U.OBJECT_CATALOG, U.OBJECT_SCHEMA, U.OBJECT_NAME, "
-            + "U.OBJECT_TYPE, U.PRIVILEGE_TYPE, U.IS_GRANTABLE "
-            + "FROM INFORMATION_SCHEMA.USAGE_PRIVILEGES U "
-            + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES A ON U.GRANTEE = A.ROLE_NAME;");
+                "SELECT U.GRANTOR, U.GRANTEE, U.OBJECT_CATALOG, U.OBJECT_SCHEMA, U.OBJECT_NAME, "
+                        + "U.OBJECT_TYPE, U.PRIVILEGE_TYPE, U.IS_GRANTABLE "
+                        + "FROM INFORMATION_SCHEMA.USAGE_PRIVILEGES U "
+                        + "JOIN INFORMATION_SCHEMA.APPLICABLE_ROLES A ON U.GRANTEE = A.ROLE_NAME;");
 
         t.insertSys(session, store, rs);
         sys.close();
@@ -5851,22 +5848,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_COLUMN_USAGE view has one row for each column
      * referenced in the body of a routine.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
-     *      ROUTINE_CATALOG     VARCHAR ,
-     *      ROUTINE_SCHEMA      VARCHAR ,
-     *      ROUTINE_NAME        VARCHAR ,
-     *      TABLE_CATALOG       VARCHAR ,
-     *      TABLE_SCHEMA        VARCHAR ,
-     *      TABLE_NAME          VARCHAR ,
-     *      COLUMN_NAME         VARCHAR ,
+     * <p>
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
+     * ROUTINE_CATALOG     VARCHAR ,
+     * ROUTINE_SCHEMA      VARCHAR ,
+     * ROUTINE_NAME        VARCHAR ,
+     * TABLE_CATALOG       VARCHAR ,
+     * TABLE_SCHEMA        VARCHAR ,
+     * TABLE_NAME          VARCHAR ,
+     * COLUMN_NAME         VARCHAR ,
      *
      * </pre>
      *
@@ -5908,11 +5905,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COLUMN_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_COLUMN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_COLUMN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                3, 4, 5, 0, 1, 2, 6, 7, 8, 9
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    3, 4, 5, 0, 1, 2, 6, 7, 8, 9
             }, false);
 
             return t;
@@ -5920,26 +5917,26 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int specific_catalog = 0;
-        final int specific_schema  = 1;
-        final int specific_name    = 2;
-        final int routine_catalog  = 3;
-        final int routine_schema   = 4;
-        final int routine_name     = 5;
-        final int table_catalog    = 6;
-        final int table_schema     = 7;
-        final int table_name       = 8;
-        final int column_name      = 9;
+        final int specific_schema = 1;
+        final int specific_name = 2;
+        final int routine_catalog = 3;
+        final int routine_schema = 4;
+        final int routine_name = 5;
+        final int table_catalog = 6;
+        final int table_schema = 7;
+        final int table_name = 8;
+        final int column_name = 9;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
-            Routine        routine = (Routine) it.next();
-            OrderedHashSet set     = routine.getReferences();
+            Routine routine = (Routine) it.next();
+            OrderedHashSet set = routine.getReferences();
 
             for (int i = 0; i < set.size(); i++) {
                 HsqlName refName = (HsqlName) set.get(i);
@@ -5956,19 +5953,20 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 //
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = routine.getSchemaName().name;
-                row[specific_name]    = routine.getSpecificName().name;
-                row[routine_catalog]  = database.getCatalogName().name;
-                row[routine_schema]   = routine.getSchemaName().name;
-                row[routine_name]     = routine.getName().name;
-                row[table_catalog]    = database.getCatalogName().name;
-                row[table_schema]     = refName.parent.schema.name;
-                row[table_name]       = refName.parent.name;
-                row[column_name]      = refName.name;
+                row[specific_schema] = routine.getSchemaName().name;
+                row[specific_name] = routine.getSpecificName().name;
+                row[routine_catalog] = database.getCatalogName().name;
+                row[routine_schema] = routine.getSchemaName().name;
+                row[routine_name] = routine.getName().name;
+                row[table_catalog] = database.getCatalogName().name;
+                row[table_schema] = refName.parent.schema.name;
+                row[table_name] = refName.parent.name;
+                row[column_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -5977,18 +5975,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_JAR_USAGE view has one row for each jar archive
      * referenced in the body of a Java routine.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
-     *      JAR_CATALOG         VARCHAR ,
-     *      JAR_SCHEMA          VARCHAR ,
-     *      JAR_NAME            VARCHAR ,
+     * <p>
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
+     * JAR_CATALOG         VARCHAR ,
+     * JAR_SCHEMA          VARCHAR ,
+     * JAR_NAME            VARCHAR ,
      *
      * </pre>
      *
@@ -6025,11 +6023,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "JAR_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_JAR_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_JAR_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -6037,11 +6035,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int specific_catalog = 0;
-        final int specific_schema  = 1;
-        final int specific_name    = 2;
-        final int jar_catalog      = 3;
-        final int jar_schema       = 4;
-        final int jar_name         = 5;
+        final int specific_schema = 1;
+        final int specific_name = 2;
+        final int jar_catalog = 3;
+        final int jar_schema = 4;
+        final int jar_name = 5;
 
         //
         Iterator it;
@@ -6052,7 +6050,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         }
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
             Routine routine = (Routine) it.next();
@@ -6061,13 +6059,13 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row                   = t.getEmptyRowData();
+            row = t.getEmptyRowData();
             row[specific_catalog] = database.getCatalogName().name;
-            row[specific_schema]  = routine.getSchemaName().name;
-            row[specific_name]    = routine.getSpecificName().name;
-            row[jar_catalog]      = database.getCatalogName().name;
+            row[specific_schema] = routine.getSchemaName().name;
+            row[specific_name] = routine.getSpecificName().name;
+            row[jar_catalog] = database.getCatalogName().name;
             row[jar_schema] =
-                database.schemaManager.getSQLJSchemaHsqlName().name;
+                    database.schemaManager.getSQLJSchemaHsqlName().name;
             row[jar_name] = "CLASSPATH";
 
             t.insertSys(session, store, row);
@@ -6078,22 +6076,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2011 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_PERIOD_USAGE view has one row for each PERIOD
      * referenced in the body of a routine.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
-     *      ROUTINE_CATALOG     VARCHAR ,
-     *      ROUTINE_SCHEMA      VARCHAR ,
-     *      ROUTINE_NAME        VARCHAR ,
-     *      TABLE_CATALOG       VARCHAR ,
-     *      TABLE_SCHEMA        VARCHAR ,
-     *      TABLE_NAME          VARCHAR ,
-     *      PERIOD_NAME         VARCHAR ,
+     * <p>
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
+     * ROUTINE_CATALOG     VARCHAR ,
+     * ROUTINE_SCHEMA      VARCHAR ,
+     * ROUTINE_NAME        VARCHAR ,
+     * TABLE_CATALOG       VARCHAR ,
+     * TABLE_SCHEMA        VARCHAR ,
+     * TABLE_NAME          VARCHAR ,
+     * PERIOD_NAME         VARCHAR ,
      *
      * </pre>
      *
@@ -6137,11 +6135,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "PERIOD_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_PERIOD_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_PERIOD_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                3, 4, 5, 0, 1, 2, 6, 7, 8, 9
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    3, 4, 5, 0, 1, 2, 6, 7, 8, 9
             }, false);
 
             return t;
@@ -6149,29 +6147,29 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int specific_catalog = 0;
-        final int specific_schema  = 1;
-        final int specific_name    = 2;
-        final int routine_catalog  = 3;
-        final int routine_schema   = 4;
-        final int routine_name     = 5;
-        final int table_catalog    = 6;
-        final int table_schema     = 7;
-        final int table_name       = 8;
-        final int period_name      = 9;
+        final int specific_schema = 1;
+        final int specific_name = 2;
+        final int routine_catalog = 3;
+        final int routine_schema = 4;
+        final int routine_name = 5;
+        final int table_catalog = 6;
+        final int table_schema = 7;
+        final int table_name = 8;
+        final int period_name = 9;
 
         //
-        Iterator         it;
-        Object[]         row;
-        Table            table;
+        Iterator it;
+        Object[] row;
+        Table table;
         PeriodDefinition systemPeriod;
         PeriodDefinition applicationPeriod;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
-            Routine        routine = (Routine) it.next();
-            OrderedHashSet set     = routine.getReferences();
+            Routine routine = (Routine) it.next();
+            OrderedHashSet set = routine.getReferences();
 
             for (int i = 0; i < set.size(); i++) {
                 HsqlName refName = (HsqlName) set.get(i);
@@ -6184,21 +6182,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = routine.getSchemaName().name;
-                row[specific_name]    = routine.getSpecificName().name;
-                row[routine_catalog]  = database.getCatalogName().name;
-                row[routine_schema]   = routine.getSchemaName().name;
-                row[routine_name]     = routine.getName().name;
-                row[table_catalog]    = database.getCatalogName().name;
-                row[table_schema]     = refName.schema.name;
-                row[table_name]       = refName.parent.name;
-                row[period_name]      = refName.name;
+                row[specific_schema] = routine.getSchemaName().name;
+                row[specific_name] = routine.getSpecificName().name;
+                row[routine_catalog] = database.getCatalogName().name;
+                row[routine_schema] = routine.getSchemaName().name;
+                row[routine_name] = routine.getName().name;
+                row[table_catalog] = database.getCatalogName().name;
+                row[table_schema] = refName.schema.name;
+                row[table_name] = refName.parent.name;
+                row[period_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -6207,7 +6206,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_PRIVILEGES view has one row for each privilege granted on
      * a PROCEDURE or CATALOG.
      *
@@ -6265,41 +6264,41 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             //
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_PRIVILEGES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_PRIVILEGES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int grantor          = 0;
-        final int grantee          = 1;
+        final int grantor = 0;
+        final int grantee = 1;
         final int specific_catalog = 2;
-        final int specific_schema  = 3;
-        final int specific_name    = 4;
-        final int routine_catalog  = 5;
-        final int routine_schema   = 6;
-        final int routine_name     = 7;
-        final int privilege_type   = 8;
-        final int is_grantable     = 9;
+        final int specific_schema = 3;
+        final int specific_name = 4;
+        final int routine_catalog = 5;
+        final int routine_schema = 6;
+        final int routine_name = 7;
+        final int privilege_type = 8;
+        final int is_grantable = 9;
 
         //
         // calculated column values
         Grantee granteeObject;
-        String  privilege;
+        String privilege;
 
         // intermediate holders
-        Iterator       routines;
-        Routine        routine;
-        Object[]       row;
+        Iterator routines;
+        Routine routine;
+        Object[] row;
         OrderedHashSet grantees = session.getGrantee().visibleGrantees();
 
         routines = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (routines.hasNext()) {
             routine = (Routine) routines.next();
@@ -6308,9 +6307,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 granteeObject = (Grantee) grantees.get(i);
 
                 OrderedHashSet rights =
-                    granteeObject.getAllDirectPrivileges(routine);
+                        granteeObject.getAllDirectPrivileges(routine);
                 OrderedHashSet grants =
-                    granteeObject.getAllGrantedPrivileges(routine);
+                        granteeObject.getAllGrantedPrivileges(routine);
 
                 if (!grants.isEmpty()) {
                     grants.addAll(rights);
@@ -6319,7 +6318,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 }
 
                 for (int j = 0; j < rights.size(); j++) {
-                    Right right          = (Right) rights.get(j);
+                    Right right = (Right) rights.get(j);
                     Right grantableRight = right.getGrantableRights();
 
                     if (!right.canAccessFully(GrantConstants.EXECUTE)) {
@@ -6327,27 +6326,28 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     }
 
                     privilege = Tokens.T_EXECUTE;
-                    row       = t.getEmptyRowData();
+                    row = t.getEmptyRowData();
 
                     //
-                    row[grantor]          = right.getGrantor().getName().name;
-                    row[grantee]          = right.getGrantee().getName().name;
+                    row[grantor] = right.getGrantor().getName().name;
+                    row[grantee] = right.getGrantee().getName().name;
                     row[specific_catalog] = database.getCatalogName().name;
-                    row[specific_schema]  = routine.getSchemaName().name;
-                    row[specific_name]    = routine.getSpecificName().name;
-                    row[routine_catalog]  = database.getCatalogName().name;
-                    row[routine_schema]   = routine.getSchemaName().name;
-                    row[routine_name]     = routine.getName().name;
-                    row[privilege_type]   = privilege;
+                    row[specific_schema] = routine.getSchemaName().name;
+                    row[specific_name] = routine.getSpecificName().name;
+                    row[routine_catalog] = database.getCatalogName().name;
+                    row[routine_schema] = routine.getSchemaName().name;
+                    row[routine_name] = routine.getName().name;
+                    row[privilege_type] = privilege;
                     row[is_grantable] =
-                        right.getGrantee() == routine.getOwner()
-                        || grantableRight.canAccessFully(
-                            GrantConstants.EXECUTE) ? "YES"
-                                                    : "NO";
+                            right.getGrantee() == routine.getOwner()
+                                    || grantableRight.canAccessFully(
+                                    GrantConstants.EXECUTE) ? "YES"
+                                    : "NO";
 
                     try {
                         t.insertSys(session, store, row);
-                    } catch (HsqlException e) {}
+                    } catch (HsqlException e) {
+                    }
                 }
             }
         }
@@ -6357,18 +6357,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_ROUTINE_USAGE view has one row for each routine
      * referenced in the body of a routine.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
-     *      ROUTINE_CATALOG     VARCHAR ,
-     *      ROUTINE_SCHEMA      VARCHAR ,
-     *      ROUTINE_NAME        VARCHAR ,
+     * <p>
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
+     * ROUTINE_CATALOG     VARCHAR ,
+     * ROUTINE_SCHEMA      VARCHAR ,
+     * ROUTINE_NAME        VARCHAR ,
      *
      * </pre>
      *
@@ -6405,11 +6405,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "ROUTINE_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_ROUTINE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_ROUTINE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -6417,22 +6417,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int specific_catalog = 0;
-        final int specific_schema  = 1;
-        final int specific_name    = 2;
-        final int routine_catalog  = 3;
-        final int routine_schema   = 4;
-        final int routine_name     = 5;
+        final int specific_schema = 1;
+        final int specific_name = 2;
+        final int routine_catalog = 3;
+        final int routine_schema = 4;
+        final int routine_name = 5;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
-            Routine        routine = (Routine) it.next();
-            OrderedHashSet set     = routine.getReferences();
+            Routine routine = (Routine) it.next();
+            OrderedHashSet set = routine.getReferences();
 
             for (int i = 0; i < set.size(); i++) {
                 HsqlName refName = (HsqlName) set.get(i);
@@ -6445,17 +6445,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = routine.getSchemaName().name;
-                row[specific_name]    = routine.getSpecificName().name;
-                row[routine_catalog]  = database.getCatalogName().name;
-                row[routine_schema]   = refName.schema.name;
-                row[routine_name]     = refName.name;
+                row[specific_schema] = routine.getSchemaName().name;
+                row[specific_name] = routine.getSpecificName().name;
+                row[routine_catalog] = database.getCatalogName().name;
+                row[routine_schema] = refName.schema.name;
+                row[routine_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -6464,18 +6465,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_SEQUENCE_USAGE view has one row for each SEQUENCE
      * referenced in the body of a routine.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
-     *      SEQUENCE_CATALOG    VARCHAR ,
-     *      SEQUENCE_SCHEMA     VARCHAR ,
-     *      SEQUENCE_NAME       VARCHAR ,
+     * <p>
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
+     * SEQUENCE_CATALOG    VARCHAR ,
+     * SEQUENCE_SCHEMA     VARCHAR ,
+     * SEQUENCE_NAME       VARCHAR ,
      *
      * </pre>
      *
@@ -6512,11 +6513,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "SEQUENCE_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_SEQUENCE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_SEQUENCE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -6524,22 +6525,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int specific_catalog = 0;
-        final int specific_schema  = 1;
-        final int specific_name    = 2;
+        final int specific_schema = 1;
+        final int specific_name = 2;
         final int sequence_catalog = 3;
-        final int sequence_schema  = 4;
-        final int sequence_name    = 5;
+        final int sequence_schema = 4;
+        final int sequence_name = 5;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
-            Routine        routine = (Routine) it.next();
-            OrderedHashSet set     = routine.getReferences();
+            Routine routine = (Routine) it.next();
+            OrderedHashSet set = routine.getReferences();
 
             for (int i = 0; i < set.size(); i++) {
                 HsqlName refName = (HsqlName) set.get(i);
@@ -6552,17 +6553,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = routine.getSchemaName().name;
-                row[specific_name]    = routine.getSpecificName().name;
+                row[specific_schema] = routine.getSchemaName().name;
+                row[specific_name] = routine.getSpecificName().name;
                 row[sequence_catalog] = database.getCatalogName().name;
-                row[sequence_schema]  = refName.schema.name;
-                row[sequence_name]    = refName.name;
+                row[sequence_schema] = refName.schema.name;
+                row[sequence_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -6571,21 +6573,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINE_TABLE_USAGE view has one row for each TABLE
      * referenced in the body of a routine.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
-     *      ROUTINE_CATALOG     VARCHAR ,
-     *      ROUTINE_SCHEMA      VARCHAR ,
-     *      ROUTINE_NAME        VARCHAR ,
-     *      TABLE_CATALOG       VARCHAR ,
-     *      TABLE_SCHEMA        VARCHAR ,
-     *      TABLE_NAME          VARCHAR ,
+     * <p>
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
+     * ROUTINE_CATALOG     VARCHAR ,
+     * ROUTINE_SCHEMA      VARCHAR ,
+     * ROUTINE_NAME        VARCHAR ,
+     * TABLE_CATALOG       VARCHAR ,
+     * TABLE_SCHEMA        VARCHAR ,
+     * TABLE_NAME          VARCHAR ,
      *
      * </pre>
      *
@@ -6625,11 +6627,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "TABLE_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINE_TABLE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINE_TABLE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                3, 4, 5, 0, 1, 2, 6, 7, 8
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    3, 4, 5, 0, 1, 2, 6, 7, 8
             }, false);
 
             return t;
@@ -6637,25 +6639,25 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int specific_catalog = 0;
-        final int specific_schema  = 1;
-        final int specific_name    = 2;
-        final int routine_catalog  = 3;
-        final int routine_schema   = 4;
-        final int routine_name     = 5;
-        final int table_catalog    = 6;
-        final int table_schema     = 7;
-        final int table_name       = 8;
+        final int specific_schema = 1;
+        final int specific_name = 2;
+        final int routine_catalog = 3;
+        final int routine_schema = 4;
+        final int routine_name = 5;
+        final int table_catalog = 6;
+        final int table_schema = 7;
+        final int table_name = 8;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
-            Routine        routine = (Routine) it.next();
-            OrderedHashSet set     = routine.getReferences();
+            Routine routine = (Routine) it.next();
+            OrderedHashSet set = routine.getReferences();
 
             for (int i = 0; i < set.size(); i++) {
                 HsqlName refName = (HsqlName) set.get(i);
@@ -6669,20 +6671,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = routine.getSchemaName().name;
-                row[specific_name]    = routine.getSpecificName().name;
-                row[routine_catalog]  = database.getCatalogName().name;
-                row[routine_schema]   = routine.getSchemaName().name;
-                row[routine_name]     = routine.getName().name;
-                row[table_catalog]    = database.getCatalogName().name;
-                row[table_schema]     = refName.schema.name;
-                row[table_name]       = refName.name;
+                row[specific_schema] = routine.getSchemaName().name;
+                row[specific_name] = routine.getSpecificName().name;
+                row[routine_catalog] = database.getCatalogName().name;
+                row[routine_schema] = routine.getSchemaName().name;
+                row[routine_name] = routine.getName().name;
+                row[table_catalog] = database.getCatalogName().name;
+                row[table_schema] = refName.schema.name;
+                row[table_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -6691,9 +6694,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The ROUTINES view has one row for each PROCEDURE and FUNCTION.<p>
-     *
      */
     Table ROUTINES(Session session, PersistentStore store) {
 
@@ -6788,118 +6790,118 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "DECLARED_NUMERIC_PRECISION", CARDINAL_NUMBER);
             addColumn(t, "DECLARED_NUMERIC_SCALE", CARDINAL_NUMBER);
             addColumn(t, "RESULT_CAST_FROM_DECLARED_DATA_TYPE",
-                      CHARACTER_DATA);
+                    CHARACTER_DATA);
             addColumn(t, "RESULT_CAST_DECLARED_NUMERIC_PRECISION",
-                      CARDINAL_NUMBER);
+                    CARDINAL_NUMBER);
             addColumn(t, "RESULT_CAST_DECLARED_NUMERIC_SCALE",
-                      CARDINAL_NUMBER);
+                    CARDINAL_NUMBER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROUTINES].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[ROUTINES].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                3, 4, 5, 0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    3, 4, 5, 0, 1, 2
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int specific_catalog                       = 0;
-        final int specific_schema                        = 1;
-        final int specific_name                          = 2;
-        final int routine_catalog                        = 3;
-        final int routine_schema                         = 4;
-        final int routine_name                           = 5;
-        final int routine_type                           = 6;
-        final int module_catalog                         = 7;
-        final int module_schema                          = 8;
-        final int module_name                            = 9;
-        final int udt_catalog                            = 10;
-        final int udt_schema                             = 11;
-        final int udt_name                               = 12;
-        final int data_type                              = 13;
-        final int character_maximum_length               = 14;
-        final int character_octet_length                 = 15;
-        final int character_set_catalog                  = 16;
-        final int character_set_schema                   = 17;
-        final int character_set_name                     = 18;
-        final int collation_catalog                      = 19;
-        final int collation_schema                       = 20;
-        final int collation_name                         = 21;
-        final int numeric_precision                      = 22;
-        final int numeric_precision_radix                = 23;
-        final int numeric_scale                          = 24;
-        final int datetime_precision                     = 25;
-        final int interval_type                          = 26;
-        final int interval_precision                     = 27;
-        final int type_udt_catalog                       = 28;
-        final int type_udt_schema                        = 29;
-        final int type_udt_name                          = 30;
-        final int scope_catalog                          = 31;
-        final int scope_schema                           = 32;
-        final int scope_name                             = 33;
-        final int maximum_cardinality                    = 34;
-        final int dtd_identifier                         = 35;
-        final int routine_body                           = 36;
-        final int routine_definition                     = 37;
-        final int external_name                          = 38;
-        final int external_language                      = 39;
-        final int parameter_style                        = 40;
-        final int is_deterministic                       = 41;
-        final int sql_data_access                        = 42;
-        final int is_null_call                           = 43;
-        final int sql_path                               = 44;
-        final int schema_level_routine                   = 45;
-        final int max_dynamic_result_sets                = 46;
-        final int is_user_defined_cast                   = 47;
-        final int is_implicitly_invocable                = 48;
-        final int security_type                          = 49;
-        final int to_sql_specific_catalog                = 50;
-        final int to_sql_specific_schema                 = 51;
-        final int to_sql_specific_name                   = 52;
-        final int as_locator                             = 53;
-        final int created                                = 54;
-        final int last_altered                           = 55;
-        final int new_savepoint_level                    = 56;
-        final int is_udt_dependent                       = 57;
-        final int result_cast_from_data_type             = 58;
-        final int result_cast_as_locator                 = 59;
-        final int result_cast_char_max_length            = 60;
-        final int result_cast_char_octet_length          = 61;
-        final int result_cast_char_set_catalog           = 62;
-        final int result_cast_char_set_schema            = 63;
-        final int result_cast_character_set_name         = 64;
-        final int result_cast_collation_catalog          = 65;
-        final int result_cast_collation_schema           = 66;
-        final int result_cast_collation_name             = 67;
-        final int result_cast_numeric_precision          = 68;
-        final int result_cast_numeric_radix              = 69;
-        final int result_cast_numeric_scale              = 70;
-        final int result_cast_datetime_precision         = 71;
-        final int result_cast_interval_type              = 72;
-        final int result_cast_interval_precision         = 73;
-        final int result_cast_type_udt_catalog           = 74;
-        final int result_cast_type_udt_schema            = 75;
-        final int result_cast_type_udt_name              = 76;
-        final int result_cast_scope_catalog              = 77;
-        final int result_cast_scope_schema               = 78;
-        final int result_cast_scope_name                 = 79;
-        final int result_cast_max_cardinality            = 80;
-        final int result_cast_dtd_identifier             = 81;
-        final int declared_data_type                     = 82;
-        final int declared_numeric_precision             = 83;
-        final int declared_numeric_scale                 = 84;
-        final int result_cast_from_declared_data_type    = 85;
+        final int specific_catalog = 0;
+        final int specific_schema = 1;
+        final int specific_name = 2;
+        final int routine_catalog = 3;
+        final int routine_schema = 4;
+        final int routine_name = 5;
+        final int routine_type = 6;
+        final int module_catalog = 7;
+        final int module_schema = 8;
+        final int module_name = 9;
+        final int udt_catalog = 10;
+        final int udt_schema = 11;
+        final int udt_name = 12;
+        final int data_type = 13;
+        final int character_maximum_length = 14;
+        final int character_octet_length = 15;
+        final int character_set_catalog = 16;
+        final int character_set_schema = 17;
+        final int character_set_name = 18;
+        final int collation_catalog = 19;
+        final int collation_schema = 20;
+        final int collation_name = 21;
+        final int numeric_precision = 22;
+        final int numeric_precision_radix = 23;
+        final int numeric_scale = 24;
+        final int datetime_precision = 25;
+        final int interval_type = 26;
+        final int interval_precision = 27;
+        final int type_udt_catalog = 28;
+        final int type_udt_schema = 29;
+        final int type_udt_name = 30;
+        final int scope_catalog = 31;
+        final int scope_schema = 32;
+        final int scope_name = 33;
+        final int maximum_cardinality = 34;
+        final int dtd_identifier = 35;
+        final int routine_body = 36;
+        final int routine_definition = 37;
+        final int external_name = 38;
+        final int external_language = 39;
+        final int parameter_style = 40;
+        final int is_deterministic = 41;
+        final int sql_data_access = 42;
+        final int is_null_call = 43;
+        final int sql_path = 44;
+        final int schema_level_routine = 45;
+        final int max_dynamic_result_sets = 46;
+        final int is_user_defined_cast = 47;
+        final int is_implicitly_invocable = 48;
+        final int security_type = 49;
+        final int to_sql_specific_catalog = 50;
+        final int to_sql_specific_schema = 51;
+        final int to_sql_specific_name = 52;
+        final int as_locator = 53;
+        final int created = 54;
+        final int last_altered = 55;
+        final int new_savepoint_level = 56;
+        final int is_udt_dependent = 57;
+        final int result_cast_from_data_type = 58;
+        final int result_cast_as_locator = 59;
+        final int result_cast_char_max_length = 60;
+        final int result_cast_char_octet_length = 61;
+        final int result_cast_char_set_catalog = 62;
+        final int result_cast_char_set_schema = 63;
+        final int result_cast_character_set_name = 64;
+        final int result_cast_collation_catalog = 65;
+        final int result_cast_collation_schema = 66;
+        final int result_cast_collation_name = 67;
+        final int result_cast_numeric_precision = 68;
+        final int result_cast_numeric_radix = 69;
+        final int result_cast_numeric_scale = 70;
+        final int result_cast_datetime_precision = 71;
+        final int result_cast_interval_type = 72;
+        final int result_cast_interval_precision = 73;
+        final int result_cast_type_udt_catalog = 74;
+        final int result_cast_type_udt_schema = 75;
+        final int result_cast_type_udt_name = 76;
+        final int result_cast_scope_catalog = 77;
+        final int result_cast_scope_schema = 78;
+        final int result_cast_scope_name = 79;
+        final int result_cast_max_cardinality = 80;
+        final int result_cast_dtd_identifier = 81;
+        final int declared_data_type = 82;
+        final int declared_numeric_precision = 83;
+        final int declared_numeric_scale = 84;
+        final int result_cast_from_declared_data_type = 85;
         final int result_cast_declared_numeric_precision = 86;
-        final int result_cast_declared_numeric_scale     = 87;
+        final int result_cast_declared_numeric_scale = 87;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.SPECIFIC_ROUTINE);
+                SchemaObject.SPECIFIC_ROUTINE);
 
         while (it.hasNext()) {
             Routine routine = (Routine) it.next();
@@ -6910,61 +6912,61 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             isFullyAccessible = session.getGrantee().isFullyAccessibleByRole(
-                routine.getName());
+                    routine.getName());
             row = t.getEmptyRowData();
 
             Type type = routine.isProcedure() ? null
-                                              : routine.getReturnType();
+                    : routine.getReturnType();
 
             //
             row[specific_catalog] = database.getCatalogName().name;
-            row[specific_schema]  = routine.getSchemaName().name;
-            row[specific_name]    = routine.getSpecificName().name;
-            row[routine_catalog]  = database.getCatalogName().name;
-            row[routine_schema]   = routine.getSchemaName().name;
-            row[routine_name]     = routine.getName().name;
-            row[routine_type]     = routine.isProcedure() ? Tokens.T_PROCEDURE
-                                                          : Tokens.T_FUNCTION;
-            row[module_catalog]   = null;
-            row[module_schema]    = null;
-            row[module_name]      = null;
-            row[udt_catalog]      = null;
-            row[udt_schema]       = null;
-            row[udt_name]         = null;
-            row[data_type]        = type == null ? null
-                                                 : type.getNameString();
+            row[specific_schema] = routine.getSchemaName().name;
+            row[specific_name] = routine.getSpecificName().name;
+            row[routine_catalog] = database.getCatalogName().name;
+            row[routine_schema] = routine.getSchemaName().name;
+            row[routine_name] = routine.getName().name;
+            row[routine_type] = routine.isProcedure() ? Tokens.T_PROCEDURE
+                    : Tokens.T_FUNCTION;
+            row[module_catalog] = null;
+            row[module_schema] = null;
+            row[module_name] = null;
+            row[udt_catalog] = null;
+            row[udt_schema] = null;
+            row[udt_name] = null;
+            row[data_type] = type == null ? null
+                    : type.getNameString();
 
             if (type != null) {
 
                 // common type block
                 if (type.isCharacterType()) {
                     row[character_maximum_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[character_octet_length] =
-                        ValuePool.getLong(type.precision * 2);
+                            ValuePool.getLong(type.precision * 2);
                     row[character_set_catalog] =
-                        database.getCatalogName().name;
+                            database.getCatalogName().name;
                     row[character_set_schema] =
-                        type.getCharacterSet().getSchemaName().name;
+                            type.getCharacterSet().getSchemaName().name;
                     row[character_set_name] =
-                        type.getCharacterSet().getName().name;
+                            type.getCharacterSet().getName().name;
                     row[collation_catalog] = database.getCatalogName().name;
                     row[collation_schema] =
-                        type.getCollation().getSchemaName().name;
+                            type.getCollation().getSchemaName().name;
                     row[collation_name] = type.getCollation().getName().name;
                 } else if (type.isNumberType()) {
                     row[numeric_precision] = ValuePool.getLong(
-                        ((NumberType) type).getNumericPrecisionInRadix());
+                            ((NumberType) type).getNumericPrecisionInRadix());
                     row[declared_numeric_precision] = ValuePool.getLong(
-                        ((NumberType) type).getNumericPrecisionInRadix());
+                            ((NumberType) type).getNumericPrecisionInRadix());
 
                     if (type.isExactNumberType()) {
                         row[numeric_scale] = row[declared_numeric_scale] =
-                            ValuePool.getLong(type.scale);
+                                ValuePool.getLong(type.scale);
                     }
 
                     row[numeric_precision_radix] =
-                        ValuePool.getLong(type.getPrecisionRadix());
+                            ValuePool.getLong(type.getPrecisionRadix());
                 } else if (type.isBooleanType()) {
 
                     //
@@ -6973,103 +6975,103 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 } else if (type.isIntervalType()) {
                     row[data_type] = "INTERVAL";
                     row[interval_type] =
-                        IntervalType.getQualifier(type.typeCode);
+                            IntervalType.getQualifier(type.typeCode);
                     row[interval_precision] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[datetime_precision] = ValuePool.getLong(type.scale);
                 } else if (type.isBinaryType()) {
                     row[character_maximum_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[character_octet_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                 } else if (type.isBitType()) {
                     row[character_maximum_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                     row[character_octet_length] =
-                        ValuePool.getLong(type.precision);
+                            ValuePool.getLong(type.precision);
                 } else if (type.isArrayType()) {
                     row[maximum_cardinality] =
-                        ValuePool.getLong(type.arrayLimitCardinality());
+                            ValuePool.getLong(type.arrayLimitCardinality());
                     row[data_type] = "ARRAY";
                 }
 
-                row[dtd_identifier]     = type.getDefinition();
+                row[dtd_identifier] = type.getDefinition();
                 row[declared_data_type] = row[data_type];
 
                 // end common block
             }
 
             row[type_udt_catalog] = null;
-            row[type_udt_schema]  = null;
-            row[type_udt_name]    = null;
-            row[scope_catalog]    = null;
-            row[scope_schema]     = null;
-            row[scope_name]       = null;
+            row[type_udt_schema] = null;
+            row[type_udt_name] = null;
+            row[scope_catalog] = null;
+            row[scope_schema] = null;
+            row[scope_name] = null;
             row[routine_body] = routine.getLanguage() == Routine.LANGUAGE_JAVA
-                                ? "EXTERNAL"
-                                : "SQL";
+                    ? "EXTERNAL"
+                    : "SQL";
             row[routine_definition] = isFullyAccessible ? routine.getSQL()
-                                                        : null;
-            row[external_name]      = routine.getExternalName();
+                    : null;
+            row[external_name] = routine.getExternalName();
             row[external_language] = routine.getLanguage()
-                                     == Routine.LANGUAGE_JAVA ? "JAVA"
-                                                              : null;
+                    == Routine.LANGUAGE_JAVA ? "JAVA"
+                    : null;
             row[parameter_style] = routine.getLanguage()
-                                   == Routine.LANGUAGE_JAVA ? "JAVA"
-                                                            : null;
+                    == Routine.LANGUAGE_JAVA ? "JAVA"
+                    : null;
             row[is_deterministic] = routine.isDeterministic() ? "YES"
-                                                              : "NO";
-            row[sql_data_access]  = routine.getDataImpactString();
-            row[is_null_call]     = type == null ? null
-                                                 : routine.isNullInputOutput()
-                                                   ? "YES"
-                                                   : "NO";
-            row[sql_path]                               = null;
-            row[schema_level_routine]                   = "YES";
-            row[max_dynamic_result_sets]                = ValuePool.getLong(0);
-            row[is_user_defined_cast]                   = type == null ? null
-                                                                       : "NO";
-            row[is_implicitly_invocable]                = null;
-            row[security_type]                          = "DEFINER";
-            row[to_sql_specific_catalog]                = null;
-            row[to_sql_specific_schema]                 = null;
-            row[to_sql_specific_name]                   = null;
-            row[as_locator]                             = type == null ? null
-                                                                       : "NO";
-            row[created]                                = null;
-            row[last_altered]                           = null;
-            row[new_savepoint_level]                    = "YES";
-            row[is_udt_dependent]                       = null;
-            row[result_cast_from_data_type]             = null;
-            row[result_cast_as_locator]                 = null;
-            row[result_cast_char_max_length]            = null;
-            row[result_cast_char_octet_length]          = null;
-            row[result_cast_char_set_catalog]           = null;
-            row[result_cast_char_set_schema]            = null;
-            row[result_cast_character_set_name]         = null;
-            row[result_cast_collation_catalog]          = null;
-            row[result_cast_collation_schema]           = null;
-            row[result_cast_collation_name]             = null;
-            row[result_cast_numeric_precision]          = null;
-            row[result_cast_numeric_radix]              = null;
-            row[result_cast_numeric_scale]              = null;
-            row[result_cast_datetime_precision]         = null;
-            row[result_cast_interval_type]              = null;
-            row[result_cast_interval_precision]         = null;
-            row[result_cast_type_udt_catalog]           = null;
-            row[result_cast_type_udt_schema]            = null;
-            row[result_cast_type_udt_name]              = null;
-            row[result_cast_scope_catalog]              = null;
-            row[result_cast_scope_schema]               = null;
-            row[result_cast_scope_name]                 = null;
-            row[result_cast_max_cardinality]            = null;
-            row[result_cast_dtd_identifier]             = null;
-            row[declared_data_type]                     = row[data_type];
+                    : "NO";
+            row[sql_data_access] = routine.getDataImpactString();
+            row[is_null_call] = type == null ? null
+                    : routine.isNullInputOutput()
+                    ? "YES"
+                    : "NO";
+            row[sql_path] = null;
+            row[schema_level_routine] = "YES";
+            row[max_dynamic_result_sets] = ValuePool.getLong(0);
+            row[is_user_defined_cast] = type == null ? null
+                    : "NO";
+            row[is_implicitly_invocable] = null;
+            row[security_type] = "DEFINER";
+            row[to_sql_specific_catalog] = null;
+            row[to_sql_specific_schema] = null;
+            row[to_sql_specific_name] = null;
+            row[as_locator] = type == null ? null
+                    : "NO";
+            row[created] = null;
+            row[last_altered] = null;
+            row[new_savepoint_level] = "YES";
+            row[is_udt_dependent] = null;
+            row[result_cast_from_data_type] = null;
+            row[result_cast_as_locator] = null;
+            row[result_cast_char_max_length] = null;
+            row[result_cast_char_octet_length] = null;
+            row[result_cast_char_set_catalog] = null;
+            row[result_cast_char_set_schema] = null;
+            row[result_cast_character_set_name] = null;
+            row[result_cast_collation_catalog] = null;
+            row[result_cast_collation_schema] = null;
+            row[result_cast_collation_name] = null;
+            row[result_cast_numeric_precision] = null;
+            row[result_cast_numeric_radix] = null;
+            row[result_cast_numeric_scale] = null;
+            row[result_cast_datetime_precision] = null;
+            row[result_cast_interval_type] = null;
+            row[result_cast_interval_precision] = null;
+            row[result_cast_type_udt_catalog] = null;
+            row[result_cast_type_udt_schema] = null;
+            row[result_cast_type_udt_name] = null;
+            row[result_cast_scope_catalog] = null;
+            row[result_cast_scope_schema] = null;
+            row[result_cast_scope_name] = null;
+            row[result_cast_max_cardinality] = null;
+            row[result_cast_dtd_identifier] = null;
+            row[declared_data_type] = row[data_type];
             row[declared_numeric_precision] = row[numeric_precision];
-            row[declared_numeric_scale]                 = row[numeric_scale];
-            row[result_cast_from_declared_data_type]    = null;
+            row[declared_numeric_scale] = row[numeric_scale];
+            row[result_cast_from_declared_data_type] = null;
             row[result_cast_declared_numeric_precision] = null;
-            row[result_cast_declared_numeric_scale]     = null;
+            row[result_cast_declared_numeric_scale] = null;
 
             t.insertSys(session, store, row);
         }
@@ -7079,18 +7081,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SCHEMATA view has one row for each accessible schema. <p>
      *
      * <b>Definition:</b><p>
-     *
-     *      CATALOG_NAME                       VARCHAR ,
-     *      SCHEMA_NAME                        VARCHAR ,
-     *      SCHEMA_OWNER                       VARCHAR ,
-     *      DEFAULT_CHARACTER_SET_CATALOG      VARCHAR ,
-     *      DEFAULT_CHARACTER_SET_SCHEMA       VARCHAR ,
-     *      DEFAULT_CHARACTER_SET_NAME         VARCHAR ,
-     *      SQL_PATH                           VARCHAR ,
+     * <p>
+     * CATALOG_NAME                       VARCHAR ,
+     * SCHEMA_NAME                        VARCHAR ,
+     * SCHEMA_OWNER                       VARCHAR ,
+     * DEFAULT_CHARACTER_SET_CATALOG      VARCHAR ,
+     * DEFAULT_CHARACTER_SET_SCHEMA       VARCHAR ,
+     * DEFAULT_CHARACTER_SET_NAME         VARCHAR ,
+     * SQL_PATH                           VARCHAR ,
      *
      * </pre>
      *
@@ -7145,10 +7147,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // order: CATALOG_NAME, SCHEMA_NAME
             // false PK, as rows may have NULL CATALOG_NAME
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SCHEMATA].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[SCHEMATA].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1
             }, false);
 
             return t;
@@ -7156,21 +7158,21 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Intermediate holders
         Schema[] schemas;
-        Schema   schema;
-        String   dcsSchema = SqlInvariants.INFORMATION_SCHEMA;
-        String   dcsName   = "SQL_TEXT";
-        String   sqlPath   = null;
-        Grantee  user      = session.getGrantee();
+        Schema schema;
+        String dcsSchema = SqlInvariants.INFORMATION_SCHEMA;
+        String dcsName = "SQL_TEXT";
+        String sqlPath = null;
+        Grantee user = session.getGrantee();
         Object[] row;
 
         // column number mappings
-        final int schema_catalog                = 0;
-        final int schema_name                   = 1;
-        final int schema_owner                  = 2;
+        final int schema_catalog = 0;
+        final int schema_name = 1;
+        final int schema_owner = 2;
         final int default_character_set_catalog = 3;
-        final int default_character_set_schema  = 4;
-        final int default_character_set_name    = 5;
-        final int sql_path                      = 6;
+        final int default_character_set_schema = 4;
+        final int default_character_set_name = 5;
+        final int sql_path = 6;
 
         // Initialization
         schemas = database.schemaManager.getAllSchemas();
@@ -7184,15 +7186,15 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row                 = t.getEmptyRowData();
+            row = t.getEmptyRowData();
             row[schema_catalog] = database.getCatalogName().name;
-            row[schema_name]    = schema.getName().getNameString();
-            row[schema_owner]   = schema.getOwner().getName().getNameString();
+            row[schema_name] = schema.getName().getNameString();
+            row[schema_owner] = schema.getOwner().getName().getNameString();
             row[default_character_set_catalog] =
-                database.getCatalogName().name;
+                    database.getCatalogName().name;
             row[default_character_set_schema] = dcsSchema;
-            row[default_character_set_name]   = dcsName;
-            row[sql_path]                     = sqlPath;
+            row[default_character_set_name] = dcsName;
+            row[sql_path] = sqlPath;
 
             t.insertSys(session, store, row);
         }
@@ -7202,10 +7204,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SQL_FEATURES view lists the individual features of the SQL Standard
      * supported by HyperSQL.<p>
-     *
      */
     Table SQL_FEATURES(Session session, PersistentStore store) {
 
@@ -7223,20 +7224,20 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENTS", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SQL_FEATURES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SQL_FEATURES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 2
             }, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         String sql = (String) statementMap.get("/*sql_features*/");
-        Result rs  = sys.executeDirectStatement(sql);
+        Result rs = sys.executeDirectStatement(sql);
 
         t.insertSys(session, store, rs);
 
@@ -7245,10 +7246,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SQL_IMPLEMENTATION_INFO shows some properties and capabilities
      * of the database engine .<p>
-     *
      */
     Table SQL_IMPLEMENTATION_INFO(Session session, PersistentStore store) {
 
@@ -7264,18 +7264,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENTS", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SQL_IMPLEMENTATION_INFO].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SQL_IMPLEMENTATION_INFO].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, false);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         String sql = (String) statementMap.get("/*sql_implementation_info*/");
-        Result rs  = sys.executeDirectStatement(sql);
+        Result rs = sys.executeDirectStatement(sql);
 
         t.insertSys(session, store, rs);
 
@@ -7284,10 +7284,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SQL_PACHAGES view lists the packages of the SQL Standard supported by
      * HyperSQL.<p>
-     *
      */
     Table SQL_PACKAGES(Session session, PersistentStore store) {
 
@@ -7303,18 +7302,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENTS", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SQL_PACKAGES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SQL_PACKAGES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, false);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         String sql = (String) statementMap.get("/*sql_packages*/");
-        Result rs  = sys.executeDirectStatement(sql);
+        Result rs = sys.executeDirectStatement(sql);
 
         t.insertSys(session, store, rs);
 
@@ -7323,10 +7322,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SQL_PARTS view lists the parts of the SQL Standard supported by
      * HyperSQL.<p>
-     *
      */
     Table SQL_PARTS(Session session, PersistentStore store) {
 
@@ -7342,17 +7340,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENTS", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SQL_PARTS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[SQL_PARTS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, false);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         String sql = (String) statementMap.get("/*sql_parts*/");
-        Result rs  = sys.executeDirectStatement(sql);
+        Result rs = sys.executeDirectStatement(sql);
 
         t.insertSys(session, store, rs);
 
@@ -7361,10 +7359,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SQL_SIZING view has one row for the maximum size of each built in
      * type supported by HyperSQL.<p>
-     *
      */
     Table SQL_SIZING(Session session, PersistentStore store) {
 
@@ -7379,17 +7376,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENTS", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SQL_SIZING].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[SQL_SIZING].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, false);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, false);
 
             return t;
         }
 
         Session sys = database.sessionManager.newSysSession(
-            SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
+                SqlInvariants.INFORMATION_SCHEMA_HSQLNAME, session.getUser());
         String sql = (String) statementMap.get("/*sql_sizing*/");
-        Result rs  = sys.executeDirectStatement(sql);
+        Result rs = sys.executeDirectStatement(sql);
 
         t.insertSys(session, store, rs);
 
@@ -7398,9 +7395,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The SQL_SIZING_PROFILES is empty.<p>
-     *
      */
     Table SQL_SIZING_PROFILES(Session session, PersistentStore store) {
 
@@ -7417,10 +7413,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COMMENTS", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[SQL_SIZING_PROFILES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[SQL_SIZING_PROFILES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[]{ 0 }, false);
+            t.createPrimaryKeyConstraint(name, new int[]{0}, false);
 
             return t;
         }
@@ -7431,7 +7427,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
     /**
      * The TABLE_CONSTRAINTS table has one row for each table constraint
      * associated with a table.  <p>
-     *
+     * <p>
      * It effectively contains a representation of the table constraint
      * descriptors. <p>
      *
@@ -7551,40 +7547,40 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // false PK, as CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA,
             // TABLE_CATALOG and/or TABLE_SCHEMA may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TABLE_CONSTRAINTS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TABLE_CONSTRAINTS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 4, 5, 6
             }, false);
 
             return t;
         }
 
         // Intermediate holders
-        Iterator     tables;
-        Table        table;
+        Iterator tables;
+        Table table;
         Constraint[] constraints;
-        int          constraintCount;
-        Constraint   constraint;
-        String       cat;
-        String       schem;
-        Object[]     row;
+        int constraintCount;
+        Constraint constraint;
+        String cat;
+        String schem;
+        Object[] row;
 
         // column number mappings
         final int constraint_catalog = 0;
-        final int constraint_schema  = 1;
-        final int constraint_name    = 2;
-        final int constraint_type    = 3;
-        final int table_catalog      = 4;
-        final int table_schema       = 5;
-        final int table_name         = 6;
-        final int is_deferable       = 7;
+        final int constraint_schema = 1;
+        final int constraint_name = 2;
+        final int constraint_type = 3;
+        final int table_catalog = 4;
+        final int table_schema = 5;
+        final int table_name = 6;
+        final int is_deferable = 7;
         final int initially_deferred = 8;
 
         // initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
         table = null;    // else compiler complains
 
         // do it
@@ -7597,51 +7593,51 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            constraints     = table.getConstraints();
+            constraints = table.getConstraints();
             constraintCount = constraints.length;
 
             for (int i = 0; i < constraintCount; i++) {
                 constraint = constraints[i];
-                row        = t.getEmptyRowData();
+                row = t.getEmptyRowData();
 
                 switch (constraint.getConstraintType()) {
 
-                    case SchemaObject.ConstraintTypes.CHECK : {
+                    case SchemaObject.ConstraintTypes.CHECK: {
                         row[constraint_type] = "CHECK";
 
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.UNIQUE : {
+                    case SchemaObject.ConstraintTypes.UNIQUE: {
                         row[constraint_type] = "UNIQUE";
 
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.FOREIGN_KEY : {
+                    case SchemaObject.ConstraintTypes.FOREIGN_KEY: {
                         row[constraint_type] = "FOREIGN KEY";
-                        table                = constraint.getRef();
+                        table = constraint.getRef();
 
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.PRIMARY_KEY : {
+                    case SchemaObject.ConstraintTypes.PRIMARY_KEY: {
                         row[constraint_type] = "PRIMARY KEY";
 
                         break;
                     }
-                    case SchemaObject.ConstraintTypes.MAIN :
-                    default : {
+                    case SchemaObject.ConstraintTypes.MAIN:
+                    default: {
                         continue;
                     }
                 }
 
-                cat                     = database.getCatalogName().name;
-                schem                   = table.getSchemaName().name;
+                cat = database.getCatalogName().name;
+                schem = table.getSchemaName().name;
                 row[constraint_catalog] = cat;
-                row[constraint_schema]  = schem;
-                row[constraint_name]    = constraint.getName().name;
-                row[table_catalog]      = cat;
-                row[table_schema]       = schem;
-                row[table_name]         = table.getName().name;
-                row[is_deferable]       = Tokens.T_NO;
+                row[constraint_schema] = schem;
+                row[constraint_name] = constraint.getName().name;
+                row[table_catalog] = cat;
+                row[table_schema] = schem;
+                row[table_name] = table.getName().name;
+                row[is_deferable] = Tokens.T_NO;
                 row[initially_deferred] = Tokens.T_NO;
 
                 t.insertSys(session, store, row);
@@ -7653,10 +7649,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRANSLATIONS view has one row for each translation between two
      * character sets.<p>
-     *
      */
     Table TRANSLATIONS(Session session, PersistentStore store) {
 
@@ -7679,11 +7674,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "TRANSLATION_SOURCE_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRANSLATIONS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRANSLATIONS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
@@ -7694,19 +7689,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRIGGER_COLUMN_USAGE view has one row for each column
      * referenced in the body of a trigger.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG     VARCHAR ,
-     *      TRIGGER_SCHEMA      VARCHAR ,
-     *      TRIGGER_NAME        VARCHAR ,
-     *      TABLE_CATALOG       VARCHAR ,
-     *      TABLE_SCHEMA        VARCHAR ,
-     *      TABLE_NAME          VARCHAR ,
-     *      COLUMN_NAME         VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG     VARCHAR ,
+     * TRIGGER_SCHEMA      VARCHAR ,
+     * TRIGGER_NAME        VARCHAR ,
+     * TABLE_CATALOG       VARCHAR ,
+     * TABLE_SCHEMA        VARCHAR ,
+     * TABLE_NAME          VARCHAR ,
+     * COLUMN_NAME         VARCHAR ,
      *
      * </pre>
      *
@@ -7744,11 +7739,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COLUMN_NAME", SQL_IDENTIFIER);     // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGER_COLUMN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGER_COLUMN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
@@ -7756,19 +7751,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int trigger_catalog = 0;
-        final int trigger_schema  = 1;
-        final int trigger_name    = 2;
-        final int table_catalog   = 3;
-        final int table_schema    = 4;
-        final int table_name      = 5;
-        final int column_name     = 6;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
+        final int table_catalog = 3;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int column_name = 6;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
@@ -7795,16 +7790,17 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 //
                 row[trigger_catalog] = database.getCatalogName().name;
-                row[trigger_schema]  = trigger.getSchemaName().name;
-                row[trigger_name]    = trigger.getName().name;
-                row[table_catalog]   = database.getCatalogName().name;
-                row[table_schema]    = refName.parent.schema.name;
-                row[table_name]      = refName.parent.name;
-                row[column_name]     = refName.name;
+                row[trigger_schema] = trigger.getSchemaName().name;
+                row[trigger_name] = trigger.getName().name;
+                row[table_catalog] = database.getCatalogName().name;
+                row[table_schema] = refName.parent.schema.name;
+                row[table_name] = refName.parent.name;
+                row[column_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -7814,18 +7810,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2011 VIEW<p>
-     *
+     * <p>
      * The TRIGGER_PERIOD_USAGE view has one row for each PRDIOD
      * referenced in the body of a trigger.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG     VARCHAR ,
-     *      TRIGGER_SCHEMA      VARCHAR ,
-     *      TRIGGER_NAME        VARCHAR ,
-     *      TABLE_CATALOG       VARCHAR ,
-     *      TABLE_SCHEMA        VARCHAR ,
-     *      TABLE_NAME          VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG     VARCHAR ,
+     * TRIGGER_SCHEMA      VARCHAR ,
+     * TRIGGER_NAME        VARCHAR ,
+     * TABLE_CATALOG       VARCHAR ,
+     * TABLE_SCHEMA        VARCHAR ,
+     * TABLE_NAME          VARCHAR ,
      *
      * </pre>
      *
@@ -7863,11 +7859,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "PERIOD_NAME", SQL_IDENTIFIER);     // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGER_PERIOD_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGER_PERIOD_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
@@ -7875,22 +7871,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int trigger_catalog = 0;
-        final int trigger_schema  = 1;
-        final int trigger_name    = 2;
-        final int table_catalog   = 3;
-        final int table_schema    = 4;
-        final int table_name      = 5;
-        final int period_name     = 6;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
+        final int table_catalog = 3;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int period_name = 6;
 
         //
-        Iterator         it;
-        Object[]         row;
-        Table            table;
+        Iterator it;
+        Object[] row;
+        Table table;
         PeriodDefinition systemPeriod;
         PeriodDefinition applicationPeriod;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
@@ -7910,7 +7906,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 }
 
                 table = database.schemaManager.getUserTable(refName);
-                systemPeriod      = table.getSystemPeriod();
+                systemPeriod = table.getSystemPeriod();
                 applicationPeriod = table.getApplicationPeriod();
 
                 if (systemPeriod == null && applicationPeriod == null) {
@@ -7919,21 +7915,22 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 for (int j = 0; j < 2; j++) {
                     PeriodDefinition period = j == 0 ? systemPeriod
-                                                     : applicationPeriod;
+                            : applicationPeriod;
 
                     if (period != null) {
-                        row                  = t.getEmptyRowData();
+                        row = t.getEmptyRowData();
                         row[trigger_catalog] = database.getCatalogName().name;
-                        row[trigger_schema]  = trigger.getSchemaName().name;
-                        row[trigger_name]    = trigger.getName().name;
-                        row[table_catalog]   = database.getCatalogName().name;
-                        row[table_schema]    = refName.schema.name;
-                        row[table_name]      = refName.name;
-                        row[period_name]     = period.getName().name;
+                        row[trigger_schema] = trigger.getSchemaName().name;
+                        row[trigger_name] = trigger.getName().name;
+                        row[table_catalog] = database.getCatalogName().name;
+                        row[table_schema] = refName.schema.name;
+                        row[table_name] = refName.name;
+                        row[period_name] = period.getName().name;
 
                         try {
                             t.insertSys(session, store, row);
-                        } catch (HsqlException e) {}
+                        } catch (HsqlException e) {
+                        }
                     }
                 }
             }
@@ -7945,18 +7942,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRIGGER_ROUTINE_USAGE view has one row for each routine
      * referenced in the body of a trigger.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG     VARCHAR ,
-     *      TRIGGER_SCHEMA      VARCHAR ,
-     *      TRIGGER_NAME        VARCHAR ,
-     *      SPECIFIC_CATALOG    VARCHAR ,
-     *      SPECIFIC_SCHEMA     VARCHAR ,
-     *      SPECIFIC_NAME       VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG     VARCHAR ,
+     * TRIGGER_SCHEMA      VARCHAR ,
+     * TRIGGER_NAME        VARCHAR ,
+     * SPECIFIC_CATALOG    VARCHAR ,
+     * SPECIFIC_SCHEMA     VARCHAR ,
+     * SPECIFIC_NAME       VARCHAR ,
      *
      * </pre>
      *
@@ -7993,30 +7990,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "SPECIFIC_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGER_ROUTINE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGER_ROUTINE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int trigger_catalog  = 0;
-        final int trigger_schema   = 1;
-        final int trigger_name     = 2;
+        final int trigger_catalog = 0;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
         final int specific_catalog = 3;
-        final int specific_schema  = 4;
-        final int specific_name    = 5;
+        final int specific_schema = 4;
+        final int specific_name = 5;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
@@ -8035,17 +8032,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
-                row[trigger_catalog]  = database.getCatalogName().name;
-                row[trigger_schema]   = trigger.getSchemaName().name;
-                row[trigger_name]     = trigger.getName().name;
+                row = t.getEmptyRowData();
+                row[trigger_catalog] = database.getCatalogName().name;
+                row[trigger_schema] = trigger.getSchemaName().name;
+                row[trigger_name] = trigger.getName().name;
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = refName.schema.name;
-                row[specific_name]    = refName.name;
+                row[specific_schema] = refName.schema.name;
+                row[specific_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -8054,18 +8052,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRIGGER_SEQUENCE_USAGE view has one row for each SEQUENCE
      * referenced in the body of a trigger.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG     VARCHAR ,
-     *      TRIGGER_SCHEMA      VARCHAR ,
-     *      TRIGGER_NAME        VARCHAR ,
-     *      SEQUENCE_CATALOG    VARCHAR ,
-     *      SEQUENCE_SCHEMA     VARCHAR ,
-     *      SEQUENCE_NAME       VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG     VARCHAR ,
+     * TRIGGER_SCHEMA      VARCHAR ,
+     * TRIGGER_NAME        VARCHAR ,
+     * SEQUENCE_CATALOG    VARCHAR ,
+     * SEQUENCE_SCHEMA     VARCHAR ,
+     * SEQUENCE_NAME       VARCHAR ,
      *
      * </pre>
      *
@@ -8102,30 +8100,30 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "SEQUENCE_NAME", SQL_IDENTIFIER);    // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGER_SEQUENCE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGER_SEQUENCE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int trigger_catalog  = 0;
-        final int trigger_schema   = 1;
-        final int trigger_name     = 2;
+        final int trigger_catalog = 0;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
         final int sequence_catalog = 3;
-        final int sequence_schema  = 4;
-        final int sequence_name    = 5;
+        final int sequence_schema = 4;
+        final int sequence_name = 5;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
@@ -8144,17 +8142,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
-                row[trigger_catalog]  = database.getCatalogName().name;
-                row[trigger_schema]   = trigger.getSchemaName().name;
-                row[trigger_name]     = trigger.getName().name;
+                row = t.getEmptyRowData();
+                row[trigger_catalog] = database.getCatalogName().name;
+                row[trigger_schema] = trigger.getSchemaName().name;
+                row[trigger_name] = trigger.getName().name;
                 row[sequence_catalog] = database.getCatalogName().name;
-                row[sequence_schema]  = refName.schema.name;
-                row[sequence_name]    = refName.name;
+                row[sequence_schema] = refName.schema.name;
+                row[sequence_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -8164,18 +8163,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRIGGER_TABLE_USAGE view has one row for each TABLE
      * referenced in the body of a trigger.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG     VARCHAR ,
-     *      TRIGGER_SCHEMA      VARCHAR ,
-     *      TRIGGER_NAME        VARCHAR ,
-     *      TABLE_CATALOG       VARCHAR ,
-     *      TABLE_SCHEMA        VARCHAR ,
-     *      TABLE_NAME          VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG     VARCHAR ,
+     * TRIGGER_SCHEMA      VARCHAR ,
+     * TRIGGER_NAME        VARCHAR ,
+     * TABLE_CATALOG       VARCHAR ,
+     * TABLE_SCHEMA        VARCHAR ,
+     * TABLE_NAME          VARCHAR ,
      *
      * </pre>
      *
@@ -8212,11 +8211,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "TABLE_NAME", SQL_IDENTIFIER);      // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGER_TABLE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGER_TABLE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -8224,18 +8223,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // column number mappings
         final int trigger_catalog = 0;
-        final int trigger_schema  = 1;
-        final int trigger_name    = 2;
-        final int table_catalog   = 3;
-        final int table_schema    = 4;
-        final int table_name      = 5;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
+        final int table_catalog = 3;
+        final int table_schema = 4;
+        final int table_name = 5;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
@@ -8255,17 +8254,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                  = t.getEmptyRowData();
+                row = t.getEmptyRowData();
                 row[trigger_catalog] = database.getCatalogName().name;
-                row[trigger_schema]  = trigger.getSchemaName().name;
-                row[trigger_name]    = trigger.getName().name;
-                row[table_catalog]   = database.getCatalogName().name;
-                row[table_schema]    = refName.schema.name;
-                row[table_name]      = refName.name;
+                row[trigger_schema] = trigger.getSchemaName().name;
+                row[trigger_name] = trigger.getName().name;
+                row[table_catalog] = database.getCatalogName().name;
+                row[table_schema] = refName.schema.name;
+                row[table_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -8275,28 +8275,28 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRIGGERS view has one row for each TRIGGER.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG               VARCHAR ,
-     *      TRIGGER_SCHEMA                VARCHAR ,
-     *      TRIGGER_NAME                  VARCHAR ,
-     *      EVENT_MANIPULATION            VARCHAR ,
-     *      EVENT_OBJECT_CATALOG          VARCHAR ,
-     *      EVENT_OBJECT_SCHEMA           VARCHAR ,
-     *      EVENT_OBJECT_TABLE            VARCHAR ,
-     *      ACTION_ORDER                  VARCHAR ,
-     *      ACTION_CONDITION              VARCHAR ,
-     *      ACTION_STATEMENT              VARCHAR ,
-     *      ACTION_ORIENTATION            VARCHAR ,
-     *      ACTION_TIMING_                VARCHAR ,
-     *      ACTION_REFERENCE_OLD_TABLE    VARCHAR ,
-     *      ACTION_REFERENCE_NEW_TABLE    VARCHAR ,
-     *      ACTION_REFERENCE_OLD_ROW      VARCHAR ,
-     *      ACTION_REFERENCE_NEW_ROW      VARCHAR ,
-     *      CREATED                       VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG               VARCHAR ,
+     * TRIGGER_SCHEMA                VARCHAR ,
+     * TRIGGER_NAME                  VARCHAR ,
+     * EVENT_MANIPULATION            VARCHAR ,
+     * EVENT_OBJECT_CATALOG          VARCHAR ,
+     * EVENT_OBJECT_SCHEMA           VARCHAR ,
+     * EVENT_OBJECT_TABLE            VARCHAR ,
+     * ACTION_ORDER                  VARCHAR ,
+     * ACTION_CONDITION              VARCHAR ,
+     * ACTION_STATEMENT              VARCHAR ,
+     * ACTION_ORIENTATION            VARCHAR ,
+     * ACTION_TIMING_                VARCHAR ,
+     * ACTION_REFERENCE_OLD_TABLE    VARCHAR ,
+     * ACTION_REFERENCE_NEW_TABLE    VARCHAR ,
+     * ACTION_REFERENCE_OLD_ROW      VARCHAR ,
+     * ACTION_REFERENCE_NEW_ROW      VARCHAR ,
+     * CREATED                       VARCHAR ,
      *
      * </pre>
      *
@@ -8367,78 +8367,78 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "CREATED", TIME_STAMP);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGERS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGERS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int trigger_catalog            = 0;
-        final int trigger_schema             = 1;
-        final int trigger_name               = 2;
-        final int event_manipulation         = 3;
-        final int event_object_catalog       = 4;
-        final int event_object_schema        = 5;
-        final int event_object_table         = 6;
-        final int action_order               = 7;
-        final int action_condition           = 8;
-        final int action_statement           = 9;
-        final int action_orientation         = 10;
-        final int action_timing              = 11;
+        final int trigger_catalog = 0;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
+        final int event_manipulation = 3;
+        final int event_object_catalog = 4;
+        final int event_object_schema = 5;
+        final int event_object_table = 6;
+        final int action_order = 7;
+        final int action_condition = 8;
+        final int action_statement = 9;
+        final int action_orientation = 10;
+        final int action_timing = 11;
         final int action_reference_old_table = 12;
         final int action_reference_new_table = 13;
-        final int action_reference_old_row   = 14;
-        final int action_reference_new_row   = 15;
-        final int created                    = 16;
+        final int action_reference_old_row = 14;
+        final int action_reference_new_row = 15;
+        final int created = 16;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
             boolean isFullAccess =
-                session.getGrantee().isFullyAccessibleByRole(
-                    trigger.getName());
+                    session.getGrantee().isFullyAccessibleByRole(
+                            trigger.getName());
 
             if (!session.getGrantee().hasNonSelectTableRight(
                     trigger.getTable())) {
                 continue;
             }
 
-            row                       = t.getEmptyRowData();
-            row[trigger_catalog]      = database.getCatalogName().name;
-            row[trigger_schema]       = trigger.getSchemaName().name;
-            row[trigger_name]         = trigger.getName().name;
-            row[event_manipulation]   = trigger.getEventTypeString();
+            row = t.getEmptyRowData();
+            row[trigger_catalog] = database.getCatalogName().name;
+            row[trigger_schema] = trigger.getSchemaName().name;
+            row[trigger_name] = trigger.getName().name;
+            row[event_manipulation] = trigger.getEventTypeString();
             row[event_object_catalog] = database.getCatalogName().name;
             row[event_object_schema] = trigger.getTable().getSchemaName().name;
-            row[event_object_table]   = trigger.getTable().getName().name;
+            row[event_object_table] = trigger.getTable().getName().name;
 
             int order =
-                trigger.getTable().getTriggerIndex(trigger.getName().name);
+                    trigger.getTable().getTriggerIndex(trigger.getName().name);
 
-            row[action_order]       = ValuePool.getLong(order);
-            row[action_condition]   = isFullAccess ? trigger.getConditionSQL()
-                                                   : null;
-            row[action_statement]   = isFullAccess ? trigger.getProcedureSQL()
-                                                   : null;
+            row[action_order] = ValuePool.getLong(order);
+            row[action_condition] = isFullAccess ? trigger.getConditionSQL()
+                    : null;
+            row[action_statement] = isFullAccess ? trigger.getProcedureSQL()
+                    : null;
             row[action_orientation] = trigger.getActionOrientationString();
-            row[action_timing]      = trigger.getActionTimingString();
+            row[action_timing] = trigger.getActionTimingString();
             row[action_reference_old_table] =
-                trigger.getOldTransitionTableName();
+                    trigger.getOldTransitionTableName();
             row[action_reference_new_table] =
-                trigger.getNewTransitionTableName();
+                    trigger.getNewTransitionTableName();
             row[action_reference_old_row] = trigger.getOldTransitionRowName();
             row[action_reference_new_row] = trigger.getNewTransitionRowName();
-            row[created]                  = null;
+            row[created] = null;
 
             t.insertSys(session, store, row);
         }
@@ -8449,18 +8449,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The TRIGGERED_UPDATE_COLUMNS view has one row for each column
      * referenced in the optional column list of a UPDATE trigger.<p>
      *
      * <b>Definition:</b><p>
-     *
-     *      TRIGGER_CATALOG            VARCHAR ,
-     *      TRIGGER_SCHEMA             VARCHAR ,
-     *      TRIGGER_NAME               VARCHAR ,
-     *      EVENT_OBJECT_CATALOG       VARCHAR ,
-     *      EVENT_OBJECT_SCHEMA        VARCHAR ,
-     *      EVENT_OBJECT_NAME          VARCHAR ,
+     * <p>
+     * TRIGGER_CATALOG            VARCHAR ,
+     * TRIGGER_SCHEMA             VARCHAR ,
+     * TRIGGER_NAME               VARCHAR ,
+     * EVENT_OBJECT_CATALOG       VARCHAR ,
+     * EVENT_OBJECT_SCHEMA        VARCHAR ,
+     * EVENT_OBJECT_NAME          VARCHAR ,
      *
      * </pre>
      *
@@ -8494,31 +8494,31 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "EVENT_OBJECT_COLUMN", SQL_IDENTIFIER);     // not null
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[TRIGGERED_UPDATE_COLUMNS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[TRIGGERED_UPDATE_COLUMNS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
         }
 
         // column number mappings
-        final int trigger_catalog      = 0;
-        final int trigger_schema       = 1;
-        final int trigger_name         = 2;
+        final int trigger_catalog = 0;
+        final int trigger_schema = 1;
+        final int trigger_name = 2;
         final int event_object_catalog = 3;
-        final int event_object_schema  = 4;
-        final int event_object_table   = 5;
-        final int event_object_column  = 6;
+        final int event_object_schema = 4;
+        final int event_object_table = 5;
+        final int event_object_column = 6;
 
         //
         Iterator it;
         Object[] row;
 
         it = database.schemaManager.databaseObjectIterator(
-            SchemaObject.TRIGGER);
+                SchemaObject.TRIGGER);
 
         while (it.hasNext()) {
             TriggerDef trigger = (TriggerDef) it.next();
@@ -8535,16 +8535,16 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             for (int i = 0; i < colIndexes.length; i++) {
                 ColumnSchema column =
-                    trigger.getTable().getColumn(colIndexes[i]);
+                        trigger.getTable().getColumn(colIndexes[i]);
 
-                row                       = t.getEmptyRowData();
-                row[trigger_catalog]      = database.getCatalogName().name;
-                row[trigger_schema]       = trigger.getSchemaName().name;
-                row[trigger_name]         = trigger.getName().name;
+                row = t.getEmptyRowData();
+                row[trigger_catalog] = database.getCatalogName().name;
+                row[trigger_schema] = trigger.getSchemaName().name;
+                row[trigger_name] = trigger.getName().name;
                 row[event_object_catalog] = database.getCatalogName().name;
                 row[event_object_schema] =
-                    trigger.getTable().getSchemaName().name;
-                row[event_object_table]  = trigger.getTable().getName().name;
+                        trigger.getTable().getSchemaName().name;
+                row[event_object_table] = trigger.getTable().getName().name;
                 row[event_object_column] = column.getNameString();
 
                 t.insertSys(session, store, row);
@@ -8557,7 +8557,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The UDT_PRIVILEGES view has one row for each privilege granted on
      * a DISTINCT TYPE.
      *
@@ -8605,29 +8605,29 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "IS_GRANTABLE", YES_OR_NO);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[UDT_PRIVILEGES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[UDT_PRIVILEGES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4
             }, false);
 
             return t;
         }
 
-        final int grantor        = 0;
-        final int grantee        = 1;
-        final int udt_catalog    = 2;
-        final int udt_schema     = 3;
-        final int udt_name       = 4;
+        final int grantor = 0;
+        final int grantee = 1;
+        final int udt_catalog = 2;
+        final int udt_schema = 3;
+        final int udt_name = 4;
         final int privilege_type = 5;
-        final int is_grantable   = 6;
+        final int is_grantable = 6;
 
         //
         Iterator objects =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TYPE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TYPE);
         OrderedHashSet grantees =
-            session.getGrantee().getGranteeAndAllRolesWithPublic();
+                session.getGrantee().getGranteeAndAllRolesWithPublic();
 
         while (objects.hasNext()) {
             SchemaObject object = (SchemaObject) objects.next();
@@ -8639,9 +8639,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             for (int i = 0; i < grantees.size(); i++) {
                 Grantee granteeObject = (Grantee) grantees.get(i);
                 OrderedHashSet rights =
-                    granteeObject.getAllDirectPrivileges(object);
+                        granteeObject.getAllDirectPrivileges(object);
                 OrderedHashSet grants =
-                    granteeObject.getAllGrantedPrivileges(object);
+                        granteeObject.getAllGrantedPrivileges(object);
 
                 if (!grants.isEmpty()) {
                     grants.addAll(rights);
@@ -8650,25 +8650,26 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 }
 
                 for (int j = 0; j < rights.size(); j++) {
-                    Right    right          = (Right) rights.get(j);
-                    Right    grantableRight = right.getGrantableRights();
+                    Right right = (Right) rights.get(j);
+                    Right grantableRight = right.getGrantableRights();
                     Object[] row;
 
-                    row                 = t.getEmptyRowData();
-                    row[grantor]        = right.getGrantor().getName().name;
-                    row[grantee]        = right.getGrantee().getName().name;
-                    row[udt_catalog]    = database.getCatalogName().name;
-                    row[udt_schema]     = object.getSchemaName().name;
-                    row[udt_name]       = object.getName().name;
+                    row = t.getEmptyRowData();
+                    row[grantor] = right.getGrantor().getName().name;
+                    row[grantee] = right.getGrantee().getName().name;
+                    row[udt_catalog] = database.getCatalogName().name;
+                    row[udt_schema] = object.getSchemaName().name;
+                    row[udt_name] = object.getName().name;
                     row[privilege_type] = Tokens.T_USAGE;
                     row[is_grantable] =
-                        right.getGrantee() == object.getOwner()
-                        || grantableRight.isFull() ? Tokens.T_YES
-                                                   : Tokens.T_NO;
+                            right.getGrantee() == object.getOwner()
+                                    || grantableRight.isFull() ? Tokens.T_YES
+                                    : Tokens.T_NO;
 
                     try {
                         t.insertSys(session, store, row);
-                    } catch (HsqlException e) {}
+                    } catch (HsqlException e) {
+                    }
                 }
             }
         }
@@ -8678,10 +8679,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The USAGE_PRIVILEGES view has one row for each usage privilege
      * descriptor. <p>
-     *
+     * <p>
      * It effectively contains a representation of the usage privilege
      * descriptors. <p>
      *
@@ -8718,7 +8719,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *      respectively, of the object to which the privilege applies. <p>
      *
      * <li> The values of OBJECT_TYPE have the following meanings: <p>
-     *
+     * <p>
      *      <table border cellpadding="3">
      *          <tr>
      *              <td nowrap>DOMAIN</td>
@@ -8748,7 +8749,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *      </table> <p>
      *
      * <li> The values of IS_GRANTABLE have the following meanings: <p>
-     *
+     * <p>
      *      <table border cellpadding="3">
      *          <tr>
      *              <td nowrap>YES</td>
@@ -8785,11 +8786,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // for unique: GRANTEE, GRANTOR, TABLE_NAME, TABLE_SCHEM, TABLE_CAT
             // false PK, as TABLE_SCHEM and/or TABLE_CAT may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[USAGE_PRIVILEGES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[USAGE_PRIVILEGES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6, 7
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6, 7
             }, false);
 
             return t;
@@ -8799,33 +8800,33 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         Object[] row;
 
         //
-        final int grantor        = 0;
-        final int grantee        = 1;
+        final int grantor = 0;
+        final int grantee = 1;
         final int object_catalog = 2;
-        final int object_schema  = 3;
-        final int object_name    = 4;
-        final int object_type    = 5;
+        final int object_schema = 3;
+        final int object_name = 4;
+        final int object_type = 5;
         final int privilege_type = 6;
-        final int is_grantable   = 7;
+        final int is_grantable = 7;
 
         //
         Iterator objects =
-            new WrapperIterator(database.schemaManager
-                .databaseObjectIterator(SchemaObject.SEQUENCE), database
-                .schemaManager.databaseObjectIterator(SchemaObject.COLLATION));
+                new WrapperIterator(database.schemaManager
+                        .databaseObjectIterator(SchemaObject.SEQUENCE), database
+                        .schemaManager.databaseObjectIterator(SchemaObject.COLLATION));
 
         objects = new WrapperIterator(
-            objects,
-            database.schemaManager.databaseObjectIterator(
-                SchemaObject.CHARSET));
+                objects,
+                database.schemaManager.databaseObjectIterator(
+                        SchemaObject.CHARSET));
         objects = new WrapperIterator(
-            objects,
-            database.schemaManager.databaseObjectIterator(
-                SchemaObject.DOMAIN));
+                objects,
+                database.schemaManager.databaseObjectIterator(
+                        SchemaObject.DOMAIN));
 
         // TYPE objects are covered in separate UDT_PRIVILEGES view
         OrderedHashSet grantees =
-            session.getGrantee().getGranteeAndAllRolesWithPublic();
+                session.getGrantee().getGranteeAndAllRolesWithPublic();
 
         while (objects.hasNext()) {
             SchemaObject object = (SchemaObject) objects.next();
@@ -8833,9 +8834,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             for (int i = 0; i < grantees.size(); i++) {
                 Grantee granteeObject = (Grantee) grantees.get(i);
                 OrderedHashSet rights =
-                    granteeObject.getAllDirectPrivileges(object);
+                        granteeObject.getAllDirectPrivileges(object);
                 OrderedHashSet grants =
-                    granteeObject.getAllGrantedPrivileges(object);
+                        granteeObject.getAllGrantedPrivileges(object);
 
                 if (!grants.isEmpty()) {
                     grants.addAll(rights);
@@ -8844,26 +8845,27 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 }
 
                 for (int j = 0; j < rights.size(); j++) {
-                    Right right          = (Right) rights.get(j);
+                    Right right = (Right) rights.get(j);
                     Right grantableRight = right.getGrantableRights();
 
-                    row                 = t.getEmptyRowData();
-                    row[grantor]        = right.getGrantor().getName().name;
-                    row[grantee]        = right.getGrantee().getName().name;
+                    row = t.getEmptyRowData();
+                    row[grantor] = right.getGrantor().getName().name;
+                    row[grantee] = right.getGrantee().getName().name;
                     row[object_catalog] = database.getCatalogName().name;
-                    row[object_schema]  = object.getSchemaName().name;
-                    row[object_name]    = object.getName().name;
+                    row[object_schema] = object.getSchemaName().name;
+                    row[object_name] = object.getName().name;
                     row[object_type] =
-                        SchemaObjectSet.getName(object.getName().type);
+                            SchemaObjectSet.getName(object.getName().type);
                     row[privilege_type] = Tokens.T_USAGE;
                     row[is_grantable] =
-                        right.getGrantee() == object.getOwner()
-                        || grantableRight.isFull() ? Tokens.T_YES
-                                                   : Tokens.T_NO;
+                            right.getGrantee() == object.getOwner()
+                                    || grantableRight.isFull() ? Tokens.T_YES
+                                    : Tokens.T_NO;
 
                     try {
                         t.insertSys(session, store, row);
-                    } catch (HsqlException e) {}
+                    } catch (HsqlException e) {
+                    }
                 }
             }
         }
@@ -8873,7 +8875,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The USER_DEFINED_TYPES view has one row for each user defined type.
      * Only DICTINCT TYPE user defined types are currently supported. <p>
      *
@@ -8952,53 +8954,53 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "JAVA_INTERFACE", CHARACTER_DATA);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[USER_DEFINED_TYPES].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[USER_DEFINED_TYPES].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 4, 5, 6
             }, false);
 
             return t;
         }
 
-        final int user_defined_type_catalog  = 0;
-        final int user_defined_type_schema   = 1;
-        final int user_defined_type_name     = 2;
+        final int user_defined_type_catalog = 0;
+        final int user_defined_type_schema = 1;
+        final int user_defined_type_name = 2;
         final int user_defined_type_category = 3;
-        final int is_instantiable            = 4;
-        final int is_final                   = 5;
-        final int ordering_form              = 6;
-        final int ordering_category          = 7;
-        final int ordering_routine_catalog   = 8;
-        final int ordering_routine_schema    = 9;
-        final int ordering_routine_name      = 10;
-        final int reference_type             = 11;
-        final int data_type                  = 12;
-        final int character_maximum_length   = 13;
-        final int character_octet_length     = 14;
-        final int character_set_catalog      = 15;
-        final int character_set_schema       = 16;
-        final int character_set_name         = 17;
-        final int collation_catalog          = 18;
-        final int collation_schema           = 19;
-        final int collation_name             = 20;
-        final int numeric_precision          = 21;
-        final int numeric_precision_radix    = 22;
-        final int numeric_scale              = 23;
-        final int datetime_precision         = 24;
-        final int interval_type              = 25;
-        final int interval_precision         = 26;
-        final int source_dtd_identifier      = 27;
-        final int ref_dtd_identifier         = 28;
-        final int declared_data_type         = 29;
+        final int is_instantiable = 4;
+        final int is_final = 5;
+        final int ordering_form = 6;
+        final int ordering_category = 7;
+        final int ordering_routine_catalog = 8;
+        final int ordering_routine_schema = 9;
+        final int ordering_routine_name = 10;
+        final int reference_type = 11;
+        final int data_type = 12;
+        final int character_maximum_length = 13;
+        final int character_octet_length = 14;
+        final int character_set_catalog = 15;
+        final int character_set_schema = 16;
+        final int character_set_name = 17;
+        final int collation_catalog = 18;
+        final int collation_schema = 19;
+        final int collation_name = 20;
+        final int numeric_precision = 21;
+        final int numeric_precision_radix = 22;
+        final int numeric_scale = 23;
+        final int datetime_precision = 24;
+        final int interval_type = 25;
+        final int interval_precision = 26;
+        final int source_dtd_identifier = 27;
+        final int ref_dtd_identifier = 28;
+        final int declared_data_type = 29;
         final int declared_numeric_precision = 30;
-        final int declared_numeric_scale     = 31;
-        final int maximum_cardinality        = 32;
+        final int declared_numeric_scale = 31;
+        final int maximum_cardinality = 32;
 
         //
         Iterator it =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TYPE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TYPE);
 
         while (it.hasNext()) {
             Type type = (Type) it.next();
@@ -9009,70 +9011,70 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             Object[] row = t.getEmptyRowData();
 
-            row[user_defined_type_catalog]  = database.getCatalogName().name;
-            row[user_defined_type_schema]   = type.getSchemaName().name;
-            row[user_defined_type_name]     = type.getName().name;
-            row[data_type]                  = type.getFullNameString();
+            row[user_defined_type_catalog] = database.getCatalogName().name;
+            row[user_defined_type_schema] = type.getSchemaName().name;
+            row[user_defined_type_name] = type.getName().name;
+            row[data_type] = type.getFullNameString();
             row[user_defined_type_category] = "DISTINCT";
-            row[is_instantiable]            = "YES";
-            row[is_final]                   = "YES";
-            row[ordering_form]              = "FULL";
+            row[is_instantiable] = "YES";
+            row[is_final] = "YES";
+            row[ordering_form] = "FULL";
 
             // common type block
             if (type.isCharacterType()) {
                 row[character_maximum_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
                 row[character_octet_length] = ValuePool.getLong(type.precision
                         * 2);
                 row[character_set_catalog] = database.getCatalogName().name;
                 row[character_set_schema] =
-                    type.getCharacterSet().getSchemaName().name;
+                        type.getCharacterSet().getSchemaName().name;
                 row[character_set_name] =
-                    type.getCharacterSet().getName().name;
+                        type.getCharacterSet().getName().name;
                 row[collation_catalog] = database.getCatalogName().name;
                 row[collation_schema] =
-                    type.getCollation().getSchemaName().name;
+                        type.getCollation().getSchemaName().name;
                 row[collation_name] = type.getCollation().getName().name;
             } else if (type.isNumberType()) {
                 row[numeric_precision] = ValuePool.getLong(
-                    ((NumberType) type).getNumericPrecisionInRadix());
+                        ((NumberType) type).getNumericPrecisionInRadix());
                 row[declared_numeric_precision] = ValuePool.getLong(
-                    ((NumberType) type).getNumericPrecisionInRadix());
+                        ((NumberType) type).getNumericPrecisionInRadix());
 
                 if (type.isExactNumberType()) {
                     row[numeric_scale] = row[declared_numeric_scale] =
-                        ValuePool.getLong(type.scale);
+                            ValuePool.getLong(type.scale);
                 }
 
                 row[numeric_precision_radix] =
-                    ValuePool.getLong(type.getPrecisionRadix());
-            } else if (type.isBooleanType()) {}
-            else if (type.isDateTimeType()) {
+                        ValuePool.getLong(type.getPrecisionRadix());
+            } else if (type.isBooleanType()) {
+            } else if (type.isDateTimeType()) {
                 row[datetime_precision] = ValuePool.getLong(type.scale);
             } else if (type.isIntervalType()) {
-                row[data_type]          = "INTERVAL";
+                row[data_type] = "INTERVAL";
                 row[interval_type] = IntervalType.getQualifier(type.typeCode);
                 row[interval_precision] = ValuePool.getLong(type.precision);
                 row[datetime_precision] = ValuePool.getLong(type.scale);
             } else if (type.isBinaryType()) {
                 row[character_maximum_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
                 row[character_octet_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
             } else if (type.isBitType()) {
                 row[character_maximum_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
                 row[character_octet_length] =
-                    ValuePool.getLong(type.precision);
+                        ValuePool.getLong(type.precision);
             } else if (type.isArrayType()) {
                 row[maximum_cardinality] =
-                    ValuePool.getLong(type.arrayLimitCardinality());
+                        ValuePool.getLong(type.arrayLimitCardinality());
                 row[data_type] = "ARRAY";
             }
 
             // end common block
             row[source_dtd_identifier] = type.getDefinition();
-            row[declared_data_type]    = row[data_type];
+            row[declared_data_type] = row[data_type];
 
             t.insertSys(session, store, row);
         }
@@ -9082,7 +9084,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The VIEW_COLUMN_USAGE view has one row for each column of a
      * table that is explicitly or implicitly referenced in the
      * &lt;query expression&gt; of the view being described. <p>
@@ -9133,11 +9135,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "COLUMN_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[VIEW_COLUMN_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[VIEW_COLUMN_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
@@ -9150,23 +9152,23 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Intermediate holders
         Iterator tables;
-        View     view;
-        Table    table;
+        View view;
+        Table table;
         Object[] row;
         Iterator iterator;
 
         // Column number mappings
-        final int view_catalog  = 0;
-        final int view_schema   = 1;
-        final int view_name     = 2;
+        final int view_catalog = 0;
+        final int view_schema = 1;
+        final int view_name = 2;
         final int table_catalog = 3;
-        final int table_schema  = 4;
-        final int table_name    = 5;
-        final int column_name   = 6;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int column_name = 6;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -9174,7 +9176,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             if (table.isView()
                     && session.getGrantee().isFullyAccessibleByRole(
-                        table.getName())) {
+                    table.getName())) {
 
                 // fall through
             } else {
@@ -9182,9 +9184,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             }
 
             viewCatalog = database.getCatalogName().name;
-            viewSchema  = table.getSchemaName().name;
-            viewName    = table.getName().name;
-            view        = (View) table;
+            viewSchema = table.getSchemaName().name;
+            viewName = table.getName().name;
+            view = (View) table;
 
             OrderedHashSet references = view.getReferences();
 
@@ -9197,18 +9199,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                = t.getEmptyRowData();
-                row[view_catalog]  = viewCatalog;
-                row[view_schema]   = viewSchema;
-                row[view_name]     = viewName;
+                row = t.getEmptyRowData();
+                row[view_catalog] = viewCatalog;
+                row[view_schema] = viewSchema;
+                row[view_name] = viewName;
                 row[table_catalog] = viewCatalog;
-                row[table_schema]  = refName.parent.schema.name;
-                row[table_name]    = refName.parent.name;
-                row[column_name]   = refName.name;
+                row[table_schema] = refName.parent.schema.name;
+                row[table_name] = refName.parent.name;
+                row[column_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -9217,7 +9220,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2011 VIEW<p>
-     *
+     * <p>
      * The VIEW_PERIOD_USAGE view has one row for each table identified
      * by a &lt;table name&gt; simply contained in a &lt;table reference&gt;
      * that is contained in the &lt;query expression&gt; of a view. <p>
@@ -9269,33 +9272,33 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // false PK, as VIEW_CATALOG, VIEW_SCHEMA, TABLE_CATALOG, and/or
             // TABLE_SCHEMA may be NULL
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[VIEW_PERIOD_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[VIEW_PERIOD_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5, 6
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5, 6
             }, false);
 
             return t;
         }
 
         // Column number mappings
-        final int view_catalog  = 0;
-        final int view_schema   = 1;
-        final int view_name     = 2;
+        final int view_catalog = 0;
+        final int view_schema = 1;
+        final int view_name = 2;
         final int table_catalog = 3;
-        final int table_schema  = 4;
-        final int table_name    = 5;
-        final int period_name   = 6;
+        final int table_schema = 4;
+        final int table_name = 5;
+        final int period_name = 6;
 
         //
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -9318,18 +9321,19 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                = t.getEmptyRowData();
-                row[view_catalog]  = database.getCatalogName().name;
-                row[view_schema]   = table.getSchemaName().name;
-                row[view_name]     = table.getName().name;
+                row = t.getEmptyRowData();
+                row[view_catalog] = database.getCatalogName().name;
+                row[view_schema] = table.getSchemaName().name;
+                row[view_name] = table.getName().name;
                 row[table_catalog] = database.getCatalogName().name;
-                row[table_schema]  = refName.schema.name;
-                row[table_name]    = refName.parent.name;
-                row[period_name]   = refName.name;
+                row[table_schema] = refName.schema.name;
+                row[table_name] = refName.parent.name;
+                row[period_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -9338,7 +9342,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The VIEW_ROUTINE_USAGE view has one row for each SQL-invoked
      * routine identified as the subject routine of either a &lt;routine
      * invocation&gt;, a &lt;method reference&gt;, a &lt;method invocation&gt;,
@@ -9387,11 +9391,11 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             addColumn(t, "SPECIFIC_NAME", SQL_IDENTIFIER);
 
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[VIEW_ROUTINE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[VIEW_ROUTINE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
@@ -9399,20 +9403,20 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         // Intermediate holders
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
 
         // Column number mappings
-        final int view_catalog     = 0;
-        final int view_schema      = 1;
-        final int view_name        = 2;
+        final int view_catalog = 0;
+        final int view_schema = 1;
+        final int view_name = 2;
         final int specific_catalog = 3;
-        final int specific_schema  = 4;
-        final int specific_name    = 5;
+        final int specific_schema = 4;
+        final int specific_name = 5;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -9435,17 +9439,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                   = t.getEmptyRowData();
-                row[view_catalog]     = database.getCatalogName().name;
-                row[view_schema]      = table.getSchemaName().name;
-                row[view_name]        = table.getName().name;
+                row = t.getEmptyRowData();
+                row[view_catalog] = database.getCatalogName().name;
+                row[view_schema] = table.getSchemaName().name;
+                row[view_name] = table.getName().name;
                 row[specific_catalog] = database.getCatalogName().name;
-                row[specific_schema]  = refName.schema.name;
-                row[specific_name]    = refName.name;
+                row[specific_schema] = refName.schema.name;
+                row[specific_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -9454,7 +9459,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The VIEW_TABLE_USAGE view has one row for each table identified
      * by a &lt;table name&gt; simply contained in a &lt;table reference&gt;
      * that is contained in the &lt;query expression&gt; of a view. <p>
@@ -9505,32 +9510,32 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // false PK, as VIEW_CATALOG, VIEW_SCHEMA, TABLE_CATALOG, and/or
             // TABLE_SCHEMA may be NULL
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[VIEW_TABLE_USAGE].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[VIEW_TABLE_USAGE].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1, 2, 3, 4, 5
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1, 2, 3, 4, 5
             }, false);
 
             return t;
         }
 
         // Column number mappings
-        final int view_catalog  = 0;
-        final int view_schema   = 1;
-        final int view_name     = 2;
+        final int view_catalog = 0;
+        final int view_schema = 1;
+        final int view_name = 2;
         final int table_catalog = 3;
-        final int table_schema  = 4;
-        final int table_name    = 5;
+        final int table_schema = 4;
+        final int table_name = 5;
 
         //
         Iterator tables;
-        Table    table;
+        Table table;
         Object[] row;
 
         // Initialization
         tables =
-            database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
+                database.schemaManager.databaseObjectIterator(SchemaObject.TABLE);
 
         // Do it.
         while (tables.hasNext()) {
@@ -9554,17 +9559,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                     continue;
                 }
 
-                row                = t.getEmptyRowData();
-                row[view_catalog]  = database.getCatalogName().name;
-                row[view_schema]   = table.getSchemaName().name;
-                row[view_name]     = table.getName().name;
+                row = t.getEmptyRowData();
+                row[view_catalog] = database.getCatalogName().name;
+                row[view_schema] = table.getSchemaName().name;
+                row[view_name] = table.getName().name;
                 row[table_catalog] = database.getCatalogName().name;
-                row[table_schema]  = refName.schema.name;
-                row[table_name]    = refName.name;
+                row[table_schema] = refName.schema.name;
+                row[table_name] = refName.name;
 
                 try {
                     t.insertSys(session, store, row);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             }
         }
 
@@ -9573,9 +9579,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * The VIEWS view contains one row for each VIEW definition. <p>
-     *
+     * <p>
      * Each row is a description of the query expression that defines its view,
      * with the following columns:
      *
@@ -9595,8 +9601,8 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      * </pre> <p>
      *
      * @return a tabular description of the text source of all
-     *        <code>View</code> objects accessible to
-     *        the user.
+     * <code>View</code> objects accessible to
+     * the user.
      */
     Table VIEWS(Session session, PersistentStore store) {
 
@@ -9620,27 +9626,27 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
             // added for unique: TABLE_SCHEMA, TABLE_CATALOG
             // false PK, as TABLE_SCHEMA and/or TABLE_CATALOG may be null
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[VIEWS].name, false, SchemaObject.INDEX);
+                    sysTableHsqlNames[VIEWS].name, false, SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                1, 2, 0
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    1, 2, 0
             }, false);
 
             return t;
         }
 
-        Iterator  tables;
-        Table     table;
-        Object[]  row;
-        final int table_catalog              = 0;
-        final int table_schema               = 1;
-        final int table_name                 = 2;
-        final int view_definition            = 3;
-        final int check_option               = 4;
-        final int is_updatable               = 5;
-        final int insertable_into            = 6;
-        final int is_trigger_updatable       = 7;
-        final int is_trigger_deletable       = 8;
+        Iterator tables;
+        Table table;
+        Object[] row;
+        final int table_catalog = 0;
+        final int table_schema = 1;
+        final int table_name = 2;
+        final int view_definition = 3;
+        final int check_option = 4;
+        final int is_updatable = 5;
+        final int insertable_into = 6;
+        final int is_trigger_updatable = 7;
+        final int is_trigger_deletable = 8;
         final int is_trigger_insertable_into = 9;
 
         tables = allTables();
@@ -9650,7 +9656,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             if (!table.isView()
                     && table.getSchemaName()
-                       != SqlInvariants.INFORMATION_SCHEMA_HSQLNAME) {
+                    != SqlInvariants.INFORMATION_SCHEMA_HSQLNAME) {
                 continue;
             }
 
@@ -9658,10 +9664,10 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
                 continue;
             }
 
-            row                = t.getEmptyRowData();
+            row = t.getEmptyRowData();
             row[table_catalog] = database.getCatalogName().name;
-            row[table_schema]  = table.getSchemaName().name;
-            row[table_name]    = table.getName().name;
+            row[table_schema] = table.getSchemaName().name;
+            row[table_name] = table.getName().name;
 
             String check = Tokens.T_NONE;
 
@@ -9673,33 +9679,33 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
                 switch (((View) table).getCheckOption()) {
 
-                    case SchemaObject.ViewCheckModes.CHECK_NONE :
+                    case SchemaObject.ViewCheckModes.CHECK_NONE:
                         break;
 
-                    case SchemaObject.ViewCheckModes.CHECK_LOCAL :
+                    case SchemaObject.ViewCheckModes.CHECK_LOCAL:
                         check = Tokens.T_LOCAL;
                         break;
 
-                    case SchemaObject.ViewCheckModes.CHECK_CASCADE :
+                    case SchemaObject.ViewCheckModes.CHECK_CASCADE:
                         check = Tokens.T_CASCADED;
                         break;
                 }
             }
 
-            row[check_option]    = check;
-            row[is_updatable]    = table.isUpdatable() ? Tokens.T_YES
-                                                       : Tokens.T_NO;
+            row[check_option] = check;
+            row[is_updatable] = table.isUpdatable() ? Tokens.T_YES
+                    : Tokens.T_NO;
             row[insertable_into] = table.isInsertable() ? Tokens.T_YES
-                                                        : Tokens.T_NO;
+                    : Tokens.T_NO;
             row[is_trigger_updatable] = table.isTriggerUpdatable()
-                                        ? Tokens.T_YES
-                                        : Tokens.T_NO;
+                    ? Tokens.T_YES
+                    : Tokens.T_NO;
             row[is_trigger_deletable] = table.isTriggerDeletable()
-                                        ? Tokens.T_YES
-                                        : Tokens.T_NO;
+                    ? Tokens.T_YES
+                    : Tokens.T_NO;
             row[is_trigger_insertable_into] = table.isTriggerInsertable()
-                                              ? Tokens.T_YES
-                                              : Tokens.T_NO;
+                    ? Tokens.T_YES
+                    : Tokens.T_NO;
 
             t.insertSys(session, store, row);
         }
@@ -9712,9 +9718,9 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
     /**
      * SQL:2008 VIEW<p>
-     *
+     * <p>
      * ROLE_AUTHORIZATION_DESCRIPTORS<p>
-     *
+     * <p>
      * Contains a representation of the role authorization descriptors.<p>
      * <b>Definition</b>
      *
@@ -9744,7 +9750,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
      *          GRANTEE. <p>
      *
      *      <li>The values of IS_GRANTABLE have the following meanings:<p>
-     *
+     * <p>
      *      <table border cellpadding="3">
      *          <tr>
      *              <td nowrap>YES</td>
@@ -9766,7 +9772,7 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
         if (t == null) {
             t = createBlankTable(
-                sysTableHsqlNames[ROLE_AUTHORIZATION_DESCRIPTORS]);
+                    sysTableHsqlNames[ROLE_AUTHORIZATION_DESCRIPTORS]);
 
             addColumn(t, "ROLE_NAME", SQL_IDENTIFIER);    // not null
             addColumn(t, "GRANTEE", SQL_IDENTIFIER);      // not null
@@ -9775,29 +9781,29 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
 
             // true PK
             HsqlName name = HsqlNameManager.newInfoSchemaObjectName(
-                sysTableHsqlNames[ROLE_AUTHORIZATION_DESCRIPTORS].name, false,
-                SchemaObject.INDEX);
+                    sysTableHsqlNames[ROLE_AUTHORIZATION_DESCRIPTORS].name, false,
+                    SchemaObject.INDEX);
 
-            t.createPrimaryKeyConstraint(name, new int[] {
-                0, 1
+            t.createPrimaryKeyConstraint(name, new int[]{
+                    0, 1
             }, true);
 
             return t;
         }
 
         // Intermediate holders
-        String   grantorName = SqlInvariants.SYSTEM_AUTHORIZATION_NAME;
+        String grantorName = SqlInvariants.SYSTEM_AUTHORIZATION_NAME;
         Iterator grantees;
-        Grantee  granteeObject;
-        String   granteeName;
+        Grantee granteeObject;
+        String granteeName;
         Iterator roles;
-        String   isGrantable;
+        String isGrantable;
         Object[] row;
 
         // Column number mappings
-        final int role_name    = 0;
-        final int grantee      = 1;
-        final int grantor      = 2;
+        final int role_name = 0;
+        final int grantee = 1;
+        final int grantor = 2;
         final int is_grantable = 3;
 
         // Initialization
@@ -9806,18 +9812,18 @@ extends org.hsqldb.dbinfo.DatabaseInformationMain {
         //
         while (grantees.hasNext()) {
             granteeObject = (Grantee) grantees.next();
-            granteeName   = granteeObject.getName().getNameString();
-            roles         = granteeObject.getDirectRoles().iterator();
-            isGrantable   = granteeObject.isAdmin() ? Tokens.T_YES
-                                                    : Tokens.T_NO;
+            granteeName = granteeObject.getName().getNameString();
+            roles = granteeObject.getDirectRoles().iterator();
+            isGrantable = granteeObject.isAdmin() ? Tokens.T_YES
+                    : Tokens.T_NO;
 
             while (roles.hasNext()) {
                 Grantee role = (Grantee) roles.next();
 
-                row               = t.getEmptyRowData();
-                row[role_name]    = role.getName().getNameString();
-                row[grantee]      = granteeName;
-                row[grantor]      = grantorName;
+                row = t.getEmptyRowData();
+                row[role_name] = role.getName().getNameString();
+                row[grantee] = granteeName;
+                row[grantor] = grantorName;
                 row[is_grantable] = isGrantable;
 
                 t.insertSys(session, store, row);

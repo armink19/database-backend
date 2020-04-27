@@ -83,7 +83,7 @@ public class AuthBeanMultiplexer {
      * From dbNames to ordered-lists-of-AuthFunctionBeans.
      * This is not an "adder" function, but a "setter" function, so do not use
      * this to add to a partial set, but to assign the entire set.
-     * <P>
+     * <p>
      * The given entries are copied, to limit side-effects and concurrency
      * issues.
      * </P>
@@ -127,12 +127,12 @@ public class AuthBeanMultiplexer {
     /**
      * Wrapper for {@code setAuthFunctionBeans(String, List<AuthFunctionBean>)}
      *
-     * @param c  An open Connection to the desired database.
+     * @param c An open Connection to the desired database.
      * @throws SQLException if failed to obtain unique name from given
      *                      Connection.
      */
     public void setAuthFunctionBeans(Connection c,
-            List<AuthFunctionBean> authFunctionBeans) throws SQLException {
+                                     List<AuthFunctionBean> authFunctionBeans) throws SQLException {
         setAuthFunctionBeans(getUniqueNameFor(c), authFunctionBeans);
     }
 
@@ -140,7 +140,7 @@ public class AuthBeanMultiplexer {
      * This is not an "adder" function, but a "setter" function for the
      * specified dbName , so do not use this to add to a database's
      * FunctionBeans, but to assign the entire list for that database.
-     * <P>
+     * <p>
      * The given entries are copied, to limit side-effects and concurrency
      * issues.
      * </P> <P>
@@ -153,11 +153,11 @@ public class AuthBeanMultiplexer {
      * @see #setAuthFunctionBean(String, AuthFunctionBean)
      */
     public void setAuthFunctionBeans(String dbName,
-            List<AuthFunctionBean> authFunctionBeans) {
+                                     List<AuthFunctionBean> authFunctionBeans) {
         if (dbName == null || dbName.length() != 16) {
             throw new IllegalArgumentException(
                     "Database name not exactly 16 characters long: "
-                    + dbName);
+                            + dbName);
         }
         List<AuthFunctionBean> dbsBeans = AuthBeanMultiplexer.beans.get(dbName);
         if (dbsBeans == null) {
@@ -167,7 +167,7 @@ public class AuthBeanMultiplexer {
             if (dbsBeans.size() > 0)
                 throw new IllegalStateException(
                         "Use setAuthFunctionBeans(String, List) only when the "
-                        + "db's AuthFunctionBean list is empty");
+                                + "db's AuthFunctionBean list is empty");
         }
         dbsBeans.addAll(authFunctionBeans);
     }
@@ -177,7 +177,7 @@ public class AuthBeanMultiplexer {
      * an open Connection to identify the database.
      */
     public void setAuthFunctionBean(Connection c,
-            AuthFunctionBean authFunctionBean) throws SQLException {
+                                    AuthFunctionBean authFunctionBean) throws SQLException {
         setAuthFunctionBeans(getUniqueNameFor(c),
                 Collections.singletonList(authFunctionBean));
     }
@@ -187,7 +187,7 @@ public class AuthBeanMultiplexer {
      * specified dbName , so do not use this to add to a database's
      * FunctionBeans, but to assign ths single given AuthFunctionBean as the
      * specified database's authenticator.
-     * <P>
+     * <p>
      * To set up multiple authenticators for a single database for redundancy
      * purposes, use the method setAuthFunctionBeans(String, List) instead.
      * </P>
@@ -195,46 +195,46 @@ public class AuthBeanMultiplexer {
      * @see #setAuthFunctionBeans(String, List)
      */
     public void setAuthFunctionBean(String dbName,
-            AuthFunctionBean authFunctionBean) {
+                                    AuthFunctionBean authFunctionBean) {
         setAuthFunctionBeans(
                 dbName, Collections.singletonList(authFunctionBean));
     }
 
     /**
      * HyperSQL Java Function Method.
-     * <P>
+     * <p>
      * Registered AuthFunctionBeans matching the specified database and password
      * will be tried in order.
      * <OL>
-     *   <li>If the AuthFunctionBean being tried throws a non-runtime Exception,
-     *       then that RuntimeException is passed through (re-thrown), resulting
-     *       in a SQLException for the authenticating application.
-     *   <li>If the AuthFunctionBean being tried doesn't throw anything, then
-     *       the return value is passed through (returned) and HyperSQL will
-     *       allow access and set roles according to HyperSQL's authentication
-     *       function contract.
-     *   <LI>If the AuthFunctionBean being tried throws a RuntimeException, then
-     *       the next AuthFunctionBean in turn will be tried.
-     *       If all matching AuthFunctionBeans throw RuntimeExceptions, then the
-     *       first RuntimeException that was thrown will be passed through
-     *       (re-thrown), resulting in a SQLException for the authenticating
-     *       application.
-     *   <LI>If there are no AuthFunctionBeans registered for the specified
-     *       dbName, then this method will throw an IllegalArgumentException,
-     *       resulting in a SQLException for the authenticating application.
+     * <li>If the AuthFunctionBean being tried throws a non-runtime Exception,
+     * then that RuntimeException is passed through (re-thrown), resulting
+     * in a SQLException for the authenticating application.
+     * <li>If the AuthFunctionBean being tried doesn't throw anything, then
+     * the return value is passed through (returned) and HyperSQL will
+     * allow access and set roles according to HyperSQL's authentication
+     * function contract.
+     * <LI>If the AuthFunctionBean being tried throws a RuntimeException, then
+     * the next AuthFunctionBean in turn will be tried.
+     * If all matching AuthFunctionBeans throw RuntimeExceptions, then the
+     * first RuntimeException that was thrown will be passed through
+     * (re-thrown), resulting in a SQLException for the authenticating
+     * application.
+     * <LI>If there are no AuthFunctionBeans registered for the specified
+     * dbName, then this method will throw an IllegalArgumentException,
+     * resulting in a SQLException for the authenticating application.
      * </OL>
      *
-     * @see "HyperSQL User Guide, System Management chapter, Authentication Settings subsection."
-     * @throws IllegalArgumentException if no AuthFunctionBean has been set for
-     *         specified dbName.
-     * @throws RuntimeException if all matching AuthFunctionBeans threw
-     *         RuntimeExceptions.  (This indicates that no matching
-     *         AuthFunctionBean functioned properly, not that authentication was
-     *         purposefully denied by any AuthFunctionBean).
-     * @throws Exception (non-runtime).  A matching AuthFunctionBean threw this
-     *         Exception.
      * @return Null or java.sql.Array to indicate successful authentication
-     *         according to the contract for HyperSQL authentication functions.
+     * according to the contract for HyperSQL authentication functions.
+     * @throws IllegalArgumentException if no AuthFunctionBean has been set for
+     *                                  specified dbName.
+     * @throws RuntimeException         if all matching AuthFunctionBeans threw
+     *                                  RuntimeExceptions.  (This indicates that no matching
+     *                                  AuthFunctionBean functioned properly, not that authentication was
+     *                                  purposefully denied by any AuthFunctionBean).
+     * @throws Exception                (non-runtime).  A matching AuthFunctionBean threw this
+     *                                  Exception.
+     * @see "HyperSQL User Guide, System Management chapter, Authentication Settings subsection."
      */
     public static java.sql.Array authenticate(
             String database, String user, String password)
@@ -260,20 +260,21 @@ public class AuthBeanMultiplexer {
         }
         Exception firstRTE = null;
         String[] beanRet;
-        for (AuthFunctionBean nextBean : beanList) try {
-            beanRet = nextBean.authenticate(user, password);
-            return (beanRet == null)
-                    ? null : new JDBCArrayBasic(beanRet, Type.SQL_VARCHAR);
-        } catch (RuntimeException re) {
-            if (firstRTE == null) {
-                firstRTE = re;
+        for (AuthFunctionBean nextBean : beanList)
+            try {
+                beanRet = nextBean.authenticate(user, password);
+                return (beanRet == null)
+                        ? null : new JDBCArrayBasic(beanRet, Type.SQL_VARCHAR);
+            } catch (RuntimeException re) {
+                if (firstRTE == null) {
+                    firstRTE = re;
+                }
+                logger.error("System failure of an AuthFunctionBean: "
+                        + ((re.getMessage() == null)
+                        ? re.toString() : re.getMessage()));
+            } catch (Exception e) {
+                throw e;
             }
-            logger.error("System failure of an AuthFunctionBean: "
-                    + ((re.getMessage() == null)
-                      ? re.toString() : re.getMessage()));
-        } catch (Exception e) {
-            throw e;
-        }
         throw firstRTE;
     }
 }

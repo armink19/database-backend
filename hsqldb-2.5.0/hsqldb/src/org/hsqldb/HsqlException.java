@@ -49,28 +49,29 @@ public class HsqlException extends RuntimeException {
     //
     public static final HsqlException[] emptyArray = new HsqlException[]{};
     public static final HsqlException noDataCondition =
-        Error.error(ErrorCode.N_02000);
+            Error.error(ErrorCode.N_02000);
 
     //
     private String message;
     private String state;
-    private int    code;
-    private int    level;
-    private int    statementGroup;
-    private int    statementCode;
-    public  Object info;
+    private int code;
+    private int level;
+    private int statementGroup;
+    private int statementCode;
+    public Object info;
+
     /**
      * @param message String
-     * @param state XOPEN / SQL code for exception
-     * @param code number code in HSQLDB
+     * @param state   XOPEN / SQL code for exception
+     * @param code    number code in HSQLDB
      */
     public HsqlException(Throwable t, String message, String state, int code) {
 
         super(t);
 
         this.message = message;
-        this.state   = state;
-        this.code    = code;
+        this.state = state;
+        this.code = code;
     }
 
     /**
@@ -79,8 +80,8 @@ public class HsqlException extends RuntimeException {
     public HsqlException(Result r) {
 
         this.message = r.getMainString();
-        this.state   = r.getSubString();
-        this.code    = r.getErrorCode();
+        this.state = r.getSubString();
+        this.code = r.getErrorCode();
     }
 
     public HsqlException(Throwable t, String errorState, int errorCode) {
@@ -88,8 +89,8 @@ public class HsqlException extends RuntimeException {
         super(t);
 
         this.message = t.toString();
-        this.state   = errorState;
-        this.code    = errorCode;
+        this.state = errorState;
+        this.code = errorCode;
     }
 
     /**
@@ -131,7 +132,7 @@ public class HsqlException extends RuntimeException {
 
     public void setStatementType(int group, int code) {
         statementGroup = group;
-        statementCode  = code;
+        statementCode = code;
     }
 
     public int hashCode() {
@@ -144,7 +145,7 @@ public class HsqlException extends RuntimeException {
             HsqlException o = (HsqlException) other;
 
             return code == o.code && equals(state, o.state)
-                   && equals(message, o.message);
+                    && equals(message, o.message);
         }
 
         return false;

@@ -40,7 +40,7 @@ import java.io.File;
 
 /**
  * Provides a facility for invoking the Preprocessor from ANT. <p>
- *
+ * <p>
  * Example ANT target: <p>
  *
  * <pre>
@@ -70,7 +70,7 @@ import java.io.File;
  *
  * </target>
  * </pre>
- *
+ * <p>
  * Task attributes :
  *
  * <table>
@@ -138,12 +138,12 @@ public class PreprocessorAntTask extends MatchingTask {
 
     private String ifExpr;
     private String unlessExpr;
-    private File   sourceDir;
-    private File   targetDir;
+    private File sourceDir;
+    private File targetDir;
     private String defines;
     private String altExt;
     private String encoding;
-    private int    options = Option.INDENT;
+    private int options = Option.INDENT;
 
     public void init() {
         super.init();
@@ -186,7 +186,7 @@ public class PreprocessorAntTask extends MatchingTask {
     }
 
     public void setEncoding(final String encoding) {
-          this.encoding = encoding;
+        this.encoding = encoding;
     }
 
     public void setIf(final String expr) {
@@ -215,7 +215,7 @@ public class PreprocessorAntTask extends MatchingTask {
         this.sourceDir = getProject().resolveFile("" + this.sourceDir);
 
         IResolver resolver = new AntResolver(getProject());
-        String[]  files    = getFiles();
+        String[] files = getFiles();
 
         log("Preprocessing " + files.length + " file(s)");
 

@@ -59,7 +59,7 @@ import java.util.regex.Pattern;
  * default by your JRE, then set system property 'javax.net.ssl.trustStore' to
  * the path to a trust store containing the cert (as well as any other certs
  * that your app needs for other purposes).
- * <P>
+ * <p>
  * This class with authenticate login attempts against LDAP entries with RDN of
  * the HyperSQL account name (the precise attribute name defaults to 'uid', but
  * you may change that).
@@ -100,11 +100,11 @@ import java.util.regex.Pattern;
  * but still give access since a list was still supplied).
  * </P>
  *
+ * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @see AuthFunctionBean
  * @see #setLdapHost(String)
  * @see #setParentDn(String)
  * @see #init()
- * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @since 2.5.0
  */
 public class LdapAuthBean implements AuthFunctionBean {
@@ -116,7 +116,7 @@ public class LdapAuthBean implements AuthFunctionBean {
     private Pattern roleSchemaValuePattern, accessValuePattern;
     private String initialContextFactory = "com.sun.jndi.ldap.LdapCtxFactory";
     private boolean tls;  // This is for StartTLS, not tunneled TLS/LDAPS.
-                  // Variable named just "tls" only for brevity.
+    // Variable named just "tls" only for brevity.
     private String mechanism = "SIMPLE";
     private String rdnAttribute = "uid";
     private boolean initialized;
@@ -168,27 +168,27 @@ public class LdapAuthBean implements AuthFunctionBean {
         if (rolesSchemaAttribute == null && accessAttribute == null) {
             throw new IllegalStateException(
                     "You must set property 'rolesSchemaAttribute' "
-                    + "and/or property 'accessAttribute'");
+                            + "and/or property 'accessAttribute'");
         }
         if (roleSchemaValuePattern != null && rolesSchemaAttribute == null) {
             throw new IllegalStateException(
                     "If property 'roleSchemaValuePattern' is set, then you "
-                    + "must also set property 'rolesSchemaAttribute' to "
-                    + "indicate which attribute to evaluate");
+                            + "must also set property 'rolesSchemaAttribute' to "
+                            + "indicate which attribute to evaluate");
         }
         if (accessValuePattern != null && accessAttribute == null) {
             throw new IllegalStateException(
                     "If property 'accessValuePattern' is set, then you "
-                    + "must also set property 'accessAttribute' to "
-                    + "indicate which attribute to evaluate");
+                            + "must also set property 'accessAttribute' to "
+                            + "indicate which attribute to evaluate");
         }
         if (rolesSchemaAttribute != null && accessAttribute != null) {
             attributeUnion = new String[]
-                    { rolesSchemaAttribute, accessAttribute };
+                    {rolesSchemaAttribute, accessAttribute};
         } else if (rolesSchemaAttribute != null) {
-            attributeUnion = new String[] { rolesSchemaAttribute };
+            attributeUnion = new String[]{rolesSchemaAttribute};
         } else {
-            attributeUnion = new String[] { accessAttribute };
+            attributeUnion = new String[]{accessAttribute};
         }
         initialized = true;
     }
@@ -215,8 +215,8 @@ public class LdapAuthBean implements AuthFunctionBean {
      * <P>Example1 :<PRE><CODE> TRUE </CODE></PRE> This will match true values
      * per OpenLDAP's boolean OID.
      *
-     * @see Matcher#matches()
      * @param accessValuePattern Pattern
+     * @see Matcher#matches()
      */
     public void setAccessValuePattern(Pattern accessValuePattern) {
         this.accessValuePattern = accessValuePattern;
@@ -226,8 +226,8 @@ public class LdapAuthBean implements AuthFunctionBean {
      * String wrapper for method setAccessValuePattern(Pattern) Use the (x?)
      * Pattern constructs to set options.
      *
-     * @see #setAccessValuePattern(Pattern)
      * @param patternString String
+     * @see #setAccessValuePattern(Pattern)
      */
     public void setAccessValuePatternString(String patternString) {
         setAccessValuePattern(Pattern.compile(patternString));
@@ -239,56 +239,56 @@ public class LdapAuthBean implements AuthFunctionBean {
      * If your rolesSchemaAttribute holds only the String values precisely as
      * HyperSQL needs them, then don't use this method at all and all matching
      * attribute values will be passed directly.
-     * <P>
+     * <p>
      * You may only use this property if you have set property
      * rolesSchemaAttribute.
      * If rolesSchemaAttribute is set but this property is not set, then
      * the value will directly determine the user's roles and schema.
-     * <P>
+     * <p>
      * <B>Unlike the rolesSchemaAttribute, the property at-hand uses the
      * singular for "role", because whereas rolesSchemaAttribute is the
      * attribute for listing multiple roles, roleSchemaValuePattern is used
      * to evaluate single role values.</B>
-     * <P>
+     * <p>
      * These are two distinct and important purposes for the specified Pattern.
      * <OL>
-     *   <LI>
-     *      Values that do not successfully match the pattern will be ignored.
-     *   <LI>
-     *      Optionally uses parentheses to specify a single capture group
-     *      (if you use parentheses to specify more than one matching group, we
-     *      will only capture for the first).
-     *      What is captured by this group is exactly the role or schema that
-     *      HyperSQL will attempt to assign.
-     *      If no capture parens are given then the Pattern is only used for the
-     *      acceptance decision, and the LDAP-provided value will be returned
-     *      verbatim.
+     * <LI>
+     * Values that do not successfully match the pattern will be ignored.
+     * <LI>
+     * Optionally uses parentheses to specify a single capture group
+     * (if you use parentheses to specify more than one matching group, we
+     * will only capture for the first).
+     * What is captured by this group is exactly the role or schema that
+     * HyperSQL will attempt to assign.
+     * If no capture parens are given then the Pattern is only used for the
+     * acceptance decision, and the LDAP-provided value will be returned
+     * verbatim.
      * </OL>
      *
-     * <P>
+     * <p>
      * Together, these two features work great to extract just the needed role
      * and schema names from 'memberof' DNs, and will have no problem if you
      * also use 'memberof' for unrelated purposes.
      *
-     * <P>
+     * <p>
      * N.b. this Pattern will be used for the matches() operation, therefore it
      * must match the entire candidate value strings (this is different than
      * the find operation which does not need to satisfy the entire candidate
      * value).
      *
      * <P>Example1 :<PRE><CODE>
-     *     cn=([^,]+),ou=dbRole,dc=admc,dc=com
+     * cn=([^,]+),ou=dbRole,dc=admc,dc=com
      * </CODE></PRE>
-     *     will extract the CN value from matching attribute values.
+     * will extract the CN value from matching attribute values.
      *
      * <P>Example1 :<PRE><CODE>
-     *     cn=[^,]+,ou=dbRole,dc=admc,dc=com
+     * cn=[^,]+,ou=dbRole,dc=admc,dc=com
      * </CODE></PRE>
-     *     will return the entire <CODE>cn...com</CODE> string for matching
-     *     attribute values.
+     * will return the entire <CODE>cn...com</CODE> string for matching
+     * attribute values.
      *
-     * @see Matcher#matches()
      * @param roleSchemaValuePattern pattern
+     * @see Matcher#matches()
      */
     public void setRoleSchemaValuePattern(Pattern roleSchemaValuePattern) {
         this.roleSchemaValuePattern = roleSchemaValuePattern;
@@ -296,13 +296,12 @@ public class LdapAuthBean implements AuthFunctionBean {
 
     /**
      * String wrapper for method setRoleSchemaValuePattern(Pattern)
-     *
+     * <p>
      * Use the (x?) Pattern constructs to set options.
      *
+     * @param patternString pattern
      * @throws java.util.regex.PatternSyntaxException exception
      * @see #setRoleSchemaValuePattern(Pattern)
-     *
-     * @param patternString pattern
      */
     public void setRoleSchemaValuePatternString(String patternString) {
         setRoleSchemaValuePattern(Pattern.compile(patternString));
@@ -311,8 +310,8 @@ public class LdapAuthBean implements AuthFunctionBean {
     /**
      * Defaults to "SIMPLE".
      *
-     * @param mechanism  Either 'SIMPLE' (the default) for LDAP Simple, or
-     *                    one of the LDAP SASL mechanisms, such as 'DIGEST-MD5'.
+     * @param mechanism Either 'SIMPLE' (the default) for LDAP Simple, or
+     *                  one of the LDAP SASL mechanisms, such as 'DIGEST-MD5'.
      */
     public void setSecurityMechanism(String mechanism) {
         this.mechanism = mechanism;
@@ -322,7 +321,7 @@ public class LdapAuthBean implements AuthFunctionBean {
      * Do not specify URL scheme ("ldap:") because that is implied.
      * (Since we purposefully don't support LDAPS, there would be no reason to
      * change that).
-     * <P>
+     * <p>
      * If using StartTLS, then this host name must match the cn of the LDAP
      * server's certificate.
      * </P> <P>
@@ -330,8 +329,8 @@ public class LdapAuthBean implements AuthFunctionBean {
      * with Sun's LdapLoginModule instead of this class.
      * </P>
      *
-     * @see JaasAuthBean
      * @param ldapHost host
+     * @see JaasAuthBean
      */
     public void setLdapHost(String ldapHost) {
         this.ldapHost = ldapHost;
@@ -341,19 +340,19 @@ public class LdapAuthBean implements AuthFunctionBean {
      * A template String containing place-holder token '${username}'.
      * All occurrences of '${username}' (without the quotes) will be translated
      * to the username that authentication is being attempted with.
-     * <P>
+     * <p>
      * If you supply a principalTemplate that does not contain '${username}',
      * then authentication will be user-independent.
-     * <P>
+     * <p>
      * It is common to authenticate to LDAP servers with the DN of the user's
      * LDAP entry.  In this situation, set principalTemplate to
      * <CODE>&lt;RDN_ATTR=&gt;${username},&lt;PARENT_DN&gt;</CODE>.
      * For example if you use parentDn of
      * <CODE>"ou=people,dc=admc,dc=com"</CODE> and rdnAttribute of
      * <CODE>uid</CODE>, then you would set <PRE><CODE>
-     *     "uid=${username},ou=people,dc=admc,dc=com"
+     * "uid=${username},ou=people,dc=admc,dc=com"
      * </CODE></PRE>
-     * <P>
+     * <p>
      * By default the user name will be passed exactly as it is, so don't use
      * this setter if that is what you want.  (This works great for OpenLDAP
      * with DIGEST-MD5 SASL, for example).
@@ -381,7 +380,7 @@ public class LdapAuthBean implements AuthFunctionBean {
      * and some mechanisms allow a realm to be specified if you wish to use that
      * feature.
      * By default no realm will be sent to the LDAP server.
-     * <P>
+     * <p>
      * Don't use this setter if you are not setting a SASL mechanism.
      * </P>
      *
@@ -404,14 +403,13 @@ public class LdapAuthBean implements AuthFunctionBean {
     /**
      * rdnAttribute must hold the user name exactly as the HyperSQL login will
      * be made with.
-     * <P>
+     * <p>
      * This is the RDN relative to the Parent DN specified with setParentDN.
      * Defaults to 'uid'.
      * </P>
      *
-     * @see #setParentDn(String)
-     *
      * @param rdnAttribute RDN attribute
+     * @see #setParentDn(String)
      */
     public void setRdnAttribute(String rdnAttribute) {
         this.rdnAttribute = rdnAttribute;
@@ -420,7 +418,7 @@ public class LdapAuthBean implements AuthFunctionBean {
     /**
      * Set the attribute name of the RDN + parentDn entries in which is stored
      * the list of roles and optional schema for the authenticating user.
-     * <P>
+     * <p>
      * There is no default.  <b>You must set this attribute if you want LDAP
      * instead of the local HyperSQL database to determine the user's roles!</b>
      * You must set the rolesSchemaAttribute property and/or the
@@ -446,7 +444,7 @@ public class LdapAuthBean implements AuthFunctionBean {
     /**
      * Set the attribute name of the RDN + parentDn entries which will be
      * consulted to decide whether the user can access the HyperSQL database.
-     * <P>
+     * <p>
      * There is no default.  If you set this attribute, then the attribute will
      * determine whether the user can access the HyperSQL database, regardless
      * of whether the rolesSchemaAttribute attribute is set.
@@ -465,19 +463,18 @@ public class LdapAuthBean implements AuthFunctionBean {
     }
 
     /**
-     *
-     * @see AuthFunctionBean#authenticate(String, String)
      * @param userName String
      * @param password String
-     * @throws DenyException on access denial
      * @return String[]
+     * @throws DenyException on access denial
+     * @see AuthFunctionBean#authenticate(String, String)
      */
     public String[] authenticate(String userName, String password)
             throws DenyException {
         if (!initialized) {
             throw new IllegalStateException(
-                "You must invoke the 'init' method to initialize the "
-                + LdapAuthBean.class.getName() + " instance.");
+                    "You must invoke the 'init' method to initialize the "
+                            + LdapAuthBean.class.getName() + " instance.");
         }
         Hashtable<String, String> env = new Hashtable<String, String>(5, 0.75f);
         env.put(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
@@ -503,9 +500,9 @@ public class LdapAuthBean implements AuthFunctionBean {
             // Assertion of client's authorization Identity -- Explicit way
             ctx.addToEnvironment(Context.SECURITY_AUTHENTICATION, mechanism);
             ctx.addToEnvironment(Context.SECURITY_PRINCIPAL,
-                  ((principalTemplate == null)
-                  ? userName
-                  : principalTemplate.replace("${username}", userName)));
+                    ((principalTemplate == null)
+                            ? userName
+                            : principalTemplate.replace("${username}", userName)));
             ctx.addToEnvironment(Context.SECURITY_CREDENTIALS, password);
             if (saslRealm != null) {
                 env.put("java.naming.security.sasl.realm", saslRealm);
@@ -533,7 +530,7 @@ public class LdapAuthBean implements AuthFunctionBean {
             }
             Attributes attrs = sRes.getAttributes();
             if (accessAttribute != null) {
-                Attribute attribute =  attrs.get(accessAttribute);
+                Attribute attribute = attrs.get(accessAttribute);
                 if (attribute == null) {
                     throw new DenyException();
                 }
@@ -566,7 +563,7 @@ public class LdapAuthBean implements AuthFunctionBean {
             // If we reach here, then we definitely need to try to return a
             // list of roles + schema.
             List<String> returns = new ArrayList<String>();
-            Attribute attribute =  attrs.get(rolesSchemaAttribute);
+            Attribute attribute = attrs.get(rolesSchemaAttribute);
             if (attribute != null) {
                 int valCount = attribute.size();
                 Matcher matcher;
@@ -580,7 +577,7 @@ public class LdapAuthBean implements AuthFunctionBean {
                     if (!(oneVal instanceof String)) {
                         throw new RuntimeException(
                                 "R/S Attr value #" + i + " not a String: "
-                                + oneVal.getClass().getName());
+                                        + oneVal.getClass().getName());
                     }
                     if (roleSchemaValuePattern == null) {
                         returns.add((String) oneVal);

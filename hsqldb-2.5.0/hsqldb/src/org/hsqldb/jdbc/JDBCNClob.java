@@ -38,7 +38,7 @@ import java.sql.NClob;
  * for the SQL <code>NCLOB</code> type.
  * An SQL <code>NCLOB</code> is a built-in type
  * that stores a Character Large Object using the National Character Set
- *  as a column value in a row of  a database table.
+ * as a column value in a row of  a database table.
  * <P>The <code>NClob</code> interface extends the <code>Clob</code> interface
  * which provides provides methods for getting the
  * length of an SQL <code>NCLOB</code> value,
@@ -51,25 +51,25 @@ import java.sql.NClob;
  * <code>getNClob</code> and <code>setNClob</code> allow a programmer to
  * access an SQL <code>NCLOB</code> value.  In addition, this interface
  * has methods for updating a <code>NCLOB</code> value.
- *
+ * <p>
  * <!-- start Release-specific documentation -->
  * <div class="ReleaseSpecificDocumentation">
  * <h3>HSQLDB-Specific Information:</h3> <p>
- *
+ * <p>
  * First, it should be noted that since HSQLDB represents all character data
  * internally as Java UNICODE (UTF16) String objects, there is not currently any
  * appreciable difference between the HSQLDB XXXCHAR types and the SQL 2003
  * NXXXCHAR and NCLOB types. <p>
- *
+ * <p>
  * See {@link org.hsqldb.jdbc.JDBCClob} for further information.
  *
  * </div>
  * <!-- end Release-specific documentation -->
  *
- * @since JDK 1.6, HSQLDB 2.0
  * @author Campbell Burnet (campbell-burnet@users dot sourceforge.net)
  * @see JDBCClob
  * @see JDBCClobClient
+ * @since JDK 1.6, HSQLDB 2.0
  */
 public class JDBCNClob extends JDBCClob implements NClob {
 

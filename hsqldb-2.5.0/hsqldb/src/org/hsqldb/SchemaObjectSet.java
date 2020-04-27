@@ -46,7 +46,7 @@ import org.hsqldb.lib.*;
 public class SchemaObjectSet {
 
     HashMap map;
-    int     type;
+    int type;
 
     SchemaObjectSet(int type) {
 
@@ -54,29 +54,29 @@ public class SchemaObjectSet {
 
         switch (type) {
 
-            case SchemaObject.VIEW :
-            case SchemaObject.TABLE :
-            case SchemaObject.SEQUENCE :
-            case SchemaObject.CHARSET :
-            case SchemaObject.DOMAIN :
-            case SchemaObject.TYPE :
-            case SchemaObject.COLLATION :
-            case SchemaObject.PROCEDURE :
-            case SchemaObject.FUNCTION :
-            case SchemaObject.SPECIFIC_ROUTINE :
-            case SchemaObject.ASSERTION :
-            case SchemaObject.TRIGGER :
-            case SchemaObject.REFERENCE :
+            case SchemaObject.VIEW:
+            case SchemaObject.TABLE:
+            case SchemaObject.SEQUENCE:
+            case SchemaObject.CHARSET:
+            case SchemaObject.DOMAIN:
+            case SchemaObject.TYPE:
+            case SchemaObject.COLLATION:
+            case SchemaObject.PROCEDURE:
+            case SchemaObject.FUNCTION:
+            case SchemaObject.SPECIFIC_ROUTINE:
+            case SchemaObject.ASSERTION:
+            case SchemaObject.TRIGGER:
+            case SchemaObject.REFERENCE:
                 map = new HashMappedList();
                 break;
 
-            case SchemaObject.COLUMN :
-            case SchemaObject.CONSTRAINT :
-            case SchemaObject.INDEX :
+            case SchemaObject.COLUMN:
+            case SchemaObject.CONSTRAINT:
+            case SchemaObject.INDEX:
                 map = new HashMap();
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SchemaObjectSet");
         }
     }
@@ -85,30 +85,30 @@ public class SchemaObjectSet {
 
         switch (type) {
 
-            case SchemaObject.VIEW :
-            case SchemaObject.TABLE :
-            case SchemaObject.SEQUENCE :
-            case SchemaObject.CHARSET :
-            case SchemaObject.DOMAIN :
-            case SchemaObject.TYPE :
-            case SchemaObject.COLLATION :
-            case SchemaObject.PROCEDURE :
-            case SchemaObject.SPECIFIC_ROUTINE :
-            case SchemaObject.FUNCTION :
-            case SchemaObject.ASSERTION :
-            case SchemaObject.TRIGGER :
-            case SchemaObject.REFERENCE :
+            case SchemaObject.VIEW:
+            case SchemaObject.TABLE:
+            case SchemaObject.SEQUENCE:
+            case SchemaObject.CHARSET:
+            case SchemaObject.DOMAIN:
+            case SchemaObject.TYPE:
+            case SchemaObject.COLLATION:
+            case SchemaObject.PROCEDURE:
+            case SchemaObject.SPECIFIC_ROUTINE:
+            case SchemaObject.FUNCTION:
+            case SchemaObject.ASSERTION:
+            case SchemaObject.TRIGGER:
+            case SchemaObject.REFERENCE:
                 SchemaObject object = ((SchemaObject) map.get(name));
 
                 return object == null ? null
-                                      : object.getName();
+                        : object.getName();
 
-            case SchemaObject.COLUMN :
-            case SchemaObject.CONSTRAINT :
-            case SchemaObject.INDEX : {
+            case SchemaObject.COLUMN:
+            case SchemaObject.CONSTRAINT:
+            case SchemaObject.INDEX: {
                 return (HsqlName) map.get(name);
             }
-            default :
+            default:
                 return (HsqlName) map.get(name);
         }
     }
@@ -117,22 +117,22 @@ public class SchemaObjectSet {
 
         switch (type) {
 
-            case SchemaObject.VIEW :
-            case SchemaObject.TABLE :
-            case SchemaObject.SEQUENCE :
-            case SchemaObject.CHARSET :
-            case SchemaObject.DOMAIN :
-            case SchemaObject.TYPE :
-            case SchemaObject.COLLATION :
-            case SchemaObject.PROCEDURE :
-            case SchemaObject.SPECIFIC_ROUTINE :
-            case SchemaObject.FUNCTION :
-            case SchemaObject.ASSERTION :
-            case SchemaObject.TRIGGER :
-            case SchemaObject.REFERENCE :
+            case SchemaObject.VIEW:
+            case SchemaObject.TABLE:
+            case SchemaObject.SEQUENCE:
+            case SchemaObject.CHARSET:
+            case SchemaObject.DOMAIN:
+            case SchemaObject.TYPE:
+            case SchemaObject.COLLATION:
+            case SchemaObject.PROCEDURE:
+            case SchemaObject.SPECIFIC_ROUTINE:
+            case SchemaObject.FUNCTION:
+            case SchemaObject.ASSERTION:
+            case SchemaObject.TRIGGER:
+            case SchemaObject.REFERENCE:
                 return (SchemaObject) map.get(name);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SchemaObjectSet");
         }
     }
@@ -181,13 +181,13 @@ public class SchemaObjectSet {
 
         switch (name.type) {
 
-            case SchemaObject.COLUMN :
-            case SchemaObject.CONSTRAINT :
-            case SchemaObject.INDEX :
+            case SchemaObject.COLUMN:
+            case SchemaObject.CONSTRAINT:
+            case SchemaObject.INDEX:
                 value = name;
                 break;
 
-            default :
+            default:
         }
 
         map.put(name.name, value);
@@ -229,19 +229,19 @@ public class SchemaObjectSet {
 
         switch (newName.type) {
 
-            case SchemaObject.VIEW :
-            case SchemaObject.TABLE :
-            case SchemaObject.SEQUENCE :
-            case SchemaObject.CHARSET :
-            case SchemaObject.COLLATION :
-            case SchemaObject.PROCEDURE :
-            case SchemaObject.FUNCTION :
-            case SchemaObject.DOMAIN :
-            case SchemaObject.TYPE :
-            case SchemaObject.ASSERTION :
-            case SchemaObject.TRIGGER :
-            case SchemaObject.ROUTINE :
-            case SchemaObject.REFERENCE : {
+            case SchemaObject.VIEW:
+            case SchemaObject.TABLE:
+            case SchemaObject.SEQUENCE:
+            case SchemaObject.CHARSET:
+            case SchemaObject.COLLATION:
+            case SchemaObject.PROCEDURE:
+            case SchemaObject.FUNCTION:
+            case SchemaObject.DOMAIN:
+            case SchemaObject.TYPE:
+            case SchemaObject.ASSERTION:
+            case SchemaObject.TRIGGER:
+            case SchemaObject.ROUTINE:
+            case SchemaObject.REFERENCE: {
                 int i = ((HashMappedList) map).getIndex(name.name);
 
                 if (i == -1) {
@@ -251,14 +251,14 @@ public class SchemaObjectSet {
                 }
 
                 SchemaObject object =
-                    (SchemaObject) ((HashMappedList) map).get(i);
+                        (SchemaObject) ((HashMappedList) map).get(i);
 
                 object.getName().rename(newName);
                 ((HashMappedList) map).setKey(i, newName.name);
 
                 break;
             }
-            case SchemaObject.SPECIFIC_ROUTINE : {
+            case SchemaObject.SPECIFIC_ROUTINE: {
                 int i = ((HashMappedList) map).getIndex(name.name);
 
                 if (i == -1) {
@@ -274,16 +274,16 @@ public class SchemaObjectSet {
 
                 break;
             }
-            case SchemaObject.COLUMN :
-            case SchemaObject.CONSTRAINT :
-            case SchemaObject.INDEX : {
+            case SchemaObject.COLUMN:
+            case SchemaObject.CONSTRAINT:
+            case SchemaObject.INDEX: {
                 map.remove(name.name);
                 name.rename(newName);
                 map.put(name.name, name);
 
                 break;
             }
-            default :
+            default:
         }
     }
 
@@ -293,26 +293,26 @@ public class SchemaObjectSet {
 
         switch (type) {
 
-            case SchemaObject.VIEW :
-            case SchemaObject.TABLE :
-            case SchemaObject.SEQUENCE :
-            case SchemaObject.CHARSET :
-            case SchemaObject.DOMAIN :
-            case SchemaObject.TYPE :
-            case SchemaObject.COLLATION :
-            case SchemaObject.PROCEDURE :
-            case SchemaObject.FUNCTION :
-            case SchemaObject.SPECIFIC_ROUTINE :
-            case SchemaObject.ASSERTION :
-            case SchemaObject.TRIGGER :
-            case SchemaObject.REFERENCE :
-            case SchemaObject.COLUMN :
-            case SchemaObject.CONSTRAINT :
-            case SchemaObject.INDEX :
+            case SchemaObject.VIEW:
+            case SchemaObject.TABLE:
+            case SchemaObject.SEQUENCE:
+            case SchemaObject.CHARSET:
+            case SchemaObject.DOMAIN:
+            case SchemaObject.TYPE:
+            case SchemaObject.COLLATION:
+            case SchemaObject.PROCEDURE:
+            case SchemaObject.FUNCTION:
+            case SchemaObject.SPECIFIC_ROUTINE:
+            case SchemaObject.ASSERTION:
+            case SchemaObject.TRIGGER:
+            case SchemaObject.REFERENCE:
+            case SchemaObject.COLUMN:
+            case SchemaObject.CONSTRAINT:
+            case SchemaObject.INDEX:
                 code = ErrorCode.X_42504;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SchemaObjectSet");
         }
 
@@ -325,26 +325,26 @@ public class SchemaObjectSet {
 
         switch (type) {
 
-            case SchemaObject.VIEW :
-            case SchemaObject.TABLE :
-            case SchemaObject.SEQUENCE :
-            case SchemaObject.CHARSET :
-            case SchemaObject.DOMAIN :
-            case SchemaObject.TYPE :
-            case SchemaObject.COLLATION :
-            case SchemaObject.PROCEDURE :
-            case SchemaObject.FUNCTION :
-            case SchemaObject.SPECIFIC_ROUTINE :
-            case SchemaObject.ASSERTION :
-            case SchemaObject.TRIGGER :
-            case SchemaObject.REFERENCE :
-            case SchemaObject.COLUMN :
-            case SchemaObject.CONSTRAINT :
-            case SchemaObject.INDEX :
+            case SchemaObject.VIEW:
+            case SchemaObject.TABLE:
+            case SchemaObject.SEQUENCE:
+            case SchemaObject.CHARSET:
+            case SchemaObject.DOMAIN:
+            case SchemaObject.TYPE:
+            case SchemaObject.COLLATION:
+            case SchemaObject.PROCEDURE:
+            case SchemaObject.FUNCTION:
+            case SchemaObject.SPECIFIC_ROUTINE:
+            case SchemaObject.ASSERTION:
+            case SchemaObject.TRIGGER:
+            case SchemaObject.REFERENCE:
+            case SchemaObject.COLUMN:
+            case SchemaObject.CONSTRAINT:
+            case SchemaObject.INDEX:
                 code = ErrorCode.X_42501;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SchemaObjectSet");
         }
 
@@ -355,61 +355,61 @@ public class SchemaObjectSet {
 
         switch (type) {
 
-            case SchemaObject.VIEW :
+            case SchemaObject.VIEW:
                 return Tokens.T_VIEW;
 
-            case SchemaObject.TABLE :
+            case SchemaObject.TABLE:
                 return Tokens.T_TABLE;
 
-            case SchemaObject.SEQUENCE :
+            case SchemaObject.SEQUENCE:
                 return Tokens.T_SEQUENCE;
 
-            case SchemaObject.CHARSET :
+            case SchemaObject.CHARSET:
                 return Tokens.T_CHARACTER + ' ' + Tokens.T_SET;
 
-            case SchemaObject.DOMAIN :
+            case SchemaObject.DOMAIN:
                 return Tokens.T_DOMAIN;
 
-            case SchemaObject.TYPE :
+            case SchemaObject.TYPE:
                 return Tokens.T_TYPE;
 
-            case SchemaObject.COLLATION :
+            case SchemaObject.COLLATION:
                 return Tokens.T_COLLATION;
 
-            case SchemaObject.PROCEDURE :
+            case SchemaObject.PROCEDURE:
                 return Tokens.T_PROCEDURE;
 
-            case SchemaObject.FUNCTION :
+            case SchemaObject.FUNCTION:
                 return Tokens.T_FUNCTION;
 
-            case SchemaObject.SPECIFIC_ROUTINE :
+            case SchemaObject.SPECIFIC_ROUTINE:
                 return Tokens.T_SPECIFIC + ' ' + Tokens.T_ROUTINE;
 
-            case SchemaObject.ASSERTION :
+            case SchemaObject.ASSERTION:
                 return Tokens.T_ASSERTION;
 
-            case SchemaObject.TRIGGER :
+            case SchemaObject.TRIGGER:
                 return Tokens.T_TRIGGER;
 
-            case SchemaObject.REFERENCE :
+            case SchemaObject.REFERENCE:
                 return Tokens.T_SYNONYM;
 
-            case SchemaObject.COLUMN :
+            case SchemaObject.COLUMN:
                 return Tokens.T_COLUMN;
 
-            case SchemaObject.PARAMETER :
+            case SchemaObject.PARAMETER:
                 return Tokens.T_PARAMETER;
 
-            case SchemaObject.CONSTRAINT :
+            case SchemaObject.CONSTRAINT:
                 return Tokens.T_CONSTRAINT;
 
-            case SchemaObject.INDEX :
+            case SchemaObject.INDEX:
                 return Tokens.T_INDEX;
 
-            case SchemaObject.PERIOD :
+            case SchemaObject.PERIOD:
                 return Tokens.T_PERIOD;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "SchemaObjectSet");
         }
     }
@@ -439,8 +439,8 @@ public class SchemaObjectSet {
 
                     if (routine.dataImpact == Routine.NO_SQL
                             || routine.dataImpact == Routine.CONTAINS_SQL
-                            || routine.language == Routine.LANGUAGE_JAVA) {}
-                    else {
+                            || routine.language == Routine.LANGUAGE_JAVA) {
+                    } else {
                         set.add(routine);
                     }
                 }
@@ -457,9 +457,9 @@ public class SchemaObjectSet {
                           OrderedHashSet newResolved) {
 
         while (it.hasNext()) {
-            SchemaObject   object     = (SchemaObject) it.next();
+            SchemaObject object = (SchemaObject) it.next();
             OrderedHashSet references = object.getReferences();
-            boolean        isResolved = true;
+            boolean isResolved = true;
 
             for (int j = 0; j < references.size(); j++) {
                 HsqlName name = (HsqlName) references.get(j);
@@ -470,17 +470,17 @@ public class SchemaObjectSet {
 
                 switch (name.type) {
 
-                    case SchemaObject.TABLE :
+                    case SchemaObject.TABLE:
                         if (!resolved.contains(name)) {
                             isResolved = false;
                         }
                         break;
 
-                    case SchemaObject.COLUMN : {
+                    case SchemaObject.COLUMN: {
                         if (object.getType() == SchemaObject.TABLE) {
                             int index = ((Table) object).findColumn(name.name);
                             ColumnSchema column =
-                                ((Table) object).getColumn(index);
+                                    ((Table) object).getColumn(index);
 
                             if (!isChildObjectResolved(column, resolved)) {
                                 isResolved = false;
@@ -495,15 +495,15 @@ public class SchemaObjectSet {
 
                         break;
                     }
-                    case SchemaObject.CONSTRAINT : {
+                    case SchemaObject.CONSTRAINT: {
                         if (name.parent == object.getName()) {
                             Constraint constraint =
-                                ((Table) object).getConstraint(name.name);
+                                    ((Table) object).getConstraint(name.name);
 
                             if (constraint.getConstraintType()
                                     == SchemaObject.ConstraintTypes.CHECK) {
                                 if (!isChildObjectResolved(constraint,
-                                                           resolved)) {
+                                        resolved)) {
                                     isResolved = false;
                                 }
                             }
@@ -512,24 +512,24 @@ public class SchemaObjectSet {
                         // only UNIQUE constraint referenced by FK in table
                         break;
                     }
-                    case SchemaObject.CHARSET :
+                    case SchemaObject.CHARSET:
                         if (name.schema == null) {
                             continue;
                         }
 
-                    // fall through
-                    case SchemaObject.TYPE :
-                    case SchemaObject.DOMAIN :
-                    case SchemaObject.COLLATION :
-                    case SchemaObject.FUNCTION :
-                    case SchemaObject.PROCEDURE :
-                    case SchemaObject.SPECIFIC_ROUTINE :
+                        // fall through
+                    case SchemaObject.TYPE:
+                    case SchemaObject.DOMAIN:
+                    case SchemaObject.COLLATION:
+                    case SchemaObject.FUNCTION:
+                    case SchemaObject.PROCEDURE:
+                    case SchemaObject.SPECIFIC_ROUTINE:
                         if (!resolved.contains(name)) {
                             isResolved = false;
                         }
                         break;
 
-                    default :
+                    default:
                 }
             }
 
@@ -559,8 +559,8 @@ public class SchemaObjectSet {
             } else {
                 switch (object.getType()) {
 
-                    case SchemaObject.FUNCTION :
-                    case SchemaObject.PROCEDURE :
+                    case SchemaObject.FUNCTION:
+                    case SchemaObject.PROCEDURE:
                         Routine routine = ((Routine) object);
 
                         if (routine.isRecursive) {
@@ -571,7 +571,7 @@ public class SchemaObjectSet {
                         }
                         break;
 
-                    default :
+                    default:
                         list.add(object.getSQL());
                 }
             }

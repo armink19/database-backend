@@ -41,14 +41,14 @@ import java.util.logging.LogRecord;
 /**
  * An implementation of java.util.logging.Formatter very close to
  * SimpleFormatter.
- *
+ * <p>
  * The features here are optional timestamping, sortable numeric time stamp
  * text, and no indication of invoking source code location (logger ID,
  * class name, method name, etc.).
  *
+ * @author Blaine Simpson (blaine dot simpson at admc dot com)
  * @see Formatter
  * @see java.util.logging.SimpleFormatter
- * @author Blaine Simpson (blaine dot simpson at admc dot com)
  */
 public class BasicTextJdkLogFormatter extends Formatter {
     public static final String LS = System.getProperty("line.separator");

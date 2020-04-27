@@ -48,14 +48,14 @@ import java.nio.charset.Charset;
 public class JavaSystem {
 
     public static final Charset CS_ISO_8859_1 = Charset.forName("ISO-8859-1");
-    public static final Charset CS_US_ASCII   = Charset.forName("US-ASCII");
-    public static final Charset CS_UTF8       = Charset.forName("UTF-8");
-    private static int          javaVersion;
+    public static final Charset CS_US_ASCII = Charset.forName("US-ASCII");
+    public static final Charset CS_UTF8 = Charset.forName("UTF-8");
+    private static int javaVersion;
 
     static {
         try {
             String version = System.getProperty("java.specification.version",
-                                                "6");
+                    "6");
 
             if (version.startsWith("1.")) {
                 version = version.substring(2);
@@ -80,7 +80,7 @@ public class JavaSystem {
 
     public static long usedMemory() {
         return Runtime.getRuntime().totalMemory()
-               - Runtime.getRuntime().freeMemory();
+                - Runtime.getRuntime().freeMemory();
     }
 
     public static Throwable unmap(MappedByteBuffer buffer) {
@@ -98,7 +98,7 @@ public class JavaSystem {
 
                 Object unsafe = unsafeField.get(null);
                 Method invokeCleaner = unsafeClass.getMethod("invokeCleaner",
-                    java.nio.ByteBuffer.class);
+                        java.nio.ByteBuffer.class);
 
                 invokeCleaner.invoke(unsafe, buffer);
             } catch (Throwable t) {
@@ -110,7 +110,7 @@ public class JavaSystem {
 
                 cleanerMethod.setAccessible(true);
 
-                Object cleaner     = cleanerMethod.invoke(buffer);
+                Object cleaner = cleanerMethod.invoke(buffer);
                 Method cleanMethod = cleaner.getClass().getMethod("clean");
 
                 cleanMethod.invoke(cleaner);
@@ -137,7 +137,7 @@ public class JavaSystem {
         return new IOException(t);
     }
 
-    static final BigDecimal BD_1  = BigDecimal.valueOf(1L);
+    static final BigDecimal BD_1 = BigDecimal.valueOf(1L);
     static final BigDecimal MBD_1 = BigDecimal.valueOf(-1L);
 
     public static int precision(BigDecimal o) {

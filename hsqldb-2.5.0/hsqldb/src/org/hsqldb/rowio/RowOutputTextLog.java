@@ -47,18 +47,18 @@ import java.math.BigDecimal;
  */
 public class RowOutputTextLog extends RowOutputBase {
 
-    private static byte[] BYTES_NULL  = Tokens.T_NULL.getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_TRUE  = Tokens.T_TRUE.getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_NULL = Tokens.T_NULL.getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_TRUE = Tokens.T_TRUE.getBytes(JavaSystem.CS_ISO_8859_1);
     private static byte[] BYTES_FALSE = Tokens.T_FALSE.getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_AND   = " AND ".getBytes(JavaSystem.CS_ISO_8859_1);
-    private static byte[] BYTES_IS    = " IS ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_AND = " AND ".getBytes(JavaSystem.CS_ISO_8859_1);
+    private static byte[] BYTES_IS = " IS ".getBytes(JavaSystem.CS_ISO_8859_1);
     private static byte[] BYTES_ARRAY = " ARRAY[".getBytes(JavaSystem.CS_ISO_8859_1);
 
     public static final int MODE_DELETE = 1;
     public static final int MODE_INSERT = 0;
-    private boolean         isWritten;
-    private int             logMode;
-    private boolean         noSeparators;
+    private boolean isWritten;
+    private int logMode;
+    private boolean noSeparators;
 
     public void setMode(int mode) {
         logMode = mode;
@@ -92,9 +92,11 @@ public class RowOutputTextLog extends RowOutputBase {
         return position;
     }
 
-    public void setStorageSize(int size) {}
+    public void setStorageSize(int size) {
+    }
 
-    public void writeEnd() {}
+    public void writeEnd() {
+    }
 
     protected void writeBit(BinaryData o) {
 
@@ -102,7 +104,7 @@ public class RowOutputTextLog extends RowOutputBase {
         write('\'');
 
         String s = StringConverter.byteArrayToBitString(o.getBytes(),
-            (int) o.bitLength(null));
+                (int) o.bitLength(null));
 
         writeBytes(s);
         write('\'');
@@ -125,7 +127,7 @@ public class RowOutputTextLog extends RowOutputBase {
         write('\'');
 
         count += StringConverter.writeHexBytes(getBuffer(), count,
-                                               o.getBytes());
+                o.getBytes());
 
         write('\'');
     }
@@ -140,7 +142,7 @@ public class RowOutputTextLog extends RowOutputBase {
 
     protected void writeArray(Object[] o, Type type) {
 
-        type         = type.collectionBaseType();
+        type = type.collectionBaseType();
         noSeparators = true;
 
         write(BYTES_ARRAY);
@@ -158,9 +160,11 @@ public class RowOutputTextLog extends RowOutputBase {
         noSeparators = false;
     }
 
-    public void writeType(int type) {}
+    public void writeType(int type) {
+    }
 
-    public void writeSize(int size) {}
+    public void writeSize(int size) {
+    }
 
     public int getSize(Row row) {
         return 0;
@@ -178,7 +182,7 @@ public class RowOutputTextLog extends RowOutputBase {
         this.writeBytes(o.toString());
     }
 
-//fredt@users - patch 1108647 by nkowalcz@users (NataliaK) fix for IS NULL
+    //fredt@users - patch 1108647 by nkowalcz@users (NataliaK) fix for IS NULL
     protected void writeNull(Type type) {
 
         if (!noSeparators) {
@@ -211,7 +215,7 @@ public class RowOutputTextLog extends RowOutputBase {
 
     protected void writeBoolean(Boolean o) {
         write(o.booleanValue() ? BYTES_TRUE
-                               : BYTES_FALSE);
+                : BYTES_FALSE);
     }
 
     protected void writeDecimal(BigDecimal o, Type type) {

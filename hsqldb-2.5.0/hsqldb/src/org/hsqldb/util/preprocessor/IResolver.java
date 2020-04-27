@@ -37,10 +37,10 @@ import java.io.File;
 
 /**
  * Property and file path resolution contract. <p>
- *
+ * <p>
  * Implementations are free to ignore expansion directives and simply
  * pass through expressions and paths unchanged. <p>
- *
+ * <p>
  * If an implementation does process expansion directives, recognized forms
  * should at least include the ubiquitous ${...} shell expansion form.
  *
@@ -50,5 +50,6 @@ import java.io.File;
  */
 public interface IResolver {
     String resolveProperties(String expression);
-    File   resolveFile(String path);
+
+    File resolveFile(String path);
 }

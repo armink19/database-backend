@@ -41,7 +41,7 @@ public class TestUpdatableResultSets extends TestBase {
 
     //
     Connection connection;
-    Statement  statement;
+    Statement statement;
 
     public TestUpdatableResultSets(String name) {
         super(name, true, false);
@@ -53,7 +53,7 @@ public class TestUpdatableResultSets extends TestBase {
 
         connection = super.newConnection();
         statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY,
-                                               ResultSet.CONCUR_UPDATABLE);
+                ResultSet.CONCUR_UPDATABLE);
     }
 
     public void testUpdatable() {
@@ -62,20 +62,20 @@ public class TestUpdatableResultSets extends TestBase {
             statement.execute("SET DATABASE EVENT LOG SQL LEVEL 3");
             statement.execute("drop table t1 if exists");
             statement.execute(
-                "create table t1 (i int primary key, v varchar(10), t varbinary(3), b blob(16), c clob(16))");
+                    "create table t1 (i int primary key, v varchar(10), t varbinary(3), b blob(16), c clob(16))");
 
-            String            insert = "insert into t1 values(?,?,?,?,?)";
+            String insert = "insert into t1 values(?,?,?,?,?)";
             String select = "select i, v, t, b, c from t1 where i > ?";
-            PreparedStatement ps     = connection.prepareStatement(insert);
+            PreparedStatement ps = connection.prepareStatement(insert);
 
             for (int i = 0; i < 10; i++) {
                 ps.setInt(1, i);
                 ps.setString(2, String.valueOf(i) + " s");
-                ps.setBytes(3, new byte[] {
-                    (byte) i, ' ', (byte) i
+                ps.setBytes(3, new byte[]{
+                        (byte) i, ' ', (byte) i
                 });
-                ps.setBytes(4, new byte[] {
-                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+                ps.setBytes(4, new byte[]{
+                        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
                 });
                 ps.setString(5, "123");
                 ps.execute();
@@ -85,8 +85,8 @@ public class TestUpdatableResultSets extends TestBase {
             connection.setAutoCommit(false);
 
             ps = connection.prepareStatement(select,
-                                             ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                             ResultSet.CONCUR_UPDATABLE);
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
 
             ps.setInt(1, -1);
 
@@ -134,8 +134,8 @@ public class TestUpdatableResultSets extends TestBase {
 
             rs = ps.executeQuery();
 
-            Blob b = new JDBCBlob(new byte[] {
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+            Blob b = new JDBCBlob(new byte[]{
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
             });
 
             if (rs.next()) {
@@ -158,7 +158,7 @@ public class TestUpdatableResultSets extends TestBase {
             rs = ps.executeQuery();
 
             Reader r =
-                new java.io.CharArrayReader("123456789abcdef".toCharArray());
+                    new java.io.CharArrayReader("123456789abcdef".toCharArray());
 
             if (rs.next()) {
                 rs.updateClob(5, c);
@@ -177,17 +177,17 @@ public class TestUpdatableResultSets extends TestBase {
         try {
             statement.execute("drop table t1 if exists");
             statement.execute(
-                "create table t1 (i int primary key, c varchar(10), t varbinary(3))");
+                    "create table t1 (i int primary key, c varchar(10), t varbinary(3))");
 
-            String            insert = "insert into t1 values(?,?,?)";
-            String            select = "select i, c, t from t1";
-            PreparedStatement ps     = connection.prepareStatement(insert);
+            String insert = "insert into t1 values(?,?,?)";
+            String select = "select i, c, t from t1";
+            PreparedStatement ps = connection.prepareStatement(insert);
 
             for (int i = 0; i < 10; i++) {
                 ps.setInt(1, i);
                 ps.setString(2, String.valueOf(i) + " s");
-                ps.setBytes(3, new byte[] {
-                    (byte) i, ' ', (byte) i
+                ps.setBytes(3, new byte[]{
+                        (byte) i, ' ', (byte) i
                 });
                 ps.execute();
             }
@@ -230,16 +230,16 @@ public class TestUpdatableResultSets extends TestBase {
 
         try {
             Connection c =
-                DriverManager.getConnection("jdbc:hsqldb:mem:mytestdb", "SA",
-                                            "");
+                    DriverManager.getConnection("jdbc:hsqldb:mem:mytestdb", "SA",
+                            "");
             String createSQL =
-                "create table test (num INTEGER PRIMARY KEY, str VARCHAR(25))";
+                    "create table test (num INTEGER PRIMARY KEY, str VARCHAR(25))";
             Statement createStmt = c.createStatement();
 
             createStmt.execute(createSQL);
             createStmt.close();
 
-            String            ins = "insert into test (num,str) values (?,?)";
+            String ins = "insert into test (num,str) values (?,?)";
             PreparedStatement pStmt = c.prepareStatement(ins);
 
             for (int i = 0; i < 100; i++) {
@@ -251,7 +251,7 @@ public class TestUpdatableResultSets extends TestBase {
             // there should now be 100 rows in the table
             String select = "SELECT * FROM test";
             PreparedStatement stmt = c.prepareStatement(select,
-                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery();
 
             rs.beforeFirst();
@@ -279,18 +279,18 @@ public class TestUpdatableResultSets extends TestBase {
         try {
             statement.execute("drop table t1 if exists");
             statement.execute(
-                "create table t1 (i int primary key, c varchar(10), t varbinary(3))");
+                    "create table t1 (i int primary key, c varchar(10), t varbinary(3))");
             statement.close();
 
-            String            insert = "insert into t1 values(?,?,?)";
-            String            select = "select i, c, t from t1";
-            PreparedStatement ps     = connection.prepareStatement(insert);
+            String insert = "insert into t1 values(?,?,?)";
+            String select = "select i, c, t from t1";
+            PreparedStatement ps = connection.prepareStatement(insert);
 
             for (int i = 0; i < 10; i++) {
                 ps.setInt(1, i);
                 ps.setString(2, String.valueOf(i) + " s");
-                ps.setBytes(3, new byte[] {
-                    (byte) i, ' ', (byte) i
+                ps.setBytes(3, new byte[]{
+                        (byte) i, ' ', (byte) i
                 });
                 ps.execute();
             }
@@ -298,8 +298,8 @@ public class TestUpdatableResultSets extends TestBase {
             connection.setAutoCommit(false);
 
             statement =
-                connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                           ResultSet.CONCUR_READ_ONLY);
+                    connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_READ_ONLY);
 
             ResultSet srs = statement.executeQuery("select * from t1 limit 2");
 
@@ -307,7 +307,7 @@ public class TestUpdatableResultSets extends TestBase {
 
             while (srs.previous()) {
                 String name = srs.getString(2);
-                float  id   = srs.getFloat(1);
+                float id = srs.getFloat(1);
 
                 System.out.println(name + "   " + id);
             }
@@ -320,7 +320,7 @@ public class TestUpdatableResultSets extends TestBase {
 
             while (srs.previous()) {
                 String name = srs.getString(2);
-                float  id   = srs.getFloat(1);
+                float id = srs.getFloat(1);
 
                 System.out.println(name + "   " + id);
             }
@@ -329,7 +329,7 @@ public class TestUpdatableResultSets extends TestBase {
 
             while (srs.previous()) {
                 String name = srs.getString(2);
-                float  id   = srs.getFloat(1);
+                float id = srs.getFloat(1);
 
                 System.out.println(name + "   " + id);
             }
@@ -338,7 +338,7 @@ public class TestUpdatableResultSets extends TestBase {
 
             while (srs.previous()) {
                 String name = srs.getString(2);
-                float  id   = srs.getFloat(1);
+                float id = srs.getFloat(1);
 
                 System.out.println(name + "   " + id);
             }

@@ -49,13 +49,16 @@ public class ReusableObjectCache {
         return new HashMappedList();
     }
 
-    public static void putHashMappedList(HashMappedList object) {}
+    public static void putHashMappedList(HashMappedList object) {
+    }
 
     public static HashSet getHashSet() {
         return new HashSet();
     }
 
-    public static void putHashSet(HashSet object) {}
+    public static void putHashSet(HashSet object) {
+    }
 
-    private void jbInit() throws Exception {}
+    private void jbInit() throws Exception {
+    }
 }

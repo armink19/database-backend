@@ -49,10 +49,10 @@ import java.sql.Array;
  */
 public class ArrayType extends Type {
 
-    public static final int defaultArrayCardinality      = 1024;
+    public static final int defaultArrayCardinality = 1024;
     public static final int defaultLargeArrayCardinality = Integer.MAX_VALUE;
-    final Type              dataType;
-    final int               maxCardinality;
+    final Type dataType;
+    final int maxCardinality;
 
     public ArrayType(Type dataType, int cardinality) {
 
@@ -62,7 +62,7 @@ public class ArrayType extends Type {
             dataType = Type.SQL_ALL_TYPES;
         }
 
-        this.dataType       = dataType;
+        this.dataType = dataType;
         this.maxCardinality = cardinality;
     }
 
@@ -150,9 +150,9 @@ public class ArrayType extends Type {
             return 1;
         }
 
-        Object[] arra   = (Object[]) a;
-        Object[] arrb   = (Object[]) b;
-        int      length = arra.length;
+        Object[] arra = (Object[]) a;
+        Object[] arrb = (Object[]) b;
+        int length = arra.length;
 
         if (arrb.length < length) {
             length = arrb.length;
@@ -235,23 +235,23 @@ public class ArrayType extends Type {
     public Object convertJavaToSQL(SessionInterface session, Object a) {
 
         Object[] data;
-        boolean  convert = false;
+        boolean convert = false;
 
         if (a == null) {
             return null;
         }
 
         if (a instanceof Object[]) {
-            data    = (Object[]) a;
+            data = (Object[]) a;
             convert = true;
         } else if (a instanceof JDBCArray) {
             data = ((JDBCArray) a).getArrayInternal();
         } else if (a instanceof JDBCArrayBasic) {
-            data    = (Object[]) ((JDBCArrayBasic) a).getArray();
+            data = (Object[]) ((JDBCArrayBasic) a).getArray();
             convert = true;
         } else if (a instanceof java.sql.Array) {
             try {
-                data    = (Object[]) ((Array) a).getArray();
+                data = (Object[]) ((Array) a).getArray();
                 convert = true;
             } catch (Exception e) {
                 throw Error.error(ErrorCode.X_42561);
@@ -281,7 +281,7 @@ public class ArrayType extends Type {
             Object[] data = (Object[]) a;
 
             return new JDBCArray(data, this.collectionBaseType(), this,
-                                 session);
+                    session);
         }
 
         throw Error.error(ErrorCode.X_42561);
@@ -307,8 +307,8 @@ public class ArrayType extends Type {
             return Tokens.T_NULL;
         }
 
-        Object[]      arra = (Object[]) a;
-        StringBuilder sb   = new StringBuilder();
+        Object[] arra = (Object[]) a;
+        StringBuilder sb = new StringBuilder();
 
         sb.append(Tokens.T_ARRAY);
         sb.append('[');
@@ -371,7 +371,7 @@ public class ArrayType extends Type {
         Type otherComponent = otherType.collectionBaseType();
 
         return otherComponent != null
-               && dataType.canBeAssignedFrom(otherComponent);
+                && dataType.canBeAssignedFrom(otherComponent);
     }
 
     public Type collectionBaseType() {
@@ -408,13 +408,13 @@ public class ArrayType extends Type {
 
         if (dataType.equals(otherComponent)) {
             return ((ArrayType) other).maxCardinality > maxCardinality ? other
-                                                                       : this;
+                    : this;
         }
 
         Type newComponent = dataType.getAggregateType(otherComponent);
         int cardinality = ((ArrayType) other).maxCardinality > maxCardinality
-                          ? ((ArrayType) other).maxCardinality
-                          : maxCardinality;
+                ? ((ArrayType) other).maxCardinality
+                : maxCardinality;
 
         return new ArrayType(newComponent, cardinality);
     }
@@ -459,12 +459,12 @@ public class ArrayType extends Type {
             return null;
         }
 
-        int      size  = ((Object[]) a).length + ((Object[]) b).length;
+        int size = ((Object[]) a).length + ((Object[]) b).length;
         Object[] array = new Object[size];
 
         System.arraycopy(a, 0, array, 0, ((Object[]) a).length);
         System.arraycopy(b, 0, array, ((Object[]) a).length,
-                         ((Object[]) b).length);
+                ((Object[]) b).length);
 
         return array;
     }
@@ -477,8 +477,8 @@ public class ArrayType extends Type {
 
         if (other instanceof ArrayType) {
             return super.equals(other)
-                   && maxCardinality == ((ArrayType) other).maxCardinality
-                   && dataType.equals(((ArrayType) other).dataType);
+                    && maxCardinality == ((ArrayType) other).maxCardinality
+                    && dataType.equals(((ArrayType) other).dataType);
         }
 
         return false;
@@ -490,7 +490,7 @@ public class ArrayType extends Type {
             return 0;
         }
 
-        int      hash  = 0;
+        int hash = 0;
         Object[] array = (Object[]) a;
 
         for (int i = 0; i < array.length && i < 4; i++) {
@@ -510,7 +510,7 @@ public class ArrayType extends Type {
 
     public int deDuplicate(Session session, Object a, SortAndSlice sort) {
 
-        Object[]        array      = (Object[]) a;
+        Object[] array = (Object[]) a;
         TypedComparator comparator = session.getComparator();
 
         comparator.setType(dataType, sort);

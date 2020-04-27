@@ -50,12 +50,15 @@ import java.util.Random;
 public class FileUtil implements FileAccess {
 
     private static final FrameworkLogger LOG =
-        FrameworkLogger.getLog(FileUtil.class);
-    private static FileUtil      fileUtil      = new FileUtil();
+            FrameworkLogger.getLog(FileUtil.class);
+    private static FileUtil fileUtil = new FileUtil();
     private static FileAccessRes fileAccessRes = new FileAccessRes();
 
-    /** Creates a new instance of FileUtil */
-    FileUtil() {}
+    /**
+     * Creates a new instance of FileUtil
+     */
+    FileUtil() {
+    }
 
     public static FileUtil getFileUtil() {
         return fileUtil;
@@ -63,7 +66,7 @@ public class FileUtil implements FileAccess {
 
     public static FileAccess getFileAccess(boolean isResource) {
         return isResource ? fileAccessRes
-                          : fileUtil;
+                : fileUtil;
     }
 
     public boolean isStreamElement(String elementName) {
@@ -71,7 +74,7 @@ public class FileUtil implements FileAccess {
     }
 
     public InputStream openInputStreamElement(String streamName)
-    throws IOException {
+            throws IOException {
 
         try {
             return new FileInputStream(new File(streamName));
@@ -102,19 +105,19 @@ public class FileUtil implements FileAccess {
             return;
         }
 
-        InputStream  inputStream  = null;
+        InputStream inputStream = null;
         OutputStream outputStream = null;
 
         try {
-            inputStream  = openInputStreamElement(oldName);
+            inputStream = openInputStreamElement(oldName);
             outputStream = openOutputStreamElement(newName, false);
 
             InOutUtil.copy(inputStream, outputStream);
             getFileSync(outputStream).sync();
         } catch (IOException e) {
             String message = String.format(
-                "Platform does not allow renaming files and failed to copy file contents from %s to %s",
-                oldName, newName);
+                    "Platform does not allow renaming files and failed to copy file contents from %s to %s",
+                    oldName, newName);
 
             LOG.error(message, e);
 
@@ -142,14 +145,14 @@ public class FileUtil implements FileAccess {
         }
 
         String message = String.format(
-            "Platform does not allow renaming files. Copied file from %s to %s instead",
-            oldName, newName);
+                "Platform does not allow renaming files. Copied file from %s to %s instead",
+                oldName, newName);
 
         LOG.finer(message);
     }
 
     public OutputStream openOutputStreamElement(String streamName,
-            boolean append) throws IOException {
+                                                boolean append) throws IOException {
         return new FileOutputStream(new File(streamName), append);
     }
 
@@ -163,12 +166,12 @@ public class FileUtil implements FileAccess {
     // (new File("A")).exits(), regardless of the hosting system's
     // file path case sensitivity policy.
     public final boolean fsIsIgnoreCase =
-        (new File("A")).equals(new File("a"));
+            (new File("A")).equals(new File("a"));
 
     // posix separator normalized to File.separator?
     // CHECKME: is this true for every file system under Java?
     public final boolean fsNormalizesPosixSeparator =
-        (new File("/")).getPath().endsWith(File.separator);
+            (new File("/")).getPath().endsWith(File.separator);
 
     // for JDK 1.1 createTempFile
     final Random random = new Random(System.currentTimeMillis());
@@ -184,16 +187,16 @@ public class FileUtil implements FileAccess {
      * Requests, in a JDK 1.1 compliant way, that the file or directory denoted
      * by the given abstract pathname be deleted when the virtual machine
      * terminates. <p>
-     *
+     * <p>
      * Deletion will be attempted only for JDK 1.2 and greater runtime
      * environments and only upon normal termination of the virtual
      * machine, as defined by the Java Language Specification. <p>
-     *
+     * <p>
      * Once deletion has been sucessfully requested, it is not possible to
      * cancel the request. This method should therefore be used with care. <p>
      *
      * @param f the abstract pathname of the file be deleted when the virtual
-     *       machine terminates
+     *          machine terminates
      */
     public void deleteOnExit(File f) {
         f.deleteOnExit();
@@ -213,13 +216,13 @@ public class FileUtil implements FileAccess {
         }
 
         return resource ? null != cla.getResource(fileName)
-                        : FileUtil.getFileUtil().exists(fileName);
+                : FileUtil.getFileUtil().exists(fileName);
     }
 
     /**
      * Rename the file with oldname to newname. If a file with newname already
      * exists, it is deleted before the renaming operation proceeds.
-     *
+     * <p>
      * If a file with oldname does not exist, no file will exist after the
      * operation.
      */
@@ -303,7 +306,7 @@ public class FileUtil implements FileAccess {
      * path if attempting to retrieve the canonical path fails.
      *
      * @param path the path for which to retrieve the canonical or
-     *      absolute path
+     *             absolute path
      * @return the canonical or absolute path
      */
     public String canonicalOrAbsolutePath(String path) {
@@ -350,7 +353,7 @@ public class FileUtil implements FileAccess {
     }
 
     public FileAccess.FileSync getFileSync(java.io.OutputStream os)
-    throws IOException {
+            throws IOException {
         return new FileSync((FileOutputStream) os);
     }
 
@@ -378,7 +381,7 @@ public class FileUtil implements FileAccess {
 
                 if (url == null) {
                     ClassLoader cl =
-                        Thread.currentThread().getContextClassLoader();
+                            Thread.currentThread().getContextClassLoader();
 
                     if (cl != null) {
                         url = cl.getResource(fileName);
@@ -393,7 +396,7 @@ public class FileUtil implements FileAccess {
         }
 
         public InputStream openInputStreamElement(final String fileName)
-        throws IOException {
+                throws IOException {
 
             InputStream fis = null;
 
@@ -402,7 +405,7 @@ public class FileUtil implements FileAccess {
 
                 if (fis == null) {
                     ClassLoader cl =
-                        Thread.currentThread().getContextClassLoader();
+                            Thread.currentThread().getContextClassLoader();
 
                     if (cl != null) {
                         fis = cl.getResourceAsStream(fileName);
@@ -420,20 +423,23 @@ public class FileUtil implements FileAccess {
             return fis;
         }
 
-        public void createParentDirs(String filename) {}
+        public void createParentDirs(String filename) {
+        }
 
-        public void removeElement(String filename) {}
+        public void removeElement(String filename) {
+        }
 
         public void renameElement(String oldName, String newName,
-                                  boolean copyIfFailed) {}
+                                  boolean copyIfFailed) {
+        }
 
         public OutputStream openOutputStreamElement(String streamName,
-                boolean append) throws IOException {
+                                                    boolean append) throws IOException {
             throw new IOException();
         }
 
         public FileAccess.FileSync getFileSync(OutputStream os)
-        throws IOException {
+                throws IOException {
             throw new IOException();
         }
     }
@@ -485,7 +491,7 @@ public class FileUtil implements FileAccess {
 
         for (int i = 0; i < fileList.length; i++) {
             fileList[i].renameTo(
-                new File(newDiscardFileName(fileList[i].getPath())));
+                    new File(newDiscardFileName(fileList[i].getPath())));
         }
 
         return true;
@@ -514,7 +520,7 @@ public class FileUtil implements FileAccess {
     public static File[] getDatabaseMainFileList(String dbNamePath) {
 
         DatabaseFilenameFilter filter = new DatabaseFilenameFilter(dbNamePath,
-            false);
+                false);
 
         return filter.getExistingFileListInDirectory();
     }
@@ -524,8 +530,8 @@ public class FileUtil implements FileAccess {
     public static String newDiscardFileName(String filename) {
 
         String timestamp = StringUtil.toPaddedString(
-            Integer.toHexString((int) System.currentTimeMillis()),
-            discardSuffixLength - 1, '0', true);
+                Integer.toHexString((int) System.currentTimeMillis()),
+                discardSuffixLength - 1, '0', true);
         String discardName = filename + "." + timestamp + ".old";
 
         return discardName;
@@ -533,15 +539,15 @@ public class FileUtil implements FileAccess {
 
     static class DatabaseFilenameFilter implements FilenameFilter {
 
-        String[]        suffixes      = new String[] {
-            ".backup", ".properties", ".script", ".data", ".log", ".lobs"
+        String[] suffixes = new String[]{
+                ".backup", ".properties", ".script", ".data", ".log", ".lobs"
         };
-        String[]        extraSuffixes = new String[] {
-            ".lck", ".sql.log", ".app.log"
+        String[] extraSuffixes = new String[]{
+                ".lck", ".sql.log", ".app.log"
         };
-        private String  dbName;
-        private File    parent;
-        private File    canonicalFile;
+        private String dbName;
+        private File parent;
+        private File canonicalFile;
         private boolean extraFiles;
 
         DatabaseFilenameFilter(String dbNamePath) {
@@ -554,10 +560,11 @@ public class FileUtil implements FileAccess {
 
             try {
                 canonicalFile = canonicalFile.getCanonicalFile();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
-            dbName     = canonicalFile.getName();
-            parent     = canonicalFile.getParentFile();
+            dbName = canonicalFile.getName();
+            parent = canonicalFile.getParentFile();
             extraFiles = extras;
         }
 
@@ -574,8 +581,8 @@ public class FileUtil implements FileAccess {
 
         public File[] getExistingMainFileSetList() {
 
-            File[]        fileList = getCompleteMainFileSetList();
-            HsqlArrayList list     = new HsqlArrayList();
+            File[] fileList = getCompleteMainFileSetList();
+            HsqlArrayList list = new HsqlArrayList();
 
             for (int i = 0; i < fileList.length; i++) {
                 if (fileList[i].exists()) {
@@ -595,7 +602,7 @@ public class FileUtil implements FileAccess {
             File[] list = parent.listFiles(this);
 
             return list == null ? new File[]{}
-                                : list;
+                    : list;
         }
 
         /**
@@ -631,7 +638,7 @@ public class FileUtil implements FileAccess {
                         } else if (name.endsWith(".old")) {
                             if (suffix.length()
                                     == suffixes[i].length()
-                                       + discardSuffixLength + 4) {
+                                    + discardSuffixLength + 4) {
                                 return true;
                             }
                         }

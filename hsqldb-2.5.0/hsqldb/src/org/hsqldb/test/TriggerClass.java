@@ -37,7 +37,7 @@ import org.hsqldb.types.Type;
 
 public class TriggerClass implements Trigger {
 
-    public static int   callCount;
+    public static int callCount;
     public static int[] callCounts = new int[12];
 
     public void fire(int type, String trigName, String tabName,
@@ -51,7 +51,7 @@ public class TriggerClass implements Trigger {
     }
 
     public static java.sql.Array authenticate(
-        String database, String user, String password) {
-         return new JDBCArrayBasic(new String[] { "DBA" }, Type.SQL_VARCHAR);
-   }
+            String database, String user, String password) {
+        return new JDBCArrayBasic(new String[]{"DBA"}, Type.SQL_VARCHAR);
+    }
 }

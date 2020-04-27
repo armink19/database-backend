@@ -49,7 +49,7 @@ import org.hsqldb.types.Collation;
 
 /**
  * Database is the root class for HSQL Database Engine database. <p>
- *
+ * <p>
  * It holds the data structures that form an HSQLDB database instance.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
@@ -58,78 +58,84 @@ import org.hsqldb.types.Collation;
  */
 public class Database {
 
-    int                        databaseID;
-    HsqlName                   databaseUniqueName;
-    DatabaseType               databaseType;
-    private final String       canonicalPath;
-    public HsqlProperties      urlProperties;
-    private final String       path;
-    public Collation           collation;
+    int databaseID;
+    HsqlName databaseUniqueName;
+    DatabaseType databaseType;
+    private final String canonicalPath;
+    public HsqlProperties urlProperties;
+    private final String path;
+    public Collation collation;
     public DatabaseInformation dbInfo;
 
-    /** indicates the state of the database */
+    /**
+     * indicates the state of the database
+     */
     private volatile int dbState;
-    public Logger        logger;
+    public Logger logger;
 
-    /** true means that all tables are readonly. */
+    /**
+     * true means that all tables are readonly.
+     */
     boolean databaseReadOnly;
 
     /**
      * true means that all CACHED and TEXT tables are readonly.
-     *  MEMORY tables are updatable but updates are not persisted.
+     * MEMORY tables are updatable but updates are not persisted.
      */
     private boolean filesReadOnly;
 
-    /** true means filesReadOnly */
+    /**
+     * true means filesReadOnly
+     */
     private boolean filesInJar;
 
     /**
      * Defaults are used in version upgrades, but overridden by
-     *  databaseProperties or URL properties for new databases.
+     * databaseProperties or URL properties for new databases.
      */
-    public int                    sqlAvgScale            = 0;
-    public boolean                sqlRestrictExec        = false;
-    public boolean                sqlCharLiteral         = true;
-    public boolean                sqlConcatNulls         = true;
-    public boolean                sqlConvertTruncate     = true;
-    public boolean                sqlDoubleNaN           = true;
-    public boolean                sqlEnforceTypes        = false;
-    public boolean                sqlEnforceRefs         = false;
-    public boolean                sqlEnforceSize         = true;
-    public boolean                sqlEnforceNames        = false;
-    public boolean                sqlEnforceTDCD         = true;
-    public boolean                sqlEnforceTDCU         = true;
-    public boolean                sqlIgnoreCase          = false;
-    public boolean                sqlLiveObject          = false;
-    public boolean                sqlLongvarIsLob        = false;
-    public boolean                sqlNullsFirst          = true;
-    public boolean                sqlNullsOrder          = true;
-    public boolean                sqlSysIndexNames       = false;
-    public boolean                sqlRegularNames        = true;
-    public boolean                sqlTranslateTTI        = true;
-    public boolean                sqlUniqueNulls         = true;
-    public boolean                sqlSyntaxDb2           = false;
-    public boolean                sqlSyntaxMss           = false;
-    public boolean                sqlSyntaxMys           = false;
-    public boolean                sqlSyntaxOra           = false;
-    public boolean                sqlSyntaxPgs           = false;
-    public int                    recoveryMode           = 0;
-    private boolean               isReferentialIntegrity = true;
+    public int sqlAvgScale = 0;
+    public boolean sqlRestrictExec = false;
+    public boolean sqlCharLiteral = true;
+    public boolean sqlConcatNulls = true;
+    public boolean sqlConvertTruncate = true;
+    public boolean sqlDoubleNaN = true;
+    public boolean sqlEnforceTypes = false;
+    public boolean sqlEnforceRefs = false;
+    public boolean sqlEnforceSize = true;
+    public boolean sqlEnforceNames = false;
+    public boolean sqlEnforceTDCD = true;
+    public boolean sqlEnforceTDCU = true;
+    public boolean sqlIgnoreCase = false;
+    public boolean sqlLiveObject = false;
+    public boolean sqlLongvarIsLob = false;
+    public boolean sqlNullsFirst = true;
+    public boolean sqlNullsOrder = true;
+    public boolean sqlSysIndexNames = false;
+    public boolean sqlRegularNames = true;
+    public boolean sqlTranslateTTI = true;
+    public boolean sqlUniqueNulls = true;
+    public boolean sqlSyntaxDb2 = false;
+    public boolean sqlSyntaxMss = false;
+    public boolean sqlSyntaxMys = false;
+    public boolean sqlSyntaxOra = false;
+    public boolean sqlSyntaxPgs = false;
+    public int recoveryMode = 0;
+    private boolean isReferentialIntegrity = true;
     public HsqlDatabaseProperties databaseProperties;
-    private final boolean         shutdownOnNoConnection;
-    int                           resultMaxMemoryRows;
+    private final boolean shutdownOnNoConnection;
+    int resultMaxMemoryRows;
 
     // schema invariant objects
-    public UserManager     userManager;
-    public GranteeManager  granteeManager;
+    public UserManager userManager;
+    public GranteeManager granteeManager;
     public HsqlNameManager nameManager;
 
     // session related objects
-    public SessionManager     sessionManager;
+    public SessionManager sessionManager;
     public TransactionManager txManager;
     public int defaultIsolationLevel = SessionInterface.TX_READ_COMMITTED;
-    public boolean            txConflictRollback  = true;
-    public boolean            txInterruptRollback = false;
+    public boolean txConflictRollback = true;
+    public boolean txInterruptRollback = false;
 
     // schema objects
     public SchemaManager schemaManager;
@@ -142,52 +148,52 @@ public class Database {
 
     //
     public CheckpointRunner checkpointRunner;
-    public TimeoutRunner    timeoutRunner;
+    public TimeoutRunner timeoutRunner;
 
     //
     Result updateZeroResult = Result.updateZeroResult;
 
     //
-    public static final int DATABASE_ONLINE       = 1;
-    public static final int DATABASE_OPENING      = 2;
-    public static final int DATABASE_CLOSING      = 3;
-    public static final int DATABASE_SHUTDOWN     = 4;
+    public static final int DATABASE_ONLINE = 1;
+    public static final int DATABASE_OPENING = 2;
+    public static final int DATABASE_CLOSING = 3;
+    public static final int DATABASE_SHUTDOWN = 4;
     public static final int CLOSEMODE_IMMEDIATELY = 1;
-    public static final int CLOSEMODE_NORMAL      = 2;
-    public static final int CLOSEMODE_COMPACT     = 3;
-    public static final int CLOSEMODE_SCRIPT      = 4;
+    public static final int CLOSEMODE_NORMAL = 2;
+    public static final int CLOSEMODE_COMPACT = 3;
+    public static final int CLOSEMODE_SCRIPT = 4;
 
     /**
-     *  Constructs a new Database object.
+     * Constructs a new Database object.
      *
-     * @param type is the type of the database: "mem:", "file:", "res:"
-     * @param path is the given path to the database files
+     * @param type          is the type of the database: "mem:", "file:", "res:"
+     * @param path          is the given path to the database files
      * @param canonicalPath is the canonical path
-     * @param props property overrides placed on the connect URL
-     * @exception  HsqlException if the specified name and path
-     *      combination is illegal or unavailable, or the database files the
-     *      name and path resolves to are in use by another process
+     * @param props         property overrides placed on the connect URL
+     * @throws HsqlException if the specified name and path
+     *                       combination is illegal or unavailable, or the database files the
+     *                       name and path resolves to are in use by another process
      */
     Database(DatabaseType type, String path, String canonicalPath,
              HsqlProperties props) {
 
         setState(Database.DATABASE_SHUTDOWN);
 
-        this.databaseType  = type;
-        this.path          = path;
+        this.databaseType = type;
+        this.path = path;
         this.canonicalPath = canonicalPath;
         this.urlProperties = props;
 
         if (databaseType == DatabaseType.DB_RES) {
-            filesInJar    = true;
+            filesInJar = true;
             filesReadOnly = true;
         }
 
         logger = new Logger(this);
         shutdownOnNoConnection =
-            urlProperties.isPropertyTrue(HsqlDatabaseProperties.url_shutdown);
+                urlProperties.isPropertyTrue(HsqlDatabaseProperties.url_shutdown);
         recoveryMode = urlProperties.getIntegerProperty(
-            HsqlDatabaseProperties.url_recover, 0);
+                HsqlDatabaseProperties.url_recover, 0);
     }
 
     /**
@@ -234,7 +240,7 @@ public class Database {
             dbInfo.setWithContent(true);
 
             checkpointRunner = new CheckpointRunner();
-            timeoutRunner    = new TimeoutRunner();
+            timeoutRunner = new TimeoutRunner();
         } catch (Throwable e) {
             logger.close(Database.CLOSEMODE_IMMEDIATELY);
             logger.releaseLock();
@@ -271,15 +277,15 @@ public class Database {
             timeoutRunner.stop();
         }
 
-        lobManager       = null;
-        granteeManager   = null;
-        userManager      = null;
-        nameManager      = null;
-        schemaManager    = null;
-        sessionManager   = null;
-        dbInfo           = null;
+        lobManager = null;
+        granteeManager = null;
+        userManager = null;
+        nameManager = null;
+        schemaManager = null;
+        sessionManager = null;
+        dbInfo = null;
         checkpointRunner = null;
-        timeoutRunner    = null;
+        timeoutRunner = null;
     }
 
     public void createObjectStructures() {
@@ -287,17 +293,17 @@ public class Database {
         nameManager = new HsqlNameManager(this);
         databaseUniqueName = nameManager.newHsqlName("", false,
                 SchemaObject.DATABASE);
-        lobManager     = new LobManager(this);
+        lobManager = new LobManager(this);
         granteeManager = new GranteeManager(this);
-        userManager    = new UserManager(this);
-        schemaManager  = new SchemaManager(this);
+        userManager = new UserManager(this);
+        schemaManager = new SchemaManager(this);
         persistentStoreCollection =
-            new PersistentStoreCollectionDatabase(this);
+                new PersistentStoreCollectionDatabase(this);
         isReferentialIntegrity = true;
-        sessionManager         = new SessionManager(this);
-        collation              = Collation.newDatabaseInstance();
+        sessionManager = new SessionManager(this);
+        collation = Collation.newDatabaseInstance();
         dbInfo = DatabaseInformation.newDatabaseInformation(this);
-        txManager              = new TransactionManager2PL(this);
+        txManager = new TransactionManager2PL(this);
 
         lobManager.createSchema();
         sessionManager.getSysLobSession().setSchema(SqlInvariants.LOBS_SCHEMA);
@@ -306,7 +312,7 @@ public class Database {
     }
 
     /**
-     *  Returns the database ID.
+     * Returns the database ID.
      */
     public int getDatabaseID() {
         return this.databaseID;
@@ -328,14 +334,14 @@ public class Database {
     }
 
     /**
-     *  Returns the type of the database: "mem", "file", "res"
+     * Returns the type of the database: "mem", "file", "res"
      */
     public DatabaseType getType() {
         return databaseType;
     }
 
     /**
-     *  Returns the path of the database
+     * Returns the path of the database
      */
     public String getPath() {
         return path;
@@ -346,7 +352,7 @@ public class Database {
     }
 
     /**
-     *  Returns the database properties.
+     * Returns the database properties.
      */
     public HsqlDatabaseProperties getProperties() {
         return databaseProperties;
@@ -364,19 +370,19 @@ public class Database {
     }
 
     /**
-     *  Returns true if database has been shut down, false otherwise
+     * Returns true if database has been shut down, false otherwise
      */
     boolean isShutdown() {
         return dbState == DATABASE_SHUTDOWN;
     }
 
     /**
-     *  Constructs a new Session that operates within (is connected to) the
-     *  context of this Database object. <p>
-     *
-     *  If successful, the new Session object initially operates on behalf of
-     *  the user specified by the supplied user name.
-     *
+     * Constructs a new Session that operates within (is connected to) the
+     * context of this Database object. <p>
+     * <p>
+     * If successful, the new Session object initially operates on behalf of
+     * the user specified by the supplied user name.
+     * <p>
      * Throws if username or password is invalid.
      */
     synchronized Session connect(String username, String password,
@@ -392,20 +398,20 @@ public class Database {
 
         User user = userManager.getUser(username, password);
         Session session = sessionManager.newSession(this, user,
-            databaseReadOnly, true, zoneString, timeZoneSeconds);
+                databaseReadOnly, true, zoneString, timeZoneSeconds);
 
         return session;
     }
 
     /**
-     *  Puts this Database object in global read-only mode. After
-     *  this call, all existing and future sessions are limited to read-only
-     *  transactions. Any following attempts to update the state of the
-     *  database will result in throwing an HsqlException.
+     * Puts this Database object in global read-only mode. After
+     * this call, all existing and future sessions are limited to read-only
+     * transactions. Any following attempts to update the state of the
+     * database will result in throwing an HsqlException.
      */
     public void setReadOnly() {
         databaseReadOnly = true;
-        filesReadOnly    = true;
+        filesReadOnly = true;
     }
 
     /**
@@ -433,14 +439,14 @@ public class Database {
     }
 
     /**
-     *  Returns the UserManager for this Database.
+     * Returns the UserManager for this Database.
      */
     public UserManager getUserManager() {
         return userManager;
     }
 
     /**
-     *  Returns the GranteeManager for this Database.
+     * Returns the GranteeManager for this Database.
      */
     public GranteeManager getGranteeManager() {
         return granteeManager;
@@ -451,14 +457,14 @@ public class Database {
     }
 
     /**
-     *  Sets the isReferentialIntegrity attribute.
+     * Sets the isReferentialIntegrity attribute.
      */
     public void setReferentialIntegrity(boolean ref) {
         isReferentialIntegrity = ref;
     }
 
     /**
-     *  Is referential integrity currently enforced?
+     * Is referential integrity currently enforced?
      */
     public boolean isReferentialIntegrity() {
         return isReferentialIntegrity;
@@ -581,7 +587,8 @@ public class Database {
             if (shutdownOnNoConnection) {
                 try {
                     close(CLOSEMODE_NORMAL);
-                } catch (HsqlException e) {}
+                } catch (HsqlException e) {
+                }
             } else {
                 logger.synchLog();
             }
@@ -589,7 +596,7 @@ public class Database {
     }
 
     /**
-     *  Closes this Database using the specified mode. <p>
+     * Closes this Database using the specified mode. <p>
      *
      * <ol>
      *  <LI> closemode -1 performs SHUTDOWN IMMEDIATELY, equivalent
@@ -638,7 +645,7 @@ public class Database {
                 clearStructures();
                 reopen();
                 txManager.setGlobalChangeTimestamp(
-                    txManager.getGlobalChangeTimestamp() + 1);
+                        txManager.getGlobalChangeTimestamp() + 1);
                 setState(DATABASE_CLOSING);
                 sessionManager.closeAllSessions();
                 logger.close(CLOSEMODE_NORMAL);
@@ -684,19 +691,19 @@ public class Database {
 
         switch (state) {
 
-            case DATABASE_CLOSING :
+            case DATABASE_CLOSING:
                 return "DATABASE_CLOSING";
 
-            case DATABASE_ONLINE :
+            case DATABASE_ONLINE:
                 return "DATABASE_ONLINE";
 
-            case DATABASE_OPENING :
+            case DATABASE_OPENING:
                 return "DATABASE_OPENING";
 
-            case DATABASE_SHUTDOWN :
+            case DATABASE_SHUTDOWN:
                 return "DATABASE_SHUTDOWN";
 
-            default :
+            default:
                 return "UNKNOWN";
         }
     }
@@ -704,7 +711,7 @@ public class Database {
     public String[] getSettingsSQL() {
 
         HsqlArrayList list = new HsqlArrayList();
-        StringBuilder sb   = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         if (!getCatalogName().name.equals(
                 SqlInvariants.DEFAULT_CATALOG_NAME)) {
@@ -720,7 +727,7 @@ public class Database {
         }
 
         HashMappedList lobTables =
-            schemaManager.getTables(SqlInvariants.LOBS_SCHEMA);
+                schemaManager.getTables(SqlInvariants.LOBS_SCHEMA);
 
         for (int i = 0; i < lobTables.size(); i++) {
             Table table = (Table) lobTables.get(i);
@@ -826,18 +833,18 @@ public class Database {
     class CheckpointRunner implements Runnable {
 
         private volatile boolean waiting;
-        private Object           timerTask;
+        private Object timerTask;
 
         public void run() {
 
             Statement checkpoint =
-                ParserCommand.getAutoCheckpointStatement(Database.this);
+                    ParserCommand.getAutoCheckpointStatement(Database.this);
             Session sysSession = sessionManager.newSysSession();
 
             try {
                 sysSession.executeCompiledStatement(checkpoint,
-                                                    ValuePool.emptyObjectArray,
-                                                    0);
+                        ValuePool.emptyObjectArray,
+                        0);
             } catch (Throwable e) {
 
                 // ignore exceptions
@@ -872,7 +879,7 @@ public class Database {
             HsqlTimer.cancel(timerTask);
 
             timerTask = null;
-            waiting   = false;
+            waiting = false;
         }
     }
 
@@ -920,7 +927,7 @@ public class Database {
                 HsqlTimer.cancel(timerTask);
                 sessionList.clear();
 
-                timerTask   = null;
+                timerTask = null;
                 sessionList = null;
             }
         }

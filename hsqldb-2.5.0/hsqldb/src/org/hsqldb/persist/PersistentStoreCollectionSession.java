@@ -52,14 +52,14 @@ import org.hsqldb.lib.LongKeyHashMap;
  * @since 1.9.0
  */
 public class PersistentStoreCollectionSession
-implements PersistentStoreCollection {
+        implements PersistentStoreCollection {
 
-    private final Session        session;
-    private final LongKeyHashMap rowStoreMapSession     = new LongKeyHashMap();
-    private LongKeyHashMap       rowStoreMapTransaction = new LongKeyHashMap();
-    private LongKeyHashMap       rowStoreMapStatement   = new LongKeyHashMap();
-    private LongKeyHashMap       rowStoreMapRoutine     = new LongKeyHashMap();
-    private HsqlDeque            rowStoreListStack;
+    private final Session session;
+    private final LongKeyHashMap rowStoreMapSession = new LongKeyHashMap();
+    private LongKeyHashMap rowStoreMapTransaction = new LongKeyHashMap();
+    private LongKeyHashMap rowStoreMapStatement = new LongKeyHashMap();
+    private LongKeyHashMap rowStoreMapRoutine = new LongKeyHashMap();
+    private HsqlDeque rowStoreListStack;
 
     public PersistentStoreCollectionSession(Session session) {
         this.session = session;
@@ -69,27 +69,27 @@ implements PersistentStoreCollection {
 
         switch (table.persistenceScope) {
 
-            case TableBase.SCOPE_ROUTINE :
+            case TableBase.SCOPE_ROUTINE:
                 rowStoreMapRoutine.remove(table.getPersistenceId());
                 break;
 
-            case TableBase.SCOPE_STATEMENT :
+            case TableBase.SCOPE_STATEMENT:
                 rowStoreMapStatement.remove(table.getPersistenceId());
                 break;
 
             // TEMP TABLE default, SYSTEM_TABLE + INFO_SCHEMA_TABLE
-            case TableBase.SCOPE_FULL :
-            case TableBase.SCOPE_TRANSACTION :
+            case TableBase.SCOPE_FULL:
+            case TableBase.SCOPE_TRANSACTION:
                 rowStoreMapTransaction.remove(table.getPersistenceId());
                 break;
 
-            case TableBase.SCOPE_SESSION :
+            case TableBase.SCOPE_SESSION:
                 rowStoreMapSession.remove(table.getPersistenceId());
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "PersistentStoreCollectionSession");
+                        "PersistentStoreCollectionSession");
         }
     }
 
@@ -103,9 +103,9 @@ implements PersistentStoreCollection {
 
         switch (table.persistenceScope) {
 
-            case TableBase.SCOPE_ROUTINE :
+            case TableBase.SCOPE_ROUTINE:
                 store = (PersistentStore) rowStoreMapRoutine.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
 
                 if (store == null) {
                     store = session.database.logger.newStore(session, this,
@@ -116,9 +116,9 @@ implements PersistentStoreCollection {
 
                 return store;
 
-            case TableBase.SCOPE_STATEMENT :
+            case TableBase.SCOPE_STATEMENT:
                 store = (PersistentStore) rowStoreMapStatement.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
 
                 if (store == null) {
                     store = session.database.logger.newStore(session, this,
@@ -130,29 +130,29 @@ implements PersistentStoreCollection {
                 return store;
 
             // TEMP TABLE default, SYSTEM_TABLE + INFO_SCHEMA_TABLE
-            case TableBase.SCOPE_FULL :
-            case TableBase.SCOPE_TRANSACTION :
+            case TableBase.SCOPE_FULL:
+            case TableBase.SCOPE_TRANSACTION:
                 store = (PersistentStore) rowStoreMapTransaction.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
 
                 if (store == null) {
                     store = session.database.logger.newStore(session, this,
                             table);
 
                     rowStoreMapTransaction.put(table.getPersistenceId(),
-                                               store);
+                            store);
                 }
 
                 if (table.getTableType() == TableBase.INFO_SCHEMA_TABLE) {
                     session.database.dbInfo.setStore(session, (Table) table,
-                                                     store);
+                            store);
                 }
 
                 return store;
 
-            case TableBase.SCOPE_SESSION :
+            case TableBase.SCOPE_SESSION:
                 store = (PersistentStore) rowStoreMapSession.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
 
                 if (store == null) {
                     store = session.database.logger.newStore(session, this,
@@ -163,9 +163,9 @@ implements PersistentStoreCollection {
 
                 return store;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500,
-                                         "PersistentStoreCollectionSession");
+                        "PersistentStoreCollectionSession");
         }
     }
 
@@ -270,26 +270,26 @@ implements PersistentStoreCollection {
 
         switch (table.persistenceScope) {
 
-            case TableBase.SCOPE_ROUTINE :
+            case TableBase.SCOPE_ROUTINE:
                 store = (PersistentStore) rowStoreMapRoutine.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
                 break;
 
-            case TableBase.SCOPE_STATEMENT :
+            case TableBase.SCOPE_STATEMENT:
                 store = (PersistentStore) rowStoreMapStatement.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
                 break;
 
             // TEMP TABLE default, SYSTEM_TABLE + INFO_SCHEMA_TABLE
-            case TableBase.SCOPE_FULL :
-            case TableBase.SCOPE_TRANSACTION :
+            case TableBase.SCOPE_FULL:
+            case TableBase.SCOPE_TRANSACTION:
                 store = (PersistentStore) rowStoreMapTransaction.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
                 break;
 
-            case TableBase.SCOPE_SESSION :
+            case TableBase.SCOPE_SESSION:
                 store = (PersistentStore) rowStoreMapSession.get(
-                    table.getPersistenceId());
+                        table.getPersistenceId());
                 break;
         }
 
@@ -297,7 +297,7 @@ implements PersistentStoreCollection {
     }
 
     synchronized public void resetAccessorKeys(Session session, Table table,
-            Index[] indexes) {
+                                               Index[] indexes) {
 
         PersistentStore store = findStore(table);
 
@@ -363,7 +363,7 @@ implements PersistentStoreCollection {
                 PersistentStore store = (PersistentStore) array[i];
 
                 rowStoreMapRoutine.put(store.getTable().getPersistenceId(),
-                                       store);
+                        store);
             }
         }
 
@@ -375,7 +375,7 @@ implements PersistentStoreCollection {
             PersistentStore store = (PersistentStore) array[i];
 
             rowStoreMapStatement.put(store.getTable().getPersistenceId(),
-                                     store);
+                    store);
         }
     }
 
@@ -392,9 +392,9 @@ implements PersistentStoreCollection {
 
             try {
                 resultCache =
-                    new DataFileCacheSession(session.database,
-                                             path + "/session_"
-                                             + Long.toString(session.getId()));
+                        new DataFileCacheSession(session.database,
+                                path + "/session_"
+                                        + Long.toString(session.getId()));
 
                 resultCache.open(false);
             } catch (Throwable t) {
@@ -411,7 +411,8 @@ implements PersistentStoreCollection {
             try {
                 resultCache.release();
                 resultCache.deleteFile();
-            } catch (HsqlException e) {}
+            } catch (HsqlException e) {
+            }
 
             resultCache = null;
         }

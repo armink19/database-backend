@@ -43,9 +43,9 @@ import java.util.NoSuchElementException;
 public class LongDeque {
 
     private long[] list;
-    private int    firstindex = 0;    // index of first list element
-    private int    endindex   = 0;    // index of last list element + 1
-    private int    elementCount;
+    private int firstindex = 0;    // index of first list element
+    private int endindex = 0;    // index of last list element + 1
+    private int elementCount;
 
     // can grow to fill list
     // if elementCount == 0 then firstindex == endindex
@@ -227,8 +227,8 @@ public class LongDeque {
 
     public long remove(final int index) {
 
-        int  target = getInternalIndex(index);
-        long value  = list[target];
+        int target = getInternalIndex(index);
+        long value = list[target];
 
         if (target == firstindex) {
             list[firstindex] = 0;
@@ -240,7 +240,7 @@ public class LongDeque {
             }
         } else if (target > firstindex) {
             System.arraycopy(list, firstindex, list, firstindex + 1,
-                             target - firstindex);
+                    target - firstindex);
 
             list[firstindex] = 0;
 
@@ -251,7 +251,7 @@ public class LongDeque {
             }
         } else {
             System.arraycopy(list, target + 1, list, target,
-                             endindex - target - 1);
+                    endindex - target - 1);
 
             endindex--;
 
@@ -337,7 +337,7 @@ public class LongDeque {
         long[] newList = new long[list.length * 2];
 
         System.arraycopy(list, firstindex, newList, firstindex,
-                         list.length - firstindex);
+                list.length - firstindex);
 
         if (endindex <= firstindex) {
             System.arraycopy(list, 0, newList, list.length, endindex);

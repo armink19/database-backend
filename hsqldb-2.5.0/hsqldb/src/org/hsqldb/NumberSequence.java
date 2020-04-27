@@ -46,7 +46,7 @@ import java.math.BigDecimal;
  * Maintains a sequence of numbers.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version  2.3.4
+ * @version 2.3.4
  * @since 1.7.2
  */
 public final class NumberSequence implements SchemaObject {
@@ -66,11 +66,11 @@ public final class NumberSequence implements SchemaObject {
     private boolean limitReached;
 
     // original start value - used in CREATE and ALTER commands
-    private long    startValue;
-    private long    minValue;
-    private long    maxValue;
-    private long    increment;
-    private Type    dataType;
+    private long startValue;
+    private long minValue;
+    private long maxValue;
+    private long increment;
+    private Type dataType;
     private boolean isCycle;
     private boolean isAlways;
     private boolean restartValueDefault;
@@ -81,7 +81,7 @@ public final class NumberSequence implements SchemaObject {
 
     public void setDefaults(HsqlName name, Type type) {
 
-        this.name     = name;
+        this.name = name;
         this.dataType = type;
 
         long min;
@@ -89,28 +89,28 @@ public final class NumberSequence implements SchemaObject {
 
         switch (dataType.typeCode) {
 
-            case Types.TINYINT :
+            case Types.TINYINT:
                 max = Byte.MAX_VALUE;
                 min = Byte.MIN_VALUE;
                 break;
 
-            case Types.SQL_SMALLINT :
+            case Types.SQL_SMALLINT:
                 max = Short.MAX_VALUE;
                 min = Short.MIN_VALUE;
                 break;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 max = Integer.MAX_VALUE;
                 min = Integer.MIN_VALUE;
                 break;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 if (type.scale == 0) {
                     max = Long.MAX_VALUE;
                     min = Long.MIN_VALUE;
@@ -119,12 +119,12 @@ public final class NumberSequence implements SchemaObject {
                 }
 
                 throw Error.error(ErrorCode.X_42563);
-            default :
+            default:
                 throw Error.error(ErrorCode.X_42563);
         }
 
-        minValue  = min;
-        maxValue  = max;
+        minValue = min;
+        maxValue = max;
         increment = 1;
     }
 
@@ -168,7 +168,8 @@ public final class NumberSequence implements SchemaObject {
         return null;
     }
 
-    public void compile(Session session, SchemaObject parentObject) {}
+    public void compile(Session session, SchemaObject parentObject) {
+    }
 
     public String getSQL() {
 
@@ -223,7 +224,7 @@ public final class NumberSequence implements SchemaObject {
             }
 
             sb.append(' ').append(Tokens.T_AS).append(' ').append(
-                Tokens.T_IDENTITY).append(Tokens.T_OPENBRACKET);
+                    Tokens.T_IDENTITY).append(Tokens.T_OPENBRACKET);
 
             //
             sb.append(Tokens.T_START).append(' ');
@@ -281,7 +282,7 @@ public final class NumberSequence implements SchemaObject {
 
         String colname = t.getColumn(t.identityColumn).getName().statementName;
         NumberSequence seq = t.identitySequence;
-        StringBuilder  sb  = new StringBuilder(128);
+        StringBuilder sb = new StringBuilder(128);
 
         sb.append(Tokens.T_ALTER).append(' ').append(Tokens.T_TABLE);
         sb.append(' ').append(t.getName().getSchemaQualifiedStatementName());
@@ -329,33 +330,33 @@ public final class NumberSequence implements SchemaObject {
 
         switch (dataType.typeCode) {
 
-            case Types.TINYINT :
+            case Types.TINYINT:
                 max = Byte.MAX_VALUE;
                 min = Byte.MIN_VALUE;
                 break;
 
-            case Types.SQL_SMALLINT :
+            case Types.SQL_SMALLINT:
                 max = Short.MAX_VALUE;
                 min = Short.MIN_VALUE;
                 break;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 max = Integer.MAX_VALUE;
                 min = Integer.MIN_VALUE;
                 break;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "NumberSequence");
         }
 
@@ -369,7 +370,7 @@ public final class NumberSequence implements SchemaObject {
         }
 
         startValue = value;
-        currValue  = lastValue = startValue;
+        currValue = lastValue = startValue;
     }
 
     synchronized void setMinValue(long value) {
@@ -423,7 +424,7 @@ public final class NumberSequence implements SchemaObject {
         checkInTypeRange(value);
 
         startValue = value;
-        currValue  = lastValue = startValue;
+        currValue = lastValue = startValue;
     }
 
     synchronized void setStartValueDefault() {
@@ -459,38 +460,38 @@ public final class NumberSequence implements SchemaObject {
 
         switch (dataType.typeCode) {
 
-            case Types.TINYINT :
+            case Types.TINYINT:
                 max = Byte.MAX_VALUE;
                 min = Byte.MIN_VALUE;
                 break;
 
-            case Types.SQL_SMALLINT :
+            case Types.SQL_SMALLINT:
                 max = Short.MAX_VALUE;
                 min = Short.MIN_VALUE;
                 break;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 max = Integer.MAX_VALUE;
                 min = Integer.MIN_VALUE;
                 break;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "NumberSequence");
         }
 
         return isMax ? max
-                     : min;
+                : min;
     }
 
     private void checkInTypeRange(long value) {
@@ -500,33 +501,33 @@ public final class NumberSequence implements SchemaObject {
 
         switch (dataType.typeCode) {
 
-            case Types.TINYINT :
+            case Types.TINYINT:
                 max = Byte.MAX_VALUE;
                 min = Byte.MIN_VALUE;
                 break;
 
-            case Types.SQL_SMALLINT :
+            case Types.SQL_SMALLINT:
                 max = Short.MAX_VALUE;
                 min = Short.MIN_VALUE;
                 break;
 
-            case Types.SQL_INTEGER :
+            case Types.SQL_INTEGER:
                 max = Integer.MAX_VALUE;
                 min = Integer.MIN_VALUE;
                 break;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 max = Long.MAX_VALUE;
                 min = Long.MIN_VALUE;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "NumberSequence");
         }
 
@@ -538,7 +539,7 @@ public final class NumberSequence implements SchemaObject {
     synchronized void checkValues() {
 
         if (restartValueDefault) {
-            currValue           = lastValue = startValue;
+            currValue = lastValue = startValue;
             restartValueDefault = false;
         }
 
@@ -554,29 +555,29 @@ public final class NumberSequence implements SchemaObject {
         NumberSequence copy = new NumberSequence(name, dataType);
 
         copy.startValue = startValue;
-        copy.currValue  = currValue;
-        copy.lastValue  = lastValue;
-        copy.increment  = increment;
-        copy.minValue   = minValue;
-        copy.maxValue   = maxValue;
-        copy.isCycle    = isCycle;
-        copy.isAlways   = isAlways;
+        copy.currValue = currValue;
+        copy.lastValue = lastValue;
+        copy.increment = increment;
+        copy.minValue = minValue;
+        copy.maxValue = maxValue;
+        copy.isCycle = isCycle;
+        copy.isAlways = isAlways;
 
         return copy;
     }
 
     synchronized void reset(NumberSequence other) {
 
-        name       = other.name;
+        name = other.name;
         startValue = other.startValue;
-        currValue  = other.currValue;
-        lastValue  = other.lastValue;
-        increment  = other.increment;
-        dataType   = other.dataType;
-        minValue   = other.minValue;
-        maxValue   = other.maxValue;
-        isCycle    = other.isCycle;
-        isAlways   = other.isAlways;
+        currValue = other.currValue;
+        lastValue = other.lastValue;
+        increment = other.increment;
+        dataType = other.dataType;
+        minValue = other.minValue;
+        maxValue = other.maxValue;
+        isCycle = other.isCycle;
+        isAlways = other.isAlways;
     }
 
     /**
@@ -593,12 +594,12 @@ public final class NumberSequence implements SchemaObject {
         if (increment > 0) {
             if (value > currValue) {
                 currValue += ((value - currValue + increment) / increment)
-                             * increment;
+                        * increment;
             }
         } else {
             if (value < currValue) {
                 currValue += ((value - currValue + increment) / increment)
-                             * increment;
+                        * increment;
             }
         }
 
@@ -634,23 +635,23 @@ public final class NumberSequence implements SchemaObject {
 
     synchronized Object getValueObject() {
 
-        long   value = getValue();
+        long value = getValue();
         Object result;
 
         switch (dataType.typeCode) {
 
-            default :
-            case Types.SQL_SMALLINT :
-            case Types.SQL_INTEGER :
+            default:
+            case Types.SQL_SMALLINT:
+            case Types.SQL_INTEGER:
                 result = ValuePool.getInt((int) value);
                 break;
 
-            case Types.SQL_BIGINT :
+            case Types.SQL_BIGINT:
                 result = ValuePool.getLong(value);
                 break;
 
-            case Types.SQL_NUMERIC :
-            case Types.SQL_DECIMAL :
+            case Types.SQL_NUMERIC:
+            case Types.SQL_DECIMAL:
                 result = ValuePool.getBigDecimal(new BigDecimal(value));
                 break;
         }
@@ -675,7 +676,7 @@ public final class NumberSequence implements SchemaObject {
                     nextValue = minValue;
                 } else {
                     limitReached = true;
-                    nextValue    = minValue;
+                    nextValue = minValue;
                 }
             } else {
                 nextValue = currValue + increment;
@@ -686,7 +687,7 @@ public final class NumberSequence implements SchemaObject {
                     nextValue = maxValue;
                 } else {
                     limitReached = true;
-                    nextValue    = minValue;
+                    nextValue = minValue;
                 }
             } else {
                 nextValue = currValue + increment;

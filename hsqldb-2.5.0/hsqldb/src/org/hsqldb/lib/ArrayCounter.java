@@ -45,7 +45,7 @@ public class ArrayCounter {
      * Returns an int[] array of length segments containing the distribution
      * count of the elements in unsorted int[] array with values between min
      * and max (range). Values outside the min-max range are ignored<p>
-     *
+     * <p>
      * A usage example is determining the count of people of each age group
      * in a large int[] array containing the age of each person. Called with
      * (array, 16,0,79), it will return an int[16] with the first element
@@ -53,15 +53,14 @@ public class ArrayCounter {
      * aged 5-9, and so on. People above the age of 79 are excluded. If the
      * range is not a multiple of segments, the last segment will be cover a
      * smaller sub-range than the rest.
-     *
      */
     public static int[] countSegments(int[] array, int elementCount,
                                       int segments, int interval, int start,
                                       int limit) {
 
         int[] counts = new int[segments];
-        int   index;
-        int   element;
+        int index;
+        int element;
 
         if (interval <= 0) {
             return counts;
@@ -88,31 +87,30 @@ public class ArrayCounter {
      * largest element (rank) where the count of all smaller elements in that
      * range is less than or equals target. Parameter margin indicates the
      * margin of error in target<p>
-     *
+     * <p>
      * In statistics, this can be used to calculate a median or quadrile value.
      * A usage example applied to an array of age values is to determine
      * the maximum age of a given number of people. With the example array
      * given in countSegments, rank(array, c, 6000, 18, 65, 0) will return an age
      * value between 18-64 (inclusive) and the count of all people aged between
      * 18 and the returned value(exclusive) will be less than or equal 6000.
-     *
      */
     public static int rank(int[] array, int elements, int target, int start,
                            int limit, int margin) {
 
-        final int segments     = 256;
-        int       elementCount = 0;
-        int       currentLimit = limit;
+        final int segments = 256;
+        int elementCount = 0;
+        int currentLimit = limit;
 
-        for (;;) {
+        for (; ; ) {
             int interval = calcInterval(segments, start, currentLimit);
             int[] counts = countSegments(array, elements, segments, interval,
-                                         start, currentLimit);
+                    start, currentLimit);
 
             for (int i = 0; i < counts.length; i++) {
                 if (elementCount + counts[i] < target) {
                     elementCount += counts[i];
-                    start        += interval;
+                    start += interval;
                 } else {
                     break;
                 }
@@ -127,7 +125,7 @@ public class ArrayCounter {
             }
 
             currentLimit = start + interval < limit ? (start + interval)
-                                                    : limit;
+                    : limit;
         }
     }
 
@@ -145,7 +143,7 @@ public class ArrayCounter {
         }
 
         int partSegment = (range % segments) == 0 ? 0
-                                                  : 1;
+                : 1;
 
         return (range / segments) + partSegment;
     }

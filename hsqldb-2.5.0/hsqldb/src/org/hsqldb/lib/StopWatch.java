@@ -33,7 +33,7 @@ package org.hsqldb.lib;
 
 /**
  * Provides the programatic analog of a physical stop watch. <p>
- *
+ * <p>
  * The watch can be started, stopped and zeroed and can be queried for
  * elapsed running time.  The watch accumulates elapsed time over starts
  * and stops such that only the time actually spent running is recorded.
@@ -60,15 +60,21 @@ public class StopWatch {
      */
     private long total;
 
-    /** Flags if this object is started or stopped. */
+    /**
+     * Flags if this object is started or stopped.
+     */
     boolean running = false;
 
-    /** Creates, zeros, and starts a new StopWatch */
+    /**
+     * Creates, zeros, and starts a new StopWatch
+     */
     public StopWatch() {
         this(true);
     }
 
-    /** Creates, zeros, and starts a new StopWatch */
+    /**
+     * Creates, zeros, and starts a new StopWatch
+     */
     public StopWatch(boolean start) {
 
         if (start) {
@@ -79,6 +85,7 @@ public class StopWatch {
     /**
      * Retrieves the accumulated time this object has spent running since
      * it was last zeroed.
+     *
      * @return the accumulated time this object has spent running since
      * it was last zeroed.
      */
@@ -94,6 +101,7 @@ public class StopWatch {
     /**
      * Retrieves the accumulated time this object has spent running since
      * it was last started.
+     *
      * @return the accumulated time this object has spent running since
      * it was last started.
      */
@@ -106,7 +114,9 @@ public class StopWatch {
         }
     }
 
-    /** Zeros accumulated running time and restarts this object. */
+    /**
+     * Zeros accumulated running time and restarts this object.
+     */
     public void zero() {
 
         total = 0;
@@ -122,7 +132,7 @@ public class StopWatch {
      */
     public void start() {
         startTime = System.currentTimeMillis();
-        running   = true;
+        running = true;
     }
 
     /**
@@ -136,7 +146,7 @@ public class StopWatch {
     public void stop() {
 
         if (running) {
-            total   += System.currentTimeMillis() - startTime;
+            total += System.currentTimeMillis() - startTime;
             running = false;
         }
     }
@@ -148,6 +158,7 @@ public class StopWatch {
 
     /**
      * Retrieves prefix + " in " + elapsedTime() + " ms."
+     *
      * @param prefix The string to use as a prefix
      * @return prefix + " in " + elapsedTime() + " ms."
      */
@@ -157,6 +168,7 @@ public class StopWatch {
 
     /**
      * Retrieves prefix + " in " + elapsedTime() + " ms."
+     *
      * @param prefix The string to use as a prefix
      * @return prefix + " in " + elapsedTime() + " ms."
      */
@@ -166,7 +178,7 @@ public class StopWatch {
 
     /**
      * Retrieves the internal state of this object, as a String.
-     *
+     * <p>
      * The retrieved value is:
      *
      * <pre>
@@ -178,10 +190,11 @@ public class StopWatch {
      *    ", total=" +
      *    total + "]";
      * </pre>
+     *
      * @return the state of this object, as a String
      */
     public String toString() {
         return super.toString() + "[running=" + running + ", startTime="
-               + startTime + ", total=" + total + "]";
+                + startTime + ", total=" + total + "]";
     }
 }

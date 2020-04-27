@@ -64,8 +64,8 @@ public class ExpressionPeriod extends Expression {
 
         super(OpTypes.PERIOD);
 
-        this.nodes = new Expression[] {
-            start, end
+        this.nodes = new Expression[]{
+                start, end
         };
     }
 
@@ -121,17 +121,17 @@ public class ExpressionPeriod extends Expression {
 
         period = table.getSystemPeriod();
 
-        Expression left  = new ExpressionColumn(rangeVar, period.startColumn);
+        Expression left = new ExpressionColumn(rangeVar, period.startColumn);
         Expression right = new ExpressionColumn(rangeVar, period.endColumn);
 
-        nodes = new Expression[] {
-            left, right
+        nodes = new Expression[]{
+                left, right
         };
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
 
         for (int i = 0; i < nodes.length; i++) {
             unresolvedSet = nodes[i].resolveColumnReferences(session,
@@ -145,19 +145,19 @@ public class ExpressionPeriod extends Expression {
             for (int i = 0; i < rangeCount; i++) {
                 RangeVariable rangeVar = rangeVarArray[i];
                 PeriodDefinition p = rangeVar.findPeriod(columnExpr.schema,
-                    columnExpr.tableName, columnExpr.columnName);
+                        columnExpr.tableName, columnExpr.columnName);
 
                 if (p != null) {
                     if (period == null) {
                         period = p;
 
                         Expression left =
-                            new ExpressionColumn(rangeVar, period.startColumn);
+                                new ExpressionColumn(rangeVar, period.startColumn);
                         Expression right = new ExpressionColumn(rangeVar,
-                            period.endColumn);
+                                period.endColumn);
 
-                        nodes = new Expression[] {
-                            left, right
+                        nodes = new Expression[]{
+                                left, right
                         };
                     } else {
                         throw Error.error(ErrorCode.X_42516);

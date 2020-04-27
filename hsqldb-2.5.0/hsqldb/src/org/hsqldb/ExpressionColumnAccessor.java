@@ -51,7 +51,7 @@ public class ExpressionColumnAccessor extends Expression {
 
         super(OpTypes.COLUMN);
 
-        this.column   = column;
+        this.column = column;
         this.dataType = column.getDataType();
     }
 
@@ -81,12 +81,13 @@ public class ExpressionColumnAccessor extends Expression {
     }
 
     public HsqlList resolveColumnReferences(Session session,
-            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
-            HsqlList unresolvedSet, boolean acceptsSequences) {
+                                            RangeGroup rangeGroup, int rangeCount, RangeGroup[] rangeGroups,
+                                            HsqlList unresolvedSet, boolean acceptsSequences) {
         return unresolvedSet;
     }
 
-    public void resolveTypes(Session session, Expression parent) {}
+    public void resolveTypes(Session session, Expression parent) {
+    }
 
     public Object getValue(Session session) {
         return null;
@@ -150,9 +151,11 @@ public class ExpressionColumnAccessor extends Expression {
     }
 
     void replaceRangeVariables(RangeVariable[] ranges,
-                               RangeVariable[] newRanges) {}
+                               RangeVariable[] newRanges) {
+    }
 
-    void resetColumnReferences() {}
+    void resetColumnReferences() {
+    }
 
     public boolean isIndexable(RangeVariable range) {
         return false;

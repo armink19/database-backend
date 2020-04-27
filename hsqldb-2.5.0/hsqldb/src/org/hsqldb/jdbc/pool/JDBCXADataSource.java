@@ -58,21 +58,21 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Connection factory for JDBCXAConnections.
  * For use by XA data source factories, not by end users.<p>
- *
+ * <p>
  * The {@link org.hsqldb.jdbc.JDBCDataSourceFactory} can be used to get
  * instances of this class.<p>
- *
+ * <p>
  * The methods of the superclass, {@link org.hsqldb.jdbc.JDBCCommonDataSource},
  * are used for settings the HyperSQL server and user.<p>
  *
- * @version 2.3.3
- * @since 2.0.0
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @version 2.3.3
  * @see javax.sql.XADataSource
  * @see org.hsqldb.jdbc.pool.JDBCXAConnection
+ * @since 2.0.0
  */
 public class JDBCXADataSource extends JDBCCommonDataSource
-implements XADataSource, Serializable, Referenceable, CommonDataSource {
+        implements XADataSource, Serializable, Referenceable, CommonDataSource {
 
     /**
      * Get new XAConnection connection, to be managed by a connection manager.
@@ -89,7 +89,7 @@ implements XADataSource, Serializable, Referenceable, CommonDataSource {
 
         // Use JDBCDriver directly so there is no need to register with DriverManager
         JDBCConnection connection =
-            (JDBCConnection) JDBCDriver.getConnection(url, connectionProps);
+                (JDBCConnection) JDBCDriver.getConnection(url, connectionProps);
         JDBCXAConnection xaConnection = new JDBCXAConnection(this, connection);
 
         return xaConnection;
@@ -99,16 +99,14 @@ implements XADataSource, Serializable, Referenceable, CommonDataSource {
      * Gets a new XAConnection after validating the given username
      * and password.
      *
-     * @param user String which must match the 'user' configured for this
-     *             JDBCXADataSource.
-     * @param password  String which must match the 'password' configured
-     *                  for this JDBCXADataSource.
-     *
-     * @see #getXAConnection()
-     *
-     * @param user the user
+     * @param user     String which must match the 'user' configured for this
+     *                 JDBCXADataSource.
+     * @param password String which must match the 'password' configured
+     *                 for this JDBCXADataSource.
+     * @param user     the user
      * @param password the password
      * @throws SQLException on error
+     * @see #getXAConnection()
      */
     public XAConnection getXAConnection(String user,
                                         String password) throws SQLException {
@@ -128,25 +126,25 @@ implements XADataSource, Serializable, Referenceable, CommonDataSource {
      * Retrieves the Reference of this object.
      *
      * @return The non-null javax.naming.Reference of this object.
-     * @exception NamingException If a naming exception was encountered
-     *          while retrieving the reference.
+     * @throws NamingException If a naming exception was encountered
+     *                         while retrieving the reference.
      */
     public Reference getReference() throws NamingException {
 
-        String    cname = "org.hsqldb.jdbc.JDBCDataSourceFactory";
-        Reference ref   = new Reference(getClass().getName(), cname, null);
+        String cname = "org.hsqldb.jdbc.JDBCDataSourceFactory";
+        Reference ref = new Reference(getClass().getName(), cname, null);
 
         ref.add(new StringRefAddr("database", getDatabase()));
         ref.add(new StringRefAddr("user", getUser()));
         ref.add(new StringRefAddr("password", password));
         ref.add(new StringRefAddr("loginTimeout",
-                                  Integer.toString(loginTimeout)));
+                Integer.toString(loginTimeout)));
 
         return ref;
     }
 
     // ------------------------ internal implementation ------------------------
-    private HashMap                resources = new HashMap();
+    private HashMap resources = new HashMap();
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     public void addResource(Xid xid, JDBCXAResource xaResource) {
@@ -190,8 +188,8 @@ implements XADataSource, Serializable, Referenceable, CommonDataSource {
 
         try {
             Iterator it = resources.keySet().iterator();
-            Xid      curXid;
-            HashSet  preparedSet = new HashSet();
+            Xid curXid;
+            HashSet preparedSet = new HashSet();
 
             while (it.hasNext()) {
                 curXid = (Xid) it.next();

@@ -48,18 +48,17 @@ import java.io.IOException;
  *
  * @author Bob Preston (sqlbob@users dot sourceforge.net)
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- * @version 2.3.4
  * @version 1.7.0
  */
 public class RowAVLDiskData extends RowAVL {
 
     RowStoreAVLDiskData store;
-    int                 accessCount;
-    boolean             hasDataChanged;
-    int                 storageSize;
+    int accessCount;
+    boolean hasDataChanged;
+    int storageSize;
 
     /**
-     *  Constructor for new rows.
+     * Constructor for new rows.
      */
     public RowAVLDiskData(PersistentStore store, TableBase t, Object[] o) {
 
@@ -67,13 +66,13 @@ public class RowAVLDiskData extends RowAVL {
 
         setNewNodes(store);
 
-        this.store     = (RowStoreAVLDiskData) store;
+        this.store = (RowStoreAVLDiskData) store;
         hasDataChanged = true;
     }
 
     /**
-     *  Constructor when read from the disk into the Cache. The link with
-     *  the Nodes is made separetly.
+     * Constructor when read from the disk into the Cache. The link with
+     * the Nodes is made separetly.
      */
     public RowAVLDiskData(RowStoreAVLDiskData store, TableBase t,
                           RowInputInterface in) throws IOException {
@@ -82,11 +81,11 @@ public class RowAVLDiskData extends RowAVL {
 
         setNewNodes(store);
 
-        position       = in.getFilePosition();
-        storageSize    = in.getSize();
-        rowData        = in.readData(table.getColumnTypes());
+        position = in.getFilePosition();
+        storageSize = in.getSize();
+        rowData = in.readData(table.getColumnTypes());
         hasDataChanged = false;
-        this.store     = store;
+        this.store = store;
     }
 
     public void setData(Object[] data) {
@@ -99,7 +98,7 @@ public class RowAVLDiskData extends RowAVL {
 
         if (data == null) {
             rowData = store.getData(this);
-            data    = rowData;
+            data = rowData;
         } else {
             accessCount++;
         }
@@ -108,8 +107,8 @@ public class RowAVLDiskData extends RowAVL {
     }
 
     /**
-     *  Used when data is read from the disk into the Cache the first time.
-     *  New Nodes are created which are then indexed.
+     * Used when data is read from the disk into the Cache the first time.
+     * New Nodes are created which are then indexed.
      */
     public void setNewNodes(PersistentStore store) {
 
@@ -121,16 +120,16 @@ public class RowAVLDiskData extends RowAVL {
 
         for (int i = 1; i < index; i++) {
             n.nNext = new NodeAVL(this);
-            n       = n.nNext;
+            n = n.nNext;
         }
     }
 
     public NodeAVL insertNode(int index) {
 
         NodeAVL backnode = getNode(index - 1);
-        NodeAVL newnode  = new NodeAVL(this);
+        NodeAVL newnode = new NodeAVL(this);
 
-        newnode.nNext  = backnode.nNext;
+        newnode.nNext = backnode.nNext;
         backnode.nNext = newnode;
 
         return newnode;
@@ -141,9 +140,9 @@ public class RowAVLDiskData extends RowAVL {
     }
 
     /**
-     *  Writes the data to disk. Unlike CachedRow, hasChanged is never set
-     *  to true when changes are made to the Nodes. (Nodes are in-memory).
-     *  The only time this is used is when a new Row is added to the Caches.
+     * Writes the data to disk. Unlike CachedRow, hasChanged is never set
+     * to true when changes are made to the Nodes. (Nodes are in-memory).
+     * The only time this is used is when a new Row is added to the Caches.
      */
     public void write(RowOutputInterface out) {
 
@@ -194,7 +193,9 @@ public class RowAVLDiskData extends RowAVL {
         return true;
     }
 
-    /** used by Index, nodes are always in memory */
+    /**
+     * used by Index, nodes are always in memory
+     */
     public boolean isInMemory() {
         return rowData != null;
     }
@@ -207,7 +208,9 @@ public class RowAVLDiskData extends RowAVL {
         return true;
     }
 
-    /** required to purge cache */
+    /**
+     * required to purge cache
+     */
     public void setInMemory(boolean in) {
 
         if (!in) {

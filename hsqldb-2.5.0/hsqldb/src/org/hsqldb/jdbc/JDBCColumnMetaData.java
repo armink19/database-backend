@@ -48,7 +48,9 @@ import java.lang.reflect.Field;
  */
 public final class JDBCColumnMetaData {
 
-    /** The column's table's catalog name. */
+    /**
+     * The column's table's catalog name.
+     */
     public String catalogName;
 
     /**
@@ -58,55 +60,89 @@ public final class JDBCColumnMetaData {
      */
     public String columnClassName;
 
-    /** The column's normal max width in chars. */
+    /**
+     * The column's normal max width in chars.
+     */
     public int columnDisplaySize;
 
-    /** The suggested column title for use in printouts and displays. */
+    /**
+     * The suggested column title for use in printouts and displays.
+     */
     public String columnLabel;
 
-    /** The column's name. */
+    /**
+     * The column's name.
+     */
     public String columnName;
 
-    /** The column's SQL type. */
+    /**
+     * The column's SQL type.
+     */
     public int columnType;
 
-    /** The column's value's number of decimal digits. */
+    /**
+     * The column's value's number of decimal digits.
+     */
     public int precision;
 
-    /** The column's value's number of digits to right of the decimal point. */
+    /**
+     * The column's value's number of digits to right of the decimal point.
+     */
     public int scale;
 
-    /** The column's table's schema. */
+    /**
+     * The column's table's schema.
+     */
     public String schemaName;
 
-    /** The column's table's name. */
+    /**
+     * The column's table's name.
+     */
     public String tableName;
 
-    /** Whether the value of the column are automatically numbered. */
+    /**
+     * Whether the value of the column are automatically numbered.
+     */
     public boolean isAutoIncrement;
 
-    /** Whether the column's value's case matters. */
+    /**
+     * Whether the column's value's case matters.
+     */
     public boolean isCaseSensitive;
 
-    /** Whether the values in the column are cash values. */
+    /**
+     * Whether the values in the column are cash values.
+     */
     public boolean isCurrency;
 
-    /** Whether a write on the column will definitely succeed. */
+    /**
+     * Whether a write on the column will definitely succeed.
+     */
     public boolean isDefinitelyWritable;
 
-    /** The nullability of values in the column. */
+    /**
+     * The nullability of values in the column.
+     */
     public int isNullable;
 
-    /** Whether the column's values are definitely not writable. */
+    /**
+     * Whether the column's values are definitely not writable.
+     */
     public boolean isReadOnly;
 
-    /** Whether the column's values can be used in a where clause. */
+    /**
+     * Whether the column's values can be used in a where clause.
+     */
     public boolean isSearchable;
 
-    /** Whether values in the column are signed numbers. */
+    /**
+     * Whether values in the column are signed numbers.
+     */
     public boolean isSigned;
 
-    /** Whether it is possible for a write on the column to succeed. */
+    /**
+     * Whether it is possible for a write on the column to succeed.
+     */
     public boolean isWritable;
 
     /**
@@ -131,8 +167,8 @@ public final class JDBCColumnMetaData {
     private String toStringImpl() throws Exception {
 
         StringBuilder sb;
-        Field[]       fields;
-        Field         field;
+        Field[] fields;
+        Field field;
 
         sb = new StringBuilder();
 

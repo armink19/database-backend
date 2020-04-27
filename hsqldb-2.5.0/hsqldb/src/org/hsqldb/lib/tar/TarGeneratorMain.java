@@ -42,11 +42,11 @@ public class TarGeneratorMain {
      * exists.
      */
     public static void main(String[] sa)
-    throws IOException, TarMalformatException {
+            throws IOException, TarMalformatException {
 
         if (sa.length < 1) {
             System.out.println(
-                RB.TarGenerator_syntax.getString(DbBackup.class.getName()));
+                    RB.TarGenerator_syntax.getString(DbBackup.class.getName()));
             System.exit(0);
         }
 

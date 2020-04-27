@@ -46,63 +46,63 @@ import java.io.*;
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
  * @version 2.3.3
- * @since  1.7.2
+ * @since 1.7.2
  */
 final class RAFile implements RandomAccessInterface {
 
-    static final int DATA_FILE_RAF    = 0;
-    static final int DATA_FILE_NIO    = 1;
-    static final int DATA_FILE_JAR    = 2;
+    static final int DATA_FILE_RAF = 0;
+    static final int DATA_FILE_NIO = 1;
+    static final int DATA_FILE_JAR = 2;
     static final int DATA_FILE_STORED = 3;
     static final int DATA_FILE_SINGLE = 4;
-    static final int DATA_FILE_TEXT   = 5;
+    static final int DATA_FILE_TEXT = 5;
 
     //
-    static final int  bufferScale = 12;
-    static final int  bufferSize  = 1 << bufferScale;
-    static final long bufferMask  = 0xffffffffffffffffL << bufferScale;
+    static final int bufferScale = 12;
+    static final int bufferSize = 1 << bufferScale;
+    static final long bufferMask = 0xffffffffffffffffL << bufferScale;
 
     //
-    final EventLogInterface         logger;
-    final RandomAccessFile          file;
-    final FileDescriptor            fileDescriptor;
-    private final boolean           readOnly;
-    final String                    fileName;
-    final byte[]                    buffer;
-    final HsqlByteArrayInputStream  ba;
-    final byte[]                    valueBuffer;
+    final EventLogInterface logger;
+    final RandomAccessFile file;
+    final FileDescriptor fileDescriptor;
+    private final boolean readOnly;
+    final String fileName;
+    final byte[] buffer;
+    final HsqlByteArrayInputStream ba;
+    final byte[] valueBuffer;
     final HsqlByteArrayOutputStream vbao;
-    final HsqlByteArrayInputStream  vbai;
-    long                            bufferOffset;
-    long                            fileLength;
-    final boolean                   extendLength;
+    final HsqlByteArrayInputStream vbai;
+    long bufferOffset;
+    long fileLength;
+    final boolean extendLength;
 
     //
     long seekPosition;
-    int  cacheHit;
+    int cacheHit;
 
     /**
      * seekPosition is the position in seek() calls or after reading or writing
      * realPosition is the file position
      */
     static RandomAccessInterface newScaledRAFile(Database database,
-            String name, boolean readonly,
-            int type) throws FileNotFoundException, IOException {
+                                                 String name, boolean readonly,
+                                                 int type) throws FileNotFoundException, IOException {
 
         if (type == DATA_FILE_JAR) {
             return new RAFileInJar(name);
         } else if (type == DATA_FILE_TEXT) {
             return new RAFile(database.logger, name, readonly, false,
-                                   true);
+                    true);
         } else if (type == DATA_FILE_RAF) {
             return new RAFile(database.logger, name, readonly, true, false);
         } else {
-            java.io.File fi     = new java.io.File(name);
-            long         length = fi.length();
+            java.io.File fi = new java.io.File(name);
+            long length = fi.length();
 
             if (length > database.logger.propNioMaxSize) {
                 return new RAFile(database.logger, name, readonly, true,
-                                  false);
+                        false);
             }
 
             return new RAFileHybrid(database, name, readonly);
@@ -110,26 +110,26 @@ final class RAFile implements RandomAccessInterface {
     }
 
     RAFile(EventLogInterface logger, String name, boolean readonly,
-            boolean extendLengthToBlock,
-            boolean commitOnChange) throws FileNotFoundException, IOException {
+           boolean extendLengthToBlock,
+           boolean commitOnChange) throws FileNotFoundException, IOException {
 
-        this.logger       = logger;
-        this.fileName     = name;
-        this.readOnly     = readonly;
+        this.logger = logger;
+        this.fileName = name;
+        this.readOnly = readonly;
         this.extendLength = extendLengthToBlock;
 
         String accessMode = readonly ? "r"
-                                     : commitOnChange ? "rws"
-                                                      : "rw";
+                : commitOnChange ? "rws"
+                : "rw";
 
-        this.file      = new RandomAccessFile(name, accessMode);
-        buffer         = new byte[bufferSize];
-        ba             = new HsqlByteArrayInputStream(buffer);
-        valueBuffer    = new byte[8];
-        vbao           = new HsqlByteArrayOutputStream(valueBuffer);
-        vbai           = new HsqlByteArrayInputStream(valueBuffer);
+        this.file = new RandomAccessFile(name, accessMode);
+        buffer = new byte[bufferSize];
+        ba = new HsqlByteArrayInputStream(buffer);
+        valueBuffer = new byte[8];
+        vbao = new HsqlByteArrayOutputStream(valueBuffer);
+        vbai = new HsqlByteArrayInputStream(valueBuffer);
         fileDescriptor = file.getFD();
-        fileLength     = length();
+        fileLength = length();
 
         readIntoBuffer();
     }
@@ -153,7 +153,7 @@ final class RAFile implements RandomAccessInterface {
 
     private void readIntoBuffer() throws IOException {
 
-        long filePos    = seekPosition & bufferMask;
+        long filePos = seekPosition & bufferMask;
         long readLength = fileLength - filePos;
 
         if (readLength > buffer.length) {
@@ -172,7 +172,7 @@ final class RAFile implements RandomAccessInterface {
         } catch (IOException e) {
             resetPointer();
             logger.logWarningEvent("Read Error " + filePos + " " + readLength,
-                                   e);
+                    e);
 
             throw e;
         }
@@ -230,7 +230,7 @@ final class RAFile implements RandomAccessInterface {
 
             if (length > buffer.length
                     && (seekPosition < bufferOffset
-                        || seekPosition >= bufferOffset + buffer.length)) {
+                    || seekPosition >= bufferOffset + buffer.length)) {
                 file.seek(seekPosition);
                 file.readFully(b, offset, length);
 
@@ -339,7 +339,7 @@ final class RAFile implements RandomAccessInterface {
             file.setLength(newLength);
             file.seek(0);
 
-            fileLength   = file.length();
+            fileLength = file.length();
             seekPosition = 0;
 
             readIntoBuffer();
@@ -368,7 +368,7 @@ final class RAFile implements RandomAccessInterface {
     private int writeToBuffer(byte[] b, int off, int len) throws IOException {
 
         int count = ArrayUtil.copyBytes(seekPosition - off, b, off, len,
-                                        bufferOffset, buffer, buffer.length);
+                bufferOffset, buffer, buffer.length);
 
         return count;
     }
@@ -424,9 +424,10 @@ final class RAFile implements RandomAccessInterface {
 
         try {
             seekPosition = 0;
-            fileLength   = length();
+            fileLength = length();
 
             readIntoBuffer();
-        } catch (Throwable e) {}
+        } catch (Throwable e) {
+        }
     }
 }

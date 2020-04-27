@@ -48,25 +48,25 @@ import java.io.IOException;
  */
 public class RowDiskDataChange extends RowAVLDisk {
 
-    public static final int COL_POS_ROW_NUM     = 0;
-    public static final int COL_POS_ROW_ID      = 1;
-    public static final int COL_POS_TABLE_ID    = 2;
+    public static final int COL_POS_ROW_NUM = 0;
+    public static final int COL_POS_ROW_ID = 1;
+    public static final int COL_POS_TABLE_ID = 2;
     public static final int COL_POS_SCHEMA_NAME = 3;
-    public static final int COL_POS_TABLE_NAME  = 4;
-    public static final int COL_POS_IS_UPDATE   = 5;
+    public static final int COL_POS_TABLE_NAME = 4;
+    public static final int COL_POS_IS_UPDATE = 5;
 
     //
     static final Type[] arrayType = new Type[]{
-        new ArrayType(Type.SQL_INTEGER, Integer.MAX_VALUE) };
-    Table    targetTable;
+            new ArrayType(Type.SQL_INTEGER, Integer.MAX_VALUE)};
+    Table targetTable;
     Object[] updateData;
-    int[]    updateColMap;
+    int[] updateColMap;
 
     /**
-     *  Constructor for new Rows.  Variable hasDataChanged is set to true in
-     *  order to indicate the data needs saving.
+     * Constructor for new Rows.  Variable hasDataChanged is set to true in
+     * order to indicate the data needs saving.
      *
-     * @param t table
+     * @param t    table
      * @param data row data
      */
     public RowDiskDataChange(TableBase t, Object[] data,
@@ -78,9 +78,9 @@ public class RowDiskDataChange extends RowAVLDisk {
     }
 
     /**
-     *  Constructor when read from the disk into the Cache.
+     * Constructor when read from the disk into the Cache.
      *
-     * @param t table
+     * @param t  table
      * @param in data source
      * @throws IOException
      */
@@ -104,7 +104,7 @@ public class RowDiskDataChange extends RowAVLDisk {
                 updateColMap = bin.readIntArray();
             }
         } else {
-            updateData   = null;
+            updateData = null;
             updateColMap = null;
         }
     }
@@ -120,7 +120,7 @@ public class RowDiskDataChange extends RowAVLDisk {
                 Type[] targetTypes = targetTable.colTypes;
 
                 out.writeData(targetTypes.length, targetTypes, updateData,
-                              null, null);
+                        null, null);
 
                 RowOutputBinary bout = (RowOutputBinary) out;
 
@@ -160,11 +160,11 @@ public class RowDiskDataChange extends RowAVLDisk {
     public int getRealSize(RowOutputInterface out) {
 
         RowOutputBinary bout = (RowOutputBinary) out;
-        int             size = out.getSize(this);
+        int size = out.getSize(this);
 
         if (updateData != null) {
             size += bout.getSize(updateData, targetTable.getColumnCount(),
-                                 targetTable.getColumnTypes());
+                    targetTable.getColumnTypes());
 
             if (updateColMap != null) {
                 size += bout.getSize(updateColMap);

@@ -45,7 +45,6 @@ import org.hsqldb.types.Type;
  * Implementation of SQL procedure and functions
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)
- *
  * @version 2.3.3
  * @since 1.9.0
  */
@@ -54,13 +53,13 @@ public class RoutineSchema implements SchemaObject {
     static RoutineSchema[] emptyArray = new RoutineSchema[]{};
 
     //
-    Routine[]        routines = Routine.emptyArray;
-    int              routineType;
+    Routine[] routines = Routine.emptyArray;
+    int routineType;
     private HsqlName name;
 
     public RoutineSchema(int type, HsqlName name) {
         routineType = type;
-        this.name   = name;
+        this.name = name;
     }
 
     public int getType() {
@@ -103,7 +102,8 @@ public class RoutineSchema implements SchemaObject {
         return set;
     }
 
-    public void compile(Session session, SchemaObject parentObject) {}
+    public void compile(Session session, SchemaObject parentObject) {
+    }
 
     public String getSQL() {
         return null;
@@ -131,9 +131,9 @@ public class RoutineSchema implements SchemaObject {
     public void addSpecificRoutine(HsqlNameManager nameManager,
                                    Routine routine, boolean replace) {
 
-        int    signature     = routine.getParameterSignature();
-        Type[] types         = routine.getParameterTypes();
-        int    matchPosition = routines.length;
+        int signature = routine.getParameterSignature();
+        Type[] types = routine.getParameterTypes();
+        int matchPosition = routines.length;
 
         for (int i = 0; i < this.routines.length; i++) {
             if (routines[i].parameterTypes.length == types.length) {
@@ -249,7 +249,7 @@ public class RoutineSchema implements SchemaObject {
                     }
 
                     int typeDifference = types[0].precedenceDegree(
-                        routines[i].parameterTypes[0]);
+                            routines[i].parameterTypes[0]);
 
                     if (typeDifference < -NumberType.DOUBLE_WIDTH) {
                         if (matchIndex == -1) {
@@ -257,9 +257,9 @@ public class RoutineSchema implements SchemaObject {
                         }
 
                         int oldDiff = types[0].precedenceDegree(
-                            routines[matchIndex].parameterTypes[0]);
+                                routines[matchIndex].parameterTypes[0]);
                         int newDiff = types[0].precedenceDegree(
-                            routines[i].parameterTypes[0]);
+                                routines[i].parameterTypes[0]);
 
                         if (oldDiff == newDiff) {
                             continue outerLoop;
@@ -299,7 +299,7 @@ public class RoutineSchema implements SchemaObject {
                 }
 
                 typeDifference =
-                    types[j].precedenceDegree(routines[i].parameterTypes[j]);
+                        types[j].precedenceDegree(routines[i].parameterTypes[j]);
 
                 if (typeDifference < -NumberType.DOUBLE_WIDTH) {
 
@@ -328,9 +328,9 @@ public class RoutineSchema implements SchemaObject {
                 }
 
                 int oldDiff = types[j].precedenceDegree(
-                    routines[matchIndex].parameterTypes[j]);
+                        routines[matchIndex].parameterTypes[j]);
                 int newDiff =
-                    types[j].precedenceDegree(routines[i].parameterTypes[j]);
+                        types[j].precedenceDegree(routines[i].parameterTypes[j]);
 
                 if (oldDiff == newDiff) {
                     continue;
@@ -345,7 +345,7 @@ public class RoutineSchema implements SchemaObject {
         }
 
         return matchIndex < 0 ? null
-                              : routines[matchIndex];
+                : routines[matchIndex];
     }
 
     public Routine getSpecificRoutine(int paramCount) {

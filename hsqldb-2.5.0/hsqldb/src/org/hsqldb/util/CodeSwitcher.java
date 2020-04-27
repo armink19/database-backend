@@ -112,16 +112,15 @@ import java.util.ArrayList;
 public class CodeSwitcher {
 
     private static final String ls = System.getProperty("line.separator",
-        "\n");
+            "\n");
     private ArrayList<String> vList;
     private ArrayList<String> vSwitchOn;
     private ArrayList<String> vSwitchOff;
     private ArrayList<String> vSwitches;
-    private static final int  MAX_LINELENGTH = 82;
+    private static final int MAX_LINELENGTH = 82;
 
     /**
      * Method declaration
-     *
      *
      * @param a
      */
@@ -136,7 +135,7 @@ public class CodeSwitcher {
         }
 
         File listFile = null;
-        File baseDir  = null;
+        File baseDir = null;
 
         for (int i = 0; i < a.length; i++) {
             String p = a[i];
@@ -157,12 +156,12 @@ public class CodeSwitcher {
         if (baseDir != null) {
             if (listFile == null) {
                 System.err.println(
-                    "--basedir= setting ignored, since only used for list files");
+                        "--basedir= setting ignored, since only used for list files");
             } else {
                 if (!baseDir.isDirectory()) {
                     System.err.println("Skipping listfile since basedir '"
-                                       + baseDir.getAbsolutePath()
-                                       + "' is not a directory");
+                            + baseDir.getAbsolutePath()
+                            + "' is not a directory");
 
                     listFile = null;
                 }
@@ -172,33 +171,33 @@ public class CodeSwitcher {
         if (listFile != null) {
             try {
                 BufferedReader br =
-                    new BufferedReader(new FileReader(listFile));
+                        new BufferedReader(new FileReader(listFile));
                 String st, p;
-                int    hashIndex;
-                File   f;
+                int hashIndex;
+                File f;
 
                 while ((st = br.readLine()) != null) {
                     hashIndex = st.indexOf('#');
-                    p         = ((hashIndex > -1) ? st.substring(0, hashIndex)
-                                                  : st).trim();
+                    p = ((hashIndex > -1) ? st.substring(0, hashIndex)
+                            : st).trim();
 
                     if (p.length() < 1) {
                         continue;
                     }
 
                     f = (baseDir == null) ? (new File(p))
-                                          : (new File(baseDir, p));
+                            : (new File(baseDir, p));
 
                     if (f.isFile()) {
                         s.addDir(f);
                     } else {
                         System.err.println("Skipping non-file '" + p.trim()
-                                           + "'");
+                                + "'");
                     }
                 }
             } catch (Exception e) {
                 System.err.println("Failed to read pathlist file '"
-                                   + listFile.getAbsolutePath() + "'");
+                        + listFile.getAbsolutePath() + "'");
             }
         }
 
@@ -216,46 +215,43 @@ public class CodeSwitcher {
 
     public int size() {
         return (vList == null) ? 0
-                               : vList.size();
+                : vList.size();
     }
 
     /**
      * Method declaration
-     *
      */
     static void showUsage() {
 
         System.out.print(
-            "Usage: java CodeSwitcher paths|{--pathlist=listfile} "
-            + "[{+|-}label...] [+][-]\n"
-            + "If no labels are specified then all used\n"
-            + "labels in the source code are shown.\n"
-            + "Use +MODE to switch on the things labeld MODE\n"
-            + "Use -MODE to switch off the things labeld MODE\n"
-            + "Path: Any number of path or files may be\n"
-            + "specified. Use . for the current directory\n"
-            + "(including sub-directories).\n"
-            + "Example: java CodeSwitcher +JAVA2 .\n"
-            + "This example switches on code labeled JAVA2\n"
-            + "in all *.java files in the current directory\n"
-            + "and all subdirectories.\n");
+                "Usage: java CodeSwitcher paths|{--pathlist=listfile} "
+                        + "[{+|-}label...] [+][-]\n"
+                        + "If no labels are specified then all used\n"
+                        + "labels in the source code are shown.\n"
+                        + "Use +MODE to switch on the things labeld MODE\n"
+                        + "Use -MODE to switch off the things labeld MODE\n"
+                        + "Path: Any number of path or files may be\n"
+                        + "specified. Use . for the current directory\n"
+                        + "(including sub-directories).\n"
+                        + "Example: java CodeSwitcher +JAVA2 .\n"
+                        + "This example switches on code labeled JAVA2\n"
+                        + "in all *.java files in the current directory\n"
+                        + "and all subdirectories.\n");
     }
 
     /**
      * Constructor declaration
-     *
      */
     CodeSwitcher() {
 
-        vList      = new ArrayList<String>();
-        vSwitchOn  = new ArrayList<String>();
+        vList = new ArrayList<String>();
+        vSwitchOn = new ArrayList<String>();
         vSwitchOff = new ArrayList<String>();
-        vSwitches  = new ArrayList<String>();
+        vSwitches = new ArrayList<String>();
     }
 
     /**
      * Method declaration
-     *
      */
     void process() {
 
@@ -276,7 +272,6 @@ public class CodeSwitcher {
 
     /**
      * Method declaration
-     *
      */
     void printSwitches() {
 
@@ -316,19 +311,18 @@ public class CodeSwitcher {
     /**
      * Method declaration
      *
-     *
      * @param name
      */
     boolean processFile(String name) {
 
-        File    f         = new File(name);
-        File    fnew      = new File(name + ".new");
-        int     state     = 0;    // 0=normal 1=inside_if 2=inside_else
+        File f = new File(name);
+        File fnew = new File(name + ".new");
+        int state = 0;    // 0=normal 1=inside_if 2=inside_else
         boolean switchoff = false;
-        boolean working   = false;
+        boolean working = false;
 
         try {
-            ArrayList<String> v  = getFileLines(f);
+            ArrayList<String> v = getFileLines(f);
             ArrayList<String> v1 = new ArrayList<String>(v.size());
 
             for (int i = 0; i < v.size(); i++) {
@@ -363,7 +357,7 @@ public class CodeSwitcher {
                         String s = line.substring(9);
 
                         if (vSwitchOn.indexOf(s) != -1) {
-                            working   = true;
+                            working = true;
                             switchoff = false;
                         } else if (vSwitchOff.indexOf(s) != -1) {
                             working = true;
@@ -379,7 +373,7 @@ public class CodeSwitcher {
                     } else if (line.startsWith("//#ifndef ")) {
                         if (state != 0) {
                             printError(
-                                "'#ifndef' not allowed inside '#ifdef'");
+                                    "'#ifndef' not allowed inside '#ifdef'");
 
                             return false;
                         }
@@ -389,7 +383,7 @@ public class CodeSwitcher {
                         String s = line.substring(10);
 
                         if (vSwitchOff.indexOf(s) != -1) {
-                            working   = true;
+                            working = true;
                             switchoff = false;
                         } else if (vSwitchOn.indexOf(s) != -1) {
                             working = true;
@@ -411,8 +405,8 @@ public class CodeSwitcher {
 
                         state = 2;
 
-                        if (!working) {}
-                        else if (switchoff) {
+                        if (!working) {
+                        } else if (switchoff) {
                             if (v.get(i - 1).equals("")) {
                                 v.add(i - 1, "*/");
 
@@ -447,7 +441,8 @@ public class CodeSwitcher {
                         }
 
                         working = false;
-                    } else {}
+                    } else {
+                    }
                 }
             }
 
@@ -493,10 +488,10 @@ public class CodeSwitcher {
 
     static ArrayList<String> getFileLines(File f) throws IOException {
 
-        LineNumberReader  read = new LineNumberReader(new FileReader(f));
-        ArrayList<String> v    = new ArrayList<String>();
+        LineNumberReader read = new LineNumberReader(new FileReader(f));
+        ArrayList<String> v = new ArrayList<String>();
 
-        for (;;) {
+        for (; ; ) {
             String line = read.readLine();
 
             if (line == null) {
@@ -526,7 +521,6 @@ public class CodeSwitcher {
 
     /**
      * Method declaration
-     *
      *
      * @param error
      */

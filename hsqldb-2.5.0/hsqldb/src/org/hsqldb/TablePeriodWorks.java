@@ -47,13 +47,13 @@ import org.hsqldb.types.TimestampData;
  */
 class TablePeriodWorks {
 
-    private Table    table;
-    private Session  session;
+    private Table table;
+    private Session session;
 
     public TablePeriodWorks(Session session, Table table) {
 
-        this.table    = table;
-        this.session  = session;
+        this.table = table;
+        this.session = session;
     }
 
     void addSystemPeriod(PeriodDefinition period) {
@@ -122,9 +122,9 @@ class TablePeriodWorks {
 
     long removeOldRows(long timestampLimit) {
 
-        int         colIndex = table.systemPeriodEndColumn;
-        long        count    = 0;
-        RowIterator it       = table.rowIterator(session);
+        int colIndex = table.systemPeriodEndColumn;
+        long count = 0;
+        RowIterator it = table.rowIterator(session);
 
         while (it.next()) {
             TimestampData value = (TimestampData) it.getField(colIndex);

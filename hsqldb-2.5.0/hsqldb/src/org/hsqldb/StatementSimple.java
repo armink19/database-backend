@@ -52,9 +52,9 @@ public class StatementSimple extends Statement {
 
         super(type, StatementTypes.X_SQL_CONTROL);
 
-        references             = new OrderedHashSet();
+        references = new OrderedHashSet();
         isTransactionStatement = false;
-        this.label             = label;
+        this.label = label;
     }
 
     public String getSQL() {
@@ -63,11 +63,11 @@ public class StatementSimple extends Statement {
 
         switch (type) {
 
-            case StatementTypes.ITERATE :
+            case StatementTypes.ITERATE:
                 sb.append(Tokens.T_ITERATE).append(' ').append(label);
                 break;
 
-            case StatementTypes.LEAVE :
+            case StatementTypes.LEAVE:
                 sb.append(Tokens.T_LEAVE).append(' ').append(label);
                 break;
         }
@@ -111,11 +111,11 @@ public class StatementSimple extends Statement {
 
         switch (type) {
 
-            case StatementTypes.ITERATE :
-            case StatementTypes.LEAVE :
+            case StatementTypes.ITERATE:
+            case StatementTypes.LEAVE:
                 return Result.newPSMResult(type, label.name, null);
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementSimple");
         }
     }
@@ -126,7 +126,7 @@ public class StatementSimple extends Statement {
 
         switch (type) {
 
-            case StatementTypes.ITERATE : {
+            case StatementTypes.ITERATE: {
                 StatementCompound statement = parent;
 
                 while (statement != null) {
@@ -150,11 +150,11 @@ public class StatementSimple extends Statement {
 
                 break;
             }
-            case StatementTypes.LEAVE :
+            case StatementTypes.LEAVE:
                 resolved = true;
                 break;
 
-            default :
+            default:
                 throw Error.runtimeError(ErrorCode.U_S0500, "StatementSimple");
         }
 

@@ -35,7 +35,7 @@ package org.hsqldb.lib;
  * Implementation of an ordered Set which maintains the inserted order of
  * elements and allows access by index. Iterators return the
  * elements in the index order.
- *
+ * <p>
  * This class does not store null elements.
  *
  * @author Fred Toussi (fredt@users dot sourceforge.net)

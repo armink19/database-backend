@@ -42,38 +42,39 @@ import org.hsqldb.types.Type;
  */
 public class ColumnBase {
 
-    private String    name;
-    private String    table;
-    private String    schema;
-    private String    catalog;
-    boolean           isWriteable;
-    private boolean   isSearchable;
-    protected byte    parameterMode;
+    private String name;
+    private String table;
+    private String schema;
+    private String catalog;
+    boolean isWriteable;
+    private boolean isSearchable;
+    protected byte parameterMode;
     protected boolean isIdentity;
-    protected byte    nullability = SchemaObject.Nullability.NULLABLE;
-    protected Type    dataType;
+    protected byte nullability = SchemaObject.Nullability.NULLABLE;
+    protected Type dataType;
 
-    ColumnBase() {}
+    ColumnBase() {
+    }
 
     public ColumnBase(String catalog, String schema, String table,
                       String name) {
 
         this.catalog = catalog;
-        this.schema  = schema;
-        this.table   = table;
-        this.name    = name;
+        this.schema = schema;
+        this.table = table;
+        this.name = name;
     }
 
     public ColumnBase(String catalog, ColumnSchema other) {
 
-        this.catalog      = catalog;
-        this.schema       = other.getSchemaNameString();
-        this.table        = other.getTableNameString();
-        this.name         = other.getNameString();
-        this.nullability  = other.getNullability();
-        this.isIdentity   = other.isIdentity();
+        this.catalog = catalog;
+        this.schema = other.getSchemaNameString();
+        this.table = other.getTableNameString();
+        this.name = other.getNameString();
+        this.nullability = other.getNullability();
+        this.isIdentity = other.isIdentity();
         this.isSearchable = other.isSearchable();
-        this.isWriteable  = other.isWriteable();
+        this.isWriteable = other.isWriteable();
     }
 
     public String getNameString() {
@@ -102,7 +103,7 @@ public class ColumnBase {
 
     protected void setType(ColumnBase other) {
         nullability = other.nullability;
-        dataType    = other.dataType;
+        dataType = other.dataType;
     }
 
     public void setType(Type type) {
@@ -115,12 +116,12 @@ public class ColumnBase {
 
     protected void setNullable(boolean value) {
         nullability = value ? SchemaObject.Nullability.NULLABLE
-                            : SchemaObject.Nullability.NO_NULLS;
+                : SchemaObject.Nullability.NO_NULLS;
     }
 
     public byte getNullability() {
         return isIdentity ? SchemaObject.Nullability.NO_NULLS
-                          : nullability;
+                : nullability;
     }
 
     public void setNullability(byte value) {

@@ -43,7 +43,7 @@ import java.util.zip.GZIPOutputStream;
  * FileOutputStream, yet we must use public methods of the underlying
  * FileOutputStream internally.  Can't accomplish these goals in Java if we
  * subclass.
- * <P>
+ * <p>
  * This class is ignorant about Tar header fields, attributes and such.
  * It is concerned with reading and writing blocks of data in conformance with
  * Tar formatting, in a way convenient to those who want to write the header
@@ -77,18 +77,18 @@ public class TarFileOutputStream {
 
     public interface Compression {
 
-        int NO_COMPRESSION            = 0;
-        int GZIP_COMPRESSION          = 1;
-        int DEFAULT_COMPRESSION       = NO_COMPRESSION;
+        int NO_COMPRESSION = 0;
+        int GZIP_COMPRESSION = 1;
+        int DEFAULT_COMPRESSION = NO_COMPRESSION;
         int DEFAULT_BLOCKS_PER_RECORD = 20;
     }
 
     public static final boolean debug = Boolean.getBoolean("DEBUG");
-    protected int               blocksPerRecord;
-    protected long              bytesWritten = 0;
-    private OutputStream        writeStream;
-    private File                targetFile;
-    private File                writeFile;
+    protected int blocksPerRecord;
+    protected long bytesWritten = 0;
+    private OutputStream writeStream;
+    private File targetFile;
+    private File writeFile;
 
     /* This is not a "Writer", but the byte "Stream" that we write() to. */
     public byte[] writeBuffer;
@@ -116,32 +116,32 @@ public class TarFileOutputStream {
     public TarFileOutputStream(File targetFile,
                                int compressionType) throws IOException {
         this(targetFile, compressionType,
-             TarFileOutputStream.Compression.DEFAULT_BLOCKS_PER_RECORD);
+                TarFileOutputStream.Compression.DEFAULT_BLOCKS_PER_RECORD);
     }
 
     /**
      * This class does no validation or enforcement of file naming conventions.
      * If desired, the caller should enforce extensions like "tar" and
      * "tar.gz" (and that they match the specified compression type).
-     *
+     * <p>
      * It also overwrites files without warning (just like FileOutputStream).
      */
     public TarFileOutputStream(File targetFile, int compressionType,
                                int blocksPerRecord) throws IOException {
 
         this.blocksPerRecord = blocksPerRecord;
-        this.targetFile      = targetFile;
+        this.targetFile = targetFile;
         writeFile = new File(targetFile.getParentFile(),
-                             targetFile.getName() + "-partial");
+                targetFile.getName() + "-partial");
 
         if (this.writeFile.exists()) {
             throw new IOException(
-                RB.move_work_file.getString(writeFile.getAbsolutePath()));
+                    RB.move_work_file.getString(writeFile.getAbsolutePath()));
         }
 
         if (targetFile.exists() && !targetFile.canWrite()) {
             throw new IOException(
-                RB.cant_overwrite.getString(targetFile.getAbsolutePath()));
+                    RB.cant_overwrite.getString(targetFile.getAbsolutePath()));
         }
 
         File parentDir = targetFile.getAbsoluteFile().getParentFile();
@@ -149,30 +149,30 @@ public class TarFileOutputStream {
         if (parentDir.exists() && parentDir.isDirectory()) {
             if (!parentDir.canWrite()) {
                 throw new IOException(
-                    RB.cant_write_dir.getString(parentDir.getAbsolutePath()));
+                        RB.cant_write_dir.getString(parentDir.getAbsolutePath()));
             }
         } else {
             throw new IOException(
-                RB.no_parent_dir.getString(parentDir.getAbsolutePath()));
+                    RB.no_parent_dir.getString(parentDir.getAbsolutePath()));
         }
 
         writeBuffer = new byte[blocksPerRecord * 512];
 
         switch (compressionType) {
 
-            case TarFileOutputStream.Compression.NO_COMPRESSION :
+            case TarFileOutputStream.Compression.NO_COMPRESSION:
                 writeStream = new FileOutputStream(writeFile);
                 break;
 
-            case TarFileOutputStream.Compression.GZIP_COMPRESSION :
+            case TarFileOutputStream.Compression.GZIP_COMPRESSION:
                 writeStream =
-                    new GZIPOutputStream(new FileOutputStream(writeFile),
-                                         writeBuffer.length);
+                        new GZIPOutputStream(new FileOutputStream(writeFile),
+                                writeBuffer.length);
                 break;
 
-            default :
+            default:
                 throw new IllegalArgumentException(
-                    RB.compression_unknown.getString(compressionType));
+                        RB.compression_unknown.getString(compressionType));
         }
 
         writeFile.setExecutable(false, true);
@@ -217,7 +217,7 @@ public class TarFileOutputStream {
 
         if (block.length != 512) {
             throw new IllegalArgumentException(
-                RB.bad_block_write_len.getString(block.length));
+                    RB.bad_block_write_len.getString(block.length));
         }
 
         write(block, block.length);
@@ -258,8 +258,8 @@ public class TarFileOutputStream {
 
         if (bytesLeftInBlock() != 0) {
             throw new IllegalArgumentException(
-                RB.illegal_block_boundary.getString(
-                    Long.toString(bytesWritten)));
+                    RB.illegal_block_boundary.getString(
+                            Long.toString(bytesWritten)));
         }
     }
 
@@ -292,7 +292,7 @@ public class TarFileOutputStream {
 
     /**
      * Implements java.io.Closeable.
-     * <P/>
+     * <p/>
      * <B>IMPORTANT:<B/>  This method <B>deletes</B> the work file after
      * closing it!
      *
@@ -309,8 +309,8 @@ public class TarFileOutputStream {
 
             if (!writeFile.delete()) {
                 throw new IOException(
-                    RB.workfile_delete_fail.getString(
-                        writeFile.getAbsolutePath()));
+                        RB.workfile_delete_fail.getString(
+                                writeFile.getAbsolutePath()));
             }
         } finally {
             writeStream = null;    // Encourage buffer GC
@@ -324,7 +324,7 @@ public class TarFileOutputStream {
     /**
      * (Only) when this method returns successfully, the generated file will be
      * a valid tar file.
-     *
+     * <p>
      * This method always performs a close, so you never need to call the close
      * if your code makes it to this method.
      * (You do need to call close if processing is aborted before calling
@@ -341,14 +341,14 @@ public class TarFileOutputStream {
 
                 // Round up total archive size to a blocksPerRecord multiple
                 finalBlock = (finalBlock / blocksPerRecord + 1)
-                             * blocksPerRecord;
+                        * blocksPerRecord;
             }
 
             int finalPadBlocks = (int) (finalBlock - bytesWritten / 512L);
 
             if (TarFileOutputStream.debug) {
                 System.out.println(
-                    RB.pad_block_write.getString(finalPadBlocks));
+                        RB.pad_block_write.getString(finalPadBlocks));
             }
 
             writePadBlocks(finalPadBlocks);

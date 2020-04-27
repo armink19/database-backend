@@ -50,32 +50,40 @@ public final class SqlInvariants {
      */
     public static final String SYSTEM_AUTHORIZATION_NAME = "_SYSTEM";
 
-    /** The role name reserved for ADMIN users. */
+    /**
+     * The role name reserved for ADMIN users.
+     */
     public static final String DBA_ADMIN_ROLE_NAME = "DBA";
 
-    /** The role name allowing schema creation for users. */
+    /**
+     * The role name allowing schema creation for users.
+     */
     public static final String SCHEMA_CREATE_ROLE_NAME = "CREATE_SCHEMA";
 
-    /** The role name allowing switching authorisation for users. */
+    /**
+     * The role name allowing switching authorisation for users.
+     */
     public static final String CHANGE_AUTH_ROLE_NAME = "CHANGE_AUTHORIZATION";
 
     //
     public static final String SYSTEM_SUBQUERY = "SYSTEM_SUBQUERY";
 
-    /** The role name reserved for the special PUBLIC pseudo-user. */
-    public static final String   PUBLIC_ROLE_NAME     = "PUBLIC";
-    public static final String   DEFAULT_CATALOG_NAME = "PUBLIC";
-    public static final String   SYSTEM_SCHEMA        = "SYSTEM_SCHEMA";
-    public static final String   LOBS_SCHEMA          = "SYSTEM_LOBS";
-    public static final String   DEFINITION_SCHEMA    = "DEFINITION_SCHEMA";
-    public static final String   INFORMATION_SCHEMA   = "INFORMATION_SCHEMA";
-    public static final String   SQLJ_SCHEMA          = "SQLJ";
-    public static final String   PUBLIC_SCHEMA        = "PUBLIC";
-    public static final String   CLASSPATH_NAME       = "CLASSPATH";
-    public static final String   MODULE               = "MODULE";
-    public static final String   DUAL                 = "DUAL";
-    public static final String   DUMMY                = "DUMMY";
-    public static final String   IDX                  = "IDX";
+    /**
+     * The role name reserved for the special PUBLIC pseudo-user.
+     */
+    public static final String PUBLIC_ROLE_NAME = "PUBLIC";
+    public static final String DEFAULT_CATALOG_NAME = "PUBLIC";
+    public static final String SYSTEM_SCHEMA = "SYSTEM_SCHEMA";
+    public static final String LOBS_SCHEMA = "SYSTEM_LOBS";
+    public static final String DEFINITION_SCHEMA = "DEFINITION_SCHEMA";
+    public static final String INFORMATION_SCHEMA = "INFORMATION_SCHEMA";
+    public static final String SQLJ_SCHEMA = "SQLJ";
+    public static final String PUBLIC_SCHEMA = "PUBLIC";
+    public static final String CLASSPATH_NAME = "CLASSPATH";
+    public static final String MODULE = "MODULE";
+    public static final String DUAL = "DUAL";
+    public static final String DUMMY = "DUMMY";
+    public static final String IDX = "IDX";
     public static final HsqlName INFORMATION_SCHEMA_HSQLNAME;
     public static final HsqlName SYSTEM_SCHEMA_HSQLNAME;
     public static final HsqlName LOBS_SCHEMA_HSQLNAME;
@@ -88,18 +96,18 @@ public final class SqlInvariants {
 
     static {
         INFORMATION_SCHEMA_HSQLNAME =
-            HsqlNameManager.newSystemObjectName(INFORMATION_SCHEMA,
-                SchemaObject.SCHEMA);
+                HsqlNameManager.newSystemObjectName(INFORMATION_SCHEMA,
+                        SchemaObject.SCHEMA);
         SYSTEM_SCHEMA_HSQLNAME =
-            HsqlNameManager.newSystemObjectName(SYSTEM_SCHEMA,
-                SchemaObject.SCHEMA);
+                HsqlNameManager.newSystemObjectName(SYSTEM_SCHEMA,
+                        SchemaObject.SCHEMA);
         LOBS_SCHEMA_HSQLNAME = HsqlNameManager.newSystemObjectName(LOBS_SCHEMA,
                 SchemaObject.SCHEMA);
         SQLJ_SCHEMA_HSQLNAME = HsqlNameManager.newSystemObjectName(SQLJ_SCHEMA,
                 SchemaObject.SCHEMA);
         SYSTEM_SUBQUERY_HSQLNAME =
-            HsqlNameManager.newSystemObjectName(SYSTEM_SUBQUERY,
-                SchemaObject.TABLE);
+                HsqlNameManager.newSystemObjectName(SYSTEM_SUBQUERY,
+                        SchemaObject.TABLE);
         MODULE_HSQLNAME = HsqlNameManager.newSystemObjectName(MODULE,
                 SchemaObject.SCHEMA);
         DUAL_TABLE_HSQLNAME = HsqlNameManager.newSystemObjectName(DUAL,

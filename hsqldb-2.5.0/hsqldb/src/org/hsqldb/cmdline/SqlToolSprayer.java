@@ -41,30 +41,31 @@ import java.util.Date;
  * Sql Tool Sprayer.
  * Invokes SqlTool.objectMain() multiple times with the same SQL.
  * Invokes for multiple urlids and/or retries.
- *
+ * <p>
  * See JavaDocs for the main method for syntax of how to run.
- *
+ * <p>
  * System properties used if set:
  * <UL>
- *      <LI>sqltoolsprayer.period (in ms.)</LI>
- *      <LI>sqltoolsprayer.maxtime (in ms.)</LI>
- *      <LI>sqltoolsprayer.rcfile (filepath)</LI>
+ * <LI>sqltoolsprayer.period (in ms.)</LI>
+ * <LI>sqltoolsprayer.maxtime (in ms.)</LI>
+ * <LI>sqltoolsprayer.rcfile (filepath)</LI>
  * </UL>
  *
- * @see #main(String[])
- * @version $Revision: 5969 $, $Date: 2019-04-27 10:59:54 -0400 (Sat, 27 Apr 2019) $
  * @author Blaine Simpson (blaine dot simpson at admc dot com)
+ * @version $Revision: 5969 $, $Date: 2019-04-27 10:59:54 -0400 (Sat, 27 Apr 2019) $
+ * @see #main(String[])
  */
 public class SqlToolSprayer {
 
     public static final String LS = System.getProperty("line.separator");
     private static String SYNTAX_MSG =
-        "SYNTAX:  java [-D...] SqlToolSprayer 'SQL;' [urlid1 urlid2...]\n"
-        + "System properties you may use [default values]:\n"
-        + "    sqltoolsprayer.period (in ms.) [500]\n"
-        + "    sqltoolsprayer.maxtime (in ms.) [0]\n"
-        + "    sqltoolsprayer.monfile (filepath) [none]\n"
-        + "    sqltoolsprayer.rcfile (filepath) [none.  SqlTool default used.]";
+            "SYNTAX:  java [-D...] SqlToolSprayer 'SQL;' [urlid1 urlid2...]\n"
+                    + "System properties you may use [default values]:\n"
+                    + "    sqltoolsprayer.period (in ms.) [500]\n"
+                    + "    sqltoolsprayer.maxtime (in ms.) [0]\n"
+                    + "    sqltoolsprayer.monfile (filepath) [none]\n"
+                    + "    sqltoolsprayer.rcfile (filepath) [none.  SqlTool default used.]";
+
     static {
         if (!LS.equals("\n")) {
             SYNTAX_MSG = SYNTAX_MSG.replaceAll("\n", LS);
@@ -79,19 +80,19 @@ public class SqlToolSprayer {
         }
 
         long period = ((System.getProperty("sqltoolsprayer.period") == null)
-                       ? 500
-                       : Integer.parseInt(
-                           System.getProperty("sqltoolsprayer.period")));
+                ? 500
+                : Integer.parseInt(
+                System.getProperty("sqltoolsprayer.period")));
         long maxtime = ((System.getProperty("sqltoolsprayer.maxtime") == null)
-                        ? 0
-                        : Integer.parseInt(
-                            System.getProperty("sqltoolsprayer.maxtime")));
-        String rcFile   = System.getProperty("sqltoolsprayer.rcfile");
+                ? 0
+                : Integer.parseInt(
+                System.getProperty("sqltoolsprayer.maxtime")));
+        String rcFile = System.getProperty("sqltoolsprayer.rcfile");
         File monitorFile =
-            (System.getProperty("sqltoolsprayer.monfile") == null) ? null
-                                                                   : new File(
-                                                                       System.getProperty(
-                                                                           "sqltoolsprayer.monfile"));
+                (System.getProperty("sqltoolsprayer.monfile") == null) ? null
+                        : new File(
+                        System.getProperty(
+                                "sqltoolsprayer.monfile"));
         ArrayList<String> urlids = new ArrayList<String>();
 
         for (int i = 1; i < sa.length; i++) {
@@ -105,16 +106,16 @@ public class SqlToolSprayer {
 
         boolean[] status = new boolean[urlids.size()];
 
-        String[] withRcArgs    = {
-            "--sql=" +  sa[0], "--rcfile=" + rcFile, null
+        String[] withRcArgs = {
+                "--sql=" + sa[0], "--rcfile=" + rcFile, null
         };
         String[] withoutRcArgs = {
-            "--sql=" + sa[0], null
+                "--sql=" + sa[0], null
         };
-        String[] sqlToolArgs   = (rcFile == null) ? withoutRcArgs
-                                                  : withRcArgs;
-        boolean  onefailed     = false;
-        long     startTime     = (new Date()).getTime();
+        String[] sqlToolArgs = (rcFile == null) ? withoutRcArgs
+                : withRcArgs;
+        boolean onefailed = false;
+        long startTime = (new Date()).getTime();
 
         while (true) {
             if (monitorFile != null && !monitorFile.exists()) {
@@ -139,7 +140,7 @@ public class SqlToolSprayer {
                     status[i] = true;
 
                     System.err.println("Success for instance '"
-                                       + urlids.get(i) + "'");
+                            + urlids.get(i) + "'");
                 } catch (SqlTool.SqlToolException se) {
                     onefailed = true;
                 }

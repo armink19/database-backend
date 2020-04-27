@@ -56,10 +56,10 @@ public interface RowInsertInterface {
 
     interface modes {
 
-        int rollbackOnError  = 0;    // not used
-        int stopOnError      = 1;
-        int continueOnError  = 2;
-        int discardOnError   = 3;
+        int rollbackOnError = 0;    // not used
+        int stopOnError = 1;
+        int continueOnError = 2;
+        int discardOnError = 3;
         int checkUntillError = 4;
     }
 
