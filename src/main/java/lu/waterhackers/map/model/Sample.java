@@ -7,8 +7,7 @@ import java.util.Date;
 @Entity
 @Table(name = "samples")
 public class Sample {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private long id;
     private String picture;
     private Date date;
@@ -37,7 +36,8 @@ public class Sample {
         this.dissolvedoxygen = dissolvedoxygen;
         this.turbidity = turbidity;
     }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -134,5 +134,13 @@ public class Sample {
 
     public void setTurbidity(Double turbidity) {
         this.turbidity = turbidity;
+    }
+
+    @Override
+    public String toString() {
+        return "Sample [id=" + id + ", date=" + date + ", time=" + time + ", descriptiom=" + descripiton+ ", " +
+                "address=" + address + ", watersource=" + watersource + ", temperature=" + temperature
+                + ", ph=" + ph + ", dissolvedoxygen=" + dissolvedoxygen + ", turbidity=" + turbidity +
+                 "]";
     }
 }

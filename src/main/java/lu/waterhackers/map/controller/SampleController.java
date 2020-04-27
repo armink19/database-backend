@@ -22,7 +22,9 @@ public class SampleController {
 
 
     @GetMapping("/samples")
-    public List<Sample> getAllSamples() {
+    public List<Sample> getAllSamples()
+    {
+
         return sampleRepository.findAll();
     }
 
