@@ -12,7 +12,7 @@ public class Sample {
     private String picture;
     private Date date;
     private Date time;
-    private String descripiton;
+    private String description;
     private String address;
     private String watersource;
     private Double temperature;
@@ -24,11 +24,11 @@ public class Sample {
     Sample() {
     }
 
-    public Sample(String picture, Date date, Date time, String descripiton, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
+    public Sample(String picture, Date date, Date time, String description, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
         this.picture = picture;
         this.date = date;
         this.time = time;
-        this.descripiton = descripiton;
+        this.description = description;
         this.address = address;
         this.watersource = watersource;
         this.temperature = temperature;
@@ -74,12 +74,12 @@ public class Sample {
     }
 
     @Column(name = "description", nullable = false)
-    public String getDescripiton() {
-        return descripiton;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripiton(String descripiton) {
-        this.descripiton = descripiton;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Column(name = "address", nullable = false)
@@ -138,7 +138,7 @@ public class Sample {
 
     @Override
     public String toString() {
-        return "Sample [id=" + id + ", date=" + date + ", time=" + time + ", descriptiom=" + descripiton+ ", " +
+        return "Sample [id=" + id + ", date=" + date + ", time=" + time + ", descriptiom=" + description + ", " +
                 "address=" + address + ", watersource=" + watersource + ", temperature=" + temperature
                 + ", ph=" + ph + ", dissolvedoxygen=" + dissolvedoxygen + ", turbidity=" + turbidity +
                  "]";
