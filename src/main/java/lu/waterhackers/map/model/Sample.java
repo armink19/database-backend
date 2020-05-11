@@ -14,6 +14,11 @@ public class Sample {
     private Date time;
     private String description;
     private String address;
+    private Double latitude;
+    private Double longitude;
+
+
+
     private String watersource;
     private Double temperature;
     private Double ph;
@@ -91,6 +96,22 @@ public class Sample {
         this.address = address;
     }
 
+    @Column(name= "latitude")
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    @Column(name= "longitude")
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
     @Column(name = "watersource", nullable = false)
     public String getWatersource() {
         return watersource;
