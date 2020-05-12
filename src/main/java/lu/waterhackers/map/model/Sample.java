@@ -16,9 +16,6 @@ public class Sample {
     private String address;
     private Double latitude;
     private Double longitude;
-
-
-
     private String watersource;
     private Double temperature;
     private Double ph;
