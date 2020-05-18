@@ -34,10 +34,17 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public void save(MultipartFile file) {
         try {
+            System.out.println(file.getOriginalFilename());
+
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void save(ByteArrayOutputStream file) {
+
     }
 
     @Override

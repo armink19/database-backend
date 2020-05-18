@@ -29,8 +29,8 @@ public class FilesController {
         String message = "";
         try {
             storageService.save(file);
-            ByteArrayOutputStream thumb = storageService.createThumbnail(file, 2000);
-            storageService.save((MultipartFile) thumb);
+           // ByteArrayOutputStream thumb = storageService.createThumbnail(file, 2000);
+          //  storageService.save((MultipartFile) thumb);
 
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));

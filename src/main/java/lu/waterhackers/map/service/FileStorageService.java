@@ -17,6 +17,8 @@ public interface FileStorageService {
 
     public void save(MultipartFile file);
 
+    public void save(ByteArrayOutputStream file);
+
     public Resource load(String filename);
 
     public void deleteAll();

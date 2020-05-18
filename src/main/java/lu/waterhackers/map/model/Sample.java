@@ -9,7 +9,6 @@ import java.util.Date;
 public class Sample {
 
     private long id;
-    private String picture;
     private Date date;
     private Date time;
     private String description;
@@ -26,8 +25,8 @@ public class Sample {
     Sample() {
     }
 
-    public Sample(String picture, Date date, Date time, String description, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
-        this.picture = picture;
+    public Sample(Date date, Date time, String description, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
+
         this.date = date;
         this.time = time;
         this.description = description;
@@ -48,14 +47,7 @@ public class Sample {
         this.id = id;
     }
 
-    @Column(name = "picture", nullable = false)
-    public String getPicture() {
-        return picture;
-    }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
 
     @Column(name = "date", nullable = false)
     public Date getDate() {
