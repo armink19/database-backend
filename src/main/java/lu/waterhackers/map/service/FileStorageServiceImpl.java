@@ -1,7 +1,7 @@
 package lu.waterhackers.map.service;
 
-
 import org.imgscalr.Scalr;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -20,24 +20,26 @@ import java.util.stream.Stream;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
-    private final Path root = Paths.get("uploads");
 
-    @Override
-    public void init() {
+    @Value("${photo_upload_location:uploads}")
+    private String photo_upload_location;
+
+    private Path getRoot() {
         try {
-            Files.createDirectory(root);
+            return Files.createDirectories(Paths.get(this.photo_upload_location));
         } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
         }
     }
 
     @Override
-    public void save(MultipartFile file) {
+    public void save(MultipartFile file, String filename) {
         try {
-            System.out.println(file.getOriginalFilename());
-
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.getRoot().resolve(filename));
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
     }
@@ -50,7 +52,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public Resource load(String filename) {
         try {
-            Path file = root.resolve(filename);
+            Path file = this.getRoot().resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -66,7 +68,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
+        FileSystemUtils.deleteRecursively(this.getRoot().toFile());
     }
 
     @Override
@@ -82,7 +84,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+            return Files.walk(this.getRoot(), 1).filter(path -> !path.equals(this.getRoot())).map(this.getRoot()::relativize);
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }
