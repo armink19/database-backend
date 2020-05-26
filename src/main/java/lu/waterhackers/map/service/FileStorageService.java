@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public interface FileStorageService {
     public void save(MultipartFile file, String filename);
 
-    public void save(ByteArrayOutputStream file);
+    public void saveThumbnail(ByteArrayOutputStream file, String filename) throws IOException;
 
     public Resource load(String filename);
 
