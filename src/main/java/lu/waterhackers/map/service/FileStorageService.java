@@ -5,6 +5,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,6 +19,8 @@ public interface FileStorageService {
     public void saveThumbnail(ByteArrayOutputStream file, String filename) throws IOException;
 
     public Resource load(String filename);
+
+    public  ByteArrayOutputStream resize(MultipartFile file) throws IOException;
 
     public void deleteAll();
 

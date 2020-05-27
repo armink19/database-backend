@@ -16,9 +16,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -53,7 +55,11 @@ public class SampleController {
     public Sample createSample(@Valid @RequestPart Sample sample, @RequestPart MultipartFile file) throws IOException {
         Sample s = sampleRepository.save(sample);
         // TODO resize to reasonable size before saving
-        fileStorage.save(file, s.getId() + ".jpg");
+
+        ByteArrayOutputStream resizedimage = fileStorage.resize(file);
+        fileStorage.saveThumbnail(resizedimage,s.getId() + ".jpg");
+       // ImageIO.write(bufferedimage, "jpg", (File) file);
+       // fileStorage.save(file, s.getId() + ".jpg");
         // TODO save again as thumbnail (eg. 150px width) under name: s.getId() + "-thumb.jpg"
         ByteArrayOutputStream thumb =fileStorage.createThumbnail(file,150);
         fileStorage.saveThumbnail(thumb, s.getId() + "-thumb.jpg");

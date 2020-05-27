@@ -9,6 +9,7 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -64,6 +65,26 @@ public class FileStorageServiceImpl implements FileStorageService {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public ByteArrayOutputStream resize(MultipartFile file) throws IOException {
+        ByteArrayOutputStream resizedOutput = new ByteArrayOutputStream();
+        BufferedImage resizedImg = null;
+        BufferedImage img = ImageIO.read(file.getInputStream());
+        if(img.getWidth()<1000){
+            resizedImg = Scalr.resize(img, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 1000, Scalr.OP_ANTIALIAS);
+            ImageIO.write(resizedImg, file.getContentType().split("/")[1] , resizedOutput);
+            return resizedOutput;
+        }
+        if(img.getWidth()>2000){
+        resizedImg = Scalr.resize(img, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 2000, Scalr.OP_ANTIALIAS);
+        ImageIO.write(resizedImg, file.getContentType().split("/")[1] , resizedOutput);}
+        else {
+            ImageIO.write(img, file.getContentType().split("/")[1] , resizedOutput);
+
+        }
+        return resizedOutput;
     }
 
 

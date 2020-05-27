@@ -1,6 +1,7 @@
 package lu.waterhackers.map.model;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 import java.util.Date;
 
 
@@ -10,7 +11,7 @@ public class Sample {
 
     private long id;
     private Date date;
-    private Date time;
+    private LocalTime time;
     private String description;
     private String address;
     private Double latitude;
@@ -23,9 +24,10 @@ public class Sample {
 
 
     Sample() {
+
     }
 
-    public Sample(Date date, Date time, String description, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
+    public Sample(Date date, LocalTime time, String description, String address, String watersource, Double temperature, Double ph, Double dissolvedoxygen, Double turbidity) {
 
         this.date = date;
         this.time = time;
@@ -59,11 +61,11 @@ public class Sample {
     }
 
     @Column(name = "time", nullable = false)
-    public Date getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
