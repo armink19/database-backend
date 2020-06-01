@@ -26,7 +26,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 
 
 public class SampleController {
@@ -54,13 +53,10 @@ public class SampleController {
     @PostMapping(value="/samples", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Sample createSample(@Valid @RequestPart Sample sample, @RequestPart MultipartFile file) throws IOException {
         Sample s = sampleRepository.save(sample);
-        // TODO resize to reasonable size before saving
-
         ByteArrayOutputStream resizedimage = fileStorage.resize(file);
         fileStorage.saveThumbnail(resizedimage,s.getId() + ".jpg");
-       // ImageIO.write(bufferedimage, "jpg", (File) file);
-       // fileStorage.save(file, s.getId() + ".jpg");
-        // TODO save again as thumbnail (eg. 150px width) under name: s.getId() + "-thumb.jpg"
+
+
         ByteArrayOutputStream thumb =fileStorage.createThumbnail(file,150);
         fileStorage.saveThumbnail(thumb, s.getId() + "-thumb.jpg");
         return s;
@@ -75,7 +71,7 @@ public class SampleController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"").body(file);
     }
 
-    // TODO add another method for getting thumbnail
+
     @GetMapping("/samples/{sampleId}/thumbnail")
     @ResponseBody
     public ResponseEntity<Resource> getThumbnail(@PathVariable String sampleId) {
