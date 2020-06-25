@@ -47,8 +47,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public void saveThumbnail(ByteArrayOutputStream file,String filename) throws IOException {
-        Files.createFile(this.getRoot().resolve(filename));
-         Files.write(this.getRoot().resolve(filename),file.toByteArray());
+        Files.write(this.getRoot().resolve(filename),file.toByteArray());
     }
 
     @Override
